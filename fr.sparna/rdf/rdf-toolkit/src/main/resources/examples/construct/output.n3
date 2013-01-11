@@ -1,0 +1,148 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+
+<http://psi.oasis-open.org/iso/639/#ara> <http://psi.oasis-open.org/iso/639/#code-a2> "ar" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "ara" .
+
+<http://psi.oasis-open.org/iso/639/#bel> <http://psi.oasis-open.org/iso/639/#code-a2> "be" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "bel" .
+
+<http://psi.oasis-open.org/iso/639/#bos> <http://psi.oasis-open.org/iso/639/#code-a2> "bs" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "bos" .
+
+<http://psi.oasis-open.org/iso/639/#bul> <http://psi.oasis-open.org/iso/639/#code-a2> "bg" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "bul" .
+
+<http://psi.oasis-open.org/iso/639/#cat> <http://psi.oasis-open.org/iso/639/#code-a2> "ca" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "cat" .
+
+<http://psi.oasis-open.org/iso/639/#ces> <http://psi.oasis-open.org/iso/639/#code-a2> "cs" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "ces" .
+
+<http://psi.oasis-open.org/iso/639/#dan> <http://psi.oasis-open.org/iso/639/#code-a2> "da" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "dan" .
+
+<http://psi.oasis-open.org/iso/639/#deu> <http://psi.oasis-open.org/iso/639/#code-a2> "de" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "deu" .
+
+<http://psi.oasis-open.org/iso/639/#ell> <http://psi.oasis-open.org/iso/639/#code-a2> "el" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "ell" .
+
+<http://psi.oasis-open.org/iso/639/#eng> <http://psi.oasis-open.org/iso/639/#code-a2> "en" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "eng" .
+
+<http://psi.oasis-open.org/iso/639/#est> <http://psi.oasis-open.org/iso/639/#code-a2> "et" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "est" .
+
+<http://psi.oasis-open.org/iso/639/#eus> <http://psi.oasis-open.org/iso/639/#code-a2> "eu" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "eus" .
+
+<http://psi.oasis-open.org/iso/639/#fao> <http://psi.oasis-open.org/iso/639/#code-a2> "fo" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "fao" .
+
+<http://psi.oasis-open.org/iso/639/#fin> <http://psi.oasis-open.org/iso/639/#code-a2> "fi" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "fin" .
+
+<http://psi.oasis-open.org/iso/639/#fra> <http://psi.oasis-open.org/iso/639/#code-a2> "fr" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "fra" .
+
+<http://psi.oasis-open.org/iso/639/#gle> <http://psi.oasis-open.org/iso/639/#code-a2> "ga" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "gle" .
+
+<http://psi.oasis-open.org/iso/639/#glg> <http://psi.oasis-open.org/iso/639/#code-a2> "gl" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "glg" .
+
+<http://psi.oasis-open.org/iso/639/#hin> <http://psi.oasis-open.org/iso/639/#code-a2> "hi" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "hin" .
+
+<http://psi.oasis-open.org/iso/639/#hrv> <http://psi.oasis-open.org/iso/639/#code-a2> "hr" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "hrv" .
+
+<http://psi.oasis-open.org/iso/639/#hun> <http://psi.oasis-open.org/iso/639/#code-a2> "hu" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "hun" .
+
+<http://psi.oasis-open.org/iso/639/#isl> <http://psi.oasis-open.org/iso/639/#code-a2> "is" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "isl" .
+
+<http://psi.oasis-open.org/iso/639/#ita> <http://psi.oasis-open.org/iso/639/#code-a2> "it" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "ita" .
+
+<http://psi.oasis-open.org/iso/639/#jpn> <http://psi.oasis-open.org/iso/639/#code-a2> "ja" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "jpn" .
+
+<http://psi.oasis-open.org/iso/639/#kat> <http://psi.oasis-open.org/iso/639/#code-a2> "ka" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "kat" .
+
+<http://psi.oasis-open.org/iso/639/#kor> <http://psi.oasis-open.org/iso/639/#code-a2> "ko" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "kor" .
+
+<http://psi.oasis-open.org/iso/639/#lav> <http://psi.oasis-open.org/iso/639/#code-a2> "lv" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "lav" .
+
+<http://psi.oasis-open.org/iso/639/#lit> <http://psi.oasis-open.org/iso/639/#code-a2> "lt" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "lit" .
+
+<http://psi.oasis-open.org/iso/639/#mkd> <http://psi.oasis-open.org/iso/639/#code-a2> "mk" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "mkd" .
+
+<http://psi.oasis-open.org/iso/639/#mlt> <http://psi.oasis-open.org/iso/639/#code-a2> "mt" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "mlt" .
+
+<http://psi.oasis-open.org/iso/639/#msa> <http://psi.oasis-open.org/iso/639/#code-a2> "ms" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "msa" .
+
+<http://psi.oasis-open.org/iso/639/#nld> <http://psi.oasis-open.org/iso/639/#code-a2> "nl" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "nld" .
+
+<http://psi.oasis-open.org/iso/639/#nor> <http://psi.oasis-open.org/iso/639/#code-a2> "no" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "nor" .
+
+<http://psi.oasis-open.org/iso/639/#pol> <http://psi.oasis-open.org/iso/639/#code-a2> "pl" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "pol" .
+
+<http://psi.oasis-open.org/iso/639/#por> <http://psi.oasis-open.org/iso/639/#code-a2> "pt" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "por" .
+
+<http://psi.oasis-open.org/iso/639/#por-BR> <http://psi.oasis-open.org/iso/639/#code-a2> "pt-BR" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "por-BR" .
+
+<http://psi.oasis-open.org/iso/639/#roh> <http://psi.oasis-open.org/iso/639/#code-a2> "rm" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "roh" .
+
+<http://psi.oasis-open.org/iso/639/#ron> <http://psi.oasis-open.org/iso/639/#code-a2> "ro" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "ron" .
+
+<http://psi.oasis-open.org/iso/639/#rus> <http://psi.oasis-open.org/iso/639/#code-a2> "ru" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "rus" .
+
+<http://psi.oasis-open.org/iso/639/#slk> <http://psi.oasis-open.org/iso/639/#code-a2> "sk" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "slk" .
+
+<http://psi.oasis-open.org/iso/639/#slv> <http://psi.oasis-open.org/iso/639/#code-a2> "sl" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "slv" .
+
+<http://psi.oasis-open.org/iso/639/#spa> <http://psi.oasis-open.org/iso/639/#code-a2> "es" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "spa" .
+
+<http://psi.oasis-open.org/iso/639/#sqi> <http://psi.oasis-open.org/iso/639/#code-a2> "sq" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "sqi" .
+
+<http://psi.oasis-open.org/iso/639/#srp> <http://psi.oasis-open.org/iso/639/#code-a2> "sr" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "srp" .
+
+<http://psi.oasis-open.org/iso/639/#swe> <http://psi.oasis-open.org/iso/639/#code-a2> "sv" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "swe" .
+
+<http://psi.oasis-open.org/iso/639/#tha> <http://psi.oasis-open.org/iso/639/#code-a2> "th" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "tha" .
+
+<http://psi.oasis-open.org/iso/639/#tur> <http://psi.oasis-open.org/iso/639/#code-a2> "tr" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "tur" .
+
+<http://psi.oasis-open.org/iso/639/#ukr> <http://psi.oasis-open.org/iso/639/#code-a2> "uk" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "ukr" .
+
+<http://psi.oasis-open.org/iso/639/#zho> <http://psi.oasis-open.org/iso/639/#code-a2> "zh" ;
+	<http://psi.oasis-open.org/iso/639/#code-a3t> "zho" .

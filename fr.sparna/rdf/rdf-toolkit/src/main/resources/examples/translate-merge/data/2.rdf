@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+	xmlns:bnf="http://www.bnf.fr/autorites/ontology/">
+<bnf:p rdf:about="http://www.bnf.fr/autorites/entry/10002005">
+	<bnf:property_100_a>Rey de Artieda</bnf:property_100_a>
+	<bnf:property_100_m>Andrés</bnf:property_100_m>
+	<rdfs:label>Andrés Rey de Artieda</rdfs:label>
+	<skos:altLabel>Andrés Rey de Artiéda</skos:altLabel>
+	<skos:altLabel>Artiéda Andrés Rey de</skos:altLabel>
+</bnf:p>
+
+</rdf:RDF>

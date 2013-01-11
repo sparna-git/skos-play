@@ -1,0 +1,84 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>Sparna</groupId>
+    <artifactId>root-pom</artifactId>
+    <version>1</version>
+    <packaging>pom</packaging>
+
+    <name>Sparna</name>
+    <description>Root pom of all the sources managed at Sparna</description>
+    <url>http://www.sparna.fr/</url>
+    
+    <organization>
+        <name>Sparna</name>
+        <url>http://www.sparna.fr/</url>
+    </organization>
+    
+<!--
+    <licenses>
+        <license>
+        </license>
+    </licenses>
+-->    
+
+<!--
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id></id>
+            <name></name>
+            <url></url>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id></id>
+            <name></name>
+            <url></url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id></id>
+            <name></name>
+            <url></url>
+            <uniqueVersion></uniqueVersion>
+        </repository>
+        <snapshotRepository>
+            <id></id>
+            <name></name>
+            <url></url>
+            <uniqueVersion></uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+-->
+
+<!--
+    <properties>
+        <organization.logo></organization.logo>
+    </properties>
+-->
+
+<!--
+    <scm>
+        <connection></connection>
+        <developerConnection></developerConnection>
+        <url></url>
+    </scm>
+-->
+</project>

@@ -1,0 +1,8 @@
+PREFIX iso:<http://psi.oasis-open.org/iso/639/#>
+CONSTRUCT {
+	?lang iso:code-a2 ?codeA2 .
+	?lang iso:code-a3t ?codeA3T .
+} WHERE {
+	?lang iso:code-a2 ?codeA2 .
+	?lang iso:code-a3t ?codeA3T .
+}

@@ -1,0 +1,8 @@
+.classpath
+.settings
+.project
+.settings/
+.svn/
+build/
+target/
+.sesame-toolkit-repositories/

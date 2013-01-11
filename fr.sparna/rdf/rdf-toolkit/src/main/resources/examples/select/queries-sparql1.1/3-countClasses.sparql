@@ -1,0 +1,1 @@
+SELECT ?o (COUNT(?o) as ?numberOfInstances) WHERE { ?s a ?o } GROUP BY ?o ORDER BY DESC (?numberOfInstances)

@@ -1,0 +1,106 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fr.sparna</groupId>
+    <artifactId>fr.sparna-root-pom</artifactId>
+    <version>1</version>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>Sparna</groupId>
+        <artifactId>root-pom</artifactId>
+        <version>1</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <name>sparna.fr</name>
+    <description>Root pom of all the sources developped for sparna.fr (we may maintain other sources as well)</description>
+    <url>http://www.sparna.fr/</url>
+    
+    <organization>
+        <name>Sparna</name>
+        <url>http://www.sparna.fr/</url>
+    </organization>    
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+	<repositories>
+		<!-- declare most uptodate java.net repository to get javax:javaee-api.jar:6.0 -->
+	  	<repository>
+	  		<id>java.net 6.0</id>
+	  		<url>http://download.java.net/maven/2</url>
+	  	</repository>
+		<!-- declare older java.net repository to get javaee:javaee-api.jar:5 -->
+	  	<repository>
+	  		<id>java.net 5</id>
+	  		<url>http://download.java.net/maven/2</url>
+	  	</repository>
+	  </repositories>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Logging: SLF4J -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>1.7.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jdk14</artifactId>
+                <version>1.7.0</version>
+            </dependency>
+		<dependency> 
+		  <groupId>org.slf4j</groupId>
+		  <artifactId>slf4j-log4j12</artifactId>
+		  <version>1.7.0</version>
+		</dependency>
+
+            <!-- Testing: JUnit -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.7</version>
+                <scope>test</scope>
+            </dependency>
+
+	    <!-- Web Part : J2EE -->
+		<dependency>
+		    	<groupId>javaee</groupId>
+		    	<artifactId>javaee-api</artifactId>
+		    	<version>5</version>
+			 <scope>provided</scope>
+		</dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+	<module>commons</module>
+	<module>rdf</module>
+    </modules>
+
+</project>

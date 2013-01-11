@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:kernel="http://www.mondeca.com/system/kernel#"
+	xmlns:itm="http://www.mondeca.com/system/publishing#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:bo="http://www.mondeca.com/system/basicontology#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+<rdf:Description rdf:about="itm:n#_109749">
+	<itm:Abbreviation xml:lang="fr">Yvan Doirieux, amoureux de la Loire.</itm:Abbreviation>
+	<Fin_de_publication_103753 xmlns="http://www.nievre-tourisme.com/onto#" rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2050-12-31</Fin_de_publication_103753>
+	<Mot_Cle_103696 xmlns="http://www.nievre-tourisme.com/onto#" rdf:resource="http://thes.world-tourism.org#GUIDE_ACCOMPAGNATEUR"/>
+	<Mot_Cle_103696 xmlns="http://www.nievre-tourisme.com/onto#" rdf:resource="http://thes.world-tourism.org#GUIDE_DE_TOURISME"/>
+	<adresse_contact xmlns="http://www.nievre-tourisme.com/onto#" xml:lang="fr">Base de canoë, Quai des Eduens - 58 000 Nevers</adresse_contact>
+	<bassin_touristique_at xmlns="http://www.nievre-tourisme.com/onto#" rdf:resource="itm:n#_103553"/>
+	<commune_at xmlns="http://www.nievre-tourisme.com/onto#" rdf:resource="http://www.nievre-tourisme.com/onto#commune_NEVERS"/>
+	<contact xmlns="http://www.nievre-tourisme.com/onto#" xml:lang="fr">Eaux Mêlées Randonnées, Yvan.</contact>
+	<debut_publication_OT__103834 xmlns="http://www.nievre-tourisme.com/onto#" rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2011-02-03</debut_publication_OT__103834>
+	<description xmlns="http://www.nievre-tourisme.com/onto#" xml:lang="fr">Yvan glisse sur l'eau à bord de son canoë en bois pour vous faire approcher de près les castors. Il vous proposera aussi des sorties, rythmées par le soleil : l'observation du gros gibier le matin et des oiseaux la journée. Ouvrez grans vos yeux et vos oreilles, la Loire a plein de secrets qu'Yvan vous aidera à percer.</description>
+	<e-mail xmlns="http://www.nievre-tourisme.com/onto#" xml:lang="fr">mailto:loire@l-o-i-r-e.com</e-mail>
+	<latitude_103937 xmlns="http://www.nievre-tourisme.com/onto#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">46.987098693</latitude_103937>
+	<longitude_103938 xmlns="http://www.nievre-tourisme.com/onto#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">3.1616899967</longitude_103938>
+	<site_web xmlns="http://www.nievre-tourisme.com/onto#" xml:lang="fr">http://www.l-o-i-r-e.com</site_web>
+	<site_web xmlns="http://www.nievre-tourisme.com/onto#" xml:lang="fr">http://www.loireallierkanu.de</site_web>
+	<telephone xmlns="http://www.nievre-tourisme.com/onto#" xml:lang="fr">03 86 57 69 76</telephone>
+	<visuel xmlns="http://www.nievre-tourisme.com/onto#" xml:lang="fr">http://doc-nievre-itis1.antisearch.net/104157/Y/Yvan-Doirieux.jpg</visuel>
+	<rdf:type rdf:resource="http://www.nievre-tourisme.com/onto#Talent_local_104157"/>
+	<rdfs:label xml:lang="fr">Suivez le guide : Yvan Doirieux, amoureux de la Loire - NEVERS</rdfs:label>
+</rdf:Description>
+
+</rdf:RDF>

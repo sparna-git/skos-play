@@ -1,0 +1,370 @@
+/*  OWLIM rules and axioms for the TRREE engine
+ *
+ *  From Thu 03-03-2006
+ *
+ *  Every rule consists of one or more premises and one or more corollaries
+ *  in the following format:
+ *
+ *  Rules
+ *  {
+ *     Id: Rule_Id
+ *     < Premise #1 >
+ *     < Premise #2 >
+ *         . . .
+ *     < Premise #n >
+ *  ---------------------
+ *    < Corollary #1 >
+ *    < Corollary #2 >
+ *         . . .
+ *    < Corollary #m >
+ *  }
+ *
+ *  Every premise may contain constraints stating that the value of one or
+ *  more variables in the statement must not be equal to a full URI, a short name
+ *  or the value of another variable from the same rule.
+ *  This is written in the following format:
+ *
+ *         . . . . . . . . . . .
+ *     a  <mynamespace:myproperty>  b             [Constraint a != b]
+ *     <mynamespace:Instance_1.0>  a  c           [Constraint a != <rdf:type>, c != a, c != b]
+ *    -----------------------------------
+ *     c  a  b
+ *     b  <rdf:type>  <mynamespace:Instance_1.0>  [Constraint b != <http://www.w3.org/2000/01/rdf-schema#Class>]
+ *
+ *  Every left value in the not-equal constraint must denote a variable
+ *  and every right value can be a variable, a short name or a full URI.
+ *  Not-equal constraints may be used to force the engine not to apply
+ *  the rule when the constraints are not satisfied. This will improve
+ *  engine's performance.
+ *  Constraints are valid within the line they appear.
+ *  If a variable is not bound yet then the constraint is considered satisfied
+ *  (and therefore does not apply).
+ *
+ *
+ *  In addition one or more axioms may be added in the following format:
+ *
+ *  Axioms
+ *  {
+ *     < Axiom #1 >
+ *     < Axiom #2 >
+ *        . . .
+ *     < Axiom #n >
+ *  }
+ *
+ *  The premises, the corollaries and the axioms must be written in N-Triple format.
+ *  The subject, the predicate and the object must denote a full URI or
+ *  a short name in format <Prefix>:<LocalName> where <Prefix> is defined in
+ *  the prefix section written in the following format:
+ *
+ *  Prefices
+ *  {
+ *     < Prefix #1 > : < Full URI for prefix #1 >
+ *     < Prefix #2 > : < Full URI for prefix #2 >
+ *            . . . . . . . . . . . . . .
+ *     < Prefix #n > : < Full URI for prefix #n >
+ *  }
+ *
+ *  The sections must be arranged in the following order:
+ *
+ *  Prefices   // If any
+ *  {
+ *     . . .
+ *  }
+ *  Axioms     // If any
+ *  {
+ *     . . .
+ *  }
+ *  Rules      // Must necessarily be present
+ *  {
+ *     . . .
+ *  }
+ *
+ *  Variables in the rules must be literals consisting of one symbol only.
+ *  They must NOT be surrounded by angle braces.
+ *  ONLY rule statements may contain variables.
+ *
+ *  The contents of this file is translated into java code and is output
+ *  to com.ontotext.trree.RdfsHashInferencer and com.ontotext.trree.OwlHashInferencer.
+ *  Use program RuleCompiler.java in order to compile this file.
+ *  Please do not make changes in file generated files because
+ *  next time the translator is started the changes will disappear.
+ *
+ */
+
+Prefices
+{
+     rdf      :  http://www.w3.org/1999/02/22-rdf-syntax-ns#
+     rdfs     :  http://www.w3.org/2000/01/rdf-schema#
+     owl      :  http://www.w3.org/2002/07/owl#
+     protons  :  http://proton.semanticweb.org/2005/04/protons#
+     protont  :  http://proton.semanticweb.org/2005/04/protont#
+//     protonu  :  http://proton.semanticweb.org/2005/04/protonu#
+//     protonkm :  http://proton.semanticweb.org/2005/04/protonkm#
+     xsd      :  http://www.w3.org/2001/XMLSchema#
+     align	  : http://knowledgeweb.semanticweb.org/heterogeneity/alignment#
+     skos : http://www.w3.org/2004/02/skos/core#
+}
+
+Axioms
+{
+// RDF axiomatic triples (from RDF Semantics, section 3.1):
+
+     <rdf:type> <rdf:type> <rdf:Property>
+     <rdf:subject> <rdf:type> <rdf:Property>
+     <rdf:predicate> <rdf:type> <rdf:Property>
+     <rdf:object> <rdf:type> <rdf:Property>
+     <rdf:first> <rdf:type> <rdf:Property>
+     <rdf:rest> <rdf:type> <rdf:Property>
+     <rdf:value> <rdf:type> <rdf:Property>
+     <rdf:nil> <rdf:type> <rdf:List>
+
+// RDFS axiomatic triples (from RDF Semantics, section 4.1):
+
+/*[partialRDFS]*/
+     <rdf:type> <rdfs:domain> <rdfs:Resource>
+
+     <rdfs:domain> <rdfs:domain> <rdf:Property>
+     <rdfs:range> <rdfs:domain> <rdf:Property>
+     <rdfs:subPropertyOf> <rdfs:domain> <rdf:Property>
+     <rdfs:subClassOf> <rdfs:domain> <rdfs:Class>
+/*[partialRDFS]*/
+
+     <rdf:subject> <rdfs:domain> <rdf:Statement>
+     <rdf:predicate> <rdfs:domain> <rdf:Statement>
+     <rdf:object> <rdfs:domain> <rdf:Statement>
+
+/*[partialRDFS]*/
+     <rdfs:member> <rdfs:domain> <rdfs:Resource>
+     <rdf:first> <rdfs:domain> <rdf:List>
+     <rdf:rest> <rdfs:domain> <rdf:List>
+     <rdfs:seeAlso> <rdfs:domain> <rdfs:Resource>
+     <rdfs:isDefinedBy> <rdfs:domain> <rdfs:Resource>
+     <rdfs:comment> <rdfs:domain> <rdfs:Resource>
+     <rdfs:label> <rdfs:domain> <rdfs:Resource>
+     <rdf:value> <rdfs:domain> <rdfs:Resource>
+
+     <rdf:type> <rdfs:range> <rdfs:Class>
+     <rdfs:domain> <rdfs:range> <rdfs:Class>
+     <rdfs:range> <rdfs:range> <rdfs:Class>
+     <rdfs:subPropertyOf> <rdfs:range> <rdf:Property>
+     <rdfs:subClassOf> <rdfs:range> <rdfs:Class>
+
+     <rdf:subject> <rdfs:range> <rdfs:Resource>
+     <rdf:predicate> <rdfs:range> <rdfs:Resource>
+     <rdf:object> <rdfs:range> <rdfs:Resource>
+     <rdfs:member> <rdfs:range> <rdfs:Resource>
+     <rdf:first> <rdfs:range> <rdfs:Resource>
+     <rdf:rest> <rdfs:range> <rdf:List>
+
+     <rdfs:seeAlso> <rdfs:range> <rdfs:Resource>
+     <rdfs:isDefinedBy> <rdfs:range> <rdfs:Resource>
+     <rdfs:comment> <rdfs:range> <rdfs:Literal>
+     <rdfs:label> <rdfs:range> <rdfs:Literal>
+
+     <rdf:value> <rdfs:range> <rdfs:Resource>
+/*[partialRDFS]*/
+
+     <rdf:Alt> <rdfs:subClassOf> <rdfs:Container>
+     <rdf:Bag> <rdfs:subClassOf> <rdfs:Container>
+     <rdf:Seq> <rdfs:subClassOf> <rdfs:Container>
+     <rdfs:ContainerMembershipProperty> <rdfs:subClassOf> <rdf:Property>
+
+     <rdfs:isDefinedBy> <rdfs:subPropertyOf> <rdfs:seeAlso>
+
+     <rdf:XMLLiteral> <rdf:type> <rdfs:Datatype>
+     <rdf:XMLLiteral> <rdfs:subClassOf> <rdfs:Literal>
+     <rdfs:Datatype> <rdfs:subClassOf> <rdfs:Class>
+
+ // OWL trivial statements in addition (OWL Horst)
+ // the OWL schema should be imported as part of the OWLMemSchemaRepository initialization:
+
+/*     <owl:equivalentClass> <rdf:type> <owl:TransitiveProperty>
+     <owl:equivalentClass> <rdf:type> <owl:SymmetricProperty>
+     <owl:equivalentClass> <rdfs:subPropertyOf> <rdfs:subClassOf>
+     <owl:equivalentProperty> <rdf:type> <owl:TransitiveProperty>
+     <owl:equivalentProperty> <rdf:type> <owl:SymmetricProperty>
+     <owl:equivalentProperty> <rdfs:subPropertyOf> <rdfs:subPropertyOf>
+*/
+// redundant! supported by special rules for owl:sameAs
+//     <owl:sameAs> <rdf:type> <owl:TransitiveProperty>
+//     <owl:sameAs> <rdf:type> <owl:SymmetricProperty>
+//     <owl:inverseOf> <rdf:type> <owl:SymmetricProperty>
+
+// Some fixes
+
+// those properties are implemented using owl:TransitiveProperty for performance reasons
+// The specific RDFS rule are removed from the final ruleset [rdfs5, rdfs11]
+//     <rdfs:subClassOf>  <rdf:type>  <owl:TransitiveProperty>
+//     <rdfs:subPropertyOf>  <rdf:type>  <owl:TransitiveProperty>
+
+// The [rdfs9] rule is removed from the final ruleset. Impelemnted as follows
+//     <rdf:type> <protons:transitiveOver> <rdfs:subClassOf>
+
+// Rules rdfs_ext1 and rdfs_ext2
+//     <rdfs:domain> <protons:transitiveOver> <rdfs:subClassOf>
+//     <rdfs:range> <protons:transitiveOver> <rdfs:subClassOf>
+
+// owl:differentFrom is symmetric
+//     <owl:differentFrom> <rdf:type> <owl:SymmetricProperty>
+     <xsd:nonNegativeInteger> <rdf:type> <rdfs:Datatype>
+     <xsd:string> <rdf:type> <rdfs:Datatype>
+
+// Statements that would have been inferred if there were no 
+// performance-inspired changes to the implementation of the 
+// RDFS axioms and rules
+     <rdf:type> <rdfs:subPropertyOf> <rdf:type>
+     <rdfs:domain> <rdfs:subPropertyOf> <rdfs:domain>
+     <rdfs:range> <rdfs:subPropertyOf> <rdfs:range>
+     <rdfs:subPropertyOf> <rdfs:subPropertyOf> <rdfs:subPropertyOf>
+     <rdfs:subClassOf> <rdfs:subPropertyOf> <rdfs:subClassOf>
+}
+
+Rules
+{
+/*[partialRDFS]*/
+Id: rdf1_rdfs4a_4b
+     x  a  y
+    -------------------------------
+     a  <rdf:type>  <rdf:Property>            [Constraint a != <rdf:type>]
+     x  <rdf:type>  <rdfs:Resource>
+     a  <rdf:type>  <rdfs:Resource>
+     y  <rdf:type>  <rdfs:Resource>
+/**/
+
+
+Id: rdfs2
+     x  a  y                                  [Constraint a != <rdf:type>]
+     a  <rdfs:domain>  z               [Constraint z != <rdfs:Resource>]
+    -------------------------------
+     x  <rdf:type>  z
+
+Id: rdfs3
+     x  a  u
+     a  <rdfs:range>  z                [Constraint z != <rdfs:Resource>]
+    -------------------------------
+     u  <rdf:type>  z
+
+Id: rdfs5
+     a  <rdfs:subPropertyOf>  b               [Constraint a != b, a != c]
+     b  <rdfs:subPropertyOf>  c               [Constraint b != c, a != b]
+    -------------------------------
+     a  <rdfs:subPropertyOf>  c
+
+
+Id: rdfs6
+	 	a  <rdf:type> <rdf:Property>
+		-------------------------------
+    a  <rdfs:subPropertyOf>  a        
+                                            
+
+Id: rdfs7
+     x  a  y
+     a  <rdfs:subPropertyOf>  b               [Constraint a != b]
+    -------------------------------
+     x  b  y
+
+
+Id: rdfs8_10
+     x  <rdf:type>  <rdfs:Class>
+    -------------------------------
+     x  <rdfs:subClassOf>  <rdfs:Resource>		
+     x  <rdfs:subClassOf>  x
+
+Id: rdfs9
+     a  <rdf:type>  x
+     x  <rdfs:subClassOf>  y                  [Constraint x != y]
+    -------------------------------
+     a  <rdf:type>  y
+
+// implemented through axiom: 
+//  <rdfs:subClassOf>  <rdf:type>  <owl:TransitiveProperty>
+Id: rdfs11
+     x  <rdfs:subClassOf>  y                  [Constraint x != y, x != z]
+     y  <rdfs:subClassOf>  z                  [Constraint y != z, y != x]
+    -------------------------------
+     x  <rdfs:subClassOf>  z
+
+
+Id: rdfs12
+     x  <rdf:type>  <rdfs:ContainerMembershipProperty>
+    -------------------------------
+     x  <rdfs:subPropertyOf>  <rdfs:member>
+
+
+Id: rdfs13
+     x  <rdf:type>  <rdfs:Datatype>
+    -------------------------------
+     x  <rdfs:subClassOf>  <rdfs:Literal>
+
+// passage en skos-align
+Id: tae0-1
+     c  <rdf:type> <align:Cell>
+     c  <align:relation> "<"
+     c <align:entity1> e
+     c <align:entity2> f
+    -------------------------------
+     e <skos:broadMatch> f
+
+// passage en skos-align
+Id: tae0-2
+     c  <rdf:type> <align:Cell>
+     c  <align:relation> ">"
+     c <align:entity1> e
+     c <align:entity2> f
+    -------------------------------
+     e <skos:narrowMatch> f
+
+// passage en skos-align
+Id: tae0-3
+     c  <rdf:type> <align:Cell>
+     c  <align:relation> "="
+     c <align:entity1> e
+     c <align:entity2> f
+    -------------------------------
+     e <skos:exactMatch> f
+
+// passage en skos-align
+Id: tae0-4
+     c  <rdf:type> <align:Cell>
+     c  <align:relation> "fr.inrialpes.exmo.align.impl.rel.SubsumedRelation"
+     c <align:entity1> e
+     c <align:entity2> f
+    -------------------------------
+     e <skos:broadMatch> f
+
+// passage en skos-align
+Id: tae0-5
+     c  <rdf:type> <align:Cell>
+     c  <align:relation> "fr.inrialpes.exmo.align.impl.rel.SubsumeRelation"
+     c <align:entity1> e
+     c <align:entity2> f
+    -------------------------------
+     e <skos:narrowMatch> f
+
+// passage en skos-align
+Id: tae0-6
+     c  <rdf:type> <align:Cell>
+     c  <align:relation> "fr.inrialpes.exmo.align.impl.rel.EquivRelation"
+     c <align:entity1> e
+     c <align:entity2> f
+    -------------------------------
+     e <skos:exactMatch> f
+
+// traitement des listes - 1
+// on fake le comportement de Jena en utilisant un predicat ARQ
+Id: list-1
+     l <rdf:first> i
+     l <rdf:type> <rdf:List>
+    -------------------------------
+     l <http://www.jena.hpl.hp.com/ARQ/list#member> i
+
+// traitement des listes - 2
+// on fake le comportement de Jena en utilisant un predicat ARQ
+Id: list-2
+     l <rdf:rest> r
+     l <rdf:type> <rdf:List>
+     r <http://www.jena.hpl.hp.com/ARQ/list#member> i
+    -------------------------------
+     l <http://www.jena.hpl.hp.com/ARQ/list#member> i
+
+}

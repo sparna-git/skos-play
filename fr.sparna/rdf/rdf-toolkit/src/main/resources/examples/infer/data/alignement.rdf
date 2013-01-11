@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8' standalone='no'?>
+<rdf:RDF xmlns='http://knowledgeweb.semanticweb.org/heterogeneity/alignment#'
+         xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+         xmlns:xsd='http://www.w3.org/2001/XMLSchema#'
+         xmlns:align='http://knowledgeweb.semanticweb.org/heterogeneity/alignment#'
+         xmlns:edoal='http://ns.inria.org/edoal/1.0/#'>
+<Alignment>
+  <xml>yes</xml>
+  <level>2EDOAL</level>
+  <type>com.mondeca.align.process.impl.method.ITMAlignReader</type>
+  <onto1>
+    <Ontology rdf:about="http://eurlex-directory-codes.europa.eu/EURLEX-DIRECTORY-CODES">
+      <location>http://eurlex-directory-codes.europa.eu/EURLEX-DIRECTORY-CODES</location>
+    </Ontology>
+  </onto1>
+  <onto2>
+    <Ontology rdf:about="http://eurovoc.europa.eu/EUROVOC/v4.3">
+      <location>http://eurovoc.europa.eu/EUROVOC/v4.3</location>
+    </Ontology>
+  </onto2>
+  <map>
+    <Cell rdf:about="122556">
+      <entity1>
+        <edoal:Class rdf:about="http://eurlex-directory-codes.europa.eu/016060"/>
+      </entity1>
+      <entity2>
+        <edoal:Class>
+          <edoal:or rdf:parseType="Collection">
+            <edoal:Class rdf:about="http://eurovoc.europa.eu/5051"/>
+            <edoal:Class rdf:about="http://eurovoc.europa.eu/189"/>
+          </edoal:or>
+        </edoal:Class>
+      </entity2>
+      <relation>fr.inrialpes.exmo.align.impl.rel.EquivRelation</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+      <alignapilocalns:hasCellStatus xmlns:alignapilocalns="http://www.mondeca.com/system/publishing#">http://www.mondeca.com/system/publishing#Validated</alignapilocalns:hasCellStatus>
+    </Cell>
+  </map>
+  <map>
+    <Cell rdf:about="122699">
+      <entity1>
+        <edoal:Class rdf:about="http://eurlex-directory-codes.europa.eu/0140"/>
+      </entity1>
+      <entity2>
+        <edoal:Class>
+          <edoal:or rdf:parseType="Collection">
+            <edoal:Class rdf:about="http://eurovoc.europa.eu/1451"/>
+            <edoal:Class rdf:about="http://eurovoc.europa.eu/5767"/>
+          </edoal:or>
+        </edoal:Class>
+      </entity2>
+      <relation>fr.inrialpes.exmo.align.impl.rel.EquivRelation</relation>
+      <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>1.0</measure>
+      <alignapilocalns:hasCellStatus xmlns:alignapilocalns="http://www.mondeca.com/system/publishing#">http://www.mondeca.com/system/publishing#Validated</alignapilocalns:hasCellStatus>
+    </Cell>
+  </map>
+</Alignment>
+</rdf:RDF>

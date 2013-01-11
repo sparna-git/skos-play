@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#ara">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">ar</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">ara</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#bel">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">be</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">bel</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#bos">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">bs</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">bos</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#bul">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">bg</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">bul</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#cat">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">ca</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">cat</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#ces">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">cs</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">ces</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#dan">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">da</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">dan</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#deu">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">de</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">deu</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#ell">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">el</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">ell</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#eng">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">en</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">eng</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#est">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">et</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">est</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#eus">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">eu</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">eus</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#fao">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">fo</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">fao</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#fin">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">fi</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">fin</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#fra">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">fr</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">fra</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#gle">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">ga</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">gle</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#glg">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">gl</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">glg</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#hin">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">hi</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">hin</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#hrv">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">hr</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">hrv</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#hun">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">hu</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">hun</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#isl">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">is</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">isl</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#ita">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">it</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">ita</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#jpn">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">ja</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">jpn</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#kat">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">ka</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">kat</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#kor">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">ko</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">kor</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#lav">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">lv</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">lav</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#lit">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">lt</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">lit</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#mkd">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">mk</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">mkd</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#mlt">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">mt</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">mlt</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#msa">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">ms</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">msa</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#nld">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">nl</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">nld</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#nor">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">no</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">nor</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#pol">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">pl</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">pol</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#por">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">pt</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">por</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#por-BR">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">pt-BR</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">por-BR</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#roh">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">rm</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">roh</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#ron">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">ro</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">ron</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#rus">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">ru</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">rus</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#slk">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">sk</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">slk</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#slv">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">sl</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">slv</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#spa">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">es</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">spa</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#sqi">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">sq</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">sqi</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#srp">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">sr</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">srp</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#swe">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">sv</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">swe</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#tha">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">th</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">tha</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#tur">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">tr</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">tur</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#ukr">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">uk</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">ukr</code-a3t>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#zho">
+	<code-a2 xmlns="http://psi.oasis-open.org/iso/639/#">zh</code-a2>
+	<code-a3t xmlns="http://psi.oasis-open.org/iso/639/#">zho</code-a3t>
+</rdf:Description>
+
+</rdf:RDF>

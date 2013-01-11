@@ -1,0 +1,7 @@
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+CONSTRUCT {
+	?x skos:narrower ?z
+} WHERE {
+	?x skos:narrower ?y .
+	?y skos:narrower ?z
+}

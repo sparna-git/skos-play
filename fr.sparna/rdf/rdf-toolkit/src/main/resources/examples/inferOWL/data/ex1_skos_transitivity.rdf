@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dct="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2008/05/skos#" xmlns:vs="http://www.w3.org/2003/06/sw-vocab-status/ns#" xml:base="http://triplr.org/rdf/www.w3.org/2008/05/skos#">
+  
+   <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#broader">
+    <rdfs:label xml:lang="en">has broader</rdfs:label>
+    <owl:inverseOf rdf:resource="http://www.w3.org/2004/02/skos/core#narrower"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  </owl:ObjectProperty>
+  
+  <owl:ObjectProperty rdf:about="http://www.w3.org/2004/02/skos/core#narrower">
+    <rdfs:label xml:lang="en">has narrower</rdfs:label>
+    <owl:inverseOf rdf:resource="http://www.w3.org/2004/02/skos/core#broader"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+  </owl:ObjectProperty>
+  
+</rdf:RDF>

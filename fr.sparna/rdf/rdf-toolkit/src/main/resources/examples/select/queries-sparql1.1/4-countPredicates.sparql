@@ -1,0 +1,1 @@
+SELECT ?p (COUNT(*) as ?numberOfTriples) WHERE { ?s ?p ?o } GROUP BY ?p ORDER BY DESC (?numberOfTriples)

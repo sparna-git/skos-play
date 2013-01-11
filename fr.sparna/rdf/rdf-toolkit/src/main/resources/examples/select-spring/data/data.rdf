@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+	xmlns:bnf="http://www.bnf.fr/autorites/ontology/">
+<bnf:p rdf:about="http://www.bnf.fr/autorites/entry/10002000">
+	<bnf:property_100_a>Giancarli</bnf:property_100_a>
+	<bnf:property_100_m>Gigio Arthemio</bnf:property_100_m>
+	<rdfs:label>Gigio Arthemio Giancarli</rdfs:label>
+	<skos:altLabel>Gigio Arthemio</skos:altLabel>
+	<skos:altLabel>Arthemio Gigio</skos:altLabel>
+</bnf:p>
+<bnf:p rdf:about="http://www.bnf.fr/autorites/entry/10002005">
+	<bnf:property_100_a>Rey de Artieda</bnf:property_100_a>
+	<bnf:property_100_m>Andrés</bnf:property_100_m>
+	<rdfs:label>Andrés Rey de Artieda</rdfs:label>
+	<skos:altLabel>Andrés Rey de Artiéda</skos:altLabel>
+	<skos:altLabel>Artiéda Andrés Rey de</skos:altLabel>
+</bnf:p>
+<bnf:p rdf:about="http://www.bnf.fr/autorites/entry/10002006">
+	<bnf:property_100_a>Artiga</bnf:property_100_a>
+	<bnf:property_100_m>Francisco Joseph</bnf:property_100_m>
+	<rdfs:label>Francisco Joseph Artiga</rdfs:label>
+	<skos:altLabel>Francisco Joseph Artieda</skos:altLabel>
+	<skos:altLabel>Artieda Francisco Joseph</skos:altLabel>
+</bnf:p>
+<bnf:p rdf:about="http://www.bnf.fr/autorites/entry/10002007">
+	<bnf:property_100_a>Esparza Artieda</bnf:property_100_a>
+	<bnf:property_100_m>Martin de</bnf:property_100_m>
+	<rdfs:label>Martin de Esparza Artieda</rdfs:label>
+	<skos:altLabel>Martin de Esparza Artieda</skos:altLabel>
+	<skos:altLabel>Artieda Martin de Esparza</skos:altLabel>
+</bnf:p>
+<bnf:p rdf:about="http://www.bnf.fr/autorites/entry/10002008">
+	<bnf:property_100_a>Olier d'Artières</bnf:property_100_a>
+	<rdfs:label>Olier d'Artières</rdfs:label>
+	<skos:altLabel>Olier d' Artières</skos:altLabel>
+	<skos:altLabel>Artières Olier d'</skos:altLabel>
+</bnf:p>
+
+</rdf:RDF>

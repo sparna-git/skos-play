@@ -1,0 +1,6 @@
+PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?person ?p100a
+WHERE {
+	?person a <http://www.bnf.fr/autorites/ontology/p> .
+	?person <http://www.bnf.fr/autorites/ontology/property_100_a> ?p100a
+}

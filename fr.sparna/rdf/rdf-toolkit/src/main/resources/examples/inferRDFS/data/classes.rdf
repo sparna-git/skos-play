@@ -1,0 +1,24 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:basicontology="http://www.mondeca.com/system/basicontology#"
+    xmlns:kernel="http://www.mondeca.com/system/kernel#"
+    xmlns:daml="http://www.daml.org/2001/03/daml+oil#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    
+  <owl:Class rdf:about="http://www.nievre-tourisme.com/onto#Talent_local_104157">
+    <rdfs:label xml:lang="fr">Talent local</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.nievre-tourisme.com/onto#Personne"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.nievre-tourisme.com/onto#Personne">
+    <rdfs:label xml:lang="fr">Personne</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://www.mondeca.com/system/publishing#Subject"/>
+    </rdfs:subClassOf>
+    <kernel:abstract>true</kernel:abstract>
+  </owl:Class>  
+  <owl:Class rdf:about="http://www.mondeca.com/system/publishing#Subject">
+    <rdfs:label xml:lang="fr">Sujet</rdfs:label>
+  </owl:Class>
+
+</rdf:RDF>

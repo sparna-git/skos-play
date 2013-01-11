@@ -1,0 +1,867 @@
+/*  OWLIM rules and axioms for the TRREE engine
+ *
+ *  From Thu 03-03-2006
+ *
+ *  Every rule consists of one or more premises and one or more corollaries
+ *  in the following format:
+ *
+ *  Rules
+ *  {
+ *     Id: Rule_Id
+ *     < Premise #1 >
+ *     < Premise #2 >
+ *         . . .
+ *     < Premise #n >
+ *  ---------------------
+ *    < Corollary #1 >
+ *    < Corollary #2 >
+ *         . . .
+ *    < Corollary #m >
+ *  }
+ *
+ *  Every premise may contain constraints stating that the value of one or
+ *  more variables in the statement must not be equal to a full URI, a short name
+ *  or the value of another variable from the same rule.
+ *  This is written in the following format:
+ *
+ *         . . . . . . . . . . .
+ *     a  <mynamespace:myproperty>  b             [Constraint a != b]
+ *     <mynamespace:Instance_1.0>  a  c           [Constraint a != <rdf:type>, c != a, c != b]
+ *    -----------------------------------
+ *     c  a  b
+ *     b  <rdf:type>  <mynamespace:Instance_1.0>  [Constraint b != <http://www.w3.org/2000/01/rdf-schema#Class>]
+ *
+ *  Every left value in the not-equal constraint must denote a variable
+ *  and every right value can be a variable, a short name or a full URI.
+ *  Not-equal constraints may be used to force the engine not to apply
+ *  the rule when the constraints are not satisfied. This will improve
+ *  engine's performance.
+ *  Constraints are valid within the line they appear.
+ *  If a variable is not bound yet then the constraint is considered satisfied
+ *  (and therefore does not apply).
+ *
+ *
+ *  In addition one or more axioms may be added in the following format:
+ *
+ *  Axioms
+ *  {
+ *     < Axiom #1 >
+ *     < Axiom #2 >
+ *        . . .
+ *     < Axiom #n >
+ *  }
+ *
+ *  The premises, the corollaries and the axioms must be written in N-Triple format.
+ *  The subject, the predicate and the object must denote a full URI or
+ *  a short name in format <Prefix>:<LocalName> where <Prefix> is defined in
+ *  the prefix section written in the following format:
+ *
+ *  Prefices
+ *  {
+ *     < Prefix #1 > : < Full URI for prefix #1 >
+ *     < Prefix #2 > : < Full URI for prefix #2 >
+ *            . . . . . . . . . . . . . .
+ *     < Prefix #n > : < Full URI for prefix #n >
+ *  }
+ *
+ *  The sections must be arranged in the following order:
+ *
+ *  Prefices   // If any
+ *  {
+ *     . . .
+ *  }
+ *  Axioms     // If any
+ *  {
+ *     . . .
+ *  }
+ *  Rules      // Must necessarily be present
+ *  {
+ *     . . .
+ *  }
+ *
+ *  Variables in the rules must be literals consisting of one symbol only.
+ *  They must NOT be surrounded by angle braces.
+ *  ONLY rule statements may contain variables.
+ *
+ *  The contents of this file is translated into java code and is output
+ *  to com.ontotext.trree.RdfsHashInferencer and com.ontotext.trree.OwlHashInferencer.
+ *  Use program RuleCompiler.java in order to compile this file.
+ *  Please do not make changes in file generated files because
+ *  next time the translator is started the changes will disappear.
+ *
+ */
+
+Prefices
+{
+     rdf      :  http://www.w3.org/1999/02/22-rdf-syntax-ns#
+     rdfs     :  http://www.w3.org/2000/01/rdf-schema#
+     owl      :  http://www.w3.org/2002/07/owl#
+     protons  :  http://proton.semanticweb.org/2005/04/protons#
+     protont  :  http://proton.semanticweb.org/2005/04/protont#
+//     protonu  :  http://proton.semanticweb.org/2005/04/protonu#
+//     protonkm :  http://proton.semanticweb.org/2005/04/protonkm#
+     xsd      :  http://www.w3.org/2001/XMLSchema#
+}
+
+Axioms
+{
+// RDF axiomatic triples (from RDF Semantics, section 3.1):
+
+     <rdf:type> <rdf:type> <rdf:Property>
+     <rdf:subject> <rdf:type> <rdf:Property>
+     <rdf:predicate> <rdf:type> <rdf:Property>
+     <rdf:object> <rdf:type> <rdf:Property>
+     <rdf:first> <rdf:type> <rdf:Property>
+     <rdf:rest> <rdf:type> <rdf:Property>
+     <rdf:value> <rdf:type> <rdf:Property>
+     <rdf:nil> <rdf:type> <rdf:List>
+
+// RDFS axiomatic triples (from RDF Semantics, section 4.1):
+
+/*[partialRDFS]*/
+     <rdf:type> <rdfs:domain> <rdfs:Resource>
+
+     <rdfs:domain> <rdfs:domain> <rdf:Property>
+     <rdfs:range> <rdfs:domain> <rdf:Property>
+     <rdfs:subPropertyOf> <rdfs:domain> <rdf:Property>
+     <rdfs:subClassOf> <rdfs:domain> <rdfs:Class>
+/*[partialRDFS]*/
+
+     <rdf:subject> <rdfs:domain> <rdf:Statement>
+     <rdf:predicate> <rdfs:domain> <rdf:Statement>
+     <rdf:object> <rdfs:domain> <rdf:Statement>
+
+/*[partialRDFS]*/
+     <rdfs:member> <rdfs:domain> <rdfs:Resource>
+     <rdf:first> <rdfs:domain> <rdf:List>
+     <rdf:rest> <rdfs:domain> <rdf:List>
+     <rdfs:seeAlso> <rdfs:domain> <rdfs:Resource>
+     <rdfs:isDefinedBy> <rdfs:domain> <rdfs:Resource>
+     <rdfs:comment> <rdfs:domain> <rdfs:Resource>
+     <rdfs:label> <rdfs:domain> <rdfs:Resource>
+     <rdf:value> <rdfs:domain> <rdfs:Resource>
+
+     <rdf:type> <rdfs:range> <rdfs:Class>
+     <rdfs:domain> <rdfs:range> <rdfs:Class>
+     <rdfs:range> <rdfs:range> <rdfs:Class>
+     <rdfs:subPropertyOf> <rdfs:range> <rdf:Property>
+     <rdfs:subClassOf> <rdfs:range> <rdfs:Class>
+
+     <rdf:subject> <rdfs:range> <rdfs:Resource>
+     <rdf:predicate> <rdfs:range> <rdfs:Resource>
+     <rdf:object> <rdfs:range> <rdfs:Resource>
+     <rdfs:member> <rdfs:range> <rdfs:Resource>
+     <rdf:first> <rdfs:range> <rdfs:Resource>
+     <rdf:rest> <rdfs:range> <rdf:List>
+
+     <rdfs:seeAlso> <rdfs:range> <rdfs:Resource>
+     <rdfs:isDefinedBy> <rdfs:range> <rdfs:Resource>
+     <rdfs:comment> <rdfs:range> <rdfs:Literal>
+     <rdfs:label> <rdfs:range> <rdfs:Literal>
+
+     <rdf:value> <rdfs:range> <rdfs:Resource>
+/*[partialRDFS]*/
+
+     <rdf:Alt> <rdfs:subClassOf> <rdfs:Container>
+     <rdf:Bag> <rdfs:subClassOf> <rdfs:Container>
+     <rdf:Seq> <rdfs:subClassOf> <rdfs:Container>
+     <rdfs:ContainerMembershipProperty> <rdfs:subClassOf> <rdf:Property>
+
+     <rdfs:isDefinedBy> <rdfs:subPropertyOf> <rdfs:seeAlso>
+
+     <rdf:XMLLiteral> <rdf:type> <rdfs:Datatype>
+     <rdf:XMLLiteral> <rdfs:subClassOf> <rdfs:Literal>
+     <rdfs:Datatype> <rdfs:subClassOf> <rdfs:Class>
+
+ // OWL trivial statements in addition (OWL Horst)
+ // the OWL schema should be imported as part of the OWLMemSchemaRepository initialization:
+
+     <owl:equivalentClass> <rdf:type> <owl:TransitiveProperty>
+     <owl:equivalentClass> <rdf:type> <owl:SymmetricProperty>
+     <owl:equivalentClass> <rdfs:subPropertyOf> <rdfs:subClassOf>
+     <owl:equivalentProperty> <rdf:type> <owl:TransitiveProperty>
+     <owl:equivalentProperty> <rdf:type> <owl:SymmetricProperty>
+     <owl:equivalentProperty> <rdfs:subPropertyOf> <rdfs:subPropertyOf>
+
+// redundant! supported by special rules for owl:sameAs
+//     <owl:sameAs> <rdf:type> <owl:TransitiveProperty>
+     <owl:sameAs> <rdf:type> <owl:SymmetricProperty>
+     <owl:inverseOf> <rdf:type> <owl:SymmetricProperty>
+
+// Some fixes
+
+// those properties are implemented using owl:TransitiveProperty for performance reasons
+// The specific RDFS rule are removed from the final ruleset [rdfs5, rdfs11]
+     <rdfs:subClassOf>  <rdf:type>  <owl:TransitiveProperty>
+     <rdfs:subPropertyOf>  <rdf:type>  <owl:TransitiveProperty>
+
+// The [rdfs9] rule is removed from the final ruleset. Impelemnted as follows
+     <rdf:type> <protons:transitiveOver> <rdfs:subClassOf>
+
+/*
+// Rules rdfs_ext1 and rdfs_ext2
+     <rdfs:domain> <protons:transitiveOver> <rdfs:subClassOf>
+     <rdfs:range> <protons:transitiveOver> <rdfs:subClassOf>
+*/
+
+// owl:differentFrom is symmetric
+     <owl:differentFrom> <rdf:type> <owl:SymmetricProperty>
+     <xsd:nonNegativeInteger> <rdf:type> <rdfs:Datatype>
+     <xsd:string> <rdf:type> <rdfs:Datatype>
+
+// Statements that would have been inferred if there were no 
+// performance-inspired changes to the implementation of the 
+// RDFS axioms and rules
+     <rdf:type> <rdfs:subPropertyOf> <rdf:type>
+     <rdfs:domain> <rdfs:subPropertyOf> <rdfs:domain>
+     <rdfs:range> <rdfs:subPropertyOf> <rdfs:range>
+     <rdfs:subPropertyOf> <rdfs:subPropertyOf> <rdfs:subPropertyOf>
+     <rdfs:subClassOf> <rdfs:subPropertyOf> <rdfs:subClassOf>
+}
+
+Rules
+{
+/*[partialRDFS]*/
+Id: rdf1_rdfs4a_4b
+     x  a  y
+    -------------------------------
+     a  <rdf:type>  <rdf:Property>            [Constraint a != <rdf:type>]
+     x  <rdf:type>  <rdfs:Resource>
+     a  <rdf:type>  <rdfs:Resource>
+     y  <rdf:type>  <rdfs:Resource>
+/*[partialRDFS]*/
+
+
+Id: rdfs2
+     x  a  y                                  [Constraint a != <rdf:type>]
+     a  <rdfs:domain>  z               	[Constraint z != <rdfs:Resource>] 
+    -------------------------------
+     x  <rdf:type>  z
+
+Id: rdfs3
+     x  a  u
+     a  <rdfs:range>  z                [Constraint z != <rdfs:Resource>] 
+    -------------------------------
+     u  <rdf:type>  z
+
+/* redundant - implemented through TransitiveProperty
+Id: rdfs5
+     a  <rdfs:subPropertyOf>  b               [Constraint a != b, a != c]
+     b  <rdfs:subPropertyOf>  c               [Constraint b != c, a != b]
+    -------------------------------
+     a  <rdfs:subPropertyOf>  c
+*/
+
+
+Id: rdfs6
+ 	a  <rdf:type> <rdf:Property>
+   -------------------------------
+    a  <rdfs:subPropertyOf>  a        
+                                            
+
+Id: rdfs7
+     x  a  y
+     a  <rdfs:subPropertyOf>  b               [Constraint a != b]
+    -------------------------------
+     x  b  y
+
+
+Id: rdfs8_10
+     x  <rdf:type>  <rdfs:Class>
+    -------------------------------
+    
+     x  <rdfs:subClassOf>  <rdfs:Resource>		
+     x  <rdfs:subClassOf>  x
+
+/*
+// implemented through axiom: 
+// 	<rdf:type> <protons:transitiveOver> <rdfs:subClassOf>    
+Id: rdfs9
+     a  <rdf:type>  x
+     x  <rdfs:subClassOf>  y                  [Constraint x != y]
+    -------------------------------
+     a  <rdf:type>  y
+*/
+
+/*
+// implemented through axiom: 
+//  <rdfs:subClassOf>  <rdf:type>  <owl:TransitiveProperty>
+Id: rdfs11
+     x  <rdfs:subClassOf>  y                  [Constraint x != y, x != z]
+     y  <rdfs:subClassOf>  z                  [Constraint y != z, y != x]
+    -------------------------------
+     x  <rdfs:subClassOf>  z
+*/
+
+
+Id: rdfs12
+     x  <rdf:type>  <rdfs:ContainerMembershipProperty>
+    -------------------------------
+     x  <rdfs:subPropertyOf>  <rdfs:member>
+
+
+Id: rdfs13
+     x  <rdf:type>  <rdfs:Datatype>
+    -------------------------------
+     x  <rdfs:subClassOf>  <rdfs:Literal>
+
+
+//==============================================================================
+// PROTON specific rules	
+//==============================================================================
+
+
+Id: proton_TransitiveOver
+// Support for property protons:transitiveOver. With its aid it is possible 
+// to define relationships as that between the rdf:type and rdfs:subClassOf. 
+//
+     p  <protons:transitiveOver>  q
+     x  p  y
+     y  q  z
+    -------------------------------
+     x  p  z
+
+
+Id: proton_TransProp
+// Infers OWL property transitivity from protons:transitiveOver. 
+// It serves as a replacement for owl_TransProp.
+//
+     p  <rdf:type>  <owl:TransitiveProperty>
+    -------------------------------
+     p  <protons:transitiveOver>  p
+	
+
+Id: proton_TransPropInduct
+// Infers protons:transitiveOver from OWL property transitivity.
+//
+     p  <protons:transitiveOver>  p
+    -------------------------------
+     p  <rdf:type>  <owl:TransitiveProperty>
+
+Id: Proton_roleHolder
+//
+     x  <protont:roleHolder>  y
+     x  <protont:roleIn>  z
+     y  <rdf:type>  <protont:Agent>
+    -------------------------------
+     y  <protont:involvedIn>  z
+
+
+//==============================================================================
+// OWL-Horst supporting rules    
+//==============================================================================
+
+Id: owl_Thing1
+     x  <rdf:type>  <owl:Class>
+    -------------------------------    
+     x  <rdfs:subClassOf>  <owl:Thing>		
+
+Id: owl_sameAsReflexive
+     x  <rdf:type>  <owl:Thing>
+    -------------------------------    
+     x  <owl:sameAs>  x		
+
+Id: owl_invOf
+// Support for owl:inverseOf
+     x  p  y
+     p  <owl:inverseOf>  q
+    -------------------------------
+     y  q  x
+
+
+Id: owl_invOfBySymProp
+// Support for owl:SymmetricProperty. The symmetric properties are defined 
+// as inverse to themselves, which is sufficient to cover their semantics
+//
+     p  <rdf:type>  <owl:SymmetricProperty>
+    -------------------------------
+     p  <owl:inverseOf>  p
+
+
+Id: owl_SymPropByInverse
+// Related to owl_invOfBySymProp
+// 
+     p  <owl:inverseOf>  p
+    -------------------------------
+     p  <rdf:type>  <owl:SymmetricProperty>
+
+/*
+Id: owl_TransProp
+// Standard support for owl:TransitiveProperty. In fact, this rule is not used; 
+// for performance reasons, it is replaced by proton_TransProp.
+//
+     p  <rdf:type>  <owl:TransitiveProperty>
+     x  p  y                                  [Constraint x != y]
+     y  p  z                                  [Constraint y != z]
+    -------------------------------
+     x  p  z
+*/
+
+
+Id: owl_FunctProp
+// Support for owl:FunctionalProperty. Implemented as equality (owl:sameAs) 
+// between the multiple objects of the same subject in statements where a 
+// functional property is used as a predicate.
+//
+     p  <rdf:type>  <owl:FunctionalProperty>
+     x  p  y                                  [Constraint y != z, p != <rdf:type>]
+     x  p  z                                  [Constraint z != y] [Cut]
+    -------------------------------
+     y  <owl:sameAs>  z
+
+
+Id: owl_InvFunctProp
+// Support for owl:InverseFunctionalProperty. An implementation analogous to 
+// that of owl:FunctionalProperty
+//
+     p  <rdf:type>  <owl:InverseFunctionalProperty>
+     y  p  x                                  [Constraint y != z, p != <rdf:type>]
+     z  p  x                                  [Constraint z != y] [Cut]
+    -------------------------------
+     y  <owl:sameAs>  z
+
+
+Id: owl_sameAsCopySubj
+// Copy of statement over owl:sameAs on the subject. The support for owl:sameAs 
+// is implemented through replication of the statements where the equivalent 
+// resources appear as subject, predicate, or object. See also the couple of 
+// rules below
+//
+     x  <owl:sameAs>  y                       [Constraint x != y]
+     x  p  z                                  //[Constraint p != <owl:sameAs>]
+    -------------------------------
+     y  p  z
+
+
+Id: owl_sameAsCopyPred
+// Copy of statement over owl:sameAs on the predicate
+//
+     p  <owl:sameAs>  q                       [Constraint p != q]
+     x  p  y
+    -------------------------------
+     x  q  y
+
+
+Id: owl_sameAsCopyObj
+// Copy of statement over owl:sameAs on the object
+//
+     x  <owl:sameAs>  y                       [Constraint x != y]
+     z  p  x                                  //[Constraint p != <owl:sameAs>]
+    -------------------------------
+     z  p  y
+
+
+
+/*
+Id: eqPropertyBySameAs
+     p  <owl:sameAs>  q
+     p  <rdf:type>  <rdf:Property>
+    -------------------------------
+     p  <owl:equivalentProperty>  q
+
+
+Id: eqPropertyByInverseOf
+     p  <owl:inverseOf>  q
+     q  <owl:inverseOf>  r
+    -------------------------------
+     p  <owl:equivalentProperty>  r
+*/
+
+Id: owl_EquivClassBySubClass
+// The support for property owl:equivalentClass is implemented since it was 
+// declared to be symmetric and transitive and thus a sub-property of 
+// rdfs:subClassOf. This particular approach was chosen in order to achieve 
+// performance optimization, but the user should be aware of the possible 
+// "side effects" when traversing the class hierarchy. By means of this 
+// property and of the following rule, it is possible to conclude the class 
+// equivalence for classes that are each other's sub classes.
+//
+     x  <rdfs:subClassOf>  y                  [Constraint y != x]
+     y  <rdfs:subClassOf>  x                  [Cut]
+    -------------------------------
+     x  <owl:equivalentClass>  y
+
+
+Id: owl_EquivPropBySubProp
+// The support for property owl:equivalentProperty is implemented since it was 
+// declared to be symmetric and transitive and thus a sub-property of 
+// rdfs:subPropertyOf. This particular approach was chosen in order to achieve 
+// performance optimization, but the user should be aware of the possible 
+// "side effects" when traversing the property hierarchy. By means of this 
+// property and of the following rule, it is possible to conclude the property 
+// equivalence for properties that are each other's sub properties.
+// 
+     x  <rdfs:subPropertyOf>  y               [Constraint y != x]
+     y  <rdfs:subPropertyOf>  x               [Cut]
+    -------------------------------
+     x  <owl:equivalentProperty>  y
+
+
+Id: owl_typeByAllVal
+// Support for restrictions owl:onProperty of type owl:allValuesFrom. 
+// The support is limited to the inference of a class membership for all the 
+// values of the triples, whose subjects are members of the restriction. 
+// No inference of the restriction membership in the opposite direction of 
+// the rule is made.
+//
+     x  <owl:onProperty>  p
+     u  <rdf:type>  x
+     x  <owl:allValuesFrom>  y
+     u  p  v
+    -------------------------------
+     v  <rdf:type>  y
+
+Id: owl_typeByHasVal
+// Support for restrictions owl:onProperty of type owl:hasValue. 
+// Derives a Restriction membership for nodes involved as subjects in 
+// statements, where the predicate and the object match those specified in the 
+// restriction.
+//
+	r  <owl:onProperty>  p
+	r  <owl:hasValue>  v
+	i  p  v
+    -------------------------------
+	i  <rdf:type>  r
+
+
+Id: owl_AttrByHasVal
+// Support for restrictions owl:onProperty of type owl:hasValue. 
+// A new triple with the defined predicate and the value for the nodes that are 
+// members of the restriction. 
+//
+     x  <owl:hasValue>  y
+     x  <owl:onProperty>  p
+     u  <rdf:type>  x
+    -------------------------------
+     u  p  y
+
+
+Id: owl_typeBySomeVal
+// Support for restrictions owl:onProperty of type owl:someValuesFrom. The 
+// support is limited to the inference of a restriction membership for nodes 
+// related to other nodes (values) of the corresponding class through the 
+// restricted property.
+//
+	q  <rdf:type>  c
+	r  <owl:onProperty>  p
+	r  <owl:someValuesFrom>  c
+	i  p  q
+    -------------------------------
+	i  <rdf:type>  r
+
+
+//==============================================================================
+// LUBM supporting rules (included in owl-horst ruleset)
+//==============================================================================
+
+
+Id: owl_subClassByInters1
+// The support for owl:intersectionOf relies on the four rules, given bellow, 
+// by means of which the inference of class membership is possible in both 
+// directions. First, for the explicit members of the intersection, the rules 
+// derive the class membership of each of the intersecting classes and then, 
+// for each instance (member) of all of the intersecting classes, they derive 
+// the class membership of the intersection.
+// 
+	c  <owl:intersectionOf>  x
+	x  <rdf:first>  y
+    -------------------------------
+	c  <rdfs:subClassOf>  x
+	c  <rdfs:subClassOf>  y
+
+Id: owl_subClassByInters2
+	x  <rdf:rest>  y             [Constraint y != <rdf:nil>]
+	c  <owl:intersectionOf>  x
+    -------------------------------
+	x  <owl:intersectionOf>  y
+
+/*
+Id: owl_subClassByInters2
+// Related to owl_subClassByInters1.
+// Note: each unbound var in the corollaries is bound to a new anonymous node
+// 
+	x  <rdf:rest>  y
+	c  <owl:intersectionOf>  x
+	y  <rdf:first>  z
+    -------------------------------
+	c  <rdfs:subClassOf>  w
+	w  <owl:intersectionOf>  y
+
+
+Id:	owl_subClassByInters3
+// Related to owl_subClassByInters1.
+// Note: each unbound var in the corollaries is bound to a new anonymous node
+// 
+	a <owl:intersectionOf> l
+	l <rdf:first> c
+	l <rdf:rest> <rdf:nil>
+    -------------------------------
+	c <rdfs:subClassOf> a
+
+Id: owl_typeByIntersect
+// Inference of membership to a class, which is an intersection of classes to  
+// which a resource belongs to.
+// 
+	i  <rdf:type>  c
+	n  <rdf:first>  c
+	n  <rdf:rest>  l
+	a  <owl:intersectionOf>  l
+	b  <owl:intersectionOf>  n
+	i  <rdf:type>  a
+    -------------------------------
+	i  <rdf:type>  b
+*/
+
+Id: owl_typeByIntersect_1
+    b  <rdf:first>  c
+    b  <rdf:rest>  <rdf:nil>
+    z  <owl:intersectionOf>  b
+    i  <rdf:type>  c
+   --------------------------------
+    i  <rdf:type>  b
+
+Id: owl_typeByIntersect_2
+    b  <rdf:first>  c
+    i  <rdf:type>  c
+    i  <rdf:type>  b
+    n  <owl:intersectionOf>  b
+    --------------------------------
+    i  <rdf:type>  n
+
+//==============================================================================
+// OWL-Max supporting rules
+//==============================================================================
+
+
+Id: rdfs_ext3
+// From the standards RDFS semantics
+//
+     p  <rdfs:subPropertyOf>  q           [Constraint p != q]
+     q  <rdfs:domain>  c
+    -------------------------------
+     p  <rdfs:domain>  c
+
+
+Id: rdfs_ext4
+// From the standards RDFS semantics
+//
+     p  <rdfs:subPropertyOf>  q           [Constraint p != q]
+     q  <rdfs:range>  c
+    -------------------------------
+     p  <rdfs:range>  c
+
+Id: owl_FunctPropByInvFunc
+// Inference of membership to FunctionalProperty by inverse property, which is 
+// an InverseFunctionalProperty
+//
+     p  <rdf:type>  <owl:InverseFunctionalProperty>
+     p <owl:inverseOf> q
+    -------------------------------
+     q  <rdf:type>  <owl:FunctionalProperty>
+
+
+Id: owl_InvFunctPropByFunctProp
+// Inference of membership to InverseFunctionalProperty by inverse property,  
+// which is an FunctionalProperty. [TBOX]
+//
+     p  <rdf:type>  <owl:FunctionalProperty>
+     p <owl:inverseOf> q
+    -------------------------------
+     q  <rdf:type>  <owl:InverseFunctionalProperty>
+
+
+Id: owl_allDiff1
+// The support for owl:AllDifferent is implemented using pair of rules that entail 
+// owl:differentFrom statements for all the distinct members of a collection by 
+// which the owl:AllDifferent  restriction is defined.
+//
+	x  <owl:distinctMembers>  m
+	m  <rdf:rest>  n					[Constraint n != <rdf:nil>]
+    -------------------------------
+	x  <owl:distinctMembers>  n
+
+
+Id: owl_allDiff2
+// Related to rule owl_allDiff1
+// 
+	x  <owl:distinctMembers>  m
+	x  <owl:distinctMembers>  n			[Constraint n != m ]
+	m  <rdf:first>  i
+	n  <rdf:first>  j					[Constraint j != i]
+   -------------------------------
+	i  <owl:differentFrom>  j
+
+
+Id: owl_subClassByUnion1
+// The support for owl:unionOf is limited to the derivation of a class 
+// membership for classes that form the union and note: only for the 
+// explicit members of the union.
+// This rule generates a class that is the union of the rest and makes 
+// it a subClass of the 'big' union
+// 
+/*
+	a  <owl:unionOf>  m
+	m  <rdf:rest>  n					[Constraint n != <rdf:nil>]
+    -------------------------------
+	z  <owl:unionOf>  n
+	z  <rdfs:subClassOf>  a
+*/
+	x  <rdf:rest>  y					[Constraint y != <rdf:nil>]
+	c  <owl:unionOf>  x
+   -------------------------------
+	x  <owl:unionOf>  y
+	x  <rdfs:subClassOf>  c
+
+Id: owl_subClassByUnion2
+// Related to rule owl_subClassByUnion1
+// 
+	a  <owl:unionOf>  m
+	m  <rdf:first>  c
+   -------------------------------
+	c  <rdfs:subClassOf>  a
+
+Id: owl_oneOf1
+// The support for owl:oneOf is implemented, in order to derive the class 
+// membership of the instances that form an enumerated class, thus introducing 
+// smaller intermediate enumerations that are subclasses of larger collections.
+//
+    c  <owl:oneOf>  m
+    m  <rdf:rest>  n 	              [Constraint n != <rdf:nil>]
+   -------------------------------
+    m  <owl:oneOf>  n
+    m  <rdfs:subClassOf>  c
+
+Id: owl_oneOf2
+// Related to rule owl_oneOf1
+// 
+    c  <owl:oneOf>  m
+    m  <rdf:first>  i
+   -------------------------------
+    i  <rdf:type>  c
+
+
+/*
+	// "1"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger>  .
+	//id:minCardinality1F
+	i p q
+	r <owl:onProperty> p
+	r <owl:minCardinality> "1"^^xsd:nonNegativeInteger
+	----------------------------
+	i <rdf:type> r
+
+	//id:maxCardinality0B
+	i <rdf:type> r
+	i p q
+	r <owl:onProperty> p
+	r <owl:maxCardinality> "0"^^xsd:nonNegativeInteger
+    -------------------------------
+	i <rdf:type> <owl:Nothing>
+
+	//id:maxCardinality1B
+	i <rdf:type> r
+	i p q
+	i p z				      [Constraint q != z]
+	r <owl:onProperty> p
+	r <owl:maxCardinality> "1"^^xsd:nonNegativeInteger
+    -------------------------------
+	q <owl:sameAs> z
+*/
+
+
+// rule: OWL someVF subclass over similar someValues over subProperties
+Id: owl_subClassBetweenSomeVal
+	r  <owl:onProperty>  p
+	r  <owl:someValuesFrom>  c
+	s  <owl:onProperty>  q
+	s  <owl:someValuesFrom>  d
+	q  <rdfs:subPropertyOf>  p
+	d  <rdfs:subClassOf>  c
+   -------------------------------
+	s  <rdfs:subClassOf>  r
+
+	      
+// rule: OWL allVF subclass over similar allValues over subProperties 
+Id: owl_subClassBetweenAllVal
+	r  <owl:onProperty>  p
+	r  <owl:allValuesFrom>  c
+	s  <owl:onProperty>  q
+	s  <owl:allValuesFrom>  d
+	p  <rdfs:subPropertyOf>  q
+	d  <rdfs:subClassOf>  c
+   -------------------------------
+	s  <rdfs:subClassOf>  r
+
+      
+// rule: OWL hasValue subclass over similar hasValue over subProperties 
+Id: owl_subClassBetweenHasVal
+	r  <owl:onProperty>  p
+	r  <owl:hasValue>  i
+	s  <owl:onProperty>  q
+	s  <owl:hasValue>  i
+	q  <rdfs:subPropertyOf>  p
+   -------------------------------
+	s  <rdfs:subClassOf>  r
+
+	
+Id: sameAsRestriction
+
+    r  <owl:onProperty>  p            [Constraint r != q]
+    r  <owl:minCardinality>  "1"^^xsd:nonNegativeInteger
+    q  <owl:onProperty>  p            [Constraint q != r]
+    q  <owl:minCardinality>  "1"^^xsd:nonNegativeInteger
+   --------------------------------
+    r  <owl:sameAs>  q
+
+Id: owl_subClassFromHasValToSomeVal
+	r  <owl:onProperty>  p
+	r  <owl:hasValue>  i
+	i  <rdf:type>  c
+	s  <owl:onProperty>  q
+	s  <owl:someValuesFrom>  c
+	p  <rdfs:subPropertyOf>  q
+   -------------------------------
+	r  <rdfs:subClassOf>  s
+
+	
+Id: owl_subClassFromSomeValToMinCard1
+	r  <owl:onProperty>  p
+	r  <owl:someValuesFrom>  c
+	s  <owl:onProperty>  q
+	s  <owl:minCardinality>  "1"^^xsd:nonNegativeInteger
+	p  <rdfs:subPropertyOf>  q
+   -------------------------------
+	r  <rdfs:subClassOf>  s
+
+
+Id: owl_typeByMinCard1
+	r  <owl:onProperty>  p
+	r  <owl:minCardinality>  "1"^^xsd:nonNegativeInteger
+	i  p  j
+   -------------------------------
+	i  <rdf:type>  r
+
+
+Id: owl_sameAsByMaxCard1
+	i <rdf:type> r
+	r  <owl:onProperty>  p
+	r  <owl:maxCardinality>  "1"^^xsd:nonNegativeInteger
+	i  <rdf:type>  r
+	i  p  j
+	i  p  k								[Constraint k != j]
+   -------------------------------
+	j  <owl:sameAs>  k
+
+
+Id: owl_minMaxCardByCard
+	r  <owl:onProperty>  p
+	r  <owl:cardinality>  "1"^^xsd:nonNegativeInteger
+   -------------------------------
+	w  <owl:onProperty>  p
+	w  <owl:minCardinality>  "1"^^xsd:nonNegativeInteger
+	z  <owl:onProperty>  p
+	z  <owl:maxCardinality>  "1"^^xsd:nonNegativeInteger
+    r  <rdfs:subClassOf>  w
+    r  <rdfs:subClassOf>  z
+	
+	
+}

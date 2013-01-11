@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:bo="http://www.mondeca.com/system/basicontology#"
+	xmlns:logs="http://www.mondeca.com/logs#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#language">
+	<sameAs xmlns="http://www.w3.org/2002/07/owl#" rdf:resource="http://www.mondeca.com/system/basicontology#Language_cl"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#deprecated_topic">
+	<sameAs xmlns="http://www.w3.org/2002/07/owl#" rdf:resource="http://www.mondeca.com/system/publishing#Deprecated_Term"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#classification_plan_template">
+	<sameAs xmlns="http://www.w3.org/2002/07/owl#" rdf:resource="http://www.mondeca.com/system/publishing#Template_Top_File"/>
+</rdf:Description>
+<rdf:Description rdf:about="itm:n#_585">
+	<sameAs xmlns="http://www.w3.org/2002/07/owl#" rdf:resource="http://www.mondeca.com/system/basicontology#logmanagement"/>
+</rdf:Description>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/clientcreation#Client_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/clientkbs#Knowledge_base_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/clientontologies#Ontology_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/clientusers#User_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/clientmanagement#Client_ontologies_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/clientmanagement#Client_knowledge_bases_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/clientmanagement#Client_users_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/clientmanagement#Client_profiles_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Class_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Association_type_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Role_type_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Data_item_type_cl"/>
+<bo:Class_cl rdf:about="http://psi.oasis-open.org/iso/639/#language"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Profile_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Source_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Quality_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#Home"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/clientkbs#Shared_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/clientkbs#Project_space_cl"/>
+<bo:Class_cl rdf:about="itm:n#_76"/>
+<bo:Class_cl rdf:about="itm:n#_77"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Document_cl"/>
+<bo:Class_cl rdf:about="itm:n#_79"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Classifications_to_arrange_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Physical_Data_Item_cl"/>
+<bo:Class_cl rdf:about="http://www.w3.org/2001/XMLSchema#boolean"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#Ontology_management"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#Widget_Type"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#Association_Type_Parameter"/>
+<bo:Class_cl rdf:about="itm:n#_127"/>
+<Unit_Class_cl xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:about="http://www.mondeca.com/system/unitsontology#Unit_cl"/>
+<Unit_Class_cl xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:about="http://www.mondeca.com/system/unitsontology#Time_Unit_cl"/>
+<Unit_Class_cl xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:about="http://www.mondeca.com/system/unitsontology#Length_Unit_cl"/>
+<Unit_Class_cl xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:about="http://www.mondeca.com/system/unitsontology#Weight_Unit_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#Unit_Class_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#External_System"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Data_Item_Pointer"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Data_Item_Text"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Data_Item_Link"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Data_Item_Name"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Data_Item_Numeric"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Data_Item_Time"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#Data_Item_Parameter"/>
+<Unit_Class_cl xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:about="http://www.mondeca.com/system/unitsontology#North_South"/>
+<Unit_Class_cl xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:about="http://www.mondeca.com/system/unitsontology#East_West"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#Reference_List"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#deprecated_topic"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#classification_plan_template"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#Date_format"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Metadata"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Query"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Trust_level"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#rule"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#Taxonomy"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#Orientation_cl"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Rule_status_ref_table"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Candidate_status_ref_table"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Report"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Reportformat"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Reportfamily"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#reporttemplate"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Reportprocess"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#reportManagement"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#reportResult"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#abstractreport"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#abstractquery"/>
+<bo:Class_cl rdf:about="itm:n#_579"/>
+<bo:Class_cl rdf:about="itm:n#_585"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#log"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#logaction"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#lognature"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#historicalreportclass"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Rule_template_object"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Data_Item_XML"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#DataItemDisplayValues"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/clientusers#Group"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/clientkbs#PublicationWorkspace"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Workflow_management"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#WorkingContext"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#WorkflowState"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/constraintChecking#Constraint"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/constraintChecking#MandatoryConstraint"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/constraintChecking#ForbiddenConstraint"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#ValidationReport"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Inference_rule"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Request_rule"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#ActionClass"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#TargetedAction"/>
+<ActionClass xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:about="http://www.mondeca.com/system/basicontology#PingAction"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#ActionManagement"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/ontology_creation#Plugin"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#Sequence"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#AlphanumericVariable"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#referenceTableTaskStatus"/>
+<bo:Class_cl rdf:about="http://www.mondeca.com/system/basicontology#task"/>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Query">
+	<istechnical xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</istechnical>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Report">
+	<istechnical xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</istechnical>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Reportfamily">
+	<istechnical xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</istechnical>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#reporttemplate">
+	<istechnical xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</istechnical>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#reportManagement">
+	<istechnical xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</istechnical>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#reportResult">
+	<istechnical xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</istechnical>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#abstractreport">
+	<istechnical xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</istechnical>
+	<abstract xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</abstract>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#abstractquery">
+	<istechnical xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</istechnical>
+	<abstract xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</abstract>
+</rdf:Description>
+<rdf:Description rdf:about="itm:n#_579">
+	<istechnical xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</istechnical>
+</rdf:Description>
+<rdf:Description rdf:about="itm:n#_585">
+	<istechnical xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</istechnical>
+	<abstract xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</abstract>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#log">
+	<istechnical xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</istechnical>
+	<abstract xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</abstract>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#historicalreportclass">
+	<istechnical xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</istechnical>
+	<abstract xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</abstract>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Workflow_management">
+	<abstract xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</abstract>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#ValidationReport">
+	<istechnical xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</istechnical>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#ActionClass">
+	<LanguagesToTranslate xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:resource="http://psi.oasis-open.org/iso/639/#rus"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#TargetedAction">
+	<LanguagesToTranslate xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:resource="http://psi.oasis-open.org/iso/639/#rus"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#PingAction">
+	<actionPlugin xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:resource="itm:n#_736"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#ActionManagement">
+	<abstract xmlns="http://www.mondeca.com/system/ontology_creation#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</abstract>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/clientcreation#Client_cl">
+	<rdfs:label>Client</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/clientkbs#Knowledge_base_cl">
+	<rdfs:label xml:lang="fr">Base de connaissances</rdfs:label>
+	<rdfs:label xml:lang="ru">База знаний</rdfs:label>
+	<rdfs:label>Knowledge base</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/clientontologies#Ontology_cl">
+	<rdfs:label xml:lang="fr">Ontologie</rdfs:label>
+	<rdfs:label xml:lang="ru">Онтология</rdfs:label>
+	<rdfs:label>Ontology</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/clientusers#User_cl">
+	<rdfs:label xml:lang="fr">Utilisateur</rdfs:label>
+	<rdfs:label xml:lang="ru">Пользователь</rdfs:label>
+	<rdfs:label>User</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/clientmanagement#Client_ontologies_cl">
+	<rdfs:label>Client ontologies</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/clientmanagement#Client_knowledge_bases_cl">
+	<rdfs:label>Client knowledge bases</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/clientmanagement#Client_users_cl">
+	<rdfs:label>Client users</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/clientmanagement#Client_profiles_cl">
+	<rdfs:label>Client profiles</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Class_cl">
+	<rdfs:label xml:lang="ru">Класс</rdfs:label>
+	<rdfs:label xml:lang="fr">Classe</rdfs:label>
+	<rdfs:label>Class</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Association_type_cl">
+	<rdfs:label xml:lang="ru">тип отношения</rdfs:label>
+	<rdfs:label xml:lang="fr">Type d'association</rdfs:label>
+	<rdfs:label>Association type</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Role_type_cl">
+	<rdfs:label xml:lang="ru">Тип роли</rdfs:label>
+	<rdfs:label xml:lang="fr">Type de rôle</rdfs:label>
+	<rdfs:label>Role type</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Data_item_type_cl">
+	<rdfs:label xml:lang="ru">Тип элемента данных</rdfs:label>
+	<rdfs:label xml:lang="fr">Type de Data Item</rdfs:label>
+	<rdfs:label>Data Item Type</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://psi.oasis-open.org/iso/639/#language">
+	<rdfs:label xml:lang="ru">Язык</rdfs:label>
+	<rdfs:label xml:lang="fr">Langue</rdfs:label>
+	<rdfs:label>Language</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Profile_cl">
+	<rdfs:label>Profile</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Source_cl">
+	<rdfs:label xml:lang="ru">Источник</rdfs:label>
+	<rdfs:label>Source</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Quality_cl">
+	<rdfs:label xml:lang="ru">Качество</rdfs:label>
+	<rdfs:label xml:lang="fr">Qualité</rdfs:label>
+	<rdfs:label>Quality</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Home">
+	<rdfs:label xml:lang="ru">Исходная позиция</rdfs:label>
+	<rdfs:label xml:lang="fr">Accueil</rdfs:label>
+	<rdfs:label>Home</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/clientkbs#Shared_cl">
+	<rdfs:label>Shared</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/clientkbs#Project_space_cl">
+	<rdfs:label>Project space</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="itm:n#_76">
+	<rdfs:label>Universal</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="itm:n#_77">
+	<rdfs:label>Individual</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Document_cl">
+	<rdfs:label xml:lang="ru">Документ</rdfs:label>
+	<rdfs:label>Document</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="itm:n#_79">
+	<rdfs:label>Subject</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Classifications_to_arrange_cl">
+	<rdfs:label xml:lang="ru">Классификации для упорядочивания</rdfs:label>
+	<rdfs:label xml:lang="fr">Classe à ranger</rdfs:label>
+	<rdfs:label>Classifications to arrange</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Physical_Data_Item_cl">
+	<rdfs:label xml:lang="ru">Физический элемент данных</rdfs:label>
+	<rdfs:label xml:lang="fr">Data Item Physique</rdfs:label>
+	<rdfs:label>Physical Data Item</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.w3.org/2001/XMLSchema#boolean">
+	<rdfs:label xml:lang="ru">Булев</rdfs:label>
+	<rdfs:label xml:lang="fr">Booléen</rdfs:label>
+	<rdfs:label>Boolean</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Ontology_management">
+	<rdfs:label xml:lang="ru">Управление онтологией</rdfs:label>
+	<rdfs:label xml:lang="fr">Gestion de l'ontologie</rdfs:label>
+	<rdfs:label>Ontology management</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Widget_Type">
+	<rdfs:label xml:lang="ru">Графический элемент</rdfs:label>
+	<rdfs:label xml:lang="fr">Elément graphique</rdfs:label>
+	<rdfs:label>Graphic Element</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Association_Type_Parameter">
+	<rdfs:label xml:lang="ru">Параметр типа отношения</rdfs:label>
+	<rdfs:label xml:lang="fr">Paramètre de type d'association</rdfs:label>
+	<rdfs:label>Association type parameter</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="itm:n#_127">
+	<rdfs:label xml:lang="en">Data Item Type Zone</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/unitsontology#Unit_cl">
+	<rdfs:label xml:lang="ru">Единица</rdfs:label>
+	<rdfs:label xml:lang="fr">Unité</rdfs:label>
+	<rdfs:label>Unit</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/unitsontology#Time_Unit_cl">
+	<rdfs:label xml:lang="ru">Единицы времени</rdfs:label>
+	<rdfs:label xml:lang="fr">Unité de temps</rdfs:label>
+	<rdfs:label>Time Unit</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/unitsontology#Length_Unit_cl">
+	<rdfs:label xml:lang="ru">Единицы длины</rdfs:label>
+	<rdfs:label xml:lang="fr">Unité de longueur</rdfs:label>
+	<rdfs:label>Length Unit</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/unitsontology#Weight_Unit_cl">
+	<rdfs:label xml:lang="ru">Единицы веса</rdfs:label>
+	<rdfs:label xml:lang="fr">Unité de largeur</rdfs:label>
+	<rdfs:label>Weight Unit</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Unit_Class_cl">
+	<rdfs:label xml:lang="ru">Класс единиц</rdfs:label>
+	<rdfs:label xml:lang="fr">Classe d'unités</rdfs:label>
+	<rdfs:label>Unit Class</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#External_System">
+	<rdfs:label xml:lang="ru">Внешняя система</rdfs:label>
+	<rdfs:label xml:lang="fr">Système externe</rdfs:label>
+	<rdfs:label>External System</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Data_Item_Pointer">
+	<rdfs:label xml:lang="ru">Тип элемента данных - Указатель</rdfs:label>
+	<rdfs:label xml:lang="fr">Type de Data Item - Pointeur</rdfs:label>
+	<rdfs:label>Data Item Type - Pointer</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Data_Item_Text">
+	<rdfs:label xml:lang="ru">Тип элемента данных - Текст</rdfs:label>
+	<rdfs:label xml:lang="fr">Type de Data Item - Texte</rdfs:label>
+	<rdfs:label>Data Item Type - Text</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Data_Item_Link">
+	<rdfs:label xml:lang="ru">Тип элемента данных - Ссылка</rdfs:label>
+	<rdfs:label xml:lang="fr">Type de Data Item - Lien</rdfs:label>
+	<rdfs:label>Data Item Type - Link</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Data_Item_Name">
+	<rdfs:label xml:lang="ru">Тип элемента данных - Название</rdfs:label>
+	<rdfs:label xml:lang="fr">Type de Data Item - Nom</rdfs:label>
+	<rdfs:label>Data Item Type - Name</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Data_Item_Numeric">
+	<rdfs:label xml:lang="ru">Тип элемента данных - Числовой</rdfs:label>
+	<rdfs:label xml:lang="fr">Type de Data Item - Numérique</rdfs:label>
+	<rdfs:label>Data Item Type - Numeric</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Data_Item_Time">
+	<rdfs:label xml:lang="ru">Тип элемента данных - Время</rdfs:label>
+	<rdfs:label xml:lang="fr">Type de Data Item - Date</rdfs:label>
+	<rdfs:label>Data Item Type - Time</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Data_Item_Parameter">
+	<rdfs:label xml:lang="ru">Тип элемента данных - Параметр (отключено)</rdfs:label>
+	<rdfs:label xml:lang="fr">Type de Data Item - Paramètre (déprécié)</rdfs:label>
+	<rdfs:label>Data Item Type - Parameter (deprecated)</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/unitsontology#North_South">
+	<rdfs:label xml:lang="ru">Север - Юг</rdfs:label>
+	<rdfs:label xml:lang="fr">Nord - Sud</rdfs:label>
+	<rdfs:label>North South</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/unitsontology#East_West">
+	<rdfs:label xml:lang="ru">Восток - Запад</rdfs:label>
+	<rdfs:label xml:lang="fr">Est - Ouest</rdfs:label>
+	<rdfs:label>East West</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Reference_List">
+	<rdfs:label xml:lang="ru">Список ссылок</rdfs:label>
+	<rdfs:label xml:lang="fr">Liste de référence</rdfs:label>
+	<rdfs:label>Reference List</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#deprecated_topic">
+	<rdfs:label xml:lang="ru">Отключенный объект</rdfs:label>
+	<rdfs:label xml:lang="fr">Topic déprécié</rdfs:label>
+	<rdfs:label>Deprecated topic</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#classification_plan_template">
+	<rdfs:label xml:lang="ru">Шаблон плана классификации</rdfs:label>
+	<rdfs:label xml:lang="fr">Modèle de plan de classement</rdfs:label>
+	<rdfs:label>Classification plan template</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Date_format">
+	<rdfs:label xml:lang="ru">Формат даты</rdfs:label>
+	<rdfs:label xml:lang="fr">Format de date</rdfs:label>
+	<rdfs:label>Date format</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Metadata">
+	<rdfs:label xml:lang="ru">Метаданные</rdfs:label>
+	<rdfs:label xml:lang="fr">Métadonnées</rdfs:label>
+	<rdfs:label>Metadata</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Query">
+	<rdfs:label xml:lang="fr">Requête</rdfs:label>
+	<rdfs:label xml:lang="ru">Запрос</rdfs:label>
+	<rdfs:label>Query</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Trust_level">
+	<rdfs:label xml:lang="ru">Уровень доверия</rdfs:label>
+	<rdfs:label xml:lang="fr">Niveau de confiance</rdfs:label>
+	<rdfs:label>Trust level</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#rule">
+	<rdfs:label xml:lang="ru">Правило</rdfs:label>
+	<rdfs:label xml:lang="fr">Règle</rdfs:label>
+	<rdfs:label>Rule</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Taxonomy">
+	<rdfs:label xml:lang="ru">Таксономия</rdfs:label>
+	<rdfs:label xml:lang="fr">Taxonomie</rdfs:label>
+	<rdfs:label>Taxonomy</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Orientation_cl">
+	<rdfs:label xml:lang="ru">Ориентация</rdfs:label>
+	<rdfs:label>Orientation</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Rule_status_ref_table">
+	<rdfs:label xml:lang="ru">Таблица ссылок статуса правила</rdfs:label>
+	<rdfs:label xml:lang="fr">Statut de règle</rdfs:label>
+	<rdfs:label>Rule status reference table</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Candidate_status_ref_table">
+	<rdfs:label xml:lang="ru">Таблица ссылок статуса кандидата</rdfs:label>
+	<rdfs:label xml:lang="fr">Statut de candidature</rdfs:label>
+	<rdfs:label>Candidate status reference table</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Report">
+	<rdfs:label xml:lang="ru">Отчет</rdfs:label>
+	<rdfs:label xml:lang="fr">Rapport</rdfs:label>
+	<rdfs:label>Report</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Reportformat">
+	<rdfs:label xml:lang="ru">Формат отчета</rdfs:label>
+	<rdfs:label xml:lang="fr">Format de rapport</rdfs:label>
+	<rdfs:label>Report format</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Reportfamily">
+	<rdfs:label xml:lang="fr">Famille de rapport</rdfs:label>
+	<rdfs:label xml:lang="ru">Тип отчета</rdfs:label>
+	<rdfs:label>Report family</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#reporttemplate">
+	<rdfs:label xml:lang="ru">Шаблон отчетов</rdfs:label>
+	<rdfs:label xml:lang="fr">Modèle de rapport</rdfs:label>
+	<rdfs:label>Report template</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Reportprocess">
+	<rdfs:label xml:lang="ru">Процесс отчета</rdfs:label>
+	<rdfs:label xml:lang="fr">Processus de rapport</rdfs:label>
+	<rdfs:label>Report process</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#reportManagement">
+	<rdfs:label xml:lang="ru">Управление отчетом</rdfs:label>
+	<rdfs:label xml:lang="fr">Gestion des rapports</rdfs:label>
+	<rdfs:label>Report management</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#reportResult">
+	<rdfs:label xml:lang="ru">Результат отчета</rdfs:label>
+	<rdfs:label xml:lang="fr">Affichage de rapport</rdfs:label>
+	<rdfs:label>Report result</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#abstractreport">
+	<rdfs:label xml:lang="ru">абстрактный отчет</rdfs:label>
+	<rdfs:label xml:lang="fr">Rapport abstrait</rdfs:label>
+	<rdfs:label>abstract report</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#abstractquery">
+	<rdfs:label xml:lang="ru">абстрактный запрос</rdfs:label>
+	<rdfs:label xml:lang="fr">Requête abstraite</rdfs:label>
+	<rdfs:label>abstract query</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="itm:n#_579">
+	<rdfs:label xml:lang="ru">Статистический отчет</rdfs:label>
+	<rdfs:label xml:lang="fr">Rapport statistique</rdfs:label>
+	<rdfs:label>Statistic report</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="itm:n#_585">
+	<rdfs:label xml:lang="ru">управление регистрацией</rdfs:label>
+	<rdfs:label xml:lang="fr">Gestion des logs</rdfs:label>
+	<rdfs:label>log management</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#log">
+	<rdfs:label xml:lang="ru">файл регистрации</rdfs:label>
+	<rdfs:label xml:lang="fr">Log</rdfs:label>
+	<rdfs:label>log</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#logaction">
+	<rdfs:label>Log action</rdfs:label>
+	<rdfs:label xml:lang="fr">Action loguée</rdfs:label>
+	<rdfs:label xml:lang="ru">операция регистрации</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#lognature">
+	<rdfs:label xml:lang="ru">свойства регистрации</rdfs:label>
+	<rdfs:label xml:lang="fr">Nature du log</rdfs:label>
+	<rdfs:label>log nature</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#historicalreportclass">
+	<rdfs:label xml:lang="ru">Исторический отчет</rdfs:label>
+	<rdfs:label xml:lang="fr">Rapport historique</rdfs:label>
+	<rdfs:label>Historical report</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Rule_template_object">
+	<rdfs:label xml:lang="ru">Объект шаблона правил</rdfs:label>
+	<rdfs:label xml:lang="fr">Modèle de règle</rdfs:label>
+	<rdfs:label>Rule Template Object</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Data_Item_XML">
+	<rdfs:label xml:lang="ru">Тип элемента данных - XML</rdfs:label>
+	<rdfs:label xml:lang="fr">Type de Data Item - XML</rdfs:label>
+	<rdfs:label>Data Item Type - XML</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#DataItemDisplayValues">
+	<rdfs:label xml:lang="ru">Отображаемые значения элемента данных</rdfs:label>
+	<rdfs:label xml:lang="fr">Valeurs d'affichage de Data Item</rdfs:label>
+	<rdfs:label>Data Item Display Values</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/clientusers#Group">
+	<rdfs:label xml:lang="fr">Groupe</rdfs:label>
+	<rdfs:label xml:lang="ru">Группа</rdfs:label>
+	<rdfs:label>Group</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/clientkbs#PublicationWorkspace">
+	<rdfs:label xml:lang="fr">Espace de publication</rdfs:label>
+	<rdfs:label xml:lang="ru">Рабочая область опубликования</rdfs:label>
+	<rdfs:label>Publication Workspace</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Workflow_management">
+	<rdfs:label xml:lang="ru">Управление технологическим процессом</rdfs:label>
+	<rdfs:label xml:lang="fr">Gestion du workflow</rdfs:label>
+	<rdfs:label>Workflow management</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#WorkingContext">
+	<rdfs:label xml:lang="ru">Рабочий контекст</rdfs:label>
+	<rdfs:label xml:lang="fr">Contexte de proposition</rdfs:label>
+	<rdfs:label>Working context</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#WorkflowState">
+	<rdfs:label xml:lang="ru">Состояние технологического процесса</rdfs:label>
+	<rdfs:label xml:lang="fr">Etat du workflow</rdfs:label>
+	<rdfs:label>Workflow state</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/constraintChecking#Constraint">
+	<rdfs:label xml:lang="ru">Ограничение</rdfs:label>
+	<rdfs:label xml:lang="fr">Contrainte</rdfs:label>
+	<rdfs:label xml:lang="en">Constraint</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/constraintChecking#MandatoryConstraint">
+	<rdfs:label xml:lang="ru">Обязательное ограничение</rdfs:label>
+	<rdfs:label xml:lang="fr">Contrainte d'obligation</rdfs:label>
+	<rdfs:label xml:lang="en">Obligation Constraint</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/constraintChecking#ForbiddenConstraint">
+	<rdfs:label xml:lang="ru">Запретительное ограничение</rdfs:label>
+	<rdfs:label xml:lang="fr">Contrainte d'interdiction</rdfs:label>
+	<rdfs:label xml:lang="en">Forbidding Constraint</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#ValidationReport">
+	<rdfs:label xml:lang="fr">Rapport de validation</rdfs:label>
+	<rdfs:label xml:lang="ru">Отчет об утверждении</rdfs:label>
+	<rdfs:label xml:lang="en">Validation Report</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Inference_rule">
+	<rdfs:label xml:lang="ru">Inference rule</rdfs:label>
+	<rdfs:label xml:lang="fr">Règle d'inférence</rdfs:label>
+	<rdfs:label xml:lang="en">Inference rule</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Request_rule">
+	<rdfs:label xml:lang="ru">Request rule</rdfs:label>
+	<rdfs:label xml:lang="fr">Règle de requête</rdfs:label>
+	<rdfs:label xml:lang="en">Request rule</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#ActionClass">
+	<rdfs:label xml:lang="fr">Classe d'action</rdfs:label>
+	<rdfs:label xml:lang="en">Action class</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#TargetedAction">
+	<rdfs:label xml:lang="en">Targeted action</rdfs:label>
+	<rdfs:label xml:lang="fr">Action ciblée</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#PingAction">
+	<rdfs:label xml:lang="en">Ping action</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#ActionManagement">
+	<rdfs:label xml:lang="fr">Gestion des actions</rdfs:label>
+	<rdfs:label xml:lang="en">Action management</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Plugin">
+	<rdfs:label xml:lang="fr">Greffon</rdfs:label>
+	<rdfs:label xml:lang="en">Plugin</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Sequence">
+	<rdfs:label xml:lang="ru">Sequence</rdfs:label>
+	<rdfs:label xml:lang="fr">Séquence</rdfs:label>
+	<rdfs:label>Sequence</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#AlphanumericVariable">
+	<rdfs:label xml:lang="ru">Alphanumeric variable</rdfs:label>
+	<rdfs:label xml:lang="fr">Variable alphanumérique</rdfs:label>
+	<rdfs:label>Alphanumeric variable</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#referenceTableTaskStatus">
+	<rdfs:label xml:lang="fr">Table de référence - Statut de tâche</rdfs:label>
+	<rdfs:label xml:lang="ru">Reference table - Task status</rdfs:label>
+	<rdfs:label>Reference table - Task status</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#task">
+	<rdfs:label xml:lang="fr">Tâche</rdfs:label>
+	<rdfs:label xml:lang="ru">Task</rdfs:label>
+	<rdfs:label>Task</rdfs:label>
+</rdf:Description>
+<rdf:Description rdf:about="itm:n#_76">
+	<bo:Comment xml:lang="fr">Cette classe n'est plus utilisée.</bo:Comment>
+	<bo:Comment xml:lang="en">This class is no longer used.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="itm:n#_77">
+	<bo:Comment xml:lang="en">This class is no longer used.</bo:Comment>
+	<bo:Comment xml:lang="fr">Cette classe n'est plus utilisée.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="itm:n#_79">
+	<bo:Comment xml:lang="fr">Cette classe n'est plus utilisée. Elle est importée dans l'ontologie Mondeca Publishing : http://www.mondeca.com/system/basicontology#Subject_cl</bo:Comment>
+	<bo:Comment xml:lang="en">This class is no longer used. It is imported in the Mondeca Publishing ontology. See http://www.mondeca.com/system/basicontology#Subject_cl</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.w3.org/2001/XMLSchema#boolean">
+	<bo:Comment xml:lang="en">The class of the two boolean values true and false.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/unitsontology#Unit_cl">
+	<bo:Comment xml:lang="en">A base class for representing measurement units. Do not instantiate this class directly</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/unitsontology#Time_Unit_cl">
+	<bo:Comment xml:lang="en">The class of all the units used to measure the time.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/unitsontology#Length_Unit_cl">
+	<bo:Comment xml:lang="en">The class of all the units used to measure a length.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/unitsontology#Weight_Unit_cl">
+	<bo:Comment xml:lang="en">The class of all the units used to measure a weight.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Unit_Class_cl">
+	<bo:Comment xml:lang="en">A special kind of classes that are used to represent measurement units (see the abstract class Unit)</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#External_System">
+	<bo:Comment xml:lang="en">Instances of this class represent external systems that are connected to ITM [generally Content Management Systems].</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Data_Item_Parameter">
+	<bo:Comment xml:lang="fr">déprécié le 18/02/09</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Metadata">
+	<bo:Comment>This Class has been created purposely without Home topic relation. It don't need DIL such as Name PSI or Comment. </bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Taxonomy">
+	<bo:Comment xml:lang="en">Represents a taxonomy. This is only used to declare which attribute corresponds to which taxonomy. See attribute In Taxonomy.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Rule_status_ref_table">
+	<bo:Comment>The reference table for values of the property 'rule status'.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Candidate_status_ref_table">
+	<bo:Comment>Reference table for the pointer type "Candidate status"</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Reportformat">
+	<bo:Comment>Example : HTML, XML, PDF, RDF, SKOS, CSV</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Reportfamily">
+	<bo:Comment>Example :
+- Thesaurus reports
+- Terminological reports</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Reportprocess">
+	<bo:Comment>Example :
+- Jasper
+- Export (XSLT, XSL)</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#reportResult">
+	<bo:Comment xml:lang="fr">Liste les types de retour possibles d'un export (email, popup, FTP, etc.)</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Rule_template_object">
+	<bo:Comment xml:lang="en">Represents a template to control the edition of a rule.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#DataItemDisplayValues">
+	<bo:Comment>Reference table for Data Item Display property.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Workflow_management">
+	<bo:Comment xml:lang="en">Abstract super class for workflow management in ITM.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#WorkflowState">
+	<bo:Comment>Reference table for workflow status.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#ActionClass">
+	<bo:Comment xml:lang="en">A special kind of class used to trigger specific actions. No instances of this class are created.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#TargetedAction">
+	<bo:Comment xml:lang="en">Subclasses of this class are actions that apply to one or more targeted objects.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/ontology_creation#Plugin">
+	<bo:Comment xml:lang="en">A plugin corresponding to a java class with properties</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#Sequence">
+	<bo:Comment xml:lang="ru">An object to represent a sequence value in the ontology, automatically incremented when used by an name template, an alert, an API call, etc.</bo:Comment>
+	<bo:Comment xml:lang="fr">Un objet pour représenter une valeur de séquence dans l'ontologie, incrémentée automatiquement lors de l'utilisation dans un template de nommage, une alerte, un appel d'API, etc.</bo:Comment>
+	<bo:Comment>An object to represent a sequence value in the ontology, automatically incremented when used by an name template, an alert, an API call, etc.</bo:Comment>
+</rdf:Description>
+<rdf:Description rdf:about="http://www.mondeca.com/system/basicontology#task">
+	<bo:Comment xml:lang="fr">Définit un ensemble d'actions à effectuer par un ou plusieurs utilisateurs sur un ensemble d'objets.</bo:Comment>
+	<bo:Comment>Defines actions to make by specified users on a set of objects.</bo:Comment>
+	<bo:Comment xml:lang="ru">Defines actions to make by specified users on a set of objects.</bo:Comment>
+</rdf:Description>
+
+</rdf:RDF>

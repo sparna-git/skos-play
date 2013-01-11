@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+	xmlns:bnf="http://www.bnf.fr/autorites/ontology/">
+<bnf:p rdf:about="http://www.bnf.fr/autorites/entry/10002006">
+	<bnf:property_100_a>Artiga</bnf:property_100_a>
+	<bnf:property_100_m>Francisco Joseph</bnf:property_100_m>
+	<rdfs:label>Francisco Joseph Artiga</rdfs:label>
+	<skos:altLabel>Francisco Joseph Artieda</skos:altLabel>
+	<skos:altLabel>Artieda Francisco Joseph</skos:altLabel>
+</bnf:p>
+
+</rdf:RDF>

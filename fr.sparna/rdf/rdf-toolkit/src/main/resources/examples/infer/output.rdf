@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+	xmlns:align="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:protons="http://proton.semanticweb.org/2005/04/protons#"
+	xmlns:protont="http://proton.semanticweb.org/2005/04/protont#">
+<align:Alignment rdf:nodeID="node1">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<align:level>2EDOAL</align:level>
+	<align:map rdf:resource="http://www.w3.org/1999/02/122556"/>
+	<align:map rdf:resource="http://www.w3.org/1999/02/122699"/>
+	<align:onto1 rdf:resource="http://eurlex-directory-codes.europa.eu/EURLEX-DIRECTORY-CODES"/>
+	<align:onto2 rdf:resource="http://eurovoc.europa.eu/EUROVOC/v4.3"/>
+	<align:type>com.mondeca.align.process.impl.method.ITMAlignReader</align:type>
+	<align:xml>yes</align:xml>
+</align:Alignment>
+<Class xmlns="http://ns.inria.org/edoal/1.0/#" rdf:nodeID="node2">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<or xmlns="http://ns.inria.org/edoal/1.0/#">
+		<rdfs:Resource rdf:nodeID="node3">
+			<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+			<member xmlns="http://www.jena.hpl.hp.com/ARQ/list#" rdf:resource="http://eurovoc.europa.eu/5051"/>
+			<member xmlns="http://www.jena.hpl.hp.com/ARQ/list#" rdf:resource="http://eurovoc.europa.eu/189"/>
+			<rdf:first rdf:resource="http://eurovoc.europa.eu/5051"/>
+			<rdf:rest>
+				<rdfs:Resource rdf:nodeID="node4">
+					<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+					<member xmlns="http://www.jena.hpl.hp.com/ARQ/list#" rdf:resource="http://eurovoc.europa.eu/189"/>
+					<rdf:first rdf:resource="http://eurovoc.europa.eu/189"/>
+					<rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+				</rdfs:Resource>
+			</rdf:rest>
+		</rdfs:Resource>
+	</or>
+</Class>
+<Class xmlns="http://ns.inria.org/edoal/1.0/#" rdf:nodeID="node5">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<or xmlns="http://ns.inria.org/edoal/1.0/#">
+		<rdfs:Resource rdf:nodeID="node6">
+			<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+			<member xmlns="http://www.jena.hpl.hp.com/ARQ/list#" rdf:resource="http://eurovoc.europa.eu/1451"/>
+			<member xmlns="http://www.jena.hpl.hp.com/ARQ/list#" rdf:resource="http://eurovoc.europa.eu/5767"/>
+			<rdf:first rdf:resource="http://eurovoc.europa.eu/1451"/>
+			<rdf:rest>
+				<rdfs:Resource rdf:nodeID="node7">
+					<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+					<member xmlns="http://www.jena.hpl.hp.com/ARQ/list#" rdf:resource="http://eurovoc.europa.eu/5767"/>
+					<rdf:first rdf:resource="http://eurovoc.europa.eu/5767"/>
+					<rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+				</rdfs:Resource>
+			</rdf:rest>
+		</rdfs:Resource>
+	</or>
+</Class>
+<Class xmlns="http://ns.inria.org/edoal/1.0/#" rdf:about="http://eurlex-directory-codes.europa.eu/0140">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<skos:exactMatch rdf:nodeID="node5"/>
+</Class>
+<Class xmlns="http://ns.inria.org/edoal/1.0/#" rdf:about="http://eurlex-directory-codes.europa.eu/016060">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<skos:exactMatch rdf:nodeID="node2"/>
+</Class>
+<align:Ontology rdf:about="http://eurlex-directory-codes.europa.eu/EURLEX-DIRECTORY-CODES">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<align:location>http://eurlex-directory-codes.europa.eu/EURLEX-DIRECTORY-CODES</align:location>
+</align:Ontology>
+<Class xmlns="http://ns.inria.org/edoal/1.0/#" rdf:about="http://eurovoc.europa.eu/1451">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</Class>
+<Class xmlns="http://ns.inria.org/edoal/1.0/#" rdf:about="http://eurovoc.europa.eu/189">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</Class>
+<Class xmlns="http://ns.inria.org/edoal/1.0/#" rdf:about="http://eurovoc.europa.eu/5051">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</Class>
+<Class xmlns="http://ns.inria.org/edoal/1.0/#" rdf:about="http://eurovoc.europa.eu/5767">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</Class>
+<align:Ontology rdf:about="http://eurovoc.europa.eu/EUROVOC/v4.3">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<align:location>http://eurovoc.europa.eu/EUROVOC/v4.3</align:location>
+</align:Ontology>
+<rdfs:Resource rdf:about="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Alignment">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Alignment"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Cell">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Cell"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Ontology">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#Ontology"/>
+</rdfs:Resource>
+<rdf:Property rdf:about="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity1">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity1"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity2">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#entity2"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#level">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#level"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#location">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#location"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#map">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#map"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#measure">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#measure"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#onto1">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#onto1"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#onto2">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#onto2"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#relation"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#type">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#type"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#xml">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://knowledgeweb.semanticweb.org/heterogeneity/alignment#xml"/>
+</rdf:Property>
+<rdfs:Resource rdf:about="http://ns.inria.org/edoal/1.0/#Class">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://ns.inria.org/edoal/1.0/#Class"/>
+</rdfs:Resource>
+<rdf:Property rdf:about="http://ns.inria.org/edoal/1.0/#or">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://ns.inria.org/edoal/1.0/#or"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://www.jena.hpl.hp.com/ARQ/list#member">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.jena.hpl.hp.com/ARQ/list#member"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://www.mondeca.com/system/publishing#hasCellStatus">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.mondeca.com/system/publishing#hasCellStatus"/>
+</rdf:Property>
+<align:Cell rdf:about="http://www.w3.org/1999/02/122556">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<align:entity1 rdf:resource="http://eurlex-directory-codes.europa.eu/016060"/>
+	<align:entity2 rdf:nodeID="node2"/>
+	<align:measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.0</align:measure>
+	<align:relation>fr.inrialpes.exmo.align.impl.rel.EquivRelation</align:relation>
+	<hasCellStatus xmlns="http://www.mondeca.com/system/publishing#">http://www.mondeca.com/system/publishing#Validated</hasCellStatus>
+</align:Cell>
+<align:Cell rdf:about="http://www.w3.org/1999/02/122699">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<align:entity1 rdf:resource="http://eurlex-directory-codes.europa.eu/0140"/>
+	<align:entity2 rdf:nodeID="node5"/>
+	<align:measure rdf:datatype="http://www.w3.org/2001/XMLSchema#float">1.0</align:measure>
+	<align:relation>fr.inrialpes.exmo.align.impl.rel.EquivRelation</align:relation>
+	<hasCellStatus xmlns="http://www.mondeca.com/system/publishing#">http://www.mondeca.com/system/publishing#Validated</hasCellStatus>
+</align:Cell>
+<rdfs:Resource rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Alt">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Container"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Alt"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Container"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#List">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Container"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"/>
+</rdfs:Resource>
+<rdfs:Datatype rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"/>
+</rdfs:Datatype>
+<rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#first">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#first"/>
+</rdf:Property>
+<rdf:List rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:List>
+<rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#object">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#object"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#rest">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+	<rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#rest"/>
+</rdf:Property>
+<rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#subject">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#subject"/>
+</rdf:Property>
+<rdfs:Resource rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"/>
+</rdfs:Resource>
+<rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#value">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#value"/>
+</rdf:Property>
+<rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#Class">
+	<rdf:type>
+		<rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#Class">
+			<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+			<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+		</rdf:Description>
+	</rdf:type>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#Container">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Container"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#ContainerMembershipProperty">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#ContainerMembershipProperty"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#Datatype">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Datatype"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#Literal">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#Resource">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#comment">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#comment"/>
+</rdfs:Resource>
+<rdf:Property rdf:about="http://www.w3.org/2000/01/rdf-schema#domain">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#domain"/>
+</rdf:Property>
+<rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#isDefinedBy">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#seeAlso"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#isDefinedBy"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#label">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#member">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#member"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#range">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#range"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#seeAlso">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#seeAlso"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#subClassOf">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#subClassOf"/>
+</rdfs:Resource>
+<rdfs:Resource rdf:about="http://www.w3.org/2000/01/rdf-schema#subPropertyOf">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:range rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#subPropertyOf"/>
+</rdfs:Resource>
+<rdfs:Datatype rdf:about="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"/>
+</rdfs:Datatype>
+<rdfs:Datatype rdf:about="http://www.w3.org/2001/XMLSchema#string">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</rdfs:Datatype>
+<rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+<rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+<rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#equivalentClass"/>
+<rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#equivalentProperty"/>
+<rdfs:Resource rdf:about="http://www.w3.org/2002/07/owl#sameAs"/>
+<rdf:Property rdf:about="http://www.w3.org/2004/02/skos/core#exactMatch">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:subPropertyOf rdf:resource="http://www.w3.org/2004/02/skos/core#exactMatch"/>
+</rdf:Property>
+
+</rdf:RDF>

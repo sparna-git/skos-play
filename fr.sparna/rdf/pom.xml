@@ -1,0 +1,70 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fr.sparna.rdf</groupId>
+    <artifactId>sparna-rdf</artifactId>
+    <version>1</version>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>fr.sparna</groupId>
+        <artifactId>fr.sparna-root-pom</artifactId>
+        <version>1</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <name>Sparna RDF</name>
+    <description>All RDF-related modules</description>
+    <url>http://www.sparna.fr/</url>
+    
+    <organization>
+        <name>Sparna</name>
+        <url>http://www.sparna.fr/</url>
+    </organization>    
+
+    <modules>
+	    <module>sesame-toolkit</module>
+	    <module>rdf-toolkit</module>
+      <module>jena-repository</module>
+    </modules>
+
+    <repositories>
+        <repository>
+            <id>openrdf</id>
+            <name>OpenRDF Repository</name>
+            <url>http://repo.aduna-software.org/maven2/releases</url>
+	    <releases>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+            <snapshots>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <properties>
+      <sesame.version>2.6.9</sesame.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+          <dependency>
+      			<groupId>org.openrdf.sesame</groupId>
+      			<artifactId>sesame-runtime</artifactId>
+      			<version>${sesame.version}</version>
+		      </dependency>
+          <dependency>
+            <groupId>com.ontotext</groupId>
+            <artifactId>owlim-lite</artifactId>
+            <version>5.2</version>
+          </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

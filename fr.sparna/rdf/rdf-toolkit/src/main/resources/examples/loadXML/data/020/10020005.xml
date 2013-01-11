@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<record Numero="10020005" format="InterXMarc_Complet" type="Authority">
+<leader>00216n41ap22000272  45  <Pos Code="0004">00216</Pos>
+<Pos Code="05" Sens="Notice nouvelle">n</Pos>
+<Pos Code="06" Sens="Notice élémentaire générée à partir d&apos;une zone vedette de notice bibliographique lors d&apos;un chargement">4</Pos>
+<Pos Code="07" Sens="Notice explicative. Notice de renvoi général ou notice de renvoi commun. Ne peut jamais être liée à une notice bibliographique">1</Pos>
+<Pos Code="08" Sens="Notice d&apos;autorité">a</Pos>
+<Pos Code="09" Sens="Personne physique">p</Pos>
+<Pos Code="10">2</Pos>
+<Pos Code="11">2</Pos>
+<Pos Code="1216">00027</Pos>
+<Pos Code="17" Sens="Autres cas">2</Pos>
+<Pos Code="20">4</Pos>
+<Pos Code="21">5</Pos>
+</leader>
+<controlfield tag="001">FRBNF100200055<Pos Code="0001">FR</Pos>
+<Pos Code="0204">BNF</Pos>
+<Pos Code="0512">10020005</Pos>
+<Pos Code="13">5</Pos>
+</controlfield>
+<controlfield tag="008">970701      xxund                                                <Pos Code="0001">97</Pos>
+<Pos Code="0203">07</Pos>
+<Pos Code="0405">01</Pos>
+<Pos Code="1213" Sens="inconnu">xx</Pos>
+<Pos Code="1416" Sens="indéterminée [langue indéterminée => indéterminée]">und</Pos>
+</controlfield>
+<datafield tag="100" ind1=" " ind2=" ">
+	<subfield code="w">    b     </subfield>
+	<subfield code="a">Pinel-Granchamp</subfield>
+</datafield>
+<datafield tag="400" ind1=" " ind2=" ">
+	<subfield code="w">    b     </subfield>
+	<subfield code="a">Granchamp</subfield>
+	<subfield code="m">Pinel</subfield>
+</datafield>
+<datafield tag="917" ind1=" " ind2=" ">
+	<subfield code="o">CRI</subfield>
+	<subfield code="a">CG006303771201R  </subfield>
+</datafield>
+<Attr Nom="IDPerenne">ark:/12148/cb100200059</Attr>
+<Attr Nom="NumSource">CRI CG006303771201R</Attr>
+<Attr Nom="Source" Sens="Imprimés / Cat. Général Auteurs (jusqu&apos;en 1959)">C</Attr>
+<Attr Nom="NbAutoritesTICLiees">0</Attr>
+<Attr Nom="NbAutoritesTUMLiees">0</Attr>
+<Attr Nom="DateCreation">01/07/ 1997</Attr>
+<Attr Nom="ResponsableCreation">SCCR</Attr>
+<Attr Nom="StructCreation">1</Attr>
+<Attr Nom="DateDerniereValidation">01/07/ 1997</Attr>
+<Attr Nom="ResponsableDerniereValidation">SCCR</Attr>
+<Attr Nom="StructPremiereValidation">1</Attr>
+<Attr Nom="DatePremiereValidation">01/07/ 1997</Attr>
+<Attr Nom="ResponsablePremiereValidation">SCCR</Attr>
+<Attr Nom="StructDerniereValidation">1</Attr>
+<Attr Nom="NumSource">OPP 11335605</Attr>
+</record>

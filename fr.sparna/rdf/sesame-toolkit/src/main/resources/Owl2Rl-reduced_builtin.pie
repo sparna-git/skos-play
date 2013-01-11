@@ -1,0 +1,1305 @@
+/*  OWLIM rules and axioms for the TRREE engine
+ *
+ *  This file holds the entailment rules and consistency checks for the OWL2 RL profile,
+ *  see http://www.w3.org/TR/owl2-profiles/#OWL_2_RL
+ *
+ *  Every rule consists of one or more premises and one or more corollaries
+ *  in the following format:
+ *
+ *  Rules
+ *  {
+ *     Id: Rule_Id
+ *     < Premise #1 >
+ *     < Premise #2 >
+ *         . . .
+ *     < Premise #n >
+ *  ---------------------
+ *    < Corollary #1 >
+ *    < Corollary #2 >
+ *         . . .
+ *    < Corollary #m >
+ *  }
+ *
+ *  Every premise may contain constraints stating that the value of one or
+ *  more variables in the statement must not be equal to a full URI, a short name
+ *  or the value of another variable from the same rule.
+ *  This is written in the following format:
+ *
+ *         . . . . . . . . . . .
+ *     a  <mynamespace:myproperty>  b             [Constraint a != b]
+ *     <mynamespace:Instance_1.0>  a  c           [Constraint a != <rdf:type>, c != a, c != b]
+ *    -----------------------------------
+ *     c  a  b
+ *     b  <rdf:type>  <mynamespace:Instance_1.0>  [Constraint b != <http://www.w3.org/2000/01/rdf-schema#Class>]
+ *
+ *  Every left value in the not-equal constraint must denote a variable
+ *  and every right value can be a variable, a short name or a full URI.
+ *  Not-equal constraints may be used to force the engine not to apply
+ *  the rule when the constraints are not satisfied. This will improve
+ *  engine's performance.
+ *  Constraints are valid within the line they appear.
+ *  If a variable is not bound yet then the constraint is considered satisfied
+ *  (and therefore does not apply).
+ * *
+ *  In addition one or more axioms may be added in the following format:
+ *
+ *  Axioms
+ *  {
+ *     < Axiom #1 >
+ *     < Axiom #2 >
+ *        . . .
+ *     < Axiom #n >
+ *  }
+ *
+ *  The premises, the corollaries and the axioms must be written in N-Triple format.
+ *  The subject, the predicate and the object must denote a full URI or
+ *  a short name in format <Prefix>:<LocalName> where <Prefix> is defined in
+ *  the prefix section written in the following format:
+ *
+ *  Prefices
+ *  {
+ *     < Prefix #1 > : < Full URI for prefix #1 >
+ *     < Prefix #2 > : < Full URI for prefix #2 >
+ *            . . . . . . . . . . . . . .
+ *     < Prefix #n > : < Full URI for prefix #n >
+ *  }
+ *
+ *  The sections must be arranged in the following order:
+ *
+ *  Prefices   // If any
+ *  {
+ *     . . .
+ *  }
+ *  Axioms     // If any
+ *  {
+ *     . . .
+ *  }
+ *  Rules      // Must necessarily be present
+ *  {
+ *     . . .
+ *  }
+ *
+ *  Variables in the rules must be literals consisting of one symbol only.
+ *  They must NOT be surrounded by angle braces.
+ *  ONLY rule statements may contain variables.
+ *
+ *  The contents of this file is translated into java code and is output
+ *  to com.ontotext.trree.RdfsHashInferencer and com.ontotext.trree.OwlHashInferencer.
+ *  Use program RuleCompiler.java in order to compile this file.
+ *  Please do not make changes in file generated files because
+ *  next time the translator is started the changes will disappear.
+ *
+ */
+
+Prefices
+{
+     rdf      :  http://www.w3.org/1999/02/22-rdf-syntax-ns#
+     rdfs     :  http://www.w3.org/2000/01/rdf-schema#
+     owl      :  http://www.w3.org/2002/07/owl#
+     xsd      :  http://www.w3.org/2001/XMLSchema#
+     onto     :  http://www.ontotext.com/
+}
+
+Axioms
+{
+	// ========================================================================
+	// RDF axiomatic triples
+	// ========================================================================
+	// The following RDF axiomatic triples were taken from here:
+	// http://www.w3.org/TR/rdf-mt/#RDFINTERP
+	// ========================================================================
+	
+	<rdf:type> <rdf:type> <rdf:Property>
+	<rdf:subject> <rdf:type> <rdf:Property>
+	<rdf:predicate> <rdf:type> <rdf:Property>
+	<rdf:object> <rdf:type> <rdf:Property>
+	<rdf:first> <rdf:type> <rdf:Property>
+	<rdf:rest> <rdf:type> <rdf:Property>
+	<rdf:value> <rdf:type> <rdf:Property>
+	<rdf:_1> <rdf:type> <rdf:Property>
+	<rdf:_2> <rdf:type> <rdf:Property>
+	<rdf:_3> <rdf:type> <rdf:Property>
+	<rdf:_4> <rdf:type> <rdf:Property>
+	<rdf:_5> <rdf:type> <rdf:Property>
+	<rdf:_6> <rdf:type> <rdf:Property>
+	<rdf:_7> <rdf:type> <rdf:Property>
+	<rdf:_8> <rdf:type> <rdf:Property>
+	<rdf:_9> <rdf:type> <rdf:Property>
+	<rdf:_10> <rdf:type> <rdf:Property>
+	<rdf:_11> <rdf:type> <rdf:Property>
+	<rdf:_12> <rdf:type> <rdf:Property>
+	<rdf:_13> <rdf:type> <rdf:Property>
+	<rdf:_14> <rdf:type> <rdf:Property>
+	<rdf:_15> <rdf:type> <rdf:Property>
+	<rdf:_16> <rdf:type> <rdf:Property>
+	<rdf:_17> <rdf:type> <rdf:Property>
+	<rdf:_18> <rdf:type> <rdf:Property>
+	<rdf:_19> <rdf:type> <rdf:Property>
+	 
+	// How far should this list go?????
+	 
+	 <rdf:nil> <rdf:type> <rdf:List>
+
+	// ========================================================================
+	// RDFS axiomatic triples
+	// ========================================================================
+	// The following RDFS axiomatic triples were taken from here:
+	// http://www.w3.org/TR/rdf-mt/#RDFSINTERP
+	// ========================================================================
+	
+	<rdf:type> <rdfs:domain> <rdfs:Resource>
+	<rdfs:domain> <rdfs:domain> <rdf:Property>
+	<rdfs:range> <rdfs:domain> <rdf:Property>
+	<rdfs:subPropertyOf> <rdfs:domain> <rdf:Property>
+	<rdfs:subClassOf> <rdfs:domain> <rdfs:Class>
+	<rdf:subject> <rdfs:domain> <rdf:Statement>
+	<rdf:predicate> <rdfs:domain> <rdf:Statement>
+	<rdf:object> <rdfs:domain> <rdf:Statement>
+	<rdfs:member> <rdfs:domain> <rdfs:Resource>
+	<rdf:first> <rdfs:domain> <rdf:List>
+	<rdf:rest> <rdfs:domain> <rdf:List>
+	<rdfs:seeAlso> <rdfs:domain> <rdfs:Resource>
+	<rdfs:isDefinedBy> <rdfs:domain> <rdfs:Resource>
+	<rdfs:comment> <rdfs:domain> <rdfs:Resource>
+	<rdfs:label> <rdfs:domain> <rdfs:Resource>
+	<rdf:value> <rdfs:domain> <rdfs:Resource>
+	<rdf:type> <rdfs:range> <rdfs:Class>
+	<rdfs:domain> <rdfs:range> <rdfs:Class>
+	<rdfs:range> <rdfs:range> <rdfs:Class>
+	<rdfs:subPropertyOf> <rdfs:range> <rdf:Property>
+	<rdfs:subClassOf> <rdfs:range> <rdfs:Class>
+	<rdf:subject> <rdfs:range> <rdfs:Resource>
+	<rdf:predicate> <rdfs:range> <rdfs:Resource>
+	<rdf:object> <rdfs:range> <rdfs:Resource>
+	<rdfs:member> <rdfs:range> <rdfs:Resource>
+	<rdf:first> <rdfs:range> <rdfs:Resource>
+	<rdf:rest> <rdfs:range> <rdf:List>
+	<rdfs:seeAlso> <rdfs:range> <rdfs:Resource>
+	<rdfs:isDefinedBy> <rdfs:range> <rdfs:Resource>
+	<rdfs:comment> <rdfs:range> <rdfs:Literal>
+	<rdfs:label> <rdfs:range> <rdfs:Literal>
+	<rdf:value> <rdfs:range> <rdfs:Resource>
+	<rdf:Alt> <rdfs:subClassOf> <rdfs:Container>
+	<rdf:Bag> <rdfs:subClassOf> <rdfs:Container>
+	<rdf:Seq> <rdfs:subClassOf> <rdfs:Container>
+	<rdfs:ContainerMembershipProperty> <rdfs:subClassOf> <rdf:Property>
+	<rdfs:isDefinedBy> <rdfs:subPropertyOf> <rdfs:seeAlso>
+	<rdf:XMLLiteral> <rdf:type> <rdfs:Datatype>
+	<rdf:XMLLiteral> <rdfs:subClassOf> <rdfs:Literal>
+	<rdfs:Datatype> <rdfs:subClassOf> <rdfs:Class>
+	<rdf:_1> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_1> <rdfs:domain> <rdfs:Resource>
+	<rdf:_1> <rdfs:range> <rdfs:Resource>
+	<rdf:_2> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_2> <rdfs:domain> <rdfs:Resource>
+	<rdf:_2> <rdfs:range> <rdfs:Resource>
+	<rdf:_3> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_3> <rdfs:domain> <rdfs:Resource>
+	<rdf:_3> <rdfs:range> <rdfs:Resource>
+	<rdf:_4> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_4> <rdfs:domain> <rdfs:Resource>
+	<rdf:_4> <rdfs:range> <rdfs:Resource>
+	<rdf:_5> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_5> <rdfs:domain> <rdfs:Resource>
+	<rdf:_5> <rdfs:range> <rdfs:Resource>
+	<rdf:_6> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_6> <rdfs:domain> <rdfs:Resource>
+	<rdf:_6> <rdfs:range> <rdfs:Resource>
+	<rdf:_7> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_7> <rdfs:domain> <rdfs:Resource>
+	<rdf:_7> <rdfs:range> <rdfs:Resource>
+	<rdf:_8> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_8> <rdfs:domain> <rdfs:Resource>
+	<rdf:_8> <rdfs:range> <rdfs:Resource>
+	<rdf:_9> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_9> <rdfs:domain> <rdfs:Resource>
+	<rdf:_9> <rdfs:range> <rdfs:Resource>
+	<rdf:_10> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_10> <rdfs:domain> <rdfs:Resource>
+	<rdf:_10> <rdfs:range> <rdfs:Resource>
+	<rdf:_11> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_11> <rdfs:domain> <rdfs:Resource>
+	<rdf:_11> <rdfs:range> <rdfs:Resource>
+	<rdf:_12> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_12> <rdfs:domain> <rdfs:Resource>
+	<rdf:_12> <rdfs:range> <rdfs:Resource>
+	<rdf:_13> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_13> <rdfs:domain> <rdfs:Resource>
+	<rdf:_13> <rdfs:range> <rdfs:Resource>
+	<rdf:_14> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_14> <rdfs:domain> <rdfs:Resource>
+	<rdf:_14> <rdfs:range> <rdfs:Resource>
+	<rdf:_15> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_15> <rdfs:domain> <rdfs:Resource>
+	<rdf:_15> <rdfs:range> <rdfs:Resource>
+	<rdf:_16> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_16> <rdfs:domain> <rdfs:Resource>
+	<rdf:_16> <rdfs:range> <rdfs:Resource>
+	<rdf:_17> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_17> <rdfs:domain> <rdfs:Resource>
+	<rdf:_17> <rdfs:range> <rdfs:Resource>
+	<rdf:_18> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_18> <rdfs:domain> <rdfs:Resource>
+	<rdf:_18> <rdfs:range> <rdfs:Resource>
+	<rdf:_19> <rdf:type> <rdfs:ContainerMembershipProperty>
+	<rdf:_19> <rdfs:domain> <rdfs:Resource>
+	<rdf:_19> <rdfs:range> <rdfs:Resource>
+	// As in the RDF axiomatic triples, how far should this list go?????
+	
+	
+	
+	// ========================================================================
+	// OWL Vocabulary
+	// ========================================================================
+	// The following 'axiomatic triples for the OWL vocabulary were taken from here:
+	// http://www.w3.org/TR/2009/REC-owl2-rdf-based-semantics-20091027/#A_Set_of_Axiomatic_Triples
+	// ========================================================================
+	
+	// Table 6.1: Axiomatic Triples for the Classes of the OWL 2 RDF-Based Vocabulary
+	
+	<owl:AllDifferent> <rdf:type> <rdfs:Class>
+	<owl:AllDifferent> <rdfs:subClassOf> <rdfs:Resource>
+	<owl:AllDisjointClasses> <rdf:type> <rdfs:Class>
+	<owl:AllDisjointClasses> <rdfs:subClassOf> <rdfs:Resource>
+	
+	<owl:AllDisjointProperties> <rdf:type> <rdfs:Class>
+	<owl:AllDisjointProperties> <rdfs:subClassOf> <rdfs:Resource>
+	<owl:Annotation> <rdf:type> <rdfs:Class>
+	<owl:Annotation> <rdfs:subClassOf> <rdfs:Resource>
+	<owl:AnnotationProperty> <rdf:type> <rdfs:Class>
+	<owl:AnnotationProperty> <rdfs:subClassOf> <rdf:Property>
+	<owl:AsymmetricProperty> <rdf:type> <rdfs:Class>
+	<owl:AsymmetricProperty> <rdfs:subClassOf> <owl:ObjectProperty>
+	<owl:Axiom> <rdf:type> <rdfs:Class>
+	<owl:Axiom> <rdfs:subClassOf> <rdfs:Resource>
+	<owl:Class> <rdf:type> <rdfs:Class>
+	<owl:Class> <rdfs:subClassOf> <rdfs:Class>
+	<owl:DataRange> <rdf:type> <rdfs:Class>
+	<owl:DataRange> <rdfs:subClassOf> <rdfs:Datatype>
+	<owl:DatatypeProperty> <rdf:type> <rdfs:Class>
+	<owl:DatatypeProperty> <rdfs:subClassOf> <rdf:Property>
+	<owl:DeprecatedClass> <rdf:type> <rdfs:Class>
+	<owl:DeprecatedClass> <rdfs:subClassOf> <rdfs:Class>
+	<owl:DeprecatedProperty> <rdf:type> <rdfs:Class>
+	<owl:DeprecatedProperty> <rdfs:subClassOf> <rdf:Property>
+	<owl:FunctionalProperty> <rdf:type> <rdfs:Class>
+	<owl:FunctionalProperty> <rdfs:subClassOf> <rdf:Property>
+	<owl:InverseFunctionalProperty> <rdf:type> <rdfs:Class>
+	<owl:InverseFunctionalProperty> <rdfs:subClassOf> <owl:ObjectProperty>
+	<owl:IrreflexiveProperty> <rdf:type> <rdfs:Class>
+	<owl:IrreflexiveProperty> <rdfs:subClassOf> <owl:ObjectProperty>
+	<owl:NamedIndividual> <rdf:type> <rdfs:Class>
+	<owl:NamedIndividual> <rdfs:subClassOf> <owl:Thing>
+	<owl:NegativePropertyAssertion> <rdf:type> <rdfs:Class>
+	<owl:NegativePropertyAssertion> <rdfs:subClassOf> <rdfs:Resource>
+	<owl:Nothing> <rdf:type> <owl:Class>
+	<owl:Nothing> <rdfs:subClassOf> <owl:Thing>
+	<owl:ObjectProperty> <rdf:type> <rdfs:Class>
+	<owl:ObjectProperty> <rdfs:subClassOf> <rdf:Property>
+	<owl:Ontology> <rdf:type> <rdfs:Class>
+	<owl:Ontology> <rdfs:subClassOf> <rdfs:Resource>
+	<owl:OntologyProperty> <rdf:type> <rdfs:Class>
+	<owl:OntologyProperty> <rdfs:subClassOf> <rdf:Property>
+	<owl:ReflexiveProperty> <rdf:type> <rdfs:Class>
+	<owl:ReflexiveProperty> <rdfs:subClassOf> <owl:ObjectProperty>
+	<owl:Restriction> <rdf:type> <rdfs:Class>
+	<owl:Restriction> <rdfs:subClassOf> <owl:Class>
+	<owl:SymmetricProperty> <rdf:type> <rdfs:Class>
+	<owl:SymmetricProperty> <rdfs:subClassOf> <owl:ObjectProperty>
+	<owl:Thing> <rdf:type> <owl:Class>
+	<owl:TransitiveProperty> <rdf:type> <rdfs:Class>
+	<owl:TransitiveProperty> <rdfs:subClassOf> <owl:ObjectProperty>
+
+	// Table 6.2: Axiomatic Triples for the Properties of the OWL 2 RDF-Based Vocabulary
+	
+	<owl:allValuesFrom> <rdf:type> <rdf:Property>
+	<owl:allValuesFrom> <rdfs:domain> <owl:Restriction>
+	<owl:allValuesFrom> <rdfs:range> <rdfs:Class>
+	<owl:annotatedProperty> <rdf:type> <rdf:Property>
+	<owl:annotatedProperty> <rdfs:domain> <rdfs:Resource>
+	<owl:annotatedProperty> <rdfs:range> <rdfs:Resource>
+	<owl:annotatedSource> <rdf:type> <rdf:Property>
+	<owl:annotatedSource> <rdfs:domain> <rdfs:Resource>
+	<owl:annotatedSource> <rdfs:range> <rdfs:Resource>
+	<owl:annotatedTarget> <rdf:type> <rdf:Property>
+	<owl:annotatedTarget> <rdfs:domain> <rdfs:Resource>
+	<owl:annotatedTarget> <rdfs:range> <rdfs:Resource>
+	<owl:assertionProperty> <rdf:type> <rdf:Property>
+	<owl:assertionProperty> <rdfs:domain> <owl:NegativePropertyAssertion>
+	<owl:assertionProperty> <rdfs:range> <rdf:Property>
+	<owl:backwardCompatibleWith> <rdf:type> <owl:AnnotationProperty>
+	<owl:backwardCompatibleWith> <rdf:type> <owl:OntologyProperty>
+	<owl:backwardCompatibleWith> <rdfs:domain> <owl:Ontology>
+	<owl:backwardCompatibleWith> <rdfs:range> <owl:Ontology>
+	<owl:bottomDataProperty> <rdf:type> <owl:DatatypeProperty>
+	<owl:bottomDataProperty> <rdfs:domain> <owl:Thing>
+	<owl:bottomDataProperty> <rdfs:range> <rdfs:Literal>
+	<owl:bottomObjectProperty> <rdf:type> <owl:ObjectProperty>
+	<owl:bottomObjectProperty> <rdfs:domain> <owl:Thing>
+	<owl:bottomObjectProperty> <rdfs:range> <owl:Thing>
+	<owl:cardinality> <rdf:type> <rdf:Property>
+	<owl:cardinality> <rdfs:domain> <owl:Restriction>
+	<owl:cardinality> <rdfs:range> <xsd:nonNegativeInteger>
+	<owl:complementOf> <rdf:type> <rdf:Property>
+	<owl:complementOf> <rdfs:domain> <owl:Class>
+	<owl:complementOf> <rdfs:range> <owl:Class>
+	<owl:datatypeComplementOf> <rdf:type> <rdf:Property>
+	<owl:datatypeComplementOf> <rdfs:domain> <rdfs:Datatype>
+	<owl:datatypeComplementOf> <rdfs:range> <rdfs:Datatype>
+	<owl:deprecated> <rdf:type> <owl:AnnotationProperty>
+	<owl:deprecated> <rdfs:domain> <rdfs:Resource>
+	<owl:deprecated> <rdfs:range> <rdfs:Resource>
+	<owl:differentFrom> <rdf:type> <rdf:Property>
+	<owl:differentFrom> <rdfs:domain> <owl:Thing>
+	<owl:differentFrom> <rdfs:range> <owl:Thing>
+	<owl:disjointUnionOf> <rdf:type> <rdf:Property>
+	<owl:disjointUnionOf> <rdfs:domain> <owl:Class>
+	<owl:disjointUnionOf> <rdfs:range> <rdf:List>
+	<owl:disjointWith> <rdf:type> <rdf:Property>
+	<owl:disjointWith> <rdfs:domain> <owl:Class>
+	<owl:disjointWith> <rdfs:range> <owl:Class>
+	<owl:distinctMembers> <rdf:type> <rdf:Property>
+	<owl:distinctMembers> <rdfs:domain> <owl:AllDifferent>
+	<owl:distinctMembers> <rdfs:range> <rdf:List>
+	<owl:equivalentClass> <rdf:type> <rdf:Property>
+	<owl:equivalentClass> <rdfs:domain> <rdfs:Class>
+	<owl:equivalentClass> <rdfs:range> <rdfs:Class>
+	<owl:equivalentProperty> <rdf:type> <rdf:Property>
+	<owl:equivalentProperty> <rdfs:domain> <rdf:Property>
+	<owl:equivalentProperty> <rdfs:range> <rdf:Property>
+	<owl:hasKey> <rdf:type> <rdf:Property>
+	<owl:hasKey> <rdfs:domain> <owl:Class>
+	<owl:hasKey> <rdfs:range> <rdf:List>
+	<owl:hasSelf> <rdf:type> <rdf:Property>
+	<owl:hasSelf> <rdfs:domain> <owl:Restriction>
+	<owl:hasSelf> <rdfs:range> <rdfs:Resource>
+	<owl:hasValue> <rdf:type> <rdf:Property>
+	<owl:hasValue> <rdfs:domain> <owl:Restriction>
+	<owl:hasValue> <rdfs:range> <rdfs:Resource>
+	<owl:imports> <rdf:type> <owl:OntologyProperty>
+	<owl:imports> <rdfs:domain> <owl:Ontology>
+	<owl:imports> <rdfs:range> <owl:Ontology>
+	<owl:incompatibleWith> <rdf:type> <owl:AnnotationProperty>
+	<owl:incompatibleWith> <rdf:type> <owl:OntologyProperty>
+	<owl:incompatibleWith> <rdfs:domain> <owl:Ontology>
+	<owl:incompatibleWith> <rdfs:range> <owl:Ontology>
+	<owl:intersectionOf> <rdf:type> <rdf:Property>
+	<owl:intersectionOf> <rdfs:domain> <rdfs:Class>
+	<owl:intersectionOf> <rdfs:range> <rdf:List>
+	<owl:inverseOf> <rdf:type> <rdf:Property>
+	<owl:inverseOf> <rdfs:domain> <owl:ObjectProperty>
+	<owl:inverseOf> <rdfs:range> <owl:ObjectProperty>
+	<owl:maxCardinality> <rdf:type> <rdf:Property>
+	<owl:maxCardinality> <rdfs:domain> <owl:Restriction>
+	<owl:maxCardinality> <rdfs:range> <xsd:nonNegativeInteger>
+	<owl:maxQualifiedCardinality> <rdf:type> <rdf:Property>
+	<owl:maxQualifiedCardinality> <rdfs:domain> <owl:Restriction>
+	<owl:maxQualifiedCardinality> <rdfs:range> <xsd:nonNegativeInteger>
+	<owl:members> <rdf:type> <rdf:Property>
+	<owl:members> <rdfs:domain> <rdfs:Resource>
+	<owl:members> <rdfs:range> <rdf:List>
+	<owl:minCardinality> <rdf:type> <rdf:Property>
+	<owl:minCardinality> <rdfs:domain> <owl:Restriction>
+	<owl:minCardinality> <rdfs:range> <xsd:nonNegativeInteger>
+	<owl:minQualifiedCardinality> <rdf:type> <rdf:Property>
+	<owl:minQualifiedCardinality> <rdfs:domain> <owl:Restriction>
+	<owl:minQualifiedCardinality> <rdfs:range> <xsd:nonNegativeInteger>
+	<owl:onClass> <rdf:type> <rdf:Property>
+	<owl:onClass> <rdfs:domain> <owl:Restriction>
+	<owl:onClass> <rdfs:range> <owl:Class>
+	<owl:onDataRange> <rdf:type> <rdf:Property>
+	<owl:onDataRange> <rdfs:domain> <owl:Restriction>
+	<owl:onDataRange> <rdfs:range> <rdfs:Datatype>
+	<owl:onDatatype> <rdf:type> <rdf:Property>
+	<owl:onDatatype> <rdfs:domain> <rdfs:Datatype>
+	<owl:onDatatype> <rdfs:range> <rdfs:Datatype>
+	<owl:oneOf> <rdf:type> <rdf:Property>
+	<owl:oneOf> <rdfs:domain> <rdfs:Class>
+	<owl:oneOf> <rdfs:range> <rdf:List>
+	<owl:onProperty> <rdf:type> <rdf:Property>
+	<owl:onProperty> <rdfs:domain> <owl:Restriction>
+	<owl:onProperty> <rdfs:range> <rdf:Property>
+	<owl:onProperties> <rdf:type> <rdf:Property>
+	<owl:onProperties> <rdfs:domain> <owl:Restriction>
+	<owl:onProperties> <rdfs:range> <rdf:List>
+	<owl:priorVersion> <rdf:type> <owl:AnnotationProperty>
+	<owl:priorVersion> <rdf:type> <owl:OntologyProperty>
+	<owl:priorVersion> <rdfs:domain> <owl:Ontology>
+	<owl:priorVersion> <rdfs:range> <owl:Ontology>
+	<owl:propertyChainAxiom> <rdf:type> <rdf:Property>
+	<owl:propertyChainAxiom> <rdfs:domain> <owl:ObjectProperty>
+	<owl:propertyChainAxiom> <rdfs:range> <rdf:List>
+	<owl:propertyDisjointWith> <rdf:type> <rdf:Property>
+	<owl:propertyDisjointWith> <rdfs:domain> <rdf:Property>
+	<owl:propertyDisjointWith> <rdfs:range> <rdf:Property>
+	<owl:qualifiedCardinality> <rdf:type> <rdf:Property>
+	<owl:qualifiedCardinality> <rdfs:domain> <owl:Restriction>
+	<owl:qualifiedCardinality> <rdfs:range> <xsd:nonNegativeInteger>
+	<owl:sameAs> <rdf:type> <rdf:Property>
+	<owl:sameAs> <rdfs:domain> <owl:Thing>
+	<owl:sameAs> <rdfs:range> <owl:Thing>
+	<owl:someValuesFrom> <rdf:type> <rdf:Property>
+	<owl:someValuesFrom> <rdfs:domain> <owl:Restriction>
+	<owl:someValuesFrom> <rdfs:range> <rdfs:Class>
+	<owl:sourceIndividual> <rdf:type> <rdf:Property>
+	<owl:sourceIndividual> <rdfs:domain> <owl:NegativePropertyAssertion>
+	<owl:sourceIndividual> <rdfs:range> <owl:Thing>
+	<owl:targetIndividual> <rdf:type> <rdf:Property>
+	<owl:targetIndividual> <rdfs:domain> <owl:NegativePropertyAssertion>
+	<owl:targetIndividual> <rdfs:range> <owl:Thing>
+	<owl:targetValue> <rdf:type> <rdf:Property>
+	<owl:targetValue> <rdfs:domain> <owl:NegativePropertyAssertion>
+	<owl:targetValue> <rdfs:range> <rdfs:Literal>
+	<owl:topDataProperty> <rdf:type> <owl:DatatypeProperty>
+	<owl:topDataProperty> <rdfs:domain> <owl:Thing>
+	<owl:topDataProperty> <rdfs:range> <rdfs:Literal>
+	<owl:topObjectProperty> <rdf:type> <rdf:ObjectProperty>
+	<owl:topObjectProperty> <rdfs:domain> <owl:Thing>
+	<owl:topObjectProperty> <rdfs:range> <owl:Thing>
+	<owl:unionOf> <rdf:type> <rdf:Property>
+	<owl:unionOf> <rdfs:domain> <rdfs:Class>
+	<owl:unionOf> <rdfs:range> <rdf:List>
+	<owl:versionInfo> <rdf:type> <owl:AnnotationProperty>
+	<owl:versionInfo> <rdfs:domain> <rdfs:Resource>
+	<owl:versionInfo> <rdfs:range> <rdfs:Resource>
+	<owl:versionIRI> <rdf:type> <owl:OntologyProperty>
+	<owl:versionIRI> <rdfs:domain> <owl:Ontology>
+	<owl:versionIRI> <rdfs:range> <owl:Ontology>
+	<owl:withRestrictions> <rdf:type> <rdf:Property>
+	<owl:withRestrictions> <rdfs:domain> <rdfs:Datatype>
+	<owl:withRestrictions> <rdfs:range> <rdf:List>
+
+	// Table 6.3: Axiomatic Triples for the Datatypes of the OWL 2 RDF-Based Semantics
+	
+	<xsd:anyURI> <rdf:type> <rdfs:Datatype>
+	<xsd:anyURI> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:base64Binary> <rdf:type> <rdfs:Datatype>
+	<xsd:base64Binary> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:boolean> <rdf:type> <rdfs:Datatype>
+	<xsd:boolean> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:byte> <rdf:type> <rdfs:Datatype>
+	<xsd:byte> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:dateTime> <rdf:type> <rdfs:Datatype>
+	<xsd:dateTime> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:dateTimeStamp> <rdf:type> <rdfs:Datatype>
+	<xsd:dateTimeStamp> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:decimal> <rdf:type> <rdfs:Datatype>
+	<xsd:decimal> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:double> <rdf:type> <rdfs:Datatype>
+	<xsd:double> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:float> <rdf:type> <rdfs:Datatype>
+	<xsd:float> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:hexBinary> <rdf:type> <rdfs:Datatype>
+	<xsd:hexBinary> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:int> <rdf:type> <rdfs:Datatype>
+	<xsd:int> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:integer> <rdf:type> <rdfs:Datatype>
+	<xsd:integer> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:language> <rdf:type> <rdfs:Datatype>
+	<xsd:language> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:long> <rdf:type> <rdfs:Datatype>
+	<xsd:long> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:Name> <rdf:type> <rdfs:Datatype>
+	<xsd:Name> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:NCName> <rdf:type> <rdfs:Datatype>
+	<xsd:NCName> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:negativeInteger> <rdf:type> <rdfs:Datatype>
+	<xsd:negativeInteger> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:NMTOKEN> <rdf:type> <rdfs:Datatype>
+	<xsd:NMTOKEN> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:nonNegativeInteger> <rdf:type> <rdfs:Datatype>
+	<xsd:nonNegativeInteger> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:nonPositiveInteger> <rdf:type> <rdfs:Datatype>
+	<xsd:nonPositiveInteger> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:normalizedString> <rdf:type> <rdfs:Datatype>
+	<xsd:normalizedString> <rdfs:subClassOf> <rdfs:Literal>
+	<rdf:PlainLiteral> <rdf:type> <rdfs:Datatype>
+	<rdf:PlainLiteral> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:positiveInteger> <rdf:type> <rdfs:Datatype>
+	<xsd:positiveInteger> <rdfs:subClassOf> <rdfs:Literal>
+	<owl:rational> <rdf:type> <rdfs:Datatype>
+	<owl:rational> <rdfs:subClassOf> <rdfs:Literal>
+	<owl:real> <rdf:type> <rdfs:Datatype>
+	<owl:real> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:short> <rdf:type> <rdfs:Datatype>
+	<xsd:short> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:string> <rdf:type> <rdfs:Datatype>
+	<xsd:string> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:token> <rdf:type> <rdfs:Datatype>
+	<xsd:token> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:unsignedByte> <rdf:type> <rdfs:Datatype>
+	<xsd:unsignedByte> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:unsignedInt> <rdf:type> <rdfs:Datatype>
+	<xsd:unsignedInt> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:unsignedLong> <rdf:type> <rdfs:Datatype>
+	<xsd:unsignedLong> <rdfs:subClassOf> <rdfs:Literal>
+	<xsd:unsignedShort> <rdf:type> <rdfs:Datatype>
+	<xsd:unsignedShort> <rdfs:subClassOf> <rdfs:Literal>
+	<rdf:XMLLiteral> <rdf:type> <rdfs:Datatype>
+	<rdf:XMLLiteral> <rdfs:subClassOf> <rdfs:Literal>
+
+	// Table 6.4: Axiomatic Triples for the Facets of the OWL 2 RDF-Based Semantics
+	
+	<rdf:langRange> <rdf:type> <owl:DatatypeProperty>
+	<rdf:langRange> <rdfs:domain> <rdfs:Resource>
+	<rdf:langRange> <rdfs:range> <rdfs:Literal>
+	<xsd:length> <rdf:type> <owl:DatatypeProperty>
+	<xsd:length> <rdfs:domain> <rdfs:Resource>
+	<xsd:length> <rdfs:range> <rdfs:Literal>
+	<xsd:maxExclusive> <rdf:type> <owl:DatatypeProperty>
+	<xsd:maxExclusive> <rdfs:domain> <rdfs:Resource>
+	<xsd:maxExclusive> <rdfs:range> <rdfs:Literal>
+	<xsd:maxInclusive> <rdf:type> <owl:DatatypeProperty>
+	<xsd:maxInclusive> <rdfs:domain> <rdfs:Resource>
+	<xsd:maxInclusive> <rdfs:range> <rdfs:Literal>
+	<xsd:maxLength> <rdf:type> <owl:DatatypeProperty>
+	<xsd:maxLength> <rdfs:domain> <rdfs:Resource>
+	<xsd:maxLength> <rdfs:range> <rdfs:Literal>
+	<xsd:minExclusive> <rdf:type> <owl:DatatypeProperty>
+	<xsd:minExclusive> <rdfs:domain> <rdfs:Resource>
+	<xsd:minExclusive> <rdfs:range> <rdfs:Literal>
+	<xsd:minInclusive> <rdf:type> <owl:DatatypeProperty>
+	<xsd:minInclusive> <rdfs:domain> <rdfs:Resource>
+	<xsd:minInclusive> <rdfs:range> <rdfs:Literal>
+	<xsd:minLength> <rdf:type> <owl:DatatypeProperty>
+	<xsd:minLength> <rdfs:domain> <rdfs:Resource>
+	<xsd:minLength> <rdfs:range> <rdfs:Literal>
+	<xsd:pattern> <rdf:type> <owl:DatatypeProperty>
+	<xsd:pattern> <rdfs:domain> <rdfs:Resource>
+	<xsd:pattern> <rdfs:range> <rdfs:Literal>
+
+	// Table 6.5: Additional Axiomatic Triples for Classes and Properties of the RDFS Vocabulary
+	
+	<rdfs:Class> <rdfs:subClassOf> <owl:Class>
+	<rdfs:comment> <rdf:type> <owl:AnnotationProperty>
+	<rdfs:comment> <rdfs:domain> <rdfs:Resource>
+	<rdfs:comment> <rdfs:range> <rdfs:Literal>
+	<rdfs:Datatype> <rdfs:subClassOf> <owl:DataRange>
+	<rdfs:isDefinedBy> <rdf:type> <owl:AnnotationProperty>
+	<rdfs:isDefinedBy> <rdfs:domain> <rdfs:Resource>
+	<rdfs:isDefinedBy> <rdfs:range> <rdfs:Resource>
+	<rdfs:label> <rdf:type> <owl:AnnotationProperty>
+	<rdfs:label> <rdfs:domain> <rdfs:Resource>
+	<rdfs:label> <rdfs:range> <rdfs:Literal>
+	<rdfs:Literal> <rdf:type> <rdfs:Datatype>
+	<rdf:Property> <rdfs:subClassOf> <owl:ObjectProperty>
+	<rdfs:Resource> <rdfs:subClassOf> <owl:Thing>
+	<rdfs:seeAlso> <rdf:type> <owl:AnnotationProperty>
+	<rdfs:seeAlso> <rdfs:domain> <rdfs:Resource>
+	<rdfs:seeAlso> <rdfs:range> <rdfs:Resource>
+
+
+	// ========================================================================
+	// OWL2 RL - Axioms about properties
+	// ========================================================================
+
+	// rule: prp-ap
+	// ------------
+	<rdfs:label>                   <rdf:type> <owl:AnnotationProperty>
+	<rdfs:comment>                 <rdf:type> <owl:AnnotationProperty>
+	<rdfs:seeAlso>                 <rdf:type> <owl:AnnotationProperty>
+	<rdfs:isDefinedBy>             <rdf:type> <owl:AnnotationProperty>
+	<owl:deprecated>               <rdf:type> <owl:AnnotationProperty>
+	<owl:versionInfo>              <rdf:type> <owl:AnnotationProperty>
+	<owl:priorVersion>             <rdf:type> <owl:AnnotationProperty>
+	<owl:backwardCompatibleWith>   <rdf:type> <owl:AnnotationProperty>
+	<owl:incompatibleWith>         <rdf:type> <owl:AnnotationProperty>
+	
+	
+	// ========================================================================
+	// OWL2 RL - Axioms about classes
+	// ========================================================================
+
+	// rule: cls-thing
+	// ---------------
+	<owl:Thing>   <rdf:type> <owl:Class>
+	
+	// rule: cls-nothing1
+	// ------------------
+	<owl:Nothing> <rdf:type> <owl:Class>
+
+
+	// ========================================================================
+	// OWL2 RL - Axioms about datatypes
+	// ========================================================================
+	
+	// rule: dt-type1
+	// --------------
+	<rdf:PlainLiteral>         <rdf:type> <rdfs:Datatype>
+	<rdf:XMLLiteral>           <rdf:type> <rdfs:Datatype>
+	<rdfs:Literal>             <rdf:type> <rdfs:Datatype>
+	<xsd:decimal>              <rdf:type> <rdfs:Datatype>
+	<xsd:integer>              <rdf:type> <rdfs:Datatype>
+	<xsd:nonNegativeInteger>   <rdf:type> <rdfs:Datatype>
+	<xsd:nonPositiveInteger>   <rdf:type> <rdfs:Datatype>
+	<xsd:positiveInteger>      <rdf:type> <rdfs:Datatype>
+	<xsd:negativeInteger>      <rdf:type> <rdfs:Datatype>
+	<xsd:long>                 <rdf:type> <rdfs:Datatype>
+	<xsd:int>                  <rdf:type> <rdfs:Datatype>
+	<xsd:short>                <rdf:type> <rdfs:Datatype>
+	<xsd:byte>                 <rdf:type> <rdfs:Datatype>
+	<xsd:unsignedLong>         <rdf:type> <rdfs:Datatype>
+	<xsd:unsignedInt>          <rdf:type> <rdfs:Datatype>
+	<xsd:unsignedShort>        <rdf:type> <rdfs:Datatype>
+	<xsd:unsignedByte>         <rdf:type> <rdfs:Datatype>
+	<xsd:float>                <rdf:type> <rdfs:Datatype>
+	<xsd:double>               <rdf:type> <rdfs:Datatype>
+	<xsd:string>               <rdf:type> <rdfs:Datatype>
+	<xsd:normalizedString>     <rdf:type> <rdfs:Datatype>
+	<xsd:token>                <rdf:type> <rdfs:Datatype>
+	<xsd:language>             <rdf:type> <rdfs:Datatype>
+	<xsd:Name>                 <rdf:type> <rdfs:Datatype>
+	<xsd:NCName>               <rdf:type> <rdfs:Datatype>
+	<xsd:NMTOKEN>              <rdf:type> <rdfs:Datatype>
+	<xsd:boolean>              <rdf:type> <rdfs:Datatype>
+	<xsd:hexBinary>            <rdf:type> <rdfs:Datatype>
+	<xsd:base64Binary>         <rdf:type> <rdfs:Datatype>
+	<xsd:anyURI>               <rdf:type> <rdfs:Datatype>
+	<xsd:dateTime>             <rdf:type> <rdfs:Datatype>
+	<xsd:dateTimeStamp>        <rdf:type> <rdfs:Datatype>
+}
+
+Rules
+{
+// ========================================================================
+// The Semantics of Equality
+// ========================================================================
+
+Id: eq-ref
+	s p o                                            [Constraint p != <owl:sameAs>]
+	-------------------------------
+	s <owl:sameAs> s
+	p <owl:sameAs> p
+	o <owl:sameAs> o
+
+Id: eq-sym
+	s <owl:sameAs> o                                 [Constraint s != o]
+	-------------------------------
+	o <owl:sameAs> s
+	
+Id: eq-trans
+	x <owl:sameAs> y                                 [Constraint x != y]
+	y <owl:sameAs> z                                 [Constraint y != z]
+	-------------------------------
+	x <owl:sameAs> z
+
+Id: eq-rep-s
+	x <owl:sameAs> y                                 [Constraint x != y]
+	x p o
+	-------------------------------
+	y p o
+
+Id: eq-rep-p
+	x <owl:sameAs> y                                 [Constraint x != y]
+	s x o
+	-------------------------------
+	s y o
+
+Id: eq-rep-o
+	x <owl:sameAs> y                                 [Constraint x != y]
+	s p x
+	-------------------------------
+	s p y
+
+
+/* TODO
+Consistency: eq-diff2
+  T(?x, rdf:type, owl:AllDifferent)
+  T(?x, owl:members, ?y)
+  LIST[?y, ?z1, ..., ?zn]
+  T(?zi, owl:sameAs, ?zj) 		// for each 1 <= i < j <= n 
+	-------------------------------
+*/
+
+/* TODO
+Consistency: eq-diff3
+	T(?x, rdf:type, owl:AllDifferent)
+	T(?x, owl:distinctMembers, ?y)
+	LIST[?y, ?z1, ..., ?zn]
+	T(?zi, owl:sameAs, ?zj) 	// for each 1 <= i < j <= n 
+	-------------------------------
+*/
+
+// ========================================================================
+// The Semantics of Axioms about Properties 
+// ========================================================================
+
+// Id: prp-ap
+// See the axiomatic triples in the Axioms section.
+	
+Id: prp-dom
+	p <rdfs:domain> c
+	x p y
+	-------------------------------
+	x <rdf:type> c
+
+Id: prp-rng
+	p <rdfs:range> c
+	x p y
+	-------------------------------
+	y <rdf:type> c
+
+Id: prp-fp
+	p <rdf:type> <owl:FunctionalProperty>
+	x p y1                                [Constraint y1 != y2]
+	x p y2                                [Cut]
+	-------------------------------
+	y1 <owl:sameAs> y2
+	
+Id: prp-ifp
+	p <rdf:type> <owl:InverseFunctionalProperty>
+	x1 p y                                [Constraint x1 != x2]
+	x2 p y                                [Cut]
+	-------------------------------
+	x1 <owl:sameAs> x2
+
+
+Id: prp-symp
+	p <rdf:type> <owl:SymmetricProperty>
+	x p y
+	-------------------------------
+	y p x
+
+
+Id: prp-trp
+	p <rdf:type> <owl:TransitiveProperty>
+	x p y
+	y p z
+	-------------------------------
+	x p z
+
+Id: prp-spo1
+	p1 <rdfs:subPropertyOf> p2
+	x p1 y
+	-------------------------------
+	x p2 y
+
+/*
+    --------
+    prp-spo2
+    --------
+	This is the rule as shown on the OWL2 RL page:
+
+	T(?p, owl:propertyChainAxiom, ?x)
+	LIST[?x, ?p1, ..., ?pn]
+	T(?u1, ?p1, ?u2)
+	T(?u2, ?p2, ?u3)
+	...
+	T(?un, ?pn, ?un+1) 
+	-------------------------------
+	T(?u1, ?p, ?un+1)
+	
+	The following implementation uses 3 rules.
+	This implementation is sound, however in 'smooth delete' mode
+	it can not be guaranteed that conclusions are retracted when
+	the premises no longer hold,
+	e.g. when deleting an individual from the chain.
+	Ideally a 4-tuple would be used: _checkChain(?s ?p ?o)
+	This is implemented using a blank node in a reification style, i.e.
+	_checkChain(s p o)
+	  =>
+    b <onto:_checkChain1> s
+    b <onto:_checkChain2> p
+    b <onto:_checkChain3> o	
+*/
+
+Id: prp-spo2_1
+    p <owl:propertyChainAxiom> pc
+    //_checkChain(?start ?pc ?last)
+    b <onto:_checkChain1> start
+    b <onto:_checkChain2> pc
+    b <onto:_checkChain3> last
+    ----------------------------
+    start p last
+        
+Id: prp-spo2_2
+    pc <rdf:first> p
+    pc <rdf:rest> t                 [Constraint t != <rdf:nil>]
+    start p next
+//    _checkChain(next t last)
+    b1 <onto:_checkChain1> next
+    b1 <onto:_checkChain2> t
+    b1 <onto:_checkChain3> last
+    ----------------------------
+//    _checkChain(start pc last)
+    b2 <onto:_checkChain1> start
+    b2 <onto:_checkChain2> pc
+    b2 <onto:_checkChain3> last
+
+Id: prp-spo2_3
+	pc <rdf:first> p
+	pc <rdf:rest> <rdf:nil>
+	start p last
+    ----------------------------
+    //_checkChain( start pc last)
+    b <onto:_checkChain1> start
+    b <onto:_checkChain2> pc
+    b <onto:_checkChain3> last 
+
+Id: prp-eqp1
+	p1 <owl:equivalentProperty> p2
+	x p1 y
+	-------------------------------
+	x p2 y
+
+Id: prp-eqp2
+	p1 <owl:equivalentProperty> p2
+	x p2 y
+	-------------------------------
+	x p1 y
+
+
+/* TODO
+Consistency: prp-adp
+	T(?x, rdf:type, owl:AllDisjointProperties)
+	T(?x, owl:members, ?y)
+	LIST[?y, ?p1, ..., ?pn]
+	T(?u, ?pi, ?v)		// for each 1 <= i < j <= n 
+	T(?u, ?pj, ?v)
+	-------------------------------
+*/
+
+Id: prp-inv1
+	p1 <owl:inverseOf> p2
+	x p1 y
+	-------------------------------
+	y p2 x
+
+Id: prp-inv2
+	p1 <owl:inverseOf> p2
+	x p2 y
+	-------------------------------
+	y p1 x
+
+/*
+    -------
+    prp-key
+    -------
+    This is the rule as shown on the OWL2 RL page:
+
+	T(?c, owl:hasKey, ?u)
+	LIST[?u, ?p1, ..., ?pn]
+	T(?x, rdf:type, ?c)
+	T(?x, ?p1, ?z1)
+	...
+	T(?x, ?pn, ?zn)
+	T(?y, rdf:type, ?c)
+	T(?y, ?p1, ?z1)
+	...
+	T(?y, ?pn, ?zn)
+	-------------------------------
+	T(?x, owl:sameAs, ?y)
+	
+    **** FOR EFFICIENCY REASONS, THIS RULE IS EXCLUDED FROM THIS RULE-SET ****
+*/
+
+// ========================================================================
+// The Semantics of Classes 
+// ========================================================================
+
+// Id: cls-thing
+// (See the axiomatic triples in the Axioms section)
+
+// Id: cls-nothing1
+// (See the axiomatic triples in the Axioms section)
+
+
+/*
+    -------------------
+    cls-int1 & cls-int2
+    -------------------
+	These rules as shown in the OWL2 RL semantics page:
+Id: cls-int1
+	T(?c, owl:intersectionOf, ?x)
+	LIST[?x, ?c1, ..., ?cn]
+	T(?y, rdf:type, ?c1)
+	T(?y, rdf:type, ?c2)
+	...
+	T(?y, rdf:type, ?cn)
+	-------------------------------
+	T(?y, rdf:type, ?c)
+
+Id: cls-int2
+	T(?c, owl:intersectionOf, ?x)
+	LIST[?x, ?c1, ..., ?cn]
+	T(?y, rdf:type, ?c)
+	-------------------------------
+	T(?y, rdf:type, ?c1)
+	T(?y, rdf:type, ?c2)
+	...
+	T(?y, rdf:type, ?cn)
+	
+	The are achieved with the following pair of rules:
+*/
+Id: owl_typeByIntersect_1
+     b  <rdf:first>  c
+     b  <rdf:rest>  <rdf:nil>
+     z  <owl:intersectionOf>  b
+     i  <rdf:type>  c
+    --------------------------------
+     i  <rdf:type>  b
+
+
+Id: owl_typeByIntersect_2
+     b  <rdf:first>  c
+     i  <rdf:type>  c
+     i  <rdf:type>  b
+     n  <owl:intersectionOf>  b
+    --------------------------------
+     i  <rdf:type>  n
+
+
+/* TODO
+Id: cls-uni
+	T(?c, owl:unionOf, ?x)
+	LIST[?x, ?c1, ..., ?cn]
+	T(?y, rdf:type, ?ci)		// for each 1 <= i <= n 
+	-------------------------------
+	T(?y, rdf:type, ?c)
+*/
+
+
+Id: cls-svf1
+	x <owl:someValuesFrom> y
+	x <owl:onProperty> p
+	u p v
+	v <rdf:type> y
+	-------------------------------
+	u <rdf:type> x
+
+Id: cls-svf2
+	x <owl:someValuesFrom> <owl:Thing>
+	x <owl:onProperty> p
+	u p v
+	-------------------------------
+	u <rdf:type> x
+
+Id: cls-avf
+	x <owl:allValuesFrom> y
+	x <owl:onProperty> p
+	u <rdf:type> x
+	u p v
+	-------------------------------
+	v <rdf:type> y
+
+Id: cls-hv1
+	x <owl:hasValue> y
+	x <owl:onProperty> p
+	u <rdf:type> x
+	-------------------------------
+	u p y
+
+Id: cls-hv2
+	x <owl:hasValue> y
+	x <owl:onProperty> p
+	u p y
+	-------------------------------
+	u <rdf:type> x
+
+
+Id: cls-maxc2
+	x <owl:maxCardinality> "1"^^xsd:nonNegativeInteger
+	x <owl:onProperty> p
+	u <rdf:type> x
+	u p y1
+	u p y2
+	-------------------------------
+	y1 <owl:sameAs> y2
+
+
+Id: cls-maxqc3
+	x <owl:maxQualifiedCardinality> "1"^^xsd:nonNegativeInteger
+	x <owl:onProperty> p
+	x <owl:onClass> c
+	u <rdf:type> x
+	u p y1
+	y1 <rdf:type> c
+	u p y2                                [Cut]
+	y2 <rdf:type> c                       [Cut] 
+	-------------------------------
+	y1 <owl:sameAs> y2                    [Constraint y1 != y2]
+
+Id: cls-maxqc4
+	x <owl:maxQualifiedCardinality> "1"^^xsd:nonNegativeInteger
+	x <owl:onProperty> p
+	x <owl:onClass> <owl:Thing>
+	u <rdf:type> x
+	u p y1                                [Cut]
+	u p y2                                [Constraint y1 != y2]
+	-------------------------------
+	y1 <owl:sameAs> y2
+
+/*
+    ------
+    cls-oo
+    ------
+    This is how the rule appears in the OWL2 RL page:
+
+	T(?c, owl:oneOf, ?x)
+	LIST[?x, ?y1, ..., ?yn] 
+	-------------------------------
+	T(?y1, rdf:type, ?c)
+	...
+	T(?yn, rdf:type, ?c)
+	
+	It is achieved with the following pair of rules:
+*/
+
+// Part 1 of cls-oo
+Id: cls-oo_1
+     x  <rdf:rest>   z                         [Constraint z != <rdf:nil>]
+     c  <owl:oneOf>  x
+     -------------------------------
+     c  <owl:oneOf>  z
+
+// Part 2 of cls-oo
+Id: cls-oo_2
+     c  <owl:oneOf>  x
+     x  <rdf:first>  y
+    -------------------------------
+     y  <rdf:type>   c
+
+// ========================================================================
+// The Semantics of Class Axioms
+// ========================================================================
+
+Id:cax-sco
+	c1 <rdfs:subClassOf> c2                [Constraint c1 != c2 ]
+	x <rdf:type> c1
+	-------------------------------
+	x <rdf:type> c2
+
+Id: cax-eqc1
+	c1 <owl:equivalentClass> c2            [Constraint c1 != c2 ]
+	x <rdf:type> c1
+	-------------------------------
+	x <rdf:type> c2
+
+Id: cax-eqc2
+	c1 <owl:equivalentClass> c2            [Constraint c1 != c2 ]
+	x <rdf:type> c2
+	-------------------------------
+	x <rdf:type> c1
+
+
+/* TODO
+Consistency: cax-adc
+	T(?x, rdf:type, owl:AllDisjointClasses)
+	T(?x, owl:members, ?y)
+	LIST[?y, ?c1, ..., ?cn]
+	T(?z, rdf:type, ?ci)
+	T(?z, rdf:type, ?cj)
+	-------------------------------
+*/
+
+
+
+// ========================================================================
+// The Semantics of Datatypes
+// ========================================================================
+
+// Id: dt-type1
+// (See the axiomatic triples in the Axioms section)
+
+// These are not implemented (and probably not implementable)
+//		dt-type2
+//		dt-eq
+//		dt-diff
+//		dt-not-type
+
+
+// ========================================================================
+// The Semantics of Schema Vocabulary
+// ========================================================================
+
+Id: scm-cls
+	c <rdf:type> <owl:Class>
+	-------------------------------
+	c <rdfs:subClassOf> c
+	c <owl:equivalentClass> c
+	c <rdfs:subClassOf> <owl:Thing>
+	<owl:Nothing> <rdfs:subClassOf> c
+
+Id: scm-sco
+	c1 <rdfs:subClassOf> c2
+	c2 <rdfs:subClassOf> c3
+	-------------------------------
+	c1 <rdfs:subClassOf> c3
+
+Id: scm-eqc1
+	c1 <owl:equivalentClass> c2            [Constraint c1 != c2 ]
+	-------------------------------
+	c1 <rdfs:subClassOf> c2
+	c2 <rdfs:subClassOf> c1
+
+Id: scm-eqc2
+	c1 <rdfs:subClassOf> c2                [Constraint c1 != c2 ]
+	c2 <rdfs:subClassOf> c1                
+	-------------------------------
+	c1 <owl:equivalentClass> c2
+
+Id: scm-op
+	p <rdf:type> <owl:ObjectProperty>
+	-------------------------------
+	p <rdfs:subPropertyOf> p
+	p <owl:equivalentProperty> p
+
+Id: scm-dp
+	p <rdf:type> <owl:DatatypeProperty>
+	-------------------------------
+	p <rdfs:subPropertyOf> p
+	p <owl:equivalentProperty> p	
+
+Id: scm-spo
+	p1 <rdfs:subPropertyOf> p2
+	p2 <rdfs:subPropertyOf> p3
+	-------------------------------
+	p1 <rdfs:subPropertyOf> p3
+
+Id: scm-eqp1
+	p1 <owl:equivalentProperty> p2            [Constraint p1 != p2 ]
+	-------------------------------
+	p1 <rdfs:subPropertyOf> p2
+	p2 <rdfs:subPropertyOf> p1
+
+Id: scm-eqp2
+	p1 <rdfs:subPropertyOf> p2                [Constraint p1 != p2 ]
+	p2 <rdfs:subPropertyOf> p1                
+	-------------------------------
+	p1 <owl:equivalentProperty> p2
+
+Id: scm-dom1
+	p  <rdfs:domain> c1
+	c1 <rdfs:subClassOf> c2
+	-------------------------------
+	p <rdfs:domain> c2
+
+Id: scm-dom2
+	p2 <rdfs:domain> c
+	p1 <rdfs:subPropertyOf> p2
+	-------------------------------
+	p1 <rdfs:domain> c
+
+Id: scm-rng1
+	p  <rdfs:range> c1
+	c1 <rdfs:subClassOf> c2 
+	-------------------------------
+	p <rdfs:range> c2
+
+Id: scm-rng2
+	p2 <rdfs:range> c
+	p1 <rdfs:subPropertyOf> p2
+	-------------------------------
+	p1 <rdfs:range> c
+
+Id: scm-hv
+	c1 <owl:hasValue> i
+	c1 <owl:onProperty> p1
+	c2 <owl:hasValue> i
+	c2 <owl:onProperty> p2
+	p1 <rdfs:subPropertyOf> p2         [Constraint p1 != p2 ]
+	-------------------------------
+	c1 <rdfs:subClassOf> c2            [Constraint c1 != c2 ]
+
+Id: scm-svf1
+	c1 <owl:someValuesFrom> y1
+	c1 <owl:onProperty> p
+	c2 <owl:someValuesFrom> y2
+	c2 <owl:onProperty> p
+	y1 <rdfs:subClassOf> y2            [Constraint y1 != y2 ]
+	-------------------------------
+	c1 <rdfs:subClassOf> c2            [Constraint c1 != c2 ]
+
+Id: scm-svf2
+	c1 <owl:someValuesFrom> y
+	c1 <owl:onProperty> p1
+	c2 <owl:someValuesFrom> y
+	c2 <owl:onProperty> p2
+	p1 <rdfs:subPropertyOf> p2         [Constraint p1 != p2 ]
+	-------------------------------
+	c1 <rdfs:subClassOf> c2            [Constraint c1 != c2 ]
+
+Id: scm-avf1
+	c1 <owl:allValuesFrom> y1
+	c1 <owl:onProperty> p
+	c2 <owl:allValuesFrom> y2
+	c2 <owl:onProperty> p
+	y1 <rdfs:subClassOf> y2            [Constraint y1 != y2 ]
+	-------------------------------
+	c1 <rdfs:subClassOf> c2            [Constraint c1 != c2 ]
+
+Id: scm-avf2
+	c1 <owl:allValuesFrom> y
+	c1 <owl:onProperty> p1
+	c2 <owl:allValuesFrom> y
+	c2 <owl:onProperty> p2
+	p1 <rdfs:subPropertyOf> p2         [Constraint p1 != p2 ]
+	-------------------------------
+	c2 <rdfs:subClassOf> c1            [Constraint c1 != c2 ]
+
+/*
+    -------
+    scm-int
+    -------
+    This is the scm-int rule as shown on the OWL2 RL page:
+
+	T(?c, owl:intersectionOf, ?x)
+	LIST[?x, ?c1, ..., ?cn]
+	-------------------------------
+	T(?c, rdfs:subClassOf, ?c1)
+	T(?c, rdfs:subClassOf, ?c2)
+	...
+	T(?c, rdfs:subClassOf, ?cn)
+	
+	It is achieved with the following pair of rules:
+*/
+
+// Part1 of scm-int (see owl_subClassByInters1 in Rules.pie)
+Id: scm-int_1
+     c  <owl:intersectionOf>  x
+     x  <rdf:first>  y
+    -------------------------------
+     c  <rdfs:subClassOf>  x
+     c  <rdfs:subClassOf>  y
+
+// Part2 of scm-int (see owl_subClassByInters2 in Rules.pie)
+Id: scm-int_2
+     x  <rdf:rest>  y                         [Constraint y != <rdf:nil>]
+     c  <owl:intersectionOf>  x
+    -------------------------------
+     x  <owl:intersectionOf>  y
+
+
+/*
+    -------
+    scm-uni
+    -------
+	This is the scm-uni rule as shown on the OWL2 RL page:
+
+	T(?c, owl:unionOf, ?x)
+	LIST[?x, ?c1, ..., ?cn]
+	-------------------------------
+	T(?c1, rdfs:subClassOf, ?c)
+	T(?c2, rdfs:subClassOf, ?c)
+	...
+	T(?cn, rdfs:subClassOf, ?c)
+	
+	It is achieved with the following 2 rules:
+*/
+
+// Part1 of scm-uni (see owl_subClassByUnion1 in Rules.pie)
+Id: scm-uni_1
+     x  <rdf:rest>  y                         [Constraint y != <rdf:nil>]
+     c  <owl:unionOf>  x
+    -------------------------------
+     x  <owl:unionOf>  y
+     x  <rdfs:subClassOf>  c
+
+// Part2 of scm-uni (see owl_subClassByUnion1 in Rules.pie)
+Id: scm-uni_2
+     a  <owl:unionOf>  m
+     m  <rdf:first>  c
+    -------------------------------
+     c  <rdfs:subClassOf>  a
+
+}

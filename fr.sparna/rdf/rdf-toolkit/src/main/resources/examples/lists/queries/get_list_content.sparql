@@ -1,0 +1,6 @@
+PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX bnf:<http://www.bnf.fr/autorites/ontology/>
+SELECT ?element WHERE { 
+	<http://www.bnf.fr/autorites/entry/test_list> bnf:property_list ?list .
+	?list rdf:rest*/rdf:first ?element
+}
