@@ -16,6 +16,7 @@ import gate.util.persistence.PersistenceManager;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -45,6 +46,10 @@ public class GateServlet extends HttpServlet {
 	 * Default gate application file. looked under under GATE HOME. example of value is : gate/application.gapp
 	 */
 	private static final String DEFAULT_GATE_APP = "application.gapp";
+	
+	private static final String PARAMETER_ANNOTATIONS = "annotations";
+	
+	private static final String PARAMETER_ENCODING = "encoding";
 
 	/**
 	 * Le pool d'applications gate
@@ -97,7 +102,7 @@ public class GateServlet extends HttpServlet {
 		StringBuffer payload = new StringBuffer();
 		String line = null;
 		try {
-			BufferedReader reader = request.getReader();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF-8"));
 			while ((line = reader.readLine()) != null) {
 				payload.append(line);
 			}
@@ -106,7 +111,7 @@ public class GateServlet extends HttpServlet {
 		}
 		
 		// Get annotation types
-		String annotationParam = request.getParameter("annotations");
+		String annotationParam = request.getParameter(PARAMETER_ANNOTATIONS);
 		Set<String> annotations = null;
 		if(annotationParam != null) {
 			annotations = new HashSet<String>(Arrays.asList(annotationParam.split(",")));
