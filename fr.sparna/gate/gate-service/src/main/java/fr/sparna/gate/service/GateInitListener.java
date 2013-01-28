@@ -21,6 +21,11 @@ public class GateInitListener implements ServletContextListener {
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 	
 	/**
+	 * Nom de la propriete System pour indiquer un chemin alternatif de racine Gate
+	 */
+	private static final String GATE_HOME_PROPERTY = "gate.home";
+	
+	/**
 	 * Nom du chemin local vers le répertoire des ressources GATE (passé comme "gate home".
 	 */
 	private static final String DEFAULT_GATE_HOME = "gate";
@@ -43,7 +48,7 @@ public class GateInitListener implements ServletContextListener {
 		} catch (GateServletException ex) {
 			ex.printStackTrace();
 			gateInitialized = false;
-			log.error("Gate not correctly initialized.");
+			log.error("Gate not correctly initialized, message is : "+ex.getMessage());
 		}		
 	}
 	
@@ -57,10 +62,13 @@ public class GateInitListener implements ServletContextListener {
 	}
 
 	private void initGate() throws GateServletException {
-		// TODO : setup alternative gate.home
-		File gateHome = new File(DEFAULT_GATE_HOME);
+		String gateHomePath = DEFAULT_GATE_HOME;
+		if(System.getProperties().contains(GATE_HOME_PROPERTY)) {
+			gateHomePath = System.getProperty(GATE_HOME_PROPERTY);
+		}
+		File gateHome = new File(gateHomePath);
 		
-		log.info("Initializing GATE...");
+		log.warn("Initializing GATE with home "+gateHome.getAbsolutePath());
 		
 		if (gateHome!=null && gateHome.exists() && gateHome.isDirectory()) {
 			log.info("GATE Home absolute path "+gateHome.getAbsolutePath());
