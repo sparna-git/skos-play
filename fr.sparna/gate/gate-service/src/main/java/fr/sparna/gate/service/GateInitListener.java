@@ -5,6 +5,7 @@ import gate.util.GateException;
 
 import java.io.File;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -43,7 +44,7 @@ public class GateInitListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent e) {
 		try {
-			this.initGate();
+			this.initGate(e.getServletContext());
 			gateInitialized = true;
 		} catch (GateServletException ex) {
 			ex.printStackTrace();
@@ -61,10 +62,12 @@ public class GateInitListener implements ServletContextListener {
 		// nothing		
 	}
 
-	private void initGate() throws GateServletException {
+	private void initGate(ServletContext context) throws GateServletException {
 		String gateHomePath = DEFAULT_GATE_HOME;
 		if(System.getProperties().contains(GATE_HOME_PROPERTY)) {
 			gateHomePath = System.getProperty(GATE_HOME_PROPERTY);
+		} else if (context.getInitParameter(GATE_HOME_PROPERTY) != null) {
+			gateHomePath = context.getInitParameter(GATE_HOME_PROPERTY);
 		}
 		File gateHome = new File(gateHomePath);
 		
