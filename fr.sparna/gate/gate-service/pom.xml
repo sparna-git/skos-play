@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>fr.sparna.rdf</groupId>
+	<artifactId>gate-service</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>war</packaging>
+
+	<name>Sparna Gate service</name>
+	<description>A servlet wrapper around Gate</description>
+
+	<organization>
+		<name>Sparna</name>
+		<url>http://www.sparna.fr/</url>
+	</organization>
+
+	<build>
+
+	</build>
+
+	<repositories>
+		<!-- declare most uptodate java.net repository to get javax:javaee-api.jar:6.0 -->
+	  	<repository>
+	  		<id>java.net 6.0</id>
+	  		<url>http://download.java.net/maven/2</url>
+	  	</repository>
+		<!-- declare older java.net repository to get javaee:javaee-api.jar:5 -->
+	  	<repository>
+	  		<id>java.net 5</id>
+	  		<url>http://download.java.net/maven/2</url>
+	  	</repository>
+	  </repositories>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>uk.ac.gate</groupId>
+			<artifactId>gate-core</artifactId>
+			<version>7.1</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>javaee</groupId>
+		    <artifactId>javaee-api</artifactId>
+		    <version>5</version>
+			<scope>provided</scope>
+		</dependency>
+
+	    <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+
+	</dependencies>
+
+</project>
