@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openrdf.model.Value;
 import org.openrdf.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,22 +38,17 @@ public class Select implements ToolkitCommandIfc {
 		Repository inputRepository = new AutoDetectRepositoryFactory(args.getInput()).createNewRepository();
 
 		// init potential bindings
-		HashMap<String, Value> bindings = new HashMap<String, Value>();
+		HashMap<String, Object> bindings = new HashMap<String, Object>();
 		if(args.getBindings() != null) {
 			for (Map.Entry<String, String> anEntry : args.getBindings().entrySet()) {
-					boolean createURI = false;
+					Object value = null;
 					try {
-						new URI(anEntry.getValue());
-						createURI = true;
+						value = new URI(anEntry.getValue());
 					} catch (Exception e) {
-						createURI = false;
+						value = anEntry.getValue();
 					}
 
-					if(createURI) {
-						bindings.put(anEntry.getKey(), inputRepository.getValueFactory().createURI(anEntry.getValue()));
-					} else {
-						bindings.put(anEntry.getKey(), inputRepository.getValueFactory().createLiteral(anEntry.getValue()));
-					}
+					bindings.put(anEntry.getKey(), value);
 			}
 		}
 

@@ -3,7 +3,6 @@ package fr.sparna.rdf.sesame.toolkit.query;
 import java.util.Map;
 
 import org.openrdf.model.Statement;
-import org.openrdf.model.Value;
 import org.openrdf.rio.RDFHandler;
 import org.openrdf.rio.RDFHandlerException;
 
@@ -11,7 +10,7 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
 
 public abstract class ConstructSPARQLHelperBase extends SPARQLQuery implements ConstructSPARQLHelperIfc, RDFHandler, SPARQLQueryIfc {
 
-	public ConstructSPARQLHelperBase(SPARQLQueryBuilderIfc builder, Map<String, Value> bindings) {
+	public ConstructSPARQLHelperBase(SPARQLQueryBuilderIfc builder, Map<String, Object> bindings) {
 		super(builder, bindings);
 	}
 
@@ -19,7 +18,7 @@ public abstract class ConstructSPARQLHelperBase extends SPARQLQuery implements C
 		super(builder);
 	}
 
-	public ConstructSPARQLHelperBase(String sparql, Map<String, Value> bindings) {
+	public ConstructSPARQLHelperBase(String sparql, Map<String, Object> bindings) {
 		super(sparql, bindings);
 	}
 

@@ -4,15 +4,13 @@ import java.net.URI;
 import java.util.Map;
 import java.util.Set;
 
-import org.openrdf.model.Value;
-
 /**
  * @author Thomas Francart
  *
  */
 public abstract class SPARQLQueryBase implements SPARQLQueryIfc {
 	
-	protected Map<String, Value> bindings = null;
+	protected Map<String, Object> bindings = null;
 	
 	protected Boolean includeInferred = null;
 	
@@ -30,7 +28,7 @@ public abstract class SPARQLQueryBase implements SPARQLQueryIfc {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Map<String, Value> getBindings() {
+	public Map<String, Object> getBindings() {
 		return bindings;
 	}
 
@@ -58,7 +56,7 @@ public abstract class SPARQLQueryBase implements SPARQLQueryIfc {
 		return namedGraphs;
 	}
 
-	public void setBindings(Map<String, Value> bindings) {
+	public void setBindings(Map<String, Object> bindings) {
 		this.bindings = bindings;
 	}
 

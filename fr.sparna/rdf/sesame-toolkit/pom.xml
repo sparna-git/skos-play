@@ -81,12 +81,6 @@
 		<artifactId>sparna-commons-xml</artifactId>
 		<version>${project.version}</version>
 	</dependency>
-	
-	<dependency>
-		<groupId>fr.sparna.commons</groupId>
-		<artifactId>sparna-commons-tree</artifactId>
-		<version>${project.version}</version>
-	</dependency>
 
 	<!-- OWLIM for runtime only -->
     	<dependency>

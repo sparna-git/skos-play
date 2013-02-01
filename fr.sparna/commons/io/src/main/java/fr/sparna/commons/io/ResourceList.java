@@ -11,7 +11,7 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 /**
- * list resources available from the classpath @ *
+ * List the resources available from the classpath
  */
 public class ResourceList{
 
@@ -19,9 +19,8 @@ public class ResourceList{
      * for all elements of java.class.path get a Collection of resources Pattern
      * pattern = Pattern.compile(".*"); gets all resources
      * 
-     * @param pattern
-     *            the pattern to match
-     * @return the resources in the order they are found
+     * @param pattern	the pattern to match
+     * @return 			the resources in the order they are found
      */
     public static Collection<String> getResources(
         final Pattern pattern

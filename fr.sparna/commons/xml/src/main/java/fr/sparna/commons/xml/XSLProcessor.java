@@ -4,6 +4,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.InvalidParameterException;
 
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.URIResolver;
@@ -35,11 +39,8 @@ public class XSLProcessor {
 	}
 
 	
-	public void transform(
-			InputStream xslInput,
-			Node node,
-			OutputStream output)
-	throws TransformerException {
+	public Transformer createTransformer(Source xsltSource) 
+	throws TransformerConfigurationException {
 		TransformerFactory factory;
 		if(this.factoryClassName != null) {
 			factory = TransformerFactory.newInstance(this.factoryClassName, this.getClass().getClassLoader());
@@ -49,14 +50,28 @@ public class XSLProcessor {
 		
 		if(this.uriResolver != null) {
 			factory.setURIResolver(this.uriResolver);
-		}
+		}		
 		
-		
-		factory.newTransformer(new StreamSource(xslInput))
-		.transform(
-				new DOMSource(node),
-				new StreamResult(output)
+		return factory.newTransformer(xsltSource);
+	}
+	
+	public void transform(
+			Source xsltSource,
+			Source xmlSource,			
+			Result result)
+	throws TransformerException {
+		createTransformer(xsltSource).transform(
+				xmlSource,
+				result
 		);
+	}
+	
+	public void transform(
+			InputStream xslInput,
+			Node node,
+			OutputStream output)
+	throws TransformerException {
+		this.transform(new StreamSource(xslInput), new DOMSource(node), new StreamResult(output));
 	}
 	
 	public void transform(
@@ -68,7 +83,7 @@ public class XSLProcessor {
 		if(xslStream == null) {
 			throw new InvalidParameterException("Cannot find XSL '"+xslResource+"' on the classpath");
 		}
-		this.transform(xslStream, node, output);
+		this.transform(new StreamSource(xslStream), new DOMSource(node), new StreamResult(output));
 	}
 
 	public String getFactoryClassName() {

@@ -14,12 +14,13 @@ import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.Fact
  * Runs another RepositoryOperationIfc in a separate thread. This allows for example to load large quantity of data
  * at startup without impacting the startup time.
  * Usage exemple :
- * 
+ * <code><pre>
  		InitializingRepositoryFactory factory = new InitializingRepositoryFactory(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_WITH_DIRECT_TYPE_AWARE));
 		CountDownLatch latch = new CountDownLatch(1);
 		ThreadedRepositoryOperation tro = new ThreadedRepositoryOperation(new LoadFromFileOrDirectory(args[0]), latch);
 		factory.addOperation(tro);
 		factory.createNewRepository();
+ *	</pre></code>
  * 
  * @author Thomas Francart
  *

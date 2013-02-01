@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.io.FileUtil;
-import fr.sparna.rdf.sesame.toolkit.util.TransactionWrapper;
+import fr.sparna.rdf.sesame.toolkit.util.RepositoryTransaction;
 
 /**
  * Provides a Sesame repository by initializing it from a Sesame config file.
@@ -106,7 +106,7 @@ public class ConfigRepositoryFactory implements RepositoryFactoryIfc {
 					log.debug("Adding repository config for repository "+this.repositoryName);
 					rm.addRepositoryConfig(new RepositoryConfig(this.repositoryName, config));	
 				} finally {
-					TransactionWrapper.closeQuietly(connection);
+					RepositoryTransaction.closeQuietly(connection);
 				}
 			}
 

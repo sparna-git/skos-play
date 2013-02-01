@@ -181,9 +181,9 @@ public class Examples {
 			}	
 
 			@Override
-			public Map<String, Value> getBindings() {
-				return new HashMap<String, Value>() {{
-					put("s", repository.getValueFactory().createURI("http://publications.europa.eu/resource/ontology/cdm#article"));
+			public Map<String, Object> getBindings() {
+				return new HashMap<String, Object>() {{
+					put("s", java.net.URI.create("http://publications.europa.eu/resource/ontology/cdm#article"));
 				}};
 			}
 		});
@@ -202,7 +202,7 @@ public class Examples {
 		public SPARQLQueryIfc getQuery() {
 			return new SPARQLQuery(
 					"SELECT * WHERE { ?s ?p ?o }",
-					new HashMap<String, Value>() {{
+					new HashMap<String, Object>() {{
 						put("s", subjectURI);
 					}}
 			);

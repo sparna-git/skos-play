@@ -9,8 +9,23 @@ import org.openrdf.query.parser.ParsedTupleQuery;
 import org.openrdf.query.parser.ParsedUpdate;
 import org.openrdf.query.parser.QueryParserUtil;
 
-public class SPARQLQueryType {
+/**
+ * A final class to determine the type a SPARQL query String.
+ * @author Thomas Francart
+ */
+public final class SPARQLQueryType {
 
+	/**
+	 * Possible types of a SPARQL query. Possible values are
+	 * <ul>
+	 *   <li>GRAPH : for a CONSTRUCT or DESCRIBE QUERY</li>
+	 *   <li>SELECT : for a SELECT query</li>
+	 *   <li>ASK : for an ASK query</li>
+	 *   <li>UPDATE : for a DELETE, INSERT, DELETE DATA or INSERT DATA query</li>
+	 * </ul>
+	 * 
+	 * @author Thomas Francart
+	 */
 	public enum QUERYTYPE {
 		GRAPH,
 		SELECT,
@@ -20,6 +35,7 @@ public class SPARQLQueryType {
 	
 	/**
 	 * Dynamically determine the type of a SPARQL query base on its content
+	 * 
 	 * @return
 	 * @throws MalformedQueryException
 	 */

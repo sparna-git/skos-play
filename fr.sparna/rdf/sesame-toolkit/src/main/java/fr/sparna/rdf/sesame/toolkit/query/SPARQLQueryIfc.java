@@ -4,8 +4,6 @@ import java.net.URI;
 import java.util.Map;
 import java.util.Set;
 
-import org.openrdf.model.Value;
-
 /**
  * Defines a SPARQL query (as a String), along with its bindings, default graphs, named graphs,
  * and includeInferred parameters (everything needed to execute the query).
@@ -25,11 +23,21 @@ public interface SPARQLQueryIfc {
 	/**
 	 * Returns the bindings to be set on the returned SPARQL query. For exemple, if the method
 	 * getSPARQL() returns the query "CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}", one could bind the "s" variables
-	 * by returning "new HashMap(){{put("s","http://www.exemple.com/ontology#123456");}};" 
+	 * by returning "new HashMap(){{put("s","http://www.exemple.com/ontology#123456");}};"
+	 * 
+	 * <p>Bindings values are interpreted as follow :
+	 * <ul>
+	 *   <li>If the value of the binding is an instance of org.openrdf.model.Value (either a Literal, a URI or a BNode)
+	 *   then it is passed as is to the query binding</li>
+	 *   <li>If the value of the binding is an instance of java.net.URI or java.net.URL, an org.openrdf.model.URI will be
+	 *   constructed from it and passed to the query binding</li>
+	 *   <li>In every other cases the toString() method will be called on the binding value and an org.openrdf.model.Literal
+	 *   instance will be constructed from it and passed to the query binding.</li>
+	 * </ul>
 	 * 
 	 * @return the bindings that will be set on the SPARQL query
 	 */
-	public Map<String, Value> getBindings();
+	public Map<String, Object> getBindings();
 	
 	/**
 	 * Tells if the sparql query should be executed by including the inferred statements or not.

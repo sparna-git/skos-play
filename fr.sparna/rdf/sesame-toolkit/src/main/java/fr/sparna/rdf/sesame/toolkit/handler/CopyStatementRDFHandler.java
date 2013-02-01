@@ -12,7 +12,7 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFHandler;
 import org.openrdf.rio.RDFHandlerException;
 
-import fr.sparna.rdf.sesame.toolkit.util.TransactionWrapper;
+import fr.sparna.rdf.sesame.toolkit.util.RepositoryTransaction;
 import fr.sparna.rdf.sesame.toolkit.util.URIUtil;
 
 /**
@@ -37,7 +37,7 @@ public class CopyStatementRDFHandler implements RDFHandler {
 	protected Set<URI> targetGraphs;
 	
 	// used internally
-	private TransactionWrapper transaction;
+	private RepositoryTransaction transaction;
 	// used internally
 	private Resource[] targetGraphsResources;
 	
@@ -67,7 +67,7 @@ public class CopyStatementRDFHandler implements RDFHandler {
 	public void startRDF() throws RDFHandlerException {
 		try {
 			RepositoryConnection connection = this.targetRepository.getConnection();
-			this.transaction = new TransactionWrapper(connection);
+			this.transaction = new RepositoryTransaction(connection);
 		} catch (RepositoryException e) {
 			throw new RDFHandlerException(e);
 		}

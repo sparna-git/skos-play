@@ -1,6 +1,6 @@
 package fr.sparna.commons.jetty;
 
-public class JettyRunnerException extends Exception {
+public class JettyRunnerException extends RuntimeException {
 
 	private static final long serialVersionUID = -2454792250865606317L;
 

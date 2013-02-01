@@ -7,7 +7,6 @@ import org.openrdf.model.Graph;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
-import org.openrdf.model.Value;
 import org.openrdf.model.impl.GraphImpl;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
@@ -91,7 +90,7 @@ public class ConciseBoundedDescriptionGenerator implements BoundedDescriptionGen
 		public GetStatementsWithSubjectHelper(final Resource r, Repository repository) {
 			super(
 					"CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }",
-					new HashMap<String, Value>() {{
+					new HashMap<String, Object>() {{
 						put("s",r);
 					}}
 			);
@@ -140,7 +139,7 @@ public class ConciseBoundedDescriptionGenerator implements BoundedDescriptionGen
 		public GetStatementsWithObjectHelper(final Resource r, Repository repository) {
 			super(
 					"CONSTRUCT { ?s ?p ?o } WHERE { ?s ?p ?o }",
-					new HashMap<String, Value>() {{
+					new HashMap<String, Object>() {{
 						put("o",r);
 					}}
 			);

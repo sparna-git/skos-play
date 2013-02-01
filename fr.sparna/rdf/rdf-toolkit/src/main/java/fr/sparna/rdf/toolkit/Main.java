@@ -20,10 +20,14 @@ import fr.sparna.rdf.toolkit.select.ArgumentsSelect;
 import fr.sparna.rdf.toolkit.select.Select;
 import fr.sparna.rdf.toolkit.server.ArgumentsLoadServer;
 import fr.sparna.rdf.toolkit.server.LoadServer;
+import fr.sparna.rdf.toolkit.skos.AddFlexions;
+import fr.sparna.rdf.toolkit.skos.ArgumentsAddFlexions;
 import fr.sparna.rdf.toolkit.skos.ArgumentsPrintSkosTree;
 import fr.sparna.rdf.toolkit.skos.PrintSkosTree;
+import fr.sparna.rdf.toolkit.solr.ArgumentsGenerateAutocompleteDictionary;
 import fr.sparna.rdf.toolkit.solr.ArgumentsGenerateBroaderSynonyms;
 import fr.sparna.rdf.toolkit.solr.ArgumentsGenerateLabelSynonyms;
+import fr.sparna.rdf.toolkit.solr.GenerateAutocompleteDictionary;
 import fr.sparna.rdf.toolkit.solr.GenerateBroaderSynonyms;
 import fr.sparna.rdf.toolkit.solr.GenerateLabelSynonyms;
 import fr.sparna.rdf.toolkit.split.ArgumentsSplit;
@@ -37,9 +41,11 @@ public class Main {
 	
 	enum COMMAND {		
 		
+		ADDFLEXIONS(new ArgumentsAddFlexions(), new AddFlexions()),
 		CONSTRUCT(new ArgumentsConstruct(), new Construct()),
 		GENERATEBROADERSYNONYMS(new ArgumentsGenerateBroaderSynonyms(), new GenerateBroaderSynonyms()),
 		GENERATELABELSYNONYMS(new ArgumentsGenerateLabelSynonyms(), new GenerateLabelSynonyms()),
+		GENERATEAUTOCOMPLETEDICTIONARY(new ArgumentsGenerateAutocompleteDictionary(), new GenerateAutocompleteDictionary()),
 		INFER(new ArgumentsInfer(), new Infer()),
 		INFEROWL(new ArgumentsInferBase(), new InferOWL()),
 		INFERRDFS(new ArgumentsInferBase(), new InferRDFS()),

@@ -19,7 +19,7 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.StringSPARQLQueryBuilder;
 /**
  * Loads data from a repository provider (possibly the same one as the initial repository), by doing some SPARQL queries onto it.
  * This can be used to filter the data that is in a public SPARQL endpoint, and select
- * only part of the data that is interesting, or to add some custom infered data into the repository.
+ * only part of the data that is interesting, or to add some custom inferred data into the repository.
  * 
  * @author Thomas Francart
  *

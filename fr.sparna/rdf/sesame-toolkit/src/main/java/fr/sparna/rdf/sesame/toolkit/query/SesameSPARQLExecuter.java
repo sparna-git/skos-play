@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import org.openrdf.model.Value;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.query.BooleanQuery;
 import org.openrdf.query.GraphQuery;
@@ -115,8 +114,7 @@ public class SesameSPARQLExecuter {
 	}
 	
 	/**
-	 * Execute la requete fourni par le helper, et passe les resultats de la requete au helper.
-	 * 
+	 * Executes the SPARQL SELECT query returned by the helper, and pass the helper to the <code>evaluate</code> method
 	 */
 	public void executeSelect(SelectSPARQLHelperIfc helper) 
 	throws SPARQLExecutionException {
@@ -133,11 +131,7 @@ public class SesameSPARQLExecuter {
 				tupleQuery = connection.prepareTupleQuery(QueryLanguage.SPARQL, query);
 				
 				// on positionne les bindings s'il y en a
-				if(helper.getQuery().getBindings() != null) {
-					for (Map.Entry<String, Value> anEntry : helper.getQuery().getBindings().entrySet()) {
-						tupleQuery.setBinding(anEntry.getKey(), anEntry.getValue());
-					}
-				}
+				processBindings(tupleQuery, helper.getQuery().getBindings());
 				
 				// on inclut les inferred statements si demandé
 				tupleQuery.setIncludeInferred((helper.getQuery().isIncludeInferred() != null)?helper.getQuery().isIncludeInferred():this.includeInferred);
@@ -168,6 +162,9 @@ public class SesameSPARQLExecuter {
 		}
 	}
 
+	/**
+	 * Executes the SPARQL CONSTRUCT query returned by the helper, and pass the helper to the <code>evaluate</code> method
+	 */
 	public void executeConstruct(ConstructSPARQLHelperIfc helper) 
 	throws SPARQLExecutionException {
 		try {
@@ -183,11 +180,7 @@ public class SesameSPARQLExecuter {
 				graphQuery = connection.prepareGraphQuery(QueryLanguage.SPARQL, query);
 				
 				// on positionne les bindings s'il y en a
-				if(helper.getQuery().getBindings() != null) {
-					for (Map.Entry<String, Value> anEntry : helper.getQuery().getBindings().entrySet()) {
-						graphQuery.setBinding(anEntry.getKey(), anEntry.getValue());
-					}
-				}
+				processBindings(graphQuery, helper.getQuery().getBindings());
 				
 				// on inclut les inferred statements si demandé
 				graphQuery.setIncludeInferred((helper.getQuery().isIncludeInferred() != null)?helper.getQuery().isIncludeInferred():this.includeInferred);
@@ -217,21 +210,12 @@ public class SesameSPARQLExecuter {
 			throw new SPARQLExecutionException(e);
 		}
 	}
-
-	/**
-	 * Convenience method that directly executes a SPARQLQueryIfc containing an ASK query without an associated writer,
-	 * and returns the result as a boolean.
-	 * 
-	 * @param query
-	 * @return
-	 * @throws SPARQLExecutionException
-	 */
-	public boolean executeAsk(SPARQLQueryIfc query) 
-	throws SPARQLExecutionException {
-		// passing a null writer will cause the executeAsk(BooleanSPARQLHelperIfc helper) to not serialize the result
-		return executeAsk(new BooleanSPARQLHelper(query, null));
-	}
 	
+	/**
+	 * Executes the SPARQL ASK query returned by the helper, and pass on the result to the helper.getWriter() method.
+	 * The boolean result is also returned by the method directly.
+	 * <p>If helper.getWriter() is null, the result is simply returned by that method.
+	 */
 	public boolean executeAsk(BooleanSPARQLHelperIfc helper) 
 	throws SPARQLExecutionException {
 		try {
@@ -247,11 +231,7 @@ public class SesameSPARQLExecuter {
 				booleanQuery = connection.prepareBooleanQuery(QueryLanguage.SPARQL, query);
 				
 				// on positionne les bindings s'il y en a
-				if(helper.getQuery().getBindings() != null) {
-					for (Map.Entry<String, Value> anEntry : helper.getQuery().getBindings().entrySet()) {
-						booleanQuery.setBinding(anEntry.getKey(), anEntry.getValue());
-					}
-				}
+				processBindings(booleanQuery, helper.getQuery().getBindings());
 				
 				// on inclut les inferred statements si demandé
 				booleanQuery.setIncludeInferred((helper.getQuery().isIncludeInferred() != null)?helper.getQuery().isIncludeInferred():this.includeInferred);
@@ -289,6 +269,26 @@ public class SesameSPARQLExecuter {
 		}
 	}
 	
+	/**
+	 * Convenience method that directly executes a SPARQLQueryIfc containing an ASK query without an associated writer,
+	 * and returns the result as a boolean.
+	 * 
+	 * @param query
+	 * @return
+	 * @throws SPARQLExecutionException
+	 */
+	public boolean executeAsk(SPARQLQueryIfc query) 
+	throws SPARQLExecutionException {
+		// passing a null writer will cause the executeAsk(BooleanSPARQLHelperIfc helper) to not serialize the result
+		return executeAsk(new BooleanSPARQLHelper(query, null));
+	}
+	
+	/**
+	 * Executes the update returned by the helper. Nothing is returned from the execution.
+	 * 
+	 * @param helper
+	 * @throws SPARQLExecutionException
+	 */
 	public void executeUpdate(SPARQLUpdateIfc helper) 
 	throws SPARQLExecutionException {
 		try {
@@ -304,11 +304,7 @@ public class SesameSPARQLExecuter {
 				update = connection.prepareUpdate(QueryLanguage.SPARQL, updateString);
 				
 				// on positionne les bindings s'il y en a
-				if(helper.getBindings() != null) {
-					for (Map.Entry<String, Value> anEntry : helper.getBindings().entrySet()) {
-						update.setBinding(anEntry.getKey(), anEntry.getValue());
-					}
-				}
+				processBindings(update, helper.getBindings());
 				
 				// on inclut les inferred statements si demandé
 				update.setIncludeInferred((helper.isIncludeInferred() != null)?helper.isIncludeInferred():this.includeInferred);
@@ -343,6 +339,25 @@ public class SesameSPARQLExecuter {
 			try {
 				connection.close();
 			} catch (RepositoryException ignore) {ignore.printStackTrace();}
+		}
+	}
+	
+	private void processBindings(
+		Operation o,
+		Map<String, Object> bindings
+	) {
+		if(bindings != null) {
+			for (Map.Entry<String, Object> anEntry : bindings.entrySet()) {
+				if(anEntry.getValue() instanceof org.openrdf.model.Value) {
+					o.setBinding(anEntry.getKey(), (org.openrdf.model.Value)anEntry.getValue());
+				} else 	if(anEntry.getValue() instanceof java.net.URI) {
+					o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createURI(((java.net.URI)anEntry.getValue()).toString()));
+				} else 	if(anEntry.getValue() instanceof java.net.URL) {
+					o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createURI(((java.net.URL)anEntry.getValue()).toString()));
+				} else {
+					o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createLiteral(anEntry.getValue().toString()));
+				}
+			}
 		}
 	}
 	

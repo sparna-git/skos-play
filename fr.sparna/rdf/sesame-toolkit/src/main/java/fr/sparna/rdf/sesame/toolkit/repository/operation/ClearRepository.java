@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-
 /**
  * Clears the given repository, or only given named graphs in the repository.
  * 

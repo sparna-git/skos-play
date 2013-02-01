@@ -28,6 +28,7 @@
 
     <modules>
 	    <module>sesame-toolkit</module>
+      <module>skos-toolkit</module>
 	    <module>rdf-toolkit</module>
       <module>jena-repository</module>
     </modules>

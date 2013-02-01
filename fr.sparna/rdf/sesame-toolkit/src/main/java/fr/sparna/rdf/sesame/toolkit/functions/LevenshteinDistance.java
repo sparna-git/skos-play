@@ -4,7 +4,7 @@ package fr.sparna.rdf.sesame.toolkit.functions;
  * Computes Levenshtein distance between 2 Strings, with an additionnal parameter to make the comparison
  * case-insensitive if needed.
  * 
- * @author thomas
+ * @author Thomas Francart
  *
  */
 public class LevenshteinDistance {

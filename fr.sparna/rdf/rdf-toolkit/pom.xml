@@ -151,6 +151,12 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>fr.sparna.rdf</groupId>
+			<artifactId>skos-toolkit</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!-- for command-line parsing -->
 		<dependency>
 			<groupId>com.beust</groupId>

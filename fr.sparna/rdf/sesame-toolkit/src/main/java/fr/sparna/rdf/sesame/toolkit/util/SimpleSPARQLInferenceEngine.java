@@ -15,9 +15,10 @@ import fr.sparna.rdf.sesame.toolkit.query.SPARQLQueryIfc;
 import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
 
 /**
- * A simple SPARQL-based inference engine.
- * @author mondeca
- *
+ * A simple SPARQL-based inference engine, that recursively applies a set of SPARQL CONSTRUCT
+ * queries until it finds that no additionnal data have been added.
+ * 
+ * @author Thomas Francart
  */
 public class SimpleSPARQLInferenceEngine {
 
@@ -38,11 +39,11 @@ public class SimpleSPARQLInferenceEngine {
 		// pour chaque regle pass�e en param�tre...
 		for (SPARQLQueryIfc aRule : rules) {
 			this.constructHelpers.add(
-					// on construit un DelegatingConstructSPARQLHelper
+					// on construit un Helper
 					new ConstructSPARQLHelper(
-							// avec la r�gle
+							// avec la regle
 							aRule,
-							// en lui demandant de copier le r�sultat dans le m�me repository que celui de d�part
+							// en lui demandant de copier le resultat dans le meme repository que celui de d�part
 							new CopyStatementRDFHandler(repository) 
 					)	
 			);

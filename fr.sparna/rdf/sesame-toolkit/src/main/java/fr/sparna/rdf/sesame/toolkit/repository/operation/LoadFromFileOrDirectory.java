@@ -15,7 +15,7 @@ import org.openrdf.rio.RDFParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.rdf.sesame.toolkit.util.TransactionWrapper;
+import fr.sparna.rdf.sesame.toolkit.util.RepositoryTransaction;
 
 /**
  * Read and load data from a file passed as a parameter. If the file is actually a
@@ -134,7 +134,7 @@ public class LoadFromFileOrDirectory extends AbstractLoadOperation implements Re
 				// on attrape l'exception et on la print - si on n'a que le finally, l'exception passe a la trappe
 				e.printStackTrace();
 			} finally {
-				TransactionWrapper.closeQuietly(connection);
+				RepositoryTransaction.closeQuietly(connection);
 			}
 		}
 	}	

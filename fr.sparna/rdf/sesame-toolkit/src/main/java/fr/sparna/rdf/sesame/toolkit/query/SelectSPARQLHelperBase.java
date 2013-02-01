@@ -3,7 +3,6 @@ package fr.sparna.rdf.sesame.toolkit.query;
 import java.util.List;
 import java.util.Map;
 
-import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandler;
 import org.openrdf.query.TupleQueryResultHandlerException;
@@ -44,7 +43,7 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
  */
 public abstract class SelectSPARQLHelperBase extends SPARQLQuery implements SelectSPARQLHelperIfc, TupleQueryResultHandler, SPARQLQueryIfc {
 	
-	public SelectSPARQLHelperBase(SPARQLQueryBuilderIfc builder, Map<String, Value> bindings) {
+	public SelectSPARQLHelperBase(SPARQLQueryBuilderIfc builder, Map<String, Object> bindings) {
 		super(builder, bindings);
 	}
 
@@ -52,7 +51,7 @@ public abstract class SelectSPARQLHelperBase extends SPARQLQuery implements Sele
 		super(builder);
 	}
 
-	public SelectSPARQLHelperBase(String sparql, Map<String, Value> bindings) {
+	public SelectSPARQLHelperBase(String sparql, Map<String, Object> bindings) {
 		super(sparql, bindings);
 	}
 

@@ -9,6 +9,11 @@ public class GenericTree<T> {
 	public GenericTree() {
 		super();
 	}
+	
+	public GenericTree(GenericTreeNode<T> root) {
+		this();
+		this.setRoot(root);
+	}
 
 	public GenericTreeNode<T> getRoot() {
 		return this.root;

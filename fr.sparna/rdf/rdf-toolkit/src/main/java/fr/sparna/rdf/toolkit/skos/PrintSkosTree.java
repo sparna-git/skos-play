@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.repository.StringRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.skos.SimpleSKOSTreeCreator;
+import fr.sparna.rdf.sesame.toolkit.skos.SimpleSKOSTreePrinter;
 import fr.sparna.rdf.toolkit.ToolkitCommandIfc;
 
 public class PrintSkosTree implements ToolkitCommandIfc {
@@ -25,7 +25,7 @@ public class PrintSkosTree implements ToolkitCommandIfc {
 		Repository r = factory.createNewRepository();
 
 		// build creator - language may be null
-		SimpleSKOSTreeCreator treeCreator = new SimpleSKOSTreeCreator(r, args.getLanguage());
+		SimpleSKOSTreePrinter treePrinter = new SimpleSKOSTreePrinter(r, args.getLanguage());
 
 		// output result
 		PrintStream s;
@@ -37,6 +37,6 @@ public class PrintSkosTree implements ToolkitCommandIfc {
 			}
 			s = new PrintStream(args.getOutput(), "UTF-8");
 		}
-		s.println(treeCreator.getTree());
+		s.println(treePrinter.printTree());
 	}
 }

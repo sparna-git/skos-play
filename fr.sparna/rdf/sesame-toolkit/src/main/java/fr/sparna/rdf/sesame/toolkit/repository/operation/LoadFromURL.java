@@ -17,6 +17,13 @@ import fr.sparna.rdf.sesame.toolkit.handler.DebugHandler;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
 
+/**
+ * Loads RDF from a URL. Optionaly, if the program runs offline or if you want to ensure there is a default data if
+ * the URL cannot be reached, you can set a local fallback path. The local JVM resource referred to by this path will
+ * be loaded if the initial URL cannot be loaded.
+ * 
+ * @author Thomas Francart
+ */
 public class LoadFromURL extends AbstractLoadOperation implements RepositoryOperationIfc {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
@@ -25,8 +32,10 @@ public class LoadFromURL extends AbstractLoadOperation implements RepositoryOper
 	protected String localFallback;
 
 	/**
-	 * @param url url to load data from
-	 * @param localFallback path to a local resource to load if call to url fails
+	 * Constructs a LoadFromURL operation with a local fallback
+	 * 
+	 * @param url 				url to load data from
+	 * @param localFallback 	path to a local resource to load if call to url fails
 	 */
 	public LoadFromURL(URL url, String localFallback) {
 		this.url = url;
@@ -35,9 +44,11 @@ public class LoadFromURL extends AbstractLoadOperation implements RepositoryOper
 	
 	/**
 	 * Constructs a LoadFromURL operation that will have a localFallback equal to the file path in the URL,
-	 * minus the leading '/', if useDefaultFallback is set to true
+	 * minus the leading '/', if useDefaultFallback is set to true (e.g. if url is http://www.exemple.com/path/to/file.txt,
+	 * the file path is "/path/to/file.txt").
 	 * 
-	 * @param url
+	 * @param url					url to load data from
+	 * @param useDefaultFallback	true to set a default fallback, false oterwise
 	 */
 	public LoadFromURL(URL url, boolean useDefaultFallback) {
 		this(url, (useDefaultFallback)?url.getFile().substring(1):null);
@@ -46,7 +57,7 @@ public class LoadFromURL extends AbstractLoadOperation implements RepositoryOper
 	/**
 	 * Constructs a LoadFromURL operation with no local fallback.
 	 * 
-	 * @param url
+	 * @param url					url to load data from
 	 */
 	public LoadFromURL(URL url) {
 		this(url, false);
