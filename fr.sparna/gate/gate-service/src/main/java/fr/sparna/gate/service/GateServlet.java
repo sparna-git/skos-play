@@ -7,72 +7,76 @@ import gate.CorpusController;
 import gate.Document;
 import gate.Factory;
 import gate.FeatureMap;
-import gate.Gate;
 import gate.creole.ExecutionException;
 import gate.creole.ResourceInstantiationException;
-import gate.persist.PersistenceException;
-import gate.util.persistence.PersistenceManager;
 
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GateServlet extends HttpServlet {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
-
-	/**
-	 * Nombre d'applications dans le pool = nombre maximal d'appels concurrents
-	 */
-	private static final int POOL_SIZE = 3;
 	
 	/**
-	 * Default gate application file. looked under under GATE HOME. example of value is : gate/application.gapp
+	 * Application Gate par défaut si le paramètre PARAM_APPLICATION n'est pas précisé
 	 */
 	private static final String DEFAULT_GATE_APP = "application.gapp";
 	
-	private static final String PARAMETER_ANNOTATIONS = "annotations";
+	private static final String PARAM_ANNOTATIONS = "annotations";
 	
-	private static final String PARAMETER_ENCODING = "encoding";
+	private static final String PARAM_ENCODING = "encoding";
+	
+	private static final String PARAM_XSLT = "xslt";
+	
+	private static final String PARAM_DOCID = "docId";
 
 	/**
-	 * Le pool d'applications gate
+	 * Path to gate application. Searched under GATE HOME. Example value is : gate/application.gapp
 	 */
-	private static BlockingQueue<CorpusController> pool;
+	private static final String PARAM_APPLICATION = "application";
+	
+	/**
+	 * Les applications gate par path
+	 */
+	private static Map<String, GateServiceApplication> applicationsCache = new HashMap<String, GateServiceApplication>();
+	
+	/**
+	 * XSL Transformer à appliquer aux résultats
+	 */
+	private static Map<String, Transformer> transformersCache = new HashMap<String, Transformer>();
 	
 	// **************** INITIALIZATION **************** 
 	
 	@Override
 	public void init() throws ServletException {
-		try {
-			pool = new LinkedBlockingQueue<CorpusController>();
-			for(int i = 0; i < POOL_SIZE; i++) {
-				pool.add(createApplication());
-			}
-		} catch (Exception e) {
-			throw new ServletException(e);
-		}
-	}
-	
-	private CorpusController createApplication() throws PersistenceException, ResourceInstantiationException, IOException {
-		// TODO : pouvoir passer le nom de l'application a charger en parametre System
-		return (CorpusController)PersistenceManager.loadObjectFromFile(new File(Gate.getGateHome(),GateServlet.DEFAULT_GATE_APP));
+		
 	}
 
 	// ********************* DESTROY ************************
@@ -80,8 +84,9 @@ public class GateServlet extends HttpServlet {
 	@Override
 	public void destroy() {
 		super.destroy();
-		for(CorpusController c : pool) {
-			Factory.deleteResource(c);
+		// destroy toutes les applications
+		for(GateServiceApplication anApp : applicationsCache.values()) {
+			anApp.destroy();
 		}
 	}
 	
@@ -98,11 +103,42 @@ public class GateServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 
+		// get application param
+		String app = (request.getParameter(PARAM_APPLICATION) != null && !request.getParameter(PARAM_APPLICATION).equals(""))?request.getParameter(PARAM_APPLICATION):DEFAULT_GATE_APP;
+		GateServiceApplication serviceApplication;
+		
+		// add to cache if not already there
+		if(!applicationsCache.containsKey(app)) {
+			serviceApplication = new GateServiceApplication(app);
+			try {
+				serviceApplication.init();
+			} catch (Exception e) {
+				throw new ServletException(e);
+			}
+			applicationsCache.put(app, serviceApplication);
+		} else {
+			serviceApplication = applicationsCache.get(app);
+		}
+		
+		// get input encoding
+		String encoding = (request.getParameter(PARAM_ENCODING) != null && !request.getParameter(PARAM_ENCODING).equals(""))?request.getParameter(PARAM_ENCODING):"UTF-8";
+		
+		// get xslt param
+		String xslt = (request.getParameter(PARAM_XSLT) != null && !request.getParameter(PARAM_XSLT).equals(""))?request.getParameter(PARAM_XSLT):null;
+		
+		// get docId param
+		String docId = (request.getParameter(PARAM_DOCID) != null && !request.getParameter(PARAM_DOCID).equals(""))?request.getParameter(PARAM_DOCID):null;
+		
+		// Get annotation types
+		Set<String> annotations = (request.getParameter(PARAM_ANNOTATIONS) != null && !request.getParameter(PARAM_ANNOTATIONS).equals(""))?
+				new HashSet<String>(Arrays.asList(request.getParameter(PARAM_ANNOTATIONS).split(",")))
+				:null;
+		
 		// Get request content
 		StringBuffer payload = new StringBuffer();
 		String line = null;
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF-8"));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream(), encoding));
 			while ((line = reader.readLine()) != null) {
 				payload.append(line);
 			}
@@ -110,35 +146,60 @@ public class GateServlet extends HttpServlet {
 			throw new ServletException(e);
 		}
 		
-		// Get annotation types
-		String annotationParam = request.getParameter(PARAMETER_ANNOTATIONS);
-		Set<String> annotations = null;
-		if(annotationParam != null) {
-			annotations = new HashSet<String>(Arrays.asList(annotationParam.split(",")));
-		}
-		
-		CorpusController application = null;
-		try {
-			// blocks if the pool is empty
-			application = pool.take();
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
+		// recuperer l'application du pool
+		CorpusController application = serviceApplication.takeApplication();
 		
 		try {
-			String result = processText(application, payload.toString(), null, "UTF-8", true, annotations);
+			String result = processText(application, payload.toString(), docId, encoding, true, annotations);
+			
+			// if xslt reference was provided, apply XSLT
+			if(xslt != null) {
+				if(!transformersCache.containsKey(xslt)) {
+					// s'il y a une erreur, on sortira en exception
+					this.initXSLT(xslt);
+				}
+				result = applyXSLT(transformersCache.get(xslt), result, docId, encoding);
+			}
 			
 			// write to the response
-			// TODO : encoding ?
-			response.setContentType("text/xml;charset=UTF-8");
+			response.setContentType("text/xml;charset="+encoding);
 			response.getWriter().print(result);
 			response.getWriter().flush();
 		} catch (GateServletException e) {
 			throw new ServletException(e);
+		} catch (TransformerException e) {
+			throw new ServletException(e);
 		} finally {
-			pool.add(application);
+			// remettre l'application dans le bon pool
+			serviceApplication.returnApplication(application);
 		}
-
+	}
+	
+	private Transformer initXSLT(String xslPath) throws GateServletException, TransformerConfigurationException {
+		InputStream is = this.getClass().getClassLoader().getResourceAsStream(xslPath);
+		if(is == null) {
+			log.error("Cannot find XSL resource at '"+xslPath+"'");
+			throw new GateServletException("Cannot find XSL resource at '"+xslPath+"'");
+		}
+		
+		TransformerFactory factory = TransformerFactory.newInstance();
+		return factory.newTransformer(new StreamSource(is));
+	}
+	
+	private String applyXSLT(Transformer t, String input, String docId, String encoding) throws TransformerException {
+		try {
+			StreamSource xmlSource = new StreamSource(new ByteArrayInputStream(input.getBytes(encoding)));
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			StreamResult xslResult = new StreamResult(new OutputStreamWriter(baos,"UTF-8"));
+			t.setParameter("docId", docId);
+			t.transform(xmlSource, xslResult);
+			
+			// le meme encoding que celui du StreamResult
+			return baos.toString("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 
