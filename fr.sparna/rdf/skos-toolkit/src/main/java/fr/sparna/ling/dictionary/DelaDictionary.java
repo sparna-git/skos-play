@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 public class DelaDictionary {
 	
-	private static Logger log = LoggerFactory.getLogger(DelaDictionary.class.getName());
+	private Logger log = LoggerFactory.getLogger(DelaDictionary.class.getName());
 
 	private TreeMap<String, Headword> gateLemmaGazetteerMap;
 	private TreeMap<String, Headword> gateFlexionGazetteerMap;
@@ -32,12 +32,12 @@ public class DelaDictionary {
 
 	private void init(InputStream dictionaryStream, String charset, String language) {
 
-		log.debug("Initializing DELA dictionary...");
+		debug("Initializing DELA dictionary...");
 
 		this.language = language;
 
 		if(!language.equals("fr") && !language.equals("en")) {
-			log.info("Only french and english have DELA dictionaries - cannot initialize DELA.");
+			info("Only french and english have DELA dictionaries - cannot initialize DELA.");
 			return;
 		}
 
@@ -112,6 +112,9 @@ public class DelaDictionary {
 						headword.setFlexionGrammaticalAnalyse(flexion, grammaticalAnalyse);
 
 						headword.addFlexion(flexion);
+						if(flexion.startsWith("prod")) {
+							System.out.println(flexion);
+						}
 						gateFlexionGazetteerMap.put(flexion, headword);
 
 						if(gateLemmaGazetteerMap.containsKey(lemma)){
@@ -126,7 +129,7 @@ public class DelaDictionary {
 				}
 			}
 
-			log.debug("Done initializing DELA dictionary");
+			debug("Done initializing DELA dictionary");
 
 		} catch(IOException e){
 			log.warn("Error while reading DELA dictionary file", e);
@@ -185,7 +188,7 @@ public class DelaDictionary {
 
 		String flexionToLook = originalFlexion;
 
-		if(isCaseSensitive)
+		if(!isCaseSensitive)
 			flexionToLook = originalFlexion.toLowerCase();
 
 		if(this.gateFlexionGazetteerMap.containsKey(flexionToLook)){
@@ -197,7 +200,7 @@ public class DelaDictionary {
 		} else {//décomposition du mot avant flexion
 
 			String[] words = originalFlexion.split("(-|[«»+=)°{}_\"'\\/!;?#,.():\\[\\] ])+");
-
+			
 			List<SortedSet<String>> flexionsList = new ArrayList<SortedSet<String>>();
 
 			boolean atLeastOneWordisFlexible = false;
@@ -214,12 +217,13 @@ public class DelaDictionary {
 				String word = words[i];
 				String wordToLook = word;
 
-				if(isCaseSensitive)
+				if(!isCaseSensitive)
 					wordToLook = word.toLowerCase();
 
 				if(this.gateFlexionGazetteerMap.containsKey(wordToLook)){
 					Headword headword = this.gateFlexionGazetteerMap.get(wordToLook);
 					String lemma = headword.getLemma();
+					
 					//TODO à mettre en param (comme caseSensitive)
 					//exclusion des verbes
 					if(!headword.getGrammaticalCategory().equals("V")){
@@ -268,20 +272,20 @@ public class DelaDictionary {
 							SortedSet<String> flexions = new TreeSet<String>();
 							flexions.add(word);
 							flexionsList.add(flexions);
-							log.info("Not derivated:"+ word + "("+originalFlexion+")");
+							debug("Not derivated:"+ word + "("+originalFlexion+")");
 						}
 					}
-				}else{
+				} else {
 					SortedSet<String> flexions = new TreeSet<String>();
 					flexions.add(word);
 					flexionsList.add(flexions);
-					log.info("partly not flexible:"+ word + "("+originalFlexion+")");
+					debug("partly not flexible:"+ word + "("+originalFlexion+")");
 				}
 			}
 
 			if(!atLeastOneWordisFlexible) {
 				flexionsRes.add(originalFlexion);
-				log.info("not flexible at all:"+ originalFlexion);
+				debug("not flexible at all:"+ originalFlexion);
 			}
 
 			SortedSet<String> completeHeadwordflexions = new TreeSet<String>();
@@ -342,21 +346,21 @@ public class DelaDictionary {
 		Iterator<String> it = flexions.iterator();
 		while(it.hasNext()){
 			String flexion = it.next();
-			log.debug(">>>flexion<<<"+flexion);
+			debug(">>>flexion<<<"+flexion);
 			SortedSet<String> grammaticalAnalyse = headword.getFlexionGrammaticalAnalyse(flexion);
 
 			Iterator<String> iter = grammaticalAnalyse.iterator();
 			while(iter.hasNext()){
 				String gramAnalyse = iter.next();
-				log.debug(">>flexion<<"+flexion+" "+gramAnalyse);
+				debug(">>flexion<<"+flexion+" "+gramAnalyse);
 				Iterator<String> iterator = grammaticalAnalyses.iterator();
 				while (iterator.hasNext()){
 					String analyse = iterator.next();
 					if(analyse.equals(gramAnalyse)){
 						resultFlexions.add(flexion);
-						log.debug(">flexion prise:"+flexion);
+						debug(">flexion prise:"+flexion);
 					}else{
-						log.debug(">flexion non prise:"+flexion+" "+gramAnalyse);
+						debug(">flexion non prise:"+flexion+" "+gramAnalyse);
 					}
 				}
 			}
@@ -435,16 +439,29 @@ public class DelaDictionary {
 		gateFlexionGazetteerMap.clear();
 	}
 	
+	private void debug(String o) {
+		System.out.println(o);
+		// log.debug(o);
+	}
+	
+	private void info(String o) {
+		System.out.println(o);
+		// log.info(o);
+	}
+	
 	public static void main(String... args) throws Exception {
+		System.setProperty("org.slf4j.simpleLogger.logFile", "System.out");
+		System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "trace");
 		DelaDictionary dico = new DelaDictionary(DelaDictionary.class.getClassLoader().getResourceAsStream("dela/dela_fr.lst"), "UTF-8", "fr");
-		testFlexions(dico, "chauffeur");
-		testFlexions(dico, "agent administratif");
-		testFlexions(dico, "assistante de direction");
-		testFlexions(dico, "Permis Bus Autocar");
-		testFlexions(dico, "Camion citerne");
-		testFlexions(dico, "Zone courte");
+//		testFlexions(dico, "chauffeur");
+//		testFlexions(dico, "agent administratif");
+//		testFlexions(dico, "assistante de direction");
+//		testFlexions(dico, "Permis Bus Autocar");
+//		testFlexions(dico, "Camion citerne");
+//		testFlexions(dico, "Zone courte");
 		testFlexions(dico, "Produits pétroliers");
-		testFlexions(dico, "Livraison au Hayon");
+		testFlexions(dico, "Produit pétrolier");
+//		testFlexions(dico, "Livraison au Hayon");
 	}
 	
 	private static void testFlexions(DelaDictionary dico, String test) {

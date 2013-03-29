@@ -17,6 +17,9 @@ public class ArgumentsLoadServer {
 
 	@Parameter(names = "-ng", description = "Loads every file in its own auto-computed named graph")
 	private boolean namedGraphAware = false;
+	
+	@Parameter(names = "-g", description = "Graph URI to load the data into")
+	private String graph = null;
 
 	
 	public String getInput() {
@@ -49,6 +52,14 @@ public class ArgumentsLoadServer {
 
 	public void setServer(String server) {
 		this.server = server;
+	}
+
+	public String getGraph() {
+		return graph;
+	}
+
+	public void setGraph(String graph) {
+		this.graph = graph;
 	}
 
 }

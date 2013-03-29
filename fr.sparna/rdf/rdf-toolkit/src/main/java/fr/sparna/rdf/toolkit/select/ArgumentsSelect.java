@@ -1,6 +1,7 @@
 package fr.sparna.rdf.toolkit.select;
 
 import java.io.File;
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,16 +10,17 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.converters.FileConverter;
 
+import fr.sparna.cli.SpaceSplitter;
+
 @Parameters(commandDescription = "Applies a set of SELECT queries and generates an HTML page with the results")
 public class ArgumentsSelect {
 
 	@Parameter(
 			names = { "-i", "--input" },
 			description = "RDF files, directory, endpoint URL, or Spring config",
-			required = true
+			variableArity = true
 	)
-	// TODO : pouvoir passer une List<String> en utilisant variableArity = true  
-	private String input;
+	private List<String> input;
 	
 	@Parameter(
 			names = { "-q", "--queries" },
@@ -50,7 +52,8 @@ public class ArgumentsSelect {
 	@Parameter(
 			names = { "-b", "--bindings" },
 			description = "Bindings, in the form <key>,<value> e.g. uri,http://www.example.com/onto#Concept1",
-			variableArity = true
+			variableArity = true,
+			splitter = SpaceSplitter.class
 	)
 	private List<String> bindingStrings;
 
@@ -60,20 +63,22 @@ public class ArgumentsSelect {
 		}
 		Map<String, String> result = new HashMap<String, String>();
 		for (String aBindingString : this.bindingStrings) {
-			result.put(aBindingString.split(",")[0],aBindingString.split(",")[1]);
+			if(!aBindingString.contains(",")) {
+				throw new InvalidParameterException("Bindings should be in the form <key>,<value>, here received : '"+aBindingString+"'");
+			}
+			result.put(aBindingString.trim().split(",")[0],aBindingString.trim().split(",")[1]);
 		}
 		return result;
 	}
 	
-	
-	public String getInput() {
+	public List<String> getInput() {
 		return input;
 	}
 
-	public void setInput(String input) {
+	public void setInput(List<String> input) {
 		this.input = input;
 	}
-	
+
 	public File getQueryDirectoryOrFile() {
 		return queryDirectoryOrFile;
 	}

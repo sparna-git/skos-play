@@ -7,6 +7,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.MissingCommandException;
 import com.beust.jcommander.ParameterException;
 
+import fr.sparna.cli.URIFactory;
 import fr.sparna.rdf.toolkit.construct.ArgumentsConstruct;
 import fr.sparna.rdf.toolkit.construct.Construct;
 import fr.sparna.rdf.toolkit.infer.ArgumentsInfer;
@@ -78,6 +79,7 @@ public class Main {
 	private void run(String[] args) throws Exception {
 		ArgumentsMain main = new ArgumentsMain();
 		JCommander jc = new JCommander(main);
+		jc.addConverterFactory(new URIFactory());
 		
 		for (COMMAND aCOMMAND : COMMAND.values()) {
 			jc.addCommand(aCOMMAND.name().toLowerCase(), aCOMMAND.getArguments());

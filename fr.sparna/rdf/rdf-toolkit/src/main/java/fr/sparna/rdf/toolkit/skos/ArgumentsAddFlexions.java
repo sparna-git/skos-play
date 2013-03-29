@@ -1,6 +1,8 @@
 package fr.sparna.rdf.toolkit.skos;
 
 import java.io.File;
+import java.net.URI;
+import java.util.List;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -23,21 +25,24 @@ public class ArgumentsAddFlexions {
 			required = true
 	) 
 	private File output;
+	
+	@Parameter(
+			names = { "-e", "--exclude" },
+			description = "List of concept schemes to exclude"
+	)
+	// voir URIConverter
+	private List<URI> conceptSchemesToExclude;
 
 	public String getInput() {
 		return input;
-	}
-
-	public void setInput(String input) {
-		this.input = input;
 	}
 
 	public File getOutput() {
 		return output;
 	}
 
-	public void setOutput(File output) {
-		this.output = output;
+	public List<URI> getConceptSchemesToExclude() {
+		return conceptSchemesToExclude;
 	}
 	
 }

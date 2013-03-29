@@ -1,5 +1,8 @@
 package fr.sparna.rdf.toolkit.skos;
 
+import java.util.logging.Level;
+
+import org.apache.log4j.BasicConfigurator;
 import org.openrdf.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,7 @@ public class AddFlexions implements ToolkitCommandIfc {
 	@Override
 	public void execute(Object o) throws Exception {
 		// TODO : configure logging
+		org.apache.log4j.Logger.getLogger("fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter").setLevel(org.apache.log4j.Level.ALL);
 		
 		ArgumentsAddFlexions args = (ArgumentsAddFlexions)o;
 		
@@ -23,8 +27,10 @@ public class AddFlexions implements ToolkitCommandIfc {
 		StringRepositoryFactory factory = new StringRepositoryFactory(args.getInput());
 		Repository r = factory.createNewRepository();
 
+		log.info("Excluding concept schemes from flexions : "+args.getConceptSchemesToExclude());
+		
 		FlexionsAdder adder = new FlexionsAdder();
-		adder.addFlexions(r);
+		adder.addFlexions(r, args.getConceptSchemesToExclude());
 		
 		// output new RDF
 		RepositoryWriter.writeToFile(args.getOutput(), r);

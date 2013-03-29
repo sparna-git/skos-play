@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import fr.sparna.commons.io.ReadWriteTextFile;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
 import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
-import fr.sparna.rdf.sesame.toolkit.repository.DefaultRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 public class SynonymsGeneratorFromSKOSLabels {
 
@@ -171,7 +171,7 @@ public class SynonymsGeneratorFromSKOSLabels {
 	 * @throws Exception
 	 */
 	public static void main(String... args) throws Exception {
-		Repository r = DefaultRepositoryFactory.fromString(args[0]);		
+		Repository r = RepositoryBuilder.fromString(args[0]);		
 		SynonymsGeneratorFromSKOSLabels generator = new SynonymsGeneratorFromSKOSLabels(r);
 		
 		if(args.length > 2) {

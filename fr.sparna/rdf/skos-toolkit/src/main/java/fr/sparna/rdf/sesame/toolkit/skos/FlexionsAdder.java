@@ -1,9 +1,9 @@
 package fr.sparna.rdf.sesame.toolkit.skos;
 
+import java.util.List;
 import java.util.Set;
 
 import org.openrdf.model.Resource;
-import org.openrdf.model.URI;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
@@ -30,10 +30,14 @@ public class FlexionsAdder {
 		this.flexionsProperty = flexionsProperty;
 	}
 	
-	public void addFlexions(Repository repository) throws RepositoryException, SPARQLExecutionException {
+	public void addFlexions(Repository repository, List<java.net.URI> conceptSchemesToExclude) throws RepositoryException, SPARQLExecutionException {
 		DelaDictionary dico = new DelaDictionary(DelaDictionary.class.getClassLoader().getResourceAsStream("dela/dela_fr.lst"), "UTF-8", "fr");
-		FlexionsAdderHelper helper = new FlexionsAdderHelper(dico, repository);
+		FlexionsAdderHelper helper = new FlexionsAdderHelper(dico, repository, conceptSchemesToExclude);
 		SesameSPARQLExecuter.newExecuter(repository).executeSelect(helper);
+	}	
+	
+	public void addFlexions(Repository repository) throws RepositoryException, SPARQLExecutionException {
+		addFlexions(repository, null);
 	}
 
 	class FlexionsAdderHelper extends GetLabelsHelper {
@@ -44,19 +48,22 @@ public class FlexionsAdder {
 		
 		public FlexionsAdderHelper(
 				DelaDictionary dico,
-				Repository repository) 
+				Repository repository,
+				List<java.net.URI> conceptSchemesToExclude) 
 		throws RepositoryException {
 			super(null, true, true, true, null);
 			this.dico = dico;
 			this.repository = repository;
 			
 			this.transaction = new RepositoryTransaction(repository.getConnection());
+			// ajouter les types de concept schemes
+			((QueryBuilder)this.builder).setConceptSchemesToExclude(conceptSchemesToExclude);
 		}
 
 		@Override
 		protected void handleLabel(
 				Resource concept,
-				URI labelType,
+				org.openrdf.model.URI labelType,
 				String label,
 				String lang)
 		throws TupleQueryResultHandlerException {

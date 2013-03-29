@@ -18,7 +18,7 @@ import fr.sparna.commons.io.ReadWriteTextFile;
 import fr.sparna.commons.lang.ListMap;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
 import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
-import fr.sparna.rdf.sesame.toolkit.repository.DefaultRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.skos.SKOS;
 
 public class AutocompleteGeneratorFromSKOSLabels {
@@ -171,7 +171,7 @@ public class AutocompleteGeneratorFromSKOSLabels {
 	 * @throws Exception
 	 */
 	public static void main(String... args) throws Exception {
-		Repository r = DefaultRepositoryFactory.fromString(args[0]);		
+		Repository r = RepositoryBuilder.fromString(args[0]);		
 		AutocompleteGeneratorFromSKOSLabels generator = new AutocompleteGeneratorFromSKOSLabels(r);
 		
 		if(args.length > 2) {

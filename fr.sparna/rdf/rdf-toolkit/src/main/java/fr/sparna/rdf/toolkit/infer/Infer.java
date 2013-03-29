@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.repository.ConfigRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.repository.DefaultRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.OWLIMConfigProvider;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
@@ -28,7 +28,7 @@ public class Infer implements ToolkitCommandIfc {
 		delegateFactory.setRepositoryName("test");
 		delegateFactory.setCleanAtStartup(true);
 		
-		DefaultRepositoryFactory factory = new DefaultRepositoryFactory(
+		RepositoryBuilder factory = new RepositoryBuilder(
 				delegateFactory,
 				new LoadFromFileOrDirectory(args.getInput())
 		);		

@@ -85,7 +85,8 @@ public abstract class GetLabelsHelper extends SelectSPARQLHelperBase {
 		private boolean includeAltLabels = false;
 		// do NOT include hidden labels by default
 		private boolean includeHiddenLabels = false;
-		private List<String> langs = null;		
+		private List<String> langs = null;
+		private List<java.net.URI> conceptSchemesToExclude;
 
 		
 		public QueryBuilder(
@@ -118,12 +119,16 @@ public abstract class GetLabelsHelper extends SelectSPARQLHelperBase {
 			"WHERE {"+"\n" +
 			"   ?concept a <"+SKOS.CONCEPT+"> ."+
 			"	?concept ?labelType ?label."+"\n" +
-			"   FILTER(";
+			// TODO : mieux gérer la négation
+			((this.conceptSchemesToExclude != null && this.conceptSchemesToExclude.size() > 0)?" ?concept <"+SKOS.IN_SCHEME+"> ?scheme ."+"\n":"")+
+			"	?concept ?labelType ?label."+"\n" +
+			"   FILTER((";
 			for (String aLabelType : labelTypes) {
 				sparql += "?labelType = <"+aLabelType+">\n"+" || "+"\n";
-			}
+			}			
 			// remove last dirt
 			sparql = sparql.substring(0, sparql.length() - ("\n"+" || "+"\n").length());
+			sparql += ")";
 			if(this.langs != null) {
 				sparql += " && (";
 				for (String aLang : this.langs) {
@@ -134,11 +139,30 @@ public abstract class GetLabelsHelper extends SelectSPARQLHelperBase {
 				sparql = sparql.substring(0, sparql.length() - " || ".length());
 				sparql += ")";
 			}
+			if(this.conceptSchemesToExclude != null && this.conceptSchemesToExclude.size() > 0) {
+				sparql += " && (";
+				for (java.net.URI conceptSchemeToInclude : conceptSchemesToExclude) {
+					sparql += "?scheme != <"+conceptSchemeToInclude.toString()+">";
+					sparql += " && ";
+				}
+				// remove last dirt
+				sparql = sparql.substring(0, sparql.length() - " || ".length());
+				sparql += ")";
+			}
 			sparql += "   )"+
 			"}";
 			
 			return sparql;
-		}		
+		}
+
+		public List<java.net.URI> getConceptSchemesToExclude() {
+			return conceptSchemesToExclude;
+		}
+
+		public void setConceptSchemesToExclude(List<java.net.URI> conceptSchemesToExclude) {
+			this.conceptSchemesToExclude = conceptSchemesToExclude;
+		}
+		
 	}
 	
 }

@@ -25,29 +25,56 @@ public class SimpleHTMLReportHandler implements TupleQueryResultHandler {
 
 	protected PrintWriter writer;
 	protected List<String> bindingNames;
+	
 	// we need the sparql here only to display it in the report
 	protected String sparql;
 	// id of the sparql query (typically name of the SPARQL file)
 	protected String sparqlID;
+	// Name of the SPARQL query to display
+	protected String sparqlName;
 
-	public SimpleHTMLReportHandler(PrintWriter writer, String sparql, String sparqlID) {
+	public SimpleHTMLReportHandler(PrintWriter writer, String sparql, String sparqlID, String sparqlName) {
 		super();
 		this.writer = writer;
 		this.sparql = sparql;
 		this.sparqlID = sparqlID;
+		this.sparqlName = sparqlName;
+	}
+	
+	public SimpleHTMLReportHandler(PrintWriter writer, String sparql, String sparqlID) {
+		this(writer, sparql, sparqlID, sparqlID);
 	}
 
 	public static void printHeader(PrintWriter writer) {
 		writer.println("<html>");
 		writer.println("<head>");
-		writer.println("  <title>SPARQL Query Results</title>");
-		writer.println("  <link href=\"bootstrap.min.css\" rel=\"stylesheet\">");
+		writer.println("  <title>Query Report</title>");
+		// writer.println("  <link href=\"bootstrap.min.css\" rel=\"stylesheet\">");
+		writer.println("  <link href=\"http://bootswatch.com/journal/bootstrap.min.css\" rel=\"stylesheet\">");
 		writer.println("</head>");
 		writer.println("<body><div class=\"container\">");
 	}
 	
 	public static void printFooter(PrintWriter writer) {
-		writer.println("</div></body>");
+		writer.println("</div>" +
+				"<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script>"+ "\n" +
+				"<script type=\"text/javascript\">"+ "\n" +
+				"	$(document).ready(function () {"+ "\n" +
+				"		$('.results table').before(function() {"+ "\n" +
+				"			return '<div>(' + $('tbody tr', this).length + ' rows)</div>';"+ "\n" +
+				"		});"+ "\n" +
+				"   $('.container').before(function() {"+ "\n" +
+				"		var html = '<div style=\"float:left; position:fixed; width:160px; margin: 5px 5px 5px 5px;\">';"+ "\n" +
+				"   	html += '<ul class=\"nav nav-list\">';"+ "\n" +
+				"		$('.container .bookmark').each(function() {"+ "\n" +
+				"			html += '<li><a href=\"#'+this.id+'\"><i class=\"icon-arrow-right\"></i>'+$(this).attr('title')+'</a></li>';"+ "\n" +
+				"		});"+ "\n" +
+				"		html += '</ul></div>'"+ "\n" +
+				"		return html;"+ "\n" +
+				"	});"+ "\n" +
+				"	});"+ "\n" +
+				"</script>"+ "\n" +
+				"</body>");
 		writer.println("</html>");
 	}
 	
@@ -58,9 +85,8 @@ public class SimpleHTMLReportHandler implements TupleQueryResultHandler {
 		// them in the same order when processing query results
 		this.bindingNames = bindingNames;
 		
-		writer.println("<h2>Query : "+this.sparqlID+"</h2>");
-		writer.println("  <pre class=\"pre-scrollable\" id=\""+this.sparqlID+"\">"+this.sparql.replaceAll("<", "&lt;").replaceAll(">", "&gt;")+"</pre>");
-		writer.println("<h2>Results</h2>");
+		writer.println("<a class=\"bookmark\" id=\""+this.sparqlID+"\" title=\""+this.sparqlName+"\"><h2>"+this.sparqlName+"</h2></a>");
+		writer.println("  <pre class=\"pre-scrollable\">"+this.sparql.replaceAll("<", "&lt;").replaceAll(">", "&gt;")+"</pre>");
 		writer.println("  <div class=\"results\">");
 		writer.println("\t<table class=\"table table-striped table-condensed\">");
 		writer.println("\t<thead><tr>");

@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,10 @@ import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
 import fr.sparna.rdf.sesame.toolkit.query.builder.FileSPARQLQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.AutoDetectRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromString;
 import fr.sparna.rdf.toolkit.ToolkitCommandIfc;
 
 public class Select implements ToolkitCommandIfc {
@@ -48,6 +54,10 @@ public class Select implements ToolkitCommandIfc {
 						value = anEntry.getValue();
 					}
 
+					if(!((URI)value).isAbsolute()) {
+						value = anEntry.getValue();
+					}
+					
 					bindings.put(anEntry.getKey(), value);
 			}
 		}
@@ -62,6 +72,12 @@ public class Select implements ToolkitCommandIfc {
 
 			// executer les SPARQL
 			List<File> sparqls = FileUtil.listFilesRecursive(args.getQueryDirectoryOrFile());
+			Collections.sort(sparqls, new Comparator<File>() {
+				@Override
+				public int compare(File o1, File o2) {
+					return o1.getAbsolutePath().compareTo(o2.getAbsolutePath());
+				}
+			});
 			for (final File file : sparqls) {
 				log.debug("Executing query in "+file.getAbsolutePath()+"...");
 				FileSPARQLQueryBuilder builder = new FileSPARQLQueryBuilder(file);
@@ -79,7 +95,8 @@ public class Select implements ToolkitCommandIfc {
 									new SimpleHTMLReportHandler(
 											writer,
 											builder.getSPARQL(),
-											file.getName()
+											file.getName(),
+											file.getName().replaceAll("-", " ").replaceAll("_", " ").replaceAll(".sparql", "")
 											)
 									)
 					);

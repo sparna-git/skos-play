@@ -4,7 +4,7 @@ import org.openrdf.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.rdf.sesame.toolkit.repository.DefaultRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromXML;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
@@ -27,7 +27,7 @@ public class LoadXML implements ToolkitCommandIfc {
 		}
 
 		// init factory
-		DefaultRepositoryFactory factory = new DefaultRepositoryFactory(
+		RepositoryBuilder factory = new RepositoryBuilder(
 				new LocalMemoryRepositoryFactory()
 		);
 		// add the LoadFromXML operation

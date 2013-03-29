@@ -1,9 +1,11 @@
 package fr.sparna.rdf.toolkit.server;
 
+import java.net.URI;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.rdf.sesame.toolkit.repository.DefaultRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.EndpointRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.ClearRepository;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
@@ -28,18 +30,25 @@ public class LoadServer implements ToolkitCommandIfc {
 			log.info("Repository will NOT be cleared at load...");
 		}
 		
-		if (args.isNamedGraphAware()) {
+		if (args.isNamedGraphAware() && args.getGraph() == null) {
 			log.info("Loading *will* be named-graph aware...");
+		} else if(args.getGraph() != null) {
+			log.warn("graph URI given, named-graph parameter not used");
 		} else {
 			log.info("Loading will NOT be named-graph aware...");
 		}
 
-		DefaultRepositoryFactory factory = new DefaultRepositoryFactory(new EndpointRepositoryFactory(args.getServer()));
+		RepositoryBuilder factory = new RepositoryBuilder(new EndpointRepositoryFactory(args.getServer(), true));
 		if(args.isClearBeforeLoading()) {
 			factory.addOperation(new ClearRepository());
 		}
 		LoadFromFileOrDirectory operation = new LoadFromFileOrDirectory(args.getInput());
-		operation.setAutoNamedGraphs(args.isNamedGraphAware());
+		if(args.getGraph() != null) {
+			operation.setTargetGraph(URI.create(args.getGraph()));
+		} else {
+			operation.setAutoNamedGraphs(args.isNamedGraphAware());
+		}
+		
 		factory.addOperation(operation);
 		
 		log.info("Running loading in server...");

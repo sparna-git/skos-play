@@ -12,7 +12,7 @@ import org.openrdf.repository.Repository;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
 import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
-import fr.sparna.rdf.sesame.toolkit.repository.DefaultRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 /**
  * Queries for the labels (pref and alt) of concepts in a given concept scheme (or in
@@ -102,7 +102,7 @@ public abstract class GetAlphabeticalLabelsOfSchemeHelper extends SelectSPARQLHe
 	}
 	
 	public static void main(String... args) throws Exception {
-		Repository r = DefaultRepositoryFactory.fromRdf(
+		Repository r = RepositoryBuilder.fromRdf(
 				"@prefix skos: <"+SKOS.NAMESPACE+"> ."+"\n" +
 				"@prefix test: <http://www.test.fr/skos/> ."+"\n" +
 				"test:_1 a skos:Concept ; skos:inScheme test:_scheme ; skos:prefLabel \"C-1-pref\"@fr; skos:altLabel \"A-1-alt\"@fr ." +

@@ -11,7 +11,7 @@ import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
 import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
-import fr.sparna.rdf.sesame.toolkit.repository.DefaultRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 /**
  * Prints a SKOS tree as a String
@@ -87,7 +87,7 @@ public class SimpleSKOSTreePrinter {
 	}
 	
 	public static void main(String... args) throws Exception {
-		Repository r = DefaultRepositoryFactory.fromRdf(
+		Repository r = RepositoryBuilder.fromRdf(
 				"@prefix skos: <"+SKOS.NAMESPACE+"> ."+"\n" +
 				"@prefix test: <http://www.test.fr/skos/> ."+"\n" +
 				"test:_1 a skos:Concept ; skos:inScheme test:_scheme ; skos:prefLabel \"1\"@fr ." +
