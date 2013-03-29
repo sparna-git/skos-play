@@ -1,6 +1,9 @@
 package fr.sparna.commons.io;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 public class InputStreamUtil {
 
@@ -11,26 +14,42 @@ public class InputStreamUtil {
 	 * @param charsetName
 	 * @return
 	 */
-	public static String streamToString(InputStream is, String charsetName) {
+	public static String readToString(InputStream is, String charsetName) {
 		try {
-	        return new java.util.Scanner(is, charsetName).useDelimiter("\\A").next();
-	    } catch (java.util.NoSuchElementException e) {
-	        return "";
-	    }
+			return new java.util.Scanner(is, charsetName).useDelimiter("\\A").next();
+		} catch (java.util.NoSuchElementException e) {
+			return "";
+		}
 	}
-	
+
 	/**
 	 * Turns the given stream into a String using the default platform charset
 	 * 
 	 * @param is
 	 * @return
 	 */
-	public static String streamToString(InputStream is) {
-		try {
-	        return new java.util.Scanner(is).useDelimiter("\\A").next();
-	    } catch (java.util.NoSuchElementException e) {
-	        return "";
-	    }
+	public static String readToString(InputStream is) {
+		return readToString(is, Charset.defaultCharset().name());
 	}
-	
+
+	/**
+	 * Turns the given stream into a byte array
+	 * 
+	 * @param is
+	 * @return
+	 */
+	public static byte[] readToBytes(InputStream is) 
+	throws IOException {
+		byte[] data = new byte[16384];
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		int nRead;
+		while ((nRead = is.read(data, 0, data.length)) != -1) {
+			buffer.write(data, 0, nRead);
+		}
+		buffer.flush();
+		buffer.close();
+
+		return buffer.toByteArray();
+	}
+
 }
