@@ -1,0 +1,11 @@
+# List the URIs of all resources used as properties
+#
+# @title	List of properties
+# @tag 		model
+# @tag		SPARQL 1.0
+# @see 		
+# @param	
+# 
+SELECT DISTINCT ?property WHERE {
+  [] ?property ?value .
+} ORDER BY ?property

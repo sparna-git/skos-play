@@ -1,0 +1,6 @@
+{
+ "title": "Generic SPARQL queries exemples",
+ "description": "A set of generic SPARQL queries to browse the model (classes and properties) of any RDF data",
+ "author": ["Thomas Francart"],
+ "endpoint": ["http://fr.dbpedia.org/sparql"]
+} 

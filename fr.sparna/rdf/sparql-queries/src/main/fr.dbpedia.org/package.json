@@ -1,0 +1,6 @@
+{
+ "title": "Exemples de requêtes SPARQL sur DBPedia francophone",
+ "description": "Un ensemble de requêtes SPARQL pour illustrer l'utilisation de [fr.dbpedia.org](http://fr.dbpedia.org). Vos commentaires et suggestions sont les bienvenus sur [le blog](http://francart.fr)",
+ "author": ["[Thomas Francart](http://www.francart.fr)"],
+ "endpoint": ["http://fr.dbpedia.org/sparql"]
+} 
