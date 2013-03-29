@@ -6,7 +6,7 @@ import org.openrdf.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.rdf.sesame.toolkit.repository.DefaultRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.FactoryConfiguration;
 
@@ -75,7 +75,7 @@ public class ThreadedRepositoryOperation implements RepositoryOperationIfc, Runn
 	}
 
 	public static void main(String[] args) throws Exception {
-		DefaultRepositoryFactory factory = new DefaultRepositoryFactory(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_WITH_DIRECT_TYPE_AWARE));
+		RepositoryBuilder factory = new RepositoryBuilder(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_WITH_DIRECT_TYPE_AWARE));
 		CountDownLatch latch = new CountDownLatch(1);
 		ThreadedRepositoryOperation tro = new ThreadedRepositoryOperation(new LoadFromFileOrDirectory(args[0]), latch);
 		factory.addOperation(tro);

@@ -21,7 +21,7 @@ import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationIfc;
  * 
  * @author Thomas Francart
  */
-public class DefaultRepositoryFactory implements RepositoryFactoryIfc {
+public class RepositoryBuilder implements RepositoryFactoryIfc {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 	
@@ -30,7 +30,7 @@ public class DefaultRepositoryFactory implements RepositoryFactoryIfc {
 	
 	private RepositoryFactoryIfc repositoryFactory;
 	
-	public DefaultRepositoryFactory(RepositoryFactoryIfc repositoryFactory, List<RepositoryOperationIfc> operations) {
+	public RepositoryBuilder(RepositoryFactoryIfc repositoryFactory, List<RepositoryOperationIfc> operations) {
 		super();
 		this.repositoryFactory = repositoryFactory;
 		this.operations = operations;
@@ -42,12 +42,12 @@ public class DefaultRepositoryFactory implements RepositoryFactoryIfc {
 	 * @param repositoryFactory
 	 * @param anOperation
 	 */
-	public DefaultRepositoryFactory(RepositoryFactoryIfc repositoryFactory, RepositoryOperationIfc anOperation) {
+	public RepositoryBuilder(RepositoryFactoryIfc repositoryFactory, RepositoryOperationIfc anOperation) {
 		this(repositoryFactory, new ArrayList<RepositoryOperationIfc>(Collections.singletonList(anOperation)));
 	}	
 	
-	public DefaultRepositoryFactory(RepositoryFactoryIfc repositoryFactory) {
-		this(repositoryFactory, (RepositoryOperationIfc)null);
+	public RepositoryBuilder(RepositoryFactoryIfc repositoryFactory) {
+		this(repositoryFactory, (List<RepositoryOperationIfc>)null);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public class DefaultRepositoryFactory implements RepositoryFactoryIfc {
 	 */
 	public static Repository fromRdf(String rdf) 
 	throws RepositoryFactoryException {
-		DefaultRepositoryFactory f = new DefaultRepositoryFactory(new LocalMemoryRepositoryFactory(), new LoadFromString(rdf));
+		RepositoryBuilder f = new RepositoryBuilder(new LocalMemoryRepositoryFactory(), new LoadFromString(rdf));
 		return f.createNewRepository();
 	}
 	
@@ -85,7 +85,7 @@ public class DefaultRepositoryFactory implements RepositoryFactoryIfc {
 	 * @throws RepositoryFactoryException
 	 */
 	public static Repository fromURL(URL url) throws RepositoryFactoryException {
-		DefaultRepositoryFactory builder = new DefaultRepositoryFactory(
+		RepositoryBuilder builder = new RepositoryBuilder(
 				new LocalMemoryRepositoryFactory(),
 				// true : use default fallback
 				new LoadFromURL(url, true)
@@ -96,7 +96,7 @@ public class DefaultRepositoryFactory implements RepositoryFactoryIfc {
 	/**
 	 * protected empty constructor for subclasses
 	 */
-	protected DefaultRepositoryFactory() {	}
+	protected RepositoryBuilder() {	}
 
 	@Override
 	public Repository createNewRepository()
@@ -106,10 +106,10 @@ public class DefaultRepositoryFactory implements RepositoryFactoryIfc {
 		
 		// triggers the operations if any - to load data in the repository if needed.
 		if(this.operations != null) {
-			log.debug("Repository Provider has listeners - will now call init listeners");
+			log.debug("Found init operations - will now run "+this.operations.size()+" operations...");
 			for (RepositoryOperationIfc anOperation : this.operations) {
 				try {
-					log.debug("Repository Provider calling listener "+anOperation.getClass().getCanonicalName());
+					log.debug("Running operation "+anOperation.getClass().getCanonicalName());
 					anOperation.execute(repository);
 				} catch (RepositoryOperationException e) {
 					throw new RepositoryFactoryException(e);

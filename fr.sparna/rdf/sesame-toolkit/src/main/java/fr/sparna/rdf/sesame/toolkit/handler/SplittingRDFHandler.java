@@ -15,7 +15,7 @@ import org.openrdf.rio.RDFWriterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.rdf.sesame.toolkit.repository.DefaultRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 /**
  * Output the triples in file chunks, constituted of chunksize triples. The
@@ -190,7 +190,7 @@ public class SplittingRDFHandler implements RDFHandler {
 	 * @throws Exception
 	 */
 	public static void main(String... args) throws Exception {
-		Repository r = DefaultRepositoryFactory.fromString(args[0]);
+		Repository r = RepositoryBuilder.fromString(args[0]);
 		r.getConnection().export(new SplittingRDFHandler(args[1]));
 	}
 }

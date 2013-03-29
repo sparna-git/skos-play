@@ -63,27 +63,46 @@ public class LoadFromFileOrDirectory extends AbstractLoadOperation implements Re
 					try {
 						if(!anRdfFile.exists() && Thread.currentThread().getContextClassLoader().getResource(anRdf) != null) {
 							log.debug("File "+anRdf+" was not found, but exists as a resource in classpath - will load from it.");
-							repository.getConnection().add(
-									Thread.currentThread().getContextClassLoader().getResource(anRdf),
-									// TODO : ici mettre le namespace par defaut comme un parametre ?
-									RDF.NAMESPACE,
-									// on suppose que c'est du RDF/XML par defaut
-									RDFFormat.forFileName(anRdf, RDFFormat.RDFXML),
-									(autoNamedGraphs)?repository.getValueFactory().createURI(anRdfFile.toURI().toString()):((this.targetGraph != null)?repository.getValueFactory().createURI(this.targetGraph.toString()):null)
-							);
+							try {
+								repository.getConnection().add(
+										Thread.currentThread().getContextClassLoader().getResource(anRdf),
+										// TODO : ici mettre le namespace par defaut comme un parametre ?
+										RDF.NAMESPACE,
+										// on suppose que c'est du RDF/XML par defaut
+										RDFFormat.forFileName(anRdf, RDFFormat.RDFXML),
+										(autoNamedGraphs)?repository.getValueFactory().createURI(anRdfFile.toURI().toString()):((this.targetGraph != null)?repository.getValueFactory().createURI(this.targetGraph.toString()):null)
+								);
+							} catch (RepositoryException e) {
+								e.printStackTrace();
+							}
 							numberOfProcessedFiles++;
 						} else {
 							log.debug("Loading RDF from file or directory "+anRdf+" into repository...");
-							this.loadFileOrDirectory(new File(anRdf), repository, new File(anRdf).toURI());
+							RepositoryConnection connection = null;
+							
+							try {
+								connection = repository.getConnection();
+								connection.setAutoCommit(false);
+								this.loadFileOrDirectory(new File(anRdf), connection, new File(anRdf).toURI());
+							} catch (RepositoryException e) {
+								e.printStackTrace();
+							} finally {
+								if(connection != null) {
+									try {
+										connection.commit();
+										connection.close();
+									} catch (RepositoryException e) {
+										e.printStackTrace();
+									}
+								}
+							}
 						}						
 					} catch (RDFParseException e) {
 						e.printStackTrace();
 					} catch (IOException e) {
 						e.printStackTrace();
-					} catch (RepositoryException e) {
-						e.printStackTrace();
-					}
-					log.debug("Done Loading RDF from "+anRdf+" into repository.");
+					} 
+					log.debug("Done Loading RDF from "+anRdf+" into repository. Number of processed files : "+this.numberOfProcessedFiles);
 				}
 			}
 		}
@@ -94,13 +113,13 @@ public class LoadFromFileOrDirectory extends AbstractLoadOperation implements Re
 	 * d'itérer sur tous les sous-fichiers et sosu-répertoires.
 	 * 
 	 * @param aFileOrDirectory
-	 * @param repository
+	 * @param connection
 	 * @param context
 	 * @throws RDFParseException
 	 * @throws RepositoryException
 	 * @throws IOException
 	 */
-	private void loadFileOrDirectory(File aFileOrDirectory, Repository repository, URI context)
+	private void loadFileOrDirectory(File aFileOrDirectory, RepositoryConnection connection, URI context)
 	throws RDFParseException, RepositoryException, IOException {
 		log.debug("Processing file "+aFileOrDirectory.getAbsolutePath()+"...");
 		
@@ -113,28 +132,27 @@ public class LoadFromFileOrDirectory extends AbstractLoadOperation implements Re
 		if(aFileOrDirectory.isDirectory()) {
 			for (File f : aFileOrDirectory.listFiles()) {
 				try {
-					loadFileOrDirectory(f, repository, context);
+					loadFileOrDirectory(f, connection, context);
 				} catch (Exception e) {
 					// on attrape l'exception et on passe au suivant
 					e.printStackTrace();
 				}
 			}
 		} else {
-			RepositoryConnection connection = repository.getConnection();
 			try {
 				connection.add(
 						aFileOrDirectory,
 						// TODO : ici mettre le namespace par defaut comme un parametre ?
 						RDF.NAMESPACE,
 						RDFFormat.forFileName(aFileOrDirectory.getName(), RDFFormat.RDFXML),
-						(autoNamedGraphs)?repository.getValueFactory().createURI(context.toString()):((this.targetGraph != null)?repository.getValueFactory().createURI(this.targetGraph.toString()):null)
+						(autoNamedGraphs)?
+								connection.getRepository().getValueFactory().createURI(context.toString())
+								:((this.targetGraph != null)?connection.getRepository().getValueFactory().createURI(this.targetGraph.toString()):null)
 				);
 				numberOfProcessedFiles++;
 			} catch (Exception e) {
 				// on attrape l'exception et on la print - si on n'a que le finally, l'exception passe a la trappe
 				e.printStackTrace();
-			} finally {
-				RepositoryTransaction.closeQuietly(connection);
 			}
 		}
 	}	

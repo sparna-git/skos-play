@@ -14,7 +14,7 @@ import org.openrdf.repository.RepositoryException;
 
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
-import fr.sparna.rdf.sesame.toolkit.repository.DefaultRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 /**
  * Manages the Map between full URI and their prefixes. This will attempt to load the dump of prefix.cc
@@ -108,7 +108,7 @@ public class Namespaces {
 	private void initNamespaceMap() {
 		try {
 			// load URL - will load the bundled file in the jar if the URL loading fails
-			Repository r = DefaultRepositoryFactory.fromURL(new URL("http://prefix.cc/popular/all.file.vann"));
+			Repository r = RepositoryBuilder.fromURL(new URL("http://prefix.cc/popular/all.file.vann"));
 			
 			// make a query on the loaded RDF and populate the namespaceMap with the result
 			SesameSPARQLExecuter.newExecuter(r).executeSelect(

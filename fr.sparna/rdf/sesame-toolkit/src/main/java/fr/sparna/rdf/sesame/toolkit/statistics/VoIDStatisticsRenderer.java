@@ -16,7 +16,7 @@ import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFWriterFactory;
 import org.openrdf.rio.RDFWriterRegistry;
 
-import fr.sparna.rdf.sesame.toolkit.repository.DefaultRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
 
@@ -135,7 +135,7 @@ public class VoIDStatisticsRenderer implements StatisticsRenderer {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
-		Repository r = DefaultRepositoryFactory.fromString(args[0]);
+		Repository r = RepositoryBuilder.fromString(args[0]);
 		StatisticsHandler handler = new StatisticsHandler();
 		r.getConnection().export(handler);
 		Repository output = new LocalMemoryRepositoryFactory().createNewRepository();

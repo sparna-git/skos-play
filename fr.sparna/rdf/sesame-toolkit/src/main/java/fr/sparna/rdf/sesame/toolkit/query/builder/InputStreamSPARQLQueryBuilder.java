@@ -23,7 +23,7 @@ public class InputStreamSPARQLQueryBuilder implements SPARQLQueryBuilderIfc {
 		super();
 		// read from the stream
 		// TODO : specify encoding ?
-		this.sparql = InputStreamUtil.streamToString(stream);
+		this.sparql = InputStreamUtil.readToString(stream);
 	}
 
 	@Override

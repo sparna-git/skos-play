@@ -26,7 +26,7 @@ import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory
  * @author Thomas Francart
  *
  */
-public class StringRepositoryFactory extends DefaultRepositoryFactory {
+public class StringRepositoryFactory extends RepositoryBuilder {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 

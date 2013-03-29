@@ -33,7 +33,7 @@ import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperIfc;
 import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
 import fr.sparna.rdf.sesame.toolkit.query.builder.PagingSPARQLQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.query.builder.StringSPARQLQueryBuilder;
-import fr.sparna.rdf.sesame.toolkit.repository.DefaultRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.EndpointRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.FactoryConfiguration;
@@ -43,11 +43,11 @@ import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory
 public class Examples {
 	
 	private static Repository getLocalMemoryRepository(String rdfDataFilePath) throws Exception {
-		return DefaultRepositoryFactory.fromString(rdfDataFilePath);
+		return RepositoryBuilder.fromString(rdfDataFilePath);
 	}	
 
 	private static Repository getLocalMemoryRepositoryWithRDFSInference(String rdfDataFilePath) throws Exception {
-		DefaultRepositoryFactory factory = new DefaultRepositoryFactory(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_AWARE));
+		RepositoryBuilder factory = new RepositoryBuilder(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_AWARE));
 		factory.addOperation(new LoadFromFileOrDirectory(rdfDataFilePath));
 		return factory.createNewRepository();
 	}
