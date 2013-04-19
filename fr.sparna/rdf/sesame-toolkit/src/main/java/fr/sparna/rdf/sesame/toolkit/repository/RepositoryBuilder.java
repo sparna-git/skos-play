@@ -14,6 +14,7 @@ import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromString;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromURL;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationException;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationIfc;
+import fr.sparna.rdf.sesame.toolkit.util.Namespaces;
 
 /**
  * Wraps another <code>RepositoryFactoryIfc</code> to create a new Repository, and executes
@@ -29,6 +30,8 @@ public class RepositoryBuilder implements RepositoryFactoryIfc {
 	private List<RepositoryOperationIfc> operations;
 	
 	private RepositoryFactoryIfc repositoryFactory;
+	
+	private boolean autoRegisterNamespaces = true;
 	
 	public RepositoryBuilder(RepositoryFactoryIfc repositoryFactory, List<RepositoryOperationIfc> operations) {
 		super();
@@ -59,7 +62,7 @@ public class RepositoryBuilder implements RepositoryFactoryIfc {
 	 */
 	public static Repository fromString(String fileOrDirectoryOrEndpointURL) 
 	throws RepositoryFactoryException {
-		StringRepositoryFactory builder = new StringRepositoryFactory(fileOrDirectoryOrEndpointURL);
+		RepositoryBuilder builder = new RepositoryBuilder(new StringRepositoryFactory(fileOrDirectoryOrEndpointURL));
 		return builder.createNewRepository();
 	}
 
@@ -117,6 +120,11 @@ public class RepositoryBuilder implements RepositoryFactoryIfc {
 			}
 		}
 		
+		if(autoRegisterNamespaces) {
+			// register Namespaces globally
+			Namespaces.getInstance().withRepository(repository);
+		}
+		
 		return repository;
 	}
 
@@ -147,6 +155,14 @@ public class RepositoryBuilder implements RepositoryFactoryIfc {
 
 	public void setRepositoryFactory(RepositoryFactoryIfc repositoryFactory) {
 		this.repositoryFactory = repositoryFactory;
+	}
+
+	public boolean isAutoRegisterNamespaces() {
+		return autoRegisterNamespaces;
+	}
+
+	public void setAutoRegisterNamespaces(boolean autoRegisterNamespaces) {
+		this.autoRegisterNamespaces = autoRegisterNamespaces;
 	}
 
 }

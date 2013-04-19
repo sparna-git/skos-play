@@ -32,9 +32,9 @@ public class SortingRDFHandler implements RDFHandler {
 	private RDFHandler handler;
 	
 	// internal list of statements that will be sorted
-	// before begin sent to the delegate
+	// before being sent to the delegate
 	private List<Statement> statements = new ArrayList<Statement>();
-
+	
 	/**
 	 * Constructs a SortingRDFHandler with a delegate handler
 	 * 

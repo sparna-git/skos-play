@@ -14,7 +14,7 @@ import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
 import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
 
 /**
- * Reads a given property in a repository, and handles a caching of values.
+ * Reads a given property in a repository, and handles caching of values.
  * 
  * @author Thomas Francart
  *
@@ -80,7 +80,7 @@ public class PropertyReader {
 	public List<Value> read(java.net.URI subjectURI) 
 	throws SPARQLExecutionException {
 		// initialize at first call
-		if(preLoad && cache == null) {
+		if(cache == null) {
 			this.init();
 		}
 		
@@ -105,6 +105,10 @@ public class PropertyReader {
 		}
 	}
 	
+	/**
+	 * Creates the cache and pre-loads it if needed
+	 * @throws SPARQLExecutionException
+	 */
 	private void init() throws SPARQLExecutionException {
 		this.cache = new ListMap<URI, Value>();
 		if(preLoad) {

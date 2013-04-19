@@ -11,10 +11,15 @@ import org.openrdf.query.TupleQueryResultHandlerBase;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
+import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromURL;
 
 /**
  * Manages the Map between full URI and their prefixes. This will attempt to load the dump of prefix.cc
@@ -24,6 +29,8 @@ import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
  *
  */
 public class Namespaces {
+	
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * Singleton instance
@@ -39,9 +46,20 @@ public class Namespaces {
 	/**
 	 * Singleton protected constructor
 	 */
-	protected Namespaces() {
+	protected Namespaces(boolean live) {
 		this.namespaceMap = new HashMap<String, String>();
-		this.initNamespaceMap();
+		this.initNamespaceMap(live);
+	}
+	
+	/**
+	 * Set the "live" parameter to true to attempt to dynamically load the prefix data
+	 * from prefix.cc.
+	 */
+	public static Namespaces getInstance(boolean live) {
+		if(instance == null) {
+			instance = new Namespaces(live);
+		}
+		return instance;
 	}
 	
 	/**
@@ -49,28 +67,36 @@ public class Namespaces {
 	 */
 	public static Namespaces getInstance() {
 		if(instance == null) {
-			instance = new Namespaces();
+			instance = new Namespaces(false);
 		}
 		return instance;
 	}
 	
-	public void withRepository(Repository r) {
+	public Namespaces withRepository(Repository r) {
+		log.debug("Registering repository namespaces...");
 		try {
 			// registers RepositoryConnection namespaces
 			List<Namespace> repoNamespaces = r.getConnection().getNamespaces().asList();
 			for (Namespace namespace : repoNamespaces) {
 				if(!this.namespaceMap.containsKey(namespace.getPrefix())) {
-					this.namespaceMap.put(namespace.getPrefix(), namespace.getName());
+					log.debug("Reading unknown namespace from repository '"+namespace.getPrefix()+"' : <"+namespace.getName()+">");
+					this.namespaceMap.put(namespace.getName(), namespace.getPrefix());
 				}
 			}
 		} catch (RepositoryException e) {
 			// don't do anything
 			e.printStackTrace();
 		}
+		return this;
 	}
 	
 	public String shorten(String fullURI) {
-		return getPrefix(split(fullURI)[0])+":"+split(fullURI)[1];
+		String prefix = getPrefix(split(fullURI)[0]);
+		if(prefix == null) {
+			return fullURI;
+		} else {
+			return prefix+":"+split(fullURI)[1]; 
+		}		
 	}
 	
 	public String[] split(String fullURI) {
@@ -105,10 +131,22 @@ public class Namespaces {
 		return namespaceMap;
 	}
 	
-	private void initNamespaceMap() {
+	private void initNamespaceMap(boolean live) {
 		try {
-			// load URL - will load the bundled file in the jar if the URL loading fails
-			Repository r = RepositoryBuilder.fromURL(new URL("http://prefix.cc/popular/all.file.vann"));
+			
+
+			RepositoryBuilder builder = new RepositoryBuilder(new LocalMemoryRepositoryFactory());
+			// DO NOT REGISTERS NAMESPACES AUTOMATICALLY OTHERWISE : INFINITE LOOP
+			builder.setAutoRegisterNamespaces(false);
+			if(live) {
+				// load URL - will load the bundled file in the jar if the URL loading fails
+				builder.addOperation(new LoadFromURL(new URL("http://prefix.cc/popular/all.file.vann")));
+			} else {
+				// LoadFromFileOrDirectory has a test to load from classpath
+				builder.addOperation(new LoadFromFileOrDirectory("popular/all.file.vann"));
+			}
+			
+			Repository r = builder.createNewRepository();
 			
 			// make a query on the loaded RDF and populate the namespaceMap with the result
 			SesameSPARQLExecuter.newExecuter(r).executeSelect(

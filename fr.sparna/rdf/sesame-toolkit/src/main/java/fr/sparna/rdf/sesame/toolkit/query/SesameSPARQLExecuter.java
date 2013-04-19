@@ -127,7 +127,7 @@ public class SesameSPARQLExecuter {
 			TupleQuery tupleQuery;
 			try {
 				String query = helper.getQuery().getSPARQL();
-				log.trace("Executing SPARQL SELECT :\n"+query);
+				log.trace("Executing SPARQL SELECT :\n"+helper.toString());
 				tupleQuery = connection.prepareTupleQuery(QueryLanguage.SPARQL, query);
 				
 				// on positionne les bindings s'il y en a
@@ -176,7 +176,7 @@ public class SesameSPARQLExecuter {
 			GraphQuery graphQuery;
 			try {
 				String query = helper.getQuery().getSPARQL();
-				log.trace("Executing SPARQL CONSTRUCT :\n"+query);
+				log.trace("Executing SPARQL CONSTRUCT :\n"+helper.toString());
 				graphQuery = connection.prepareGraphQuery(QueryLanguage.SPARQL, query);
 				
 				// on positionne les bindings s'il y en a
@@ -227,7 +227,7 @@ public class SesameSPARQLExecuter {
 			BooleanQuery booleanQuery;
 			try {
 				String query = helper.getQuery().getSPARQL();
-				log.trace("Executing SPARQL ASK :\n"+query);
+				log.trace("Executing SPARQL ASK :\n"+helper.toString());
 				booleanQuery = connection.prepareBooleanQuery(QueryLanguage.SPARQL, query);
 				
 				// on positionne les bindings s'il y en a
@@ -300,7 +300,7 @@ public class SesameSPARQLExecuter {
 			Update update;
 			try {
 				String updateString = helper.getSPARQL();
-				log.trace("Executing SPARQL UPDATE :\n"+updateString);
+				log.trace("Executing SPARQL UPDATE :\n"+helper.toString());
 				update = connection.prepareUpdate(QueryLanguage.SPARQL, updateString);
 				
 				// on positionne les bindings s'il y en a

@@ -7,8 +7,7 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.StringSPARQLQueryBuilder;
 
 /**
  * Concrete implementation of {@link SPARQLQueryIfc} that uses a {@link fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc}
- * to return the SPARQL query, and implements setters and getters
- * for bindings, defaultGraphs, namedGraphs, includedInferred flag.
+ * to return the SPARQL query.
  * 
  * @author Thomas Francart
  *
