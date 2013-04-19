@@ -16,7 +16,7 @@ import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 /**
  * Queries for the labels (pref and alt) of concepts in a given concept scheme (or in
- * the entire repository), ordered by label, in a given language.
+ * the entire repository), in a given language. Results are _not_ordered and should be ordered with a Collator.
  * 
  * @author Thomas Francart
  */
@@ -31,7 +31,10 @@ public abstract class GetAlphabeticalLabelsOfSchemeHelper extends SelectSPARQLHe
 		super(
 				new QueryBuilder(lang, conceptSchemeURI),
 				new HashMap<String, Object>() {{
-					put("scheme", conceptSchemeURI);
+					// is a concept scheme URI was given, bind it to a URI
+					if(conceptSchemeURI != null) {
+						put("scheme", conceptSchemeURI);
+					}
 				}}		
 		);
 	}
@@ -86,16 +89,23 @@ public abstract class GetAlphabeticalLabelsOfSchemeHelper extends SelectSPARQLHe
 					"	?concept a <"+SKOS.CONCEPT+"> ." +
 					((this.conceptScheme != null)?"?concept <"+SKOS.IN_SCHEME+"> ?scheme . ":"") +
 					"	{ " +
-					"		{ ?concept <"+SKOS.PREF_LABEL+"> ?label FILTER(lang(?label) = '"+this.lang+"') }" +
-							"UNION" +
-							"{" +
+					"		{ " +
+							"   ?concept <"+SKOS.PREF_LABEL+"> ?label FILTER(lang(?label) = '"+this.lang+"') " +
+							" }" +
+							" UNION {" +
 							"	?concept <"+SKOS.ALT_LABEL+"> ?label ." +
 							"	?concept <"+SKOS.PREF_LABEL+"> ?prefLabel ." +
 							"	FILTER(lang(?label) = '"+this.lang+"' && lang(?prefLabel) = '"+this.lang+"') " +
 							" }" +
+							" UNION {" +
+							// il faut qu'on ait au moins un critere positif sinon ca ne fonctionne pas
+							"	?concept a <"+SKOS.CONCEPT+"> . " +
+							"	OPTIONAL { ?concept <"+SKOS.PREF_LABEL+"> ?nopref . FILTER(lang(?nopref) = '"+this.lang+"') }" +
+							"   FILTER(!bound(?nopref))" +
+							"   BIND(str(?concept) as ?label)" +
+							" }" +
 					"	}" +
-					"}"+"\n" +
-					" ORDER BY ?label";
+					"}";
 					
 					return sparql;
 		}		

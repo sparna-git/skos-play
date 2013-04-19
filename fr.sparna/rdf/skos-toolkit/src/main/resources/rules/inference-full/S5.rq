@@ -1,0 +1,7 @@
+# S5 : The rdfs:domain of skos:hasTopConcept is the class skos:ConceptScheme.
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+CONSTRUCT {
+	?scheme a skos:ConceptScheme .
+} WHERE {
+	?scheme skos:hasTopConcept ?x .
+}

@@ -1,0 +1,7 @@
+# S42 : skos:exactMatch is a sub-property of skos:closeMatch.
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+CONSTRUCT {
+	?x skos:closeMatch ?y
+} WHERE {
+	?x skos:exactMatch ?y .
+}

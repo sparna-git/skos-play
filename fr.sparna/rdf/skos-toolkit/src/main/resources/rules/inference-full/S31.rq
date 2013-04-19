@@ -1,0 +1,7 @@
+# S31 : The rdfs:domain of skos:member is the class skos:Collection.
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+CONSTRUCT {
+	?x a skos:Collection .
+} WHERE {
+	?x skos:member ?y .
+}

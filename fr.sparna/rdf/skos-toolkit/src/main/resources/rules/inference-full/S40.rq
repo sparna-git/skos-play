@@ -1,0 +1,7 @@
+# S40 : skos:closeMatch, skos:broadMatch, skos:narrowMatch and skos:relatedMatch are each sub-properties of skos:mappingRelation. 
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+CONSTRUCT {
+	?x skos:mappingRelation ?y
+} WHERE {
+	?x skos:closeMatch|skos:broadMatch|skos:narrowMatch|skos:relatedMatch ?y .
+}

@@ -1,0 +1,8 @@
+# S11 : skos:prefLabel, skos:altLabel and skos:hiddenLabel are each sub-properties of rdfs:label.
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+CONSTRUCT {
+	?y rdfs:label ?x .
+} WHERE {
+	?x skos:prefLabel|skos:altLabel|skos:hiddenLabel ?y .
+}

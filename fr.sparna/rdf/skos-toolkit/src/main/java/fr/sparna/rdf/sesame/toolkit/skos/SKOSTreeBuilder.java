@@ -93,6 +93,8 @@ public class SKOSTreeBuilder {
 				result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)aConceptScheme, true)));
 			}		
 		} else {
+			log.debug("No concept schemes exist, will set all the concepts without broaders as roots.");
+			
 			// fetch all concepts with no broaders
 			new SesameSPARQLExecuter(this.repository).executeSelect(new GetConceptsWithNoBroaderHelper(null) {
 				@Override

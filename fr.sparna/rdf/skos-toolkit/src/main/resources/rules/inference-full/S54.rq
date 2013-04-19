@@ -1,0 +1,8 @@
+# S54 : The rdfs:range of each of skosxl:prefLabel, skosxl:altLabel and skosxl:hiddenLabel is the class skosxl:Label.
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+PREFIX skosxl:<http://www.w3.org/2008/05/skos-xl#>
+CONSTRUCT {
+	?y a skosxl:Label .
+} WHERE {
+	?x skosxl:prefLabel|skosxl:altLabel|skosxl:hiddenLabel ?y .
+}
