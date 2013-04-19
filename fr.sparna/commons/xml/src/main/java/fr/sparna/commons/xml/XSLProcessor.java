@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.InvalidParameterException;
 
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -26,6 +27,10 @@ public class XSLProcessor {
 	private XSLProcessor() {	
 	}
 	
+	/**
+	 * Creates a processor with JVM default processor
+	 * @return
+	 */
 	public static XSLProcessor createDefaultProcessor() {
 		XSLProcessor p = new XSLProcessor();
 		return p;
@@ -52,7 +57,13 @@ public class XSLProcessor {
 			factory.setURIResolver(this.uriResolver);
 		}		
 		
-		return factory.newTransformer(xsltSource);
+		Transformer t = factory.newTransformer(xsltSource);
+		// set indent to true
+		t.setOutputProperty(OutputKeys.INDENT, "yes");
+		// necessaire pour avoir une indentation (avec l'implementation par defaut)
+		// see http://stackoverflow.com/questions/1384802/java-how-to-indent-xml-generated-by-transformer
+		t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+		return t;
 	}
 	
 	public void transform(
