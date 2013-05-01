@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://lookup.dbpedia.org/"
+	elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:lookup="http://lookup.dbpedia.org/">
+
+	<complexType name="ArrayOfResult">
+		<sequence minOccurs="0" maxOccurs="unbounded">
+			<element name="Result" type="lookup:Result"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Result">
+		<complexContent>
+			<extension base="lookup:LabeledResource">
+				<sequence>
+					<element name="Description" type="string"></element>
+					<element name="Refcount" type="int"></element>
+					<element name="Classes" type="lookup:Classes" minOccurs="1"></element>
+					<element name="Categories" type="lookup:Categories" minOccurs="1" maxOccurs="1"></element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+
+
+
+	<complexType name="LabeledResource">
+		<sequence>
+			<element name="Label" type="string" minOccurs="1" maxOccurs="1"></element>
+			<element name="URI" type="string" minOccurs="1" maxOccurs="1"></element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Class">
+		<complexContent>
+			<extension base="lookup:LabeledResource"></extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Category">
+		<complexContent>
+			<extension base="lookup:LabeledResource"></extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="Classes">
+		<sequence minOccurs="0" maxOccurs="unbounded">
+			<element name="Class" type="lookup:Class"></element>
+		</sequence>
+	</complexType>
+	
+	<complexType name="Categories">
+		<sequence minOccurs="0" maxOccurs="unbounded">
+			<element name="Category" type="lookup:Category"></element>
+		</sequence>
+	</complexType>
+</schema>

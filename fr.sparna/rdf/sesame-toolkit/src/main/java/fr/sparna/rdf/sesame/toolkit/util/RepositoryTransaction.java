@@ -84,15 +84,7 @@ public class RepositoryTransaction {
 	}
 
 	public void closeQuietly() {
-		RepositoryTransaction.closeQuietly(this.connection);
-	}
-	
-	public static void closeQuietly(RepositoryConnection connection) {
-		if(connection != null) {
-			try {
-				connection.close();
-			} catch (RepositoryException ignore) {ignore.printStackTrace();}
-		}
+		RepositoryConnectionDoorman.closeQuietly(this.connection);
 	}
 	
 }

@@ -103,21 +103,23 @@ public class LabelReader {
 		List<SPARQLQuery> queries = new ArrayList<SPARQLQuery>();
 		
 		// for each possible property in order ...
-		for (java.net.URI aType : this.labelProperties) {
+		for (final java.net.URI aType : this.labelProperties) {
 			// query for the preferredLanguage
 			queries.add(new SPARQLQuery(
-					"SELECT ?label WHERE { ?uri <"+aType.toString()+"> ?label FILTER(lang(?label = '"+lang+"')) }",
+					"SELECT ?label WHERE { ?uri ?labelProp ?label FILTER(lang(?label) = '"+lang+"') }",
 					new HashMap<String, Object>() {{ 
 						put("uri", resource);
+						put("labelProp", aType);
 					}}
 			));
 			
 			// then for the fallback language
 			if(this.fallbackLanguage != null) {
 				queries.add(new SPARQLQuery(
-						"SELECT ?label WHERE { ?uri <"+aType.toString()+"> ?label FILTER(lang(?label = '"+fallbackLanguage+"')) }",
+						"SELECT ?label WHERE { ?uri ?labelProp ?label FILTER(lang(?label) = '"+fallbackLanguage+"') }",
 						new HashMap<String, Object>() {{ 
 							put("uri", resource);
+							put("labelProp", aType);
 						}}
 				));
 			}

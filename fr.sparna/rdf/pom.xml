@@ -31,6 +31,7 @@
       <module>skos-toolkit</module>
 	    <module>rdf-toolkit</module>
       <module>jena-repository</module>
+      <module>dbpedia-lookup-client</module>
     </modules>
 
     <repositories>

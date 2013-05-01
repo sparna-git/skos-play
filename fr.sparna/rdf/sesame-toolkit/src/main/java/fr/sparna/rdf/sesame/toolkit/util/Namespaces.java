@@ -10,6 +10,7 @@ import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerBase;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,9 +75,11 @@ public class Namespaces {
 	
 	public Namespaces withRepository(Repository r) {
 		log.debug("Registering repository namespaces...");
+		RepositoryConnection c = null;
 		try {
 			// registers RepositoryConnection namespaces
-			List<Namespace> repoNamespaces = r.getConnection().getNamespaces().asList();
+			c = r.getConnection();
+			List<Namespace> repoNamespaces = c.getNamespaces().asList();
 			for (Namespace namespace : repoNamespaces) {
 				if(!this.namespaceMap.containsKey(namespace.getPrefix())) {
 					log.debug("Reading unknown namespace from repository '"+namespace.getPrefix()+"' : <"+namespace.getName()+">");
@@ -86,7 +89,10 @@ public class Namespaces {
 		} catch (RepositoryException e) {
 			// don't do anything
 			e.printStackTrace();
+		} finally {
+			RepositoryConnectionDoorman.closeQuietly(c);
 		}
+		
 		return this;
 	}
 	

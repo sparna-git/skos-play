@@ -10,7 +10,7 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
 
-import fr.sparna.rdf.sesame.toolkit.util.RepositoryTransaction;
+import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
 
 /**
  * Read and load data from an InputStream, that can be a resource in the classpath, a URL, etc.
@@ -63,7 +63,7 @@ public class LoadFromStream extends AbstractLoadOperation implements RepositoryO
 						(this.targetGraph != null)?repository.getValueFactory().createURI(this.targetGraph.toString()):null
 				);
 			} finally {
-				RepositoryTransaction.closeQuietly(connection);
+				RepositoryConnectionDoorman.closeQuietly(connection);
 			}
 		} catch (RDFParseException e) {
 			throw new RepositoryOperationException("Bad RDF format in stream. "+this.format.getName()+" was expected", e);

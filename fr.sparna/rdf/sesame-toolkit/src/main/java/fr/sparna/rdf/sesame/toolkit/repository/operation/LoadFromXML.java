@@ -25,8 +25,8 @@ import org.w3c.dom.Document;
 
 import fr.sparna.commons.io.ReadWriteTextFile;
 import fr.sparna.commons.xml.ReadWriteXML;
+import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
-import fr.sparna.rdf.sesame.toolkit.util.RepositoryTransaction;
 
 /**
  * Uses an XSL stylesheet on an XML file (or set of files in a directory) to transform it into RDF, and loads the RDF into a repository.
@@ -141,7 +141,7 @@ public class LoadFromXML extends AbstractLoadOperation implements RepositoryOper
 				}
 				connection.commit();
 			} finally {
-				RepositoryTransaction.closeQuietly(connection);
+				RepositoryConnectionDoorman.closeQuietly(connection);
 			}
 			log.debug("Done applying transformation");
 

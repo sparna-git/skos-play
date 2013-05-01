@@ -2,6 +2,8 @@ package fr.sparna.rdf.sesame.toolkit.repository.operation;
 
 import org.openrdf.repository.Repository;
 
+import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
+
 /**
  * A special kind of LoadFromSPARQL operation where the SPARQL queries are executed on the source repository
  * 
@@ -10,8 +12,14 @@ import org.openrdf.repository.Repository;
  */
 public class InferFromSPARQL extends LoadFromSPARQL implements RepositoryOperationIfc {
 	
-	public InferFromSPARQL(String sparqlPath) {
-		super(null, sparqlPath);
+	/**
+	 * Shortcut to execute and load a single inference query
+	 * 
+	 * @param repository	The repository to execute SPARQL queries on
+	 * @param query			The query to execute
+	 */
+	public InferFromSPARQL(SPARQLQueryBuilderIfc query) {
+		super(null, query);
 	}
 	
 	@Override

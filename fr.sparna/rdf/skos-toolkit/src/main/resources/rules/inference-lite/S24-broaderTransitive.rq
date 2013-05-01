@@ -3,5 +3,5 @@ PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
 CONSTRUCT {
 	?x skos:broaderTransitive ?y .
 } WHERE {
-	?x skos:broaderTransitive/skos:broaderTransitive ?y .
+	?x skos:broaderTransitive+ ?y .
 }

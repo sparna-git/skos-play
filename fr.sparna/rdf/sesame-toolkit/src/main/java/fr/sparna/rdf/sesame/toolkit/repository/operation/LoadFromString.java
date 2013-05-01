@@ -14,7 +14,7 @@ import org.openrdf.rio.RDFFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.rdf.sesame.toolkit.util.RepositoryTransaction;
+import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
 
 /**
  * Reads RDF from an inline String. The RDF format to use to parse the string can be supplied
@@ -97,7 +97,7 @@ public class LoadFromString extends AbstractLoadOperation implements RepositoryO
 			// happens if repository.getConnection throws an Exception
 			throw new RepositoryOperationException(e);
 		} finally {
-			RepositoryTransaction.closeQuietly(connection);
+			RepositoryConnectionDoorman.closeQuietly(connection);
 		}
 	}	
 

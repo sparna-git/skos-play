@@ -37,6 +37,9 @@ public class InferSPARQL implements ToolkitCommandIfc {
 				inputRepository,
 				helpers
 		);
+		if(args.getMaxIterations() > 0) {
+			engine.setMaxIterationCount(args.getMaxIterations());
+		}
 		
 		// run engine
 		engine.run();

@@ -54,6 +54,13 @@ public class RepositoryBuilder implements RepositoryFactoryIfc {
 	}
 	
 	/**
+	 * Creates a RepositoryBuilder with a default LocalMemoryRepositoryFactory
+	 */
+	public RepositoryBuilder() {
+		this(new LocalMemoryRepositoryFactory());
+	}
+	
+	/**
 	 * Shortcut to a StringRepositoryFactory.
 	 * 
 	 * @param fileOrDirectoryOrEndpointURL
@@ -95,11 +102,6 @@ public class RepositoryBuilder implements RepositoryFactoryIfc {
 				);
 		return builder.createNewRepository();
 	}
-	
-	/**
-	 * protected empty constructor for subclasses
-	 */
-	protected RepositoryBuilder() {	}
 
 	@Override
 	public Repository createNewRepository()
@@ -129,7 +131,7 @@ public class RepositoryBuilder implements RepositoryFactoryIfc {
 	}
 
 	/**
-	 * Adds a single operation to the list of operations of this provider
+	 * Adds a single operation to the list of operations of this builder
 	 * 
 	 * @param operation	The operation to add
 	 */

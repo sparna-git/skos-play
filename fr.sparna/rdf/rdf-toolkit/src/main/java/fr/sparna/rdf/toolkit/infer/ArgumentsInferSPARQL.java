@@ -16,6 +16,12 @@ public class ArgumentsInferSPARQL extends ArgumentsInferBase {
 			required = true
 	)
 	private File queryDirectory;
+	
+	@Parameter(
+			names = { "-t", "--iterations" },
+			description = "Maximum number of iterations to be executed by the engine."
+	)
+	private int maxIterations = -1;
 
 	public File getQueryDirectory() {
 		return queryDirectory;
@@ -23,6 +29,14 @@ public class ArgumentsInferSPARQL extends ArgumentsInferBase {
 
 	public void setQueryDirectory(File queryDirectory) {
 		this.queryDirectory = queryDirectory;
+	}
+
+	public int getMaxIterations() {
+		return maxIterations;
+	}
+
+	public void setMaxIterations(int maxIterations) {
+		this.maxIterations = maxIterations;
 	}
 
 }

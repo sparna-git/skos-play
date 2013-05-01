@@ -35,10 +35,10 @@ public class LoadFromSPARQL extends AbstractLoadOperation implements RepositoryO
 	 * @param repository	The repository to execute SPARQL queries on
 	 * @param sparqlQueries	The list of SPARQL queries to execute
 	 */
-	public LoadFromSPARQL(Repository sourceRepository, List<String> sparqlQueries) {
+	public LoadFromSPARQL(Repository sourceRepository, List<SPARQLQueryBuilderIfc> sparqlQueries) {
 		super();
 		this.sourceRepository = sourceRepository;
-		this.sparqlQueries = StringSPARQLQueryBuilder.fromStringList(sparqlQueries);
+		this.sparqlQueries = sparqlQueries;
 	}
 
 	/**
@@ -47,14 +47,26 @@ public class LoadFromSPARQL extends AbstractLoadOperation implements RepositoryO
 	 * @param repository	The repository to execute SPARQL queries on
 	 * @param query
 	 */
-	public LoadFromSPARQL(Repository sourceRepository, String query) {
+	public LoadFromSPARQL(Repository sourceRepository, SPARQLQueryBuilderIfc query) {
 		this(sourceRepository, Collections.singletonList(query));
 	}
 	
+	/**
+	 * Specifies only the repository on which to execute the SPARQL queries, but no
+	 * SPARQL queries to execute.
+	 * 
+	 * @param sourceRepository The repository to execute SPARQL queries on
+	 */
 	public LoadFromSPARQL(Repository sourceRepository) {
-		this(sourceRepository, (String)null);
+		this(sourceRepository, (SPARQLQueryBuilderIfc)null);
 	}
 	
+	/**
+	 * Executes all the sparql queries contained recursively in the given folder
+	 * 
+	 * @param sourceRepository	the repository to execute SPARQL queries on 
+	 * @param sparqlDir			a folder from which queries will be read
+	 */
 	public LoadFromSPARQL(Repository sourceRepository, File sparqlDir) {
 		this.sourceRepository = sourceRepository; 
 		
@@ -68,7 +80,6 @@ public class LoadFromSPARQL extends AbstractLoadOperation implements RepositoryO
 			this.setSparqlQueries(builders);
 		}
 	}
-
 
 	@Override
 	public void execute(Repository repository)
@@ -89,6 +100,10 @@ public class LoadFromSPARQL extends AbstractLoadOperation implements RepositoryO
 		}
 	}
 
+	/**
+	 * Sets the SPARQL queries to execute.
+	 * @param sparqlQueries
+	 */
 	public void setSparqlQueries(List<? extends SPARQLQueryBuilderIfc> sparqlQueries) {
 		this.sparqlQueries = sparqlQueries;
 	}
