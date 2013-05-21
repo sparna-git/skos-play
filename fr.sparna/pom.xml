@@ -57,6 +57,69 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Sparna Modules : Commons -->
+            <dependency>
+                <groupId>fr.sparna.commons</groupId>
+                <artifactId>sparna-commons-lang</artifactId>
+                <version>0.30-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.sparna.commons</groupId>
+                <artifactId>sparna-commons-io</artifactId>
+                <version>0.30-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.sparna.commons</groupId>
+                <artifactId>sparna-commons-jetty</artifactId>
+                <version>0.30-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.sparna.commons</groupId>
+                <artifactId>sparna-commons-fop</artifactId>
+                <version>0.30-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.sparna.commons</groupId>
+                <artifactId>sparna-commons-sql</artifactId>
+                <version>0.30-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.sparna.commons</groupId>
+                <artifactId>sparna-commons-tree</artifactId>
+                <version>0.30-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.sparna.commons</groupId>
+                <artifactId>sparna-commons-xml</artifactId>
+                <version>0.30-SNAPSHOT</version>
+            </dependency>
+            <!-- Sparna Modules : RDF -->
+            <dependency>
+                <groupId>fr.sparna.rdf</groupId>
+                <artifactId>sesame-toolkit</artifactId>
+                <version>0.30-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.sparna.rdf</groupId>
+                <artifactId>skos-toolkit</artifactId>
+                <version>0.30-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.sparna.rdf</groupId>
+                <artifactId>rdf-toolkit</artifactId>
+                <version>0.30-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.sparna.rdf</groupId>
+                <artifactId>jena-repository</artifactId>
+                <version>0.30-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.sparna.rdf</groupId>
+                <artifactId>dbpedia-lookup-client</artifactId>
+                <version>0.30-SNAPSHOT</version>
+            </dependency>
+
             <!-- Logging: SLF4J -->
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -73,11 +136,11 @@
                 <artifactId>slf4j-jdk14</artifactId>
                 <version>1.7.0</version>
             </dependency>
-		<dependency> 
-		  <groupId>org.slf4j</groupId>
-		  <artifactId>slf4j-log4j12</artifactId>
-		  <version>1.7.0</version>
-		</dependency>
+    		<dependency> 
+    		  <groupId>org.slf4j</groupId>
+    		  <artifactId>slf4j-log4j12</artifactId>
+    		  <version>1.7.0</version>
+    		</dependency>
 
             <!-- Testing: JUnit -->
             <dependency>
@@ -87,13 +150,13 @@
                 <scope>test</scope>
             </dependency>
 
-	    <!-- Web Part : J2EE -->
-		<dependency>
-		    	<groupId>javaee</groupId>
-		    	<artifactId>javaee-api</artifactId>
-		    	<version>5</version>
-			 <scope>provided</scope>
-		</dependency>
+    	    <!-- J2EE -->
+    		<dependency>
+    		    <groupId>javaee</groupId>
+    		    <artifactId>javaee-api</artifactId>
+    		    <version>5</version>
+    			<scope>provided</scope>
+    		</dependency>
 
         </dependencies>
     </dependencyManagement>

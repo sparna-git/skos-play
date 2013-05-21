@@ -13,20 +13,16 @@
     </parent>
 
     <groupId>fr.sparna.commons</groupId>
-    <artifactId>sparna-commons-jetty</artifactId>
+    <artifactId>sparna-commons-fop</artifactId>
     <version>0.30-SNAPSHOT</version>
 
-    <name>Sparna Commons: Jetty</name>
-    <description>Runs and deploy a war in a jetty server</description>
+    <name>Sparna Commons: FOP and PDF</name>
+    <description>FOP and PDF-related utilities</description>
 
     <organization>
         <name>Sparna</name>
         <url>http://www.sparna.fr/</url>
     </organization>
-
-    <properties>
-        <jettyVersion>8.1.8.v20121106</jettyVersion>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -36,19 +32,13 @@
 
         <dependency>
             <groupId>fr.sparna.commons</groupId>
-            <artifactId>sparna-commons-io</artifactId>
+            <artifactId>sparna-commons-xml</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>${jettyVersion}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
-            <version>${jettyVersion}</version>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>fop</artifactId>
+            <version>1.1</version>
         </dependency>
     </dependencies>
 

@@ -14,7 +14,7 @@
 
     <groupId>fr.sparna.rdf</groupId>
     <artifactId>sesame-toolkit</artifactId>
-    <version>0.40-SNAPSHOT</version>
+    <version>0.30-SNAPSHOT</version>
 
     <name>Sparna RDF : sesame-toolkit</name>
     <description>Extensions to the Sesame RDF framework.</description>
@@ -79,19 +79,16 @@
 		<dependency>
 			<groupId>fr.sparna.commons</groupId>
 			<artifactId>sparna-commons-lang</artifactId>
-			<version>0.30-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>fr.sparna.commons</groupId>
 			<artifactId>sparna-commons-io</artifactId>
-			<version>0.30-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>fr.sparna.commons</groupId>
 			<artifactId>sparna-commons-xml</artifactId>
-			<version>0.30-SNAPSHOT</version>
 		</dependency>
 
 		<!-- OWLIM for runtime only -->

@@ -12,7 +12,7 @@
 
 	<groupId>fr.sparna.rdf</groupId>
 	<artifactId>rdf-toolkit</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>0.30-SNAPSHOT</version>
 
 	<name>Sparna RDF : rdf-toolkit</name>
 	<description>Command-line utilities to manipulate RDF data</description>
@@ -148,13 +148,11 @@
 		<dependency>
 			<groupId>fr.sparna.rdf</groupId>
 			<artifactId>sesame-toolkit</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>fr.sparna.rdf</groupId>
 			<artifactId>skos-toolkit</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<!-- for command-line parsing -->
