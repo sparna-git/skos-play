@@ -1,7 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                              http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -69,12 +66,12 @@
             <dependency>
                 <groupId>fr.sparna.commons</groupId>
                 <artifactId>sparna-commons-lang</artifactId>
-                <version>0.30-SNAPSHOT</version>
+                <version>0.30</version>
             </dependency>
             <dependency>
                 <groupId>fr.sparna.commons</groupId>
                 <artifactId>sparna-commons-io</artifactId>
-                <version>0.30-SNAPSHOT</version>
+                <version>0.30</version>
             </dependency>
             <dependency>
                 <groupId>fr.sparna.commons</groupId>
@@ -89,43 +86,43 @@
             <dependency>
                 <groupId>fr.sparna.commons</groupId>
                 <artifactId>sparna-commons-sql</artifactId>
-                <version>0.30-SNAPSHOT</version>
+                <version>0.30</version>
             </dependency>
             <dependency>
                 <groupId>fr.sparna.commons</groupId>
                 <artifactId>sparna-commons-tree</artifactId>
-                <version>0.30-SNAPSHOT</version>
+                <version>0.30</version>
             </dependency>
             <dependency>
                 <groupId>fr.sparna.commons</groupId>
                 <artifactId>sparna-commons-xml</artifactId>
-                <version>0.30-SNAPSHOT</version>
+                <version>0.30</version>
             </dependency>
             <!-- Sparna Modules : RDF -->
             <dependency>
                 <groupId>fr.sparna.rdf</groupId>
                 <artifactId>sesame-toolkit</artifactId>
-                <version>0.30-SNAPSHOT</version>
+                <version>0.30</version>
             </dependency>
             <dependency>
                 <groupId>fr.sparna.rdf</groupId>
                 <artifactId>skos-toolkit</artifactId>
-                <version>0.30-SNAPSHOT</version>
+                <version>0.30</version>
             </dependency>
             <dependency>
                 <groupId>fr.sparna.rdf</groupId>
                 <artifactId>rdf-toolkit</artifactId>
-                <version>0.30-SNAPSHOT</version>
+                <version>0.30</version>
             </dependency>
             <dependency>
                 <groupId>fr.sparna.rdf</groupId>
                 <artifactId>jena-repository</artifactId>
-                <version>0.30-SNAPSHOT</version>
+                <version>0.30</version>
             </dependency>
             <dependency>
                 <groupId>fr.sparna.rdf</groupId>
                 <artifactId>dbpedia-lookup-client</artifactId>
-                <version>0.30-SNAPSHOT</version>
+                <version>0.30</version>
             </dependency>
 
             <!-- Logging: SLF4J -->
