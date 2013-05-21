@@ -16,6 +16,7 @@
         <version>1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+    
 
     <name>Sparna RDF</name>
     <description>All RDF-related modules</description>
