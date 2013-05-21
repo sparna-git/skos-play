@@ -95,11 +95,10 @@
     </properties>
 -->
 
-<!--
     <scm>
-        <connection></connection>
-        <developerConnection></developerConnection>
-        <url></url>
+        <connection>scm:git:ssh://git@bitbucket.org//tfrancart/sparna.git</connection>
+        <developerConnection>scm:git:ssh://git@bitbucket.org/tfrancart/sparna.git</developerConnection>
+        <url>https://bitbucket.org/tfrancart/sparna.git</url>
     </scm>
--->
+
 </project>
