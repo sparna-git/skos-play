@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import fr.sparna.commons.io.FileUtil;
 import fr.sparna.rdf.sesame.toolkit.handler.CopyStatementRDFHandler;
 import fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelper;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
-import fr.sparna.rdf.sesame.toolkit.query.builder.FileSPARQLQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.AutoDetectRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
@@ -38,9 +38,9 @@ public class Construct implements ToolkitCommandIfc {
 		List<File> sparqls = FileUtil.listFilesRecursive(args.getQueryDirectoryOrFile());
 		for (File file : sparqls) {
 			log.debug("Applying rule "+file.getAbsolutePath()+"...");
-			SesameSPARQLExecuter.newExecuter(inputRepository).executeConstruct(
+			Perform.on(inputRepository).construct(
 					new ConstructSPARQLHelper(
-							new FileSPARQLQueryBuilder(file),
+							new SPARQLQueryBuilder(file),
 							new CopyStatementRDFHandler(outputRepository)
 					)
 			);

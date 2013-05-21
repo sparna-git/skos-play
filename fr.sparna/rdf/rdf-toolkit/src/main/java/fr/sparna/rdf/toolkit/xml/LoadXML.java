@@ -1,5 +1,7 @@
 package fr.sparna.rdf.toolkit.xml;
 
+import java.io.File;
+
 import org.openrdf.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +33,7 @@ public class LoadXML implements ToolkitCommandIfc {
 				new LocalMemoryRepositoryFactory()
 		);
 		// add the LoadFromXML operation
-		factory.addOperation(new LoadFromXML(args.getInput(), args.getXsl()));
+		factory.addOperation(new LoadFromXML(new File(args.getInput()), args.getXsl()));
 		// obtain repository loaded with data
 		Repository r = factory.createNewRepository();
 

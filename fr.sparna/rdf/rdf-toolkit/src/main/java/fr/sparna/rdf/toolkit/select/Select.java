@@ -18,15 +18,11 @@ import org.slf4j.LoggerFactory;
 import fr.sparna.commons.io.ClasspathUnzip;
 import fr.sparna.commons.io.FileUtil;
 import fr.sparna.rdf.sesame.toolkit.handler.CSVHandler;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
-import fr.sparna.rdf.sesame.toolkit.query.builder.FileSPARQLQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.AutoDetectRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromString;
 import fr.sparna.rdf.toolkit.ToolkitCommandIfc;
 
 public class Select implements ToolkitCommandIfc {
@@ -80,7 +76,7 @@ public class Select implements ToolkitCommandIfc {
 			});
 			for (final File file : sparqls) {
 				log.debug("Executing query in "+file.getAbsolutePath()+"...");
-				FileSPARQLQueryBuilder builder = new FileSPARQLQueryBuilder(file);
+				SPARQLQueryBuilder builder = new SPARQLQueryBuilder(file);
 				log.debug("Query is "+builder.getSPARQL());
 				
 				SPARQLQuery query = new SPARQLQuery(builder);
@@ -89,7 +85,7 @@ public class Select implements ToolkitCommandIfc {
 				}
 		
 				try {
-					SesameSPARQLExecuter.newExecuter(inputRepository).executeSelect(
+					Perform.on(inputRepository).select(
 							new SelectSPARQLHelper(
 									query, 
 									new SimpleHTMLReportHandler(
@@ -128,8 +124,8 @@ public class Select implements ToolkitCommandIfc {
 			List<File> sparqls = FileUtil.listFilesRecursive(args.getQueryDirectoryOrFile());
 			for (final File file : sparqls) {
 				log.debug("Executing query in "+file.getAbsolutePath()+"...");
-				FileSPARQLQueryBuilder builder = new FileSPARQLQueryBuilder(file);
-				log.debug("Query is "+builder.getSPARQL());
+				SPARQLQueryBuilder builder = new SPARQLQueryBuilder(file);
+				log.debug("Query is :\n"+builder.getSPARQL());
 				
 				SPARQLQuery query = new SPARQLQuery(builder);
 				if(!bindings.isEmpty()) {
@@ -140,7 +136,7 @@ public class Select implements ToolkitCommandIfc {
 				PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(outputDir, file.getName()+".csv"))));
 				
 				try {
-					SesameSPARQLExecuter.newExecuter(inputRepository).executeSelect(
+					Perform.on(inputRepository).select(
 							new SelectSPARQLHelper(
 									query, 
 									// new CSVHandler(writer)

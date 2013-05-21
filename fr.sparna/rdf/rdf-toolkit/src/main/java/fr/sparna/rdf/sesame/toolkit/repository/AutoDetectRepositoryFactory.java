@@ -54,6 +54,7 @@ public class AutoDetectRepositoryFactory implements RepositoryFactoryIfc {
 				}
 			}
 		} else {
+			// plus d'un parametre, on considere que ce sont des fichiers ou des repertoires
 			RepositoryBuilder builder = new RepositoryBuilder(new LocalMemoryRepositoryFactory());
 			builder.addOperation(new LoadFromFileOrDirectory(aParameter));
 			return builder.createNewRepository();

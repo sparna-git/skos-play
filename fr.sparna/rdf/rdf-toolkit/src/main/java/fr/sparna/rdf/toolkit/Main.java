@@ -35,6 +35,8 @@ import fr.sparna.rdf.toolkit.split.ArgumentsSplit;
 import fr.sparna.rdf.toolkit.split.Split;
 import fr.sparna.rdf.toolkit.translate.ArgumentsTranslate;
 import fr.sparna.rdf.toolkit.translate.Translate;
+import fr.sparna.rdf.toolkit.update.ArgumentsUpdate;
+import fr.sparna.rdf.toolkit.update.Update;
 import fr.sparna.rdf.toolkit.xml.ArgumentsLoadXML;
 import fr.sparna.rdf.toolkit.xml.LoadXML;
 
@@ -56,7 +58,8 @@ public class Main {
 		PRINTSKOSTREE(new ArgumentsPrintSkosTree(), new PrintSkosTree()),
 		SELECT(new ArgumentsSelect(), new Select()),
 		SPLIT(new ArgumentsSplit(), new Split()),
-		TRANSLATE(new ArgumentsTranslate(), new Translate()),		
+		TRANSLATE(new ArgumentsTranslate(), new Translate()),
+		UPDATE(new ArgumentsUpdate(), new Update()),	
 		;
 		
 		private ToolkitCommandIfc command;

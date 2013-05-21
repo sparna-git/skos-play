@@ -9,7 +9,7 @@ import org.openrdf.repository.Repository;
 import fr.sparna.commons.io.FileUtil;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQueryIfc;
-import fr.sparna.rdf.sesame.toolkit.query.builder.FileSPARQLQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.AutoDetectRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
 import fr.sparna.rdf.sesame.toolkit.util.SimpleSPARQLInferenceEngine;
@@ -29,7 +29,7 @@ public class InferSPARQL implements ToolkitCommandIfc {
 		List<SPARQLQueryIfc> helpers = new ArrayList<SPARQLQueryIfc>();
 		List<File> sparqls = FileUtil.listFilesRecursive(args.getQueryDirectory());
 		for (final File file : sparqls) {
-			helpers.add(new SPARQLQuery(new FileSPARQLQueryBuilder(file)));
+			helpers.add(new SPARQLQuery(new SPARQLQueryBuilder(file)));
 		}
 		
 		// init inference engine
