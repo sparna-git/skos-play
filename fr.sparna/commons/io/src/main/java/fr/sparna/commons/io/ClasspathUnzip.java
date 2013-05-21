@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
@@ -27,10 +28,11 @@ public class ClasspathUnzip {
 		}
 
 		// list all resources from classpath matching given directory
-		Collection<String> resources = ResourceList.getResources(Pattern.compile(classpathDir+"/.*"));
+		Collection<URL> resources = ResourceList.listResources(Pattern.compile(classpathDir+"/.*"));
 
 		// for each resource, extract it into the given output dir
-		for (String aResource : resources) {
+		for (URL aResourceURL : resources) {
+			String aResource = aResourceURL.toString();
 			// log.trace("Extracting resource\t\t'"+aResource+"'");
 
 			// ca c'est le chemin de la resource depuis la racine du classpath
