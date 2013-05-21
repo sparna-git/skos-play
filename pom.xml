@@ -19,6 +19,27 @@
         <url>http://www.sparna.fr/</url>
     </organization>
     
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <taglet>ch.arrenbrecht.jcite.JCiteTaglet</taglet>
+                    <tagletArtifact>
+                        <groupId>org.mcraig</groupId>
+                        <artifactId>jcite</artifactId>
+                        <version>1.13.0</version>
+                    </tagletArtifact>
+                    <sourcepath>${project.build.sourceDirectory}</sourcepath>
+                    <stylesheetfile>${basedir}/src/main/javadoc/jcite.css</stylesheetfile>
+                    <additionalJOption>-J-Djcitesourcepath=${project.build.sourceDirectory}</additionalJOption>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 <!--
     <licenses>
         <license>
