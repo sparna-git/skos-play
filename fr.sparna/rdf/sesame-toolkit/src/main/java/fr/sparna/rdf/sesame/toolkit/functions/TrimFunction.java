@@ -48,10 +48,5 @@ public class TrimFunction implements Function {
 			return valueFactory.createLiteral(value.stringValue().trim());
 		}
 	}
-
-	
-	public static void main(String[] args) throws Exception {
-		
-	}
 	
 }

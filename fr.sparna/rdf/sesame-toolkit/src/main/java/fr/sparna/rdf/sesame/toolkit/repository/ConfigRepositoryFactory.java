@@ -29,7 +29,7 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
  * 
  * This uses a ConfigProviderIfc to read the config file.
  * 
- * @author mondeca
+ * @author Thomas Francart
  *
  */
 public class ConfigRepositoryFactory implements RepositoryFactoryIfc {

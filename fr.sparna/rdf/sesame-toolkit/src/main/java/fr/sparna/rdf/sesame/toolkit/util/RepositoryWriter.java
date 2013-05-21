@@ -130,6 +130,27 @@ public class RepositoryWriter {
 		RepositoryWriter dumper = new RepositoryWriter(repository);
 		dumper.writeToFile(targetFile);
 	}
+
+	/**
+	 * Shortcut method that writes the content of the given namedGraphs of a repository to the file
+	 * denoted by the given path. Internally calls the <code>writeToFile</code> method.
+	 * 
+	 * @param targetFile	Path of the file to write to
+	 * @param repository	Repository to write
+	 * @param namedGraphs	List of named graphs URI to write
+	 * 
+	 * @throws RepositoryException
+	 * @throws MalformedQueryException
+	 * @throws IOException
+	 * @throws QueryEvaluationException
+	 * @throws RDFHandlerException
+	 */
+	public static void writeToFile(String targetFile, Repository repository, List<URI> namedGraphs)
+	throws RepositoryException, MalformedQueryException, IOException, QueryEvaluationException, RDFHandlerException {
+		RepositoryWriter dumper = new RepositoryWriter(repository);
+		dumper.setNamedGraphsToDump(namedGraphs);
+		dumper.writeToFile(targetFile);
+	}	
 	
 	/**
 	 * Shortcut method that writes the content of the given namedGraph of a repository to the file
@@ -147,9 +168,7 @@ public class RepositoryWriter {
 	 */
 	public static void writeToFile(String targetFile, Repository repository, URI namedGraph)
 	throws RepositoryException, MalformedQueryException, IOException, QueryEvaluationException, RDFHandlerException {
-		RepositoryWriter dumper = new RepositoryWriter(repository);
-		dumper.setNamedGraphsToDump(Arrays.asList(new URI[] { namedGraph }));
-		dumper.writeToFile(targetFile);
+		writeToFile(targetFile, repository, Arrays.asList(new URI[] { namedGraph }));
 	}
 
 	/**

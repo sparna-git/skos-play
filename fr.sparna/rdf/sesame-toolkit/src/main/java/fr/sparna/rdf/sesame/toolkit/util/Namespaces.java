@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
@@ -155,7 +155,7 @@ public class Namespaces {
 			Repository r = builder.createNewRepository();
 			
 			// make a query on the loaded RDF and populate the namespaceMap with the result
-			SesameSPARQLExecuter.newExecuter(r).executeSelect(
+			Perform.on(r).select(
 					new SelectSPARQLHelper(
 							"PREFIX vann:<http://purl.org/vocab/vann/> SELECT ?prefix ?uri WHERE { ?x vann:preferredNamespacePrefix ?prefix . ?x vann:preferredNamespaceUri ?uri }",
 							new TupleQueryResultHandlerBase() {

@@ -14,7 +14,7 @@ import java.util.Set;
 public interface SPARQLQueryIfc {
 	
 	/**
-	 * Returns a SPARQL query to be executed by a {@link SesameSPARQLExecuter}
+	 * Returns a SPARQL query to be executed by a {@link Perform}
 	 * 
 	 * @return The SPARQL query
 	 */
@@ -41,7 +41,7 @@ public interface SPARQLQueryIfc {
 	
 	/**
 	 * Tells if the sparql query should be executed by including the inferred statements or not.
-	 * <p />If this returns null, the default behavior of the {@link SesameSPARQLExecuter} will be used.
+	 * <p />If this returns null, the default behavior of the {@link Perform} will be used.
 	 * 
 	 * @return true if this query will use inferred statements
 	 */
@@ -50,7 +50,7 @@ public interface SPARQLQueryIfc {
 	/**
 	 * Returns the set of URIs (as java.net.URI) that will constitute the default graph in which the query
 	 * will be executed. Return null to specify no default graph.
-	 * <p />If this returns null, the default behavior of the {@link SesameSPARQLExecuter} will be used.
+	 * <p />If this returns null, the default behavior of the {@link Perform} will be used.
 	 * 
 	 * @return a Set of java.net.URI specifying the default graph
 	 */
@@ -60,7 +60,7 @@ public interface SPARQLQueryIfc {
 	 * Returns the set of URIs (as java.net.URI) that will be the named graphs of the query.
 	 * Return null to specify no named graphs.
 	 * 
-	 * <p />If this returns null, the default behavior of the {@link SesameSPARQLExecuter} will be used.
+	 * <p />If this returns null, the default behavior of the {@link Perform} will be used.
 	 * 
 	 * @return a Set of java.net.URI specifying the named graphs
 	 */

@@ -6,7 +6,7 @@ import org.openrdf.rio.RDFFormat;
 
 /**
  * Loads a Sesame config from a file in the classpath.
- * @author mondeca
+ * @author Thomas Francart
  *
  */
 public class ClasspathConfigProvider implements ConfigProviderIfc {

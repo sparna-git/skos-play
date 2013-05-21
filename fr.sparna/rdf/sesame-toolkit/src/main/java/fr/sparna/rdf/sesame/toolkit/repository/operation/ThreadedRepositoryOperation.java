@@ -15,11 +15,11 @@ import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.Fact
  * at startup without impacting the startup time.
  * Usage exemple :
  * <code><pre>
- 		InitializingRepositoryFactory factory = new InitializingRepositoryFactory(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_WITH_DIRECT_TYPE_AWARE));
+ 		RepositoryBuilder builder = new RepositoryBuilder(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_WITH_DIRECT_TYPE_AWARE));
 		CountDownLatch latch = new CountDownLatch(1);
 		ThreadedRepositoryOperation tro = new ThreadedRepositoryOperation(new LoadFromFileOrDirectory(args[0]), latch);
 		factory.addOperation(tro);
-		factory.createNewRepository();
+		factory.createRepository();
  *	</pre></code>
  * 
  * @author Thomas Francart

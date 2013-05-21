@@ -1,7 +1,7 @@
 package fr.sparna.rdf.sesame.toolkit.query;
 
 /**
- * An exception indicating an error happened while executing a SPARQL query
+ * An exception indicating an error happened while performing a SPARQL query
  * 
  * @author Thomas Francart
  */

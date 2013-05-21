@@ -5,9 +5,10 @@ import java.io.InputStream;
 import org.openrdf.rio.RDFFormat;
 
 /**
- * Return a config for a Sesame repository (used by ConfigRepositoryProvider).
+ * Returns a config for a Sesame repository (used by ConfigRepositoryProvider).
  * The config can be read from a classpath file, or it can be a special config for OWLIM.
- * @author mondeca
+ *
+ * @author Thomas Francart
  *
  */
 public interface ConfigProviderIfc {

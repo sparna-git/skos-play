@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.handler.DebugHandler;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 
 /**
  * Loads RDF from a URL. Optionaly, if the program runs offline or if you want to ensure there is a default data if
@@ -103,7 +103,7 @@ public class LoadFromURL extends AbstractLoadOperation implements RepositoryOper
 		LoadFromURL lfu = new LoadFromURL(new URL("http://prefix.cc/popular/all.file.vann"));
 		lfu.execute(r);
 		
-		SesameSPARQLExecuter.newExecuter(r).executeSelect(
+		Perform.on(r).select(
 				new SelectSPARQLHelper(
 						"PREFIX vann:<http://purl.org/vocab/vann/> SELECT ?prefix ?uri WHERE { ?x vann:preferredNamespacePrefix ?prefix . ?x vann:preferredNamespaceUri ?uri }",
 						new DebugHandler(System.out)

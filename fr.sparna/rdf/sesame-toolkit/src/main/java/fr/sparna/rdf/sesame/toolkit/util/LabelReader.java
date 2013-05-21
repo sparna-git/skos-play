@@ -20,7 +20,7 @@ import fr.sparna.commons.lang.LRUCache;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 
 /**
  * Returns a label for given resource or list of resources, in a given language.
@@ -156,10 +156,10 @@ public class LabelReader {
 	throws SPARQLExecutionException {
 		final List<Literal> result = new ArrayList<Literal>();
 		
-		SesameSPARQLExecuter executer = SesameSPARQLExecuter.newExecuter(this.repository);
+		Perform executer = Perform.on(this.repository);
 		// for each query
 		for (SPARQLQuery aQuery : queries) {
-			executer.executeSelect(new SelectSPARQLHelper(
+			executer.select(new SelectSPARQLHelper(
 					aQuery,
 					new TupleQueryResultHandlerBase() {
 						@Override

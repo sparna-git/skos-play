@@ -11,6 +11,13 @@ import org.openrdf.query.TupleQueryResultHandler;
 import org.openrdf.query.TupleQueryResultHandlerBase;
 import org.openrdf.query.TupleQueryResultHandlerException;
 
+/**
+ * Stores the result of a SPARQL query with a single binding representing an RDF Resource
+ * as a List<Resource>.
+ * 
+ * @author Thomas Francart
+ *
+ */
 public class ResourceListHandler extends TupleQueryResultHandlerBase implements TupleQueryResultHandler {
 
 	private List<Resource> resources;
@@ -37,6 +44,10 @@ public class ResourceListHandler extends TupleQueryResultHandlerBase implements 
 		}
 	}
 
+	/**
+	 * Returns the List of gathered resources
+	 * @return
+	 */
 	public List<Resource> getResources() {
 		return resources;
 	}

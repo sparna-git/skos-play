@@ -6,8 +6,8 @@ import org.openrdf.repository.Repository;
 
 /**
  * Executes an operation on a Repository, typically to load data into it, coming from a file, a URL, an XML+XSL, etc.
- * depending on the implementation. <code>RepositoryOperationIfc</code>s can be given as parameters to an
- * {@link fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder InitializingRepositoryFactory} to
+ * depending on the implementation. <code>RepositoryOperationIfc</code>s can be given as parameters to a
+ * {@link fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder} to
  * creates <code>Repository</code>s loaded with data automatically.
  * 
  * @author Thomas Francart

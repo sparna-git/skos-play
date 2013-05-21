@@ -1,20 +1,18 @@
 package fr.sparna.rdf.sesame.toolkit.repository.operation;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.openrdf.repository.Repository;
 
-import fr.sparna.commons.io.FileUtil;
 import fr.sparna.rdf.sesame.toolkit.handler.CopyStatementRDFHandler;
 import fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelper;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
-import fr.sparna.rdf.sesame.toolkit.query.builder.FileSPARQLQueryBuilder;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
-import fr.sparna.rdf.sesame.toolkit.query.builder.StringSPARQLQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLQueryIfc;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderList;
 
 /**
  * Loads data from a repository provider (possibly the same one as the initial repository), by doing some SPARQL queries onto it.
@@ -27,15 +25,15 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.StringSPARQLQueryBuilder;
 public class LoadFromSPARQL extends AbstractLoadOperation implements RepositoryOperationIfc {
 
 	protected Repository sourceRepository;
-	protected List<? extends SPARQLQueryBuilderIfc> sparqlQueries;	
+	protected List<? extends SPARQLQueryIfc> sparqlQueries;	
 
 	/**
 	 * Will execute and load the given list of SPARQL queries on the given repository
 	 * 
-	 * @param repository	The repository to execute SPARQL queries on
-	 * @param sparqlQueries	The list of SPARQL queries to execute
+	 * @param repository		The repository to execute SPARQL queries on
+	 * @param sparqlQueries		The list of SPARQL queries to execute
 	 */
-	public LoadFromSPARQL(Repository sourceRepository, List<SPARQLQueryBuilderIfc> sparqlQueries) {
+	public LoadFromSPARQL(Repository sourceRepository, List<SPARQLQueryIfc> sparqlQueries) {
 		super();
 		this.sourceRepository = sourceRepository;
 		this.sparqlQueries = sparqlQueries;
@@ -47,18 +45,8 @@ public class LoadFromSPARQL extends AbstractLoadOperation implements RepositoryO
 	 * @param repository	The repository to execute SPARQL queries on
 	 * @param query
 	 */
-	public LoadFromSPARQL(Repository sourceRepository, SPARQLQueryBuilderIfc query) {
+	public LoadFromSPARQL(Repository sourceRepository, SPARQLQueryIfc query) {
 		this(sourceRepository, Collections.singletonList(query));
-	}
-	
-	/**
-	 * Specifies only the repository on which to execute the SPARQL queries, but no
-	 * SPARQL queries to execute.
-	 * 
-	 * @param sourceRepository The repository to execute SPARQL queries on
-	 */
-	public LoadFromSPARQL(Repository sourceRepository) {
-		this(sourceRepository, (SPARQLQueryBuilderIfc)null);
 	}
 	
 	/**
@@ -68,26 +56,27 @@ public class LoadFromSPARQL extends AbstractLoadOperation implements RepositoryO
 	 * @param sparqlDir			a folder from which queries will be read
 	 */
 	public LoadFromSPARQL(Repository sourceRepository, File sparqlDir) {
-		this.sourceRepository = sourceRepository; 
-		
-		if(sparqlDir.exists()) {
-			List<File> files = FileUtil.listFilesRecursive(sparqlDir);
-			ArrayList<FileSPARQLQueryBuilder> builders = new ArrayList<FileSPARQLQueryBuilder>();
-			for (File aFile : files) {
-				builders.add(new FileSPARQLQueryBuilder(aFile));
-			}
-			
-			this.setSparqlQueries(builders);
-		}
+		this.sourceRepository = sourceRepository; 		
+		this.setSparqlQueries(SPARQLQuery.fromQueryList(SPARQLQueryBuilderList.fromDirectory(sparqlDir)));
+	}
+	
+	/**
+	 * Specifies only the repository on which to execute the SPARQL queries, but no
+	 * SPARQL queries to execute.
+	 * 
+	 * @param sourceRepository The repository to execute SPARQL queries on
+	 */
+	public LoadFromSPARQL(Repository sourceRepository) {
+		this(sourceRepository, (SPARQLQueryIfc)null);
 	}
 
 	@Override
 	public void execute(Repository repository)
 	throws RepositoryOperationException {		
 		if(this.sparqlQueries != null) {
-			for (final SPARQLQueryBuilderIfc aBuilder : this.sparqlQueries) {
+			for (final SPARQLQueryIfc aBuilder : this.sparqlQueries) {
 				try {
-					new SesameSPARQLExecuter(this.sourceRepository).executeConstruct(
+					new Perform(this.sourceRepository).construct(
 							new ConstructSPARQLHelper(
 									aBuilder,
 									new CopyStatementRDFHandler(repository, this.targetGraph)
@@ -104,7 +93,7 @@ public class LoadFromSPARQL extends AbstractLoadOperation implements RepositoryO
 	 * Sets the SPARQL queries to execute.
 	 * @param sparqlQueries
 	 */
-	public void setSparqlQueries(List<? extends SPARQLQueryBuilderIfc> sparqlQueries) {
+	public void setSparqlQueries(List<? extends SPARQLQueryIfc> sparqlQueries) {
 		this.sparqlQueries = sparqlQueries;
 	}
 

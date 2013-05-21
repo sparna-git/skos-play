@@ -14,7 +14,7 @@ import org.openrdf.rio.RDFHandlerException;
 
 import fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelperBase;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.util.GraphExport;
 
 
@@ -44,7 +44,7 @@ public class ConciseBoundedDescriptionGenerator implements BoundedDescriptionGen
 		GetStatementsWithSubjectHelper helperSubject;
 		try {
 			helperSubject = new GetStatementsWithSubjectHelper(aNode, this.repository);
-			SesameSPARQLExecuter.newExecuter(this.repository).executeConstruct(helperSubject);
+			Perform.on(this.repository).construct(helperSubject);
 		} catch (SPARQLExecutionException e) {
 			throw new BoundedDescriptionGenerationException(e);
 		}
@@ -55,7 +55,7 @@ public class ConciseBoundedDescriptionGenerator implements BoundedDescriptionGen
 			GetStatementsWithObjectHelper helperObject;
 			try {
 				helperObject = new GetStatementsWithObjectHelper(aNode, this.repository);
-				SesameSPARQLExecuter.newExecuter(this.repository).executeConstruct(helperObject);
+				Perform.on(this.repository).construct(helperObject);
 			} catch (SPARQLExecutionException e) {
 				throw new BoundedDescriptionGenerationException(e);
 			}

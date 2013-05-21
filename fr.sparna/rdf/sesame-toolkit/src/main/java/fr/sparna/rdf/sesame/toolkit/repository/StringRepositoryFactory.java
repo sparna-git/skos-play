@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.handler.DebugHandler;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
 
 /**
@@ -51,7 +51,7 @@ public class StringRepositoryFactory extends RepositoryBuilder {
 //				Repository temp = this.createNewRepository();
 //				
 //				try {
-//					SesameSPARQLExecuter.newExecuter(temp).executeSelect(new SelectSPARQLHelper("SELECT DISTINCT ?type WHERE { <http://www.this.uri.does.not.exists> a ?type }", new ResourceListHandler()));
+//					Perform.on(temp).select(new SelectSPARQLHelper("SELECT DISTINCT ?type WHERE { <http://www.this.uri.does.not.exists> a ?type }", new ResourceListHandler()));
 //					log.debug("Querying endpoint "+this.fileOrDirectoryOrURL+" succeeded. Will initialize an EndpointRepository.");
 //					// nothing more, we're all set.
 //				} catch (Exception e) {
@@ -92,7 +92,7 @@ public class StringRepositoryFactory extends RepositoryBuilder {
 		StringRepositoryFactory factory = new StringRepositoryFactory("http://www.mondeca.com/foaf/mondeca.rdf");
 		
 		Repository r = factory.createNewRepository();
-		SesameSPARQLExecuter.newExecuter(r).executeSelect(new SelectSPARQLHelper("SELECT DISTINCT ?type WHERE { ?s a ?type }", new DebugHandler()));
+		Perform.on(r).select(new SelectSPARQLHelper("SELECT DISTINCT ?type WHERE { ?s a ?type }", new DebugHandler()));
 	}
 	
 }

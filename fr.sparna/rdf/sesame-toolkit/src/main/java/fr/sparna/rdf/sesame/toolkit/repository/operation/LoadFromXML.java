@@ -40,7 +40,8 @@ public class LoadFromXML extends AbstractLoadOperation implements RepositoryOper
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
 	// list of files or directory to process
-	private List<String> xmlFiles;
+	private List<File> xmlFiles;
+	
 	// path to XSL file or XSL classpath ressource
 	protected String xslSource;
 
@@ -48,19 +49,19 @@ public class LoadFromXML extends AbstractLoadOperation implements RepositoryOper
 	private InputStream xslInputStream = null;
 
 	// number of processed documents
-	private int inputDocumentCounter = 0;
+	private int processedFilesCounter = 0;
 	
-	public LoadFromXML(List<String> xmlFiles, String xslSource) {
+	public LoadFromXML(List<File> xmlFiles, String xslSource) {
 		super();
 		this.xmlFiles = xmlFiles;
 		this.xslSource = xslSource;
 	}
 	
-	public LoadFromXML(List<String> xmlFiles, File xslSource) {
+	public LoadFromXML(List<File> xmlFiles, File xslSource) {
 		this(xmlFiles, xslSource.getAbsolutePath());
 	}
 
-	public LoadFromXML(List<String> xmlFiles, InputStream xslInputStream){
+	public LoadFromXML(List<File> xmlFiles, InputStream xslInputStream){
 		super();
 		this.xmlFiles = xmlFiles;
 		this.xslInputStream = xslInputStream;
@@ -74,8 +75,8 @@ public class LoadFromXML extends AbstractLoadOperation implements RepositoryOper
 	 * @param xmlFile		XML file or directory to process
 	 * @param xslSource		XSL File path or classpath resource to use
 	 */
-	public LoadFromXML(String xmlFile, String xslSource){
-		this(new ArrayList<String>(Arrays.asList(xmlFile)), xslSource);
+	public LoadFromXML(File xmlFile, String xslSource){
+		this(new ArrayList<File>(Arrays.asList(xmlFile)), xslSource);
 	}
 
 	/**
@@ -85,8 +86,8 @@ public class LoadFromXML extends AbstractLoadOperation implements RepositoryOper
 	 * @param xmlFile			XML File or directory to process
 	 * @param xslInputStream	XSL File to use
 	 */
-	public LoadFromXML(String xmlFile, InputStream xslInputStream){
-		this(new ArrayList<String>(Arrays.asList(xmlFile)), xslInputStream);
+	public LoadFromXML(File xmlFile, InputStream xslInputStream){
+		this(new ArrayList<File>(Arrays.asList(xmlFile)), xslInputStream);
 	}
 	
 	/**
@@ -96,8 +97,8 @@ public class LoadFromXML extends AbstractLoadOperation implements RepositoryOper
 	 * @param xmlFile	XML file or directory to process
 	 * @param xslFile	XSL file to use
 	 */
-	public LoadFromXML(String xmlFile, File xslFile){
-		this(new ArrayList<String>(Arrays.asList(xmlFile)), xslFile);
+	public LoadFromXML(File xmlFile, File xslFile){
+		this(new ArrayList<File>(Arrays.asList(xmlFile)), xslFile);
 	}
 
 	@Override
@@ -136,8 +137,8 @@ public class LoadFromXML extends AbstractLoadOperation implements RepositoryOper
 			RepositoryConnection connection = repository.getConnection();
 			try {
 				connection.setAutoCommit(false);
-				for(String file : (List<String>)xmlFiles){
-					doApplyXSLOnAFile(transformer, connection, new File(file));
+				for(File file : xmlFiles){
+					doApplyXSLOnAFile(transformer, connection, file);
 				}
 				connection.commit();
 			} finally {
@@ -204,9 +205,9 @@ public class LoadFromXML extends AbstractLoadOperation implements RepositoryOper
 						);
 
 				// increment counter
-				this.inputDocumentCounter++;
-				if(this.inputDocumentCounter % 1000 == 0) {
-					log.debug("Processed "+this.inputDocumentCounter+" input files");
+				this.processedFilesCounter++;
+				if(this.processedFilesCounter % 1000 == 0) {
+					log.debug("Processed "+this.processedFilesCounter+" input files");
 				}
 			} catch (FileNotFoundException e) {
 				// will never happen
@@ -217,11 +218,11 @@ public class LoadFromXML extends AbstractLoadOperation implements RepositoryOper
 		}
 	}
 
-	public List<String> getXmlFiles() {
+	public List<File> getXmlFiles() {
 		return xmlFiles;
 	}
 
-	public void setXmlFiles(List<String> xmlFiles) {
+	public void setXmlFiles(List<File> xmlFiles) {
 		this.xmlFiles = xmlFiles;
 	}
 
@@ -233,4 +234,8 @@ public class LoadFromXML extends AbstractLoadOperation implements RepositoryOper
 		this.xslSource = xslSource;
 	}
 
+	public int getProcessedFilesCounter() {
+		return processedFilesCounter;
+	}
+	
 }

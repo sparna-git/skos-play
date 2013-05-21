@@ -4,7 +4,7 @@ import org.openrdf.query.resultio.BooleanQueryResultWriter;
 
 /**
  * An object that associates a SPARQL query (an instance of a {@link SPARQLQueryIfc}) and a
- * <code>BooleanQueryResultWriter</code> capable of writing the boolean result of the query. The {@link fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter}
+ * <code>BooleanQueryResultWriter</code> capable of writing the boolean result of the query. The {@link fr.sparna.rdf.sesame.toolkit.query.Perform}
  * takes this interface as a parameter of its <code>executeAsk</code> method.
  * 
  * @author Thomas Francart

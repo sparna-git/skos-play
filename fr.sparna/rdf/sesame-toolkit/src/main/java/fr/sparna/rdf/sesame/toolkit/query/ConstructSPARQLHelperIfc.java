@@ -4,8 +4,8 @@ import org.openrdf.rio.RDFHandler;
 
 /**
  * An object that associates a SPARQL query (an instance of a {@link SPARQLQueryIfc}) and a
- * <code>RDFHandler</code> capable of handling the results of the query. The {@link fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter}</code>
- * takes this interface as a parameter of its <code>executeConstruct</code> method.
+ * <code>RDFHandler</code> capable of handling the results of the query. The {@link fr.sparna.rdf.sesame.toolkit.query.Perform}</code>
+ * takes this interface as a parameter of its <code>construct</code> method.
  * 
  * @author Thomas Francart
  * 

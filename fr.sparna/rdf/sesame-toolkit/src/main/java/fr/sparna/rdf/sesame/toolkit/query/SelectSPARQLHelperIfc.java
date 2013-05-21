@@ -4,8 +4,8 @@ import org.openrdf.query.TupleQueryResultHandler;
 
 /**
  * An object that associates a SPARQL query (an instance of a {@link SPARQLQueryIfc}) and a
- * <code>TupleQueryResultHandler</code> capable of handling the results of the query. The {@link fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter}
- * takes this interface as a parameter of its <code>executeSelect</code> method.
+ * <code>TupleQueryResultHandler</code> capable of handling the results of the query. The {@link fr.sparna.rdf.sesame.toolkit.query.Perform}
+ * takes this interface as a parameter of its <code>select</code> method.
  * 
  * @author Thomas Francart
  * 

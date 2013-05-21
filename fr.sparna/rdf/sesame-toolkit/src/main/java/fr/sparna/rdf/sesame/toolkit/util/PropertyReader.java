@@ -11,7 +11,7 @@ import org.openrdf.repository.Repository;
 
 import fr.sparna.commons.lang.ListMap;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 
 /**
  * Reads a given property in a repository, and handles caching of values.
@@ -133,7 +133,7 @@ public class PropertyReader {
 			}
 		};
 		
-		SesameSPARQLExecuter.newExecuter(this.repository).executeSelect(helper);
+		Perform.on(this.repository).select(helper);
 	}
 
 	public boolean isPreLoad() {

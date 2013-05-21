@@ -61,6 +61,13 @@ public class RepositoryBuilder implements RepositoryFactoryIfc {
 	}
 	
 	/**
+	 * Creates a RepositoryBuilder with a default LocalMemoryRepositoryFactory and a single operation
+	 */
+	public RepositoryBuilder(RepositoryOperationIfc operation) {
+		this(new LocalMemoryRepositoryFactory(), operation);
+	}
+	
+	/**
 	 * Shortcut to a StringRepositoryFactory.
 	 * 
 	 * @param fileOrDirectoryOrEndpointURL

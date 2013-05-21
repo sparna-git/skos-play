@@ -12,10 +12,10 @@ import fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelperIfc;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQueryIfc;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 
 /**
- * A simple SPARQL-based inference engine, that recursively applies a set of SPARQL CONSTRUCT
+ * A simple SPARQL CONSTRUCT-based inference engine, that recursively applies a set of SPARQL CONSTRUCT
  * queries until it finds that no additionnal data have been added.
  * 
  * @author Thomas Francart
@@ -27,7 +27,7 @@ public class SimpleSPARQLInferenceEngine {
 	// la liste de helper construct qui vont chacun executer une regle
 	protected List<ConstructSPARQLHelper> constructHelpers;
 	// l'executer a travers lequel on va executer nos regles
-	protected SesameSPARQLExecuter executer;
+	protected Perform executer;
 	// le nombre d'it�rations que le moteur a effectu�
 	protected int iterationCount = 0;
 	// le nombre maximum d'iteration que peut faire le moteur avant de s'arreter. si <= 0, on boucle jusqu'a la fin
@@ -35,7 +35,7 @@ public class SimpleSPARQLInferenceEngine {
 	
 	public SimpleSPARQLInferenceEngine(Repository repository, List<SPARQLQueryIfc> rules) {
 		this.constructHelpers = new ArrayList<ConstructSPARQLHelper>();
-		this.executer = new SesameSPARQLExecuter(repository);
+		this.executer = new Perform(repository);
 		// pour chaque regle pass�e en param�tre...
 		for (SPARQLQueryIfc aRule : rules) {
 			this.constructHelpers.add(
@@ -64,7 +64,7 @@ public class SimpleSPARQLInferenceEngine {
 				// execute a rule
 				log.debug("Executing rule "+ruleIndex);
 				long start = System.currentTimeMillis();
-				executer.executeConstruct(aHelper);
+				executer.construct(aHelper);
 				log.debug("Done in "+((System.currentTimeMillis() - start))+" ms");
 				// if the rule had more results than before...
 				if(((CopyStatementRDFHandler)aHelper.getHandler()).getResultStatementsCount() > ((CopyStatementRDFHandler)aHelper.getHandler()).getPreviousResultStatementsCount()) {

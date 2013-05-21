@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  * You can use a RDFXMLPrettyWriter as a delegate to produce a clean RDF/XML output.
  * Usage :
  * <code>
- * RDFHandler writer = new SortedWriter(new RDFXMLPrettyWriter(new FileOutputStream(myFile)));
+ * RDFHandler writer = new SortingRDFHandler(new RDFXMLPrettyWriter(new FileOutputStream(myFile)));
  * repository.export(writer);
  * </code>
  * 

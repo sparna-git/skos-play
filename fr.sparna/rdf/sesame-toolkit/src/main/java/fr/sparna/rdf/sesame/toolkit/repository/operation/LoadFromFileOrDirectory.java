@@ -15,8 +15,6 @@ import org.openrdf.rio.RDFParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.rdf.sesame.toolkit.util.RepositoryTransaction;
-
 /**
  * Read and load data from a file passed as a parameter. If the file is actually a
  * directory, it will try to recursively load all the files inside it.

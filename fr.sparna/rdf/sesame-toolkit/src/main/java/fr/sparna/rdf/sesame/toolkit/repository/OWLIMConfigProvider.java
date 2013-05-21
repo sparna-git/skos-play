@@ -18,7 +18,6 @@ import fr.sparna.commons.io.ClasspathUnzip;
  * into a File (OWLIM needs to read the ruleset from a File).
  * 
  * @author Thomas Francart
- *
  */
 public class OWLIMConfigProvider implements ConfigProviderIfc {
 

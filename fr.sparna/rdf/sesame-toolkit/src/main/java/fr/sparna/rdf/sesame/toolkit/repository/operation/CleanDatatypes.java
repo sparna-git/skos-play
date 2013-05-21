@@ -13,18 +13,18 @@ import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.helpers.RDFHandlerBase;
 
 import fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelper;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
-public class CleanDatatypesOperation implements RepositoryOperationIfc {
+public class CleanDatatypes implements RepositoryOperationIfc {
 
 	@Override
 	public void execute(final Repository repository)
 			throws RepositoryOperationException {
 		try {
 			final RepositoryConnection connection = repository.getConnection();
-			SesameSPARQLExecuter.newExecuter(repository).executeConstruct(
+			Perform.on(repository).construct(
 					new ConstructSPARQLHelper(
 							"CONSTRUCT { ?s ?p ?o } " +
 									" WHERE {" +
@@ -84,7 +84,7 @@ public class CleanDatatypesOperation implements RepositoryOperationIfc {
 	public static void main(String... args) throws Exception {
 		RepositoryBuilder builder = new RepositoryBuilder(new LocalMemoryRepositoryFactory());
 		builder.addOperation(new LoadFromURL(new URL("http://dbpedia.org/resource/Paris")));
-		builder.addOperation(new CleanDatatypesOperation());
+		builder.addOperation(new CleanDatatypes());
 		Repository r = builder.createNewRepository();
 	}
 

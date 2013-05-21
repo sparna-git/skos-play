@@ -25,9 +25,12 @@ import org.openrdf.rio.RDFHandlerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
+
 /**
  * Executes SPARQL helpers onto a Sesame repository 
- * (built with a {@link fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryIfc}). The helpers knows
+ * (built with a {@link fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder}
+ * or a a {@link fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryIfc}). The helpers knows
  * how to return a {@link fr.sparna.rdf.sesame.toolkit.query.SPARQLQueryIfc} and how to process the results
  * of the query with a <code>TupleQueryResultHandler</code> (for SELECT queries), or <code>RDFHandler</code> (for CONSTRUCT queries).
  * This can execute SPARQL SELECT, CONSTRUCT, UPDATE, ASK, INSERT or DELETE.
@@ -38,7 +41,7 @@ import org.slf4j.LoggerFactory;
  * {@code
  *	Repository repository = ...;
  *	SelectSPARQLHelperIfc helper = ...;
- *	SesameSPARQLExecuter.newExecuter(repository).executeSelect(helper);
+ *	Perform.on(repository).select(helper);
  * }
  * </pre>
  * <p>To execute a construct helper :
@@ -46,17 +49,17 @@ import org.slf4j.LoggerFactory;
  * {@code
  *	Repository repository = ...;
  *	ConstructSPARQLHelperIfc helper = ...;
- *	SesameSPARQLExecuter.newExecuter(repository).executeConstruct(helper);
+ *	Perform.on(repository).construct(helper);
  * }
  * </pre>
  * 
  * Note that the default behavior of <code>isIncludeInferred</code> method is true, meaning the SPARQL
  * will be executed against the inferred RDF graph. You should set this to false explicitely
- * at the executer or the helper level if you need to make a query against the original RDF data.
+ * on the Perform instance or on the SPARQLHelper if you need to make a query against the original RDF data.
  * 
  * @author Thomas Francart
  */
-public class SesameSPARQLExecuter {
+public class Perform {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 	
@@ -72,27 +75,27 @@ public class SesameSPARQLExecuter {
 	
 	private Set<URI> defaultRemoveGraphs = null;
 	
-	public SesameSPARQLExecuter(Repository repository) {
+	public Perform(Repository repository) {
 		this(repository, true);
 	}
 	
-	public SesameSPARQLExecuter(Repository repository, boolean includeInferred) {
+	public Perform(Repository repository, boolean includeInferred) {
 		super();
 		this.repository = repository;
 		this.includeInferred = includeInferred;
 	}
 	
 	/**
-	 * Convenience static constructor that returns a new instance of <code>SesameSPARQLExecuter</code>
+	 * Convenience static constructor that returns a new instance of <code>Perform</code>
 	 * and allows to write
 	 * 
-	 *  <code>SesameSPARQLExecuter.newExecuter(repository).executeSelect(myHelper)</code>
+	 *  <code>Perform.newExecuter(repository).executeSelect(myHelper)</code>
 	 * 
 	 * @param repository The repository on which to execute the queries
-	 * @return a new instance of SesameSPARQLExecuter
+	 * @return a new instance of Perform
 	 */
-	public static SesameSPARQLExecuter newExecuter(Repository repository) {
-		return new SesameSPARQLExecuter(repository);
+	public static Perform on(Repository repository) {
+		return new Perform(repository);
 	}
 	
 	/**
@@ -116,7 +119,7 @@ public class SesameSPARQLExecuter {
 	/**
 	 * Executes the SPARQL SELECT query returned by the helper, and pass the helper to the <code>evaluate</code> method
 	 */
-	public void executeSelect(SelectSPARQLHelperIfc helper) 
+	public void select(SelectSPARQLHelperIfc helper) 
 	throws SPARQLExecutionException {
 		try {
 			if(repository == null) {
@@ -150,7 +153,7 @@ public class SesameSPARQLExecuter {
 			} catch (MalformedQueryException e) {
 				throw new SPARQLExecutionException(e);
 			} finally {
-				SesameSPARQLExecuter.closeQuietly(connection);
+				RepositoryConnectionDoorman.closeQuietly(connection);
 			}
 
 		} catch (RepositoryException e) {
@@ -165,7 +168,7 @@ public class SesameSPARQLExecuter {
 	/**
 	 * Executes the SPARQL CONSTRUCT query returned by the helper, and pass the helper to the <code>evaluate</code> method
 	 */
-	public void executeConstruct(ConstructSPARQLHelperIfc helper) 
+	public void construct(ConstructSPARQLHelperIfc helper) 
 	throws SPARQLExecutionException {
 		try {
 			if(repository == null) {
@@ -199,7 +202,7 @@ public class SesameSPARQLExecuter {
 			} catch (MalformedQueryException e) {
 				throw new SPARQLExecutionException(e);
 			} finally {
-				SesameSPARQLExecuter.closeQuietly(connection);
+				RepositoryConnectionDoorman.closeQuietly(connection);
 			}
 
 		} catch (RepositoryException e) {
@@ -216,7 +219,7 @@ public class SesameSPARQLExecuter {
 	 * The boolean result is also returned by the method directly.
 	 * <p>If helper.getWriter() is null, the result is simply returned by that method.
 	 */
-	public boolean executeAsk(BooleanSPARQLHelperIfc helper) 
+	public boolean ask(BooleanSPARQLHelperIfc helper) 
 	throws SPARQLExecutionException {
 		try {
 			if(repository == null) {
@@ -259,7 +262,7 @@ public class SesameSPARQLExecuter {
 			} catch(IOException ioe) {
 				throw new SPARQLExecutionException(ioe);
 			} finally {
-				SesameSPARQLExecuter.closeQuietly(connection);
+				RepositoryConnectionDoorman.closeQuietly(connection);
 			}
 
 		} catch (RepositoryException e) {
@@ -277,10 +280,10 @@ public class SesameSPARQLExecuter {
 	 * @return
 	 * @throws SPARQLExecutionException
 	 */
-	public boolean executeAsk(SPARQLQueryIfc query) 
+	public boolean ask(SPARQLQueryIfc query) 
 	throws SPARQLExecutionException {
 		// passing a null writer will cause the executeAsk(BooleanSPARQLHelperIfc helper) to not serialize the result
-		return executeAsk(new BooleanSPARQLHelper(query, null));
+		return ask(new BooleanSPARQLHelper(query, null));
 	}
 	
 	/**
@@ -289,7 +292,7 @@ public class SesameSPARQLExecuter {
 	 * @param helper
 	 * @throws SPARQLExecutionException
 	 */
-	public void executeUpdate(SPARQLUpdateIfc helper) 
+	public void update(SPARQLUpdateIfc helper) 
 	throws SPARQLExecutionException {
 		try {
 			if(repository == null) {
@@ -324,21 +327,13 @@ public class SesameSPARQLExecuter {
 			} catch (MalformedQueryException e) {
 				throw new SPARQLExecutionException(e);
 			} finally {
-				SesameSPARQLExecuter.closeQuietly(connection);
+				RepositoryConnectionDoorman.closeQuietly(connection);
 			}
 
 		} catch (RepositoryException e) {
 			throw new SPARQLExecutionException(e);
 		} catch (UpdateExecutionException e) {
 			throw new SPARQLExecutionException(e);
-		}
-	}
-	
-	private static void closeQuietly(RepositoryConnection connection) {
-		if(connection != null) {
-			try {
-				connection.close();
-			} catch (RepositoryException ignore) {ignore.printStackTrace();}
 		}
 	}
 	

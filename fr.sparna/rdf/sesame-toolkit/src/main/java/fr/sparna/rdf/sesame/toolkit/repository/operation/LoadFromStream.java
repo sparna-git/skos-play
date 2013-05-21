@@ -49,6 +49,20 @@ public class LoadFromStream extends AbstractLoadOperation implements RepositoryO
 	public LoadFromStream(InputStream stream, RDFFormat format) {
 		this(stream, format, RDF.NAMESPACE);
 	}
+	
+	/**
+	 * Loads the given classpath resource relative the given owner, using the default RDF.NAMESPACE as the namespace
+	 * 
+	 * @param owner
+	 * @param resource
+	 */
+	public LoadFromStream(Object owner, String resource) {
+		this(
+				owner.getClass().getResourceAsStream(resource),
+				RDFFormat.forFileName(resource, RDFFormat.RDFXML),
+				RDF.NAMESPACE
+		);
+	}
 
 	@Override
 	public void execute(Repository repository)
