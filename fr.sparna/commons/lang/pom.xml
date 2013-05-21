@@ -11,7 +11,7 @@
 
     <groupId>fr.sparna.commons</groupId>
     <artifactId>sparna-commons-lang</artifactId>
-    <version>0.30-SNAPSHOT</version>
+    <version>0.30</version>
 
     <name>Sparna Commons: Lang</name>
     <description>Extensions to the Java language constructs</description>
