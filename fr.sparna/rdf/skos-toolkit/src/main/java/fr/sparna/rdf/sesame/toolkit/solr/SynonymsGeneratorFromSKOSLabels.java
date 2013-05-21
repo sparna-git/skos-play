@@ -16,8 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.io.ReadWriteTextFile;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 public class SynonymsGeneratorFromSKOSLabels {
@@ -51,7 +51,7 @@ public class SynonymsGeneratorFromSKOSLabels {
 		
 		SKOSSynonymSPARQLHelper helper = new SKOSSynonymSPARQLHelper();
 		log.debug(helper.getSPARQL());
-		SesameSPARQLExecuter.newExecuter(this.repository).executeSelect(helper);
+		Perform.on(repository).select(helper);
 		Map<URI, List<String>> labels = helper.labels;
 		
 		generateSynonymFile(labels);

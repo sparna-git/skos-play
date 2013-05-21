@@ -5,8 +5,8 @@ import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
 
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
@@ -84,7 +84,7 @@ public abstract class GetLanguagesHelper extends SelectSPARQLHelperBase {
 				"test:_3 a skos:Concept ; skos:inScheme test:_anotherScheme ; skos:hiddenLabel \"D-3-pref\"@de ."
 		);
 		
-		SesameSPARQLExecuter.newExecuter(r).executeSelect(new GetLanguagesHelper() {
+		Perform.on(r).select(new GetLanguagesHelper() {
 			@Override
 			protected void handleLang(Literal lang)
 			throws TupleQueryResultHandlerException {

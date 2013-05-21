@@ -1,6 +1,6 @@
 # S23 :  skos:related is an instance of owl:SymmetricProperty.
 PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-CONSTRUCT {
+INSERT {
 	?y skos:related ?x .
 } WHERE {
 	?x skos:related ?y .

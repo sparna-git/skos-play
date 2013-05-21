@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.ling.dictionary.DelaDictionary;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryTransaction;
 
 public class FlexionsAdder {
@@ -33,7 +33,7 @@ public class FlexionsAdder {
 	public void addFlexions(Repository repository, List<java.net.URI> conceptSchemesToExclude) throws RepositoryException, SPARQLExecutionException {
 		DelaDictionary dico = new DelaDictionary(DelaDictionary.class.getClassLoader().getResourceAsStream("dela/dela_fr.lst"), "UTF-8", "fr");
 		FlexionsAdderHelper helper = new FlexionsAdderHelper(dico, repository, conceptSchemesToExclude);
-		SesameSPARQLExecuter.newExecuter(repository).executeSelect(helper);
+		Perform.on(repository).select(helper);
 	}	
 	
 	public void addFlexions(Repository repository) throws RepositoryException, SPARQLExecutionException {

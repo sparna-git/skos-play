@@ -9,8 +9,8 @@ import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
 
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
@@ -133,7 +133,7 @@ public abstract class GetAlphabeticalLabelsOfSchemeHelper extends SelectSPARQLHe
 				System.out.println(label.getLabel()+" / "+((prefLabel != null)?prefLabel.getLabel():"null")+" / "+concept.stringValue());
 			}
 		};
-		SesameSPARQLExecuter.newExecuter(r).executeSelect(helper);
+		Perform.on(r).select(helper);
 	}
 	
 }

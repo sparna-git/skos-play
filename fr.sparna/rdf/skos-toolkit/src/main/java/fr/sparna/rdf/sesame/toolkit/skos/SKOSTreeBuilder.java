@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 
 /**
@@ -76,7 +76,7 @@ public class SKOSTreeBuilder {
 		final List<GenericTree<SKOSTreeNode>> result = new ArrayList<GenericTree<SKOSTreeNode>>();
 		
 		final List<Resource> conceptSchemeList = new ArrayList<Resource>();
-		new SesameSPARQLExecuter(this.repository).executeSelect(new GetConceptsSchemesHelper(null) {		
+		Perform.on(repository).select(new GetConceptsSchemesHelper(null) {		
 			@Override
 			protected void handleConceptScheme(Resource conceptScheme)
 			throws TupleQueryResultHandlerException {
@@ -96,7 +96,7 @@ public class SKOSTreeBuilder {
 			log.debug("No concept schemes exist, will set all the concepts without broaders as roots.");
 			
 			// fetch all concepts with no broaders
-			new SesameSPARQLExecuter(this.repository).executeSelect(new GetConceptsWithNoBroaderHelper(null) {
+			Perform.on(repository).select(new GetConceptsWithNoBroaderHelper(null) {
 				@Override
 				protected void handleConceptWithNoBroader(Resource noBroader)
 				throws TupleQueryResultHandlerException {
@@ -131,7 +131,7 @@ public class SKOSTreeBuilder {
 		log.debug("Building SKOS Tree from root "+root);
 		
 		final List<Resource> conceptSchemeList = new ArrayList<Resource>();
-		new SesameSPARQLExecuter(this.repository).executeSelect(new GetConceptsSchemesHelper(null) {		
+		Perform.on(repository).select(new GetConceptsSchemesHelper(null) {		
 			@Override
 			protected void handleConceptScheme(Resource conceptScheme)
 			throws TupleQueryResultHandlerException {
@@ -214,7 +214,7 @@ public class SKOSTreeBuilder {
 		// get subtree
 		if(isConceptScheme) {
 
-			new SesameSPARQLExecuter(this.repository).executeSelect(new GetTopConceptOfConceptSchemeHelper(java.net.URI.create(conceptOrConceptScheme.stringValue()), null) {
+			Perform.on(repository).select(new GetTopConceptOfConceptSchemeHelper(java.net.URI.create(conceptOrConceptScheme.stringValue()), null) {
 				
 				@Override
 				protected void handleTopConcept(Resource top)
@@ -230,7 +230,7 @@ public class SKOSTreeBuilder {
 			
 			if(node.getChildren() == null || node.getChildren().size() == 0) {
 				// if no explicit hasTopConcept or istopConceptOf was found, get the concepts of that scheme with no broader info
-				new SesameSPARQLExecuter(this.repository).executeSelect(new GetConceptsWithNoBroaderHelper(null, java.net.URI.create(conceptOrConceptScheme.stringValue())) {
+				Perform.on(repository).select(new GetConceptsWithNoBroaderHelper(null, java.net.URI.create(conceptOrConceptScheme.stringValue())) {
 					@Override
 					protected void handleConceptWithNoBroader(Resource noBroader)
 					throws TupleQueryResultHandlerException {
@@ -243,7 +243,7 @@ public class SKOSTreeBuilder {
 				});
 			}
 		} else {
-			new SesameSPARQLExecuter(this.repository).executeSelect(new GetNarrowersHelper(java.net.URI.create(conceptOrConceptScheme.stringValue()), null) {
+			Perform.on(repository).select(new GetNarrowersHelper(java.net.URI.create(conceptOrConceptScheme.stringValue()), null) {
 				
 				@Override
 				protected void handleNarrowerConcept(Resource parent, Resource narrower)

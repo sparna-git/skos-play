@@ -16,8 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.io.ReadWriteTextFile;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 public class SynonymsGeneratorFromSKOSBroaders {
@@ -43,12 +43,12 @@ public class SynonymsGeneratorFromSKOSBroaders {
 
 		LabelsSPARQLHelper labelsHelper = new LabelsSPARQLHelper();
 		log.debug(labelsHelper.getSPARQL());
-		SesameSPARQLExecuter.newExecuter(this.repository).executeSelect(labelsHelper);
+		Perform.on(repository).select(labelsHelper);
 		Map<URI, List<String>> labels = labelsHelper.labels;
 
 		BroaderSPARQLHelper broaderHelper = new BroaderSPARQLHelper();
 		log.debug(broaderHelper.getSPARQL());
-		SesameSPARQLExecuter.newExecuter(this.repository).executeSelect(broaderHelper);
+		Perform.on(repository).select(broaderHelper);
 		Map<URI, List<URI>> hierarchy = broaderHelper.broaders;
 
 		generateBroaderLabelsFile(labels, hierarchy);

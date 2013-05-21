@@ -9,8 +9,8 @@ import org.openrdf.repository.Repository;
 
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
-import fr.sparna.rdf.sesame.toolkit.query.SesameSPARQLExecuter;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 /**
@@ -61,7 +61,7 @@ public class SimpleSKOSTreePrinter {
 		}			
 		buffer.append((depth > 0)?"\\-":"");
 		
-		new SesameSPARQLExecuter(this.repository).executeSelect(new GetLabelsHelper(aNode.getData().getUri()) {
+		Perform.on(repository).select(new GetLabelsHelper(aNode.getData().getUri()) {
 			@Override
 			protected void handleLabel(Resource concept, URI labelType, String prefLabel, String lang)
 			throws TupleQueryResultHandlerException {
