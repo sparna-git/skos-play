@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>fr.sparna.rdf</groupId>
 		<artifactId>sparna-rdf</artifactId>
-		<version>1</version>
+		<version>2-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<groupId>fr.sparna.rdf</groupId>
 	<artifactId>rdf-toolkit</artifactId>
-	<version>0.30</version>
+	<version>0.31-SNAPSHOT</version>
 
 	<name>Sparna RDF : rdf-toolkit</name>
 	<description>Command-line utilities to manipulate RDF data</description>

@@ -5,13 +5,13 @@
     <parent>
         <groupId>fr.sparna.commons</groupId>
         <artifactId>sparna-commons</artifactId>
-        <version>1</version>
+        <version>2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>fr.sparna.commons</groupId>
     <artifactId>sparna-commons-xml</artifactId>
-    <version>0.30</version>
+    <version>0.31-SNAPSHOT</version>
 
     <name>Sparna Commons: XML</name>
     <description>XML-related utilities</description>
