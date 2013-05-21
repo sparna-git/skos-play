@@ -14,7 +14,7 @@
 
     <groupId>fr.sparna.rdf</groupId>
     <artifactId>sesame-toolkit</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.40-SNAPSHOT</version>
 
     <name>Sparna RDF : sesame-toolkit</name>
     <description>Extensions to the Sesame RDF framework.</description>
@@ -71,51 +71,51 @@
             <scope>test</scope>
         </dependency>
 
-	<dependency>
-		<groupId>org.openrdf.sesame</groupId>
-		<artifactId>sesame-runtime</artifactId>
-	</dependency>
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-runtime</artifactId>
+		</dependency>
 
-	<dependency>
-		<groupId>fr.sparna.commons</groupId>
-		<artifactId>sparna-commons-lang</artifactId>
-		<version>${project.version}</version>
-	</dependency>
+		<dependency>
+			<groupId>fr.sparna.commons</groupId>
+			<artifactId>sparna-commons-lang</artifactId>
+			<version>0.30-SNAPSHOT</version>
+		</dependency>
 
-	<dependency>
-		<groupId>fr.sparna.commons</groupId>
-		<artifactId>sparna-commons-io</artifactId>
-		<version>${project.version}</version>
-	</dependency>
+		<dependency>
+			<groupId>fr.sparna.commons</groupId>
+			<artifactId>sparna-commons-io</artifactId>
+			<version>0.30-SNAPSHOT</version>
+		</dependency>
 
-	<dependency>
-		<groupId>fr.sparna.commons</groupId>
-		<artifactId>sparna-commons-xml</artifactId>
-		<version>${project.version}</version>
-	</dependency>
+		<dependency>
+			<groupId>fr.sparna.commons</groupId>
+			<artifactId>sparna-commons-xml</artifactId>
+			<version>0.30-SNAPSHOT</version>
+		</dependency>
 
-	<!-- OWLIM for runtime only -->
-    	<dependency>
-		<groupId>com.ontotext</groupId>
-		<artifactId>owlim-lite</artifactId>
-		<scope>runtime</scope>
-	</dependency>
+		<!-- OWLIM for runtime only -->
+	    	<dependency>
+			<groupId>com.ontotext</groupId>
+			<artifactId>owlim-lite</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 
-	<!-- necessaire seulement lorsqu'on utilise un Endpoint HTTP -->
-	<dependency>
-		<groupId>commons-http</groupId>
-		<artifactId>commons-http</artifactId>
-		<version>1.1</version>
-		<scope>runtime</scope>
-	</dependency>  
-	
-	<!-- necessaire seulement lorsqu'on utilise un Endpoint HTTP -->
-	<dependency>
-		<groupId>commons-logging</groupId>
-		<artifactId>commons-logging</artifactId>
-		<version>1.1.1</version>
-		<scope>runtime</scope>
-	</dependency>  
+		<!-- necessaire seulement lorsqu'on utilise un Endpoint HTTP -->
+		<dependency>
+			<groupId>commons-http</groupId>
+			<artifactId>commons-http</artifactId>
+			<version>1.1</version>
+			<scope>runtime</scope>
+		</dependency>  
+		
+		<!-- necessaire seulement lorsqu'on utilise un Endpoint HTTP -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+			<scope>runtime</scope>
+		</dependency>  
     </dependencies>
 
 </project>

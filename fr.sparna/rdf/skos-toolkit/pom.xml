@@ -48,7 +48,7 @@
         <dependency>
             <groupId>fr.sparna.commons</groupId>
             <artifactId>sparna-commons-tree</artifactId>
-            <version>${project.version}</version>
+            <version>0.30-SNAPSHOT</version>
         </dependency>  
     </dependencies>
 
