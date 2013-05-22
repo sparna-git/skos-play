@@ -28,7 +28,7 @@ public class LevenshteinDistanceFunction implements Function {
 	public static final String NAMESPACE = "http://www.sparna.fr/rdf/sesame/toolkit/functions#";
 
 	/**
-	 * return the URI 'http://www.mondeca.com/sesame/toolkit/functions#levenshtein' as a String
+	 * return the URI 'http://www.sparna.fr/rdf/sesame/toolkit/functions#levenshtein' as a String
 	 */
 	@Override
 	public String getURI() {

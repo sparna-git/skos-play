@@ -80,7 +80,7 @@ public class LoadFromStream extends AbstractLoadOperation implements RepositoryO
 				RepositoryConnectionDoorman.closeQuietly(connection);
 			}
 		} catch (RDFParseException e) {
-			throw new RepositoryOperationException("Bad RDF format in stream. "+this.format.getName()+" was expected", e);
+			throw new RepositoryOperationException("Error when parsing RDF. "+this.format.getName()+" was expected. Error was : "+e.getMessage(), e);
 		} catch (IOException e) {
 			throw new RepositoryOperationException("Cannot read from stream", e);
 		} catch (RepositoryException e) {

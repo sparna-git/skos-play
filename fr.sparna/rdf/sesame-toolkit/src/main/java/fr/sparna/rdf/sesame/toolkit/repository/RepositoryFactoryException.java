@@ -4,7 +4,7 @@ package fr.sparna.rdf.sesame.toolkit.repository;
  * An exception that indicates that an error occurred during the initialisation of a Repository
  * by a RepositoryProvider.
  * 
- * @author mondeca
+ * @author Thomas Francart
  *
  */
 public class RepositoryFactoryException extends Exception {
