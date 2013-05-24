@@ -6,6 +6,7 @@
 # @see 		
 # @param	
 # 
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 SELECT DISTINCT ?class ?label WHERE {
   [] a ?class
   OPTIONAL { ?class rdfs:label ?label }

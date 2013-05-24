@@ -1,0 +1,13 @@
+# List the number of instances of each properties, from largest to smallest
+#
+# @title	Number of instances per property
+# @tag 		model
+# @tag		SPARQL 1.0
+# @see 		
+# @param	
+# 
+SELECT DISTINCT ?property (COUNT(?x) AS ?numberOfInstances) WHERE {
+  ?x ?property ?value .
+}
+GROUP BY ?property
+ORDER BY DESC(?numberOfInstances)
