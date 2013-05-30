@@ -10,6 +10,7 @@ import java.util.Locale;
 import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
+import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.skos.SKOSTreeNode.NodeType;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 
 /**
@@ -32,6 +34,7 @@ public class SKOSTreeBuilder {
 	
 	protected Repository repository;
 	protected PropertyReader sortCriteriaReader;
+	protected SKOSNodeTypeReader nodeTypeReader;
 
 	private Collator collator;
 
@@ -42,10 +45,11 @@ public class SKOSTreeBuilder {
 	 * @param repository			The repository to read data from
 	 * @param sortCriteriaReader	A PropertyReader to read the property that will be used to sort the elements of the tree
 	 */
-	public SKOSTreeBuilder(Repository repository, PropertyReader sortCriteriaReader) {
+	public SKOSTreeBuilder(Repository repository, PropertyReader sortCriteriaReader, SKOSNodeTypeReader nodeTypeReader) {
 		super();
 		this.repository = repository;
 		this.sortCriteriaReader = sortCriteriaReader;
+		this.nodeTypeReader = nodeTypeReader;
 		
 		// setup Collator with a Locale corresponding to the lang read by our sort criteria reader
 		collator = Collator.getInstance((sortCriteriaReader.getLang() != null)?new Locale(sortCriteriaReader.getLang()):Locale.getDefault());
@@ -59,7 +63,11 @@ public class SKOSTreeBuilder {
 	 * @param lang			The language with which to read the skos:prefLabel property of the Concept to sort them
 	 */
 	public SKOSTreeBuilder(Repository repository, String lang) {
-		this(repository, new PropertyReader(repository, java.net.URI.create(SKOS.PREF_LABEL), lang));
+		this(
+				repository,
+				new PropertyReader(repository, java.net.URI.create(SKOS.PREF_LABEL), lang),
+				new SKOSNodeTypeReader(new PropertyReader(repository, java.net.URI.create(RDF.TYPE.stringValue())))
+		);
 	}
 
 	/**
@@ -76,37 +84,61 @@ public class SKOSTreeBuilder {
 		final List<GenericTree<SKOSTreeNode>> result = new ArrayList<GenericTree<SKOSTreeNode>>();
 		
 		final List<Resource> conceptSchemeList = new ArrayList<Resource>();
-		Perform.on(repository).select(new GetConceptsSchemesHelper(null) {		
+		Perform.on(repository).select(new GetConceptSchemesHelper(null) {		
 			@Override
 			protected void handleConceptScheme(Resource conceptScheme)
 			throws TupleQueryResultHandlerException {
-				conceptSchemeList.add(conceptScheme);
+				try {
+					result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)conceptScheme)));
+				} catch (SPARQLExecutionException e) {
+					throw new TupleQueryResultHandlerException(e);
+				}
 			}
 		});
 		
 		if(conceptSchemeList.size() > 0) {
-			// no root given, and multiple concept schemes available
-			log.debug("No root URI was given and multiple concept schemes exist, will create a dummy root and set concept scheme as first level nodes");
+			// multiple concept schemes available
+			log.debug("Concept schemes exists, will take them as first level nodes");
 			
-			// set all the concept schemes as children of the root
+			// set all the concept schemes as roots
 			for (Resource aConceptScheme : conceptSchemeList) {
-				result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)aConceptScheme, true)));
+				result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)aConceptScheme)));
 			}		
 		} else {
-			log.debug("No concept schemes exist, will set all the concepts without broaders as roots.");
 			
-			// fetch all concepts with no broaders
-			Perform.on(repository).select(new GetConceptsWithNoBroaderHelper(null) {
+			// see if there are some top-level collections
+			final List<Resource> topCollectionsList = new ArrayList<Resource>();
+			Perform.on(repository).select(new GetTopCollectionsHelper(null, null) {				
 				@Override
-				protected void handleConceptWithNoBroader(Resource noBroader)
+				protected void handleTopCollection(Resource top)
 				throws TupleQueryResultHandlerException {
-					try {
-						result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)noBroader, false)));
-					} catch (SPARQLExecutionException e) {
-						throw new TupleQueryResultHandlerException(e);
-					}
+					topCollectionsList.add(top);
+				}				
+			});
+			
+			if(topCollectionsList.size() > 0) {
+				log.debug("Collections exist, will take them as first level nodes");
+				
+				// set all the collections as root
+				for (Resource aCollection : topCollectionsList) {
+					result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)aCollection)));
 				}
-			});			
+			} else {
+				log.debug("No concept schemes and no collections exists, will fetch all concepts without broaders.");
+				
+				// fetch all concepts with no broaders
+				Perform.on(repository).select(new GetConceptsWithNoBroaderHelper(null) {
+					@Override
+					protected void handleConceptWithNoBroader(Resource noBroader)
+					throws TupleQueryResultHandlerException {
+						try {
+							result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)noBroader)));
+						} catch (SPARQLExecutionException e) {
+							throw new TupleQueryResultHandlerException(e);
+						}
+					}
+				});
+			}			
 		}
 		
 		// sort trees before returning them
@@ -129,45 +161,16 @@ public class SKOSTreeBuilder {
 	throws SPARQLExecutionException {
 
 		log.debug("Building SKOS Tree from root "+root);
-		
-		final List<Resource> conceptSchemeList = new ArrayList<Resource>();
-		Perform.on(repository).select(new GetConceptsSchemesHelper(null) {		
-			@Override
-			protected void handleConceptScheme(Resource conceptScheme)
-			throws TupleQueryResultHandlerException {
-				conceptSchemeList.add(conceptScheme);
-			}
-		});
-		
-		log.debug("Found "+conceptSchemeList.size()+" concept schemes in the data");
-
-		// a root was given
-		log.debug("Will test if root is a concept scheme");
-		
-		boolean isConceptScheme = false;
-		for (Resource aConceptScheme : conceptSchemeList) {
-			if(aConceptScheme.stringValue().equals(root.toString())) {
-				isConceptScheme = true;
-				break;
-			}
-		}
-		
-		final GenericTreeNode<SKOSTreeNode> treeRoot;
-		if(isConceptScheme) {
-			// if given root is a concept scheme...
-			log.debug("Root URI is a concept scheme, will set it as the root");
-			treeRoot = buildTreeRec(this.repository.getValueFactory().createURI(root.toString()), true);
-		} else {
-			// if it is NOT a concept scheme, we assume it is a simple concept
-			log.debug("Root URI is not a concept scheme, will set it as the root");
-			treeRoot = buildTreeRec(this.repository.getValueFactory().createURI(root.toString()), false);
-		}
+			
+		GenericTreeNode<SKOSTreeNode> treeRoot = buildTreeRec(this.repository.getValueFactory().createURI(root.toString()));
 
 		// sort tree before returning it
 		sortTreeRec(treeRoot);
 
 		return new GenericTree<SKOSTreeNode>(treeRoot);
 	}
+	
+	
 
 	private void sortTreeRec(GenericTreeNode<SKOSTreeNode> aNode) {
 		if(aNode.getChildren() != null) {
@@ -199,28 +202,34 @@ public class SKOSTreeBuilder {
 		
 	}
 	
-	private GenericTreeNode<SKOSTreeNode> buildTreeRec(URI conceptOrConceptScheme, final boolean isConceptScheme)
+	private GenericTreeNode<SKOSTreeNode> buildTreeRec(URI conceptOrConceptSchemeOrCollection)
 	throws SPARQLExecutionException {
 
 		// fetch sort criteria - usually prefLabel in a given language
-		List<Value> sortCriterias = this.sortCriteriaReader.read(java.net.URI.create(conceptOrConceptScheme.stringValue()));
+		List<Value> sortCriterias = this.sortCriteriaReader.read(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()));
 		// usually there would be only one
 		String sortCriteria = (sortCriterias != null && sortCriterias.size() > 0)?sortCriterias.get(0).stringValue():null;				
 		
+		// fetch node type
+		final NodeType nodeType = this.nodeTypeReader.readNodeType(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()));
+		
 		// build node
-		final SKOSTreeNode payload = new SKOSTreeNode(java.net.URI.create(conceptOrConceptScheme.stringValue()), sortCriteria);
+		final SKOSTreeNode payload = new SKOSTreeNode(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()), sortCriteria, nodeType);
 		final GenericTreeNode<SKOSTreeNode> node = new GenericTreeNode<SKOSTreeNode>(payload);
 		
 		// get subtree
-		if(isConceptScheme) {
-
-			Perform.on(repository).select(new GetTopConceptOfConceptSchemeHelper(java.net.URI.create(conceptOrConceptScheme.stringValue()), null) {
+		switch(nodeType) {
+		case CONCEPT_SCHEME : {
+			log.debug("Found a Concept Scheme URI : "+conceptOrConceptSchemeOrCollection);
+			
+			// We take Collections if we find some
+			Perform.on(repository).select(new GetTopCollectionsHelper(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()), null) {
 				
 				@Override
-				protected void handleTopConcept(Resource top)
+				protected void handleTopCollection(Resource top)
 				throws TupleQueryResultHandlerException {
 					try {
-						node.addChild(buildTreeRec((URI)top, false));
+						node.addChild(buildTreeRec((URI)top));
 					} catch (SPARQLExecutionException e) {
 						throw new TupleQueryResultHandlerException(e);
 					}
@@ -228,34 +237,79 @@ public class SKOSTreeBuilder {
 				
 			});
 			
+			// if no collection was found, we look for topConcepts declared on the scheme
 			if(node.getChildren() == null || node.getChildren().size() == 0) {
-				// if no explicit hasTopConcept or istopConceptOf was found, get the concepts of that scheme with no broader info
-				Perform.on(repository).select(new GetConceptsWithNoBroaderHelper(null, java.net.URI.create(conceptOrConceptScheme.stringValue())) {
+				Perform.on(repository).select(new GetTopConceptsHelper(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()), null) {
+					
+					@Override
+					protected void handleTopConcept(Resource top)
+					throws TupleQueryResultHandlerException {
+						try {
+							node.addChild(buildTreeRec((URI)top));
+						} catch (SPARQLExecutionException e) {
+							throw new TupleQueryResultHandlerException(e);
+						}
+					}
+					
+				});
+			}
+			
+			// if no explicit hasTopConcept or istopConceptOf was found, get the concepts of that scheme with no broader info
+			if(node.getChildren() == null || node.getChildren().size() == 0) {
+				Perform.on(repository).select(new GetConceptsWithNoBroaderHelper(null, java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue())) {
 					@Override
 					protected void handleConceptWithNoBroader(Resource noBroader)
 					throws TupleQueryResultHandlerException {
 						try {
-							node.addChild(buildTreeRec((URI)noBroader, false));
+							node.addChild(buildTreeRec((URI)noBroader));
 						} catch (SPARQLExecutionException e) {
 							throw new TupleQueryResultHandlerException(e);
 						}
 					}
 				});
 			}
-		} else {
-			Perform.on(repository).select(new GetNarrowersHelper(java.net.URI.create(conceptOrConceptScheme.stringValue()), null) {
+			break;
+		}
+		case COLLECTION : {
+			log.debug("Found a Collection URI : "+conceptOrConceptSchemeOrCollection);
+			Perform.on(repository).select(new GetTopMembersHelper(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()), null) {
 				
 				@Override
-				protected void handleNarrowerConcept(Resource parent, Resource narrower)
+				protected void handleMember(Resource collection, Resource member)
 				throws TupleQueryResultHandlerException {
 					try {
-						node.addChild(buildTreeRec((URI)narrower, false));
+						node.addChild(buildTreeRec((URI)member));
 					} catch (SPARQLExecutionException e) {
 						throw new TupleQueryResultHandlerException(e);
 					}
 				}
 				
-			});	
+			});
+			break;
+		}
+		// in case of an unknown type, attempt to read it like a concept
+		case UNKNOWN : {
+			log.warn("Unable to determine node type of : "+conceptOrConceptSchemeOrCollection);
+		}
+		case CONCEPT : {			
+			Perform.on(repository).select(new GetNarrowersHelper(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()), null) {
+				
+				@Override
+				protected void handleNarrowerConcept(Resource parent, Resource narrower)
+				throws TupleQueryResultHandlerException {
+					try {
+						node.addChild(buildTreeRec((URI)narrower));
+					} catch (SPARQLExecutionException e) {
+						throw new TupleQueryResultHandlerException(e);
+					}
+				}
+				
+			});
+			break;
+		}
+		default : {
+			break;
+		}
 		}
 		
 		return node;

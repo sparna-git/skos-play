@@ -86,11 +86,7 @@ public abstract class GetNarrowersHelper extends SelectSPARQLHelperBase implemen
 			String sparql = "" +
 			"SELECT DISTINCT ?concept ?narrower"+"\n" +
 			"WHERE {"+"\n" +
-			"	{" +
-			"	{?concept <"+SKOS.NARROWER+"> ?narrower }"+"\n" +
-			"	UNION"+"\n"+
-			"	{?narrower <"+SKOS.BROADER+"> ?concept }"+"\n" +
-			"	}" +
+			"	?concept <"+SKOS.NARROWER+">|^<"+SKOS.BROADER+"> ?narrower "+"\n" +
 			((this.orderByLang != null)?
 			"	OPTIONAL { ?narrower <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(lang(?prefLabel) = '"+this.orderByLang+"')}"+"\n" +
 			"}" +

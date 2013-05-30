@@ -1,0 +1,9 @@
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+
+SELECT DISTINCT ?language
+WHERE {
+  ?concept a skos:Concept .
+  ?concept skos:prefLabel|skos:altLabel|skos:hiddenLabel ?label .
+  BIND(lang(?label) as ?language) .
+  FILTER(?language != "")
+}

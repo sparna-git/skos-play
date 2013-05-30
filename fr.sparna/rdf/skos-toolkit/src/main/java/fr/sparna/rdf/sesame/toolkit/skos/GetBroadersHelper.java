@@ -84,11 +84,7 @@ public abstract class GetBroadersHelper extends SelectSPARQLHelperBase {
 			String sparql = "" +
 					"SELECT DISTINCT ?concept ?broader"+"\n" +
 					"WHERE {"+"\n" +
-					"	{" +
-					"	{?concept <"+SKOS.BROADER+"> ?broader }"+"\n" +
-					"	UNION"+"\n"+
-					"	{?broader <"+SKOS.NARROWER+"> ?concept }"+"\n" +
-					"	}" +
+					"	?concept <"+SKOS.BROADER+">|^<"+SKOS.NARROWER+"> ?broader "+"\n" +
 					((this.orderByLang != null)?
 							"	OPTIONAL { ?broader <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(lang(?prefLabel) = '"+this.orderByLang+"')}"+"\n" +
 							"}" +

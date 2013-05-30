@@ -31,6 +31,7 @@ import org.openrdf.query.parser.QueryParserUtil;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
+import org.openrdf.repository.UnknownTransactionStateException;
 import org.openrdf.repository.base.RepositoryConnectionBase;
 import org.openrdf.rio.RDFHandler;
 import org.openrdf.rio.RDFHandlerException;
@@ -119,6 +120,11 @@ public class JenaRepositoryConnection extends RepositoryConnectionBase implement
 		repository.model.commit();
 	}
 
+	@Override
+	public void begin() throws RepositoryException {
+		repository.model.begin();
+	}
+
 	/**
 	 * Calls abort() on the underlying Model
 	 */
@@ -126,8 +132,17 @@ public class JenaRepositoryConnection extends RepositoryConnectionBase implement
 	public void rollback() throws RepositoryException {
 		repository.model.abort();
 	}
+
+	@Override
+	public boolean isActive()
+	throws UnknownTransactionStateException, RepositoryException {
+		// TODO
+		return false;
+	}	
+	
 	
 	/* END TRANSACTION-RELATED OPERATIONS */
+
 
 	/**
 	 * Since named graphs are not supported, always returns an empty RepositoryResult

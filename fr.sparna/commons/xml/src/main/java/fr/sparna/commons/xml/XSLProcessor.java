@@ -5,7 +5,6 @@ import java.io.OutputStream;
 import java.security.InvalidParameterException;
 
 import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -67,22 +66,11 @@ public class XSLProcessor {
 	}
 	
 	public void transform(
-			Source xsltSource,
-			Source xmlSource,			
-			Result result)
-	throws TransformerException {
-		createTransformer(xsltSource).transform(
-				xmlSource,
-				result
-		);
-	}
-	
-	public void transform(
 			InputStream xslInput,
 			Node node,
 			OutputStream output)
 	throws TransformerException {
-		this.transform(new StreamSource(xslInput), new DOMSource(node), new StreamResult(output));
+		this.createTransformer(new StreamSource(xslInput)).transform(new DOMSource(node), new StreamResult(output));
 	}
 	
 	public void transform(
@@ -94,7 +82,7 @@ public class XSLProcessor {
 		if(xslStream == null) {
 			throw new InvalidParameterException("Cannot find XSL '"+xslResource+"' on the classpath");
 		}
-		this.transform(new StreamSource(xslStream), new DOMSource(node), new StreamResult(output));
+		this.createTransformer(new StreamSource(xslStream)).transform(new DOMSource(node), new StreamResult(output));
 	}
 
 	public String getFactoryClassName() {

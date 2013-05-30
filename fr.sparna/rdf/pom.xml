@@ -24,11 +24,13 @@
     </organization>    
 
     <modules>
-	    <module>sesame-toolkit</module>
-      <module>skos-toolkit</module>
-	    <module>rdf-toolkit</module>
-      <module>jena-repository</module>
-      <module>dbpedia-lookup-client</module>
+        <module>sesame-toolkit</module>
+        <module>skos-toolkit</module>
+        <module>rdf-toolkit</module>
+        <module>skos-printer</module>
+        <module>skos-play</module>
+        <module>jena-repository</module>
+        <module>dbpedia-lookup-client</module>
     </modules>
 
     <repositories>
@@ -36,7 +38,7 @@
             <id>openrdf</id>
             <name>OpenRDF Repository</name>
             <url>http://repo.aduna-software.org/maven2/releases</url>
-	    <releases>
+	        <releases>
                 <updatePolicy>never</updatePolicy>
                 <checksumPolicy>fail</checksumPolicy>
             </releases>
@@ -48,21 +50,21 @@
     </repositories>
 
     <properties>
-      <sesame.version>2.6.9</sesame.version>
+      <sesame.version>2.7.1</sesame.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-          <dependency>
-      			<groupId>org.openrdf.sesame</groupId>
-      			<artifactId>sesame-runtime</artifactId>
-      			<version>${sesame.version}</version>
-		      </dependency>
-          <dependency>
-            <groupId>com.ontotext</groupId>
-            <artifactId>owlim-lite</artifactId>
-            <version>5.2</version>
-          </dependency>
+            <dependency>
+            	<groupId>org.openrdf.sesame</groupId>
+            	<artifactId>sesame-runtime</artifactId>
+            	<version>${sesame.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ontotext</groupId>
+                <artifactId>owlim-lite</artifactId>
+                <version>5.2</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

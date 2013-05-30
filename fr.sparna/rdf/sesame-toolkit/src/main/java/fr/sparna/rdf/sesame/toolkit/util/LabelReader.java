@@ -38,13 +38,16 @@ public class LabelReader {
 			// rdfs:label
 			URI.create(RDFS.LABEL.toString()),
 			// dcterms title
-			URI.create("http://purl.org/dc/terms/title")
+			// URI.create("http://purl.org/dc/terms/title")
 			// could also look for old dc property ?
 			// ,URI.create("http://purl.org/dc/elements/1.1/title"),
 	});
 	
 	// data to query on
 	protected Repository repository;
+
+	// preferred language to retrieve
+	protected String preferredLanguage;
 	
 	// fallback language to retrieve if initial language was not found
 	protected String fallbackLanguage;
@@ -59,18 +62,33 @@ public class LabelReader {
 	// flag to activate caching or not
 	protected boolean caching = true;
 	
-	public LabelReader(Repository repository, List<java.net.URI> labelProperties, String fallbackLanguage) {
+	public LabelReader(
+			Repository repository,
+			List<java.net.URI> labelProperties,
+			String fallbackLanguage,
+			String preferredLanguage) {
 		this.repository = repository;
 		this.labelProperties = labelProperties;
 		this.fallbackLanguage = fallbackLanguage;
+		this.preferredLanguage = preferredLanguage;
 	}
 	
-	public LabelReader(Repository repository, String fallbackLanguage) {
-		this(repository, DEFAULT_LABEL_PROPERTIES, fallbackLanguage);
+	public LabelReader(Repository repository, String fallbackLanguage, String preferredLanguage) {
+		this(
+				repository,
+				DEFAULT_LABEL_PROPERTIES,
+				fallbackLanguage,
+				preferredLanguage
+		);
 	}
 	
-	public LabelReader(Repository repository) {
-		this(repository, DEFAULT_LABEL_PROPERTIES, null);
+	public LabelReader(Repository repository, String preferredLanguage) {
+		this(
+				repository,
+				DEFAULT_LABEL_PROPERTIES,
+				null,
+				preferredLanguage
+		);
 	}
 	
 	public static String display(List<Literal> literals) {
@@ -87,12 +105,7 @@ public class LabelReader {
 		return buffer.toString();
 	}
 	
-	public List<Literal> getLabels(org.openrdf.model.URI resource, final String lang) 
-	throws SPARQLExecutionException {
-		return getLabels(URI.create(resource.stringValue()), lang);
-	}
-	
-	public List<Literal> getLabels(final java.net.URI resource, final String lang) 
+	public List<Literal> getLabels(final java.net.URI resource) 
 	throws SPARQLExecutionException {
 		
 		// look into the cache first
@@ -106,7 +119,7 @@ public class LabelReader {
 		for (final java.net.URI aType : this.labelProperties) {
 			// query for the preferredLanguage
 			queries.add(new SPARQLQuery(
-					"SELECT ?label WHERE { ?uri ?labelProp ?label FILTER(lang(?label) = '"+lang+"') }",
+					"SELECT ?label WHERE { ?uri ?labelProp ?label FILTER(lang(?label) = '"+this.preferredLanguage+"') }",
 					new HashMap<String, Object>() {{ 
 						put("uri", resource);
 						put("labelProp", aType);
@@ -116,7 +129,7 @@ public class LabelReader {
 			// then for the fallback language
 			if(this.fallbackLanguage != null) {
 				queries.add(new SPARQLQuery(
-						"SELECT ?label WHERE { ?uri ?labelProp ?label FILTER(lang(?label) = '"+fallbackLanguage+"') }",
+						"SELECT ?label WHERE { ?uri ?labelProp ?label FILTER(lang(?label) = '"+this.preferredLanguage+"') }",
 						new HashMap<String, Object>() {{ 
 							put("uri", resource);
 							put("labelProp", aType);
@@ -138,10 +151,35 @@ public class LabelReader {
 			this.cache.put(resource, result);
 		}
 		return result;
+	}	
+	
+	public List<Literal> getLabels(final org.openrdf.model.URI resource) 
+	throws SPARQLExecutionException {
+		return getLabels(URI.create(resource.stringValue()));
 	}
 	
-	public Map<java.net.URI, List<Literal>> getLabels(Set<java.net.URI> resources, String lang) {
-		throw new UnsupportedOperationException("Not implement yet");
+	public Map<java.net.URI, List<Literal>> getLabels(Set<java.net.URI> resources) {
+		final int PACKET_SIZE = 20;
+		
+		List<java.net.URI> packet = new ArrayList<java.net.URI>();
+		for (URI aUri : resources) {
+			packet.add(aUri);
+			if(packet.size() >= PACKET_SIZE) {
+				StringBuffer query = new StringBuffer("SELECT ?s ?label WHERE { }");
+				// do stuff
+//				Perform.on(repository).select(new SPARQLQuery(
+//						"SELECT ?label WHERE { ?uri ?labelProp ?label FILTER(lang(?label) = '"+this.preferredLanguage+"') }",
+//						new HashMap<String, Object>() {{ 
+//							put("uri", resource);
+//							put("labelProp", aType);
+//						}}
+//				));
+				
+				packet = new ArrayList<java.net.URI>();
+			}
+		}
+		
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 	
 	public boolean isCaching() {

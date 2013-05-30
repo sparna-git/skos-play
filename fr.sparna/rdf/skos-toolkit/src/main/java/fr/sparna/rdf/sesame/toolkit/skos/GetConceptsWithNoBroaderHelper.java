@@ -69,9 +69,8 @@ public abstract class GetConceptsWithNoBroaderHelper extends SelectSPARQLHelperB
 					"WHERE {"+"\n" +
 					"	?concept a <"+SKOS.CONCEPT+"> ."+"\n" +
 					"	"+((this.additionalCriteria)?"   ?concept ?additionalCriteriaPredicate ?additionalCriteriaObject .":"")+"\n" +
-					"	OPTIONAL { ?concept <"+SKOS.BROADER+"> ?broader }"+"\n"+
-					"	OPTIONAL { ?narrower <"+SKOS.NARROWER+"> ?concept }"+"\n"+
-					"	FILTER(!bound(?broader) && !bound(?narrower))"+"\n"+
+					"	OPTIONAL { ?concept <"+SKOS.BROADER+">|^<"+SKOS.NARROWER+"> ?broader }"+"\n"+
+					"	FILTER(!bound(?broader))"+"\n"+
 					(
 							(this.orderByLang != null)?
 							"	OPTIONAL { ?concept <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(lang(?prefLabel) = '"+this.orderByLang+"')}"+"\n" +

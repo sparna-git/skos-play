@@ -6,6 +6,7 @@ import java.util.List;
 import org.openrdf.model.URI;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandler;
+import org.openrdf.query.TupleQueryResultHandlerBase;
 import org.openrdf.query.TupleQueryResultHandlerException;
 
 /**
@@ -21,7 +22,7 @@ import org.openrdf.query.TupleQueryResultHandlerException;
  * @author Thomas Francart
  *
  */
-public class SimpleHTMLReportHandler implements TupleQueryResultHandler {
+public class SimpleHTMLReportHandler extends TupleQueryResultHandlerBase implements TupleQueryResultHandler {
 
 	protected PrintWriter writer;
 	protected List<String> bindingNames;

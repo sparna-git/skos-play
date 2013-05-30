@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openrdf.query.BindingSet;
+import org.openrdf.query.QueryResultHandlerException;
 import org.openrdf.query.TupleQueryResultHandler;
 import org.openrdf.query.TupleQueryResultHandlerException;
 
@@ -77,6 +78,17 @@ public abstract class SelectSPARQLHelperBase extends SPARQLQuery implements Sele
 	@Override
 	public void startQueryResult(List<String> arg0)
 	throws TupleQueryResultHandlerException {
+		// base implementation does nothing
+	}
+
+	@Override
+	public void handleBoolean(boolean arg0) throws QueryResultHandlerException {
+		// base implementation does nothing
+	}
+
+	@Override
+	public void handleLinks(List<String> arg0)
+	throws QueryResultHandlerException {
 		// base implementation does nothing
 	}
 

@@ -87,12 +87,24 @@ public class SimpleSKOSTreePrinter {
 	}
 	
 	public static void main(String... args) throws Exception {
+//		Repository r = RepositoryBuilder.fromRdf(
+//				"@prefix skos: <"+SKOS.NAMESPACE+"> ."+"\n" +
+//				"@prefix test: <http://www.test.fr/skos/> ."+"\n" +
+//				"test:_1 a skos:Concept ; skos:inScheme test:_scheme ; skos:prefLabel \"1\"@fr ." +
+//				"test:_2 a skos:Concept ; skos:inScheme test:_scheme ; skos:prefLabel \"a\"@fr; skos:broader test:_1 ." +
+//				"test:_3 a skos:Concept ; skos:inScheme test:_anotherScheme ; skos:prefLabel \"B\"@fr; skos:broader test:_1 ."
+//		);
+		
 		Repository r = RepositoryBuilder.fromRdf(
 				"@prefix skos: <"+SKOS.NAMESPACE+"> ."+"\n" +
 				"@prefix test: <http://www.test.fr/skos/> ."+"\n" +
-				"test:_1 a skos:Concept ; skos:inScheme test:_scheme ; skos:prefLabel \"1\"@fr ." +
-				"test:_2 a skos:Concept ; skos:inScheme test:_scheme ; skos:prefLabel \"a\"@fr; skos:broader test:_1 ." +
-				"test:_3 a skos:Concept ; skos:inScheme test:_anotherScheme ; skos:prefLabel \"B\"@fr; skos:broader test:_1 ."
+				"test:_col2 a skos:Collection ; skos:prefLabel \"la deuxieme collection\"@fr ; skos:member test:_x, test:_y ." +
+				"test:_col a skos:Collection ; skos:prefLabel \"la collection\"@fr ; skos:member test:_1, test:_2, test:_3 ." +
+				"test:_1 a skos:Concept ; skos:prefLabel \"11111\"@fr ." +
+				"test:_2 a skos:Concept ; skos:prefLabel \"a\"@fr; skos:broader test:_1 ." +
+				"test:_3 a skos:Concept ; skos:prefLabel \"B\"@fr; skos:broader test:_1 ." +
+				"test:_x a skos:Concept ; skos:prefLabel \"x\"@fr ." +
+				"test:_y a skos:Concept ; skos:prefLabel \"y\"@fr ."
 		);
 		
 		SimpleSKOSTreePrinter printer = new SimpleSKOSTreePrinter(r, "fr");

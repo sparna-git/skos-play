@@ -76,12 +76,12 @@
             <dependency>
                 <groupId>fr.sparna.commons</groupId>
                 <artifactId>sparna-commons-jetty</artifactId>
-                <version>0.30-SNAPSHOT</version>
+                <version>0.31-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>fr.sparna.commons</groupId>
                 <artifactId>sparna-commons-fop</artifactId>
-                <version>0.30-SNAPSHOT</version>
+                <version>0.31-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>fr.sparna.commons</groupId>
@@ -122,6 +122,11 @@
             <dependency>
                 <groupId>fr.sparna.rdf</groupId>
                 <artifactId>dbpedia-lookup-client</artifactId>
+                <version>0.31-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.sparna.rdf</groupId>
+                <artifactId>skos-printer</artifactId>
                 <version>0.31-SNAPSHOT</version>
             </dependency>
 

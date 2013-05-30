@@ -1,0 +1,6 @@
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+
+SELECT (COUNT(?concept) AS ?nbOfConcepts) 
+WHERE {
+  ?concept a skos:Concept .
+}

@@ -803,7 +803,29 @@ public class Documentation {
 		// -- namespaces1
 	}	
 
-	
+	private void usageExample1() throws Exception {
+		// -- usageExample1
+		// reads RDF files contained in a directory and load them in a repository
+		Repository r = RepositoryBuilder.fromString("/directory/containing/rdf/files");
+		// apply some SPARQL updates on it, by reading a list of *.rq files in another directory
+		ApplyUpdates upd = new ApplyUpdates(SPARQLUpdate.fromUpdateDirectory(new File("/directory/containing/sparql/updates")));
+		upd.execute(r);
+		// perform a query on it
+		Perform.on(r).select(new SelectSPARQLHelper(
+				"SELECT DISTINCT ?type WHERE { [] a ?type }",
+				// will print result on the console
+				new DebugHandler()
+		));
+		// perform another query coming from a file
+		Perform.on(r).select(new SelectSPARQLHelper(
+				new SPARQLQueryBuilder(new File("/path/to/sparql/file.rq")),
+				// will output result in a CSV file
+				new CSVHandler(new PrintWriter(new File("/path/to/output/file.csv")))
+		));
+		// output repository content (with updates applied) in another single file
+		RepositoryWriter.writeToFile("/path/to/output/file.ttl", r);
+		// -- usageExample1
+	}
 	
 	
 	private static void testCustomFunction(Repository repository) throws Exception {

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandler;
+import org.openrdf.query.TupleQueryResultHandlerBase;
 import org.openrdf.query.TupleQueryResultHandlerException;
 
 /**
@@ -15,7 +16,7 @@ import org.openrdf.query.TupleQueryResultHandlerException;
  * @author Thomas Francart
  *
  */
-public class DebugHandler implements TupleQueryResultHandler {
+public class DebugHandler extends TupleQueryResultHandlerBase implements TupleQueryResultHandler {
 
 	protected PrintWriter writer;
 	

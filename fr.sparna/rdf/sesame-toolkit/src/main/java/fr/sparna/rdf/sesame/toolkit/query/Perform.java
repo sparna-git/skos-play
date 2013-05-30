@@ -25,6 +25,7 @@ import org.openrdf.rio.RDFHandlerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.sparna.rdf.sesame.toolkit.handler.ReadSingleIntegerHandler;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
 
 /**
@@ -284,6 +285,21 @@ public class Perform {
 	throws SPARQLExecutionException {
 		// passing a null writer will cause the executeAsk(BooleanSPARQLHelperIfc helper) to not serialize the result
 		return ask(new BooleanSPARQLHelper(query, null));
+	}
+	
+	/**
+	 * Convenience method that directly execute a COUNT query, or another query with a single line of result and a single binding,
+	 * and directly returns the results, allowing it to be called in <code>if(Perform.on(repository).count(...) > xxx)</code>
+	 * 
+	 * @param query
+	 * @return
+	 * @throws SPARQLExecutionException
+	 */
+	public int count(SPARQLQueryIfc query) 
+	throws SPARQLExecutionException {
+		ReadSingleIntegerHandler handler = new ReadSingleIntegerHandler();
+		this.select(new SelectSPARQLHelper(query, handler));
+		return handler.getResult();
 	}
 	
 	/**

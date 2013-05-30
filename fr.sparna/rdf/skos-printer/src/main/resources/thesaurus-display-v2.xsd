@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.sparna.fr/thesaurus-display" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:disp="http://www.sparna.fr/thesaurus-display">
+
+
+    <attribute name="concept" type="anyURI"></attribute>
+
+    <element name="label" type="disp:label"></element>
+
+    <attribute name="type" type="string"></attribute>
+
+    <complexType name="alphabetical">
+        <choice minOccurs="1" maxOccurs="unbounded">
+        	<element ref="disp:entry"></element>
+        	<element ref="disp:section"></element>
+        </choice>
+        
+    </complexType>
+
+    <complexType name="display">
+    	<sequence>
+    		<element ref="disp:header" minOccurs="1"
+    			maxOccurs="1">
+    		</element>
+    		<choice minOccurs="1" maxOccurs="unbounded">
+    			<element ref="disp:alphabetical"></element>
+    			<element ref="disp:hierarchical"></element>
+    		</choice>
+    	</sequence>
+    </complexType>
+
+    <element name="alphabetical" type="disp:alphabetical"></element>
+
+    <complexType name="displayHeader">
+    	<sequence>
+    		<element name="title" type="string"></element>
+    		<element name="date" type="dateTime"></element>
+    		<element name="version" type="string"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="header" type="disp:displayHeader"></element>
+
+    <complexType name="hierarchical">
+    	<sequence minOccurs="1" maxOccurs="unbounded">
+    		<element ref="disp:entry"></element>
+    	</sequence>
+    </complexType>
+
+
+    <element name="display" type="disp:display"></element>
+
+    <complexType name="label">
+    	<sequence>
+    		<element ref="disp:str"></element>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="att">
+    	<sequence>
+    		<element ref="disp:str"></element>
+    	</sequence>
+    	<attribute ref="disp:type"></attribute>
+    </complexType>
+    
+
+    <complexType name="str">
+    	<simpleContent>
+    		<extension base="string">
+    			<attribute ref="disp:type"></attribute>
+    		</extension>
+    	</simpleContent>
+    </complexType>
+
+    <element name="str" type="disp:str"></element>
+
+    <element name="att" type="disp:att"></element>
+
+    <complexType name="ref">
+    	<sequence minOccurs="1" maxOccurs="1">
+    		<element ref="disp:entry"></element>
+    	</sequence>
+    	<attribute ref="disp:type"></attribute>
+    	<attribute name="entryRef" type="string"></attribute>
+    </complexType>
+
+    <element name="ref" type="disp:ref"></element>
+
+    <complexType name="entry">
+    	<sequence>
+    		<element minOccurs="1" maxOccurs="1" ref="disp:label"></element>
+    		<choice minOccurs="0" maxOccurs="unbounded">
+    			<element ref="disp:att"></element>
+    			<element ref="disp:ref"></element>
+    		</choice>
+    		<element minOccurs="0" maxOccurs="unbounded"
+    			ref="disp:entry">
+    		</element>
+    	</sequence>
+    	<attribute ref="disp:concept"></attribute>
+    	<attribute name="entryId" type="ID"></attribute>
+    </complexType>
+
+    <element name="entry" type="disp:entry"></element>
+
+    <element name="hierarchical" type="disp:hierarchical"></element>
+
+    <complexType name="section">
+    	<sequence maxOccurs="unbounded" minOccurs="1">
+    		<element ref="disp:entry"></element>
+    	</sequence>
+    	<attribute name="title" type="string" use="required"></attribute>
+    </complexType>
+
+    <element name="section" type="disp:section"></element>
+</schema>

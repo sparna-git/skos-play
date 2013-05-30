@@ -1,0 +1,48 @@
+<display
+	xmlns="http://www.sparna.fr/thesaurus-display"
+	xmlns:disp="http://www.sparna.fr/thesaurus-display"	
+>
+
+	<header>
+		<title>Diving and photography</title>
+		<version>1.0</version>
+		<date>10/01/2013</date>	
+	</header>
+	
+	<alphabetical lang="fr">		
+
+		<entry disp:concept="http://ex/1">
+			<label><string disp:type="pref">aqualungs</string></label>
+			<att disp:type="CC"><string>H012</string></att>
+			<ref disp:type="BT"><entry disp:concept="http://ex/11"><label><string disp:type="pref">film cameras</string></label></entry></ref>
+		</entry>
+		<entry disp:concept="http://ex/4">
+			<label><string disp:type="pref">instant picture cameras</string></label>
+			<att disp:type="CC"><string>H015</string></att>
+			<att disp:type="SN"><string>Cameras which produce a finished print directly</string></att>
+			<att disp:type="UF"><string disp:type="alt">Polaroid cameras</string></att>
+			<ref disp:type="BT"><entry disp:concept="http://ex/24"><label><string disp:type="pref">cameras</string></label></entry></ref>
+			<ref disp:type="BT">
+				<entry disp:concept="http://ex/4">
+					<label><string disp:type="pref">toto</string></label>
+				</entry>			
+			</ref>
+			<ref disp:type="BT">
+				<entry disp:concept="http://ex/bt1">
+					<label><string disp:type="pref">BT1</string></label>
+					<ref disp:type="BT">
+						<entry disp:concept="http://ex/bt2">
+							<label><string disp:type="pref">BT2</string></label>
+						</entry>
+					</ref>
+				</entry>
+			</ref>
+		</entry>
+		<entry disp:concept="http://ex/4">
+			<label><string disp:type="alt">Polaroid cameras</string></label>
+			<ref disp:type="USE"><entry disp:concept="http://ex/4"><label><string disp:type="pref">instant pictures cameras</string></label></entry></ref>
+		</entry>
+		
+	</alphabetical>
+
+</display>

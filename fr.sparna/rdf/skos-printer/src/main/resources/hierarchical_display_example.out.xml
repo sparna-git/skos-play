@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:disp="http://www.sparna.fr/thesaurus-display"><fo:layout-master-set><fo:simple-page-master master-name="A4" page-width="210mm" page-height="297mm" margin-top="2cm" margin-bottom="2cm" margin-left="2cm" margin-right="2cm"><fo:region-body column-count="3" column-gap="5pt"/><fo:region-before extent="2cm"/><fo:region-after extent="2cm"/><fo:region-start extent="2cm"/><fo:region-end extent="2cm"/></fo:simple-page-master></fo:layout-master-set><fo:page-sequence master-reference="A4"><fo:flow flow-name="xsl-region-body">
+	<fo:block space-before="5mm" space-after="5mm" font-family="sans-serif"><fo:block font-size="16pt">Diving and photography</fo:block><fo:block font-size="12pt">10/01/2013</fo:block><fo:block font-size="12pt">1.0</fo:block></fo:block>
+	
+	<fo:block><fo:block margin-top="10pt"><fo:inline font-weight="bold">fields of work</fo:inline><fo:block margin-left="10pt"><fo:block>NT : <fo:inline font-weight="bold">diving</fo:inline><fo:block margin-left="10pt"/></fo:block><fo:block>NT : <fo:inline font-weight="bold">photography</fo:inline><fo:block margin-left="10pt"/></fo:block><fo:block>NT : <fo:inline font-weight="bold">physics</fo:inline><fo:block margin-left="10pt"/></fo:block></fo:block></fo:block></fo:block><fo:block><fo:block margin-top="10pt"><fo:inline font-weight="bold">people</fo:inline><fo:block margin-left="10pt"><fo:block>NT : 
+				<fo:inline font-weight="bold">people by age</fo:inline><fo:block margin-left="10pt"><fo:block>NT : 
+						<fo:inline font-weight="bold">children</fo:inline><fo:block margin-left="10pt"><fo:block>NT : 
+								<fo:inline font-weight="bold">infants</fo:inline><fo:block margin-left="10pt"/>
+							</fo:block></fo:block>
+					</fo:block><fo:block>NT : adults</fo:block></fo:block>
+			</fo:block></fo:block></fo:block></fo:block><fo:block><fo:block margin-top="10pt"><fo:inline font-weight="bold">people</fo:inline><fo:block margin-left="10pt"><fo:block>SN : blah blah blah blih blih</fo:block><fo:inline font-weight="bold">people by age</fo:inline><fo:block margin-left="10pt"><fo:block>SN : blah blah blah blih blih</fo:block><fo:inline font-weight="bold">children</fo:inline><fo:block margin-left="10pt"><fo:block>SN : blah blah blah blih blih</fo:block><fo:inline font-weight="bold">infants</fo:inline><fo:block margin-left="10pt"><fo:block>SN : blah blah blah blih blih</fo:block></fo:block></fo:block></fo:block></fo:block></fo:block></fo:block>
+
+</fo:flow></fo:page-sequence></fo:root>

@@ -88,8 +88,8 @@ public class StringRepositoryFactory extends RepositoryBuilder {
 		// StringRepositoryFactory factory = new StringRepositoryFactory("http://axel.deri.ie/teaching/SemWebTech_2009/testdata/foaf.ttl");
 		// StringRepositoryFactory factory = new StringRepositoryFactory("file:///home/thomas/workspace/datalift/geo2012.ttl");
 		
-		Repository r = factory.createNewRepository();
-		Perform.on(r).select(new SelectSPARQLHelper("SELECT DISTINCT ?type WHERE { ?s a ?type }", new DebugHandler()));
+		// Repository r = factory.createNewRepository();
+		// Perform.on(r).select(new SelectSPARQLHelper("SELECT DISTINCT ?type WHERE { ?s a ?type }", new DebugHandler()));
 	}
 	
 }
