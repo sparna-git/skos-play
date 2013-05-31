@@ -59,8 +59,23 @@
 				</p>
 				<h4>Is is open-source ?</h4>
 				<p>
-					TODO
+					Yes, the code is published <a href="http://bitbucket.org/tfrancart/sparna">on bitbucket</a>.
+					SKOS Play has for the time being a
+					<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.fr" target="_blank">CC-BY-SA</a> licence :
+					<ul>
+						<li>You can freely use the online application, or download the code and use it at home, including for commercial use;
+						</li>
+						<li>If you reuse it, you have to cite the author ("Thomas Francart for Sparna");</li>
+						<li>If you modify the code you have to publish your modifications in the same licence, the easiest
+						being to contribute directly in <a href="http://bitbucket.org/tfrancart/sparna" target="_blank">the sources</a>;
+						</li>
+					</ul>					
+					Anyway, <a href="m&#x61;ilto:t&#x68;om&#x61;s.fr&#x61;nc&#x61;&#x72;t@sp&#x61;&#x72;na&#46;fr">contact me</a> if in doubt
+					(it is not very for me neither anyway).
+					<br />These licensing terms may evolve in the future.
 				</p>
+				<h4>Does SKOS Play keep a copy of the submitted data ? </h4>
+				<p>No.</p>
 				<h4>Who build it ?</h4>
 				<p>
 					<a href="http://francart.fr" target="_blank">Thomas Francart</a> for <a href="http://sparna.fr" target="_blank">Sparna</a>.
@@ -79,7 +94,7 @@
 					Nice !
 					<ul>
 						<li><a href="http://www.google.com/moderator/#15/e=209fff&t=209fff.40" target="_blank">vote and give feedbacks on Google Moderator</a>;</li>
-						<li>or <a href="http://francart.fr">leave a word on the blog</a>;</li>
+						<li>or <a href="http://francart.fr/skos-play-generer-html-pdf-dataviz-thesaurus-skos">leave a word on the blog</a>;</li>
 						<li>or <a href="m&#x61;ilto:t&#x68;om&#x61;s.fr&#x61;nc&#x61;&#x72;t@sp&#x61;&#x72;na&#46;fr">send me an email</a>;</li>
 						<li>or look at <a href="http://bitbucket.org/tfrancart/sparna" target="_blank">the code</a>;</li>
 					</ul>
@@ -230,15 +245,13 @@ me:123456 skos:broader me:Vehicle .
 					more than 5000 concepts to limit the output file size. For dataviv, I would say that above 2000 concepts you
 					can't see anything and you have big latencies when zooming.
 				</p>
-				<h4>Does SKOS Play keep a copy of the submitted data ? </h4>
-				<p>No.</p>
 				<h4>Is there a web service ? is SKOS-WL supported ? can I give a SPARQL endpoint as input ? do you support inference ?
 				</h4>
 				<p>
 					No. No. No. No. But <a href="http://www.google.com/moderator/#15/e=209fff&t=209fff.40" target="_blank">vote</a>
 					and express your interest, and this may be added one day in the future.
 				</p>
-				<h4>It is so slow !</h4>
+				<h4>It's slow !</h4>
 				<p>
 					Yes. the application is hosted by a mini fanless server running in my living-room, on my personnal Internet connection.
 					I am looking for organizations willing to host freely the application to remove the 5000 concepts limit. If you are interested,
@@ -247,6 +260,10 @@ me:123456 skos:broader me:Vehicle .
 			</fieldset>
 
       	</div>
-      	<footer>SKOS Play! by <a href="http://francart.fr" target="_blank">Thomas Francart</a> for <a href="http://sparna.fr" target="_blank">Sparna</a></footer>
+      	<footer>
+      	SKOS Play! by <a href="http://francart.fr" target="_blank">Thomas Francart</a> for <a href="http://sparna.fr" target="_blank">Sparna</a>
+      	&nbsp;|&nbsp;
+      	<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.fr"><img alt="Licence Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+      	</footer>
 	</body>
 </html>

@@ -10,7 +10,7 @@
 <c:set var="data" value="${requestScope['fr.sparna.rdf.skosplay.UploadFormData']}" />
 <html>
 	<head>
-		<title>SKOS Play ! - Do more with SKOS data</title>
+		<title>SKOS Play ! - Visualize SKOS data</title>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="bootstrap-fileupload/bootstrap-fileupload.min.css" rel="stylesheet" />
@@ -147,7 +147,11 @@
 			</fieldset>
 			</form>
       	</div>
-      	<footer>SKOS Play! by <a href="http://francart.fr" target="_blank">Thomas Francart</a> for <a href="http://sparna.fr" target="_blank">Sparna</a></footer>
+      	<footer>
+      	SKOS Play! by <a href="http://francart.fr" target="_blank">Thomas Francart</a> for <a href="http://sparna.fr" target="_blank">Sparna</a>
+      	&nbsp;|&nbsp;
+      	<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.fr"><img alt="Licence Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+      	</footer>
       	<script>
 	      	$(document).ready(function() {
 				// disable submit button on click		

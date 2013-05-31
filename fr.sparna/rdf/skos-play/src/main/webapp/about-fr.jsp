@@ -57,9 +57,23 @@
 				<h4>C'est open-source ?</h4>
 				<p>
 					Oui, le code est récupérable <a href="http://bitbucket.org/tfrancart/sparna">ici</a>.
-					Cependant les termes de sa licence ne sont pas encore clairement définis, donc si vous voulez réutiliser tout ou partie
-					de l'application, pour le moment <a href="m&#x61;ilto:t&#x68;om&#x61;s.fr&#x61;nc&#x61;&#x72;t@sp&#x61;&#x72;na&#46;fr">contactez-moi</a>.
+					SKOS-Play a pour le moment une licence
+					<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.fr" target="_blank">CC-BY-SA</a>, en d'autres termes :
+					<ul>
+						<li>Vous pouvez utiliser l'application en ligne, ou télécharger le code et l'installer chez vous, y compris
+						pour une utilisation commerciale;
+						</li>
+						<li>Si vous réutiliser l'application, vous devez citez son auteur ("Thomas Francart pour Sparna");</li>
+						<li>Si vous modifiez le code, vous devez publier vos modifications sous cette mếme licence, le mieux étant
+						d'apporter vos modifications directement dans <a href="http://bitbucket.org/tfrancart/sparna" target="_blank">les sources</a>;
+						</li>
+					</ul>					
+					Enfin, <a href="m&#x61;ilto:t&#x68;om&#x61;s.fr&#x61;nc&#x61;&#x72;t@sp&#x61;&#x72;na&#46;fr">contactez-moi</a> si tout
+					ça n'est pas clair (ça ne l'est pas pour moi non plus de toutes façons).
+					<br />Cette licence pourra évoluer à l'avenir.
 				</p>
+				<h4>SKOS Play garde-t-il une copie des données soumises ? </h4>
+				<p>Non.</p>
 				<h4>Qui a développé SKOS Play ?</h4>
 				<p>
 					<a href="http://francart.fr" target="_blank">Thomas Francart</a> pour <a href="http://sparna.fr" target="_blank">Sparna</a>.
@@ -78,7 +92,7 @@
 					Chouette !
 					<ul>
 						<li><a href="http://www.google.com/moderator/#15/e=209fff&t=209fff.40" target="_blank">votez, donnez vos idées et feedback sur le Google Moderator</a>;</li>
-						<li>ou <a href="http://francart.fr">laissez un mot sur le blog</a>;</li>
+						<li>ou <a href="http://francart.fr/skos-play-generer-html-pdf-dataviz-thesaurus-skos">laissez un mot sur le blog</a>;</li>
 						<li>ou <a href="m&#x61;ilto:t&#x68;om&#x61;s.fr&#x61;nc&#x61;&#x72;t@sp&#x61;&#x72;na&#46;fr">prenez contact par e-mail</a>;</li>
 						<li>ou regardez <a href="http://bitbucket.org/tfrancart/sparna" target="_blank">le code</a>;</li>
 					</ul>
@@ -230,8 +244,6 @@ chezmoi:123456 skos:broader chezmoi:Vehicule .
 					j'éviterais d'envoyer plus de 5000 concepts pour ne pas avoir des fichiers de sortie énormes.
 					Pour les visualisations, je dirai pas plus de 2000 concepts, sinon on ne voit plus rien.
 				</p>
-				<h4>SKOS Play garde-t-il une copie des données soumises ? </h4>
-				<p>Non.</p>
 				<h4>Est-ce qu'il y a un service web ? est-ce que SKOS-XL est supporté ? est-ce qu'il y a de l'inférence ? est-qu'on peut
 				donner un endpoint SPARQL en entrée ?
 				</h4>
@@ -247,6 +259,10 @@ chezmoi:123456 skos:broader chezmoi:Vehicule .
 			</fieldset>
 
       	</div>
-      	<footer>SKOS Play! by <a href="http://francart.fr" target="_blank">Thomas Francart</a> for <a href="http://sparna.fr" target="_blank">Sparna</a></footer>
+      	<footer>
+      	SKOS Play! by <a href="http://francart.fr" target="_blank">Thomas Francart</a> for <a href="http://sparna.fr" target="_blank">Sparna</a>
+      	&nbsp;|&nbsp;
+      	<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.fr"><img alt="Licence Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+      	</footer>
 	</body>
 </html>

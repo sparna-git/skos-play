@@ -12334,7 +12334,7 @@ unescothes:C00450 a skos:Concept;
 
 unescothes:C00451 a skos:Concept;
    skos:prefLabel "British Virgin Islands"@en;
-   skos:prefLabel "×les Vierges britanniques"@fr;
+   skos:prefLabel "Iles Vierges britanniques"@fr;
    skos:prefLabel "Islas Vírgenes Británicas"@es;
    skos:prefLabel "Британские Виргинские острова"@ru;
    skos:inScheme unescothes:CS000;
@@ -13480,7 +13480,7 @@ unescothes:C00533 a skos:Concept;
 
 unescothes:C00534 a skos:Concept;
    skos:prefLabel "Cayman Islands"@en;
-   skos:prefLabel "×les Cayman"@fr;
+   skos:prefLabel "Iles Cayman"@fr;
    skos:prefLabel "Islas Caimán"@es;
    skos:prefLabel "Каймановы острова"@ru;
    skos:inScheme unescothes:CS000;
@@ -17563,7 +17563,7 @@ unescothes:C00798 a skos:Concept;
 
 unescothes:C00799 a skos:Concept;
    skos:prefLabel "Cook Islands"@en;
-   skos:prefLabel "×les Cook"@fr;
+   skos:prefLabel "Iles Cook"@fr;
    skos:prefLabel "Islas Cook"@es;
    skos:prefLabel "Острова Кука"@ru;
    skos:inScheme unescothes:CS000;
@@ -28983,7 +28983,7 @@ unescothes:C01480 a skos:Concept;
 
 unescothes:C01481 a skos:Concept;
    skos:prefLabel "Falkland Islands"@en;
-   skos:prefLabel "×les Malouines (Falkland)"@fr;
+   skos:prefLabel "Iles Malouines (Falkland)"@fr;
    skos:prefLabel "Islas Malvinas (Falkland)"@es;
    skos:prefLabel "Фолклендские острова"@ru;
    skos:inScheme unescothes:CS000;
@@ -43564,7 +43564,7 @@ unescothes:C02417 a skos:Concept;
 
 unescothes:C02418 a skos:Concept;
    skos:prefLabel "Marshall Islands"@en;
-   skos:prefLabel "×les Marshall"@fr;
+   skos:prefLabel "Iles Marshall"@fr;
    skos:prefLabel "lslas Marshall"@es;
    skos:prefLabel "Маршалловы Острова"@ru;
    skos:inScheme unescothes:CS000;
@@ -64336,7 +64336,7 @@ unescothes:C03769 a skos:Concept;
 
 unescothes:C03770 a skos:Concept;
    skos:prefLabel "Solomon Islands"@en;
-   skos:prefLabel "×les Salomon"@fr;
+   skos:prefLabel "Iles Salomon"@fr;
    skos:prefLabel "Islas Salomón"@es;
    skos:prefLabel "Соломоновы Острова"@ru;
    skos:inScheme unescothes:CS000;
@@ -70313,7 +70313,7 @@ unescothes:C04154 a skos:Concept;
 
 unescothes:C04155 a skos:Concept;
    skos:prefLabel "Turks and Caicos Islands"@en;
-   skos:prefLabel "×les Turques et Caïques"@fr;
+   skos:prefLabel "Iles Turques et Caïques"@fr;
    skos:prefLabel "Islas Turcas y Caicos"@es;
    skos:prefLabel "Острова Теркс и Кайкос"@ru;
    skos:inScheme unescothes:CS000;
@@ -70775,7 +70775,7 @@ unescothes:C04183 a skos:Concept;
 
 unescothes:C04184 a skos:Concept;
    skos:prefLabel "United States Virgin Islands"@en;
-   skos:prefLabel "×les Vierges américaines"@fr;
+   skos:prefLabel "Iles Vierges américaines"@fr;
    skos:prefLabel "Islas Vírgenes Estadounidenses"@es;
    skos:prefLabel "Виргинские острова (США)"@ru;
    skos:inScheme unescothes:CS000;
@@ -72193,7 +72193,7 @@ unescothes:C04275 a skos:Concept;
 
 unescothes:C04276 a skos:Concept;
    skos:prefLabel "Wallis and Futuna"@en;
-   skos:prefLabel "×les Wallis-et-Futuna"@fr;
+   skos:prefLabel "Iles Wallis-et-Futuna"@fr;
    skos:prefLabel "Islas Wallis y Futuna"@es;
    skos:prefLabel "Вале (Валлис) и Футуна (Хорн)"@ru;
    skos:inScheme unescothes:CS000;
