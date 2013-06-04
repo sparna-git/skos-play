@@ -14,6 +14,10 @@ import org.openrdf.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.reader.AlphabeticalSkosReader;
 import fr.sparna.rdf.skos.printer.reader.ConceptListSkosReader;
@@ -79,8 +83,13 @@ public class PrintServlet extends HttpServlet {
 		// retrieve data from session
 		Repository r = SessionData.get(request.getSession()).getRepository();
 		
-		// make a log		
-		log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+displayType+","+scheme+","+language+","+outputType);
+		// make a log to trace usage
+		try {
+			String aRandomConcept = Perform.on(r).read(new SPARQLQuery(new SPARQLQueryBuilder(this, "ReadRandomConcept.rq"))).stringValue();
+			log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+outputType);
+		} catch (SPARQLExecutionException e1) {
+			throw new ServletException(e1);
+		}
 		
 		switch(displayType) {
 		case PARTITION : {

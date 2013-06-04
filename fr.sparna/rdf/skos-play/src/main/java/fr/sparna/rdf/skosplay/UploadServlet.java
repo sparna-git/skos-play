@@ -2,6 +2,7 @@ package fr.sparna.rdf.skosplay;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -29,6 +30,7 @@ import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.repository.EndpointRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryException;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromStream;
@@ -47,6 +49,9 @@ public class UploadServlet extends HttpServlet {
 	
 	// if source == URL, the url
 	private static final String PARAM_URL = "url";
+	
+	// if source == ENDPOINT, the endpoint
+	private static final String PARAM_ENDPOINT = "endpoint";
 
 	// if source == EXAMPLE, the resource path
 	private static final String PARAM_EXAMPLE = "example";
@@ -54,7 +59,8 @@ public class UploadServlet extends HttpServlet {
 	private enum SOURCE_TYPE {
 		FILE,
 		URL,
-		EXAMPLE
+		EXAMPLE,
+		ENDPOINT
 	}
 	
 	@Override
@@ -93,7 +99,8 @@ public class UploadServlet extends HttpServlet {
 				}
 				FileItem data = (FileItem)dataParam;
 				
-				builder.addOperation(new LoadFromStream(data.getInputStream(), RDFFormat.forFileName(data.getName(), RDFFormat.RDFXML)));
+				// hack : fool the default Sesame's behavior to interpet *.xml files as RDF/XML
+				builder.addOperation(new LoadFromStream(data.getInputStream(), RDFFormat.forFileName(data.getName().replaceAll("\\.xml", ".rdf"), RDFFormat.RDFXML)));
 				repository = builder.createNewRepository();
 				break;
 			}
@@ -115,6 +122,13 @@ public class UploadServlet extends HttpServlet {
 				repository = (Repository)getServletContext().getAttribute(resourceParam);
 				break;
 			}
+			case ENDPOINT : {				
+				// get endpoint
+				String endpointParam = (request.getParameter(PARAM_ENDPOINT) != null && !request.getParameter(PARAM_ENDPOINT).equals(""))?request.getParameter(PARAM_ENDPOINT):null;
+				RepositoryBuilder builder = new RepositoryBuilder(new EndpointRepositoryFactory(endpointParam, false));
+				repository = builder.createNewRepository();
+				break;
+			}
 			default : {
 				repository = null;
 				break;
@@ -124,20 +138,31 @@ public class UploadServlet extends HttpServlet {
 			doError(request, response, e.getMessage());
 			return;
 		}
-
 		
-		try {
+//		try {
+//			// apply inference
+//			ApplyUpdates au = new ApplyUpdates(SPARQLUpdate.fromUpdateList(SKOSRules.getRulesetLite()));
+//			au.execute(repository);
+//		} catch (RepositoryOperationException e1) {
+//			doError(request, response, e1.getMessage());
+//			return;
+//		}
+
+		int count = -1;
+		try {			
+			// check that data does not contain more than X concepts
+			count = Perform.on(repository).count(new SPARQLQuery(new SPARQLQueryBuilder(this, "CountConcepts.rq")));
+			
 			// check that data contains at least one SKOS Concept
-			if(!Perform.on(repository).ask(new SPARQLQuery(new SPARQLQueryBuilder(this, "AskConcepts.rq")))) {
+			if(count <= 0) {
 				doError(request, response, b.getString("upload.error.noConceptsFound"));
 				return;
 			}
 			
-			// check that data does not contain more than X concepts
 			if(
 					sourceType != SOURCE_TYPE.EXAMPLE
 					&&
-					Perform.on(repository).count(new SPARQLQuery(new SPARQLQueryBuilder(this, "CountConcepts.rq"))) > 5000
+					count > 5000
 			) {
 				doError(request, response, b.getString("upload.error.dataTooLarge"));
 				return;
@@ -163,13 +188,21 @@ public class UploadServlet extends HttpServlet {
 		final PrintFormData printFormData = new PrintFormData();
 		sessionData.setPrintFormData(printFormData);
 		
+		// store success message with number of concepts
+		printFormData.setSuccessMessage(MessageFormat.format(b.getString("print.message.numberOfConcepts"), count));
+		
 		try {
 			// ask if some hierarchy exists
 			if(!Perform.on(repository).ask(new SPARQLQuery(new SPARQLQueryBuilder(this, "AskBroadersOrNarrowers.rq")))) {
 				printFormData.setEnableHierarchical(false);
 				printFormData.setWarningMessage(b.getString("upload.warning.noHierarchyFound"));
 			}
-
+		} catch (SPARQLExecutionException e) {
+			printFormData.setEnableHierarchical(false);
+			printFormData.setWarningMessage(b.getString("upload.warning.noHierarchyFound"));
+		}
+			
+		try {
 			// retrieve number of concepts per concept schemes
 			Perform.on(repository).select(new SelectSPARQLHelper(
 					new SPARQLQueryBuilder(this, "ConceptCountByConceptSchemes.rq"),
@@ -185,7 +218,9 @@ public class UploadServlet extends HttpServlet {
 													java.net.URI.create(bindingSet.getValue("scheme").stringValue()),
 													LabelReader.display(labelReader.getLabels((org.openrdf.model.URI)bindingSet.getValue("scheme")))
 											),
-											((Literal)bindingSet.getValue("conceptCount")).intValue()
+											(bindingSet.getValue("conceptCount") != null)?
+													((Literal)bindingSet.getValue("conceptCount")).intValue()
+													:0
 									);
 								} catch (SPARQLExecutionException e) {
 									throw new TupleQueryResultHandlerException(e);
@@ -258,5 +293,5 @@ public class UploadServlet extends HttpServlet {
 		getServletContext().getRequestDispatcher("/upload.jsp").forward(request, response);
 		return;
 	}
-	
+
 }

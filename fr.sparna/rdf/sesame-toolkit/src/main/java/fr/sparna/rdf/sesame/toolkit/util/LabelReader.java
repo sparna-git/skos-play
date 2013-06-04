@@ -3,13 +3,16 @@ package fr.sparna.rdf.sesame.toolkit.util;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.openrdf.model.Literal;
+import org.openrdf.model.Resource;
 import org.openrdf.model.vocabulary.RDFS;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerBase;
@@ -17,10 +20,14 @@ import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
 
 import fr.sparna.commons.lang.LRUCache;
+import fr.sparna.commons.lang.ListMap;
+import fr.sparna.rdf.sesame.toolkit.handler.LiteralListHandler;
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
-import fr.sparna.rdf.sesame.toolkit.query.Perform;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.builder.ValuesSPARQLQueryBuilder;
 
 /**
  * Returns a label for given resource or list of resources, in a given language.
@@ -56,7 +63,7 @@ public class LabelReader {
 	protected List<java.net.URI> labelProperties;
 	
 	// cache
-	private static final int CACHE_SIZE = 1000;
+	private static final int CACHE_SIZE = 10000;
 	private Map<java.net.URI, List<Literal>> cache = Collections.synchronizedMap(new LRUCache<java.net.URI, List<Literal>>(CACHE_SIZE));
 	
 	// flag to activate caching or not
@@ -129,7 +136,7 @@ public class LabelReader {
 			// then for the fallback language
 			if(this.fallbackLanguage != null) {
 				queries.add(new SPARQLQuery(
-						"SELECT ?label WHERE { ?uri ?labelProp ?label FILTER(lang(?label) = '"+this.preferredLanguage+"') }",
+						"SELECT ?label WHERE { ?uri ?labelProp ?label FILTER(lang(?label) = '"+this.fallbackLanguage+"') }",
 						new HashMap<String, Object>() {{ 
 							put("uri", resource);
 							put("labelProp", aType);
@@ -144,7 +151,9 @@ public class LabelReader {
 		
 		// if nothing was found add the URI itself in the list of values
 		if(result.size() == 0) {
-			result.add(this.repository.getValueFactory().createLiteral(Namespaces.getInstance().withRepository(this.repository).shorten(resource.toString())));
+			result.add(this.repository.getValueFactory().createLiteral(
+					Namespaces.getInstance().withRepository(this.repository).shorten(resource.toString())
+			));
 		}
 		
 		if(isCaching()) {
@@ -158,28 +167,121 @@ public class LabelReader {
 		return getLabels(URI.create(resource.stringValue()));
 	}
 	
-	public Map<java.net.URI, List<Literal>> getLabels(Set<java.net.URI> resources) {
-		final int PACKET_SIZE = 20;
+	public Map<java.net.URI, List<Literal>> getLabels(Collection<java.net.URI> resources)
+	throws SPARQLExecutionException {
+		// prepare result
+		ListMap<java.net.URI, Literal> result = new ListMap<java.net.URI, Literal>();
 		
-		List<java.net.URI> packet = new ArrayList<java.net.URI>();
-		for (URI aUri : resources) {
-			packet.add(aUri);
-			if(packet.size() >= PACKET_SIZE) {
-				StringBuffer query = new StringBuffer("SELECT ?s ?label WHERE { }");
-				// do stuff
-//				Perform.on(repository).select(new SPARQLQuery(
-//						"SELECT ?label WHERE { ?uri ?labelProp ?label FILTER(lang(?label) = '"+this.preferredLanguage+"') }",
-//						new HashMap<String, Object>() {{ 
-//							put("uri", resource);
-//							put("labelProp", aType);
-//						}}
-//				));
-				
-				packet = new ArrayList<java.net.URI>();
+		// the remaining work we have to do
+		Set<java.net.URI> resourcesToProcess = new HashSet<java.net.URI>(resources);
+		
+		// first look in the cache
+		if(caching) {
+			for (URI uri : resourcesToProcess) {
+				if(cache.containsKey(uri)) {
+					result.put(uri, cache.get(uri));
+				}
 			}
 		}
 		
-		throw new UnsupportedOperationException("Not implemented yet");
+		// for each property ...
+		for (URI aProperty : this.labelProperties) {
+			// try to get a value for each of the resources for that property
+			Map<java.net.URI, List<Literal>> labels = getLabelsOnProperty(resourcesToProcess, aProperty);
+			// add that to the final result
+			result.putAll(labels);
+			// remove what we have found from the work to be done
+			resourcesToProcess.removeAll(labels.keySet());
+			// if we have found everything, we can break
+			if(resourcesToProcess.size() == 0) {
+				break;
+			}
+		}
+		
+		// for each resources for which a value wasn't found, create a default value
+		for (URI uri : resourcesToProcess) {
+			result.add(
+					uri, 
+					this.repository.getValueFactory().createLiteral(Namespaces.getInstance().withRepository(this.repository).shorten(uri.toString())
+			));
+		}
+		
+		// feed the cache
+		if(caching) {
+			this.cache.putAll(result);
+		}
+		
+		return result;
+	}
+	
+	private Map<java.net.URI, List<Literal>> getLabelsOnProperty(Set<java.net.URI> resources, final java.net.URI property) 
+	throws SPARQLExecutionException {
+		
+		final int CHUNK_SIZE = 100;
+		ListMap<java.net.URI, Literal> result = new ListMap<java.net.URI, Literal>();
+		
+		// gather chunks to process
+		List<java.net.URI> chunk = new ArrayList<java.net.URI>();
+		
+		// for each URI...
+		for (URI aUri : resources) {
+			// add it to the chunk
+			chunk.add(aUri);
+			
+			// if we have reached our chunk size
+			if(chunk.size() >= CHUNK_SIZE) {
+				// do stuff
+				result.putAll(processChunkOnProperty(chunk, property));
+				
+				// then reset chunk
+				chunk = new ArrayList<java.net.URI>();
+			}
+		}
+		
+		// process last part of the cunk
+		if(chunk.size() > 0) {
+			result.putAll(processChunkOnProperty(chunk, property));
+		}
+		
+		return result;
+	}
+	
+	private Map<java.net.URI, List<Literal>> processChunkOnProperty(List<java.net.URI> resources, final java.net.URI property) 
+	throws SPARQLExecutionException {
+		
+		String query = "SELECT ?uri ?label WHERE { ?uri ?labelProp ?label FILTER(lang(?label) = '"+this.preferredLanguage+"') }";
+		ValuesSPARQLQueryBuilder builder = new ValuesSPARQLQueryBuilder(
+				new SPARQLQueryBuilder(query),
+				"uri",
+				Arrays.asList(URIUtil.toResourceArray(resources, repository.getValueFactory()))
+		);
+		
+		SPARQLQuery q = new SPARQLQuery(
+				builder,
+				new HashMap<String, Object>() {{ 
+					put("labelProp", property);
+				}}
+		);
+		
+		System.out.println(q.getSPARQL());
+		
+		final ListMap<java.net.URI, Literal> result = new ListMap<java.net.URI, Literal>();
+		Perform.on(this.repository).select(new SelectSPARQLHelper(
+				q,
+				new TupleQueryResultHandlerBase() {
+
+					@Override
+					public void handleSolution(BindingSet bindingSet)
+					throws TupleQueryResultHandlerException {
+						Resource uri = (Resource)bindingSet.getValue("uri");
+						Literal label = (Literal)bindingSet.getValue("label");
+						result.add(URI.create(uri.stringValue()), label);
+					}
+					
+				}
+		));
+		
+		return result;
 	}
 	
 	public boolean isCaching() {
@@ -192,27 +294,21 @@ public class LabelReader {
 
 	private List<Literal> findALabel(List<SPARQLQuery> queries) 
 	throws SPARQLExecutionException {
-		final List<Literal> result = new ArrayList<Literal>();
+		LiteralListHandler h = new LiteralListHandler();
 		
-		Perform executer = Perform.on(this.repository);
 		// for each query
 		for (SPARQLQuery aQuery : queries) {
-			executer.select(new SelectSPARQLHelper(
+			Perform.on(this.repository).select(new SelectSPARQLHelper(
 					aQuery,
-					new TupleQueryResultHandlerBase() {
-						@Override
-						public void handleSolution(BindingSet bindingSet) throws TupleQueryResultHandlerException {
-							result.add((Literal)bindingSet.getValue("label"));
-						}						
-					}
+					h
 			));
 			
 			// as soon as we find one, exit
-			if(result.size() > 0) {
+			if(h.getResult().size() > 0) {
 				break;
 			}
 		}
 		
-		return result;
+		return h.getResult();
 	}
 }

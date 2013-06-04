@@ -10,6 +10,7 @@ public class PrintFormData {
 	protected List<String> languages = new ArrayList<String>();
 	protected Map<LabeledResource, Integer> conceptCountByConceptSchemes = new TreeMap<LabeledResource, Integer>();
 	protected String warningMessage;
+	protected String successMessage;
 	protected boolean enableHierarchical = true;
 	
 	public List<String> getLanguages() {
@@ -42,6 +43,14 @@ public class PrintFormData {
 
 	public void setEnableHierarchical(boolean enableHierarchical) {
 		this.enableHierarchical = enableHierarchical;
+	}
+
+	public String getSuccessMessage() {
+		return successMessage;
+	}
+
+	public void setSuccessMessage(String successMessage) {
+		this.successMessage = successMessage;
 	}
 	
 }

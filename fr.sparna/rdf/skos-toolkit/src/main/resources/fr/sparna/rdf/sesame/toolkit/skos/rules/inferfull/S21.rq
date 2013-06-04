@@ -1,0 +1,7 @@
+# S21 : skos:broaderTransitive, skos:narrowerTransitive and skos:related are each sub-properties of skos:semanticRelation.
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+CONSTRUCT {
+	?x skos:semanticRelation ?y .
+} WHERE {
+	?x skos:broaderTransitive|skos:narrowerTransitive|skos:related ?y .
+}

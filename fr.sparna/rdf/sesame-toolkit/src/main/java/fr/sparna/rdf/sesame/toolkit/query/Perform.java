@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
+import org.openrdf.model.Value;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.query.BooleanQuery;
 import org.openrdf.query.GraphQuery;
@@ -26,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.handler.ReadSingleIntegerHandler;
+import fr.sparna.rdf.sesame.toolkit.handler.ReadSingleValueHandler;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
 
 /**
@@ -131,7 +133,7 @@ public class Perform {
 			TupleQuery tupleQuery;
 			try {
 				String query = helper.getQuery().getSPARQL();
-				log.trace("Executing SPARQL SELECT :\n"+helper.toString());
+				log.trace("Executing SPARQL SELECT :\n"+helper.getQuery().toString());
 				tupleQuery = connection.prepareTupleQuery(QueryLanguage.SPARQL, query);
 				
 				// on positionne les bindings s'il y en a
@@ -180,7 +182,7 @@ public class Perform {
 			GraphQuery graphQuery;
 			try {
 				String query = helper.getQuery().getSPARQL();
-				log.trace("Executing SPARQL CONSTRUCT :\n"+helper.toString());
+				log.trace("Executing SPARQL CONSTRUCT :\n"+helper.getQuery().toString());
 				graphQuery = connection.prepareGraphQuery(QueryLanguage.SPARQL, query);
 				
 				// on positionne les bindings s'il y en a
@@ -231,7 +233,7 @@ public class Perform {
 			BooleanQuery booleanQuery;
 			try {
 				String query = helper.getQuery().getSPARQL();
-				log.trace("Executing SPARQL ASK :\n"+helper.toString());
+				log.trace("Executing SPARQL ASK :\n"+helper.getQuery().toString());
 				booleanQuery = connection.prepareBooleanQuery(QueryLanguage.SPARQL, query);
 				
 				// on positionne les bindings s'il y en a
@@ -299,8 +301,24 @@ public class Perform {
 	throws SPARQLExecutionException {
 		ReadSingleIntegerHandler handler = new ReadSingleIntegerHandler();
 		this.select(new SelectSPARQLHelper(query, handler));
+		return handler.getResultIntValue();
+	}
+
+	/**
+	 * Convenience method that directly execute a query with a single line of result and a single binding,
+	 * and directly returns the results, allowing it to be called in <code>Value v = Perform.on(repository).read(...)</code>
+	 * 
+	 * @param query
+	 * @return
+	 * @throws SPARQLExecutionException
+	 */
+	public Value read(SPARQLQueryIfc query) 
+	throws SPARQLExecutionException {
+		ReadSingleValueHandler handler = new ReadSingleValueHandler();
+		this.select(new SelectSPARQLHelper(query, handler));
 		return handler.getResult();
 	}
+	
 	
 	/**
 	 * Executes the update returned by the helper. Nothing is returned from the execution.

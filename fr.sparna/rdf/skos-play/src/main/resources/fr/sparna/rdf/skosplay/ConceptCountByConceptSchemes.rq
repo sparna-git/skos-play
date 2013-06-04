@@ -3,6 +3,8 @@ PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
 SELECT ?scheme (COUNT(?concept) AS ?conceptCount)
 WHERE {
   ?scheme a skos:ConceptScheme .
-  ?concept a skos:Concept .
-  ?concept skos:inScheme ?scheme .
+  OPTIONAL {
+	  ?concept a skos:Concept .
+	  ?concept skos:inScheme ?scheme .
+  }
 } GROUP BY ?scheme

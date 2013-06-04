@@ -7,26 +7,18 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import org.openrdf.model.Literal;
 import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
-import org.openrdf.query.TupleQueryResultHandler;
 import org.openrdf.query.TupleQueryResultHandlerBase;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFHandler;
-import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFWriterRegistry;
-import org.openrdf.rio.helpers.RDFHandlerBase;
 
 import fr.sparna.rdf.sesame.toolkit.bd.BoundedDescriptionGeneratorIfc;
 import fr.sparna.rdf.sesame.toolkit.bd.BoundedDescriptionHandlerAdapter;
@@ -39,15 +31,12 @@ import fr.sparna.rdf.sesame.toolkit.handler.DebugHandler;
 import fr.sparna.rdf.sesame.toolkit.handler.MultipleRDFHandler;
 import fr.sparna.rdf.sesame.toolkit.handler.SplittingRDFHandler;
 import fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelper;
-import fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelperBase;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLQueryIfc;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLUpdate;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperIfc;
 import fr.sparna.rdf.sesame.toolkit.query.builder.OrderBy;
 import fr.sparna.rdf.sesame.toolkit.query.builder.PagingSPARQLQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
@@ -856,4 +845,11 @@ public class Documentation {
 				new BoundedDescriptionHandlerAdapter(RDFWriterRegistry.getInstance().get(RDFFormat.N3).getWriter(System.out))
 		);
 	}
+	
+	
+	public static void main(String...strings) throws Exception {
+		final String test = "/home/thomas/Téléchargements/NAL_Thesaurus_2013_SKOS.xml";
+		System.out.println(RDFFormat.forFileName(test.replaceAll(".xml", ".rdf"), RDFFormat.RDFXML));
+	}
+	
 }

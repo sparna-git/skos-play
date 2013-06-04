@@ -56,7 +56,7 @@ public abstract class GetTopConceptsHelper extends SelectSPARQLHelperBase {
 		@Override
 		public String getSPARQL() {
 			String sparql = "" +
-					"SELECT ?scheme ?top"+"\n" +
+					"SELECT DISTINCT ?scheme ?top"+"\n" +
 					"WHERE {"+"\n" +
 					"	?scheme <"+SKOS.HAS_TOP_CONCEPT+">|^<"+SKOS.TOP_CONCEPT_OF+"> ?top"+"\n" +
 					((this.orderByLang != null)?

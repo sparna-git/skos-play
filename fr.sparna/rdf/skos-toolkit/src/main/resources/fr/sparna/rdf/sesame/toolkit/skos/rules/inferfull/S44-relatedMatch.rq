@@ -1,0 +1,7 @@
+# S44-relatedMatch : skos:relatedMatch, skos:closeMatch and skos:exactMatch are each instances of owl:SymmetricProperty.
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+CONSTRUCT {
+	?y skos:relatedMatch ?x .
+} WHERE {
+	?x skos:relatedMatch ?y .
+}

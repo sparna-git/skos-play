@@ -20,11 +20,11 @@ import org.openrdf.query.TupleQueryResultHandlerException;
  */
 public class ResourceListHandler extends TupleQueryResultHandlerBase implements TupleQueryResultHandler {
 
-	private List<Resource> resources;
+	private List<Resource> result;
 
 	@Override
 	public void startQueryResult(List<String> bindingNames) throws TupleQueryResultHandlerException {
-		this.resources = new ArrayList<Resource>();
+		this.result = new ArrayList<Resource>();
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class ResourceListHandler extends TupleQueryResultHandlerBase implements 
 		if(v instanceof Literal) {
 			throw new TupleQueryResultHandlerException("Literal values are not accepted");
 		} else if (v instanceof Resource) {
-			this.resources.add((Resource)v);
+			this.result.add((Resource)v);
 		} else {
 			throw new TupleQueryResultHandlerException("Unexpected value type : "+v.getClass().getName());
 		}
@@ -48,8 +48,8 @@ public class ResourceListHandler extends TupleQueryResultHandlerBase implements 
 	 * Returns the List of gathered resources
 	 * @return
 	 */
-	public List<Resource> getResources() {
-		return resources;
+	public List<Resource> getResult() {
+		return result;
 	}
 	
 }

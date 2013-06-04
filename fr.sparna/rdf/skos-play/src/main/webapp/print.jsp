@@ -40,6 +40,12 @@
 						${data.warningMessage}
 					</div>
 				</c:if>
+				<c:if test="${data.successMessage != null}">
+					<div class="alert alert-success">
+						<h4><fmt:message key="success" /></h4>
+						${data.successMessage}
+					</div>
+				</c:if>
 			</div>
 			<form id="print_form" action="print" method="post" enctype="multipart/form-data" class="form-horizontal">
 			<fieldset>
@@ -47,14 +53,14 @@
 				<div class="control-group">
 					<label class="control-label"><fmt:message key="print.form.conceptScheme.legend" /></label>
 					<div class="controls">
-						<select name="scheme" id="scheme" class="span4">
+						<select name="scheme" id="scheme" class="span5">
 						<c:choose>
 							<c:when test="${empty data.conceptCountByConceptSchemes}">
 								<option value="no-scheme"><fmt:message key="print.form.conceptScheme.noConceptSchemeFound" /></option>
 							</c:when>
 							<c:otherwise>
 								<c:forEach items="${data.conceptCountByConceptSchemes}" var="entry">
-									<option value="${entry.key.uri}">${entry.key.label} (${entry.value})</option>
+									<option value="${entry.key.uri}">${entry.key.label} (${entry.value} concepts)</option>
 								</c:forEach>
 							</c:otherwise>
 						</c:choose>

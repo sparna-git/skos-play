@@ -139,6 +139,32 @@
 							<span class="help-block"><i><fmt:message key="upload.form.remoteUrl.help" /></i></span>
 						</td>
 					</tr>
+					<!-- 
+					<tr>
+						<td></td>
+						<td>
+							<input
+								type="radio"
+								name="source"
+								id="source-endpoint"
+								value="endpoint"
+								onchange="enabledInput('endpoint')" />
+							<fmt:message key="upload.form.endpoint" />
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<input
+								type="text"
+								id="endpoint"
+								name="endpoint"
+								value=""
+								onkeypress="enabledInput('endpoint');" />
+							<span class="help-block"><i><fmt:message key="upload.form.endpoint.help" /></i></span>
+						</td>
+					</tr>
+					 -->
 				</table>
 				<div class="form-actions">
 					<button type="submit" id="submit-button" class="btn btn-large btn-success"><fmt:message key="next" /></button>

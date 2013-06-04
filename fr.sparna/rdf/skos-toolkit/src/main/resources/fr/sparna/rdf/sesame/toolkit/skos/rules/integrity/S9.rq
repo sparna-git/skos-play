@@ -1,0 +1,7 @@
+# S9 : skos:ConceptScheme is disjoint with skos:Concept.
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+SELECT ?x 
+WHERE {
+	?x a skos:ConceptScheme .
+	?x a skos:Concept .
+}

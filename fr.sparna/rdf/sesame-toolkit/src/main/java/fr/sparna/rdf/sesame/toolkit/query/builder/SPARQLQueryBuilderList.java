@@ -89,4 +89,16 @@ public final class SPARQLQueryBuilderList {
 		return result;
 	}
 	
+	public static List<SPARQLQueryBuilder> fromResources(Class<?> owner, List<String> resource) {
+		if(owner == null) {
+			return null;
+		}
+		
+		ArrayList<SPARQLQueryBuilder> result = new ArrayList<SPARQLQueryBuilder>();
+		for (String aString : resource) {
+			result.add(new SPARQLQueryBuilder(owner, aString));
+		}
+		return result;
+	}
+	
 }

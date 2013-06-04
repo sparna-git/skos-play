@@ -35,8 +35,8 @@
         </layout>
     </appender>
  
-    <logger name="fr.sparna.rdf.skosplay" additivity="false">
-        <level value="INFO" />
+    <logger name="fr.sparna.rdf" additivity="false">
+        <level value="ALL" />
         <appender-ref ref="SKOSPLAY_ROLLING_FILE" />
         <appender-ref ref="STDOUT" />
     </logger>

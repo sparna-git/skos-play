@@ -3,8 +3,13 @@ package fr.sparna.rdf.sesame.toolkit.skos;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.openrdf.model.Literal;
 import org.openrdf.repository.Repository;
 
 import com.fasterxml.jackson.core.JsonEncoding;
@@ -14,12 +19,19 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
+import fr.sparna.commons.tree.GenericTreeVisitorException;
+import fr.sparna.commons.tree.GenericTreeVisitorIfc;
 import fr.sparna.rdf.sesame.toolkit.handler.DebugHandler;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLUpdate;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderList;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.ApplyUpdates;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
+import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
 
 public class JsonSKOSTreePrinter {
 
@@ -41,16 +53,28 @@ public class JsonSKOSTreePrinter {
 	public void print(GenericTree<SKOSTreeNode> tree, OutputStream out) 
 	throws SPARQLExecutionException, IOException, JsonGenerationException {
 		JsonFactory jsonF = new JsonFactory();
-		// let's write to a file, using UTF-8 encoding (only sensible one)
+		// let's write to the stream, using UTF-8 encoding (only sensible one)
 		JsonGenerator jg = jsonF.createGenerator(out, JsonEncoding.UTF8);
 		if(this.prettyPrinting) {
-			jg.useDefaultPrettyPrinter(); // enable indentation just to make debug/testing easier
+			// enable indentation to make debug/testing easier
+			jg.useDefaultPrettyPrinter(); 
 		}
-		printConceptRec(tree.getRoot(), jg);
+		
+		Map<URI, List<Literal>> labels = new HashMap<URI, List<Literal>>();
+		
+		try {
+			URIHarvester harvester = new URIHarvester();
+			tree.visit(harvester);
+			labels = this.labelReader.getLabels(harvester.uris);
+		} catch (GenericTreeVisitorException e) {
+			e.printStackTrace();
+		}
+		
+		printConceptRec(tree.getRoot(), jg, labels);
 		jg.close();
 	}
 	
-	private void printConceptRec(GenericTreeNode<SKOSTreeNode> aNode, final JsonGenerator jg) 
+	private void printConceptRec(GenericTreeNode<SKOSTreeNode> aNode, final JsonGenerator jg, Map<URI, List<Literal>> labels) 
 	throws SPARQLExecutionException, JsonGenerationException, IOException {
 		
 		jg.writeStartObject();
@@ -59,7 +83,7 @@ public class JsonSKOSTreePrinter {
 		
 		// write name
 		if(labelReader != null) {
-			String label = LabelReader.display(labelReader.getLabels(aNode.getData().getUri()));
+			String label = LabelReader.display(labels.get(aNode.getData().getUri()));
 			jg.writeStringField("name", label);
 		}
 		
@@ -67,7 +91,7 @@ public class JsonSKOSTreePrinter {
 		if(aNode.getChildren() != null && aNode.getChildren().size() > 0) {
 			jg.writeArrayFieldStart("children");
 			for (GenericTreeNode<SKOSTreeNode> aChild : aNode.getChildren()) {
-				printConceptRec(aChild, jg);
+				printConceptRec(aChild, jg, labels);
 			}
 			jg.writeEndArray();
 		} else {
@@ -76,6 +100,19 @@ public class JsonSKOSTreePrinter {
 		}
 		
 		jg.writeEndObject();	
+	}
+	
+	class URIHarvester implements GenericTreeVisitorIfc<SKOSTreeNode> {
+
+		List<java.net.URI> uris = new ArrayList<java.net.URI>();
+		
+		@Override
+		public boolean visit(GenericTreeNode<SKOSTreeNode> node)
+		throws GenericTreeVisitorException {
+			this.uris.add(node.getData().uri);
+			return true;
+		}
+		
 	}
 
 	public boolean isPrettyPrinting() {
@@ -90,23 +127,29 @@ public class JsonSKOSTreePrinter {
 		Repository r = RepositoryBuilder.fromRdf(
 				"@prefix skos: <"+SKOS.NAMESPACE+"> ."+"\n" +
 				"@prefix test: <http://www.test.fr/skos/> ."+"\n" +
-				"test:_1 a skos:Concept ; skos:inScheme test:_scheme ; skos:prefLabel \"1\"@fr ." +
-				"test:_2 a skos:Concept ; skos:inScheme test:_scheme ; skos:prefLabel \"a\"@fr; skos:broader test:_1 ." +
-				"test:_3 a skos:Concept ; skos:inScheme test:_anotherScheme ; skos:prefLabel \"B\"@fr; skos:broader test:_1 ."
+				"test:_scheme a skos:ConceptScheme ; skos:hasTopConcept test:_1 ."+"\n" +
+				"test:_1 a skos:Concept ; skos:prefLabel \"1\"@fr ." +
+				"test:_2 a skos:Concept ; skos:prefLabel \"a\"@fr; skos:broader test:_1 ." +
+				"test:_3 a skos:Concept ; skos:prefLabel \"B\"@fr; skos:broader test:_1 ."
 		);
+		
+		ApplyUpdates au = new ApplyUpdates(SPARQLUpdate.fromUpdateList(SPARQLQueryBuilderList.fromClasspathDirectory("rules/inference-lite")));
+		au.execute(r);
+		
+		RepositoryWriter.writeToFile("output.ttl", r);
 		
 		SimpleSKOSTreePrinter printer = new SimpleSKOSTreePrinter(r, "fr");
 		System.out.println(printer.printTree());
 		
-		SKOSTreeBuilder builder = new SKOSTreeBuilder(r, "fr");
-		List<GenericTree<SKOSTreeNode>> trees = builder.buildTrees();
+//		SKOSTreeBuilder builder = new SKOSTreeBuilder(r, "fr");
+//		List<GenericTree<SKOSTreeNode>> trees = builder.buildTrees();
 		
-		JsonSKOSTreePrinter jsonPrinter = new JsonSKOSTreePrinter(new LabelReader(r, "fr"));
-		System.out.println(jsonPrinter.printToString(trees.get(0)));
+//		JsonSKOSTreePrinter jsonPrinter = new JsonSKOSTreePrinter(new LabelReader(r, "fr"));
+//		System.out.println(jsonPrinter.printToString(trees.get(0)));
 		
-		Perform.on(r).select(new SelectSPARQLHelper(
-				"SELECT ?uri ?label WHERE { ?uri <"+SKOS.PREF_LABEL+"> ?label . VALUES ?uri { <http://www.test.fr/skos/_1> <http://www.test.fr/skos/_2> } }",
-				new DebugHandler()
-		));
+//		Perform.on(r).select(new SelectSPARQLHelper(
+//				"SELECT ?uri ?label WHERE { ?uri <"+SKOS.PREF_LABEL+"> ?label . } VALUES ?uri { <http://www.test.fr/skos/_1> <http://www.test.fr/skos/_2> }",
+//				new DebugHandler()
+//		));
 	}
 }

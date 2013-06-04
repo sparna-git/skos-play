@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openrdf.repository.Repository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
@@ -13,6 +15,8 @@ import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 public class ApplyUpdates extends AbstractLoadOperation implements RepositoryOperationIfc {
 
+	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
+	
 	protected List<SPARQLUpdate> updates = new ArrayList<SPARQLUpdate>();
 	
 	public ApplyUpdates(List<SPARQLUpdate> updates) {
@@ -36,6 +40,7 @@ public class ApplyUpdates extends AbstractLoadOperation implements RepositoryOpe
 			// apply updates
 			for (SPARQLUpdate anUpdate : this.updates) {
 				try {
+					log.debug("Applying update : "+"\n"+anUpdate.toString());
 					p.update(anUpdate);
 				} catch (SPARQLExecutionException e) {
 					throw new RepositoryOperationException(e);
