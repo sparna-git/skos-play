@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
@@ -24,26 +27,33 @@ public class ResourceList {
      * @param pattern	the pattern to match
      * @return 			the resources URL in the order they are found
      */
-    public static Collection<URL> listResources(
+    public static List<URL> listResources(
             final Pattern pattern
         ) {
-            final Collection<URL> retval = new ArrayList<URL>();
+            final List<URL> retval = new ArrayList<URL>();
             final String classPath = System.getProperty("java.class.path", ".");
             final String[] classPathElements = classPath.split(System.getProperty("path.separator", ":"));
             for(final String element : classPathElements){
                 retval.addAll(listResources(element, pattern));
             }
+            // sort result to garantee ordering
+            Collections.sort(retval, new Comparator<URL>() {
+				@Override
+				public int compare(URL o1, URL o2) {
+					return o1.toString().compareTo(o2.toString());
+				}
+            });
             return retval;
         }
     
-    public static Collection<URL> listDirectoryResources(
+    public static List<URL> listDirectoryResources(
             String directory
-        ) {
-    		if(!directory.endsWith("/")) {
-    			directory = directory.concat("/");
-    		}
-            return listResources(Pattern.compile(".*"+directory+".*"));
-        }
+    ) {
+		if(!directory.endsWith("/")) {
+			directory = directory.concat("/");
+		}
+        return listResources(Pattern.compile(".*"+directory+".*"));
+    }
 
     private static Collection<URL> listResources(
         final String element,
