@@ -19,11 +19,41 @@
 				<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet"></link>
 				<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 				<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+				<style>
+					.unstyled > li { font-size: 80% }
+					
+					.ext-link {
+						background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=');
+						background-repeat: no-repeat;
+						background-position : 100% 50%;
+						padding-right:13px;
+						cursor:pointer;
+					}			
+				</style>
 			</head>
 			<body>
 				<div class="container">
 					<xsl:apply-templates />
 				</div>
+				<script>
+			      $(document).ready(function () {
+					// add external link behavior to every external link
+					$('span[title]').mouseover(function() {
+						$(this).addClass('ext-link');
+					});
+					$('span[title]').mouseout(function() {
+						$(this).removeClass('ext-link');
+					});
+					$('span[title]').click(function() {
+						window.open($(this).attr('title'));
+						// change this to the following line to have links open in same window/tab
+						// document.location.href = $(this).attr('title');
+					});
+					
+					// add unstyled class to all 'no' class
+					$('.no').addClass('unstyled');
+			      });					
+				</script>
 			</body>
 		</html>
 	</xsl:template>
@@ -80,8 +110,7 @@
 	<xsl:template match="disp:hierarchical">
 		<div class="display">
 			<ul class="tree">
-				<!-- on saute le premier niveau -->
-				<xsl:for-each select="disp:entry/disp:entry">
+				<xsl:for-each select="disp:entry">
 					<li id="{@entryId}">
 						<xsl:apply-templates select="." />
 					</li> 
@@ -107,7 +136,7 @@
 	<xsl:template match="disp:entry">
 			<span title="{@disp:concept}"><xsl:apply-templates select="disp:label" /></span>
 			<xsl:if test="disp:att | disp:ref">
-				<ul class="unstyled">
+				<ul class="no">
 					<xsl:apply-templates select="disp:att | disp:ref" />
 				</ul>
 			</xsl:if>
@@ -121,6 +150,10 @@
 					</xsl:for-each>
 				</ul>
 			</xsl:if>
+	</xsl:template>
+
+	<xsl:template match="disp:entry" mode="ref">
+			<xsl:apply-templates select="disp:label" />
 	</xsl:template>
 	
 	<xsl:template match="disp:label">
@@ -136,11 +169,11 @@
 	</xsl:template>
 	
 	<xsl:template match="disp:att">
-		<li><small><xsl:value-of select="@disp:type" /> : <xsl:apply-templates /></small></li>
+		<li><xsl:value-of select="@disp:type" /> : <xsl:apply-templates /></li>
 	</xsl:template>
 	
 	<xsl:template match="disp:ref">
-		<li><small><a href="#{@entryRef}"><xsl:value-of select="@disp:type" /> : <xsl:apply-templates select="disp:entry"/></a></small></li>
+		<li><a href="#{@entryRef}"><xsl:value-of select="@disp:type" /> : <xsl:apply-templates select="disp:entry" mode="ref" /></a></li>
 	</xsl:template>
 	
 </xsl:stylesheet>

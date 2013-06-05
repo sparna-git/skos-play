@@ -1,9 +1,0 @@
-# S35 : skos:memberList is an instance of owl:FunctionalProperty.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-PREFIX owl:<http://www.w3.org/2002/07/owl#>
-CONSTRUCT {
-	?x1 owl:sameAs ?x2
-} WHERE {
-	?x1 skos:memberList ?y .
-	?x2 skos:memberList ?y .
-}

@@ -34,7 +34,18 @@
 	    </init-param>
 	     -->
 	</filter>
+	
+	<filter>
+	    <description></description>
+	    <filter-name>sessionFilter</filter-name>
+	    <filter-class>fr.sparna.rdf.skosplay.SessionFilter</filter-class>
+	</filter>
 
+	<filter-mapping>
+	    <filter-name>sessionFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
 	<filter-mapping>
 	    <filter-name>multipartFilter</filter-name>
 	    <url-pattern>/upload</url-pattern>
@@ -97,7 +108,7 @@
 	
 	<servlet-mapping>
 		<servlet-name>HomeServlet</servlet-name>
-		<url-pattern>/home</url-pattern>
+		<url-pattern>/home/*</url-pattern>
 	</servlet-mapping>
 	
 	<servlet-mapping>

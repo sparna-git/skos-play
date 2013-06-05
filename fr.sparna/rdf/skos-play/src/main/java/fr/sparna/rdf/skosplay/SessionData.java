@@ -1,5 +1,7 @@
 package fr.sparna.rdf.skosplay;
 
+import java.util.Locale;
+
 import javax.servlet.http.HttpSession;
 
 import org.openrdf.repository.Repository;
@@ -12,8 +14,13 @@ public class SessionData {
 	
 	// The repository
 	protected Repository repository;
+	
+	// The user Locale
+	protected Locale userLocale;
+	
 	// The label reader (with a cache)
 	protected LabelReader labelReader;
+	
 	// data for the PrintForm
 	protected PrintFormData printFormData;
 	
@@ -57,6 +64,14 @@ public class SessionData {
 
 	public void setPrintFormData(PrintFormData printFormData) {
 		this.printFormData = printFormData;
-	}	
+	}
 
+	public Locale getUserLocale() {
+		return userLocale;
+	}
+
+	public void setUserLocale(Locale userLocale) {
+		this.userLocale = userLocale;
+	}
+	
 }

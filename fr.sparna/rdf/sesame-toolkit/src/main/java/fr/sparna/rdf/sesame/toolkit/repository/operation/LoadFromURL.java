@@ -9,6 +9,7 @@ import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
+import org.openrdf.rio.Rio;
 import org.openrdf.sail.memory.MemoryStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +71,7 @@ public class LoadFromURL extends AbstractLoadOperation implements RepositoryOper
 			repository.getConnection().add(
 					this.url,
 					this.defaultNamespace,
-					RDFFormat.forFileName(url.toString()),
+					Rio.getParserFormatForFileName(url.toString(), RDFFormat.RDFXML),
 					(this.targetGraph != null)?repository.getValueFactory().createURI(this.targetGraph.toString()):null
 			);
 		} catch (RDFParseException e) {
@@ -87,7 +88,7 @@ public class LoadFromURL extends AbstractLoadOperation implements RepositoryOper
 				}
 				LoadFromStream lfs = new LoadFromStream(
 						resourceAsStream,
-						RDFFormat.forFileName(this.localFallback, RDFFormat.RDFXML),
+						Rio.getParserFormatForFileName(this.localFallback, RDFFormat.RDFXML),
 						this.defaultNamespace
 				);
 				lfs.setTargetGraph(this.targetGraph);

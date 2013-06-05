@@ -3,19 +3,20 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" 	prefix="fmt" 	%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" 	prefix="c" 		%>
 
-<!-- setup the locale for the messages based on the language of the request -->
-<fmt:setLocale value="${pageContext.request.locale.language}"/>
+<!-- setup the locale for the messages based on the language in the session -->
+<fmt:setLocale value="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language}"/>
 <fmt:setBundle basename="fr.sparna.rdf.skosplay.i18n.Bundle"/>
 
 <c:set var="data" value="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].printFormData}" />
 <html>
 	<head>
-		<title>SKOS Play ! - Visualize SKOS data</title>
+		<title>SKOS Play ! - Visualize SKOS Thesaurus</title>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="bootstrap-fileupload/bootstrap-fileupload.min.css" rel="stylesheet" />
 		<link href="css/skos-play.css" rel="stylesheet" />
 		<script src="js/jquery.min.js"></script>
+		<script src="bootstrap/js/bootstrap.min.js"></script>
 		<script src="bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
 	</head>
 	<body>

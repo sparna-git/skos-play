@@ -21,11 +21,11 @@ public class AboutServlet extends HttpServlet {
 	protected void doGet(
 			HttpServletRequest request,
 			HttpServletResponse response
-			) throws ServletException, IOException {
+			) throws ServletException, IOException {		
 		// retrieve resource bundle for error messages
 		ResourceBundle b = ResourceBundle.getBundle(
 				"fr.sparna.rdf.skosplay.i18n.Bundle",
-				request.getLocale(),
+				SessionData.get(request.getSession()).getUserLocale(),
 				new StrictResourceBundleControl()
 		);
 

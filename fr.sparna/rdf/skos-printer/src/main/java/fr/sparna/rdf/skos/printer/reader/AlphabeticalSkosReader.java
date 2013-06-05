@@ -69,7 +69,11 @@ public class AlphabeticalSkosReader {
 		
 		// init tag resource bundle if not set
 		if(this.tagsBundle == null) {
-			tagsBundle = ResourceBundle.getBundle("fr.sparna.rdf.skos.display.Tags");
+			tagsBundle = ResourceBundle.getBundle(
+					"fr.sparna.rdf.skos.display.Tags",
+					new Locale(lang),
+					new fr.sparna.i18n.StrictResourceBundleControl()
+			);
 		}
 				
 		// build our alphabetical display
@@ -252,16 +256,16 @@ public class AlphabeticalSkosReader {
 		
 		// build and set header
 		DisplayHeaderSkosReader headerReader = new DisplayHeaderSkosReader(r);
-		DisplayHeader header = headerReader.read("fr", (args.length > 1)?URI.create(args[1]):null);
+		DisplayHeader header = headerReader.read("en", (args.length > 1)?URI.create(args[1]):null);
 		display.setHeader(header);
 		
 		AlphabeticalSkosReader reader = new AlphabeticalSkosReader(r);
 		reader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES);
-		display.getAlphabeticalOrHierarchical().add(reader.read("fr", (args.length > 1)?URI.create(args[1]):null));
+		display.getAlphabeticalOrHierarchical().add(reader.read("en", (args.length > 1)?URI.create(args[1]):null));
 
 		DisplayPrinter printer = new DisplayPrinter();
 		printer.printToHtml(display, new File("display-test.html"));
-		printer.printToPdf(display, new File("display-test.pdf"));
+//		printer.printToPdf(display, new File("display-test.pdf"));
 		
 //		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
 //		m.setProperty("jaxb.formatted.output", true);

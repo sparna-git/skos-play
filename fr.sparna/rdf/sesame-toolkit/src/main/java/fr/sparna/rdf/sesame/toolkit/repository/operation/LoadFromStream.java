@@ -9,6 +9,7 @@ import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
+import org.openrdf.rio.Rio;
 
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
 
@@ -59,7 +60,7 @@ public class LoadFromStream extends AbstractLoadOperation implements RepositoryO
 	public LoadFromStream(Object owner, String resource) {
 		this(
 				owner.getClass().getResourceAsStream(resource),
-				RDFFormat.forFileName(resource, RDFFormat.RDFXML),
+				Rio.getParserFormatForFileName(resource, RDFFormat.RDFXML),
 				RDF.NAMESPACE
 		);
 	}

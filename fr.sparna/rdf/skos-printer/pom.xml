@@ -47,7 +47,19 @@
 
 		<dependency>
 			<groupId>fr.sparna.commons</groupId>
+			<artifactId>sparna-commons-lang</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>fr.sparna.commons</groupId>
 			<artifactId>sparna-commons-fop</artifactId>
+			<!-- conflicts with sesame's commons-io -->
+			<exclusions>
+	            <exclusion>
+	                <groupId>commons-io</groupId>
+	                <artifactId>commons-io</artifactId>
+	            </exclusion>
+	        </exclusions>
 		</dependency>
 
 		<dependency>

@@ -1,8 +1,0 @@
-# S26 : skos:narrowerTransitive is owl:inverseOf the property skos:broaderTransitive.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-CONSTRUCT {
-	?x skos:narrowerTransitive ?y .
-	?y skos:broaderTransitive ?x .
-} WHERE {
-	?x skos:narrowerTransitive|^skos:broaderTransitive ?y .
-}

@@ -1,8 +1,0 @@
-# S50 : The rdfs:domain of skosxl:literalForm is the class skosxl:Label.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-PREFIX skosxl:<http://www.w3.org/2008/05/skos-xl#>
-CONSTRUCT {
-	?x a skosxl:Label .
-} WHERE {
-	?x skosxl:literalForm ?y .
-}

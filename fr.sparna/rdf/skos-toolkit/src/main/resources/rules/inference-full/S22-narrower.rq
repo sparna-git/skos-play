@@ -1,7 +1,0 @@
-# S22 (narrower) : skos:broader is a sub-property of skos:broaderTransitive, and skos:narrower is a sub-property of skos:narrowerTransitive.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-CONSTRUCT {
-	?x skos:narrowerTransitive ?y .
-} WHERE {
-	?x skos:narrower ?y .
-}

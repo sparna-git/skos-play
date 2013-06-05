@@ -49,7 +49,9 @@ public class SchemaFactory {
 	public static Entry createEntry(String entryId, String uri, String label, String labelType) {
 		Entry e = new Entry();
 		// utilisation de Namespaces pour raccourcir l'URI
-		e.setConcept(Namespaces.getInstance().shorten(uri));
+		// not anymore to have full URIs in HTML display and geenrate outgoing links
+		// e.setConcept(Namespaces.getInstance().shorten(uri));
+		e.setConcept(uri);
 		e.setLabel(createLabel(label, labelType));
 		e.setEntryId(entryId);
 		return e;

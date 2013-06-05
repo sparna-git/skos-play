@@ -1,7 +1,0 @@
-# S17 : skos:changeNote, skos:definition, skos:editorialNote, skos:example, skos:historyNote and skos:scopeNote are each sub-properties of skos:note.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-CONSTRUCT {
-	?y skos:note ?x .
-} WHERE {
-	?x skos:changeNote|skos:definition|skos:editorialNote|skos:example|skos:historyNote|skos:scopeNote ?y .
-}

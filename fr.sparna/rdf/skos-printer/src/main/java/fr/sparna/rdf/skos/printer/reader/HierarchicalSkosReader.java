@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Level;
@@ -64,7 +65,11 @@ public class HierarchicalSkosReader {
 		
 		// init tag resource bundle if not set
 		if(this.tagsBundle == null) {
-			tagsBundle = ResourceBundle.getBundle("fr.sparna.rdf.skos.display.Tags");
+			tagsBundle = ResourceBundle.getBundle(
+					"fr.sparna.rdf.skos.display.Tags",
+					new Locale(lang),
+					new fr.sparna.i18n.StrictResourceBundleControl()
+			);
 		}
 
 		final List<PropertyReader> additionalReaders = new ArrayList<PropertyReader>();

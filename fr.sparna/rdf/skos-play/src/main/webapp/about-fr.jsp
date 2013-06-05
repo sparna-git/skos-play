@@ -4,19 +4,22 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" 	prefix="fmt" 	%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" 	prefix="c" 		%>
 
-<!-- setup the locale for the messages based on the language of the request -->
-<fmt:setLocale value="${pageContext.request.locale.language}"/>
+<!-- setup the locale for the messages based on the language in the session -->
+<fmt:setLocale value="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language}"/>
 <fmt:setBundle basename="fr.sparna.rdf.skosplay.i18n.Bundle"/>
 
 <html>
 	<head>
-		<title>SKOS Play ! - A propos</title>
+		<title>SKOS Play ! - Visualiser des thesaurus SKOS - A propos</title>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="bootstrap-fileupload/bootstrap-fileupload.min.css" rel="stylesheet" />
 		<link href="css/skos-play.css" rel="stylesheet" />
 		<script src="js/jquery.min.js"></script>
+		<script src="bootstrap/js/bootstrap.min.js"></script>
 		<script src="bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
+		
+		<link rel="alternate" hreflang="en" href="?lang=en" />
 	</head>
 	<body>
 		<div class="container">
@@ -29,6 +32,23 @@
 			    			<li><a href="upload.jsp"><fmt:message key="menu.start" /></a></li>
 					    	<li class="active"><a href="about"><fmt:message key="menu.about" /></a></li>
 					    	<li><a href="http://www.google.com/moderator/#15/e=209fff&t=209fff.40" target="_blank"><fmt:message key="menu.feedback" /></a></li>
+					    	<li class="dropdown">
+								<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+									<c:choose>
+										<c:when test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language == 'fr'}">fr</c:when>
+										<c:otherwise>en</c:otherwise>
+									</c:choose>
+									<b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu">
+									<li>
+									<c:choose>
+										<c:when test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language == 'fr'}"><a href="?lang=en">en</a></c:when>
+										<c:otherwise><a href="?lang=fr">fr</a></c:otherwise>
+									</c:choose>
+									</li>
+								</ul>
+							</li>
 					    </ul>
 					</div>
 			    </div>	      		

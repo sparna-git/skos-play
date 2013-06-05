@@ -1,7 +1,0 @@
-# S34 : The rdfs:range of skos:memberList is the class rdf:List.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-CONSTRUCT {
-	?y a rdf:List .
-} WHERE {
-	?x skos:memberList ?y .
-}

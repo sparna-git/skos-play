@@ -21,6 +21,7 @@ import org.openrdf.query.TupleQueryResultHandlerBase;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
 import org.openrdf.rio.RDFFormat;
+import org.openrdf.rio.Rio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,10 +70,13 @@ public class UploadServlet extends HttpServlet {
 			final HttpServletResponse response
 	) throws ServletException, IOException {
 		
+		// retrieve session
+		SessionData sessionData = SessionData.get(request.getSession());
+		
 		// retrieve resource bundle for error messages
 		ResourceBundle b = ResourceBundle.getBundle(
 				"fr.sparna.rdf.skosplay.i18n.Bundle",
-				request.getLocale(),
+				sessionData.getUserLocale(),
 				new StrictResourceBundleControl()
 		);
 		
@@ -98,9 +102,7 @@ public class UploadServlet extends HttpServlet {
 					return;
 				}
 				FileItem data = (FileItem)dataParam;
-				
-				// hack : fool the default Sesame's behavior to interpet *.xml files as RDF/XML
-				builder.addOperation(new LoadFromStream(data.getInputStream(), RDFFormat.forFileName(data.getName().replaceAll("\\.xml", ".rdf"), RDFFormat.RDFXML)));
+				builder.addOperation(new LoadFromStream(data.getInputStream(), Rio.getParserFormatForFileName(data.getName(), RDFFormat.RDFXML)));
 				repository = builder.createNewRepository();
 				break;
 			}
@@ -172,16 +174,12 @@ public class UploadServlet extends HttpServlet {
 			return;
 		}
 		
-		// initiate session and store SessionData
-		SessionData sessionData = new SessionData();
-		sessionData.store(request.getSession());
-		
 		// store repository in the session
 		sessionData.setRepository(repository);
 		
 		// store label reader in the session
 		// 'en' is the fallback language if the preferred language is not found
-		final LabelReader labelReader = new LabelReader(repository, "en", request.getLocale().getLanguage());
+		final LabelReader labelReader = new LabelReader(repository, "en", sessionData.getUserLocale().getLanguage());
 		sessionData.setLabelReader(labelReader);
 		
 		// build data structure

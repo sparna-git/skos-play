@@ -86,6 +86,11 @@
         </dependency>
 
         <dependency>
+            <groupId>fr.sparna.commons</groupId>
+            <artifactId>sparna-commons-lang</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>fr.sparna.rdf</groupId>
             <artifactId>skos-printer</artifactId>
         </dependency>

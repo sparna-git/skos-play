@@ -1,7 +1,0 @@
-# S45 : skos:exactMatch is an instance of owl:TransitiveProperty.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-CONSTRUCT {
-	?x skos:exactMatch ?y .
-} WHERE {
-	?x skos:exactMatch/skos:exactMatch ?y .
-}

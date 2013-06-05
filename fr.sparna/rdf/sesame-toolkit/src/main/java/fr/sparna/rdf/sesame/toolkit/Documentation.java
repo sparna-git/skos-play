@@ -19,6 +19,7 @@ import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFHandler;
 import org.openrdf.rio.RDFWriterRegistry;
+import org.openrdf.rio.Rio;
 
 import fr.sparna.rdf.sesame.toolkit.bd.BoundedDescriptionGeneratorIfc;
 import fr.sparna.rdf.sesame.toolkit.bd.BoundedDescriptionHandlerAdapter;
@@ -849,7 +850,8 @@ public class Documentation {
 	
 	public static void main(String...strings) throws Exception {
 		final String test = "/home/thomas/Téléchargements/NAL_Thesaurus_2013_SKOS.xml";
-		System.out.println(RDFFormat.forFileName(test.replaceAll(".xml", ".rdf"), RDFFormat.RDFXML));
+		// System.out.println(RDFFormat.forFileName(test.replaceAll(".xml", ".rdf"), RDFFormat.RDFXML));
+		System.out.println(Rio.getParserFormatForFileName(test, RDFFormat.RDFXML));
 	}
 	
 }

@@ -59,6 +59,12 @@
             	<groupId>org.openrdf.sesame</groupId>
             	<artifactId>sesame-runtime</artifactId>
             	<version>${sesame.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.openrdf.sesame</groupId>
+                        <artifactId>sesame-rio-trix</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>com.ontotext</groupId>

@@ -1,8 +1,0 @@
-# S62 : skosxl:labelRelation is an instance of owl:SymmetricProperty.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-PREFIX skosxl:<http://www.w3.org/2008/05/skos-xl#>
-CONSTRUCT {
-	?y skosxl:labelRelation ?x .
-} WHERE {
-	?x skosxl:labelRelation ?y .
-}

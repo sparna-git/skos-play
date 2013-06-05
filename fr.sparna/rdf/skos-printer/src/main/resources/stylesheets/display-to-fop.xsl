@@ -95,8 +95,7 @@
 	<!-- Display : Hierarchical -->
 	<xsl:template match="disp:hierarchical">
 		<fo:block font-size="80%">
-			<!-- jump first level -->
-			<xsl:for-each select="disp:entry/disp:entry">
+			<xsl:for-each select="disp:entry">
 				<fo:block>
 					<xsl:apply-templates select="." />
 				</fo:block>

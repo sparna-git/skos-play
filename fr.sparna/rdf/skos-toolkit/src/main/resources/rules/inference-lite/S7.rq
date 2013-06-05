@@ -1,7 +1,0 @@
-# S7 : skos:topConceptOf is a sub-property of skos:inScheme.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-INSERT {
-	?x skos:inScheme ?y .
-} WHERE {
-	?x skos:topConceptOf ?y .
-}

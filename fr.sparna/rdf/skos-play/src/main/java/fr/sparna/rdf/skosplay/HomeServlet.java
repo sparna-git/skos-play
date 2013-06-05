@@ -1,8 +1,6 @@
 package fr.sparna.rdf.skosplay;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -25,10 +23,11 @@ public class HomeServlet extends HttpServlet {
 			HttpServletRequest request,
 			HttpServletResponse response
 	) throws ServletException, IOException {
+
 		// retrieve resource bundle for error messages
 		ResourceBundle b = ResourceBundle.getBundle(
 				"fr.sparna.rdf.skosplay.i18n.Bundle",
-				request.getLocale(),
+				SessionData.get(request.getSession()).getUserLocale(),
 				new StrictResourceBundleControl()
 		);
 		getServletContext().getRequestDispatcher(b.getString("home.jsp")).forward(request, response);

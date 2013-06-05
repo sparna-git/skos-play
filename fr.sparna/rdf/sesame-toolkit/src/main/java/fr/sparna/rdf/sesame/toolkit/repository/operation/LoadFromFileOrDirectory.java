@@ -12,6 +12,7 @@ import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
+import org.openrdf.rio.Rio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +68,7 @@ public class LoadFromFileOrDirectory extends AbstractLoadOperation implements Re
 										// TODO : ici mettre le namespace par defaut comme un parametre ?
 										RDF.NAMESPACE,
 										// on suppose que c'est du RDF/XML par defaut
-										RDFFormat.forFileName(anRdf, RDFFormat.RDFXML),
+										Rio.getParserFormatForFileName(anRdf, RDFFormat.RDFXML),
 										(autoNamedGraphs)?repository.getValueFactory().createURI(anRdfFile.toURI().toString()):((this.targetGraph != null)?repository.getValueFactory().createURI(this.targetGraph.toString()):null)
 								);
 							} catch (RepositoryException e) {
@@ -108,7 +109,7 @@ public class LoadFromFileOrDirectory extends AbstractLoadOperation implements Re
 	
 	/**
 	 * Charge le RDF contenu dans le fichier. Si le fichier est un répertoire, tente
-	 * d'itérer sur tous les sous-fichiers et sosu-répertoires.
+	 * d'itérer sur tous les sous-fichiers et sous-répertoires.
 	 * 
 	 * @param aFileOrDirectory
 	 * @param connection
@@ -142,7 +143,7 @@ public class LoadFromFileOrDirectory extends AbstractLoadOperation implements Re
 						aFileOrDirectory,
 						// TODO : ici mettre le namespace par defaut comme un parametre ?
 						RDF.NAMESPACE,
-						RDFFormat.forFileName(aFileOrDirectory.getName(), RDFFormat.RDFXML),
+						Rio.getParserFormatForFileName(aFileOrDirectory.getName(), RDFFormat.RDFXML),
 						(autoNamedGraphs)?
 								connection.getRepository().getValueFactory().createURI(context.toString())
 								:((this.targetGraph != null)?connection.getRepository().getValueFactory().createURI(this.targetGraph.toString()):null)
