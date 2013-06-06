@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.io.ReadWriteTextFile;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 public class SynonymsGeneratorFromSKOSBroaders {
@@ -37,7 +37,7 @@ public class SynonymsGeneratorFromSKOSBroaders {
 	}
 
 	public String generate() 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		// on initialise
 		this.result = new StringBuffer(500);
 

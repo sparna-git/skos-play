@@ -5,19 +5,19 @@ package fr.sparna.rdf.sesame.toolkit.query;
  * 
  * @author Thomas Francart
  */
-public class SPARQLExecutionException extends Exception {
+public class SPARQLPerformException extends Exception {
 
 	private static final long serialVersionUID = -7140173477048016716L;
 
-	public SPARQLExecutionException(String msg) {
+	public SPARQLPerformException(String msg) {
 		super(msg);
 	}
 
-	public SPARQLExecutionException(Throwable cause) {
+	public SPARQLPerformException(Throwable cause) {
 		super(cause);
 	}
 
-	public SPARQLExecutionException(String msg, Throwable cause) {
+	public SPARQLPerformException(String msg, Throwable cause) {
 		super(msg, cause);
 	}
 	

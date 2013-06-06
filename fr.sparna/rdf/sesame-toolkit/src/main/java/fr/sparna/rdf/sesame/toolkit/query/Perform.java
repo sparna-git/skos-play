@@ -123,10 +123,10 @@ public class Perform {
 	 * Executes the SPARQL SELECT query returned by the helper, and pass the helper to the <code>evaluate</code> method
 	 */
 	public void select(SelectSPARQLHelperIfc helper) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		try {
 			if(repository == null) {
-				throw new SPARQLExecutionException("Repository is null. If it comes from a RepositoryProviderIfc, have you called the init() method on the RepositoryProvider ?");
+				throw new SPARQLPerformException("Repository is null. If it comes from a RepositoryProviderIfc, have you called the init() method on the RepositoryProvider ?");
 			}
 			
 			RepositoryConnection connection = this.repository.getConnection();
@@ -154,17 +154,17 @@ public class Perform {
 				// on execute la query
 				tupleQuery.evaluate(helper.getHandler());
 			} catch (MalformedQueryException e) {
-				throw new SPARQLExecutionException(e);
+				throw new SPARQLPerformException(e);
 			} finally {
 				RepositoryConnectionDoorman.closeQuietly(connection);
 			}
 
 		} catch (RepositoryException e) {
-			throw new SPARQLExecutionException(e);
+			throw new SPARQLPerformException(e);
 		} catch (QueryEvaluationException e) {
-			throw new SPARQLExecutionException(e);
+			throw new SPARQLPerformException(e);
 		} catch (TupleQueryResultHandlerException e) {
-			throw new SPARQLExecutionException(e);
+			throw new SPARQLPerformException(e);
 		}
 	}
 
@@ -172,10 +172,10 @@ public class Perform {
 	 * Executes the SPARQL CONSTRUCT query returned by the helper, and pass the helper to the <code>evaluate</code> method
 	 */
 	public void construct(ConstructSPARQLHelperIfc helper) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		try {
 			if(repository == null) {
-				throw new SPARQLExecutionException("Repository is null. If it comes from a RepositoryProviderIfc, have you called the init() method on the RepositoryProvider ?");
+				throw new SPARQLPerformException("Repository is null. If it comes from a RepositoryProviderIfc, have you called the init() method on the RepositoryProvider ?");
 			}
 			
 			RepositoryConnection connection = this.repository.getConnection();
@@ -203,17 +203,17 @@ public class Perform {
 				// on execute la query
 				graphQuery.evaluate(helper.getHandler());
 			} catch (MalformedQueryException e) {
-				throw new SPARQLExecutionException(e);
+				throw new SPARQLPerformException(e);
 			} finally {
 				RepositoryConnectionDoorman.closeQuietly(connection);
 			}
 
 		} catch (RepositoryException e) {
-			throw new SPARQLExecutionException(e);
+			throw new SPARQLPerformException(e);
 		} catch (QueryEvaluationException e) {
-			throw new SPARQLExecutionException(e);
+			throw new SPARQLPerformException(e);
 		} catch (RDFHandlerException e) {
-			throw new SPARQLExecutionException(e);
+			throw new SPARQLPerformException(e);
 		}
 	}
 	
@@ -223,10 +223,10 @@ public class Perform {
 	 * <p>If helper.getWriter() is null, the result is simply returned by that method.
 	 */
 	public boolean ask(BooleanSPARQLHelperIfc helper) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		try {
 			if(repository == null) {
-				throw new SPARQLExecutionException("Repository is null. If it comes from a RepositoryProviderIfc, have you called the init() method on the RepositoryProvider ?");
+				throw new SPARQLPerformException("Repository is null. If it comes from a RepositoryProviderIfc, have you called the init() method on the RepositoryProvider ?");
 			}
 			
 			RepositoryConnection connection = this.repository.getConnection();
@@ -261,17 +261,17 @@ public class Perform {
 				return result;
 				
 			} catch (MalformedQueryException e) {
-				throw new SPARQLExecutionException(e);
+				throw new SPARQLPerformException(e);
 			} catch(IOException ioe) {
-				throw new SPARQLExecutionException(ioe);
+				throw new SPARQLPerformException(ioe);
 			} finally {
 				RepositoryConnectionDoorman.closeQuietly(connection);
 			}
 
 		} catch (RepositoryException e) {
-			throw new SPARQLExecutionException(e);
+			throw new SPARQLPerformException(e);
 		} catch (QueryEvaluationException e) {
-			throw new SPARQLExecutionException(e);
+			throw new SPARQLPerformException(e);
 		}
 	}
 	
@@ -281,10 +281,10 @@ public class Perform {
 	 * 
 	 * @param query
 	 * @return
-	 * @throws SPARQLExecutionException
+	 * @throws SPARQLPerformException
 	 */
 	public boolean ask(SPARQLQueryIfc query) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		// passing a null writer will cause the executeAsk(BooleanSPARQLHelperIfc helper) to not serialize the result
 		return ask(new BooleanSPARQLHelper(query, null));
 	}
@@ -295,10 +295,10 @@ public class Perform {
 	 * 
 	 * @param query
 	 * @return
-	 * @throws SPARQLExecutionException
+	 * @throws SPARQLPerformException
 	 */
 	public int count(SPARQLQueryIfc query) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		ReadSingleIntegerHandler handler = new ReadSingleIntegerHandler();
 		this.select(new SelectSPARQLHelper(query, handler));
 		return handler.getResultIntValue();
@@ -310,10 +310,10 @@ public class Perform {
 	 * 
 	 * @param query
 	 * @return
-	 * @throws SPARQLExecutionException
+	 * @throws SPARQLPerformException
 	 */
 	public Value read(SPARQLQueryIfc query) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		ReadSingleValueHandler handler = new ReadSingleValueHandler();
 		this.select(new SelectSPARQLHelper(query, handler));
 		return handler.getResult();
@@ -324,13 +324,13 @@ public class Perform {
 	 * Executes the update returned by the helper. Nothing is returned from the execution.
 	 * 
 	 * @param helper
-	 * @throws SPARQLExecutionException
+	 * @throws SPARQLPerformException
 	 */
 	public void update(SPARQLUpdateIfc helper) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		try {
 			if(repository == null) {
-				throw new SPARQLExecutionException("Repository is null. If it comes from a RepositoryProviderIfc, have you called the init() method on the RepositoryProvider ?");
+				throw new SPARQLPerformException("Repository is null. If it comes from a RepositoryProviderIfc, have you called the init() method on the RepositoryProvider ?");
 			}
 			
 			RepositoryConnection connection = this.repository.getConnection();
@@ -359,15 +359,15 @@ public class Perform {
 				update.execute();
 				log.trace("UPDATE executed sucessfully");
 			} catch (MalformedQueryException e) {
-				throw new SPARQLExecutionException(e);
+				throw new SPARQLPerformException(e);
 			} finally {
 				RepositoryConnectionDoorman.closeQuietly(connection);
 			}
 
 		} catch (RepositoryException e) {
-			throw new SPARQLExecutionException(e);
+			throw new SPARQLPerformException(e);
 		} catch (UpdateExecutionException e) {
-			throw new SPARQLExecutionException(e);
+			throw new SPARQLPerformException(e);
 		}
 	}
 	

@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.skos.SKOSTreeNode.NodeType;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 
@@ -76,10 +76,10 @@ public class SKOSTreeBuilder {
 	 * result will be an empty list.
 	 * 
 	 * @return		A List of trees starting at the ConceptSchemes or the Concepts with no broaders.
-	 * @throws SPARQLExecutionException
+	 * @throws SPARQLPerformException
 	 */
 	public List<GenericTree<SKOSTreeNode>> buildTrees() 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 
 		final List<GenericTree<SKOSTreeNode>> result = new ArrayList<GenericTree<SKOSTreeNode>>();
 		
@@ -90,7 +90,7 @@ public class SKOSTreeBuilder {
 			throws TupleQueryResultHandlerException {
 				try {
 					result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)conceptScheme)));
-				} catch (SPARQLExecutionException e) {
+				} catch (SPARQLPerformException e) {
 					throw new TupleQueryResultHandlerException(e);
 				}
 			}
@@ -133,7 +133,7 @@ public class SKOSTreeBuilder {
 					throws TupleQueryResultHandlerException {
 						try {
 							result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)noBroader)));
-						} catch (SPARQLExecutionException e) {
+						} catch (SPARQLPerformException e) {
 							throw new TupleQueryResultHandlerException(e);
 						}
 					}
@@ -155,10 +155,10 @@ public class SKOSTreeBuilder {
 	 * 
 	 * @param root		The URI of the Concept or the ConceptScheme that will be the root of that tree
 	 * @return
-	 * @throws SPARQLExecutionException
+	 * @throws SPARQLPerformException
 	 */
 	public GenericTree<SKOSTreeNode> buildTree(java.net.URI root) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 
 		log.debug("Building SKOS Tree from root "+root);
 			
@@ -203,7 +203,7 @@ public class SKOSTreeBuilder {
 	}
 	
 	private GenericTreeNode<SKOSTreeNode> buildTreeRec(URI conceptOrConceptSchemeOrCollection)
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 
 		// fetch sort criteria - usually prefLabel in a given language
 		List<Value> sortCriterias = this.sortCriteriaReader.read(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()));
@@ -230,7 +230,7 @@ public class SKOSTreeBuilder {
 				throws TupleQueryResultHandlerException {
 					try {
 						node.addChild(buildTreeRec((URI)top));
-					} catch (SPARQLExecutionException e) {
+					} catch (SPARQLPerformException e) {
 						throw new TupleQueryResultHandlerException(e);
 					}
 				}
@@ -246,7 +246,7 @@ public class SKOSTreeBuilder {
 					throws TupleQueryResultHandlerException {
 						try {
 							node.addChild(buildTreeRec((URI)top));
-						} catch (SPARQLExecutionException e) {
+						} catch (SPARQLPerformException e) {
 							throw new TupleQueryResultHandlerException(e);
 						}
 					}
@@ -262,7 +262,7 @@ public class SKOSTreeBuilder {
 					throws TupleQueryResultHandlerException {
 						try {
 							node.addChild(buildTreeRec((URI)noBroader));
-						} catch (SPARQLExecutionException e) {
+						} catch (SPARQLPerformException e) {
 							throw new TupleQueryResultHandlerException(e);
 						}
 					}
@@ -279,7 +279,7 @@ public class SKOSTreeBuilder {
 				throws TupleQueryResultHandlerException {
 					try {
 						node.addChild(buildTreeRec((URI)member));
-					} catch (SPARQLExecutionException e) {
+					} catch (SPARQLPerformException e) {
 						throw new TupleQueryResultHandlerException(e);
 					}
 				}
@@ -299,7 +299,7 @@ public class SKOSTreeBuilder {
 				throws TupleQueryResultHandlerException {
 					try {
 						node.addChild(buildTreeRec((URI)narrower));
-					} catch (SPARQLExecutionException e) {
+					} catch (SPARQLPerformException e) {
 						throw new TupleQueryResultHandlerException(e);
 					}
 				}

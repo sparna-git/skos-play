@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
@@ -87,7 +87,7 @@ public class PrintServlet extends HttpServlet {
 		try {
 			String aRandomConcept = Perform.on(r).read(new SPARQLQuery(new SPARQLQueryBuilder(this, "ReadRandomConcept.rq"))).stringValue();
 			log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+outputType);
-		} catch (SPARQLExecutionException e1) {
+		} catch (SPARQLPerformException e1) {
 			throw new ServletException(e1);
 		}
 		

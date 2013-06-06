@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import fr.sparna.commons.io.ReadWriteTextFile;
 import fr.sparna.commons.lang.ListMap;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.skos.SKOS;
 
@@ -46,7 +46,7 @@ public class AutocompleteGeneratorFromSKOSLabels {
 	}
 
 	public String generate() 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		// on initialise
 		this.result = new StringBuffer(500);
 		

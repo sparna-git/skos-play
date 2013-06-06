@@ -9,7 +9,7 @@ import org.openrdf.repository.Repository;
 import fr.sparna.rdf.sesame.toolkit.handler.CopyStatementRDFHandler;
 import fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQueryIfc;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderList;
@@ -82,7 +82,7 @@ public class LoadFromSPARQL extends AbstractLoadOperation implements RepositoryO
 									new CopyStatementRDFHandler(repository, this.targetGraph)
 							)
 					);
-				} catch (SPARQLExecutionException e) {
+				} catch (SPARQLPerformException e) {
 					throw new RepositoryOperationException(e);
 				}
 			}

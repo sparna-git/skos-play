@@ -33,7 +33,7 @@ import fr.sparna.rdf.sesame.toolkit.handler.MultipleRDFHandler;
 import fr.sparna.rdf.sesame.toolkit.handler.SplittingRDFHandler;
 import fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLUpdate;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
@@ -268,7 +268,7 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
  * 		Simple cases with a SPARQL query as a String are easily adressed by constructing a SelectSPARQLHelper with the String, associate the appropriate
  * 		TupleQueryResultHandler, and pass them to the Perform class. The "on(Repository)" static method tells the Perform class to execute the query
  * 		on the given Repository.<br />
- * 		You need to catch {@link fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException} when performing
+ * 		You need to catch {@link fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException} when performing
  * 		a SPARQL query.
  * 		{@.jcite -- perform1}
  * </li>
@@ -615,7 +615,7 @@ public class Documentation {
 		try {
 			// Performs the query. The DebugHandler prints the result on the console
 			Perform.on(r).select(new SelectSPARQLHelper("SELECT DISTINCT ?type WHERE { ?x a ?type }", new DebugHandler()));
-		} catch (SPARQLExecutionException e) {
+		} catch (SPARQLPerformException e) {
 			e.printStackTrace();
 		}
 		// -- perform1
@@ -700,7 +700,7 @@ public class Documentation {
 			));
 		} catch (RepositoryFactoryException e) {
 			e.printStackTrace();
-		} catch (SPARQLExecutionException e) {
+		} catch (SPARQLPerformException e) {
 			e.printStackTrace();
 		}
 		// -- perform4

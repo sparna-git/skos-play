@@ -23,7 +23,7 @@ import fr.sparna.commons.lang.LRUCache;
 import fr.sparna.commons.lang.ListMap;
 import fr.sparna.rdf.sesame.toolkit.handler.LiteralListHandler;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
@@ -113,7 +113,7 @@ public class LabelReader {
 	}
 	
 	public List<Literal> getLabels(final java.net.URI resource) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		
 		// look into the cache first
 		if(isCaching() && cache.containsKey(resource)) {
@@ -163,12 +163,12 @@ public class LabelReader {
 	}	
 	
 	public List<Literal> getLabels(final org.openrdf.model.URI resource) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		return getLabels(URI.create(resource.stringValue()));
 	}
 	
 	public Map<java.net.URI, List<Literal>> getLabels(Collection<java.net.URI> resources)
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		// prepare result
 		ListMap<java.net.URI, Literal> result = new ListMap<java.net.URI, Literal>();
 		
@@ -215,7 +215,7 @@ public class LabelReader {
 	}
 	
 	private Map<java.net.URI, List<Literal>> getLabelsOnProperty(Set<java.net.URI> resources, final java.net.URI property) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		
 		final int CHUNK_SIZE = 100;
 		ListMap<java.net.URI, Literal> result = new ListMap<java.net.URI, Literal>();
@@ -247,7 +247,7 @@ public class LabelReader {
 	}
 	
 	private Map<java.net.URI, List<Literal>> processChunkOnProperty(List<java.net.URI> resources, final java.net.URI property) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		
 		String query = "SELECT ?uri ?label WHERE { ?uri ?labelProp ?label FILTER(lang(?label) = '"+this.preferredLanguage+"') }";
 		ValuesSPARQLQueryBuilder builder = new ValuesSPARQLQueryBuilder(
@@ -293,7 +293,7 @@ public class LabelReader {
 	}
 
 	private List<Literal> findALabel(List<SPARQLQuery> queries) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		LiteralListHandler h = new LiteralListHandler();
 		
 		// for each query

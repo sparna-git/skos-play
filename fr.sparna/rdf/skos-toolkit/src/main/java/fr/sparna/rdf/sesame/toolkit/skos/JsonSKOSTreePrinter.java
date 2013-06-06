@@ -23,7 +23,7 @@ import fr.sparna.commons.tree.GenericTreeVisitorException;
 import fr.sparna.commons.tree.GenericTreeVisitorIfc;
 import fr.sparna.rdf.sesame.toolkit.handler.DebugHandler;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLUpdate;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
@@ -44,14 +44,14 @@ public class JsonSKOSTreePrinter {
 	}
 	
 	public String printToString(GenericTree<SKOSTreeNode> tree) 
-	throws SPARQLExecutionException, IOException, JsonGenerationException {
+	throws SPARQLPerformException, IOException, JsonGenerationException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		print(tree, baos);
 		return baos.toString("UTF-8");
 	}
 	
 	public void print(GenericTree<SKOSTreeNode> tree, OutputStream out) 
-	throws SPARQLExecutionException, IOException, JsonGenerationException {
+	throws SPARQLPerformException, IOException, JsonGenerationException {
 		JsonFactory jsonF = new JsonFactory();
 		// let's write to the stream, using UTF-8 encoding (only sensible one)
 		JsonGenerator jg = jsonF.createGenerator(out, JsonEncoding.UTF8);
@@ -75,7 +75,7 @@ public class JsonSKOSTreePrinter {
 	}
 	
 	private void printConceptRec(GenericTreeNode<SKOSTreeNode> aNode, final JsonGenerator jg, Map<URI, List<Literal>> labels) 
-	throws SPARQLExecutionException, JsonGenerationException, IOException {
+	throws SPARQLPerformException, JsonGenerationException, IOException {
 		
 		jg.writeStartObject();
 		// write URI

@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLUpdate;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderList;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
@@ -42,7 +42,7 @@ public class ApplyUpdates extends AbstractLoadOperation implements RepositoryOpe
 				try {
 					log.debug("Applying update : "+"\n"+anUpdate.toString());
 					p.update(anUpdate);
-				} catch (SPARQLExecutionException e) {
+				} catch (SPARQLPerformException e) {
 					throw new RepositoryOperationException(e);
 				}
 			}

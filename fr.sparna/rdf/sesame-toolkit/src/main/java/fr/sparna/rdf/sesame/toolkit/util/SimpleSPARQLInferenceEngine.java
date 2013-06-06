@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import fr.sparna.rdf.sesame.toolkit.handler.CopyStatementRDFHandler;
 import fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelperIfc;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQueryIfc;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 
@@ -50,7 +50,7 @@ public class SimpleSPARQLInferenceEngine {
 		}
 	}
 	
-	public void run() throws SPARQLExecutionException {
+	public void run() throws SPARQLPerformException {
 		boolean saturated = false;
 		do {
 			// keep track of number of iterations

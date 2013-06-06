@@ -13,7 +13,7 @@ import org.openrdf.repository.Repository;
 
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.skos.JsonSKOSTreePrinter;
 import fr.sparna.rdf.sesame.toolkit.skos.SKOSTreeBuilder;
 import fr.sparna.rdf.sesame.toolkit.skos.SKOSTreeNode;
@@ -76,7 +76,7 @@ public class JsonServlet extends HttpServlet {
 					tree.setRoot(root);
 				}				
 			}
-		} catch (SPARQLExecutionException e) {
+		} catch (SPARQLPerformException e) {
 			throw new ServletException(e);
 		}
 		
@@ -88,7 +88,7 @@ public class JsonServlet extends HttpServlet {
 			// writes json output
 			JsonSKOSTreePrinter printer = new JsonSKOSTreePrinter(labelReader);
 			printer.print(tree, response.getOutputStream());
-		} catch (SPARQLExecutionException e) {
+		} catch (SPARQLPerformException e) {
 			throw new ServletException(e);
 		}
 	}	

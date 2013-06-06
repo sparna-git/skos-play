@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.openrdf.model.Value;
 
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.skos.SKOSTreeNode.NodeType;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 
@@ -18,7 +18,7 @@ public class SKOSNodeTypeReader {
 	}
 
 	public NodeType readNodeType(java.net.URI node) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		List<Value> types = typeReader.read(node);
 
 		for (Value value : types) {

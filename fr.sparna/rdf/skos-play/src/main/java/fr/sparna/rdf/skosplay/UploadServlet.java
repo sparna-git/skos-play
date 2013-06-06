@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.i18n.StrictResourceBundleControl;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
@@ -169,7 +169,7 @@ public class UploadServlet extends HttpServlet {
 				doError(request, response, b.getString("upload.error.dataTooLarge"));
 				return;
 			}
-		} catch (SPARQLExecutionException e) {
+		} catch (SPARQLPerformException e) {
 			doError(request, response, e.getMessage());
 			return;
 		}
@@ -195,7 +195,7 @@ public class UploadServlet extends HttpServlet {
 				printFormData.setEnableHierarchical(false);
 				printFormData.setWarningMessage(b.getString("upload.warning.noHierarchyFound"));
 			}
-		} catch (SPARQLExecutionException e) {
+		} catch (SPARQLPerformException e) {
 			printFormData.setEnableHierarchical(false);
 			printFormData.setWarningMessage(b.getString("upload.warning.noHierarchyFound"));
 		}
@@ -220,7 +220,7 @@ public class UploadServlet extends HttpServlet {
 													((Literal)bindingSet.getValue("conceptCount")).intValue()
 													:0
 									);
-								} catch (SPARQLExecutionException e) {
+								} catch (SPARQLPerformException e) {
 									throw new TupleQueryResultHandlerException(e);
 								}
 							}
@@ -241,7 +241,7 @@ public class UploadServlet extends HttpServlet {
 						
 					}
 			));
-		} catch (SPARQLExecutionException e) {
+		} catch (SPARQLPerformException e) {
 			doError(request, response, e.getMessage());
 			return;
 		}
