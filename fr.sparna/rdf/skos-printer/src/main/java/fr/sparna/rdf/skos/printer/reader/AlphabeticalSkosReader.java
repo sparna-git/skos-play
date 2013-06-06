@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.lang.StringUtil;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.skos.GetLabelsInSchemeHelper;
 import fr.sparna.rdf.sesame.toolkit.skos.SKOS;
@@ -65,7 +65,7 @@ public class AlphabeticalSkosReader {
 	}
 
 	public Alphabetical read(final String lang, final URI conceptScheme) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		
 		// init tag resource bundle if not set
 		if(this.tagsBundle == null) {
@@ -169,7 +169,7 @@ public class AlphabeticalSkosReader {
 	}
 
 	private Entry buildEntry(EntrySpec anEntry, final List<PropertyReader> additionalReaders, final PropertyReader prefLabelReader)
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		Entry e;
 		// s'il y a un prefLabel, c'est que la valeur de "label" est un altLabel
 		if(anEntry.prefLabel != null) {

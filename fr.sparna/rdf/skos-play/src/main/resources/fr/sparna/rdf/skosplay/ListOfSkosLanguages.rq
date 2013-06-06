@@ -6,4 +6,4 @@ WHERE {
   ?concept skos:prefLabel|skos:altLabel|skos:hiddenLabel ?label .
   BIND(lang(?label) as ?language) .
   FILTER(?language != "")
-}
+} ORDER BY ?language

@@ -97,6 +97,7 @@
 								name="example"
 								id="example"
 								onchange="enabledInput('example')">
+								<option value="data/eurovoc/eurovoc-4.4-clean.ttl"><fmt:message key="upload.form.providedExample.eurovoc" /></option>
 								<option value="data/unesco/unescothes.ttl"><fmt:message key="upload.form.providedExample.unesco" /></option>
 								<option value="data/w/matieres.rdf"><fmt:message key="upload.form.providedExample.w" /></option>
 								<option value="data/nyt/nyt-descriptors.ttl"><fmt:message key="upload.form.providedExample.nyt" /></option>

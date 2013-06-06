@@ -103,6 +103,7 @@
 				<h4>What are the licences of included examples ?</h4>
 				<p>
 					<ul>
+						<li>Thesaurus EUROVOC : © European Union, 2013, <a href="http://eurovoc.europa.eu/" target="_blank">http://eurovoc.europa.eu/</a>.</li>
 						<li>UNESCO Thesaurus : <a href="http://www.unesco.org/new/fr/terms-of-use/terms-of-use/copyright" target="_blank">copyright UNESCO</a>, thanks to <a href="http://skos.um.es/unescothes/" target="_blank">University of Murcia</a>.</li>
 						<li>W Thesaurus : property of archives de France, data downloaded <a href="http://www.archivesdefrance.culture.gouv.fr/gerer/classement/normes-outils/thesaurus/" target="_blank">here</a> in may 2013</li>
 						<li>New-York Times Subject descriptors : Creative Commons Attribution 3.0 United States License, New York Times Company. Data downloaded <a href="http://data.nytimes.com">here</a> in may 2013.</li>

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLExecutionException;
+import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.skos.SKOS;
 import fr.sparna.rdf.sesame.toolkit.skos.SKOSNodeTypeReader;
@@ -60,7 +60,7 @@ public class HierarchicalSkosReader {
 	}
 
 	public List<Hierarchical> read(final String lang, final URI conceptScheme) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		log.debug("Reading hierarchical structure in '"+lang+"' for conceptScheme '"+conceptScheme+"'...");
 		
 		// init tag resource bundle if not set
@@ -130,7 +130,7 @@ public class HierarchicalSkosReader {
 	}
 	
 	private Entry buildEntryRec(GenericTreeNode<SKOSTreeNode> treeNode, List<PropertyReader> additionalReaders) 
-	throws SPARQLExecutionException {
+	throws SPARQLPerformException {
 		log.debug("Creating entry for "+treeNode.getData().getUri().toString()+"...");
 		
 		// create entry

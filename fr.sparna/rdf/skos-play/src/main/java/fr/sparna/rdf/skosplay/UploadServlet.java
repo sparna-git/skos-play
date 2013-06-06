@@ -1,5 +1,6 @@
 package fr.sparna.rdf.skosplay;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
@@ -34,6 +35,7 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.EndpointRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryException;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromStream;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromURL;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
@@ -266,15 +268,23 @@ public class UploadServlet extends HttpServlet {
 		List<String> exampleDatas = Arrays.asList(new String[]{
 				"data/unesco/unescothes.ttl",
 				"data/w/matieres.rdf",
-				"data/nyt/nyt-descriptors.ttl"
+				"data/nyt/nyt-descriptors.ttl",
+				"data/eurovoc/eurovoc-4.4-clean.ttl"
 		});
 		for (String aData : exampleDatas) {
 			try {
 				RepositoryBuilder builder = new RepositoryBuilder();
-				builder.addOperation(new LoadFromStream(this, aData));
+				String path = System.getProperty("skosplay.home")+"/"+aData;
+				File f = new File(path);
+				if(f.exists()) {
+					builder.addOperation(new LoadFromFileOrDirectory(path));
+				} else {					
+					builder.addOperation(new LoadFromStream(this, aData));					
+				}
 				this.getServletContext().setAttribute(aData, builder.createNewRepository());
+				
 			} catch (RepositoryFactoryException e) {
-				throw new ServletException(e);
+				e.printStackTrace();
 			}
 		}
 	}
