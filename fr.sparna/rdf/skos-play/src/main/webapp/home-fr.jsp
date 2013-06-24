@@ -67,11 +67,11 @@
 				documentaires et des référentiels d'entreprise, et des technologies du web de données.
 				</p>
 				<br />
-				<br />
 				<div style="text-align:center">
                   	<a href="upload.jsp"><button class="btn btn-large btn-success">Commencer</button></a>
                   	<a href="about"><button class="btn btn-large" type="button">En savoir plus</button></a>                
               	</div>
+              	<br />
 			</div>
 
       	</div>

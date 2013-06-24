@@ -15,6 +15,7 @@ import org.openrdf.query.Operation;
 import org.openrdf.query.QueryEvaluationException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.TupleQuery;
+import org.openrdf.query.TupleQueryResult;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.query.Update;
 import org.openrdf.query.UpdateExecutionException;
@@ -66,8 +67,6 @@ public class Perform {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 	
-	private Repository repository;
-	
 	private boolean includeInferred = true;
 	
 	private Set<URI> defaultGraphs = null;
@@ -77,6 +76,10 @@ public class Perform {
 	private URI defaultInsertGraph = null;
 	
 	private Set<URI> defaultRemoveGraphs = null;
+	
+	private Repository repository;
+	
+	private RepositoryConnection connection;
 	
 	public Perform(Repository repository) {
 		this(repository, true);
@@ -88,11 +91,21 @@ public class Perform {
 		this.includeInferred = includeInferred;
 	}
 	
+	public Perform(RepositoryConnection connection) {
+		this(connection, true);
+	}
+	
+	public Perform(RepositoryConnection connection, boolean includeInferred) {
+		super();
+		this.connection = connection;
+		this.includeInferred = includeInferred;
+	}
+	
 	/**
 	 * Convenience static constructor that returns a new instance of <code>Perform</code>
 	 * and allows to write
 	 * 
-	 *  <code>Perform.newExecuter(repository).executeSelect(myHelper)</code>
+	 *  <code>Perform.on(repository).select(myHelper)</code>
 	 * 
 	 * @param repository The repository on which to execute the queries
 	 * @return a new instance of Perform
@@ -100,15 +113,27 @@ public class Perform {
 	public static Perform on(Repository repository) {
 		return new Perform(repository);
 	}
+
+	/**
+	 * Convenience static constructor that returns a new instance of <code>Perform</code>
+	 * 
+	 *  <code>TupleQueryResult result = Perform.on(connection).selectResult(myQuery)</code>
+	 * 
+	 * @param repository The repository on which to execute the queries
+	 * @return a new instance of Perform
+	 */
+	public static Perform on(RepositoryConnection connection) {
+		return new Perform(connection);
+	}
 	
 	/**
 	 * A convenience method that sets the default graph, the default insert graph,
 	 * and the default remove graph to the provided graph URI. This is equivalent to the
 	 * following calls :
 	 * <code>
-	 *  executer.setDefaultGraphs(Collections.singleton(graph));
-	 *	executer.setDefaultInsertGraph(graph);
-	 *	executer.setDefaultRemoveGraphs(Collections.singleton(graph));
+	 *  perform.setDefaultGraphs(Collections.singleton(graph));
+	 *	perform.setDefaultInsertGraph(graph);
+	 *	perform.setDefaultRemoveGraphs(Collections.singleton(graph));
 	 * </code>
 	 * 
 	 * @param graph the URI of the graph to set
@@ -124,39 +149,26 @@ public class Perform {
 	 */
 	public void select(SelectSPARQLHelperIfc helper) 
 	throws SPARQLPerformException {
+		
+		boolean useOpenedConnection = (this.connection != null);
+		
 		try {
-			if(repository == null) {
-				throw new SPARQLPerformException("Repository is null. If it comes from a RepositoryProviderIfc, have you called the init() method on the RepositoryProvider ?");
-			}
+			RepositoryConnection localConnection = (useOpenedConnection)?this.connection:this.repository.getConnection();
 			
-			RepositoryConnection connection = this.repository.getConnection();
 			TupleQuery tupleQuery;
 			try {
 				String query = helper.getQuery().getSPARQL();
 				log.trace("Executing SPARQL SELECT :\n"+helper.getQuery().toString());
-				tupleQuery = connection.prepareTupleQuery(QueryLanguage.SPARQL, query);
-				
-				// on positionne les bindings s'il y en a
-				processBindings(tupleQuery, helper.getQuery().getBindings());
-				
-				// on inclut les inferred statements si demandé
-				tupleQuery.setIncludeInferred((helper.getQuery().isIncludeInferred() != null)?helper.getQuery().isIncludeInferred():this.includeInferred);
-				
-				// on ajoute les datasets si besoin
-				tupleQuery = (TupleQuery)processDataset(
-						tupleQuery,
-						((helper.getQuery().getDefaultGraphs() != null)?helper.getQuery().getDefaultGraphs():this.defaultGraphs),
-						((helper.getQuery().getNamedGraphs() != null)?helper.getQuery().getNamedGraphs():this.namedGraphs),
-						this.defaultInsertGraph,
-						this.defaultRemoveGraphs
-				);
+				tupleQuery = localConnection.prepareTupleQuery(QueryLanguage.SPARQL, query);
+				// sets bindings, inferred statement flags and datasets
+				tupleQuery = (TupleQuery)preprocessOperation(tupleQuery, helper.getQuery());
 				
 				// on execute la query
 				tupleQuery.evaluate(helper.getHandler());
 			} catch (MalformedQueryException e) {
 				throw new SPARQLPerformException(e);
 			} finally {
-				RepositoryConnectionDoorman.closeQuietly(connection);
+				if(!useOpenedConnection) { RepositoryConnectionDoorman.closeQuietly(localConnection); }
 			}
 
 		} catch (RepositoryException e) {
@@ -167,45 +179,64 @@ public class Perform {
 			throw new SPARQLPerformException(e);
 		}
 	}
+	
+	/**
+	 * Executes the SPARQL SELECT query, and returns a TupleQueryResult (that needs to be closed after that)
+	 */
+	public TupleQueryResult selectResult(SPARQLQuery sparqlQuery) 
+	throws SPARQLPerformException {
+		
+		if(this.connection == null) {
+			throw new SPARQLPerformException("selectResult method can only work on already opened connections");
+		}
+		
+		try {
+			RepositoryConnection localConnection = this.connection;
+			TupleQuery tupleQuery;
+			try {
+				String query = sparqlQuery.getSPARQL();
+				log.trace("Executing SPARQL SELECT :\n"+query);
+				tupleQuery = localConnection.prepareTupleQuery(QueryLanguage.SPARQL, query);
+				// sets bindings, inferred statement flags and datasets
+				tupleQuery = (TupleQuery)preprocessOperation(tupleQuery, sparqlQuery);
+				
+				// on execute la query
+				return tupleQuery.evaluate();
+			} catch (MalformedQueryException e) {
+				throw new SPARQLPerformException(e);
+			}
+
+		} catch (RepositoryException e) {
+			throw new SPARQLPerformException(e);
+		} catch (QueryEvaluationException e) {
+			throw new SPARQLPerformException(e);
+		}
+	}
 
 	/**
 	 * Executes the SPARQL CONSTRUCT query returned by the helper, and pass the helper to the <code>evaluate</code> method
 	 */
 	public void construct(ConstructSPARQLHelperIfc helper) 
 	throws SPARQLPerformException {
+		
+		boolean useOpenedConnection = (this.connection != null);
+		
 		try {
-			if(repository == null) {
-				throw new SPARQLPerformException("Repository is null. If it comes from a RepositoryProviderIfc, have you called the init() method on the RepositoryProvider ?");
-			}
-			
-			RepositoryConnection connection = this.repository.getConnection();
+			RepositoryConnection localConnection = (useOpenedConnection)?this.connection:this.repository.getConnection();
 			GraphQuery graphQuery;
 			try {
 				String query = helper.getQuery().getSPARQL();
 				log.trace("Executing SPARQL CONSTRUCT :\n"+helper.getQuery().toString());
-				graphQuery = connection.prepareGraphQuery(QueryLanguage.SPARQL, query);
-				
-				// on positionne les bindings s'il y en a
-				processBindings(graphQuery, helper.getQuery().getBindings());
-				
-				// on inclut les inferred statements si demandé
-				graphQuery.setIncludeInferred((helper.getQuery().isIncludeInferred() != null)?helper.getQuery().isIncludeInferred():this.includeInferred);
-				
-				// on ajoute les datasets si besoin
-				graphQuery = (GraphQuery)processDataset(
-						graphQuery,
-						((helper.getQuery().getDefaultGraphs() != null)?helper.getQuery().getDefaultGraphs():this.defaultGraphs),
-						((helper.getQuery().getNamedGraphs() != null)?helper.getQuery().getNamedGraphs():this.namedGraphs),
-						this.defaultInsertGraph,
-						this.defaultRemoveGraphs
-				);
+				graphQuery = localConnection.prepareGraphQuery(QueryLanguage.SPARQL, query);
+				// sets bindings, inferred statement flags and datasets
+				graphQuery = (GraphQuery)preprocessOperation(graphQuery, helper.getQuery());
 				
 				// on execute la query
 				graphQuery.evaluate(helper.getHandler());
 			} catch (MalformedQueryException e) {
 				throw new SPARQLPerformException(e);
 			} finally {
-				RepositoryConnectionDoorman.closeQuietly(connection);
+				if(!useOpenedConnection) { RepositoryConnectionDoorman.closeQuietly(localConnection); }
 			}
 
 		} catch (RepositoryException e) {
@@ -224,32 +255,18 @@ public class Perform {
 	 */
 	public boolean ask(BooleanSPARQLHelperIfc helper) 
 	throws SPARQLPerformException {
+		
+		boolean useOpenedConnection = (this.connection != null);
+		
 		try {
-			if(repository == null) {
-				throw new SPARQLPerformException("Repository is null. If it comes from a RepositoryProviderIfc, have you called the init() method on the RepositoryProvider ?");
-			}
-			
-			RepositoryConnection connection = this.repository.getConnection();
+			RepositoryConnection localConnection = (useOpenedConnection)?this.connection:this.repository.getConnection();
 			BooleanQuery booleanQuery;
 			try {
 				String query = helper.getQuery().getSPARQL();
 				log.trace("Executing SPARQL ASK :\n"+helper.getQuery().toString());
-				booleanQuery = connection.prepareBooleanQuery(QueryLanguage.SPARQL, query);
-				
-				// on positionne les bindings s'il y en a
-				processBindings(booleanQuery, helper.getQuery().getBindings());
-				
-				// on inclut les inferred statements si demandé
-				booleanQuery.setIncludeInferred((helper.getQuery().isIncludeInferred() != null)?helper.getQuery().isIncludeInferred():this.includeInferred);
-				
-				// on ajoute les datasets si besoin
-				booleanQuery = (BooleanQuery)processDataset(
-						booleanQuery,
-						((helper.getQuery().getDefaultGraphs() != null)?helper.getQuery().getDefaultGraphs():this.defaultGraphs),
-						((helper.getQuery().getNamedGraphs() != null)?helper.getQuery().getNamedGraphs():this.namedGraphs),
-						this.defaultInsertGraph,
-						this.defaultRemoveGraphs
-				);
+				booleanQuery = localConnection.prepareBooleanQuery(QueryLanguage.SPARQL, query);
+				// sets bindings, inferred statement flags and datasets
+				booleanQuery = (BooleanQuery)preprocessOperation(booleanQuery, helper.getQuery());
 				
 				// on execute la query
 				boolean result = booleanQuery.evaluate();
@@ -265,7 +282,7 @@ public class Perform {
 			} catch(IOException ioe) {
 				throw new SPARQLPerformException(ioe);
 			} finally {
-				RepositoryConnectionDoorman.closeQuietly(connection);
+				if(!useOpenedConnection) { RepositoryConnectionDoorman.closeQuietly(localConnection); }
 			}
 
 		} catch (RepositoryException e) {
@@ -328,32 +345,18 @@ public class Perform {
 	 */
 	public void update(SPARQLUpdateIfc helper) 
 	throws SPARQLPerformException {
+		
+		boolean useOpenedConnection = (this.connection != null);
+		
 		try {
-			if(repository == null) {
-				throw new SPARQLPerformException("Repository is null. If it comes from a RepositoryProviderIfc, have you called the init() method on the RepositoryProvider ?");
-			}
-			
-			RepositoryConnection connection = this.repository.getConnection();
+			RepositoryConnection localConnection = (useOpenedConnection)?this.connection:this.repository.getConnection();
 			Update update;
 			try {
 				String updateString = helper.getSPARQL();
 				log.trace("Executing SPARQL UPDATE :\n"+helper.toString());
-				update = connection.prepareUpdate(QueryLanguage.SPARQL, updateString);
-				
-				// on positionne les bindings s'il y en a
-				processBindings(update, helper.getBindings());
-				
-				// on inclut les inferred statements si demandé
-				update.setIncludeInferred((helper.isIncludeInferred() != null)?helper.isIncludeInferred():this.includeInferred);
-				
-				// on ajoute les datasets si besoin
-				update = (Update)processDataset(
-						update,
-						((helper.getDefaultGraphs() != null)?helper.getDefaultGraphs():this.defaultGraphs),
-						((helper.getNamedGraphs() != null)?helper.getNamedGraphs():this.namedGraphs),
-						this.defaultInsertGraph,
-						this.defaultRemoveGraphs
-				);
+				update = localConnection.prepareUpdate(QueryLanguage.SPARQL, updateString);
+				// sets bindings, inferred statement flags and datasets
+				update = (Update)preprocessOperation(update, helper);
 				
 				// on execute l'update
 				update.execute();
@@ -361,7 +364,7 @@ public class Perform {
 			} catch (MalformedQueryException e) {
 				throw new SPARQLPerformException(e);
 			} finally {
-				RepositoryConnectionDoorman.closeQuietly(connection);
+				if(!useOpenedConnection) { RepositoryConnectionDoorman.closeQuietly(localConnection); }
 			}
 
 		} catch (RepositoryException e) {
@@ -369,6 +372,25 @@ public class Perform {
 		} catch (UpdateExecutionException e) {
 			throw new SPARQLPerformException(e);
 		}
+	}
+	
+	private Operation preprocessOperation(Operation o, SPARQLQueryIfc query) {
+		// on positionne les bindings s'il y en a
+		processBindings(o, query.getBindings());
+		
+		// on inclut les inferred statements si demandé
+		o.setIncludeInferred((query.isIncludeInferred() != null)?query.isIncludeInferred():this.includeInferred);
+		
+		// on ajoute les datasets si besoin
+		o = processDataset(
+				o,
+				((query.getDefaultGraphs() != null)?query.getDefaultGraphs():this.defaultGraphs),
+				((query.getNamedGraphs() != null)?query.getNamedGraphs():this.namedGraphs),
+				this.defaultInsertGraph,
+				this.defaultRemoveGraphs
+		);
+		
+		return o;
 	}
 	
 	private void processBindings(

@@ -6,3 +6,4 @@
 build/
 target/
 .sesame-toolkit-repositories/
+pom.xml.releaseBackup

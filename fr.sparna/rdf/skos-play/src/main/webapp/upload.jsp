@@ -23,9 +23,10 @@
 	
 			function enabledInput(selected) {
 				document.getElementById('source-' + selected).checked = true;
-				// document.getElementById('url').disabled = selected != 'url';
-				// document.getElementById('example').disabled = selected != 'example';
-				// document.getElementById('file').disabled = selected != 'file';				
+				document.getElementById('url').disabled = selected != 'url';
+				document.getElementById('example').disabled = selected != 'example';
+				document.getElementById('file').disabled = selected != 'file';
+				document.getElementById('endpoint').disabled = selected != 'endpoint';
 			}	
 			
 	    </script>
@@ -157,8 +158,7 @@
 								onkeypress="enabledInput('url');" />
 							<span class="help-block"><i><fmt:message key="upload.form.remoteUrl.help" /></i></span>
 						</td>
-					</tr>
-					<!-- 
+					</tr> 
 					<tr>
 						<td></td>
 						<td>
@@ -183,7 +183,6 @@
 							<span class="help-block"><i><fmt:message key="upload.form.endpoint.help" /></i></span>
 						</td>
 					</tr>
-					 -->
 				</table>
 				<div class="form-actions">
 					<button type="submit" id="submit-button" class="btn btn-large btn-success"><fmt:message key="next" /></button>

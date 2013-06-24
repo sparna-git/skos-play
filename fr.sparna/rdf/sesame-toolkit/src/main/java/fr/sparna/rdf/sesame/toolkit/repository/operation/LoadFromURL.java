@@ -19,7 +19,7 @@ import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 
 /**
- * Loads RDF from a URL. Optionaly, if the program runs offline or if you want to ensure there is a default data if
+ * Loads RDF from a URL. Optionally, if the program runs offline or if you want to ensure there is a default data if
  * the URL cannot be reached, you can set a local fallback path. The local JVM resource referred to by this path will
  * be loaded if the initial URL cannot be loaded.
  * 

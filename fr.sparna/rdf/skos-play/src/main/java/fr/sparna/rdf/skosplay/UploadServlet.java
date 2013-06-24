@@ -39,6 +39,8 @@ import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromStream;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromURL;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
+import fr.sparna.rdf.skosplay.config.Configuration;
+import fr.sparna.rdf.skosplay.config.DefaultConfiguration;
 
 public class UploadServlet extends HttpServlet {
 	
@@ -172,6 +174,7 @@ public class UploadServlet extends HttpServlet {
 				return;
 			}
 		} catch (SPARQLPerformException e) {
+			e.printStackTrace();
 			doError(request, response, e.getMessage());
 			return;
 		}
@@ -274,7 +277,7 @@ public class UploadServlet extends HttpServlet {
 		for (String aData : exampleDatas) {
 			try {
 				RepositoryBuilder builder = new RepositoryBuilder();
-				String path = System.getProperty("skosplay.home")+"/"+aData;
+				String path = Configuration.getDefault().getProperty(DefaultConfiguration.PROP_THESAURUS_DIRECTORY)+"/"+aData;
 				File f = new File(path);
 				if(f.exists()) {
 					builder.addOperation(new LoadFromFileOrDirectory(path));

@@ -12,6 +12,7 @@ import java.util.concurrent.CountDownLatch;
 import org.openrdf.model.Literal;
 import org.openrdf.model.Resource;
 import org.openrdf.query.BindingSet;
+import org.openrdf.query.TupleQueryResult;
 import org.openrdf.query.TupleQueryResultHandlerBase;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
@@ -59,6 +60,7 @@ import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromURL;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromXML;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.ThreadedRepositoryOperation;
 import fr.sparna.rdf.sesame.toolkit.util.Namespaces;
+import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
 
 /**
@@ -815,6 +817,26 @@ public class Documentation {
 		// output repository content (with updates applied) in another single file
 		RepositoryWriter.writeToFile("/path/to/output/file.ttl", r);
 		// -- usageExample1
+	}
+	
+	private void selectResult1() throws Exception {
+		// -- selectResult1
+		// reads RDF files contained in a directory and load them in a repository
+		Repository r = RepositoryBuilder.fromString("/directory/containing/rdf/files");
+
+		// explicitely open connection
+		RepositoryConnection connection = r.getConnection();
+		
+		// perform a query on it
+		TupleQueryResult tqr = Perform.on(connection).selectResult(new SPARQLQuery(
+				"SELECT DISTINCT ?type WHERE { [] a ?type }"
+		));
+		// process result
+		
+		// close result and connection
+		tqr.close();
+		RepositoryConnectionDoorman.closeQuietly(connection);
+		// -- selectResult1
 	}
 	
 	
