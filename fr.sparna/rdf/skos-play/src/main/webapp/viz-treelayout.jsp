@@ -16,13 +16,13 @@
 }
 
 .node text {
-  font-size: 11px;
+  font-size: 12px;
 }
 
 path.link {
   fill: none;
-  stroke: #ccc;
-  stroke-width: 1.5px;
+  stroke: #aaa;
+  stroke-width: 3px;
 }
 
     </style>
@@ -103,7 +103,7 @@ function update(source) {
       .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
   nodeUpdate.select("circle")
-      .attr("r", 4.5)
+      .attr("r", 6)
       .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
   nodeUpdate.select("text")
