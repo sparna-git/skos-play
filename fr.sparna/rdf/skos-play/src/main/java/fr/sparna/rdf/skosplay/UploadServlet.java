@@ -33,6 +33,8 @@ import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.EndpointRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.FactoryConfiguration;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryException;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
@@ -60,6 +62,9 @@ public class UploadServlet extends HttpServlet {
 
 	// if source == EXAMPLE, the resource path
 	private static final String PARAM_EXAMPLE = "example";
+	
+	// RDFS inference
+	private static final String PARAM_RDFS = "rdfs-inference";
 	
 	private enum SOURCE_TYPE {
 		FILE,
@@ -93,12 +98,21 @@ public class UploadServlet extends HttpServlet {
 			return;
 		}
 		
+		// determine rdfs inference
+		String rdfsParam = (request.getParameter(PARAM_RDFS) != null && !request.getParameter(PARAM_RDFS).equals(""))?request.getParameter(PARAM_RDFS):null;
+		log.debug(PARAM_RDFS+" : "+rdfsParam);
+		boolean doRdfs = (rdfsParam != null && !"".equals(rdfsParam));		
+		RepositoryBuilder localRepositoryBuilder;
+		if(doRdfs) {
+			localRepositoryBuilder = new RepositoryBuilder(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_AWARE));
+		} else {
+			localRepositoryBuilder = new RepositoryBuilder();
+		}
 		
 		Repository repository;		
 		try {
 			switch(sourceType) {
 			case FILE : {
-				RepositoryBuilder builder = new RepositoryBuilder();
 				// get uploaded file
 				Object dataParam = request.getAttribute(PARAM_FILE);
 				if(dataParam instanceof FileUploadException) {
@@ -106,16 +120,15 @@ public class UploadServlet extends HttpServlet {
 					return;
 				}
 				FileItem data = (FileItem)dataParam;
-				builder.addOperation(new LoadFromStream(data.getInputStream(), Rio.getParserFormatForFileName(data.getName(), RDFFormat.RDFXML)));
-				repository = builder.createNewRepository();
+				localRepositoryBuilder.addOperation(new LoadFromStream(data.getInputStream(), Rio.getParserFormatForFileName(data.getName(), RDFFormat.RDFXML)));
+				repository = localRepositoryBuilder.createNewRepository();
 				break;
 			}
 			case URL : {
-				RepositoryBuilder builder = new RepositoryBuilder();
 				// get url param
 				String urlParam = (request.getParameter(PARAM_URL) != null && !request.getParameter(PARAM_URL).equals(""))?request.getParameter(PARAM_URL):null;
-				builder.addOperation(new LoadFromURL(new URL(urlParam), false));
-				repository = builder.createNewRepository();
+				localRepositoryBuilder.addOperation(new LoadFromURL(new URL(urlParam), false));
+				repository = localRepositoryBuilder.createNewRepository();
 				break;
 			}
 			case EXAMPLE : {

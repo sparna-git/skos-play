@@ -73,13 +73,12 @@
 					</div>
 				</c:if>
 			</div>			
-			<form id="upload_form" action="upload" method="post" enctype="multipart/form-data">
+			<form id="upload_form" action="upload" method="post" enctype="multipart/form-data" class="form-horizontal">
 			<fieldset>
 				<legend><fmt:message key="upload.form.legend" /></legend>
-				<table>
-					<tr>
-						<td></td>
-						<td>
+				
+				<div class="control-group">
+					<label class="control-label">
 							<input
 								type="radio"
 								name="source"
@@ -88,26 +87,23 @@
 								onchange="enabledInput('example')"
 								checked="checked" />
 							<fmt:message key="upload.form.providedExample" />
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>
-							<select
-								class="span4"
-								name="example"
-								id="example"
-								onchange="enabledInput('example')">
-								<option value="data/eurovoc/eurovoc-4.4-clean.ttl"><fmt:message key="upload.form.providedExample.eurovoc" /></option>
-								<option value="data/unesco/unescothes.ttl"><fmt:message key="upload.form.providedExample.unesco" /></option>
-								<option value="data/w/matieres.rdf"><fmt:message key="upload.form.providedExample.w" /></option>
-								<option value="data/nyt/nyt-descriptors.ttl"><fmt:message key="upload.form.providedExample.nyt" /></option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>
+					</label>
+					<div class="controls">
+						<select
+							class="span4"
+							name="example"
+							id="example"
+							onchange="enabledInput('example')">
+							<option value="data/eurovoc/eurovoc-4.4-clean.ttl"><fmt:message key="upload.form.providedExample.eurovoc" /></option>
+							<option value="data/unesco/unescothes.ttl"><fmt:message key="upload.form.providedExample.unesco" /></option>
+							<option value="data/w/matieres.rdf"><fmt:message key="upload.form.providedExample.w" /></option>
+							<option value="data/nyt/nyt-descriptors.ttl"><fmt:message key="upload.form.providedExample.nyt" /></option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label">
 							<input
 								type="radio"
 								name="source"
@@ -115,80 +111,88 @@
 								value="file"
 								onchange="enabledInput('file')" />
 							<fmt:message key="upload.form.localFile" />
-					</tr>
-					<tr>
-						<td></td>
-						<td>
-							<div class="fileupload fileupload-new" data-provides="fileupload">
-								<div class="input-append">
-									<div class="uneditable-input span4">
-										<i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span>
-									</div>
-									<span class="btn btn-file">
-										<span class="fileupload-new"><fmt:message key="upload.form.localFile.select" /></span>
-										<span class="fileupload-exists"><fmt:message key="upload.form.localFile.change" /></span>
-										<input type="file" name="file" id="file" onchange="enabledInput('file')" />
-									</span>
-									<a href="#" class="btn fileupload-exists" data-dismiss="fileupload"><fmt:message key="upload.form.localFile.remove" /></a>
+					</label>
+					<div class="controls">
+						<div class="fileupload fileupload-new" data-provides="fileupload">
+							<div class="input-append">
+								<div class="uneditable-input span4">
+									<i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span>
 								</div>
+								<span class="btn btn-file">
+									<span class="fileupload-new"><fmt:message key="upload.form.localFile.select" /></span>
+									<span class="fileupload-exists"><fmt:message key="upload.form.localFile.change" /></span>
+									<input type="file" name="file" id="file" onchange="enabledInput('file')" />
+								</span>
+								<a href="#" class="btn fileupload-exists" data-dismiss="fileupload"><fmt:message key="upload.form.localFile.remove" /></a>
 							</div>
-							<span class="help-block"><i><fmt:message key="upload.form.localFile.help" /></i></span>
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>
-							<input
-								type="radio"
-								name="source"
-								id="source-url"
-								value="url"
-								onchange="enabledInput('url')" />
-							<fmt:message key="upload.form.remoteUrl" />
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>
-							<input
-								type="text"
-								id="url"
-								name="url"
-								value=""
-								onkeypress="enabledInput('url');" />
-							<span class="help-block"><i><fmt:message key="upload.form.remoteUrl.help" /></i></span>
-						</td>
-					</tr> 
-					<tr>
-						<td></td>
-						<td>
-							<input
-								type="radio"
-								name="source"
-								id="source-endpoint"
-								value="endpoint"
-								onchange="enabledInput('endpoint')" />
-							<fmt:message key="upload.form.endpoint" />
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>
-							<input
-								type="text"
-								id="endpoint"
-								name="endpoint"
-								value=""
-								onkeypress="enabledInput('endpoint');" />
-							<span class="help-block"><i><fmt:message key="upload.form.endpoint.help" /></i></span>
-						</td>
-					</tr>
-				</table>
-				<div class="form-actions">
-					<button type="submit" id="submit-button" class="btn btn-large btn-success"><fmt:message key="next" /></button>
-					<img src="images/ajax-loader.gif" id="loading" hidden="hidden" />
+						</div>
+						<span class="help-block"><i><fmt:message key="upload.form.localFile.help" /></i></span>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label">
+						<input
+							type="radio"
+							name="source"
+							id="source-url"
+							value="url"
+							onchange="enabledInput('url')" />
+						<fmt:message key="upload.form.remoteUrl" />
+					</label>
+					<div class="controls">
+						<input
+							type="text"
+							id="url"
+							name="url"
+							value=""
+							onkeypress="enabledInput('url');" />
+						<span class="help-block"><i><fmt:message key="upload.form.remoteUrl.help" /></i></span>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label">
+						<input
+							type="radio"
+							name="source"
+							id="source-endpoint"
+							value="endpoint"
+							onchange="enabledInput('endpoint')" />
+						<fmt:message key="upload.form.endpoint" />
+					</label>
+					<div class="controls">
+						<input
+							type="text"
+							id="endpoint"
+							name="endpoint"
+							value=""
+							onkeypress="enabledInput('endpoint');" />
+						<span class="help-block"><i><fmt:message key="upload.form.endpoint.help" /></i></span>
+					</div>
 				</div>
 			</fieldset>
+			<fieldset>
+				<legend><fmt:message key="upload.form.advanced.legend" /></legend>
+				<div class="control-group">
+					<label class="control-label">
+						<fmt:message key="upload.form.rdfs" />
+					</label>
+					<div class="controls">
+						<input
+							type="checkbox"
+							id="rdfs-inference"
+							value="rdfs-inference"
+							name="rdfs-inference" />
+						<span class="help-block"><i><fmt:message key="upload.form.rdfs.help" /></i></span>
+					</div>
+				</div>
+			</fieldset>
+			<div class="form-actions">
+				<button type="submit" id="submit-button" class="btn btn-large btn-success"><fmt:message key="next" /></button>
+				<img src="images/ajax-loader.gif" id="loading" hidden="hidden" />
+			</div>
+			
 			</form>
       	</div>
       	<footer>

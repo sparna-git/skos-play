@@ -1,0 +1,14 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix ex: <http://www.exemple.fr/> .
+
+# extend skos:Concept with a more specialized class
+ex:Organization rdfs:subClassOf skos:Concept .
+
+# extend skos:altLabel with a more specialized property
+ex:acronym rdfs:subPropertyOf skos:altLabel .
+
+# use the declared extensions
+ex:a1 a ex:Organization ;
+	skos:prefLabel "Organisation des Nations Unies"@fr ;
+	ex:acronym "ONU"@fr .
