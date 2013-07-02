@@ -27,6 +27,7 @@ rect.parent {
 
 text {
   pointer-events: none;
+  font-size: 14px;
 }
 
     </style>
@@ -74,6 +75,7 @@ var json = JSON.parse( dataset );
 
   g.append("svg:text")
       .attr("transform", transform)
+      // position verticale a partir du haut (?)
       .attr("dy", ".35em")
       .style("opacity", function(d) { return d.dx * ky > 12 ? 1 : 0; })
       .text(function(d) { return d.name; })
