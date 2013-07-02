@@ -79,7 +79,7 @@ public class LoadFromURL extends AbstractLoadOperation implements RepositoryOper
 		} catch (RepositoryException e) {
 			throw new RepositoryOperationException("Error when adding content of URL '"+this.url.toString()+"'", e);
 		} catch (IOException e) {
-			log.info("Cannot open stream of URL '"+this.url+"'");
+			log.info("Cannot open stream of URL '"+this.url+"', cause : "+e.getMessage());
 			if(this.localFallback != null) {
 				log.info("Will attempt to load local resource fallback : '"+this.localFallback+"'");
 				InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(this.localFallback);

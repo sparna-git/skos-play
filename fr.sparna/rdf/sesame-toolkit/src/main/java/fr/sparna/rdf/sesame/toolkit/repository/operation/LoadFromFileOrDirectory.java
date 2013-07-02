@@ -141,7 +141,7 @@ public class LoadFromFileOrDirectory extends AbstractLoadOperation implements Re
 			try {
 				connection.add(
 						aFileOrDirectory,
-						// TODO : ici mettre le namespace par defaut comme un parametre ?
+						// TODO : mettre le namespace par defaut comme un parametre ?
 						RDF.NAMESPACE,
 						Rio.getParserFormatForFileName(aFileOrDirectory.getName(), RDFFormat.RDFXML),
 						(autoNamedGraphs)?

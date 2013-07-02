@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.openrdf.model.Literal;
+import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.rio.RDFHandler;
@@ -66,12 +68,19 @@ public class SortingRDFHandler implements RDFHandler {
 			@Override
 			public int compare(Statement s1, Statement s2) {
 				int subjectComparison = s1.getSubject().stringValue().compareTo(s2.getSubject().stringValue());
+				// si on est sur le meme sujet...
 				if(subjectComparison == 0) {
 					// on fait remonter le rdf:type en premier pour etre sur qu'il soit mis comme nom de la balise
 					if(s1.getPredicate().equals(RDF.TYPE)) return -1;
 					else if (s2.getPredicate().equals(RDF.TYPE)) return 1;
 					// sinon on tri par predicat pour regrouper ensemble les predicats du meme type
-					else return s1.getPredicate().stringValue().compareTo(s2.getPredicate().stringValue());
+					else if((s1.getObject() instanceof Literal) && (s2.getObject() instanceof Resource)) {
+						return 1;
+					} else if((s1.getObject() instanceof Resource) && (s2.getObject() instanceof Literal)) {
+						return -1;
+					} else {
+						return s1.getPredicate().stringValue().compareTo(s2.getPredicate().stringValue());
+					}					
 				} else {
 					return subjectComparison;
 				}

@@ -89,11 +89,13 @@
 		</dependency>
 
 		<!-- OWLIM for runtime only -->
-	    	<dependency>
+		<!--
+	    <dependency>
 			<groupId>com.ontotext</groupId>
 			<artifactId>owlim-lite</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		-->
 
 		<!-- necessaire seulement lorsqu'on utilise un Endpoint HTTP -->
 		<dependency>
