@@ -47,10 +47,13 @@ var diagonal = d3.svg.diagonal()
 var vis = d3.select("#body").append("svg:svg")
     .attr("width", w + m[1] + m[3])
     .attr("height", h + m[0] + m[2])
-  .append("svg:g")
+  	.append("svg:g")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-d3.json("json?language=${language}&root=${root}", function(json) {
+
+  var dataset = '${dataset}';
+  var json = JSON.parse( dataset );
+// d3.json("json?language=${language}&root=${root}", function(json) {
   root = json;
   root.x0 = h / 2;
   root.y0 = 0;
@@ -65,7 +68,7 @@ d3.json("json?language=${language}&root=${root}", function(json) {
   // Initialize the display to show a few nodes.
   root.children.forEach(toggleAll);
   update(root);
-});
+// });
 
 function update(source) {
   var duration = d3.event && d3.event.altKey ? 5000 : 500;

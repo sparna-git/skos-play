@@ -52,10 +52,15 @@ var vis = d3.select("#body").append("div")
 var partition = d3.layout.partition()
     .value(function(d) { return d.size; });
 
-d3.json("json?language=${language}&root=${root}", function(root) {
+var dataset = '${dataset}';
+var json = JSON.parse( dataset );
+
+// d3.json("json?language=${language}&root=${root}", function(root) {
+  root = json;
+  
   var g = vis.selectAll("g")
       .data(partition.nodes(root))
-    .enter().append("svg:g")
+      .enter().append("svg:g")
       .attr("transform", function(d) { return "translate(" + x(d.y) + "," + y(d.x) + ")"; })
       .on("click", click);
 
@@ -102,7 +107,7 @@ d3.json("json?language=${language}&root=${root}", function(root) {
   function transform(d) {
     return "translate(8," + d.dx * ky / 2 + ")";
   }
-});
+// });
 
     </script>
   </body>

@@ -12,3 +12,7 @@ ex:acronym rdfs:subPropertyOf skos:altLabel .
 ex:a1 a ex:Organization ;
 	skos:prefLabel "Organisation des Nations Unies"@fr ;
 	ex:acronym "ONU"@fr .
+
+ex:a2 a ex:Organization ;
+	skos:prefLabel "Conseil de sécurité"@fr ;
+	skos:broader ex:a1 .

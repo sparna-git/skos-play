@@ -154,7 +154,7 @@ public class UploadServlet extends HttpServlet {
 			}
 			}
 		} catch (RepositoryFactoryException e) {
-			doError(request, response, e.getMessage());
+			doError(request, response, e);
 			return;
 		}
 		
@@ -188,7 +188,7 @@ public class UploadServlet extends HttpServlet {
 			}
 		} catch (SPARQLPerformException e) {
 			e.printStackTrace();
-			doError(request, response, e.getMessage());
+			doError(request, response, e);
 			return;
 		}
 		
@@ -260,7 +260,7 @@ public class UploadServlet extends HttpServlet {
 					}
 			));
 		} catch (SPARQLPerformException e) {
-			doError(request, response, e.getMessage());
+			doError(request, response, e);
 			return;
 		}
 		
@@ -309,10 +309,28 @@ public class UploadServlet extends HttpServlet {
 	protected void doError(
 			HttpServletRequest request,
 			HttpServletResponse response,
-			String errorMessage
+			Exception e
+	) throws ServletException, IOException {
+		// print stack trace
+		e.printStackTrace();
+		// build on-screen error message
+		StringBuffer message = new StringBuffer(e.getMessage());
+		Throwable current = e.getCause();
+		while(current != null) {
+			message.append(". Cause : "+current.getMessage());
+			current = current.getCause();
+		}
+		doError(request, response, message.toString());
+		return;
+	}
+	
+	protected void doError(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			String message
 	) throws ServletException, IOException {
 		UploadFormData data = new UploadFormData();
-		data.setErrorMessage(errorMessage);
+		data.setErrorMessage(message);
 		request.setAttribute(UploadFormData.KEY, data);
 		getServletContext().getRequestDispatcher("/upload.jsp").forward(request, response);
 		return;

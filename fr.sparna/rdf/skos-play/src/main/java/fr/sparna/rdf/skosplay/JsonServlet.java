@@ -42,49 +42,20 @@ public class JsonServlet extends HttpServlet {
 		
 		// retrieve data from session
 		Repository r = SessionData.get(request.getSession()).getRepository();
-		// reconstruire un labelReader
+		// recreate a labelReader
 		// TODO
 		// LabelReader labelReader = SessionData.get(request.getSession()).getLabelReader();
 		LabelReader labelReader = new LabelReader(r, "en", language);
 		
-		// craete a tree builder
+		// create a tree builder
 		SKOSTreeBuilder builder = new SKOSTreeBuilder(r, language);
-		GenericTree<SKOSTreeNode> tree = new GenericTree<SKOSTreeNode>();
-
-		try {
-			if(rootParam != null) {	
-				// generates tree				
-				tree = builder.buildTree(URI.create(rootParam));
-			} else {
-				// fetch all trees
-				List<GenericTree<SKOSTreeNode>> trees = builder.buildTrees();
-				
-				// if only one, set it as root
-				if(trees.size() == 1) {
-					tree = trees.get(0);
-				} else {
-					// otherwise, create a fake root
-					GenericTreeNode<SKOSTreeNode> root = new GenericTreeNode<SKOSTreeNode>();
-					root.setData(new SKOSTreeNode(URI.create("skosplay:allData"), "", NodeType.UNKNOWN));
-
-					// add all the trees under it					
-					for (GenericTree<SKOSTreeNode> genericTree : trees) {
-						root.addChild(genericTree.getRoot());
-					}
-					
-					// set the root of the tree
-					tree.setRoot(root);
-				}				
-			}
-		} catch (SPARQLPerformException e) {
-			throw new ServletException(e);
-		}
-		
+		GenericTree<SKOSTreeNode> tree = null;
 		
 		// set content-type and response encoding
 		response.setContentType("application/json; charset=UTF-8");
 		
 		try {
+			tree = buildTree(builder, (rootParam != null)?URI.create(rootParam):null);			
 			// writes json output
 			JsonSKOSTreePrinter printer = new JsonSKOSTreePrinter(labelReader);
 			printer.print(tree, response.getOutputStream());
@@ -100,6 +71,38 @@ public class JsonServlet extends HttpServlet {
 			HttpServletResponse response
 	) throws ServletException, IOException {
 		this.doGet(request, response);
+	}
+	
+	public static GenericTree<SKOSTreeNode> buildTree(SKOSTreeBuilder builder, URI root)
+	throws SPARQLPerformException {
+		GenericTree<SKOSTreeNode> tree = new GenericTree<SKOSTreeNode>();
+		
+		if(root != null) {	
+			// generates tree				
+			tree = builder.buildTree(root);
+		} else {
+			// fetch all trees
+			List<GenericTree<SKOSTreeNode>> trees = builder.buildTrees();
+			
+			// if only one, set it as root
+			if(trees.size() == 1) {
+				tree = trees.get(0);
+			} else {
+				// otherwise, create a fake root
+				GenericTreeNode<SKOSTreeNode> fakeRoot = new GenericTreeNode<SKOSTreeNode>();
+				fakeRoot.setData(new SKOSTreeNode(URI.create("skosplay:allData"), "", NodeType.UNKNOWN));
+
+				// add all the trees under it					
+				for (GenericTree<SKOSTreeNode> genericTree : trees) {
+					fakeRoot.addChild(genericTree.getRoot());
+				}
+				
+				// set the root of the tree
+				tree.setRoot(fakeRoot);
+			}				
+		}
+		
+		return tree;
 	}
 	
 }

@@ -148,11 +148,11 @@
 # modify this prefix to suit your namespace
 @prefix me: &lt;http://www.exemple.com/&gt; .
 
-# declare e concept scheme that represents the thesaurus, one time at the top of the file
+# declare a concept scheme that represents the thesaurus, one time at the top of the file
 me:MyThesaurus a skos:ConceptScheme .
 me:MyThesaurus skos:prefLabel "Name of the thesaurus here"@en .
 
-# then decalre concepts. Here is one
+# then declare concepts. Here is one
 me:Vehicle a skos:Concept .
 # for each concept you need to say it is part of the thesaurus
 me:Vehicle skos:inScheme me:MyThesaurus .
@@ -266,7 +266,7 @@ me:123456 skos:broader me:Vehicle .
 					more than 5000 concepts to limit the output file size. For dataviv, I would say that above 2000 concepts you
 					can't see anything and you have big latencies when zooming.
 				</p>
-				<h4>Is there a web service ? is SKOS-WL supported ? can I give a SPARQL endpoint as input ? do you support inference ?
+				<h4>Is there a web service ? is SKOS-XL supported ? can I give a SPARQL endpoint as input ? do you support inference ?
 				</h4>
 				<p>
 					No. No. No. No. But <a href="http://www.google.com/moderator/#15/e=209fff&t=209fff.40" target="_blank">vote</a>

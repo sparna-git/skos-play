@@ -85,4 +85,9 @@ public abstract class Configuration {
         }
         defaultConfiguration = configuration;
     }
+    
+    public static void main(String... args) throws Exception {
+    	String s = "Côte d'ivoire";
+    	System.out.println(s.replaceAll("'", "\\\\'"));
+    }
 }

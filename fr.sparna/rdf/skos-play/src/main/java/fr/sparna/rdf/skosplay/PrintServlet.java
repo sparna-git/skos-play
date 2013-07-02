@@ -1,5 +1,6 @@
 package fr.sparna.rdf.skosplay;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
@@ -14,10 +15,15 @@ import org.openrdf.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.skos.JsonSKOSTreePrinter;
+import fr.sparna.rdf.sesame.toolkit.skos.SKOSTreeBuilder;
+import fr.sparna.rdf.sesame.toolkit.skos.SKOSTreeNode;
+import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.reader.AlphabeticalSkosReader;
 import fr.sparna.rdf.skos.printer.reader.ConceptListSkosReader;
@@ -94,8 +100,25 @@ public class PrintServlet extends HttpServlet {
 		switch(displayType) {
 		case PARTITION : {
 			// set attributes
-			request.setAttribute("language", language);
-			request.setAttribute("root", (scheme != null)?scheme.toString():"");
+			// request.setAttribute("language", language);
+			// request.setAttribute("root", (scheme != null)?scheme.toString():"");
+			
+			SKOSTreeBuilder builder = new SKOSTreeBuilder(r, language);
+			try {
+				GenericTree<SKOSTreeNode> tree = JsonServlet.buildTree(builder, (scheme != null)?URI.create(scheme.toString()):null);			
+				
+				// writes json output
+				LabelReader labelReader = new LabelReader(r, "en", language);
+				JsonSKOSTreePrinter printer = new JsonSKOSTreePrinter(labelReader);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				printer.print(tree, baos);
+				request.setAttribute("dataset", baos.toString().replaceAll("'", "\\\\'"));
+				
+			} catch (SPARQLPerformException e) {
+				throw new ServletException(e);
+			}
+			
+			
 			// forward to the JSP
 			getServletContext().getRequestDispatcher("/viz-partition.jsp").forward(request, response);
 			
@@ -103,8 +126,24 @@ public class PrintServlet extends HttpServlet {
 		}
 		case TREELAYOUT : {
 			// set attributes
-			request.setAttribute("language", language);
-			request.setAttribute("root", (scheme != null)?scheme.toString():"");
+			// request.setAttribute("language", language);
+			// request.setAttribute("root", (scheme != null)?scheme.toString():"");
+			
+			SKOSTreeBuilder builder = new SKOSTreeBuilder(r, language);
+			try {
+				GenericTree<SKOSTreeNode> tree = JsonServlet.buildTree(builder, (scheme != null)?URI.create(scheme.toString()):null);			
+				
+				// writes json output
+				LabelReader labelReader = new LabelReader(r, "en", language);
+				JsonSKOSTreePrinter printer = new JsonSKOSTreePrinter(labelReader);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				printer.print(tree, baos);
+				request.setAttribute("dataset", baos.toString().replaceAll("'", "\\\\'"));
+				
+			} catch (SPARQLPerformException e) {
+				throw new ServletException(e);
+			}
+			
 			// forward to the JSP
 			getServletContext().getRequestDispatcher("/viz-treelayout.jsp").forward(request, response);
 			return;
