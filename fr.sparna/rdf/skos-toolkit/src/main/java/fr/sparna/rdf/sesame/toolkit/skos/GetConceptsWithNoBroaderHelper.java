@@ -65,7 +65,7 @@ public abstract class GetConceptsWithNoBroaderHelper extends SelectSPARQLHelperB
 		@Override
 		public String getSPARQL() {
 			String sparql = "" +
-					"SELECT ?concept"+"\n" +
+					"SELECT DISTINCT ?concept"+"\n" +
 					"WHERE {"+"\n" +
 					"	?concept a <"+SKOS.CONCEPT+"> ."+"\n" +
 					"	"+((this.additionalCriteria)?"   ?concept ?additionalCriteriaPredicate ?additionalCriteriaObject .":"")+"\n" +

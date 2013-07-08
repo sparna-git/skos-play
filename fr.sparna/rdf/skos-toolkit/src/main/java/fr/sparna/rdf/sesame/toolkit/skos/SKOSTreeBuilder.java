@@ -37,6 +37,8 @@ public class SKOSTreeBuilder {
 	protected SKOSNodeTypeReader nodeTypeReader;
 
 	private Collator collator;
+	
+	private boolean ignoreExplicitTopConcepts = false;
 
 	/**
 	 * Builds a SKOSTreeBuilder that will use the given PropertyReader to read the property on which
@@ -238,20 +240,22 @@ public class SKOSTreeBuilder {
 			});
 			
 			// if no collection was found, we look for topConcepts declared on the scheme
-			if(node.getChildren() == null || node.getChildren().size() == 0) {
-				Perform.on(repository).select(new GetTopConceptsHelper(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()), null) {
-					
-					@Override
-					protected void handleTopConcept(Resource top)
-					throws TupleQueryResultHandlerException {
-						try {
-							node.addChild(buildTreeRec((URI)top));
-						} catch (SPARQLPerformException e) {
-							throw new TupleQueryResultHandlerException(e);
+			if(ignoreExplicitTopConcepts) {
+				if(node.getChildren() == null || node.getChildren().size() == 0) {
+					Perform.on(repository).select(new GetTopConceptsHelper(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()), null) {
+						
+						@Override
+						protected void handleTopConcept(Resource top)
+						throws TupleQueryResultHandlerException {
+							try {
+								node.addChild(buildTreeRec((URI)top));
+							} catch (SPARQLPerformException e) {
+								throw new TupleQueryResultHandlerException(e);
+							}
 						}
-					}
-					
-				});
+						
+					});
+				}
 			}
 			
 			// if no explicit hasTopConcept or istopConceptOf was found, get the concepts of that scheme with no broader info
@@ -313,6 +317,14 @@ public class SKOSTreeBuilder {
 		}
 		
 		return node;
+	}
+
+	public boolean isIgnoreExplicitTopConcepts() {
+		return ignoreExplicitTopConcepts;
+	}
+
+	public void setIgnoreExplicitTopConcepts(boolean ignoreExplicitTopConcepts) {
+		this.ignoreExplicitTopConcepts = ignoreExplicitTopConcepts;
 	}
 
 }

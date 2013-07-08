@@ -67,6 +67,9 @@ public class LoadFromFileOrDirectory extends AbstractLoadOperation implements Re
 										Thread.currentThread().getContextClassLoader().getResource(anRdf),
 										// TODO : ici mettre le namespace par defaut comme un parametre ?
 										RDF.NAMESPACE,
+										// NOTE : if we leave the RDFFormat parameter to null, then Sesame will determine
+										// a default format based on the file extension. The only difference is that it will
+										// not default to RDF/XML
 										// on suppose que c'est du RDF/XML par defaut
 										Rio.getParserFormatForFileName(anRdf, RDFFormat.RDFXML),
 										(autoNamedGraphs)?repository.getValueFactory().createURI(anRdfFile.toURI().toString()):((this.targetGraph != null)?repository.getValueFactory().createURI(this.targetGraph.toString()):null)

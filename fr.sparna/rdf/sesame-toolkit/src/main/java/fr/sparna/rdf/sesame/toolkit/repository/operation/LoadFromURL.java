@@ -71,7 +71,11 @@ public class LoadFromURL extends AbstractLoadOperation implements RepositoryOper
 			repository.getConnection().add(
 					this.url,
 					this.defaultNamespace,
-					Rio.getParserFormatForFileName(url.toString(), RDFFormat.RDFXML),
+					// NEVER EVER explicitly set the RDFFormat when loading from a URL.
+					// Sesame can determine the appropriate parser based on the content type of the response if this parameter
+					// is left to null
+					// Rio.getParserFormatForFileName(url.toString(), RDFFormat.RDFXML),
+					null,
 					(this.targetGraph != null)?repository.getValueFactory().createURI(this.targetGraph.toString()):null
 			);
 		} catch (RDFParseException e) {

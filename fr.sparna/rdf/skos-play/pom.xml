@@ -25,7 +25,21 @@
         <url>http://www.sparna.fr/</url>
     </organization>
 
+    <!-- see http://stackoverflow.com/questions/12426723/displaying-version-and-date-of-build-in-the-xhtml-page -->
+    <properties>
+        <timestamp>${maven.build.timestamp}</timestamp>
+    </properties>
+
     <build>
+        <!-- to populate automagically version.properties -->
+        <!--
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        -->
         <plugins>
             <plugin>
                 <groupId>org.simplericity.jettyconsole</groupId>
@@ -59,21 +73,6 @@
             <version>1.2</version>
         </dependency>
 
-<!--
-        <dependency>
-            <groupId>javax.servlet.jsp.jstl</groupId>
-            <artifactId>jstl-api</artifactId>
-            <version>1.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish.web</groupId>
-            <artifactId>jstl-impl</artifactId>
-            <version>1.2</version>
-        </dependency>
--->
-
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -92,8 +91,26 @@
 
         <dependency>
             <groupId>fr.sparna.rdf</groupId>
+            <artifactId>sesame-toolkit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.sparna.rdf</groupId>
             <artifactId>skos-printer</artifactId>
         </dependency>
+
+        <!-- Semargl and Semargl Sesame integration -->
+        <dependency>
+            <groupId>org.semarglproject</groupId>
+            <artifactId>semargl-rdfa</artifactId>
+            <version>0.6-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.semarglproject</groupId>
+            <artifactId>semargl-sesame</artifactId>
+            <version>0.6-SNAPSHOT</version>
+        </dependency>
+
 
     </dependencies>
 

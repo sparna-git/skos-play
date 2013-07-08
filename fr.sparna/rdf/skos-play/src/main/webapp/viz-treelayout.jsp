@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" 	prefix="fmt" 	%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" 	prefix="c" 		%>
+
+<!-- setup the locale for the messages based on the language in the session -->
+<fmt:setLocale value="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language}"/>
+<fmt:setBundle basename="fr.sparna.rdf.skosplay.i18n.Bundle"/>
 
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js" charset="utf-8"></script>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="bootstrap/js/bootstrap.min.js"></script>
     
     <style type="text/css">
 
@@ -25,9 +34,16 @@ path.link {
   stroke-width: 3px;
 }
 
+.ext-link {
+  font-weight: bold;
+}
+
     </style>
   </head>
   <body>
+    <div id="header" style="text-align:center; font-size: 0.9em;">
+  		<span id="help-popover"><i class="icon-info-sign"></i><fmt:message key="viz.help.label" /></span>
+  	</div>
     <div id="body">
     </div>
     <script type="text/javascript">
@@ -93,7 +109,12 @@ function update(source) {
       .attr("r", 1e-6)
       .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
-  nodeEnter.append("svg:text")
+  // add a link to the concept
+  var a = nodeEnter.append("a")
+	  .attr("xlink:href", function(d){ return d.uri; })
+	  .attr("target", "_blank");
+  
+  a.append("svg:text")
       .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
       .attr("dy", ".35em")
       .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
@@ -171,6 +192,27 @@ function toggle(d) {
   }
 }
 
+    </script>
+    
+    <script>
+        $(document).ready(function () {
+          // add external link behavior to every external link
+          $('text').mouseover(function() {
+            $(this).attr("class", "ext-link");
+          });
+          $('text').mouseout(function() {
+            $(this).attr("class", "");
+          });
+          
+          $('#help-popover').popover({
+        	  html: true,
+              trigger : "click",
+              delay: { show: 0, hide: 400 },
+              content: '<fmt:message key="viz.treelayout.help.content" />',
+              placement: "bottom"
+          });
+          $('#help-popover').css("text-decoration", "underline").css("cursor", "pointer");
+        });         
     </script>
   </body>
 </html>

@@ -280,10 +280,6 @@ chezmoi:123456 skos:broader chezmoi:Vehicule .
 			</fieldset>
 
       	</div>
-      	<footer>
-      	SKOS Play! by <a href="http://francart.fr" target="_blank">Thomas Francart</a> for <a href="http://sparna.fr" target="_blank">Sparna</a>
-      	&nbsp;|&nbsp;
-      	<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.fr"><img alt="Licence Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
-      	</footer>
+      	<jsp:include page="footer.jsp" />
 	</body>
 </html>
