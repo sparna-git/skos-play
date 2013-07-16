@@ -3,6 +3,7 @@ package fr.sparna.rdf.sesame.toolkit.query;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.handler.ReadSingleIntegerHandler;
 import fr.sparna.rdf.sesame.toolkit.handler.ReadSingleValueHandler;
+import fr.sparna.rdf.sesame.toolkit.handler.ReadValueListHandler;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
 
 /**
@@ -332,6 +334,21 @@ public class Perform {
 	public Value read(SPARQLQueryIfc query) 
 	throws SPARQLPerformException {
 		ReadSingleValueHandler handler = new ReadSingleValueHandler();
+		this.select(new SelectSPARQLHelper(query, handler));
+		return handler.getResult();
+	}
+	
+	/**
+	 * Convenience method that directly execute a query with a single binding and possibly multiple lines of result,
+	 * and directly returns the results, allowing it to be called in <code>List<Value> v = Perform.on(repository).readList(...)</code>
+	 * 
+	 * @param query
+	 * @return
+	 * @throws SPARQLPerformException
+	 */
+	public List<Value> readList(SPARQLQueryIfc query) 
+	throws SPARQLPerformException {
+		ReadValueListHandler handler = new ReadValueListHandler();
 		this.select(new SelectSPARQLHelper(query, handler));
 		return handler.getResult();
 	}

@@ -1,0 +1,14 @@
+# List the classes which properties are referencing as objects
+#
+# @title	Number of instances per property per type of object
+# @tag 		model
+# @tag		SPARQL 1.1
+# @see 		
+# @param	
+# 
+SELECT DISTINCT ?property ?type (COUNT(?object) AS ?numberOfInstances) WHERE {
+  ?x ?property ?object .
+  ?object a ?type .
+}
+GROUP BY ?property ?type
+ORDER BY ?property DESC(?numberOfInstances)

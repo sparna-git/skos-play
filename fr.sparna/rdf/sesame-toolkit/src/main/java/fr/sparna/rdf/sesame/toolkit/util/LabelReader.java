@@ -125,6 +125,7 @@ public class LabelReader {
 		// for each possible property in order ...
 		for (final java.net.URI aType : this.labelProperties) {
 			// query for the preferredLanguage
+			// if preferredLanguage is the empty string, this will query for labels without a language
 			queries.add(new SPARQLQuery(
 					"SELECT ?label WHERE { ?uri ?labelProp ?label FILTER(lang(?label) = '"+this.preferredLanguage+"') }",
 					new HashMap<String, Object>() {{ 
