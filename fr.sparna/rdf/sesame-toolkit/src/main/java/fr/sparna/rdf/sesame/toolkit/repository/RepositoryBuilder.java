@@ -23,6 +23,8 @@ import fr.sparna.rdf.sesame.toolkit.util.Namespaces;
  * @author Thomas Francart
  */
 public class RepositoryBuilder implements RepositoryFactoryIfc {
+	
+	public static final String DEFAULT_REPOSITORY_SYSTEM_PROPERTY = "sesame.repository";
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 	
@@ -109,7 +111,34 @@ public class RepositoryBuilder implements RepositoryFactoryIfc {
 				);
 		return builder.createNewRepository();
 	}
+	
+	/**
+	 * Returns a Repository built from a String read in a System property given as a parameter.
+	 * Throws an IllegalArgumentException if the System property is not found.
+	 * 
+	 * @param property The system property to read repository URL or directory.
+	 * @return
+	 * @throws RepositoryFactoryException
+	 */
+	public static Repository fromSystemProperty(String property) throws RepositoryFactoryException {
+		String pValue = System.getProperty(property);
+		if(pValue == null) {
+			throw new IllegalArgumentException("Cannot find system property value : "+property);
+		}
+		
+		return fromString(property);
+	}
 
+	/**
+	 * Returns a Repository built with the DEFAULT_REPOSITORY_SYSTEM_PROPERTY.
+	 * 
+	 * @return
+	 * @throws RepositoryFactoryException
+	 */
+	public static Repository fromSystemProperty() throws RepositoryFactoryException {
+		return fromSystemProperty(DEFAULT_REPOSITORY_SYSTEM_PROPERTY);
+	}
+	
 	@Override
 	public Repository createNewRepository()
 	throws RepositoryFactoryException {
