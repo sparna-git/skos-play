@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class FileUtil {
@@ -54,6 +56,14 @@ public class FileUtil {
 				result.add(fileOrDirectory);
 			}			
 		}
+		
+		// sort output
+		Collections.sort(result, new Comparator<File>() {
+			@Override
+			public int compare(File o1, File o2) {
+				return o1.getAbsolutePath().compareTo(o2.getAbsolutePath());
+			}			
+		});
 		
 		return result;
 	}
