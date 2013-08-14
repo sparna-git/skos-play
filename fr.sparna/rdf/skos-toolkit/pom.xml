@@ -11,7 +11,7 @@
 
     <groupId>fr.sparna.rdf</groupId>
     <artifactId>skos-toolkit</artifactId>
-    <version>0.31-SNAPSHOT</version>
+    <version>0.32-SNAPSHOT</version>
 
     <name>Sparna RDF : skos-toolkit</name>
     <description>SKOS-related utilities, SPARQL queries and query helpers.</description>

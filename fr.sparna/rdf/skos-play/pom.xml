@@ -14,7 +14,7 @@
 
     <groupId>fr.sparna.rdf</groupId>
     <artifactId>skos-play</artifactId>
-    <version>0.31-SNAPSHOT</version>
+    <version>0.32-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>Sparna RDF : SKOS-Play</name>

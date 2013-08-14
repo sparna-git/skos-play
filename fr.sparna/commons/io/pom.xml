@@ -11,7 +11,7 @@
 
     <groupId>fr.sparna.commons</groupId>
     <artifactId>sparna-commons-io</artifactId>
-    <version>0.31-SNAPSHOT</version>
+    <version>0.32-SNAPSHOT</version>
 
     <name>Sparna Commons: IO</name>
     <description>Extensions to the Java IO functionality.</description>

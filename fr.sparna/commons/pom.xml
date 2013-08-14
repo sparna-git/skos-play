@@ -29,6 +29,7 @@
     	<module>xml</module>
         <module>sql</module>
         <module>tree</module>
+        <module>fop</module>
     </modules>
 
 </project>

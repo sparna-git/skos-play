@@ -12,7 +12,7 @@
 
 	<groupId>fr.sparna.rdf</groupId>
 	<artifactId>skos-printer</artifactId>
-	<version>0.31-SNAPSHOT</version>
+	<version>0.32-SNAPSHOT</version>
 
 	<name>Sparna RDF : skos-printer</name>
 	<description>Prints SKOS thesaurus in pdf or html</description>
