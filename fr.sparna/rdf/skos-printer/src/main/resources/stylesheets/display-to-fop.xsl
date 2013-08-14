@@ -64,9 +64,19 @@
   			border-end-style="outset"
   		>
   			<fo:block font-size="16pt"><xsl:value-of select="disp:title" /></fo:block>
-  			<fo:block font-size="12pt"><xsl:value-of select="disp:date" /></fo:block>
-  			<fo:block font-size="12pt"><xsl:value-of select="disp:version" /></fo:block>
+  			<xsl:apply-templates select="disp:date" />
+			<xsl:apply-templates select="disp:version" />
+			<xsl:apply-templates select="disp:description" />
   		</fo:block>
+	</xsl:template>
+	<xsl:template match="disp:date">
+		<fo:block margin-left="10pt" font-size="10pt"><xsl:value-of select="." /></fo:block>
+	</xsl:template>
+	<xsl:template match="disp:version">
+		<fo:block margin-left="10pt" font-size="10pt"><xsl:value-of select="." /></fo:block>
+	</xsl:template>
+	<xsl:template match="disp:description">
+		<fo:block margin-left="10pt" font-size="10pt"><xsl:value-of select="." /></fo:block>
 	</xsl:template>
 	
 	<!-- Display : Alphabetical -->

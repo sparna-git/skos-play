@@ -265,7 +265,7 @@ public class AlphabeticalSkosReader {
 
 		DisplayPrinter printer = new DisplayPrinter();
 		printer.printToHtml(display, new File("display-test.html"));
-//		printer.printToPdf(display, new File("display-test.pdf"));
+		printer.printToPdf(display, new File("display-test.pdf"));
 		
 //		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
 //		m.setProperty("jaxb.formatted.output", true);

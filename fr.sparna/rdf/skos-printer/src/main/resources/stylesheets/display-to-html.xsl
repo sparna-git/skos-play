@@ -63,10 +63,20 @@
 		<div class="header">
 		<h1><xsl:value-of select="disp:title" /></h1>
 			<div>
-				<xsl:value-of select="disp:version" /><br />
-				<xsl:value-of select="disp:date" /><br />
+				<xsl:apply-templates select="disp:date" />
+				<xsl:apply-templates select="disp:version" />
+				<xsl:apply-templates select="disp:description" />
 			</div>
 		</div>
+	</xsl:template>
+	<xsl:template match="disp:date">
+		<xsl:value-of select="." /><br /><br />
+	</xsl:template>
+	<xsl:template match="disp:version">
+		<xsl:value-of select="." /><br /><br />
+	</xsl:template>
+	<xsl:template match="disp:description">
+		<xsl:value-of select="." /><br /><br />
 	</xsl:template>
 
 

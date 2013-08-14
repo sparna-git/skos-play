@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.i18n.StrictResourceBundleControl;
+import fr.sparna.web.config.Configuration;
+import fr.sparna.web.config.DefaultConfiguration;
 
 public class HomeServlet extends HttpServlet {
 
@@ -24,12 +26,13 @@ public class HomeServlet extends HttpServlet {
 			HttpServletResponse response
 	) throws ServletException, IOException {
 
-		// retrieve resource bundle for error messages
+		// retrieve resource bundle for path to home page
 		ResourceBundle b = ResourceBundle.getBundle(
 				"fr.sparna.rdf.skosplay.i18n.Bundle",
 				SessionData.get(request.getSession()).getUserLocale(),
 				new StrictResourceBundleControl()
 		);
+		
 		getServletContext().getRequestDispatcher(b.getString("home.jsp")).forward(request, response);
 	}
 

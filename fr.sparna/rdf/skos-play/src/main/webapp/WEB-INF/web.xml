@@ -6,7 +6,7 @@
     <param-value>en</param-value>
   </context-param>
   <listener>
-    <listener-class>fr.sparna.rdf.skosplay.config.ConfigurationListener</listener-class>
+    <listener-class>fr.sparna.rdf.skosplay.ConfigurationListener</listener-class>
   </listener>
   <filter>
     <description>

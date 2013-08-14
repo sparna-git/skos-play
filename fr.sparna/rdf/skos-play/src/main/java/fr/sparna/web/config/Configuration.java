@@ -1,4 +1,4 @@
-package fr.sparna.rdf.skosplay.config;
+package fr.sparna.web.config;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -65,7 +65,7 @@ public abstract class Configuration {
     //-------------------------------------------------------------------------
 
     /**
-     * Returns the current DataLift configuration.
+     * Returns the current application configuration.
      * @return the current configuration.
      */
     public static Configuration getDefault() {
@@ -73,7 +73,7 @@ public abstract class Configuration {
     }
 
     /**
-     * Sets the current DataLift configuration.
+     * Sets the current application configuration.
      * @param  configuration   the configuration to install as default.
      *
      * @throws IllegalArgumentException if another configuration has
@@ -85,9 +85,5 @@ public abstract class Configuration {
         }
         defaultConfiguration = configuration;
     }
-    
-    public static void main(String... args) throws Exception {
-    	String s = "Côte d'ivoire";
-    	System.out.println(s.replaceAll("'", "\\\\'"));
-    }
+
 }

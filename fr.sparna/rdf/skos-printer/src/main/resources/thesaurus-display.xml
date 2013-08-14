@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <disp:display xmlns:disp="http://www.sparna.fr/thesaurus-display" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sparna.fr/thesaurus-display thesaurus-display.xsd ">
-  <disp:displayHeader>
+  <disp:header>
     <disp:title>disp:title</disp:title>
     <disp:date>2001-12-31T12:00:00</disp:date>
-  </disp:displayHeader>
+  </disp:header>
   <disp:alphabetical>
     <disp:term disp:conceptId="http://tempuri.org" disp:type="pref">
       <disp:label>disp:label</disp:label>

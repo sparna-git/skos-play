@@ -5,10 +5,12 @@ import java.util.List;
 
 import org.openrdf.model.Literal;
 import org.openrdf.model.Value;
+import org.openrdf.model.vocabulary.DC;
+import org.openrdf.model.vocabulary.DCTERMS;
 import org.openrdf.repository.Repository;
 
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
-import fr.sparna.rdf.sesame.toolkit.skos.SKOS;
+import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 import fr.sparna.rdf.skos.printer.schema.DisplayHeader;
 
@@ -28,31 +30,31 @@ public class DisplayHeaderSkosReader {
 		if(conceptScheme == null) {
 			// TODO
 		} else {
-			// read skos:prefLabel for title
-			PropertyReader reader = new PropertyReader(
-					this.repository,
-					URI.create(SKOS.PREF_LABEL),
-					lang,
-					null,
-					null
-			);
+			// this will try to read in turn all the properties defined in a LabelReader
+			// skos:prefLabel, rdfs:label and dcterms:title
+			LabelReader labelReader = new LabelReader(this.repository, lang);
+			String label = LabelReader.display(labelReader.getLabels(conceptScheme));
+			if(label != null) {
+				h.setTitle(label);
+			}
 			
-			List<Value> values = reader.read(conceptScheme);
-			h.setTitle(valueListToString(values));
+			// read a description in the given language
+			PropertyReader descriptionReader = new PropertyReader(repository, java.net.URI.create(DCTERMS.DESCRIPTION.stringValue()), lang);
+			List<Value> descriptions = descriptionReader.read(conceptScheme);
+			if(descriptions != null && descriptions.size() > 0) {
+				// take the first one
+				h.setDescription(((Literal)descriptions.get(0)).getLabel());
+			} else {
+				// try with dc
+				PropertyReader dcDescriptionReader = new PropertyReader(repository, java.net.URI.create(DC.DESCRIPTION.stringValue()), lang);
+				descriptions = dcDescriptionReader.read(conceptScheme);
+				if(descriptions != null && descriptions.size() > 0) {
+					// take the first one
+					h.setDescription(((Literal)descriptions.get(0)).getLabel());
+				} 
+			}
 		}
 		
 		return h;
-	}
-	
-	private String valueListToString(List<Value> values) {
-		StringBuffer sb = new StringBuffer();
-		if(values != null && values.size() > 0) {
-			for (Value aValue : values) {
-				sb.append(((Literal)aValue).getLabel()+", ");
-			}
-			// remove last ", "
-			sb.delete(sb.length() - 2, sb.length());
-		}
-		return sb.toString();
 	}
 }

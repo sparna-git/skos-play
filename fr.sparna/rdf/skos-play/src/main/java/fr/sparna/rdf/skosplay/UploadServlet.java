@@ -1,11 +1,8 @@
 package fr.sparna.rdf.skosplay;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.servlet.ServletConfig;
@@ -30,7 +27,6 @@ import fr.sparna.i18n.StrictResourceBundleControl;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLUpdate;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.EndpointRepositoryFactory;
@@ -38,15 +34,10 @@ import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.FactoryConfiguration;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryException;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.ApplyUpdates;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromStream;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromURL;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationException;
-import fr.sparna.rdf.sesame.toolkit.skos.SKOSRules;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
-import fr.sparna.rdf.skosplay.config.Configuration;
-import fr.sparna.rdf.skosplay.config.DefaultConfiguration;
+import fr.sparna.web.config.Configuration;
 
 public class UploadServlet extends HttpServlet {
 	
@@ -142,7 +133,7 @@ public class UploadServlet extends HttpServlet {
 					doError(request, response, "Select an example from the list.");
 					return;
 				}
-				repository = (Repository)getServletContext().getAttribute(resourceParam);
+				repository = ApplicationData.get(getServletContext()).getExampleDatas().get(resourceParam);
 				break;
 			}
 			case ENDPOINT : {				
@@ -182,12 +173,24 @@ public class UploadServlet extends HttpServlet {
 				return;
 			}
 			
+			String limitConfiguration = Configuration.getDefault().getProperty(SkosPlayProperties.PROP_CONCEPTS_LIMIT);
 			if(
 					sourceType != SOURCE_TYPE.EXAMPLE
 					&&
-					count > 5000
+					limitConfiguration != null
+					&&
+					Integer.parseInt(limitConfiguration) > 0
+					&&
+					count > Integer.parseInt(limitConfiguration)
 			) {
-				doError(request, response, b.getString("upload.error.dataTooLarge"));
+				doError(
+						request,
+						response,
+						MessageFormat.format(
+								b.getString("upload.error.dataTooLarge"),
+								limitConfiguration
+						)
+				);
 				return;
 			}
 		} catch (SPARQLPerformException e) {
@@ -285,28 +288,6 @@ public class UploadServlet extends HttpServlet {
 	public void init(ServletConfig cfg) throws ServletException {
 		// call superclass to store the servletconfig
 		super.init(cfg);
-		List<String> exampleDatas = Arrays.asList(new String[]{
-				"data/unesco/unescothes.ttl",
-				"data/w/matieres.rdf",
-				"data/nyt/nyt-descriptors.ttl",
-				"data/eurovoc/eurovoc-4.4-clean.ttl"
-		});
-		for (String aData : exampleDatas) {
-			try {
-				RepositoryBuilder builder = new RepositoryBuilder();
-				String path = Configuration.getDefault().getProperty(DefaultConfiguration.PROP_THESAURUS_DIRECTORY)+"/"+aData;
-				File f = new File(path);
-				if(f.exists()) {
-					builder.addOperation(new LoadFromFileOrDirectory(path));
-				} else {					
-					builder.addOperation(new LoadFromStream(this, aData));					
-				}
-				this.getServletContext().setAttribute(aData, builder.createNewRepository());
-				
-			} catch (RepositoryFactoryException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 

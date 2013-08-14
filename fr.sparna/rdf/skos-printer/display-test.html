@@ -1,0 +1,75 @@
+<html xmlns:disp="http://www.sparna.fr/thesaurus-display">
+  <head>
+    <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>my concept scheme</title>
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css">
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script><script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <style>
+					.unstyled > li { font-size: 80% }
+					
+					.ext-link {
+						background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=');
+						background-repeat: no-repeat;
+						background-position : 100% 50%;
+						padding-right:13px;
+						cursor:pointer;
+					}			
+				</style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>my concept scheme</h1>
+        <div>blah blah blah this is a description<br>
+          <br>
+        </div>
+      </div>
+      <div class="display">
+        <ul>
+          <li id="-1697008477">
+            <span title="http://www.semanticweb.org/owl/owlapi/turtle#concept1"><b>concept 1</b></span>
+            <ul class="no">
+              <li>
+                <a href="#-1893521981">NT : <b>concept 2</b></a>
+              </li>
+            </ul>
+          </li>
+          <li id="-1243363199">
+            <span title="http://www.semanticweb.org/owl/owlapi/turtle#concept2"><i>Concept2</i></span>
+            <ul class="no">
+              <li>
+                <a href="#-1893521981">USE : <b>concept 2</b></a>
+              </li>
+            </ul>
+          </li>
+          <li id="-1893521981">
+            <span title="http://www.semanticweb.org/owl/owlapi/turtle#concept2"><b>concept 2</b></span>
+            <ul class="no">
+              <li>UF : <i>Concept2</i>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <script>
+			      $(document).ready(function () {
+					// add external link behavior to every external link
+					$('span[title]').mouseover(function() {
+						$(this).addClass('ext-link');
+					});
+					$('span[title]').mouseout(function() {
+						$(this).removeClass('ext-link');
+					});
+					$('span[title]').click(function() {
+						window.open($(this).attr('title'));
+						// change this to the following line to have links open in same window/tab
+						// document.location.href = $(this).attr('title');
+					});
+					
+					// add unstyled class to all 'no' class
+					$('.no').addClass('unstyled');
+			      });					
+				</script>
+  </body>
+</html>

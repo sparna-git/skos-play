@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.openrdf.model.Literal;
 import org.openrdf.model.Resource;
+import org.openrdf.model.vocabulary.DCTERMS;
 import org.openrdf.model.vocabulary.RDFS;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerBase;
@@ -31,11 +32,8 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.ValuesSPARQLQueryBuilder;
 
 /**
  * Returns a label for given resource or list of resources, in a given language.
- * The algorithm is as follow
- * 
  * 
  * @author Thomas Francart
- *
  */
 public class LabelReader {
 
@@ -45,7 +43,7 @@ public class LabelReader {
 			// rdfs:label
 			URI.create(RDFS.LABEL.toString()),
 			// dcterms title
-			// URI.create("http://purl.org/dc/terms/title")
+			URI.create(DCTERMS.TITLE.toString())
 			// could also look for old dc property ?
 			// ,URI.create("http://purl.org/dc/elements/1.1/title"),
 	});
@@ -263,8 +261,6 @@ public class LabelReader {
 					put("labelProp", property);
 				}}
 		);
-		
-		System.out.println(q.getSPARQL());
 		
 		final ListMap<java.net.URI, Literal> result = new ListMap<java.net.URI, Literal>();
 		Perform.on(this.repository).select(new SelectSPARQLHelper(

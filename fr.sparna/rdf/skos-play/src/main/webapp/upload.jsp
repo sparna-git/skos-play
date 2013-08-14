@@ -8,6 +8,8 @@
 <fmt:setBundle basename="fr.sparna.rdf.skosplay.i18n.Bundle"/>
 
 <c:set var="data" value="${requestScope['fr.sparna.rdf.skosplay.UploadFormData']}" />
+<c:set var="applicationData" value="${applicationScope.applicationData}" />
+
 <html>
 	<head>
 		<title>SKOS Play ! - Visualize SKOS Thesaurus</title>
@@ -94,10 +96,30 @@
 							name="example"
 							id="example"
 							onchange="enabledInput('example')">
+							
+							<c:forEach items="${applicationData.exampleDatas}" var="entry">
+								<option value="${entry.key}">
+									<c:set value="upload.form.providedExample.${entry.key}" var="messageKey"/>
+									<c:set value="???${pageScope.messageKey}???" var="unknownValue"/>
+									<fmt:message key="${pageScope.messageKey}" var="exampleDataName"/>
+	
+									<c:choose>
+										<c:when test="${pageScope.exampleDataName == pageScope.unknownValue}">
+											${entry.key}
+										</c:when>
+										<c:otherwise>
+											${pageScope.exampleDataName}
+										</c:otherwise>
+									</c:choose>
+								</option>
+							</c:forEach>
+							
+							<!-- 
 							<option value="data/eurovoc/eurovoc-4.4-clean.ttl"><fmt:message key="upload.form.providedExample.eurovoc" /></option>
 							<option value="data/unesco/unescothes.ttl"><fmt:message key="upload.form.providedExample.unesco" /></option>
 							<option value="data/w/matieres.rdf"><fmt:message key="upload.form.providedExample.w" /></option>
 							<option value="data/nyt/nyt-descriptors.ttl"><fmt:message key="upload.form.providedExample.nyt" /></option>
+							-->
 						</select>
 					</div>
 				</div>

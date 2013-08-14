@@ -1,4 +1,4 @@
-package fr.sparna.rdf.skosplay.config;
+package fr.sparna.web.config;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,14 +20,6 @@ public class DefaultConfiguration extends Configuration {
     //-------------------------------------------------------------------------
     // Constants
     //-------------------------------------------------------------------------
-
-    /** The application working directory system property/environment variable. */
-    public final static String SKOSPLAY_HOME = "skosplay.home";
-    
-    /** The application properties configuration file. */
-    public final static String CONFIGURATION_FILE = "skosplay-application.properties";
-
-    public final static String PROP_THESAURUS_DIRECTORY = "skosplay.thesaurus.directory";
     
     //-------------------------------------------------------------------------
     // Class members
@@ -46,6 +38,16 @@ public class DefaultConfiguration extends Configuration {
      * even when the loading of the DataLift configuration fails.
      */
     private VersatileProperties props = new VersatileProperties();
+    
+    /**
+     * The property to read to get the application home directory
+     */
+    private final String applicationHomeProperty;
+    
+    /**
+     * The name of the file containing application properties
+     */
+    private final String applicationPropertiesFile;
 
     //-------------------------------------------------------------------------
     // Constructors
@@ -58,7 +60,9 @@ public class DefaultConfiguration extends Configuration {
      * @throws TechnicalException if any error occurred loading or
      *         parsing the configuration data.
      */
-    public DefaultConfiguration(Properties props) {
+    public DefaultConfiguration(Properties props, String applicationHomeProperty, String applicationPropertiesFile) {
+    	this.applicationHomeProperty = applicationHomeProperty;
+    	this.applicationPropertiesFile = applicationPropertiesFile;
         this.props = this.loadConfiguration(props);
     }
 
@@ -93,7 +97,7 @@ public class DefaultConfiguration extends Configuration {
     /** {@inheritDoc} */
     @Override
     public Properties loadProperties(String path, Class<?> owner)
-                                                            throws IOException {
+    throws IOException {
         if ((path == null) || (path.length() == 0)) {
             throw new IllegalArgumentException("path");
         }
@@ -113,7 +117,7 @@ public class DefaultConfiguration extends Configuration {
     }
 
     /**
-     * Loads the DataLift configuration, reading the configuration file
+     * Loads the application configuration, reading the configuration file
      * path from the specified properties.
      * @param  props   the bootstrap properties.
      *
@@ -123,8 +127,8 @@ public class DefaultConfiguration extends Configuration {
     private VersatileProperties loadConfiguration(Properties props) {
     	VersatileProperties config = null;
         try {
-            String cfgFilePath = CONFIGURATION_FILE;
-            String homePath = this.getProperty(SKOSPLAY_HOME);
+            String cfgFilePath = this.applicationPropertiesFile;
+            String homePath = this.getProperty(this.applicationHomeProperty);
             if (homePath != null) {
                 File f = new File(new File(homePath), "conf/" + cfgFilePath);
                 if ((f.isFile()) && (f.canRead())) {
@@ -136,7 +140,7 @@ public class DefaultConfiguration extends Configuration {
             log.info("Configuration loaded from {}", cfgFilePath);
         }
         catch (IOException e) {
-            RuntimeException error = new RuntimeException("Configuration file not found : "+CONFIGURATION_FILE, e);
+            RuntimeException error = new RuntimeException("Configuration file not found : "+this.applicationPropertiesFile, e);
             log.error(error.getMessage());
             throw error;
         }

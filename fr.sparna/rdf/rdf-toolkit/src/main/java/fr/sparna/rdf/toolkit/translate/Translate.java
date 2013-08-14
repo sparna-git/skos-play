@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.repository.StringRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.util.Namespaces;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
 import fr.sparna.rdf.toolkit.ToolkitCommandIfc;
 
@@ -28,7 +29,7 @@ public class Translate implements ToolkitCommandIfc {
 		writer.setSorting(true);
 		// on positionne les namespaces
 		writer.setNamespacesMap(args.getNamespaceMappings());
-		
+
 		// dumper le repository trié
 		writer.writeToFile(args.getOutput());
 		

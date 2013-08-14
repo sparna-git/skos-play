@@ -78,8 +78,7 @@ public class SessionData {
 	public void setUserLocale(Locale userLocale) {
 		this.userLocale = userLocale;
 	}
-	
-	
+
 	public static void main(String...strings) throws Exception {
 		RepositoryBuilder builder = new RepositoryBuilder(new EndpointRepositoryFactory("http://poolparty.reegle.info/PoolParty/sparql/glossary", false));
 		Repository repository = builder.createNewRepository();

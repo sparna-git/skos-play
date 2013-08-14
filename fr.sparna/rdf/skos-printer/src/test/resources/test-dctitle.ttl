@@ -1,0 +1,23 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix : <http://www.semanticweb.org/owl/owlapi/turtle#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+
+:myConceptScheme a skos:ConceptScheme ;
+	dcterms:title "my concept scheme"@en ;
+	skos:hasTopConcept :concept1 .
+
+:concept1 a skos:Concept ;
+	skos:prefLabel "concept 1"@en ;
+	skos:narrower :concept2 ;
+	skos:inScheme :myConceptScheme .
+
+:concept2 a skos:Concept ;
+	skos:prefLabel "concept 2"@en;
+	skos:altLabel "Concept2"@en ;
+	skos:inScheme :myConceptScheme .
