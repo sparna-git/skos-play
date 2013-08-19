@@ -1,0 +1,16 @@
+# S13 : skos:prefLabel, skos:altLabel and skos:hiddenLabel are pairwise disjoint properties.
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+SELECT ?x 
+WHERE {
+	{
+		?x skos:prefLabel ?y1 .
+		?x skos:altLabel|skos:hiddenLabel ?y2 .
+		FILTER(?y1 = ?y2)
+	}
+	UNION
+	{
+		?x skos:altLabel ?y1 .
+		?x skos:hiddenLabel ?y2 .
+		FILTER(?y1 = ?y2)
+	}
+}

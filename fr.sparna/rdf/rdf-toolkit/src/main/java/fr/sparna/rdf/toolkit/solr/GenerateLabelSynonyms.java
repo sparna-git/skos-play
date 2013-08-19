@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.io.ReadWriteTextFile;
 import fr.sparna.rdf.sesame.toolkit.repository.AutoDetectRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.solr.SynonymsGeneratorFromSKOSLabels;
+import fr.sparna.rdf.skos.toolkit.solr.SynonymsGeneratorFromSKOSLabels;
 import fr.sparna.rdf.toolkit.ToolkitCommandIfc;
 
 public class GenerateLabelSynonyms implements ToolkitCommandIfc {

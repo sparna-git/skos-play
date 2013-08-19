@@ -98,15 +98,11 @@
                 <artifactId>sparna-commons-xml</artifactId>
                 <version>0.32-SNAPSHOT</version>
             </dependency>
+
             <!-- Sparna Modules : RDF -->
             <dependency>
                 <groupId>fr.sparna.rdf</groupId>
                 <artifactId>sesame-toolkit</artifactId>
-                <version>0.32-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>fr.sparna.rdf</groupId>
-                <artifactId>skos-toolkit</artifactId>
                 <version>0.32-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -124,8 +120,20 @@
                 <artifactId>dbpedia-lookup-client</artifactId>
                 <version>0.32-SNAPSHOT</version>
             </dependency>
+            
+            <!-- Sparna modules : SKOS -->
             <dependency>
-                <groupId>fr.sparna.rdf</groupId>
+                <groupId>fr.sparna.rdf.skos</groupId>
+                <artifactId>skos-toolkit</artifactId>
+                <version>0.32-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.sparna.rdf.skos</groupId>
+                <artifactId>skos-toolkit-solr</artifactId>
+                <version>0.32-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>fr.sparna.rdf.skos</groupId>
                 <artifactId>skos-printer</artifactId>
                 <version>0.32-SNAPSHOT</version>
             </dependency>

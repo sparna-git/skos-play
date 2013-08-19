@@ -1,0 +1,8 @@
+# X1 : all concepts linked to a topConcept of a ConceptScheme are also part of that scheme
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+INSERT {
+	?x skos:inScheme ?scheme
+} WHERE {
+	?x skos:broaderTransitive|^skos:narrowerTransitive ?top .
+	?top skos:topConceptOf|^skos:hasTopConcept ?scheme .
+}

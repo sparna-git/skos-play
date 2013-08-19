@@ -1,0 +1,11 @@
+# S46 : skos:exactMatch is disjoint with each of the properties skos:broadMatch and skos:relatedMatch.
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+SELECT ?x 
+WHERE {
+	?x skos:exactMatch ?y .
+	{
+		{?x skos:broadMatch ?y}
+		UNION
+		{?x skos:relatedMatch ?y}
+	}
+}

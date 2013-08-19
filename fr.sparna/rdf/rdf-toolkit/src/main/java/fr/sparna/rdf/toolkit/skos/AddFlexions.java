@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.repository.StringRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.skos.FlexionsAdder;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
+import fr.sparna.rdf.skos.toolkit.FlexionsAdder;
 import fr.sparna.rdf.toolkit.ToolkitCommandIfc;
 
 public class AddFlexions implements ToolkitCommandIfc {

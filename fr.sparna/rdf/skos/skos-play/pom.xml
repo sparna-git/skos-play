@@ -1,0 +1,129 @@
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>fr.sparna.rdf.skos</groupId>
+        <artifactId>sparna-skos</artifactId>
+        <version>0.32-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>fr.sparna.rdf.skos</groupId>
+    <artifactId>skos-play</artifactId>
+    <!-- version inherited from parent pom -->
+    <packaging>war</packaging>
+
+    <name>Sparna SKOS : SKOS-Play</name>
+    <description>A web application to render Knowledge Organization Systems defined expressed in SKOS</description>
+
+    <organization>
+        <name>Sparna</name>
+        <url>http://www.sparna.fr/</url>
+    </organization>
+
+    <!-- see http://stackoverflow.com/questions/12426723/displaying-version-and-date-of-build-in-the-xhtml-page -->
+    <properties>
+        <timestamp>${maven.build.timestamp}</timestamp>
+    </properties>
+
+    <build>
+        <!-- to populate automagically version.properties -->
+        <resources>
+            <!-- filtering only for version properties to avoid encoding issues with other resources -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                  <include>version.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                  <exclude>version.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.simplericity.jettyconsole</groupId>
+                <artifactId>jetty-console-maven-plugin</artifactId>
+                <version>1.47</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>createconsole</goal>
+                        </goals>
+                        <configuration>
+                            <backgroundImage>${basedir}/src/main/jettyconsole/blank-background-image.jpg</backgroundImage>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        
+        <dependency>
+            <groupId>javaee</groupId>
+            <artifactId>javaee-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3</version>
+        </dependency>
+
+        <!-- Sparna other dependecies -->
+        <dependency>
+            <groupId>fr.sparna.commons</groupId>
+            <artifactId>sparna-commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>fr.sparna.rdf</groupId>
+            <artifactId>sesame-toolkit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>fr.sparna.rdf.skos</groupId>
+            <artifactId>skos-toolkit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>fr.sparna.rdf.skos</groupId>
+            <artifactId>skos-printer</artifactId>
+        </dependency>
+
+
+        <!-- Semargl and Semargl Sesame integration for RDFa parsing -->
+        <dependency>
+            <groupId>org.semarglproject</groupId>
+            <artifactId>semargl-rdfa</artifactId>
+            <version>0.6-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.semarglproject</groupId>
+            <artifactId>semargl-sesame</artifactId>
+            <version>0.6-SNAPSHOT</version>
+        </dependency>
+
+
+    </dependencies>
+
+</project>

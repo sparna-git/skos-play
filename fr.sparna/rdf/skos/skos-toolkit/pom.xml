@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>fr.sparna.rdf.skos</groupId>
+        <artifactId>sparna-skos</artifactId>
+        <version>0.32-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>fr.sparna.rdf.skos</groupId>
+    <artifactId>skos-toolkit</artifactId>
+    <!-- version inherited from parent pom -->
+
+    <name>Sparna SKOS : skos-toolkit</name>
+    <description>SKOS-related utilities, SPARQL queries and query helpers.</description>
+
+    <organization>
+        <name>Sparna</name>
+        <url>http://www.sparna.fr/</url>
+    </organization>
+
+    <build>
+
+    </build>
+
+    <dependencies>
+	    <dependency>
+	        <groupId>org.slf4j</groupId>
+	        <artifactId>slf4j-api</artifactId>
+	    </dependency>
+
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-runtime</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>fr.sparna.rdf</groupId>
+			<artifactId>sesame-toolkit</artifactId>
+		</dependency>
+
+        <dependency>
+            <groupId>fr.sparna.commons</groupId>
+            <artifactId>sparna-commons-tree</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.2.1</version>
+        </dependency> 
+    </dependencies>
+
+</project>

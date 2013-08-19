@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.repository.StringRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.skos.SimpleSKOSTreePrinter;
+import fr.sparna.rdf.skos.toolkit.SimpleSKOSTreePrinter;
 import fr.sparna.rdf.toolkit.ToolkitCommandIfc;
 
 public class PrintSkosTree implements ToolkitCommandIfc {

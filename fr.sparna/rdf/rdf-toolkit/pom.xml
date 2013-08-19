@@ -38,6 +38,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -50,6 +51,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -150,8 +152,13 @@
 		</dependency>
 
 		<dependency>
-			<groupId>fr.sparna.rdf</groupId>
+			<groupId>fr.sparna.rdf.skos</groupId>
 			<artifactId>skos-toolkit</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>fr.sparna.rdf.skos</groupId>
+			<artifactId>skos-toolkit-solr</artifactId>
 		</dependency>
 
 		<!-- for command-line parsing -->

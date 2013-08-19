@@ -1,0 +1,7 @@
+# S8 : skos:topConceptOf is owl:inverseOf the property skos:hasTopConcept.
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+INSERT {
+	?y skos:topConceptOf ?x .
+} WHERE {
+	?x skos:hasTopConcept ?y .
+}

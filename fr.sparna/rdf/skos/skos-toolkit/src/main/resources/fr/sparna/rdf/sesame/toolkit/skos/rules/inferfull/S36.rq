@@ -1,0 +1,8 @@
+# S36 : For any resource, every item in the list given as the value of the skos:memberList property is also a value of the skos:member property.
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+CONSTRUCT {
+	?x skos:member ?y
+} WHERE {
+	?x skos:memberList/rdf:rest*/rdf:first ?y .
+}

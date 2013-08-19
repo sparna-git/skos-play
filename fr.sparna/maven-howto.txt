@@ -1,0 +1,11 @@
+How to update versions : http://stackoverflow.com/questions/5726291/updating-version-numbers-of-modules-in-a-multi-module-maven-project
+
+	mvn versions:set -DnewVersion=0.33-SNAPSHOT
+	mvn versions:commit
+	ou mvn versions:revert
+
+	This updates versions in the dependencyManagement section of the parent, too
+
+Resolve "Invalid POM for..., transitive dependency will not be included" :
+
+	install the updated parent POM in the repository

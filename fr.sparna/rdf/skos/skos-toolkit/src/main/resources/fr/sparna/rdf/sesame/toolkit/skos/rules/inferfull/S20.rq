@@ -1,0 +1,7 @@
+# S20 : The rdfs:range of skos:semanticRelation is the class skos:Concept.
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+CONSTRUCT {
+	?y a skos:Concept .
+} WHERE {
+	?x skos:semanticRelation ?y .
+}
