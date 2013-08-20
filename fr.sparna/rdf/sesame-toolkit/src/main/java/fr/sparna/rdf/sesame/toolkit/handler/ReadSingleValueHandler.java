@@ -16,7 +16,8 @@ import org.openrdf.query.TupleQueryResultHandlerException;
 public class ReadSingleValueHandler extends TupleQueryResultHandlerBase implements TupleQueryResultHandler {
 
 	protected Value result = null;
-
+	protected String bindingName = null;
+	
 	@Override
 	public void startQueryResult(List<String> bindingNames)
 	throws TupleQueryResultHandlerException {	
@@ -24,6 +25,9 @@ public class ReadSingleValueHandler extends TupleQueryResultHandlerBase implemen
 		if(bindingNames.size() > 1) {
 			throw new TupleQueryResultHandlerException(this.getClass().getSimpleName()+" can only read query results with a single binding.");
 		}
+		
+		// keep track of binding name
+		this.bindingName = bindingNames.get(0);
 		
 		// re-init result
 		this.result = null;
@@ -36,7 +40,7 @@ public class ReadSingleValueHandler extends TupleQueryResultHandlerBase implemen
 			// oups, 2 result lines, this is unexpected
 			throw new TupleQueryResultHandlerException(this.getClass().getSimpleName()+" can only read query results with a single result.");
 		}
-		this.result = bs.getValue(bs.getBindingNames().iterator().next());
+		this.result = bs.getValue(this.bindingName);
 	}
 
 	/**
