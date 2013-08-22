@@ -10,22 +10,21 @@ package fr.sparna.rdf.skos.printer.schema;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for label complex type.
+ * <p>Java class for cell complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="label">
+ * &lt;complexType name="cell">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element ref="{http://www.sparna.fr/thesaurus-display}str"/>
- *       &lt;/sequence>
+ *       &lt;choice minOccurs="0">
+ *         &lt;element ref="{http://www.sparna.fr/thesaurus-display}entry"/>
+ *       &lt;/choice>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -34,36 +33,35 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "label", propOrder = {
-    "str"
+@XmlType(name = "cell", propOrder = {
+    "entry"
 })
-public class Label {
+public class Cell {
 
-    @XmlElement(required = true)
-    protected Str str;
+    protected Entry entry;
 
     /**
-     * Gets the value of the str property.
+     * Gets the value of the entry property.
      * 
      * @return
      *     possible object is
-     *     {@link Str }
+     *     {@link Entry }
      *     
      */
-    public Str getStr() {
-        return str;
+    public Entry getEntry() {
+        return entry;
     }
 
     /**
-     * Sets the value of the str property.
+     * Sets the value of the entry property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Str }
+     *     {@link Entry }
      *     
      */
-    public void setStr(Str value) {
-        this.str = value;
+    public void setEntry(Entry value) {
+        this.entry = value;
     }
 
 }

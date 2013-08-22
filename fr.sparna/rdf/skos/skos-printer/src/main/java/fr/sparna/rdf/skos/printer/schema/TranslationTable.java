@@ -10,24 +10,22 @@ package fr.sparna.rdf.skos.printer.schema;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for att complex type.
+ * <p>Java class for translationTable complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="att">
+ * &lt;complexType name="translationTable">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{http://www.sparna.fr/thesaurus-display}str"/>
+ *         &lt;element ref="{http://www.sparna.fr/thesaurus-display}table"/>
  *       &lt;/sequence>
- *       &lt;attribute ref="{http://www.sparna.fr/thesaurus-display}type"/>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -36,62 +34,36 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "att", propOrder = {
-    "str"
+@XmlType(name = "translationTable", propOrder = {
+    "table"
 })
-public class Att {
+public class TranslationTable {
 
     @XmlElement(required = true)
-    protected Str str;
-    @XmlAttribute(namespace = "http://www.sparna.fr/thesaurus-display")
-    protected String type;
+    protected Table table;
 
     /**
-     * Gets the value of the str property.
+     * Gets the value of the table property.
      * 
      * @return
      *     possible object is
-     *     {@link Str }
+     *     {@link Table }
      *     
      */
-    public Str getStr() {
-        return str;
+    public Table getTable() {
+        return table;
     }
 
     /**
-     * Sets the value of the str property.
+     * Sets the value of the table property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Str }
+     *     {@link Table }
      *     
      */
-    public void setStr(Str value) {
-        this.str = value;
-    }
-
-    /**
-     * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setType(String value) {
-        this.type = value;
+    public void setTable(Table value) {
+        this.table = value;
     }
 
 }

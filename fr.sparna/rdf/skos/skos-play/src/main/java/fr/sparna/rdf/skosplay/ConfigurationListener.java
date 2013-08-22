@@ -57,7 +57,10 @@ public class ConfigurationListener implements ServletContextListener {
         	Properties props = new Properties();
         	try {
 				props.load(in);
-				timestamp = props.getProperty("build.timestamp");
+				timestamp = props.getProperty("build.version");
+				timestamp += " (";
+				timestamp += props.getProperty("build.timestamp");
+				timestamp += ")";
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -265,11 +265,10 @@ chezmoi:123456 skos:broader chezmoi:Vehicule .
 					j'éviterais d'envoyer plus de 5000 concepts pour ne pas avoir des fichiers de sortie énormes.
 					Pour les visualisations, je dirai pas plus de 2000 concepts, sinon on ne voit plus rien.
 				</p>
-				<h4>Est-ce qu'il y a un service web ? est-ce que SKOS-XL est supporté ? est-ce qu'il y a de l'inférence ? est-qu'on peut
-				donner un endpoint SPARQL en entrée ?
+				<h4>Est-ce qu'il y a un service web, une API ? est-ce que SKOS-XL est supporté ? est-ce qu'il y a de l'inférence ?
 				</h4>
 				<p>
-					Non. Non. Non. Non. Mais <a href="http://www.google.com/moderator/#15/e=209fff&t=209fff.40" target="_blank">votez</a> pour exprimer votre intérêt et cela existera peut-être un jour.
+					Non. Non. Non. Mais <a href="http://www.google.com/moderator/#15/e=209fff&t=209fff.40" target="_blank">votez</a> pour exprimer votre intérêt et cela existera peut-être un jour.
 				</p>
 				<h4>C'est lent !</h4>
 				<p>

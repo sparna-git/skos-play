@@ -24,6 +24,7 @@
     		<choice minOccurs="1" maxOccurs="unbounded">
     			<element ref="disp:alphabetical"></element>
     			<element ref="disp:hierarchical"></element>
+    			<element ref="disp:translationTable"></element>
     		</choice>
     	</sequence>
     </complexType>
@@ -113,4 +114,36 @@
     </complexType>
 
     <element name="section" type="disp:section"></element>
+
+    <complexType name="row">
+    	<sequence>
+    		<element ref="disp:cell" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="cell">
+    	<choice minOccurs="0" maxOccurs="1">
+    		<element ref="disp:entry"></element>
+    	</choice>
+    </complexType>
+
+    <element name="cell" type="disp:cell"></element>
+
+    <element name="row" type="disp:row"></element>
+
+    <complexType name="table">
+    	<sequence>
+    		<element ref="disp:row" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="translationTable">
+    	<sequence>
+    		<element ref="disp:table"></element>
+    	</sequence>
+    </complexType>
+    
+    <element name="translationTable" type="disp:translationTable"></element>
+
+    <element name="table" type="disp:table"></element>
 </schema>

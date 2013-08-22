@@ -266,7 +266,7 @@ public class AlphabeticalSkosReader {
 		
 		AlphabeticalSkosReader reader = new AlphabeticalSkosReader(r);
 		reader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES);
-		display.getAlphabeticalOrHierarchical().add(reader.read("en", (args.length > 1)?URI.create(args[1]):null));
+		display.getAlphabeticalOrHierarchicalOrTranslationTable().add(reader.read("en", (args.length > 1)?URI.create(args[1]):null));
 
 		DisplayPrinter printer = new DisplayPrinter();
 		printer.printToHtml(display, new File("display-test.html"));

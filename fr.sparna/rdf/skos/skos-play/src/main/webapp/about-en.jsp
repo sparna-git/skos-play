@@ -266,10 +266,10 @@ me:123456 skos:broader me:Vehicle .
 					more than 5000 concepts to limit the output file size. For dataviv, I would say that above 2000 concepts you
 					can't see anything and you have big latencies when zooming.
 				</p>
-				<h4>Is there a web service ? is SKOS-XL supported ? can I give a SPARQL endpoint as input ? do you support inference ?
+				<h4>Is there a web service, an API ? is SKOS-XL supported ? do you support inference ?
 				</h4>
 				<p>
-					No. No. No. No. But <a href="http://www.google.com/moderator/#15/e=209fff&t=209fff.40" target="_blank">vote</a>
+					No. No. No. But <a href="http://www.google.com/moderator/#15/e=209fff&t=209fff.40" target="_blank">vote</a>
 					and express your interest, and this may be added one day in the future.
 				</p>
 				<h4>It's slow !</h4>

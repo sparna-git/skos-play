@@ -240,7 +240,7 @@ public class ConceptListSkosReader {
 		display.setHeader(header);
 		
 		ConceptListSkosReader reader = new ConceptListSkosReader(r);
-		display.getAlphabeticalOrHierarchical().add(reader.read("fr", (args.length > 1)?URI.create(args[1]):null));
+		display.getAlphabeticalOrHierarchicalOrTranslationTable().add(reader.read("fr", (args.length > 1)?URI.create(args[1]):null));
 
 		DisplayPrinter printer = new DisplayPrinter();
 		printer.printToHtml(display, new File("display-test.html"));

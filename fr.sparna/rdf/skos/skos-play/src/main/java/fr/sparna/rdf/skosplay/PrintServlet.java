@@ -167,29 +167,29 @@ public class PrintServlet extends HttpServlet {
 			switch(displayType) {
 			case ALPHABETICAL : {			
 				AlphabeticalSkosReader reader = new AlphabeticalSkosReader(r);
-				display.getAlphabeticalOrHierarchical().add(reader.read(language, scheme));
+				display.getAlphabeticalOrHierarchicalOrTranslationTable().add(reader.read(language, scheme));
 				break;
 			}
 			case ALPHABETICAL_EXPANDED : {			
 				AlphabeticalSkosReader reader = new AlphabeticalSkosReader(r);
 				reader.setSkosPropertiesToRead(AlphabeticalSkosReader.EXPANDED_SKOS_PROPERTIES);
-				display.getAlphabeticalOrHierarchical().add(reader.read(language, scheme));
+				display.getAlphabeticalOrHierarchicalOrTranslationTable().add(reader.read(language, scheme));
 				break;
 			}
 			case HIERARCHICAL : {
 				HierarchicalSkosReader reader = new HierarchicalSkosReader(r);
-				display.getAlphabeticalOrHierarchical().addAll(reader.read(language, scheme));
+				display.getAlphabeticalOrHierarchicalOrTranslationTable().addAll(reader.read(language, scheme));
 				break;
 			}
 			case HIERARCHICAL_EXPANDED : {
 				HierarchicalSkosReader reader = new HierarchicalSkosReader(r);
 				reader.setSkosPropertiesToRead(HierarchicalSkosReader.EXPANDED_SKOS_PROPERTIES);
-				display.getAlphabeticalOrHierarchical().addAll(reader.read(language, scheme));
+				display.getAlphabeticalOrHierarchicalOrTranslationTable().addAll(reader.read(language, scheme));
 				break;
 			}
 			case CONCEPTLISTING : {
 				ConceptListSkosReader reader = new ConceptListSkosReader(r);
-				display.getAlphabeticalOrHierarchical().add(reader.read(language, scheme));
+				display.getAlphabeticalOrHierarchicalOrTranslationTable().add(reader.read(language, scheme));
 				break;
 			}
 			default :
