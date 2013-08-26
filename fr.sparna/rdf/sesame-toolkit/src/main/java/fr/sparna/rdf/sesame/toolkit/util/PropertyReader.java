@@ -25,6 +25,7 @@ public class PropertyReader {
 	protected String lang;
 	protected java.net.URI additionalCriteriaProperty;
 	protected java.net.URI additionalCriteriaObject;
+	protected String additionalPath;
 	
 	protected boolean preLoad = true;
 	
@@ -44,6 +45,7 @@ public class PropertyReader {
 	public PropertyReader(
 			Repository repository,
 			java.net.URI propertyURI,
+			String additionalPath,
 			String lang,
 			java.net.URI additionalCriteriaProperty,
 			java.net.URI additionalCriteriaObject
@@ -51,6 +53,7 @@ public class PropertyReader {
 		super();
 		this.repository = repository;
 		this.propertyURI = propertyURI;
+		this.additionalPath = additionalPath;
 		this.lang = lang;
 		this.additionalCriteriaProperty = additionalCriteriaProperty;
 		this.additionalCriteriaObject = additionalCriteriaObject;
@@ -64,7 +67,7 @@ public class PropertyReader {
 	 * @param lang			The language in which to read the property
 	 */
 	public PropertyReader(Repository repository, java.net.URI propertyURI, String lang) {
-		this(repository, propertyURI, lang, null, null);
+		this(repository, propertyURI, null, lang, null, null);
 	}
 	
 	/**
@@ -74,7 +77,7 @@ public class PropertyReader {
 	 * @param propertyURI	The property URI to read
 	 */
 	public PropertyReader(Repository repository, java.net.URI propertyURI) {
-		this(repository, propertyURI, null, null, null);
+		this(repository, propertyURI, null, null, null, null);
 	}
 
 	public List<Value> read(java.net.URI subjectURI) 
@@ -120,6 +123,7 @@ public class PropertyReader {
 	throws SPARQLPerformException {
 		ReadPropertyHelper helper = new ReadPropertyHelper(
 				this.propertyURI,
+				this.additionalPath,
 				this.lang,
 				subjectURI,
 				this.additionalCriteriaProperty,

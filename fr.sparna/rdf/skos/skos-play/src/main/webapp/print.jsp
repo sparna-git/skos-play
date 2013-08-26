@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" 	prefix="fmt" 	%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" 	prefix="c" 		%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" 		prefix="fmt" 	%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" 		prefix="c" 		%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <!-- setup the locale for the messages based on the language in the session -->
 <fmt:setLocale value="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language}"/>
@@ -35,12 +36,12 @@
 			    </div>	      		
 	      	</div>
 			<div class="messages">
-				<c:if test="${data.warningMessage != null}">
+				<c:forEach items="${data.warningMessages}" var="warningMessage">
 					<div class="alert alert-warning">
 						<h4><fmt:message key="warning" /></h4>
-						${data.warningMessage}
+						${warningMessage}
 					</div>
-				</c:if>
+				</c:forEach>
 				<c:if test="${data.successMessage != null}">
 					<div class="alert alert-success">
 						<h4><fmt:message key="success" /></h4>
@@ -71,7 +72,7 @@
 				<div class="control-group">
 					<label class="control-label"><fmt:message key="print.form.language.legend" /></label>
 					<div class="controls">
-						<select name="language" class="span2">
+						<select name="language" class="span1">
 						<c:choose>
 							<c:when test="${empty data.languages}">
 								<option value="no-language"><fmt:message key="print.form.language.noLanguageFound" /></option>
@@ -88,15 +89,32 @@
 				<div class="control-group">
 					<label class="control-label"><fmt:message key="print.form.displayType.legend" /></label>
 					<div class="controls">
-						<!--
 						<label class="radio">
-							<input type="radio" name="display" id="conceptListing" value="conceptListing">
+							<input type="radio" name="display" id="conceptListing" value="conceptListing" checked>
 							<fmt:message key="print.form.displayType.conceptListing" />
 							<span class="help-inline"><fmt:message key="print.form.displayType.conceptListing.help" /></span>
 						</label>
-						 -->
 						<label class="radio">
-							<input type="radio" name="display" id="alphabetical" value="alphabetical" checked>
+							<input type="radio" name="display" id="translation_table" value="translation_table">
+							<fmt:message key="print.form.displayType.translation_table" />
+							<span class="help-inline"><fmt:message key="print.form.displayType.translation_table.help" /></span>
+						</label>
+						<div style="margin-left:30px; font-size:smaller;">
+							<fmt:message key="print.form.displayType.translation_table.targetLanguage" /> : <select id="targetLanguage" name="targetLanguage" class="span1">
+							<c:choose>
+								<c:when test="${empty data.languages}">
+									<option value="no-language"><fmt:message key="print.form.language.noLanguageFound" /></option>
+								</c:when>
+								<c:otherwise>
+									<c:forEach items="${data.languages}" var="lang">
+										<option value="${lang}">${lang}</option>
+									</c:forEach>
+								</c:otherwise>
+							</c:choose>
+							</select>
+						</div>
+						<label class="radio">
+							<input type="radio" name="display" id="alphabetical" value="alphabetical">
 							<fmt:message key="print.form.displayType.alphabetical" />
 							<span class="help-inline"><fmt:message key="print.form.displayType.alphabetical.help" /></span>
 						</label>
@@ -152,24 +170,39 @@
       	<script>
 
 		
-		// disable concept scheme choice if only one concept scheme
 		$(document).ready(function () {
 			// disable concept scheme selection if not available
 	        $('#scheme:has(option[value="no-scheme"])').attr('disabled', 'disabled');
-			
-			
-			<c:if test="${!data.enableHierarchical}">
-				// disable hierarchical fields if needed
+
+	     	// disable hierarchical fields if not available
+			<c:if test="${!data.enableHierarchical}">				
 				$(':radio[hierarchical="true"]').attr('disabled', 'disabled');
 			</c:if>
 			
-			// enable-disable output formats based on display type selection
+			// disable translation table if needed
+			<c:if test="${!data.enableTranslations}">				
+				$('#translation_table').attr('disabled', 'disabled');
+			</c:if>
+			// always disable target language - will be re-enabled only if translation_table can be selected
+			$('#targetLanguage').attr('disabled', 'disabled');
+			
+			
 			$(':radio[name="display"]').click(function() {
+				// enable-disable output formats based on display type selection
 				if(this.id.indexOf('viz-') == 0) {
 					$(':radio[name="output"]').attr('disabled', 'disabled');
 				} else {
 					$(':radio[name="output"]').removeAttr('disabled');
 				}
+				
+				// enable-disable target language selection base on display selection
+				<c:if test="${data.enableTranslations}">	
+					if(this.id.indexOf('translation_table') == 0) {
+						$('#targetLanguage').removeAttr('disabled');
+					} else {
+						$('#targetLanguage').attr('disabled', 'disabled');
+					}
+				</c:if>
 			});
 			
 	     	// disable submit button on click		
@@ -179,11 +212,12 @@
 		        $('#loading').show();
 		    });
 			
-			// re-enable buttons
+			// re-enable buttons for click on browser back
 			$(window).unload(function() {
 	      		$('#loading').hide();
 			    $('#submit-button').attr('disabled', false);
 			    $('#previous-button').attr('disabled', false);
+			    $('#targetLanguage').attr('disabled', false);
 	      	});
 
 	    });

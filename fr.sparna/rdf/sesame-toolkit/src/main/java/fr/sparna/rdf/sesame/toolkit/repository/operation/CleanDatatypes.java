@@ -17,6 +17,12 @@ import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
+/**
+ * Deletes all unknown (non XMLSchema) datatypes from the repository.
+ * 
+ * @author Thomas Francart
+ *
+ */
 public class CleanDatatypes implements RepositoryOperationIfc {
 
 	@Override

@@ -125,39 +125,39 @@
             <dependency>
                 <groupId>fr.sparna.rdf.skos</groupId>
                 <artifactId>skos-toolkit</artifactId>
-                <version>0.32</version>
+                <version>0.40</version>
             </dependency>
             <dependency>
                 <groupId>fr.sparna.rdf.skos</groupId>
                 <artifactId>skos-toolkit-solr</artifactId>
-                <version>0.32</version>
+                <version>0.40</version>
             </dependency>
             <dependency>
                 <groupId>fr.sparna.rdf.skos</groupId>
                 <artifactId>skos-printer</artifactId>
-                <version>0.32</version>
+                <version>0.40</version>
             </dependency>
 
             <!-- Logging: SLF4J -->
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.0</version>
+                <version>1.7.5</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-simple</artifactId>
-                <version>1.7.0</version>
+                <version>1.7.5</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-jdk14</artifactId>
-                <version>1.7.0</version>
+                <version>1.7.5</version>
             </dependency>
     		<dependency> 
     		  <groupId>org.slf4j</groupId>
     		  <artifactId>slf4j-log4j12</artifactId>
-    		  <version>1.7.0</version>
+    		  <version>1.7.5</version>
     		</dependency>
 
             <!-- Testing: JUnit -->

@@ -105,6 +105,7 @@
 						<li>Thesaurus UNESCO : <a href="http://www.unesco.org/new/fr/terms-of-use/terms-of-use/copyright" target="_blank">copyright UNESCO</a>, thanks to <a href="http://skos.um.es/unescothes/" target="_blank">University of Murcia</a>.</li>
 						<li>Thesaurus W : propriété des archives de France, données téléchargées <a href="http://www.archivesdefrance.culture.gouv.fr/gerer/classement/normes-outils/thesaurus/" target="_blank">ici</a> en mai 2013</li>
 						<li>Descripteurs New-York Times : Creative Commons Attribution 3.0 United States License, New York Times Company. Données téléchargées <a href="http://data.nytimes.com">ici</a> en mai 2013.</li>
+						<li><a href="http://data.reegle.info/thesaurus">Thesaurus Reegle sur l'énergie</a> : Données téléchargées <a href="http://poolparty.reegle.info/PoolParty/sparql/glossary">ici</a> en aout 2013, avec l'accord de l'éditeur.</li>
 					</ul>
 					<a href="http://www.google.com/moderator/#15/e=209fff&t=209fff.40" target="_blank">Suggérez d'autres données.</a>
 				</p>

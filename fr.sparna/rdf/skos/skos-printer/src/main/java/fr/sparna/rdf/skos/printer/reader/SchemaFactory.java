@@ -1,18 +1,18 @@
 package fr.sparna.rdf.skos.printer.reader;
 
-import fr.sparna.rdf.sesame.toolkit.util.Namespaces;
 import fr.sparna.rdf.skos.printer.schema.Att;
-import fr.sparna.rdf.skos.printer.schema.Entry;
-import fr.sparna.rdf.skos.printer.schema.Label;
+import fr.sparna.rdf.skos.printer.schema.CellType;
+import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
+import fr.sparna.rdf.skos.printer.schema.ListItem;
 import fr.sparna.rdf.skos.printer.schema.Ref;
-import fr.sparna.rdf.skos.printer.schema.Str;
-
+import fr.sparna.rdf.skos.printer.schema.RowType;
+import fr.sparna.rdf.skos.printer.schema.TypedString;
 
 
 public class SchemaFactory {
 
-	public static Str createStr(String s, String type) {
-		Str str = new Str();
+	public static TypedString createTypedString(String s, String type) {
+		TypedString str = new TypedString();
 		str.setValue(s);
 		if(type != null) {
 			str.setType(type);
@@ -20,40 +20,34 @@ public class SchemaFactory {
 		return str;
 	}
 	
-	public static Str createStr(String s) {
-		return createStr(s, null);
+	public static TypedString createTypedString(String s) {
+		return createTypedString(s, null);
 	}
 	
 	public static Att createAtt(String value, String attType, String valueType) {
 		Att a = new Att();
-		a.setStr(createStr(value, valueType));
+		a.setStr(createTypedString(value, valueType));
 		a.setType(attType);
 		return a;
-	}
-	
-	public static Label createLabel(String value, String labelType) {
-		Label l = new Label();
-		l.setStr(createStr(value, labelType));
-		return l;
 	}
 	
 	/**
 	 * Créé une Entry complète
 	 * 
-	 * @param entryId
+	 * @param blockId
 	 * @param uri
 	 * @param label
 	 * @param labelType
 	 * @return
 	 */
-	public static Entry createEntry(String entryId, String uri, String label, String labelType) {
-		Entry e = new Entry();
+	public static ConceptBlock createConceptBlock(String blockId, String uri, String label, String labelType) {
+		ConceptBlock e = new ConceptBlock();
 		// utilisation de Namespaces pour raccourcir l'URI
 		// not anymore to have full URIs in HTML display and geenrate outgoing links
 		// e.setConcept(Namespaces.getInstance().shorten(uri));
-		e.setConcept(uri);
-		e.setLabel(createLabel(label, labelType));
-		e.setEntryId(entryId);
+		e.setUri(uri);
+		e.setLabel(createTypedString(label, labelType));
+		e.setId(blockId);
 		return e;
 	}
 	
@@ -64,16 +58,16 @@ public class SchemaFactory {
 	 * @param prefLabel
 	 * @return
 	 */
-	public static Entry createEntry(String entryId, String uri, String prefLabel) {
-		return createEntry(entryId, uri, prefLabel, "pref");
+	public static ConceptBlock createConceptBlock(String entryId, String uri, String prefLabel) {
+		return createConceptBlock(entryId, uri, prefLabel, "pref");
 	}
 	
 	public static Ref createRef(String entryRef, String conceptUri, String prefLabel, String refType, String labelType) {
 		Ref r = new Ref();
-		r.setEntryRef(entryRef);
+		r.setRefId(entryRef);
 		r.setType(refType);
-		// cette entry n'aura pas d'entryId
-		r.setEntry(createEntry(null, conceptUri, prefLabel, labelType));
+		r.setLabel(createTypedString(prefLabel, labelType));
+		r.setUri(conceptUri);
 		return r;
 	}
 	
@@ -89,4 +83,25 @@ public class SchemaFactory {
 	public static Ref createRef(String entryRef, String uri, String prefLabel, String refType) {
 		return createRef(entryRef, uri, prefLabel, refType, null);
 	}
+	
+	public static ListItem createListItem(Object o) {
+		ListItem li = new ListItem();
+		li.setAny(o);
+		return li;
+	}
+	
+	public static CellType createCell(Object o) {
+		CellType c = new CellType();
+		c.setAny(o);
+		return c;
+	}
+	
+	public static RowType createRow(Object...objects) {
+		RowType row = new RowType();
+		for (Object object : objects) {
+			row.getCell().add(createCell(object));
+		}
+		return row;
+	}
+
 }

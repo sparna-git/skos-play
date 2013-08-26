@@ -104,4 +104,22 @@ public final class SKOS {
 				||
 				skosProperty.equals(SKOS.SCOPE_NOTE);
 	}
+	
+	public static String getInverseOf(String skosProperty) {
+		if(skosProperty.equals(SKOS.BROADER)) {
+			return SKOS.NARROWER;
+		} else if(skosProperty.equals(SKOS.NARROWER)) {
+			return SKOS.BROADER;
+		} else if(skosProperty.equals(SKOS.BROADER_TRANSITIVE)) {
+			return SKOS.NARROWER_TRANSITIVE;
+		} else if(skosProperty.equals(SKOS.RELATED)) {
+			// related is symmetric
+			return SKOS.RELATED;
+		} else if(skosProperty.equals(SKOS.HAS_TOP_CONCEPT)) {
+			return SKOS.TOP_CONCEPT_OF;
+		} else if(skosProperty.equals(SKOS.TOP_CONCEPT_OF)) {
+			return SKOS.HAS_TOP_CONCEPT;
+		}
+		return null;
+	}
 }

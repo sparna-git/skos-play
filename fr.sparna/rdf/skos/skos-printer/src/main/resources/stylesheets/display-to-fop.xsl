@@ -50,6 +50,7 @@
 		</fo:root>
 	</xsl:template>
 	
+	<!-- Display header -->
 	<xsl:template match="disp:header">
 		<fo:block 
   			padding-before="1em" 
@@ -78,79 +79,132 @@
 	<xsl:template match="disp:description">
 		<fo:block margin-left="10pt" font-size="10pt"><xsl:value-of select="." /></fo:block>
 	</xsl:template>
-	
-	<!-- Display : Alphabetical -->
-	<xsl:template match="disp:alphabetical">
-	
-		<xsl:choose>
-			<!-- case where we process entries directly -->
-			<xsl:when test="disp:entry">
-				<fo:block font-size="90%">
-					<xsl:for-each select="disp:entry">
-						<fo:block margin-top="9pt">
-							<xsl:apply-templates select="." />
-						</fo:block>
-					</xsl:for-each>
-				</fo:block>
-			</xsl:when>
-			<!-- case where we have sections -->
-			<xsl:when test="disp:section">
-				<fo:block font-size="90%">
-					<xsl:apply-templates />
-				</fo:block>
-			</xsl:when>
-		</xsl:choose>
+
+
+	<!-- Display body -->
+	<xsl:template match="disp:body">
+		<!-- if more than one section, and at least have a title -->
+		<xsl:if test="count(disp:section[@title]) > 1">
+			<!-- nothing special in PDF. Maybe an automatic summary ? -->
+		</xsl:if>
+		<xsl:apply-templates select="disp:section" />
 	</xsl:template>
 	
-	<!-- Display : Hierarchical -->
-	<xsl:template match="disp:hierarchical">
-		<fo:block font-size="80%">
-			<xsl:for-each select="disp:entry">
-				<fo:block>
-					<xsl:apply-templates select="." />
+	<!-- Process a section -->
+	<xsl:template match="disp:section">
+		<fo:block page-break-after="always">
+			<xsl:if test="@title">
+				<fo:block
+					margin-top="9pt"
+					margin-bottom="9pt"
+					font-size="120%"
+					text-align="center"
+					font-weight="bold">
+					<xsl:value-of select="@title" />
+				</fo:block>
+			</xsl:if>
+			<xsl:apply-templates />
+		</fo:block>
+	</xsl:template>
+
+	<!-- Display a list -->
+	<xsl:template match="disp:list">
+		<fo:block font-size="90%">
+			<xsl:for-each select="disp:listItem">
+				<fo:block margin-top="9pt">
+					<xsl:apply-templates select="disp:conceptBlock" />
 				</fo:block>
 			</xsl:for-each>
 		</fo:block>
 	</xsl:template>
 	
-	<!-- Match a section -->
-	<xsl:template match="disp:section">
-		<xsl:for-each select="disp:entry">
-			<fo:block margin-top="9pt">
-				<xsl:apply-templates select="." />
-			</fo:block>
-		</xsl:for-each>
-	</xsl:template>
-	
-	<xsl:template match="disp:entry">
-		<xsl:apply-templates select="disp:label" />
-		
-		<fo:block margin-left="10pt">
-			<xsl:apply-templates select="disp:att | disp:ref" />
-			<xsl:apply-templates select="disp:entry" />
+	<!-- Display a tree -->
+	<xsl:template match="disp:tree">
+		<fo:block font-size="80%">
+			<xsl:apply-templates select="disp:node" />
 		</fo:block>
 	</xsl:template>
 	
-	<xsl:template match="disp:label">
-		<xsl:apply-templates />
+	<!-- process a tree node -->
+	<xsl:template match="disp:node">
+		<fo:block margin-left="10pt">
+			<!-- print its conceptBlock data -->
+			<xsl:apply-templates select="disp:nodeData/disp:conceptBlock" />
+			<!-- recurse -->
+			<xsl:apply-templates select="disp:node" />
+		</fo:block>
+	</xsl:template>
+
+	<!-- Display a table -->
+	<xsl:template match="disp:table">
+		<fo:block font-size="90%">
+			<fo:table>
+				<fo:table-column column-width="50%"/>
+				<fo:table-column column-width="50%"/>
+				<xsl:apply-templates select="disp:tableHeader" />
+				<fo:table-body>
+					<xsl:for-each select="disp:row">
+						<fo:table-row>
+							<xsl:for-each select="disp:cell">
+								<fo:table-cell>
+									<fo:block>
+										<xsl:apply-templates />
+									</fo:block>
+								</fo:table-cell>
+							</xsl:for-each>
+						</fo:table-row>
+					</xsl:for-each>
+				</fo:table-body>
+			</fo:table>
+		</fo:block>
 	</xsl:template>
 	
-	<xsl:template match="disp:att | disp:ref">
-		<fo:block font-size="smaller"><xsl:value-of select="@disp:type" /> : <xsl:apply-templates /></fo:block>
+	<xsl:template match="disp:tableHeader">
+		<fo:table-header>
+			<fo:table-row>
+				<xsl:for-each select="disp:cell">
+				<fo:table-cell>
+					<fo:block text-align="center" font-weight="bold">
+						<xsl:apply-templates />
+					</fo:block>
+				</fo:table-cell>
+				</xsl:for-each>
+			</fo:table-row>
+		</fo:table-header>
 	</xsl:template>
-	
-	<xsl:template match="disp:str">
+
+
+	<!-- display a concept block -->
+	<xsl:template match="disp:conceptBlock">
+		<xsl:apply-templates select="disp:label" />
+		
+		<xsl:if test="disp:att | disp:ref">
+			<fo:block margin-left="10pt">
+				<xsl:apply-templates select="disp:att | disp:ref" />
+			</fo:block>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template match="disp:str | disp:label | disp:typedString">
 		<xsl:choose>
-			<xsl:when test="@disp:type = 'pref'">
+			<xsl:when test="@type = 'pref'">
 				<fo:inline font-weight="bold"><xsl:value-of select="text()" /></fo:inline>
 			</xsl:when>
-			<xsl:when test="@disp:type = 'alt'">
+			<xsl:when test="@type = 'alt'">
 				<fo:inline font-style="italic"><xsl:value-of select="text()" /></fo:inline>
 			</xsl:when>
 			<xsl:otherwise>
 				<fo:inline><xsl:value-of select="text()" /></fo:inline>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template match="disp:att">
+		<fo:block font-size="smaller"><xsl:value-of select="@type" /> : <xsl:apply-templates /></fo:block>
+	</xsl:template>
+	
+	<xsl:template match="disp:ref">
+		<fo:block font-size="smaller"><xsl:value-of select="@type" /> : <xsl:apply-templates /></fo:block>
 	</xsl:template>
 	
 </xsl:stylesheet>

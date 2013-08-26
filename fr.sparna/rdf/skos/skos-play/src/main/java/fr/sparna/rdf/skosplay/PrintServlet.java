@@ -3,6 +3,7 @@ package fr.sparna.rdf.skosplay;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,10 +23,13 @@ import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
-import fr.sparna.rdf.skos.printer.reader.AlphabeticalSkosReader;
-import fr.sparna.rdf.skos.printer.reader.ConceptListSkosReader;
-import fr.sparna.rdf.skos.printer.reader.DisplayHeaderSkosReader;
-import fr.sparna.rdf.skos.printer.reader.HierarchicalSkosReader;
+import fr.sparna.rdf.skos.printer.reader.AbstractBodyReader;
+import fr.sparna.rdf.skos.printer.reader.AlphabeticalIndexBodyReader;
+import fr.sparna.rdf.skos.printer.reader.ConceptBlockReader;
+import fr.sparna.rdf.skos.printer.reader.ConceptListBodyReader;
+import fr.sparna.rdf.skos.printer.reader.HeaderReader;
+import fr.sparna.rdf.skos.printer.reader.HierarchicalBodyReader;
+import fr.sparna.rdf.skos.printer.reader.TranslationTableBodyReader;
 import fr.sparna.rdf.skos.printer.schema.Display;
 import fr.sparna.rdf.skos.printer.schema.DisplayHeader;
 import fr.sparna.rdf.skos.toolkit.JsonSKOSTreePrinter;
@@ -42,6 +46,8 @@ public class PrintServlet extends HttpServlet {
 	
 	private static final String PARAM_LANGUAGE = "language";
 	
+	private static final String PARAM_TARGET_LANGUAGE = "targetLanguage";
+	
 	private static final String PARAM_SCHEME = "scheme";
 	
 	private enum OUTPUT_TYPE {
@@ -55,6 +61,7 @@ public class PrintServlet extends HttpServlet {
 		HIERARCHICAL,
 		HIERARCHICAL_EXPANDED,
 		CONCEPTLISTING,
+		TRANSLATION_TABLE,
 		PARTITION,
 		TREELAYOUT,
 	}
@@ -85,6 +92,10 @@ public class PrintServlet extends HttpServlet {
 		// get scheme param
 		String paramScheme = (request.getParameter(PARAM_SCHEME) != null && !request.getParameter(PARAM_SCHEME).equals(""))?request.getParameter(PARAM_SCHEME):null;
 		URI scheme = (paramScheme == null || paramScheme.equals("no-scheme"))?null:URI.create(paramScheme);
+		
+		// get target language param - only for translations
+		String paramTargetLanguage = (request.getParameter(PARAM_TARGET_LANGUAGE) != null && !request.getParameter(PARAM_TARGET_LANGUAGE).equals(""))?request.getParameter(PARAM_TARGET_LANGUAGE):null;
+		String targetLanguage = (paramTargetLanguage != null)?(paramTargetLanguage.equals("no-language")?null:paramTargetLanguage):null;
 		
 		// retrieve data from session
 		Repository r = SessionData.get(request.getSession()).getRepository();
@@ -159,42 +170,43 @@ public class PrintServlet extends HttpServlet {
 		try {
 			
 			// build and set header
-			DisplayHeaderSkosReader headerReader = new DisplayHeaderSkosReader(r);
+			HeaderReader headerReader = new HeaderReader(r);
 			DisplayHeader header = headerReader.read(language, scheme);
 			display.setHeader(header);
 			
 			// pass on Repository to skos-printer level
+			AbstractBodyReader bodyReader = null;
 			switch(displayType) {
 			case ALPHABETICAL : {			
-				AlphabeticalSkosReader reader = new AlphabeticalSkosReader(r);
-				display.getAlphabeticalOrHierarchicalOrTranslationTable().add(reader.read(language, scheme));
+				bodyReader = new AlphabeticalIndexBodyReader(r, new ConceptBlockReader(r));			
 				break;
 			}
 			case ALPHABETICAL_EXPANDED : {			
-				AlphabeticalSkosReader reader = new AlphabeticalSkosReader(r);
-				reader.setSkosPropertiesToRead(AlphabeticalSkosReader.EXPANDED_SKOS_PROPERTIES);
-				display.getAlphabeticalOrHierarchicalOrTranslationTable().add(reader.read(language, scheme));
+				bodyReader = new AlphabeticalIndexBodyReader(r, new ConceptBlockReader(r, AlphabeticalIndexBodyReader.EXPANDED_SKOS_PROPERTIES));
 				break;
 			}
 			case HIERARCHICAL : {
-				HierarchicalSkosReader reader = new HierarchicalSkosReader(r);
-				display.getAlphabeticalOrHierarchicalOrTranslationTable().addAll(reader.read(language, scheme));
+				bodyReader = new HierarchicalBodyReader(r, new ConceptBlockReader(r));
 				break;
 			}
 			case HIERARCHICAL_EXPANDED : {
-				HierarchicalSkosReader reader = new HierarchicalSkosReader(r);
-				reader.setSkosPropertiesToRead(HierarchicalSkosReader.EXPANDED_SKOS_PROPERTIES);
-				display.getAlphabeticalOrHierarchicalOrTranslationTable().addAll(reader.read(language, scheme));
+				bodyReader = new HierarchicalBodyReader(r, new ConceptBlockReader(r, HierarchicalBodyReader.EXPANDED_SKOS_PROPERTIES));
 				break;
 			}
 			case CONCEPTLISTING : {
-				ConceptListSkosReader reader = new ConceptListSkosReader(r);
-				display.getAlphabeticalOrHierarchicalOrTranslationTable().add(reader.read(language, scheme));
+				bodyReader = new ConceptListBodyReader(r, new ConceptBlockReader(r, ConceptListBodyReader.EXPANDED_SKOS_PROPERTIES));
+				break;
+			}
+			case TRANSLATION_TABLE : {
+				bodyReader = new TranslationTableBodyReader(r, new ConceptBlockReader(r), targetLanguage);
 				break;
 			}
 			default :
-				break;
-			}		
+				throw new InvalidParameterException("Unknown display type "+displayType);
+			}	
+			
+			// read the body
+			display.setBody(bodyReader.readBody(language, scheme));
 
 			DisplayPrinter printer = new DisplayPrinter();
 			switch(outputType) {

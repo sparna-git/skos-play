@@ -9,11 +9,14 @@
     <attribute name="type" type="string"></attribute>
 
     <complexType name="alphabetical">
-        <choice minOccurs="1" maxOccurs="unbounded">
-        	<element ref="disp:entry"></element>
-        	<element ref="disp:section"></element>
-        </choice>
-        
+    	<complexContent>
+            <extension base="disp:displayContent">
+                <choice minOccurs="1" maxOccurs="unbounded">
+		        	<element ref="disp:entry"></element>
+		        	<element ref="disp:section"></element>
+		        </choice>
+            </extension>
+        </complexContent>
     </complexType>
 
     <complexType name="display">
@@ -43,9 +46,13 @@
     <element name="header" type="disp:displayHeader"></element>
 
     <complexType name="hierarchical">
-    	<sequence minOccurs="1" maxOccurs="unbounded">
-    		<element ref="disp:entry"></element>
-    	</sequence>
+        <complexContent>
+            <extension base="disp:displayContent">
+		    	<sequence minOccurs="1" maxOccurs="unbounded">
+		    		<element ref="disp:entry"></element>
+		    	</sequence>
+		    </extension>
+	    </complexContent>
     </complexType>
 
 
@@ -138,12 +145,18 @@
     </complexType>
 
     <complexType name="translationTable">
-    	<sequence>
-    		<element ref="disp:table"></element>
-    	</sequence>
+        <complexContent>
+            <extension base="disp:displayContent">
+		    	<sequence>
+		    		<element ref="disp:table"></element>
+		    	</sequence>
+	    	</extension>
+    	</complexContent>
     </complexType>
     
     <element name="translationTable" type="disp:translationTable"></element>
 
     <element name="table" type="disp:table"></element>
+
+    <complexType name="displayContent"  abstract="true"></complexType>
 </schema>

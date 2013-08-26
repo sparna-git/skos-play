@@ -218,11 +218,22 @@ public class UploadServlet extends HttpServlet {
 			// ask if some hierarchy exists
 			if(!Perform.on(repository).ask(new SPARQLQuery(new SPARQLQueryBuilder(this, "AskBroadersOrNarrowers.rq")))) {
 				printFormData.setEnableHierarchical(false);
-				printFormData.setWarningMessage(b.getString("upload.warning.noHierarchyFound"));
+				printFormData.getWarningMessages().add(b.getString("upload.warning.noHierarchyFound"));
 			}
 		} catch (SPARQLPerformException e) {
 			printFormData.setEnableHierarchical(false);
-			printFormData.setWarningMessage(b.getString("upload.warning.noHierarchyFound"));
+			printFormData.getWarningMessages().add(b.getString("upload.warning.noHierarchyFound"));
+		}
+		
+		try {
+			// ask if some translations exists
+			if(!Perform.on(repository).ask(new SPARQLQuery(new SPARQLQueryBuilder(this, "AskTranslatedConcepts.rq")))) {
+				printFormData.setEnableTranslations(false);
+				printFormData.getWarningMessages().add(b.getString("upload.warning.noTranslationsFound"));
+			}
+		} catch (SPARQLPerformException e) {
+			printFormData.setEnableTranslations(false);
+			printFormData.getWarningMessages().add(b.getString("upload.warning.noTranslationsFound"));
 		}
 			
 		try {

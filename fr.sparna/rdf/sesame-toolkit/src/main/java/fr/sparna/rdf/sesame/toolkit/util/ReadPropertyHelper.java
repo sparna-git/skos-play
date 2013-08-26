@@ -31,6 +31,7 @@ public abstract class ReadPropertyHelper extends SelectSPARQLHelperBase implemen
 	 */
 	public ReadPropertyHelper(
 			final URI predicateURI,
+			final String additionalPath,
 			final String lang,
 			final URI subjectURI,
 			final URI additionalCriteriaPredicate,
@@ -38,8 +39,8 @@ public abstract class ReadPropertyHelper extends SelectSPARQLHelperBase implemen
 	) {
 		super(
 				(additionalCriteriaPredicate != null || additionalCriteriaObject != null)
-				?new QueryBuilder(true, lang)
-				:new QueryBuilder(false, lang),
+				?new QueryBuilder(((additionalPath != null)?"<"+predicateURI.toString()+">|"+additionalPath:null),true, lang)
+				:new QueryBuilder(((additionalPath != null)?"<"+predicateURI.toString()+">|"+additionalPath:null),false, lang),
 				new HashMap<String, Object>() {{
 					// bind the property
 					put("predicate", predicateURI);
@@ -67,7 +68,7 @@ public abstract class ReadPropertyHelper extends SelectSPARQLHelperBase implemen
 	 * @param predicateURI URI of the predicate to read
 	 */
 	public ReadPropertyHelper(final URI predicateURI) {
-		this(predicateURI, null, null, null, null);
+		this(predicateURI, null, null, null, null, null);
 	}
 	
 	/**
@@ -77,7 +78,7 @@ public abstract class ReadPropertyHelper extends SelectSPARQLHelperBase implemen
 	 * @param subjectURI 	URI of the subject for which we want to read the predicate.
 	 */
 	public ReadPropertyHelper(final URI predicateURI, final URI subjectURI) {
-		this(predicateURI, null, subjectURI, null, null);
+		this(predicateURI, null, null, subjectURI, null, null);
 	}
 	
 	/**
@@ -111,36 +112,55 @@ public abstract class ReadPropertyHelper extends SelectSPARQLHelperBase implemen
 	 */
 	public static class QueryBuilder implements SPARQLQueryBuilderIfc {
 		
+		protected String predicatePath = null;
 		protected boolean additionalCriteria = false;
 		protected String lang;
 
-		public QueryBuilder(boolean additionalCriteria, String lang) {
+		public QueryBuilder(String predicatePath, boolean additionalCriteria, String lang) {
 			super();
+			this.predicatePath = predicatePath;
 			this.additionalCriteria = additionalCriteria;
 			this.lang = lang;
 		}
+		
+		public QueryBuilder(boolean additionalCriteria, String lang) {
+			this(null, additionalCriteria, lang);
+		}
 
+		/**
+		 * No predicatePath, no additionnal criteria, no language filtering
+		 */
 		public QueryBuilder() {	
 			this(false, null);
 		}
 		
 		@Override
 		public String getSPARQL() {
-			String sparql = "" +
-			"SELECT ?subject ?object"+"\n" +
-			"WHERE {"+"\n" +
-			"	?subject ?predicate ?object ."+"\n" +
-			((this.additionalCriteria)
-					?"   ?subject ?additionalCriteriaPredicate ?additionalCriteriaObject ."
-					:""
-			)+"\n" +
-			((this.lang != null)
-					?"   FILTER(lang(?object) = '"+this.lang+"')"   
-					:""
-			)+
-			"}";
+			StringBuffer sparql = new StringBuffer();
+			if(this.predicatePath != null) {
+				// add a distinct to avoid duplicated matches
+				sparql.append("SELECT DISTINCT ?subject ?object"+"\n");
+			} else {
+				sparql.append("SELECT ?subject ?object"+"\n");
+			}			
+			sparql.append("WHERE {"+"\n");
+			// sparql.append("	?subject ?predicate ?object ."+"\n");
+			sparql.append("	?subject");
+			if(this.predicatePath != null) {
+				sparql.append(" "+this.predicatePath);
+			} else {
+				sparql.append("	?predicate");
+			}
+			sparql.append("	?object ."+"\n");
+			if(this.additionalCriteria) {
+				sparql.append("   ?subject ?additionalCriteriaPredicate ?additionalCriteriaObject ."+"\n");
+			}
+			if(this.lang != null) {
+				sparql.append("   FILTER(lang(?object) = '"+this.lang+"')"+"\n");
+			}
+			sparql.append("} ");
 			
-			return sparql;
+			return sparql.toString();
 		}		
 	}
 	

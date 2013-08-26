@@ -2,7 +2,12 @@ package fr.sparna.rdf.sesame.toolkit.repository.operation;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
@@ -29,37 +34,34 @@ public class LoadFromURL extends AbstractLoadOperation implements RepositoryOper
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 	
-	protected URL url;
-	protected String localFallback;
+	// URL to load from, associated with optional path to a classpath-accessible fallback resource
+	protected Map<URL, String> urls;
+	// whether to automatically add the URL to the corresponding named graph
+	protected boolean autoNamedGraph;
 
-	/**
-	 * Constructs a LoadFromURL operation with a local fallback
-	 * 
-	 * @param url 				url to load data from
-	 * @param localFallback 	path to a local resource to load if call to url fails
-	 */
-	public LoadFromURL(URL url, String localFallback) {
-		this.url = url;
-		this.localFallback = localFallback;
+	public LoadFromURL(Map<URL, String> urls, boolean autoNamedGraph) {
+		super();
+		this.urls = urls;
+		this.autoNamedGraph = autoNamedGraph;
 	}
 	
-	/**
-	 * Constructs a LoadFromURL operation that will have a localFallback equal to the file path in the URL,
-	 * minus the leading '/', if useDefaultFallback is set to true (e.g. if url is http://www.exemple.com/path/to/file.txt,
-	 * the file path is "/path/to/file.txt").
-	 * 
-	 * @param url					url to load data from
-	 * @param useDefaultFallback	true to set a default fallback, false oterwise
-	 */
-	public LoadFromURL(URL url, boolean useDefaultFallback) {
-		this(url, (useDefaultFallback)?url.getFile().substring(1):null);
+	public LoadFromURL(List<URL> urls, boolean autoNamedGraph) {
+		super();
+		this.urls = new HashMap<URL, String>();
+		for (URL url : urls) {
+			this.urls.put(url, null);
+		}
+		this.autoNamedGraph = autoNamedGraph;
 	}
 	
-	/**
-	 * Constructs a LoadFromURL operation with no local fallback.
-	 * 
-	 * @param url					url to load data from
-	 */
+	public LoadFromURL(URL url, boolean autoNamedGraph) {
+		this(url, autoNamedGraph, null);
+	}
+	
+	public LoadFromURL(URL url, boolean autoNamedGraph, String localFallback) {
+		this(new HashMap<URL, String>(Collections.singletonMap(url, localFallback)), autoNamedGraph);
+	}	
+	
 	public LoadFromURL(URL url) {
 		this(url, false);
 	}
@@ -67,41 +69,70 @@ public class LoadFromURL extends AbstractLoadOperation implements RepositoryOper
 	@Override
 	public void execute(Repository repository)
 	throws RepositoryOperationException {
-		try {
-			repository.getConnection().add(
-					this.url,
-					this.defaultNamespace,
-					// NEVER EVER explicitly set the RDFFormat when loading from a URL.
-					// Sesame can determine the appropriate parser based on the content type of the response if this parameter
-					// is left to null
-					// Rio.getParserFormatForFileName(url.toString(), RDFFormat.RDFXML),
-					null,
-					(this.targetGraph != null)?repository.getValueFactory().createURI(this.targetGraph.toString()):null
-			);
-		} catch (RDFParseException e) {
-			throw new RepositoryOperationException("Error when parsing content at URL '"+this.url.toString()+"'", e);
-		} catch (RepositoryException e) {
-			throw new RepositoryOperationException("Error when adding content of URL '"+this.url.toString()+"'", e);
-		} catch (IOException e) {
-			log.info("Cannot open stream of URL '"+this.url+"', cause : "+e.getMessage());
-			if(this.localFallback != null) {
-				log.info("Will attempt to load local resource fallback : '"+this.localFallback+"'");
-				InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(this.localFallback);
-				if(resourceAsStream == null) {
-					throw new RepositoryOperationException("Cannot find resource "+this.localFallback);
+		
+		// return if urls is null
+		if(this.urls == null) {
+			return;
+		}
+		
+		for (Map.Entry<URL, String> aUrlEntry : this.urls.entrySet()) {
+			
+			// set target graph according to autoNamedGraph flag
+			if(this.autoNamedGraph && this.targetGraph != null) {
+				try {
+					this.targetGraph = aUrlEntry.getKey().toURI();
+				} catch (URISyntaxException e) {
+					throw new RepositoryOperationException("Unable to convert following URL to a URI to set it as named graph : '"+aUrlEntry.getKey()+"'", e);
 				}
-				LoadFromStream lfs = new LoadFromStream(
-						resourceAsStream,
-						Rio.getParserFormatForFileName(this.localFallback, RDFFormat.RDFXML),
-						this.defaultNamespace
+			}
+			
+			try {
+				log.debug("Loading URL "+aUrlEntry.getKey()+"...");
+				repository.getConnection().add(
+						aUrlEntry.getKey(),
+						this.defaultNamespace,
+						// NEVER EVER explicitly set the RDFFormat when loading from a URL.
+						// Sesame can determine the appropriate parser based on the content type of the response if this parameter
+						// is left to null
+						// Rio.getParserFormatForFileName(url.toString(), RDFFormat.RDFXML),
+						null,
+						(this.targetGraph != null)?repository.getValueFactory().createURI(this.targetGraph.toString()):null
 				);
-				lfs.setTargetGraph(this.targetGraph);
-				lfs.execute(repository);
+			} catch (RDFParseException e) {
+				throw new RepositoryOperationException("Error when parsing content at URL '"+aUrlEntry.getKey().toString()+"'", e);
+			} catch (RepositoryException e) {
+				throw new RepositoryOperationException("Error when adding content of URL '"+aUrlEntry.getKey().toString()+"'", e);
+			} catch (IOException e) {
+				log.info("Cannot open stream of URL '"+aUrlEntry.getKey()+"', cause : "+e.getMessage());
+				// look in the fallback value
+				if(aUrlEntry.getValue() != null) {
+					log.info("Will attempt to load local resource fallback : '"+aUrlEntry.getValue()+"'");
+					InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(aUrlEntry.getValue());
+					if(resourceAsStream == null) {
+						throw new RepositoryOperationException("Cannot find resource "+aUrlEntry.getValue());
+					}
+					LoadFromStream lfs = new LoadFromStream(
+							resourceAsStream,
+							Rio.getParserFormatForFileName(aUrlEntry.getValue(), RDFFormat.RDFXML),
+							this.defaultNamespace
+					);
+					lfs.setTargetGraph(this.targetGraph);
+					lfs.execute(repository);
+				}
 			}
 		}
+	
 	}
 	
 	
+	public boolean isAutoNamedGraph() {
+		return autoNamedGraph;
+	}
+
+	public void setAutoNamedGraph(boolean autoNamedGraph) {
+		this.autoNamedGraph = autoNamedGraph;
+	}
+
 	public static void main(String[] args) throws Exception {
 		Repository r = new SailRepository(new MemoryStore());
 		r.initialize();

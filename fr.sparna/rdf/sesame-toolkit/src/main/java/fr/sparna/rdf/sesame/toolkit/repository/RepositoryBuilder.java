@@ -107,7 +107,7 @@ public class RepositoryBuilder implements RepositoryFactoryIfc {
 		RepositoryBuilder builder = new RepositoryBuilder(
 				new LocalMemoryRepositoryFactory(),
 				// true : use default fallback
-				new LoadFromURL(url, true)
+				new LoadFromURL(url, false, url.getFile().substring(1))
 				);
 		return builder.createNewRepository();
 	}

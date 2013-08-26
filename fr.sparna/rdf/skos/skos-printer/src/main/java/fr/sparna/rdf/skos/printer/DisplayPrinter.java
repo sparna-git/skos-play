@@ -165,8 +165,5 @@ public class DisplayPrinter {
 
 	public void setTransformerParams(Map<String, Object> transformerParams) {
 		this.transformerParams = transformerParams;
-	}
-	
-	
-	
+	}	
 }

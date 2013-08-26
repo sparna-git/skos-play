@@ -9,9 +9,10 @@ public class PrintFormData {
 
 	protected List<String> languages = new ArrayList<String>();
 	protected Map<LabeledResource, Integer> conceptCountByConceptSchemes = new TreeMap<LabeledResource, Integer>();
-	protected String warningMessage;
+	protected List<String> warningMessages = new ArrayList<String>();
 	protected String successMessage;
 	protected boolean enableHierarchical = true;
+	protected boolean enableTranslations = true;
 	
 	public List<String> getLanguages() {
 		return languages;
@@ -29,12 +30,12 @@ public class PrintFormData {
 		this.conceptCountByConceptSchemes = conceptCountByConceptSchemes;
 	}
 
-	public String getWarningMessage() {
-		return warningMessage;
+	public List<String> getWarningMessages() {
+		return warningMessages;
 	}
 
-	public void setWarningMessage(String warningMessage) {
-		this.warningMessage = warningMessage;
+	public void setWarningMessages(List<String> warningMessages) {
+		this.warningMessages = warningMessages;
 	}
 
 	public boolean isEnableHierarchical() {
@@ -51,6 +52,14 @@ public class PrintFormData {
 
 	public void setSuccessMessage(String successMessage) {
 		this.successMessage = successMessage;
+	}
+
+	public boolean isEnableTranslations() {
+		return enableTranslations;
+	}
+
+	public void setEnableTranslations(boolean enableTranslations) {
+		this.enableTranslations = enableTranslations;
 	}
 	
 }

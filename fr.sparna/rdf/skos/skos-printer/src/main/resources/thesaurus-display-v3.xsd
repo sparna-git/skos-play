@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.sparna.fr/thesaurus-display" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:disp="http://www.sparna.fr/thesaurus-display">
+
+	<!-- display, header and body -->
+	
+    <complexType name="display">
+    	<sequence>
+    		<element ref="disp:header" minOccurs="1" maxOccurs="1"></element>
+    		<element ref="disp:body" minOccurs="1" maxOccurs="1"></element>
+    	</sequence>
+    </complexType>
+    <element name="display" type="disp:display"></element>
+
+    <complexType name="displayHeader">
+    	<sequence>
+    		<element name="title" type="string"></element>
+    		<element name="date" type="dateTime"></element>
+    		<element name="version" type="string"></element>
+    		<element name="description" type="string"></element>
+    	</sequence>
+    </complexType>
+    <element name="header" type="disp:displayHeader"></element>
+
+    <complexType name="displayBody">
+    	<sequence minOccurs="1" maxOccurs="unbounded">
+   			<element ref="disp:section"></element>
+   		</sequence>
+    </complexType>
+    <element name="body" type="disp:displayBody"></element>
+    
+    <complexType name="section">
+    	<annotation>
+    		<documentation>
+    			A section in the output document, typically to organize
+    			output alphabetically. @title : title of the section.
+    		</documentation>
+    	</annotation>
+    	<choice>
+    		<element ref="disp:list"></element>
+    		<element ref="disp:tree"></element>
+    		<element ref="disp:table"></element>
+    	</choice>
+    	<attribute name="title" type="string" use="required"></attribute>
+    </complexType>
+    <element name="section" type="disp:section"></element>
+
+	<!-- END display, header and body -->
+	
+	<!-- tree -->
+    <complexType name="tree">
+    	<annotation>
+        	<documentation>A tree structure.</documentation>
+        </annotation>
+    	<sequence>
+    		<element ref="disp:node"></element>
+    	</sequence>
+    </complexType>
+    <element name="tree" type="disp:tree"></element>
+    
+    <complexType name="node">
+    	<annotation>
+        	<documentation>Node of a tree.</documentation>
+        </annotation>
+    	<sequence>
+    		<element ref="disp:nodeData"></element>
+    		<sequence>
+    			<element ref="disp:node" minOccurs="0" maxOccurs="unbounded"></element>
+    		</sequence>
+    	</sequence>
+    </complexType>
+	<element name="node" type="disp:node"></element>
+
+    <complexType name="nodeData">
+        <annotation>
+        	<documentation>Data of a tree node.</documentation>
+        </annotation>
+        <sequence minOccurs="0" maxOccurs="1">
+    		<element ref="disp:conceptBlock"></element>
+    	</sequence>
+    </complexType>
+	<element name="nodeData" type="disp:nodeData"></element>
+
+	<!-- END tree -->
+
+	<!-- list -->
+	<complexType name="list">
+    	<sequence>
+    		<element name="listItem" type="disp:listItem" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+    <element name="list" type="disp:list"></element>
+
+    <complexType name="listItem">
+    	<sequence>
+    		<any></any>
+    	</sequence>
+    </complexType>
+    
+	<!-- END list -->
+	
+	<!-- table -->
+	
+	<complexType name="table">
+    	<sequence>
+    		<element name="tableHeader" type="disp:rowType" minOccurs="0" maxOccurs="1"></element>
+    		<element name="row" type="disp:rowType" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+    <element name="table" type="disp:table"></element>
+
+    <complexType name="rowType">
+    	<sequence>
+    		<element name="cell" type="disp:cellType" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="cellType">
+    	<annotation>
+    		<documentation>A cell of a row in a table.</documentation>
+    	</annotation>
+    	<sequence>
+    		<any></any>
+    	</sequence>
+    </complexType>
+
+    <!-- END table -->
+	
+	<!-- conceptBlock -->
+	
+	<complexType name="conceptBlock">
+    	<sequence>
+    		<element minOccurs="1" maxOccurs="1" ref="disp:label"></element>
+    		<choice minOccurs="0" maxOccurs="unbounded">
+    			<element ref="disp:att"></element>
+    			<element ref="disp:ref"></element>
+    		</choice>
+    	</sequence>
+    	<attribute name="uri" type="anyURI"></attribute>
+    	<attribute name="id" type="ID"></attribute>
+    </complexType>
+    <element name="conceptBlock" type="disp:conceptBlock"></element>
+	
+    <element name="label" type="disp:typedString"></element>  
+    
+    <complexType name="att">
+    	<sequence>
+    		<element ref="disp:str"></element>
+    	</sequence>
+    	<attribute name="type" type="string"></attribute>
+    </complexType> 
+    <element name="att" type="disp:att"></element>   
+
+    <complexType name="ref">
+        <annotation>
+        	<documentation>A reference to another conceptBlock.
+@type : the type of the attribute
+@refId : the id of the referenced conceptBlock.
+label : the label of the referenced conceptBlock</documentation>
+        </annotation>
+        <sequence minOccurs="1" maxOccurs="1">
+    		<element ref="disp:label"></element>
+    	</sequence>
+    	<attribute name="type" type="string"></attribute>
+    	<attribute name="refId" type="string"></attribute>
+    	<attribute name="uri" type="anyURI"></attribute>
+    </complexType>
+    <element name="ref" type="disp:ref"></element>
+
+    <complexType name="typedString">
+    	<annotation>
+        	<documentation>A string with an additional type.</documentation>
+        </annotation>
+    	<simpleContent>
+    		<extension base="string">
+    			<attribute name="type" type="string"></attribute>
+    		</extension>
+    	</simpleContent>
+    </complexType>
+    <element name="str" type="disp:typedString"></element>    
+    
+</schema>

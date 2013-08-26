@@ -80,110 +80,133 @@
 	</xsl:template>
 
 
-	<!-- Display : Alphabetical -->
-	<xsl:template match="disp:alphabetical">
+	<!-- Display body -->
+	<xsl:template match="disp:body">
 
-		<xsl:choose>
-			<!-- case where we process entries directly -->
-			<xsl:when test="disp:entry">
-				<div class="display">
-					<ul>
-						<xsl:for-each select="disp:entry">
-							<li id="{@entryId}">
-								<xsl:apply-templates select="." />
-							</li>
+		<!-- if more than one section, and at least have a title, generate navbar -->
+		<xsl:if test="count(disp:section[@title]) > 1">
+			<div class="navbar navbar-fixed-bottom">
+		    	<div class="navbar-inner">
+		        	<ul class="nav">
+		        		<xsl:for-each select="disp:section">
+							<li><a href="#{@title}"><xsl:value-of select="@title" /></a></li>
 						</xsl:for-each>
-					</ul>
-				</div>
-			</xsl:when>
-			<!-- case where we have sections -->
-			<xsl:when test="disp:section">
-				<!-- generation de la "navbar" -->
-				<div class="navbar navbar-fixed-bottom">
-			    	<div class="navbar-inner">
-			        	<ul class="nav">
-			        		<xsl:for-each select="disp:section">
-								<li><a href="#{@title}"><xsl:value-of select="@title" /></a></li>
-							</xsl:for-each>
-			      		</ul>
-			    	</div>
-			    </div>
-				<div class="display">
-					<xsl:apply-templates select="disp:section" />
-				</div>
-			</xsl:when>
-		</xsl:choose>
+		      		</ul>
+		    	</div>
+		    </div>
+		</xsl:if>
+		<!-- display each section -->
+		<div class="display">
+			<xsl:apply-templates select="disp:section" />
+		</div>
 
 	</xsl:template>
-	
-	<!-- Display : Hierarchical -->
-	<xsl:template match="disp:hierarchical">
-		<div class="display">
-			<ul class="tree">
-				<xsl:for-each select="disp:entry">
-					<li id="{@entryId}">
-						<xsl:apply-templates select="." />
-					</li> 
-				</xsl:for-each>
-			</ul>
-		</div>
-	</xsl:template>
+
 	
 	<!-- Process a section -->
 	<xsl:template match="disp:section">
 		<div class="section" id="{@title}">
-			<h2 class="title"><xsl:value-of select="@title" /></h2>
-			<ul>
-				<xsl:for-each select="disp:entry">
-					<li id="{@entryId}">
-						<xsl:apply-templates select="." />
-					</li> 
-				</xsl:for-each>
+			<xsl:if test="@title"><h2 class="title"><xsl:value-of select="@title" /></h2></xsl:if>
+			<!-- process either list, table or tree -->
+			<xsl:apply-templates />
+		</div>
+	</xsl:template>
+
+	<!-- Display a list -->
+	<xsl:template match="disp:list">
+		<ul>
+			<xsl:for-each select="disp:listItem">
+				<li>
+					<xsl:apply-templates select="disp:conceptBlock" />
+				</li>
+			</xsl:for-each>
+		</ul>
+	</xsl:template>
+	
+	<!-- Display a tree -->
+	<xsl:template match="disp:tree">
+		<div class="display">
+			<ul class="tree">
+				<xsl:apply-templates select="disp:node" />
 			</ul>
 		</div>
 	</xsl:template>
 	
-	<xsl:template match="disp:entry">
-			<span title="{@disp:concept}"><xsl:apply-templates select="disp:label" /></span>
+	<!-- process a tree node -->
+	<xsl:template match="disp:node">
+		<li id="{@entryId}">
+			<!-- print its conceptBlock data -->
+			<xsl:apply-templates select="disp:nodeData/disp:conceptBlock" />
+			<!-- recurse -->
+			<xsl:if test="disp:node">
+				<ul>
+					<xsl:apply-templates select="disp:node" />
+				</ul>
+			</xsl:if>
+		</li> 
+	</xsl:template>
+
+	<!-- Display a table -->
+	<xsl:template match="disp:table">
+		<table class="table table-striped table-condensed">
+			<!-- TODO : change this for tables with more than 2 cells -->
+			<colgroup>
+               <col span="1" style="width: 50%;" />
+               <col span="1" style="width: 50%;" />
+            </colgroup>
+			<xsl:apply-templates select="disp:tableHeader" />
+			<tbody>
+				<xsl:for-each select="disp:row">
+					<tr>
+						<xsl:for-each select="disp:cell">
+							<td>
+								<xsl:apply-templates />
+							</td>
+						</xsl:for-each>
+					</tr>
+				</xsl:for-each>
+			</tbody>
+		</table>
+	</xsl:template>
+	
+	<xsl:template match="disp:tableHeader">
+		<thead>
+			<tr>
+				<xsl:for-each select="disp:cell">
+					<th style="text-align:center;">
+						<xsl:apply-templates />
+					</th>
+				</xsl:for-each>
+			</tr>
+		</thead>
+	</xsl:template>
+
+	<!-- display a concept block -->
+	<xsl:template match="disp:conceptBlock">
+		<div id="{@id}">
+			<span title="{@uri}"><xsl:apply-templates select="disp:label" /></span>
 			<xsl:if test="disp:att | disp:ref">
 				<ul class="no">
 					<xsl:apply-templates select="disp:att | disp:ref" />
 				</ul>
 			</xsl:if>
-			<!-- descente recursive pour gerer le display hierarchique -->
-			<xsl:if test="disp:entry">
-				<ul>
-					<xsl:for-each select="disp:entry">
-						<li id="{@entryId}">
-							<xsl:apply-templates select="." />
-						</li> 
-					</xsl:for-each>
-				</ul>
-			</xsl:if>
+		</div>
 	</xsl:template>
 
-	<xsl:template match="disp:entry" mode="ref">
-			<xsl:apply-templates select="disp:label" />
-	</xsl:template>
-	
-	<xsl:template match="disp:label">
-		<xsl:apply-templates />		
-	</xsl:template>
-
-	<xsl:template match="disp:str">
+	<xsl:template match="disp:str | disp:label | disp:typedString">
 		<xsl:choose>
-			<xsl:when test="@disp:type = 'pref'"><b><xsl:value-of select="text()" /></b></xsl:when>
-			<xsl:when test="@disp:type = 'alt'"><i><xsl:value-of select="text()" /></i></xsl:when>
+			<xsl:when test="@type = 'pref'"><b><xsl:value-of select="text()" /></b></xsl:when>
+			<xsl:when test="@type = 'alt'"><i><xsl:value-of select="text()" /></i></xsl:when>
 			<xsl:otherwise><xsl:value-of select="text()" /></xsl:otherwise>
 		</xsl:choose>		
 	</xsl:template>
 	
 	<xsl:template match="disp:att">
-		<li><xsl:value-of select="@disp:type" /> : <xsl:apply-templates /></li>
+		<li><xsl:value-of select="@type" /> : <xsl:apply-templates /></li>
 	</xsl:template>
 	
 	<xsl:template match="disp:ref">
-		<li><a href="#{@entryRef}"><xsl:value-of select="@disp:type" /> : <xsl:apply-templates select="disp:entry" mode="ref" /></a></li>
+		<li><a href="#{@refId}"><xsl:value-of select="@type" /> : <xsl:apply-templates select="disp:label" /></a></li>
 	</xsl:template>
 	
 </xsl:stylesheet>
