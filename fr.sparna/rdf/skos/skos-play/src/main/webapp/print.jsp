@@ -72,7 +72,7 @@
 				<div class="control-group">
 					<label class="control-label"><fmt:message key="print.form.language.legend" /></label>
 					<div class="controls">
-						<select name="language" class="span1">
+						<select name="language" class="span2">
 						<c:choose>
 							<c:when test="${empty data.languages}">
 								<option value="no-language"><fmt:message key="print.form.language.noLanguageFound" /></option>
@@ -100,7 +100,7 @@
 							<span class="help-inline"><fmt:message key="print.form.displayType.translation_table.help" /></span>
 						</label>
 						<div style="margin-left:30px; font-size:smaller;">
-							<fmt:message key="print.form.displayType.translation_table.targetLanguage" /> : <select id="targetLanguage" name="targetLanguage" class="span1">
+							<fmt:message key="print.form.displayType.translation_table.targetLanguage" /> : <select id="targetLanguage" name="targetLanguage" class="span2">
 							<c:choose>
 								<c:when test="${empty data.languages}">
 									<option value="no-language"><fmt:message key="print.form.language.noLanguageFound" /></option>

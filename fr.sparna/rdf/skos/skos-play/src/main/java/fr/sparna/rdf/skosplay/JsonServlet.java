@@ -35,7 +35,7 @@ public class JsonServlet extends HttpServlet {
 		// get language param
 		String languageParam = (request.getParameter(PARAM_LANGUAGE) != null && !request.getParameter(PARAM_LANGUAGE).equals(""))?request.getParameter(PARAM_LANGUAGE):null;
 		// if no language param, set a default value
-		String language = (languageParam == null)?"en":languageParam;
+		String language = (languageParam == null)?"":languageParam;
 		
 		// get root param
 		String rootParam = (request.getParameter(PARAM_ROOT) != null && !request.getParameter(PARAM_ROOT).equals(""))?request.getParameter(PARAM_ROOT):null;
@@ -45,7 +45,7 @@ public class JsonServlet extends HttpServlet {
 		// recreate a labelReader
 		// TODO
 		// LabelReader labelReader = SessionData.get(request.getSession()).getLabelReader();
-		LabelReader labelReader = new LabelReader(r, "en", language);
+		LabelReader labelReader = new LabelReader(r, language);
 		
 		// create a tree builder
 		SKOSTreeBuilder builder = new SKOSTreeBuilder(r, language);

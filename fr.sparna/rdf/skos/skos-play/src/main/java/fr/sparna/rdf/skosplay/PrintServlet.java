@@ -87,7 +87,7 @@ public class PrintServlet extends HttpServlet {
 		
 		// get language param
 		String languageParam = (request.getParameter(PARAM_LANGUAGE) != null && !request.getParameter(PARAM_LANGUAGE).equals(""))?request.getParameter(PARAM_LANGUAGE):null;
-		String language = languageParam.equals("no-language")?null:languageParam;
+		String language = languageParam.equals("no-language")?"":languageParam;
 		
 		// get scheme param
 		String paramScheme = (request.getParameter(PARAM_SCHEME) != null && !request.getParameter(PARAM_SCHEME).equals(""))?request.getParameter(PARAM_SCHEME):null;
@@ -119,7 +119,7 @@ public class PrintServlet extends HttpServlet {
 				GenericTree<SKOSTreeNode> tree = JsonServlet.buildTree(builder, (scheme != null)?URI.create(scheme.toString()):null);			
 				
 				// writes json output
-				LabelReader labelReader = new LabelReader(r, "en", language);
+				LabelReader labelReader = new LabelReader(r, language);
 				JsonSKOSTreePrinter printer = new JsonSKOSTreePrinter(labelReader);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				printer.print(tree, baos);
@@ -145,7 +145,7 @@ public class PrintServlet extends HttpServlet {
 				GenericTree<SKOSTreeNode> tree = JsonServlet.buildTree(builder, (scheme != null)?URI.create(scheme.toString()):null);			
 				
 				// writes json output
-				LabelReader labelReader = new LabelReader(r, "en", language);
+				LabelReader labelReader = new LabelReader(r, language);
 				JsonSKOSTreePrinter printer = new JsonSKOSTreePrinter(labelReader);
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				printer.print(tree, baos);

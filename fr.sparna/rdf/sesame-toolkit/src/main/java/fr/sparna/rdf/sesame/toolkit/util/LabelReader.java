@@ -1,6 +1,7 @@
 package fr.sparna.rdf.sesame.toolkit.util;
 
 import java.net.URI;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -72,6 +73,10 @@ public class LabelReader {
 			List<java.net.URI> labelProperties,
 			String fallbackLanguage,
 			String preferredLanguage) {
+		if(preferredLanguage == null) {
+			throw new InvalidParameterException("preferredLanguage cannot be null (but can be the empty string");
+		}
+		
 		this.repository = repository;
 		this.labelProperties = labelProperties;
 		this.fallbackLanguage = fallbackLanguage;

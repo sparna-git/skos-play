@@ -22,12 +22,12 @@ public abstract class AbstractBodyReader {
 
 	public DisplayBody readBody(String mainLang, final URI conceptScheme) 
 	throws SPARQLPerformException {
-		this.initTagsBundle(mainLang);
-		
 		// prevent null language
 		if(mainLang == null) {
-			mainLang = Locale.getDefault().getLanguage();
+			mainLang = "";
 		}
+		
+		this.initTagsBundle(mainLang);
 		
 		return this.doRead(mainLang, conceptScheme);
 	}
