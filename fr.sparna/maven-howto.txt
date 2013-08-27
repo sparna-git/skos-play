@@ -9,3 +9,8 @@ How to update versions : http://stackoverflow.com/questions/5726291/updating-ver
 Resolve "Invalid POM for..., transitive dependency will not be included" :
 
 	install the updated parent POM in the repository
+
+Create a tag and push it to bitbucket :
+
+	git tag 0.40 -a
+	git push --tags
