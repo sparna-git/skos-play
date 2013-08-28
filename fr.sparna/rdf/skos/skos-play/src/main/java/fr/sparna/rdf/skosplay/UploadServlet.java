@@ -1,6 +1,7 @@
 package fr.sparna.rdf.skosplay;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.openrdf.model.Literal;
+import org.openrdf.model.vocabulary.DC;
+import org.openrdf.model.vocabulary.DCTERMS;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerBase;
 import org.openrdf.query.TupleQueryResultHandlerException;
@@ -203,8 +206,11 @@ public class UploadServlet extends HttpServlet {
 		sessionData.setRepository(repository);
 		
 		// store label reader in the session
-		// 'en' is the fallback language if the preferred language is not found
-		final LabelReader labelReader = new LabelReader(repository, "en", sessionData.getUserLocale().getLanguage());
+		// default to no language
+		final LabelReader labelReader = new LabelReader(repository, "", sessionData.getUserLocale().getLanguage());
+		// add dcterms title and dc title
+		labelReader.getProperties().add(URI.create(DCTERMS.TITLE.toString()));
+		labelReader.getProperties().add(URI.create(DC.TITLE.toString()));
 		sessionData.setLabelReader(labelReader);
 		
 		// build data structure
@@ -250,7 +256,7 @@ public class UploadServlet extends HttpServlet {
 									printFormData.getConceptCountByConceptSchemes().put(
 											new LabeledResource(
 													java.net.URI.create(bindingSet.getValue("scheme").stringValue()),
-													LabelReader.display(labelReader.getLabels((org.openrdf.model.URI)bindingSet.getValue("scheme")))
+													LabelReader.display(labelReader.getValues((org.openrdf.model.URI)bindingSet.getValue("scheme")))
 											),
 											(bindingSet.getValue("conceptCount") != null)?
 													((Literal)bindingSet.getValue("conceptCount")).intValue()

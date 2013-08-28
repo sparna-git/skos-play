@@ -14,7 +14,8 @@
     <complexType name="displayHeader">
     	<sequence>
     		<element name="title" type="string"></element>
-    		<element name="date" type="dateTime"></element>
+    		<element name="creator" type="string"></element>
+    		<element name="date" type="string"></element>
     		<element name="version" type="string"></element>
     		<element name="description" type="string"></element>
     	</sequence>

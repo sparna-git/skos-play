@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openrdf.model.Literal;
+import org.openrdf.model.Value;
 import org.openrdf.repository.Repository;
 
 import com.fasterxml.jackson.core.JsonEncoding;
@@ -56,12 +56,12 @@ public class JsonSKOSTreePrinter {
 			jg.useDefaultPrettyPrinter(); 
 		}
 		
-		Map<URI, List<Literal>> labels = new HashMap<URI, List<Literal>>();
+		Map<URI, List<Value>> labels = new HashMap<URI, List<Value>>();
 		
 		try {
 			URIHarvester harvester = new URIHarvester();
 			tree.visit(harvester);
-			labels = this.labelReader.getLabels(harvester.uris);
+			labels = this.labelReader.getValues(harvester.uris);
 		} catch (GenericTreeVisitorException e) {
 			e.printStackTrace();
 		}
@@ -70,7 +70,7 @@ public class JsonSKOSTreePrinter {
 		jg.close();
 	}
 	
-	private void printConceptRec(GenericTreeNode<SKOSTreeNode> aNode, final JsonGenerator jg, Map<URI, List<Literal>> labels) 
+	private void printConceptRec(GenericTreeNode<SKOSTreeNode> aNode, final JsonGenerator jg, Map<URI, List<Value>> labels) 
 	throws SPARQLPerformException, JsonGenerationException, IOException {
 		
 		jg.writeStartObject();

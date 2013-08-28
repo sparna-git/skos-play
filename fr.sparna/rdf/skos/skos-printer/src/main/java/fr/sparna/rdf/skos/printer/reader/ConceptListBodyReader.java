@@ -177,6 +177,8 @@ public class ConceptListBodyReader extends AbstractBodyReader {
 
 		DisplayPrinter printer = new DisplayPrinter();
 		printer.setDebug(true);
+		// ask for 2-columns !
+		printer.getTransformerParams().put("column-count", 2);
 		printer.printToHtml(display, new File("display-test.html"));
 		printer.printToPdf(display, new File("display-test.pdf"));
 		

@@ -38,6 +38,7 @@ public class PropertyReader {
 	 * 
 	 * @param repository					The repository to read from
 	 * @param propertyURI					The property URI to read
+	 * @param additionalPath				An additional path to append to the predicate URI
 	 * @param lang							The language in which we want to read the property (optional, may be null)
 	 * @param additionalCriteriaProperty	An additional property constraint on the resources on which we will be reading the property (optional, may be null)
 	 * @param additionalCriteriaObject		A value for the additional property constraint (optional, may be null)
@@ -68,6 +69,18 @@ public class PropertyReader {
 	 */
 	public PropertyReader(Repository repository, java.net.URI propertyURI, String lang) {
 		this(repository, propertyURI, null, lang, null, null);
+	}
+	
+	/**
+	 * Will read the given property with the given language in the repository
+	 * 
+	 * @param repository		The repository to read from
+	 * @param propertyURI		The property URI to read
+	 * @param additionalPath	An additionnal path to append to the predicate URI
+	 * @param lang				The language in which to read the property
+	 */
+	public PropertyReader(Repository repository, java.net.URI propertyURI, String additionalPath, String lang) {
+		this(repository, propertyURI, additionalPath, lang, null, null);
 	}
 	
 	/**
