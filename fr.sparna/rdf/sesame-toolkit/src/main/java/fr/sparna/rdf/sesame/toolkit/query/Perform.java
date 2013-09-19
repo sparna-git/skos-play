@@ -129,6 +129,19 @@ public class Perform {
 	}
 	
 	/**
+	 * A convenience method to set the working graph inline, allowing to write
+	 * <code>
+	 *  Perform.on(repository).withWorkingGraph(graph).select(...);
+	 * </code>
+	 * 
+	 * @param graph the URI of the graph to set
+	 */
+	public Perform withWorkingGraph(URI graph) {
+		this.setWorkingGraph(graph);
+		return this;
+	}
+	
+	/**
 	 * A convenience method that sets the default graph, the default insert graph,
 	 * and the default remove graph to the provided graph URI. This is equivalent to the
 	 * following calls :

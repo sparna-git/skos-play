@@ -48,15 +48,20 @@ public class StringRepositoryFactory extends RepositoryBuilder {
 			
 			// try with a SPARQL endpoint 
 			URL url = null;
-			try {
-				url = new URL(value);
-			} catch (MalformedURLException e) {
-				log.debug(value+" is not a valid URL. It will be interpreted as a file or directory path.");
+			// make sure we work only with JDBC URL
+			if(value.startsWith("http")) {
+				try {
+					url = new URL(value);
+				} catch (MalformedURLException e) {
+					log.debug(value+" is not a valid URL. It will be interpreted as a file or directory path.");
+				}
 			}
 			
 			// if URL is OK but does not correspond to anything we know, we consider it is the URL of a SPARQL endpoint
 			if(url != null && Rio.getParserFormatForFileName(url.toString()) == null) {
 				this.setRepositoryFactory(new EndpointRepositoryFactory(value));				
+			} else if(value.startsWith("jdbc:virtuoso")){
+				this.setRepositoryFactory(new VirtuosoReflectionRepositoryFactory(value));				
 			} else {
 				this.setRepositoryFactory(new LocalMemoryRepositoryFactory());
 				this.addOperation(new LoadFromFileOrDirectory(this.fileOrDirectoryOrURLs));
