@@ -59,7 +59,7 @@ public class StringRepositoryFactory extends RepositoryBuilder {
 			
 			// if URL is OK but does not correspond to anything we know, we consider it is the URL of a SPARQL endpoint
 			if(url != null && Rio.getParserFormatForFileName(url.toString()) == null) {
-				this.setRepositoryFactory(new EndpointRepositoryFactory(value));				
+				this.setRepositoryFactory(new EndpointRepositoryFactory(value, url.toString().contains("openrdf-sesame")));	
 			} else if(value.startsWith("jdbc:virtuoso")){
 				this.setRepositoryFactory(new VirtuosoReflectionRepositoryFactory(value));				
 			} else {
