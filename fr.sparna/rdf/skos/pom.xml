@@ -4,7 +4,7 @@
 
     <groupId>fr.sparna.rdf.skos</groupId>
     <artifactId>sparna-skos</artifactId>
-    <version>0.41</version>
+    <version>0.42</version>
     <packaging>pom</packaging>
 
     <parent>
