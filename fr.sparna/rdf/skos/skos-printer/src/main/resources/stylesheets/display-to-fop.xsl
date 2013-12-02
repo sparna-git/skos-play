@@ -133,7 +133,7 @@
 	
 	<!-- process a tree node -->
 	<xsl:template match="disp:node">
-		<fo:block margin-left="10pt">
+		<fo:block margin-left="12pt">
 			<!-- print its conceptBlock data -->
 			<xsl:apply-templates select="disp:nodeData/disp:conceptBlock" />
 			<!-- recurse -->
@@ -185,7 +185,7 @@
 		<xsl:apply-templates select="disp:label" />
 		
 		<xsl:if test="disp:att | disp:ref">
-			<fo:block margin-left="10pt">
+			<fo:block margin-left="12pt">
 				<xsl:apply-templates select="disp:att | disp:ref" />
 			</fo:block>
 		</xsl:if>

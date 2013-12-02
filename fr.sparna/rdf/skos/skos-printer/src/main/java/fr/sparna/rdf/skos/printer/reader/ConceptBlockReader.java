@@ -139,7 +139,7 @@ public class ConceptBlockReader {
 									aRef.stringValue(),
 									refPrefLabel,
 									this.tagsBundle.getString(predicateReader.getPropertyURI().toString().substring(SKOS.NAMESPACE.length())),
-									"pref"
+									null
 									)
 							);
 				}

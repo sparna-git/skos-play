@@ -139,11 +139,11 @@ public class HierarchicalBodyReader extends AbstractBodyReader {
 		
 		// build and set header
 		HeaderReader headerReader = new HeaderReader(r);
-		DisplayHeader header = headerReader.read("fr", (args.length > 1)?URI.create(args[1]):null);
+		DisplayHeader header = headerReader.read("en", (args.length > 1)?URI.create(args[1]):null);
 		display.setHeader(header);
 		
 		HierarchicalBodyReader reader = new HierarchicalBodyReader(r, new ConceptBlockReader(r, EXPANDED_SKOS_PROPERTIES));
-		display.setBody(reader.readBody("fr", (args.length > 1)?URI.create(args[1]):null));
+		display.setBody(reader.readBody("en", (args.length > 1)?URI.create(args[1]):null));
 
 		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
 		m.setProperty("jaxb.formatted.output", true);
