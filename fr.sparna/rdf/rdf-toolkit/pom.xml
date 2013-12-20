@@ -76,45 +76,52 @@
 			      <shadedArtifactAttached>true</shadedArtifactAttached>
 			      <shadedClassifierName>onejar</shadedClassifierName>              
 			      <transformers>
-				<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-				  <manifestEntries>
-				  	  <Main-Class>fr.sparna.rdf.toolkit.Main</Main-Class>
-		 			  <Class-Path>.</Class-Path>
-		 		  </manifestEntries>
-		 		</transformer>
-		 		<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+					<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+						<manifestEntries>
+						  <Main-Class>fr.sparna.rdf.toolkit.Main</Main-Class>
+						  <Class-Path>.</Class-Path>
+						</manifestEntries>
+		 			</transformer>
+		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 	      				<resource>META-INF/services/org.openrdf.query.algebra.evaluation.function.Function</resource>
 	      			</transformer>
-		 		<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 	      				<resource>META-INF/services/org.openrdf.query.parser.QueryParserFactory</resource>
 	      			</transformer>
-		 		<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 	      				<resource>META-INF/services/org.openrdf.query.resultio.BooleanQueryResultParserFactory</resource>
 	      			</transformer>
-		 		<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 	      				<resource>META-INF/services/org.openrdf.query.resultio.BooleanQueryResultWriterFactory</resource>
 	      			</transformer>
-		 		<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 	      				<resource>META-INF/services/org.openrdf.query.resultio.TupleQueryResultParserFactory</resource>
 	      			</transformer>
-		 		<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 	      				<resource>META-INF/services/org.openrdf.query.resultio.TupleQueryResultWriterFactory</resource>
 	      			</transformer>
-		 		<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 	      				<resource>META-INF/services/org.openrdf.repository.config.RepositoryFactory</resource>
 	      			</transformer>
-		 		<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 	      				<resource>META-INF/services/org.openrdf.rio.RDFParserFactory</resource>
 	      			</transformer>
-		 		<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 	      				<resource>META-INF/services/org.openrdf.rio.RDFWriterFactory</resource>
 	      			</transformer>
-		 		<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 	      				<resource>META-INF/services/org.openrdf.sail.config.SailFactory</resource>
 	      			</transformer>
-		 		<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 	      				<resource>META-INF/services/org.openrdf.sail.rdbms.RdbmsProvider</resource>
 	      			</transformer>
+	      			<!-- accumulation des schemas Spring -->
+	      			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+						<resource>META-INF/spring.handlers</resource>
+					</transformer>
+					<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+						<resource>META-INF/spring.schemas</resource>
+					</transformer>
 			      </transformers>
 			    </configuration>
 			  </execution>
