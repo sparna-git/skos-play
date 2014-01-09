@@ -8,9 +8,9 @@ import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerException;
 
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperIfc;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperIfc;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 
 
 /**
@@ -20,7 +20,7 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
  * @author Thomas Francart
  */
 @SuppressWarnings("serial")
-public abstract class ReadPropertyHelper extends SelectSPARQLHelperBase implements SelectSPARQLHelperIfc {
+public abstract class ReadPropertyHelper extends SelectSparqlHelperBase implements SelectSparqlHelperIfc {
 
 	/**
 	 * @param predicateURI 					URI of the predicate type to read. This must not be null.
@@ -110,7 +110,7 @@ public abstract class ReadPropertyHelper extends SelectSPARQLHelperBase implemen
 	 * 
 	 * @author Thomas Francart
 	 */
-	public static class QueryBuilder implements SPARQLQueryBuilderIfc {
+	public static class QueryBuilder implements SparqlQueryBuilderIfc {
 		
 		protected String predicatePath = null;
 		protected boolean additionalCriteria = false;

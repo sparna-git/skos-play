@@ -12,7 +12,7 @@ import org.openrdf.model.vocabulary.RDFS;
 import org.openrdf.repository.Repository;
 
 import fr.sparna.commons.lang.ListMap;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 
 /**
  * Returns a label for given resource or list of resources, in a given language.
@@ -60,7 +60,7 @@ public class LabelReader extends PreferredPropertyReader {
 		);
 	}
 	
-	public static String display(List<Value> values) {
+	public static String display(List<? extends Value> values) {
 		StringBuffer buffer = new StringBuffer();
 		if(values != null) {
 			for (Value value : values) {
@@ -76,7 +76,7 @@ public class LabelReader extends PreferredPropertyReader {
 	
 	@Override
 	public List<Value> getValues(final java.net.URI resource) 
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 		List<Value> values = super.getValues(resource);
 		
 		// if nothing was found add the URI itself in the list of values
@@ -91,13 +91,13 @@ public class LabelReader extends PreferredPropertyReader {
 	
 	@Override
 	public List<Value> getValues(final org.openrdf.model.URI resource) 
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 		return getValues(URI.create(resource.stringValue()));
 	}
 	
 	@Override
 	public Map<java.net.URI, List<Value>> getValues(Collection<java.net.URI> resources)
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 		ListMap<java.net.URI, Value> values = (ListMap<java.net.URI, Value>)super.getValues(resources);
 				
 		// for each resources for which a value wasn't found, create a default value

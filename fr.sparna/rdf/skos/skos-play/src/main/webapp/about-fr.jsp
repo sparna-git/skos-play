@@ -36,17 +36,26 @@
 								<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 									<c:choose>
 										<c:when test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language == 'fr'}">fr</c:when>
+										<c:when test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language == 'de'}">de</c:when>
 										<c:otherwise>en</c:otherwise>
 									</c:choose>
 									<b class="caret"></b>
 								</a>
-								<ul class="dropdown-menu">
-									<li>
+								<ul class="dropdown-menu">									
 									<c:choose>
-										<c:when test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language == 'fr'}"><a href="?lang=en">en</a></c:when>
-										<c:otherwise><a href="?lang=fr">fr</a></c:otherwise>
-									</c:choose>
-									</li>
+										<c:when test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language == 'fr'}">
+											<li><a href="?lang=en">en</a></li>
+											<li><a href="?lang=de">de</a></li>
+										</c:when>
+										<c:when test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language == 'de'}">
+											<li><a href="?lang=en">en</a></li>
+											<li><a href="?lang=fr">fr</a></li>
+										</c:when>
+										<c:otherwise>
+											<li><a href="?lang=fr">fr</a></li>
+											<li><a href="?lang=de">de</a></li>
+										</c:otherwise>
+									</c:choose>									
 								</ul>
 							</li>
 					    </ul>

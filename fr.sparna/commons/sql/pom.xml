@@ -11,7 +11,7 @@
 
     <groupId>fr.sparna.commons</groupId>
     <artifactId>sparna-commons-sql</artifactId>
-    <version>0.32-SNAPSHOT</version>
+    <version>0.33-SNAPSHOT</version>
 
     <name>Sparna Commons: SQL</name>
     <description>utility classes to connect and query SQL databases.</description>

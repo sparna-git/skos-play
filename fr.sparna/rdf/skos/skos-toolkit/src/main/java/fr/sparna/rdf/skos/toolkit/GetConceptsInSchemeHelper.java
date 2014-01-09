@@ -10,8 +10,8 @@ import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
 
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 /**
@@ -21,7 +21,7 @@ import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
  * @author Thomas Francart
  */
 @SuppressWarnings("serial")
-public abstract class GetConceptsInSchemeHelper extends SelectSPARQLHelperBase {
+public abstract class GetConceptsInSchemeHelper extends SelectSparqlHelperBase {
 
 	/**
 	 * @param lang				a 2-letters ISO-code of the language to read labels in.
@@ -58,7 +58,7 @@ public abstract class GetConceptsInSchemeHelper extends SelectSPARQLHelperBase {
 	protected abstract void handleConcept(Resource concept, Literal prefLabel)
 	throws TupleQueryResultHandlerException;
 	
-	public static class QueryBuilder implements SPARQLQueryBuilderIfc {
+	public static class QueryBuilder implements SparqlQueryBuilderIfc {
 
 		private String lang = null;
 		private URI conceptScheme = null;

@@ -12,8 +12,8 @@ import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFHandlerException;
 
-import fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.ConstructSparqlHelperBase;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.util.GraphExport;
 
@@ -45,7 +45,7 @@ public class ConciseBoundedDescriptionGenerator implements BoundedDescriptionGen
 		try {
 			helperSubject = new GetStatementsWithSubjectHelper(aNode, this.repository);
 			Perform.on(this.repository).construct(helperSubject);
-		} catch (SPARQLPerformException e) {
+		} catch (SparqlPerformException e) {
 			throw new BoundedDescriptionGenerationException(e);
 		}
 		
@@ -56,7 +56,7 @@ public class ConciseBoundedDescriptionGenerator implements BoundedDescriptionGen
 			try {
 				helperObject = new GetStatementsWithObjectHelper(aNode, this.repository);
 				Perform.on(this.repository).construct(helperObject);
-			} catch (SPARQLPerformException e) {
+			} catch (SparqlPerformException e) {
 				throw new BoundedDescriptionGenerationException(e);
 			}
 			
@@ -80,7 +80,7 @@ public class ConciseBoundedDescriptionGenerator implements BoundedDescriptionGen
 		}
 	}
 	
-	protected class GetStatementsWithSubjectHelper extends ConstructSPARQLHelperBase {
+	protected class GetStatementsWithSubjectHelper extends ConstructSparqlHelperBase {
 
 		protected Resource r;
 		protected Repository repository;
@@ -129,7 +129,7 @@ public class ConciseBoundedDescriptionGenerator implements BoundedDescriptionGen
 	}
 
 	
-	protected class GetStatementsWithObjectHelper extends ConstructSPARQLHelperBase {
+	protected class GetStatementsWithObjectHelper extends ConstructSparqlHelperBase {
 
 		protected Resource r;
 		protected Repository repository;

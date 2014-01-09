@@ -15,9 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromURL;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromUrl;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationException;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
 
@@ -49,8 +49,8 @@ public class LoadURIHandler extends ReadValueListHandler implements TupleQueryRe
 		}
 		
 		for (URL url : urlsToLoad) {
-			// initiate a LoadFromURL operation
-			LoadFromURL loadOperation = new LoadFromURL(url, true);
+			// initiate a LoadFromUrl operation
+			LoadFromUrl loadOperation = new LoadFromUrl(url, true);
 			try {
 				// run it
 				loadOperation.execute(this.repository);
@@ -76,7 +76,7 @@ public class LoadURIHandler extends ReadValueListHandler implements TupleQueryRe
 //		
 		Repository r = RepositoryBuilder.fromString("/media/Library/Sparna/Thesaurus/Gemet");
 		LoadURIHandler h = new LoadURIHandler(r);
-		Perform.on(r).select(new SelectSPARQLHelper("SELECT ?x WHERE { ?c <"+SKOS.EXACT_MATCH.stringValue()+"> ?x }", h));
+		Perform.on(r).select(new SelectSparqlHelper("SELECT ?x WHERE { ?c <"+SKOS.EXACT_MATCH.stringValue()+"> ?x }", h));
 		RepositoryWriter.writeToFile("output.ttl", r);
 	}
 	

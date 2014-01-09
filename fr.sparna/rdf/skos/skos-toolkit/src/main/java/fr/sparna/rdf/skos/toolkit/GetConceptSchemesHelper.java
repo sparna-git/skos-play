@@ -4,15 +4,15 @@ import org.openrdf.model.Resource;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerException;
 
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 
 /**
  * Returns the list of all concept schemes, optionally ordered by their label in a given language.
  * 
  * @author Thomas Francart
  */
-public abstract class GetConceptSchemesHelper extends SelectSPARQLHelperBase {
+public abstract class GetConceptSchemesHelper extends SelectSparqlHelperBase {
 
 	/**
 	 * @param orderByLang a 2-letters ISO-code of a language to order the list on the labels of this language,
@@ -36,7 +36,7 @@ public abstract class GetConceptSchemesHelper extends SelectSPARQLHelperBase {
 	protected abstract void handleConceptScheme(Resource conceptScheme) throws TupleQueryResultHandlerException;
 
 	
-	public static class QueryBuilder implements SPARQLQueryBuilderIfc {
+	public static class QueryBuilder implements SparqlQueryBuilderIfc {
 
 		private String orderByLang = null;
 

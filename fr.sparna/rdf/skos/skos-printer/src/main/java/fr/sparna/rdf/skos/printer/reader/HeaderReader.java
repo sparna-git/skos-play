@@ -8,10 +8,10 @@ import org.openrdf.model.vocabulary.DC;
 import org.openrdf.model.vocabulary.DCTERMS;
 import org.openrdf.repository.Repository;
 
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
 import fr.sparna.rdf.sesame.toolkit.util.PreferredPropertyReader;
-import fr.sparna.rdf.skos.printer.schema.DisplayHeader;
+import fr.sparna.rdf.skos.printer.schema.KosDocumentHeader;
 
 public class HeaderReader {
 
@@ -22,9 +22,9 @@ public class HeaderReader {
 		this.repository = repository;
 	}
 	
-	public DisplayHeader read(final String lang, final URI conceptScheme)
-	throws SPARQLPerformException {
-		DisplayHeader h = new DisplayHeader();
+	public KosDocumentHeader read(final String lang, final URI conceptScheme)
+	throws SparqlPerformException {
+		KosDocumentHeader h = new KosDocumentHeader();
 		
 		if(conceptScheme == null) {
 			// TODO
@@ -77,7 +77,7 @@ public class HeaderReader {
 	}
 	
 	protected String readProperties(URI subject, List<URI> uris, String lang) 
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 		PreferredPropertyReader reader = new PreferredPropertyReader(
 				this.repository,
 				uris,

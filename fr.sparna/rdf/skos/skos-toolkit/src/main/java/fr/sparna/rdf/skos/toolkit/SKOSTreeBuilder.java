@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
 
@@ -78,10 +78,10 @@ public class SKOSTreeBuilder {
 	 * result will be an empty list.
 	 * 
 	 * @return		A List of trees starting at the ConceptSchemes or the Concepts with no broaders.
-	 * @throws SPARQLPerformException
+	 * @throws SparqlPerformException
 	 */
 	public List<GenericTree<SKOSTreeNode>> buildTrees() 
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 
 		final List<GenericTree<SKOSTreeNode>> result = new ArrayList<GenericTree<SKOSTreeNode>>();
 		
@@ -92,7 +92,7 @@ public class SKOSTreeBuilder {
 			throws TupleQueryResultHandlerException {
 				try {
 					result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)conceptScheme)));
-				} catch (SPARQLPerformException e) {
+				} catch (SparqlPerformException e) {
 					throw new TupleQueryResultHandlerException(e);
 				}
 			}
@@ -135,7 +135,7 @@ public class SKOSTreeBuilder {
 					throws TupleQueryResultHandlerException {
 						try {
 							result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)noBroader)));
-						} catch (SPARQLPerformException e) {
+						} catch (SparqlPerformException e) {
 							throw new TupleQueryResultHandlerException(e);
 						}
 					}
@@ -157,10 +157,10 @@ public class SKOSTreeBuilder {
 	 * 
 	 * @param root		The URI of the Concept or the ConceptScheme that will be the root of that tree
 	 * @return
-	 * @throws SPARQLPerformException
+	 * @throws SparqlPerformException
 	 */
 	public GenericTree<SKOSTreeNode> buildTree(java.net.URI root) 
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 
 		log.debug("Building SKOS Tree from root "+root);
 			
@@ -205,7 +205,7 @@ public class SKOSTreeBuilder {
 	}
 	
 	private GenericTreeNode<SKOSTreeNode> buildTreeRec(URI conceptOrConceptSchemeOrCollection)
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 
 		// fetch sort criteria - usually prefLabel in a given language
 		List<Value> sortCriterias = this.sortCriteriaReader.read(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()));
@@ -232,7 +232,7 @@ public class SKOSTreeBuilder {
 				throws TupleQueryResultHandlerException {
 					try {
 						node.addChild(buildTreeRec((URI)top));
-					} catch (SPARQLPerformException e) {
+					} catch (SparqlPerformException e) {
 						throw new TupleQueryResultHandlerException(e);
 					}
 				}
@@ -249,7 +249,7 @@ public class SKOSTreeBuilder {
 						throws TupleQueryResultHandlerException {
 							try {
 								node.addChild(buildTreeRec((URI)top));
-							} catch (SPARQLPerformException e) {
+							} catch (SparqlPerformException e) {
 								throw new TupleQueryResultHandlerException(e);
 							}
 						}
@@ -266,7 +266,7 @@ public class SKOSTreeBuilder {
 					throws TupleQueryResultHandlerException {
 						try {
 							node.addChild(buildTreeRec((URI)noBroader));
-						} catch (SPARQLPerformException e) {
+						} catch (SparqlPerformException e) {
 							throw new TupleQueryResultHandlerException(e);
 						}
 					}
@@ -283,7 +283,7 @@ public class SKOSTreeBuilder {
 				throws TupleQueryResultHandlerException {
 					try {
 						node.addChild(buildTreeRec((URI)member));
-					} catch (SPARQLPerformException e) {
+					} catch (SparqlPerformException e) {
 						throw new TupleQueryResultHandlerException(e);
 					}
 				}
@@ -303,7 +303,7 @@ public class SKOSTreeBuilder {
 				throws TupleQueryResultHandlerException {
 					try {
 						node.addChild(buildTreeRec((URI)narrower));
-					} catch (SPARQLPerformException e) {
+					} catch (SparqlPerformException e) {
 						throw new TupleQueryResultHandlerException(e);
 					}
 				}

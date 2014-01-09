@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.repository.ConfigRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
-import fr.sparna.rdf.sesame.toolkit.repository.OWLIMConfigProvider;
+import fr.sparna.rdf.sesame.toolkit.repository.OwlimConfigProvider;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
 import fr.sparna.rdf.toolkit.ToolkitCommandIfc;
@@ -23,7 +23,7 @@ public class Infer implements ToolkitCommandIfc {
 		
 		log.debug("Using ruleset : "+args.getRuleset());
 		ConfigRepositoryFactory delegateFactory = new ConfigRepositoryFactory(
-				new OWLIMConfigProvider("owlim-base.ttl", args.getRuleset())
+				new OwlimConfigProvider("owlim-base.ttl", args.getRuleset())
 		);
 		delegateFactory.setRepositoryName("test");
 		delegateFactory.setCleanAtStartup(true);

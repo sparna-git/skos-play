@@ -10,18 +10,18 @@ import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
 
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 /**
  * Queries for the labels (pref and alt) of concepts in a given concept scheme (or in
- * the entire repository), in a given language. Results are _not_ordered and should be ordered with a Collator.
+ * the entire repository), in a given language. Results are _not_ ordered and should be ordered with a Collator.
  * 
  * @author Thomas Francart
  */
 @SuppressWarnings("serial")
-public abstract class GetLabelsInSchemeHelper extends SelectSPARQLHelperBase {
+public abstract class GetLabelsInSchemeHelper extends SelectSparqlHelperBase {
 
 	/**
 	 * @param lang				a 2-letters ISO-code of the language to read labels in.
@@ -59,7 +59,7 @@ public abstract class GetLabelsInSchemeHelper extends SelectSPARQLHelperBase {
 	protected abstract void handleLabel(Literal label, Literal prefLabel, Resource concept)
 	throws TupleQueryResultHandlerException;
 	
-	public static class QueryBuilder implements SPARQLQueryBuilderIfc {
+	public static class QueryBuilder implements SparqlQueryBuilderIfc {
 
 		private String lang = null;
 		private URI conceptScheme = null;

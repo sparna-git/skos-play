@@ -10,7 +10,7 @@ import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
 
 import fr.sparna.commons.lang.ListMap;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 
 /**
@@ -94,7 +94,7 @@ public class PropertyReader {
 	}
 
 	public List<Value> read(java.net.URI subjectURI) 
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 		// initialize at first call
 		if(cache == null) {
 			this.init();
@@ -123,9 +123,9 @@ public class PropertyReader {
 	
 	/**
 	 * Creates the cache and pre-loads it if needed
-	 * @throws SPARQLPerformException
+	 * @throws SparqlPerformException
 	 */
-	private void init() throws SPARQLPerformException {
+	private void init() throws SparqlPerformException {
 		this.cache = new ListMap<URI, Value>();
 		if(preLoad) {
 			this.readFromRepository(null);
@@ -133,7 +133,7 @@ public class PropertyReader {
 	}
 	
 	private void readFromRepository(URI subjectURI) 
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 		ReadPropertyHelper helper = new ReadPropertyHelper(
 				this.propertyURI,
 				this.additionalPath,

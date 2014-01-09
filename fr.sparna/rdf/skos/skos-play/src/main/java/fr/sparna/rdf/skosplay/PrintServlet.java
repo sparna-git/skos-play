@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,20 +20,22 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
-import fr.sparna.rdf.skos.printer.reader.AbstractBodyReader;
-import fr.sparna.rdf.skos.printer.reader.AlphabeticalIndexBodyReader;
+import fr.sparna.rdf.skos.printer.reader.AbstractKosDisplayGenerator;
+import fr.sparna.rdf.skos.printer.reader.AlphaIndexDisplayGenerator;
+import fr.sparna.rdf.skos.printer.reader.BodyReader;
 import fr.sparna.rdf.skos.printer.reader.ConceptBlockReader;
-import fr.sparna.rdf.skos.printer.reader.ConceptListBodyReader;
+import fr.sparna.rdf.skos.printer.reader.ConceptListDisplayGenerator;
 import fr.sparna.rdf.skos.printer.reader.HeaderReader;
-import fr.sparna.rdf.skos.printer.reader.HierarchicalBodyReader;
-import fr.sparna.rdf.skos.printer.reader.TranslationTableBodyReader;
-import fr.sparna.rdf.skos.printer.schema.Display;
-import fr.sparna.rdf.skos.printer.schema.DisplayHeader;
+import fr.sparna.rdf.skos.printer.reader.HierarchicalDisplayGenerator;
+import fr.sparna.rdf.skos.printer.reader.TranslationTableDisplayGenerator;
+import fr.sparna.rdf.skos.printer.reader.TranslationTableReverseDisplayGenerator;
+import fr.sparna.rdf.skos.printer.schema.KosDocument;
+import fr.sparna.rdf.skos.printer.schema.KosDocumentHeader;
 import fr.sparna.rdf.skos.toolkit.JsonSKOSTreePrinter;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeBuilder;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode;
@@ -59,11 +63,13 @@ public class PrintServlet extends HttpServlet {
 		ALPHABETICAL,
 		ALPHABETICAL_EXPANDED,
 		HIERARCHICAL,
-		HIERARCHICAL_EXPANDED,
+//		HIERARCHICAL_EXPANDED,
 		CONCEPTLISTING,
 		TRANSLATION_TABLE,
 		PARTITION,
 		TREELAYOUT,
+		COMPLETE_MONOLINGUAL,
+		COMPLETE_MULTILINGUAL,
 	}
 	
 	@Override
@@ -102,9 +108,9 @@ public class PrintServlet extends HttpServlet {
 		
 		// make a log to trace usage
 		try {
-			String aRandomConcept = Perform.on(r).read(new SPARQLQuery(new SPARQLQueryBuilder(this, "ReadRandomConcept.rq"))).stringValue();
+			String aRandomConcept = Perform.on(r).read(new SparqlQuery(new SparqlQueryBuilder(this, "ReadRandomConcept.rq"))).stringValue();
 			log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+outputType);
-		} catch (SPARQLPerformException e1) {
+		} catch (SparqlPerformException e1) {
 			throw new ServletException(e1);
 		}
 		
@@ -125,7 +131,7 @@ public class PrintServlet extends HttpServlet {
 				printer.print(tree, baos);
 				request.setAttribute("dataset", baos.toString().replaceAll("'", "\\\\'"));
 				
-			} catch (SPARQLPerformException e) {
+			} catch (SparqlPerformException e) {
 				throw new ServletException(e);
 			}
 			
@@ -151,7 +157,7 @@ public class PrintServlet extends HttpServlet {
 				printer.print(tree, baos);
 				request.setAttribute("dataset", baos.toString().replaceAll("'", "\\\\'"));
 				
-			} catch (SPARQLPerformException e) {
+			} catch (SparqlPerformException e) {
 				throw new ServletException(e);
 			}
 			
@@ -165,40 +171,127 @@ public class PrintServlet extends HttpServlet {
 		}
 		
 		// build display result
-		Display display = new Display();
+		KosDocument document = new KosDocument();
 		
 		try {
 			
 			// build and set header
 			HeaderReader headerReader = new HeaderReader(r);
-			DisplayHeader header = headerReader.read(language, scheme);
-			display.setHeader(header);
+			KosDocumentHeader header = headerReader.read(language, scheme);
+			document.setHeader(header);
 			
 			// pass on Repository to skos-printer level
-			AbstractBodyReader bodyReader = null;
+			BodyReader bodyReader;
 			switch(displayType) {
 			case ALPHABETICAL : {			
-				bodyReader = new AlphabeticalIndexBodyReader(r, new ConceptBlockReader(r));			
+				ConceptBlockReader cbr = new ConceptBlockReader(r);
+				cbr.setIncludeTopConcepts(false);
+				bodyReader = new BodyReader(new AlphaIndexDisplayGenerator(r, cbr));			
 				break;
 			}
 			case ALPHABETICAL_EXPANDED : {			
-				bodyReader = new AlphabeticalIndexBodyReader(r, new ConceptBlockReader(r, AlphabeticalIndexBodyReader.EXPANDED_SKOS_PROPERTIES));
+				ConceptBlockReader cbr = new ConceptBlockReader(r, AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
+				cbr.setIncludeTopConcepts(true);
+				bodyReader = new BodyReader(new AlphaIndexDisplayGenerator(r, cbr));
 				break;
 			}
 			case HIERARCHICAL : {
-				bodyReader = new HierarchicalBodyReader(r, new ConceptBlockReader(r));
+				bodyReader = new BodyReader(new HierarchicalDisplayGenerator(r, new ConceptBlockReader(r)));
 				break;
 			}
-			case HIERARCHICAL_EXPANDED : {
-				bodyReader = new HierarchicalBodyReader(r, new ConceptBlockReader(r, HierarchicalBodyReader.EXPANDED_SKOS_PROPERTIES));
-				break;
-			}
+//			case HIERARCHICAL_EXPANDED : {
+//				displayGenerator = new HierarchicalDisplayGenerator(r, new ConceptBlockReader(r, HierarchicalDisplayGenerator.EXPANDED_SKOS_PROPERTIES));
+//				break;
+//			}
 			case CONCEPTLISTING : {
-				bodyReader = new ConceptListBodyReader(r, new ConceptBlockReader(r, ConceptListBodyReader.EXPANDED_SKOS_PROPERTIES));
+				ConceptBlockReader cbr = new ConceptBlockReader(r, ConceptListDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
+				cbr.setIncludeTopConcepts(true);
+				List<String> additionalLanguages = new ArrayList<String>();
+				for (String aLang : SessionData.get(request.getSession()).getPrintFormData().getLanguages().keySet()) {
+					if(!aLang.equals(language)) {
+						additionalLanguages.add(aLang);
+					}
+				}
+				cbr.setAdditionalLabelLanguagesToInclude(additionalLanguages);
+				
+				bodyReader = new BodyReader(new ConceptListDisplayGenerator(r, cbr));
 				break;
 			}
 			case TRANSLATION_TABLE : {
-				bodyReader = new TranslationTableBodyReader(r, new ConceptBlockReader(r), targetLanguage);
+				bodyReader = new BodyReader(new TranslationTableDisplayGenerator(r, new ConceptBlockReader(r), targetLanguage));
+				break;
+			}
+			case COMPLETE_MONOLINGUAL : {
+				
+				// prepare a list of generators
+				List<AbstractKosDisplayGenerator> generators = new ArrayList<AbstractKosDisplayGenerator>();
+					
+				// alphabetical display
+				ConceptBlockReader alphaCbReader = new ConceptBlockReader(r, AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
+				AlphaIndexDisplayGenerator alphaGen = new AlphaIndexDisplayGenerator(
+						r,
+						alphaCbReader,
+						"alpha"
+				);
+				generators.add(alphaGen);
+				
+				// hierarchical display
+				HierarchicalDisplayGenerator hierarchyGen = new HierarchicalDisplayGenerator(
+						r,
+						new ConceptBlockReader(r),
+						"hier"
+				);
+				generators.add(hierarchyGen);
+				
+				bodyReader = new BodyReader(generators, alphaGen.getDisplayId());
+				
+				
+				break;
+			}
+			case COMPLETE_MULTILINGUAL : {
+				
+				// prepare a list of generators
+				List<AbstractKosDisplayGenerator> generators = new ArrayList<AbstractKosDisplayGenerator>();
+				
+				// read all potential languages and exclude the main one
+				final List<String> additionalLanguages = new ArrayList<String>();
+				for (String aLang : SessionData.get(request.getSession()).getPrintFormData().getLanguages().keySet()) {
+					if(!aLang.equals(language)) {
+						additionalLanguages.add(aLang);
+					}
+				}
+					
+				// alphabetical display
+				ConceptBlockReader alphaCbReader = new ConceptBlockReader(r, AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
+				alphaCbReader.setAdditionalLabelLanguagesToInclude(additionalLanguages);
+				AlphaIndexDisplayGenerator alphaGen = new AlphaIndexDisplayGenerator(
+						r,
+						alphaCbReader,
+						"alpha"
+				);
+				generators.add(alphaGen);
+				
+				// hierarchical display
+				HierarchicalDisplayGenerator hierarchyGen = new HierarchicalDisplayGenerator(
+						r,
+						new ConceptBlockReader(r),
+						"hier"
+				);
+				generators.add(hierarchyGen);
+				
+				// add translation tables for each additional languages
+				for (int i=0;i<additionalLanguages.size(); i++) {
+					String anAdditionalLang = additionalLanguages.get(i);
+					TranslationTableReverseDisplayGenerator ttGen = new TranslationTableReverseDisplayGenerator(
+							r,
+							new ConceptBlockReader(r),
+							anAdditionalLang,
+							"trans"+i);
+					generators.add(ttGen);
+				}
+				
+				bodyReader = new BodyReader(generators, alphaGen.getDisplayId());
+				
 				break;
 			}
 			default :
@@ -206,12 +299,12 @@ public class PrintServlet extends HttpServlet {
 			}	
 			
 			// read the body
-			display.setBody(bodyReader.readBody(language, scheme));
+			document.setBody(bodyReader.readBody(language, scheme));
 
 			DisplayPrinter printer = new DisplayPrinter();
 			switch(outputType) {
 			case HTML : {
-				printer.printToHtml(display, response.getOutputStream());
+				printer.printToHtml(document, response.getOutputStream());
 				break;
 			}
 			case PDF : {
@@ -226,7 +319,7 @@ public class PrintServlet extends HttpServlet {
 				) {
 					printer.getTransformerParams().put("column-count", 2);
 				}
-				printer.printToPdf(display, response.getOutputStream());
+				printer.printToPdf(document, response.getOutputStream());
 				break;
 			}
 			}

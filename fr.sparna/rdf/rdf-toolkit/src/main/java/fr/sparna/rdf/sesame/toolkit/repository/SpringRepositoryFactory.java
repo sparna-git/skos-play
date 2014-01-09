@@ -9,7 +9,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 public class SpringRepositoryFactory implements RepositoryFactoryIfc {
 
 	private static String DEFAULT_SPRING_FILE = "repository-config.xml";
-	private static String DEFAULT_BEAN_ID = "repository-provider";
+	private static String DEFAULT_BEAN_ID = "RepositoryBuilder";
 	
 	protected String springFile = DEFAULT_SPRING_FILE;
 	protected String beanId = DEFAULT_BEAN_ID;

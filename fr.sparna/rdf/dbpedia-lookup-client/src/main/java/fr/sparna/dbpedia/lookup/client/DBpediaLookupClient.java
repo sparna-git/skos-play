@@ -21,13 +21,6 @@ import fr.sparna.dbpedia.lookup.client.schema.ArrayOfResult;
 // Use Georgi Kobilarov's DBpedia lookup web service
 //    ref: http://lookup.dbpedia.org/api/search.asmx?op=KeywordSearch
 //    example: http://lookup.dbpedia.org/api/search.asmx/KeywordSearch?QueryString=Flagstaff&QueryClass=XML&MaxHits=10
-
-/**
- * Searches return results that contain any of the search terms. I am going to filter
- * the results to ignore results that do not contain all search terms.
- */
-
-
 public class DBpediaLookupClient {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass());

@@ -9,16 +9,16 @@
             indent="yes"/>
 	
 	<xsl:template match="/">
-		<xsl:apply-templates select="disp:display" />
+		<xsl:apply-templates select="disp:kosDocument" />
 	</xsl:template>
 	
-	<xsl:template match="disp:display">
+	<xsl:template match="disp:kosDocument">
 		<html>
 			<head>
 				<title><xsl:value-of select="disp:header/disp:title" /></title>
-				<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet"></link>
+				<link href="http://netdna.bootstrapcdn.com/bootswatch/2.3.2/united/bootstrap.min.css" rel="stylesheet"></link>
 				<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-				<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+				<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 				<style>
 					.unstyled > li { font-size: 80% }
 					
@@ -28,23 +28,45 @@
 						background-position : 100% 50%;
 						padding-right:13px;
 						cursor:pointer;
-					}			
+					}
+					
+					.pref {
+						font-weight: bold;
+					}
+					
+					.alt {
+						font-style:italic;
+					}		
 				</style>
 			</head>
 			<body>
 				<div class="container">
+				
+					<!-- if more than one section, and at least have a title, generate navbar at the document level -->
+					<xsl:if test="count(disp:body/disp:kosDisplay/disp:section[@title]) > 1">
+						<div class="navbar navbar-fixed-bottom">
+					    	<div class="navbar-inner">
+					        	<ul class="nav">
+					        		<xsl:for-each select="disp:body/disp:kosDisplay/disp:section">
+										<li><a href="#{@title}"><xsl:value-of select="@title" /></a></li>
+									</xsl:for-each>
+					      		</ul>
+					    	</div>
+					    </div>
+					</xsl:if>
+				
 					<xsl:apply-templates />
 				</div>
 				<script>
 			      $(document).ready(function () {
 					// add external link behavior to every external link
-					$('span[title]').mouseover(function() {
+					$('span[title]:not(:has(a))').mouseover(function() {
 						$(this).addClass('ext-link');
 					});
-					$('span[title]').mouseout(function() {
+					$('span[title]:not(:has(a))').mouseout(function() {
 						$(this).removeClass('ext-link');
 					});
-					$('span[title]').click(function() {
+					$('span[title]:not(:has(a))').click(function() {
 						window.open($(this).attr('title'));
 						// change this to the following line to have links open in same window/tab
 						// document.location.href = $(this).attr('title');
@@ -74,29 +96,19 @@
 		<xsl:value-of select="." /><br /><br />
 	</xsl:template>
 
-
 	<!-- Display body -->
 	<xsl:template match="disp:body">
+		<!-- display each display -->
+		<xsl:apply-templates />
+	</xsl:template>
 
-		<!-- if more than one section, and at least have a title, generate navbar -->
-		<xsl:if test="count(disp:section[@title]) > 1">
-			<div class="navbar navbar-fixed-bottom">
-		    	<div class="navbar-inner">
-		        	<ul class="nav">
-		        		<xsl:for-each select="disp:section">
-							<li><a href="#{@title}"><xsl:value-of select="@title" /></a></li>
-						</xsl:for-each>
-		      		</ul>
-		    	</div>
-		    </div>
-		</xsl:if>
+	<!-- A KOS Display -->
+	<xsl:template match="disp:kosDisplay">
 		<!-- display each section -->
 		<div class="display">
 			<xsl:apply-templates select="disp:section" />
 		</div>
-
 	</xsl:template>
-
 	
 	<!-- Process a section -->
 	<xsl:template match="disp:section">
@@ -180,28 +192,34 @@
 	<xsl:template match="disp:conceptBlock">
 		<div id="{@id}">
 			<span title="{@uri}"><xsl:apply-templates select="disp:label" /></span>
-			<xsl:if test="disp:att | disp:ref">
+			<xsl:if test="disp:att">
 				<ul class="no">
-					<xsl:apply-templates select="disp:att | disp:ref" />
+					<xsl:apply-templates select="disp:att" />
 				</ul>
 			</xsl:if>
 		</div>
 	</xsl:template>
 
-	<xsl:template match="disp:str | disp:label | disp:typedString">
-		<xsl:choose>
-			<xsl:when test="@type = 'pref'"><b><xsl:value-of select="text()" /></b></xsl:when>
-			<xsl:when test="@type = 'alt'"><i><xsl:value-of select="text()" /></i></xsl:when>
-			<xsl:otherwise><xsl:value-of select="text()" /></xsl:otherwise>
-		</xsl:choose>		
+	<xsl:template match="disp:label">
+		<xsl:apply-templates />		
 	</xsl:template>
 	
 	<xsl:template match="disp:att">
 		<li><xsl:value-of select="@type" /> : <xsl:apply-templates /></li>
 	</xsl:template>
 	
-	<xsl:template match="disp:ref">
-		<li><a href="#{@refId}"><xsl:value-of select="@type" /> : <xsl:apply-templates select="disp:label" /></a></li>
+	<xsl:template match="disp:link">
+		<xsl:choose>
+			<xsl:when test="@style"><a href="#{@refId}" class="{@style}"><xsl:apply-templates /></a></xsl:when>
+			<xsl:otherwise><a href="#{@refId}"><xsl:apply-templates /></a></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template match="disp:str">
+		<xsl:choose>
+			<xsl:when test="@style"><span class="{@style}"><xsl:value-of select="text()" /></span></xsl:when>
+			<xsl:otherwise><xsl:value-of select="text()" /></xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 </xsl:stylesheet>

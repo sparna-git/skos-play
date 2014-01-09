@@ -1,6 +1,7 @@
 package fr.sparna.rdf.toolkit.infer;
 
 import java.io.File;
+import java.util.List;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -12,10 +13,10 @@ public class ArgumentsInferBase {
 	@Parameter(
 			names = { "-i", "--input" },
 			description = "RDF files, directory, endpoint URL, or Spring config",
-			required = true
-	)
-	// TODO : pouvoir passer une List<String> en utilisant variableArity = true  
-	private String input;
+			required = true,
+			variableArity = true
+	) 
+	private List<String> input;
 	
 	@Parameter(
 			names = { "-o", "--output" },
@@ -42,11 +43,11 @@ public class ArgumentsInferBase {
 		this.output = other.output;
 	}
 
-	public String getInput() {
+	public List<String> getInput() {
 		return input;
 	}
 
-	public void setInput(String input) {
+	public void setInput(List<String> input) {
 		this.input = input;
 	}
 

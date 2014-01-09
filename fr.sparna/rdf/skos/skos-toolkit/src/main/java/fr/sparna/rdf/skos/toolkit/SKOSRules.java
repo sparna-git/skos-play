@@ -3,8 +3,8 @@ package fr.sparna.rdf.skos.toolkit;
 import java.util.Arrays;
 import java.util.List;
 
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderList;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderList;
 
 public class SKOSRules {
 
@@ -20,7 +20,7 @@ public class SKOSRules {
 			"rules/inferlite/X1.rq",
 	});
 
-	public static List<SPARQLQueryBuilder> getRulesetLite() {
-		return SPARQLQueryBuilderList.fromResources(SKOSRules.class, LITE_RULESET);
+	public static List<SparqlQueryBuilder> getRulesetLite() {
+		return SparqlQueryBuilderList.fromResources(SKOSRules.class, LITE_RULESET);
 	}
 }

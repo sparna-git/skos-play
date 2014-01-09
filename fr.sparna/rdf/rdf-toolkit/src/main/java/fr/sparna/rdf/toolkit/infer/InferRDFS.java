@@ -1,6 +1,6 @@
 package fr.sparna.rdf.toolkit.infer;
 
-import fr.sparna.rdf.sesame.toolkit.repository.OWLIMConfigProvider;
+import fr.sparna.rdf.sesame.toolkit.repository.OwlimConfigProvider;
 import fr.sparna.rdf.toolkit.ToolkitCommandIfc;
 
 /**
@@ -15,7 +15,7 @@ public class InferRDFS implements ToolkitCommandIfc {
 		new Infer().execute(
 				new ArgumentsInfer(
 						(ArgumentsInferBase)o,
-						OWLIMConfigProvider.RDFS_CONFIG_PROVIDER.getRuleset()
+						OwlimConfigProvider.RDFS_CONFIG_PROVIDER.getRuleset()
 				)
 		);
 	}

@@ -50,17 +50,26 @@
 								<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 									<c:choose>
 										<c:when test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language == 'fr'}">fr</c:when>
+										<c:when test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language == 'de'}">de</c:when>
 										<c:otherwise>en</c:otherwise>
 									</c:choose>
 									<b class="caret"></b>
 								</a>
-								<ul class="dropdown-menu">
-									<li>
+								<ul class="dropdown-menu">									
 									<c:choose>
-										<c:when test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language == 'fr'}"><a href="?lang=en">en</a></c:when>
-										<c:otherwise><a href="?lang=fr">fr</a></c:otherwise>
-									</c:choose>
-									</li>
+										<c:when test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language == 'fr'}">
+											<li><a href="?lang=en">en</a></li>
+											<li><a href="?lang=de">de</a></li>
+										</c:when>
+										<c:when test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language == 'de'}">
+											<li><a href="?lang=en">en</a></li>
+											<li><a href="?lang=fr">fr</a></li>
+										</c:when>
+										<c:otherwise>
+											<li><a href="?lang=fr">fr</a></li>
+											<li><a href="?lang=de">de</a></li>
+										</c:otherwise>
+									</c:choose>									
 								</ul>
 							</li>
 					    </ul>
@@ -69,7 +78,8 @@
 	      	</div>
 			<div class="messages">
 				<c:if test="${data.errorMessage != null}">
-					<div class="alert alert-error">
+					<div class="alert alert-error fade in">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 						<h4><fmt:message key="error" /></h4>
 						${data.errorMessage}
 					</div>
@@ -104,22 +114,11 @@
 									<fmt:message key="${pageScope.messageKey}" var="exampleDataName"/>
 	
 									<c:choose>
-										<c:when test="${pageScope.exampleDataName == pageScope.unknownValue}">
-											${entry.key}
-										</c:when>
-										<c:otherwise>
-											${pageScope.exampleDataName}
-										</c:otherwise>
+										<c:when test="${pageScope.exampleDataName == pageScope.unknownValue}">${entry.key}</c:when>
+										<c:otherwise>${pageScope.exampleDataName}</c:otherwise>
 									</c:choose>
 								</option>
 							</c:forEach>
-							
-							<!-- 
-							<option value="data/eurovoc/eurovoc-4.4-clean.ttl"><fmt:message key="upload.form.providedExample.eurovoc" /></option>
-							<option value="data/unesco/unescothes.ttl"><fmt:message key="upload.form.providedExample.unesco" /></option>
-							<option value="data/w/matieres.rdf"><fmt:message key="upload.form.providedExample.w" /></option>
-							<option value="data/nyt/nyt-descriptors.ttl"><fmt:message key="upload.form.providedExample.nyt" /></option>
-							-->
 						</select>
 					</div>
 				</div>
@@ -211,7 +210,7 @@
 				</div>
 			</fieldset>
 			<div class="form-actions">
-				<button type="submit" id="submit-button" class="btn btn-large btn-success"><fmt:message key="next" /></button>
+				<button type="submit" id="submit-button" class="btn btn-large btn-primary"><fmt:message key="next" /></button>
 				<img src="images/ajax-loader.gif" id="loading" hidden="hidden" />
 			</div>
 			

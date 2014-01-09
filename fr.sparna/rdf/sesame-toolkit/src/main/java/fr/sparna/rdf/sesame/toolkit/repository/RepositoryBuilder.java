@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromString;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromURL;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromUrl;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationException;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationIfc;
 import fr.sparna.rdf.sesame.toolkit.util.Namespaces;
@@ -107,7 +107,7 @@ public class RepositoryBuilder implements RepositoryFactoryIfc {
 		RepositoryBuilder builder = new RepositoryBuilder(
 				new LocalMemoryRepositoryFactory(),
 				// true : use default fallback
-				new LoadFromURL(url, false, url.getFile().substring(1))
+				new LoadFromUrl(url, false, url.getFile().substring(1))
 				);
 		return builder.createNewRepository();
 	}

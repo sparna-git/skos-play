@@ -17,11 +17,11 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.io.ClasspathUnzip;
 import fr.sparna.commons.io.FileUtil;
-import fr.sparna.rdf.sesame.toolkit.handler.CSVHandler;
+import fr.sparna.rdf.sesame.toolkit.handler.CsvHandler;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.AutoDetectRepositoryFactory;
 import fr.sparna.rdf.toolkit.ToolkitCommandIfc;
 
@@ -76,17 +76,17 @@ public class Select implements ToolkitCommandIfc {
 			});
 			for (final File file : sparqls) {
 				log.debug("Executing query in "+file.getAbsolutePath()+"...");
-				SPARQLQueryBuilder builder = new SPARQLQueryBuilder(file);
+				SparqlQueryBuilder builder = new SparqlQueryBuilder(file);
 				log.debug("Query is "+builder.getSPARQL());
 				
-				SPARQLQuery query = new SPARQLQuery(builder);
+				SparqlQuery query = new SparqlQuery(builder);
 				if(!bindings.isEmpty()) {
 					query.setBindings(bindings);
 				}
 		
 				try {
 					Perform.on(inputRepository).select(
-							new SelectSPARQLHelper(
+							new SelectSparqlHelper(
 									query, 
 									new SimpleHTMLReportHandler(
 											writer,
@@ -124,10 +124,10 @@ public class Select implements ToolkitCommandIfc {
 			List<File> sparqls = FileUtil.listFilesRecursive(args.getQueryDirectoryOrFile());
 			for (final File file : sparqls) {
 				log.debug("Executing query in "+file.getAbsolutePath()+"...");
-				SPARQLQueryBuilder builder = new SPARQLQueryBuilder(file);
+				SparqlQueryBuilder builder = new SparqlQueryBuilder(file);
 				log.debug("Query is :\n"+builder.getSPARQL());
 				
-				SPARQLQuery query = new SPARQLQuery(builder);
+				SparqlQuery query = new SparqlQuery(builder);
 				if(!bindings.isEmpty()) {
 					query.setBindings(bindings);
 				}
@@ -137,10 +137,10 @@ public class Select implements ToolkitCommandIfc {
 				
 				try {
 					Perform.on(inputRepository).select(
-							new SelectSPARQLHelper(
+							new SelectSparqlHelper(
 									query, 
 									// new CSVHandler(writer)
-									new CSVHandler(writer, false, false)
+									new CsvHandler(writer, false, false)
 							)
 					);
 				} catch (Exception e) {

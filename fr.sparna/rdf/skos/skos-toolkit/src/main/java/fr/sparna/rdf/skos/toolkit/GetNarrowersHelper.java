@@ -7,9 +7,9 @@ import org.openrdf.model.Resource;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerException;
 
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperIfc;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperIfc;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 
 
 /**
@@ -19,7 +19,7 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
  * @author Thomas Francart
  */
 @SuppressWarnings("serial")
-public abstract class GetNarrowersHelper extends SelectSPARQLHelperBase implements SelectSPARQLHelperIfc {
+public abstract class GetNarrowersHelper extends SelectSparqlHelperBase implements SelectSparqlHelperIfc {
 
 	/**
 	 * @param conceptURI URI of the concept for which we want the narrowers
@@ -70,7 +70,7 @@ public abstract class GetNarrowersHelper extends SelectSPARQLHelperBase implemen
 	 * 
 	 * @author Thomas Francart
 	 */
-	public static class QueryBuilder implements SPARQLQueryBuilderIfc {
+	public static class QueryBuilder implements SparqlQueryBuilderIfc {
 
 		private String orderByLang = null;		
 

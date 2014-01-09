@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.openrdf.model.Resource;
 import org.openrdf.model.Value;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.query.BooleanQuery;
@@ -37,7 +38,7 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
  * Executes SPARQL helpers onto a Sesame repository 
  * (built with a {@link fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder}
  * or a a {@link fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryIfc}). The helpers knows
- * how to return a {@link fr.sparna.rdf.sesame.toolkit.query.SPARQLQueryIfc} and how to process the results
+ * how to return a {@link fr.sparna.rdf.sesame.toolkit.query.SparqlQueryIfc} and how to process the results
  * of the query with a <code>TupleQueryResultHandler</code> (for SELECT queries), or <code>RDFHandler</code> (for CONSTRUCT queries).
  * This can execute SPARQL SELECT, CONSTRUCT, UPDATE, ASK, INSERT or DELETE.
  * <p />Note that by default, inferred statements WILL be included in the queries.
@@ -46,7 +47,7 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
  * <pre>
  * {@code
  *	Repository repository = ...;
- *	SelectSPARQLHelperIfc helper = ...;
+ *	SelectSparqlHelperIfc helper = ...;
  *	Perform.on(repository).select(helper);
  * }
  * </pre>
@@ -54,7 +55,7 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
  * <pre>
  * {@code
  *	Repository repository = ...;
- *	ConstructSPARQLHelperIfc helper = ...;
+ *	ConstructSparqlHelperIfc helper = ...;
  *	Perform.on(repository).construct(helper);
  * }
  * </pre>
@@ -162,8 +163,8 @@ public class Perform {
 	/**
 	 * Executes the SPARQL SELECT query returned by the helper, and pass the helper to the <code>evaluate</code> method
 	 */
-	public void select(SelectSPARQLHelperIfc helper) 
-	throws SPARQLPerformException {
+	public void select(SelectSparqlHelperIfc helper) 
+	throws SparqlPerformException {
 		
 		boolean useOpenedConnection = (this.connection != null);
 		
@@ -181,28 +182,28 @@ public class Perform {
 				// on execute la query
 				tupleQuery.evaluate(helper.getHandler());
 			} catch (MalformedQueryException e) {
-				throw new SPARQLPerformException(e);
+				throw new SparqlPerformException(e);
 			} finally {
 				if(!useOpenedConnection) { RepositoryConnectionDoorman.closeQuietly(localConnection); }
 			}
 
 		} catch (RepositoryException e) {
-			throw new SPARQLPerformException(e);
+			throw new SparqlPerformException(e);
 		} catch (QueryEvaluationException e) {
-			throw new SPARQLPerformException(e);
+			throw new SparqlPerformException(e);
 		} catch (TupleQueryResultHandlerException e) {
-			throw new SPARQLPerformException(e);
+			throw new SparqlPerformException(e);
 		}
 	}
 	
 	/**
 	 * Executes the SPARQL SELECT query, and returns a TupleQueryResult (that needs to be closed after that)
 	 */
-	public TupleQueryResult selectResult(SPARQLQuery sparqlQuery) 
-	throws SPARQLPerformException {
+	public TupleQueryResult selectResult(SparqlQuery sparqlQuery) 
+	throws SparqlPerformException {
 		
 		if(this.connection == null) {
-			throw new SPARQLPerformException("selectResult method can only work on already opened connections");
+			throw new SparqlPerformException("selectResult method can only work on already opened connections");
 		}
 		
 		try {
@@ -218,21 +219,21 @@ public class Perform {
 				// on execute la query
 				return tupleQuery.evaluate();
 			} catch (MalformedQueryException e) {
-				throw new SPARQLPerformException(e);
+				throw new SparqlPerformException(e);
 			}
 
 		} catch (RepositoryException e) {
-			throw new SPARQLPerformException(e);
+			throw new SparqlPerformException(e);
 		} catch (QueryEvaluationException e) {
-			throw new SPARQLPerformException(e);
+			throw new SparqlPerformException(e);
 		}
 	}
 
 	/**
 	 * Executes the SPARQL CONSTRUCT query returned by the helper, and pass the helper to the <code>evaluate</code> method
 	 */
-	public void construct(ConstructSPARQLHelperIfc helper) 
-	throws SPARQLPerformException {
+	public void construct(ConstructSparqlHelperIfc helper) 
+	throws SparqlPerformException {
 		
 		boolean useOpenedConnection = (this.connection != null);
 		
@@ -249,17 +250,17 @@ public class Perform {
 				// on execute la query
 				graphQuery.evaluate(helper.getHandler());
 			} catch (MalformedQueryException e) {
-				throw new SPARQLPerformException(e);
+				throw new SparqlPerformException(e);
 			} finally {
 				if(!useOpenedConnection) { RepositoryConnectionDoorman.closeQuietly(localConnection); }
 			}
 
 		} catch (RepositoryException e) {
-			throw new SPARQLPerformException(e);
+			throw new SparqlPerformException(e);
 		} catch (QueryEvaluationException e) {
-			throw new SPARQLPerformException(e);
+			throw new SparqlPerformException(e);
 		} catch (RDFHandlerException e) {
-			throw new SPARQLPerformException(e);
+			throw new SparqlPerformException(e);
 		}
 	}
 	
@@ -268,8 +269,8 @@ public class Perform {
 	 * The boolean result is also returned by the method directly.
 	 * <p>If helper.getWriter() is null, the result is simply returned by that method.
 	 */
-	public boolean ask(BooleanSPARQLHelperIfc helper) 
-	throws SPARQLPerformException {
+	public boolean ask(BooleanSparqlHelperIfc helper) 
+	throws SparqlPerformException {
 		
 		boolean useOpenedConnection = (this.connection != null);
 		
@@ -293,32 +294,32 @@ public class Perform {
 				return result;
 				
 			} catch (MalformedQueryException e) {
-				throw new SPARQLPerformException(e);
+				throw new SparqlPerformException(e);
 			} catch(IOException ioe) {
-				throw new SPARQLPerformException(ioe);
+				throw new SparqlPerformException(ioe);
 			} finally {
 				if(!useOpenedConnection) { RepositoryConnectionDoorman.closeQuietly(localConnection); }
 			}
 
 		} catch (RepositoryException e) {
-			throw new SPARQLPerformException(e);
+			throw new SparqlPerformException(e);
 		} catch (QueryEvaluationException e) {
-			throw new SPARQLPerformException(e);
+			throw new SparqlPerformException(e);
 		}
 	}
 	
 	/**
-	 * Convenience method that directly executes a SPARQLQueryIfc containing an ASK query without an associated writer,
+	 * Convenience method that directly executes a SparqlQueryIfc containing an ASK query without an associated writer,
 	 * and returns the result as a boolean.
 	 * 
 	 * @param query
 	 * @return
-	 * @throws SPARQLPerformException
+	 * @throws SparqlPerformException
 	 */
-	public boolean ask(SPARQLQueryIfc query) 
-	throws SPARQLPerformException {
-		// passing a null writer will cause the executeAsk(BooleanSPARQLHelperIfc helper) to not serialize the result
-		return ask(new BooleanSPARQLHelper(query, null));
+	public boolean ask(SparqlQueryIfc query) 
+	throws SparqlPerformException {
+		// passing a null writer will cause the executeAsk(BooleanSparqlHelperIfc helper) to not serialize the result
+		return ask(new BooleanSparqlHelper(query, null));
 	}
 	
 	/**
@@ -327,12 +328,12 @@ public class Perform {
 	 * 
 	 * @param query
 	 * @return
-	 * @throws SPARQLPerformException
+	 * @throws SparqlPerformException
 	 */
-	public int count(SPARQLQueryIfc query) 
-	throws SPARQLPerformException {
+	public int count(SparqlQueryIfc query) 
+	throws SparqlPerformException {
 		ReadSingleIntegerHandler handler = new ReadSingleIntegerHandler();
-		this.select(new SelectSPARQLHelper(query, handler));
+		this.select(new SelectSparqlHelper(query, handler));
 		return handler.getResultIntValue();
 	}
 
@@ -342,12 +343,12 @@ public class Perform {
 	 * 
 	 * @param query
 	 * @return
-	 * @throws SPARQLPerformException
+	 * @throws SparqlPerformException
 	 */
-	public Value read(SPARQLQueryIfc query) 
-	throws SPARQLPerformException {
+	public Value read(SparqlQueryIfc query) 
+	throws SparqlPerformException {
 		ReadSingleValueHandler handler = new ReadSingleValueHandler();
-		this.select(new SelectSPARQLHelper(query, handler));
+		this.select(new SelectSparqlHelper(query, handler));
 		return handler.getResult();
 	}
 	
@@ -357,24 +358,23 @@ public class Perform {
 	 * 
 	 * @param query
 	 * @return
-	 * @throws SPARQLPerformException
+	 * @throws SparqlPerformException
 	 */
-	public List<Value> readList(SPARQLQueryIfc query) 
-	throws SPARQLPerformException {
+	public List<Value> readList(SparqlQueryIfc query) 
+	throws SparqlPerformException {
 		ReadValueListHandler handler = new ReadValueListHandler();
-		this.select(new SelectSPARQLHelper(query, handler));
+		this.select(new SelectSparqlHelper(query, handler));
 		return handler.getResult();
 	}
-	
 	
 	/**
 	 * Executes the update returned by the helper. Nothing is returned from the execution.
 	 * 
 	 * @param helper
-	 * @throws SPARQLPerformException
+	 * @throws SparqlPerformException
 	 */
-	public void update(SPARQLUpdateIfc helper) 
-	throws SPARQLPerformException {
+	public void update(SparqlUpdateIfc helper) 
+	throws SparqlPerformException {
 		
 		boolean useOpenedConnection = (this.connection != null);
 		
@@ -392,19 +392,19 @@ public class Perform {
 				update.execute();
 				log.trace("UPDATE executed sucessfully");
 			} catch (MalformedQueryException e) {
-				throw new SPARQLPerformException(e);
+				throw new SparqlPerformException(e);
 			} finally {
 				if(!useOpenedConnection) { RepositoryConnectionDoorman.closeQuietly(localConnection); }
 			}
 
 		} catch (RepositoryException e) {
-			throw new SPARQLPerformException(e);
+			throw new SparqlPerformException(e);
 		} catch (UpdateExecutionException e) {
-			throw new SPARQLPerformException(e);
+			throw new SparqlPerformException(e);
 		}
 	}
 	
-	private Operation preprocessOperation(Operation o, SPARQLQueryIfc query) {
+	private Operation preprocessOperation(Operation o, SparqlQueryIfc query) {
 		// on positionne les bindings s'il y en a
 		processBindings(o, query.getBindings());
 		
@@ -429,14 +429,17 @@ public class Perform {
 	) {
 		if(bindings != null) {
 			for (Map.Entry<String, Object> anEntry : bindings.entrySet()) {
-				if(anEntry.getValue() instanceof org.openrdf.model.Value) {
-					o.setBinding(anEntry.getKey(), (org.openrdf.model.Value)anEntry.getValue());
-				} else 	if(anEntry.getValue() instanceof java.net.URI) {
-					o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createURI(((java.net.URI)anEntry.getValue()).toString()));
-				} else 	if(anEntry.getValue() instanceof java.net.URL) {
-					o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createURI(((java.net.URL)anEntry.getValue()).toString()));
-				} else {
-					o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createLiteral(anEntry.getValue().toString()));
+				// avoid setting null values
+				if(anEntry.getValue() != null) {
+					if(anEntry.getValue() instanceof org.openrdf.model.Value) {
+						o.setBinding(anEntry.getKey(), (org.openrdf.model.Value)anEntry.getValue());
+					} else 	if(anEntry.getValue() instanceof java.net.URI) {
+						o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createURI(((java.net.URI)anEntry.getValue()).toString()));
+					} else 	if(anEntry.getValue() instanceof java.net.URL) {
+						o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createURI(((java.net.URL)anEntry.getValue()).toString()));
+					} else {
+						o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createLiteral(anEntry.getValue().toString()));
+					}
 				}
 			}
 		}

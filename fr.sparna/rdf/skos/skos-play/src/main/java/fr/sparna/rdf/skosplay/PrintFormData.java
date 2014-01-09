@@ -7,18 +7,18 @@ import java.util.TreeMap;
 
 public class PrintFormData {
 
-	protected List<String> languages = new ArrayList<String>();
+	protected Map<String, String> languages = new TreeMap<String, String>();
 	protected Map<LabeledResource, Integer> conceptCountByConceptSchemes = new TreeMap<LabeledResource, Integer>();
 	protected List<String> warningMessages = new ArrayList<String>();
 	protected String successMessage;
 	protected boolean enableHierarchical = true;
 	protected boolean enableTranslations = true;
 	
-	public List<String> getLanguages() {
+	public Map<String, String> getLanguages() {
 		return languages;
 	}
-	
-	public void setLanguages(List<String> languages) {
+
+	public void setLanguages(Map<String, String> languages) {
 		this.languages = languages;
 	}
 

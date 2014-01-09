@@ -13,11 +13,11 @@ import fr.sparna.cli.SpaceSplitter;
 public class ArgumentsTranslate {
 
 	@Parameter(
-			names = "-i",
-			description = "Input RDF file or directory",
+			names = { "-i", "--input" },
+			description = "RDF files, directory, endpoint URL, or Spring config",
 			required = true,
 			variableArity = true
-	)
+	) 
 	private List<String> input;
 
 	@Parameter(names = "-o", description = "Output RDF file", required = true)

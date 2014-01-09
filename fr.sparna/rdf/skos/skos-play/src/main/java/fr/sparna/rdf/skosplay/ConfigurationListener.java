@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -68,7 +69,7 @@ public class ConfigurationListener implements ServletContextListener {
         appData.setBuildTimestamp(timestamp);
         
         // load example thesaurii included in the war
-        Map<String, Repository> exampleDataMap = new HashMap<String, Repository>();
+        Map<String, Repository> exampleDataMap = new TreeMap<String, Repository>();
         
 		List<String> exampleDatas = Arrays.asList(new String[]{
 				"data/unesco/unescothes.ttl",

@@ -6,8 +6,8 @@ import org.openrdf.model.Resource;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerException;
 
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 
 
 /**
@@ -16,7 +16,7 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
  * @author Thomas Francart
  */
 @SuppressWarnings("serial")
-public abstract class GetConceptsWithNoBroaderHelper extends SelectSPARQLHelperBase {
+public abstract class GetConceptsWithNoBroaderHelper extends SelectSparqlHelperBase {
 	
 	/**
 	 * @param orderByLang a 2-letters ISO-code of a language to order the list on the labels of this language,
@@ -48,7 +48,7 @@ public abstract class GetConceptsWithNoBroaderHelper extends SelectSPARQLHelperB
 	protected abstract void handleConceptWithNoBroader(Resource noBroader)
 	throws TupleQueryResultHandlerException;
 	
-	public static class QueryBuilder implements SPARQLQueryBuilderIfc {
+	public static class QueryBuilder implements SparqlQueryBuilderIfc {
 
 		private String orderByLang = null;
 		private boolean additionalCriteria = false;

@@ -6,8 +6,8 @@ import org.openrdf.model.Resource;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerException;
 
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 
 /**
  * Queries for the top collections of a given concept scheme, optionally ordered by their skos:prefLabels
@@ -16,7 +16,7 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
  * @author Thomas Francart
  */
 @SuppressWarnings("serial")
-public abstract class GetTopCollectionsHelper extends SelectSPARQLHelperBase {
+public abstract class GetTopCollectionsHelper extends SelectSparqlHelperBase {
 
 	/**
 	 * @param conceptSchemeURI 	the URI of the concept scheme to read top collections from, or null to read all top collections
@@ -42,7 +42,7 @@ public abstract class GetTopCollectionsHelper extends SelectSPARQLHelperBase {
 	protected abstract void handleTopCollection(Resource collection)
 	throws TupleQueryResultHandlerException;
 	
-	public static class QueryBuilder implements SPARQLQueryBuilderIfc {
+	public static class QueryBuilder implements SparqlQueryBuilderIfc {
 
 		private String orderByLang = null;
 		private boolean addInScheme = true;

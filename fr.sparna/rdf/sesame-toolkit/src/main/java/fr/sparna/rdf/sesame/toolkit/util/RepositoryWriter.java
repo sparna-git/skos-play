@@ -316,7 +316,7 @@ public class RepositoryWriter {
 							true,
 							// writer
 							writer,
-							URIUtil.toResourceArray(this.namedGraphsToDump, repository.getValueFactory())
+							UriUtil.toResourceArray(this.namedGraphsToDump, repository.getValueFactory())
 					);
 				}
 			}

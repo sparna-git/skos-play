@@ -4,7 +4,7 @@ import java.net.URISyntaxException;
 
 import org.openrdf.repository.Repository;
 
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLUpdate;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlUpdate;
 import fr.sparna.rdf.sesame.toolkit.repository.AutoDetectRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.ApplyUpdates;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
@@ -21,7 +21,7 @@ public class Update implements ToolkitCommandIfc {
 		Repository r = new AutoDetectRepositoryFactory(args.getInput()).createNewRepository();
 
 		// init updates
-		ApplyUpdates u = new ApplyUpdates(SPARQLUpdate.fromUpdateDirectory(args.getUpdateDirectory()));
+		ApplyUpdates u = new ApplyUpdates(SparqlUpdate.fromUpdateDirectory(args.getUpdateDirectory()));
 		
 		// execute updates
 		u.execute(r);

@@ -3,76 +3,56 @@ package fr.sparna.rdf.skos.printer.reader;
 import fr.sparna.rdf.skos.printer.schema.Att;
 import fr.sparna.rdf.skos.printer.schema.CellType;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
+import fr.sparna.rdf.skos.printer.schema.KwicEntry;
+import fr.sparna.rdf.skos.printer.schema.Label;
+import fr.sparna.rdf.skos.printer.schema.Link;
 import fr.sparna.rdf.skos.printer.schema.ListItem;
-import fr.sparna.rdf.skos.printer.schema.Ref;
 import fr.sparna.rdf.skos.printer.schema.RowType;
-import fr.sparna.rdf.skos.printer.schema.TypedString;
+import fr.sparna.rdf.skos.printer.schema.StyledString;
 
 
 public class SchemaFactory {
 
-	public static TypedString createTypedString(String s, String type) {
-		TypedString str = new TypedString();
+	public static StyledString createStyledString(String s, String style) {
+		StyledString str = new StyledString();
 		str.setValue(s);
-		if(type != null) {
-			str.setType(type);
+		if(style != null) {
+			str.setStyle(style);
 		}
 		return str;
 	}
 	
-	public static TypedString createTypedString(String s) {
-		return createTypedString(s, null);
+	public static StyledString createStyledString(String s) {
+		return createStyledString(s, null);
+	}
+	
+	public static Link createLink(String entryRef, String conceptUri, String label, String style) {
+		Link l = new Link();
+		l.setRefId(entryRef);
+		l.setUri(conceptUri);
+		if(style != null) {
+			l.setStyle(style);
+		}
+		l.setValue(label);
+		return l;
 	}
 	
 	public static Att createAtt(String value, String attType, String valueType) {
 		Att a = new Att();
-		a.setStr(createTypedString(value, valueType));
+		a.setStr(createStyledString(value, valueType));
 		a.setType(attType);
 		return a;
 	}
 	
-	/**
-	 * Créé une Entry complète
-	 * 
-	 * @param blockId
-	 * @param uri
-	 * @param label
-	 * @param labelType
-	 * @return
-	 */
-	public static ConceptBlock createConceptBlock(String blockId, String uri, String label, String labelType) {
-		ConceptBlock e = new ConceptBlock();
-		// utilisation de Namespaces pour raccourcir l'URI
-		// not anymore to have full URIs in HTML display and geenrate outgoing links
-		// e.setConcept(Namespaces.getInstance().shorten(uri));
-		e.setUri(uri);
-		e.setLabel(createTypedString(label, labelType));
-		e.setId(blockId);
-		return e;
+	public static Att createAttLink(String entryRef, String conceptUri, String label, String attType, String style) {
+		Att a = new Att();
+		a.setType(attType);
+		a.setLink(createLink(entryRef, conceptUri, label, style));
+		return a;
 	}
 	
 	/**
-	 * Créé une Entry avec seulement un prefLabel
-	 * 
-	 * @param uri
-	 * @param prefLabel
-	 * @return
-	 */
-	public static ConceptBlock createConceptBlock(String entryId, String uri, String prefLabel) {
-		return createConceptBlock(entryId, uri, prefLabel, "pref");
-	}
-	
-	public static Ref createRef(String entryRef, String conceptUri, String prefLabel, String refType, String labelType) {
-		Ref r = new Ref();
-		r.setRefId(entryRef);
-		r.setType(refType);
-		r.setLabel(createTypedString(prefLabel, labelType));
-		r.setUri(conceptUri);
-		return r;
-	}
-	
-	/**
-	 * Créé une référence vers une autre entry sans préciser le type du label de la référence
+	 * Créé une référence vers une autre entry sans préciser de style
 	 * 
 	 * @param entryRef
 	 * @param uri
@@ -80,9 +60,30 @@ public class SchemaFactory {
 	 * @param refType
 	 * @return
 	 */
-	public static Ref createRef(String entryRef, String uri, String prefLabel, String refType) {
-		return createRef(entryRef, uri, prefLabel, refType, null);
+	public static Att createAttLink(String entryRef, String uri, String prefLabel, String refType) {
+		return createAttLink(entryRef, uri, prefLabel, refType, null);
 	}
+	
+	public static Label createLabel(String label, String style) {
+		Label l = new Label();
+		l.setStr(createStyledString(label, style));
+		return l;
+	}
+	
+	public static Label createLabelLink(String entryRef, String conceptUri, String label, String style) {
+		Label l = new Label();
+		l.setLink(createLink(entryRef, conceptUri, label, style));
+		return l;
+	}
+	
+	public static ConceptBlock createConceptBlock(String blockId, String uri, Label l) {
+		ConceptBlock e = new ConceptBlock();
+		e.setId(blockId);
+		e.setUri(uri);
+		e.setLabel(l);
+		return e;
+	}
+
 	
 	public static ListItem createListItem(Object o) {
 		ListItem li = new ListItem();
@@ -102,6 +103,15 @@ public class SchemaFactory {
 			row.getCell().add(createCell(object));
 		}
 		return row;
+	}
+	
+	public static KwicEntry createKwicEntry(Label label, String before, String keyLabel, String after) {
+		KwicEntry entry = new KwicEntry();
+		entry.setLabel(label);
+		entry.setKeyLabel(keyLabel);
+		entry.setBefore(before);
+		entry.setAfter(after);
+		return entry;
 	}
 
 }

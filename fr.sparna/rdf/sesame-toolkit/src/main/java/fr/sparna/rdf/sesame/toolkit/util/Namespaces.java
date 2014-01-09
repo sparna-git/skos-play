@@ -15,12 +15,12 @@ import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromURL;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromUrl;
 
 /**
  * Manages the Map between full URI and their prefixes. This will attempt to load the dump of prefix.cc
@@ -146,7 +146,7 @@ public class Namespaces {
 			builder.setAutoRegisterNamespaces(false);
 			if(live) {
 				// load URL - will load the bundled file in the jar if the URL loading fails
-				builder.addOperation(new LoadFromURL(new URL("http://prefix.cc/popular/all.file.vann")));
+				builder.addOperation(new LoadFromUrl(new URL("http://prefix.cc/popular/all.file.vann")));
 			} else {
 				// LoadFromFileOrDirectory has a test to load from classpath
 				builder.addOperation(new LoadFromFileOrDirectory("popular/all.file.vann"));
@@ -156,7 +156,7 @@ public class Namespaces {
 			
 			// make a query on the loaded RDF and populate the namespaceMap with the result
 			Perform.on(r).select(
-					new SelectSPARQLHelper(
+					new SelectSparqlHelper(
 							"PREFIX vann:<http://purl.org/vocab/vann/> SELECT ?prefix ?uri WHERE { ?x vann:preferredNamespacePrefix ?prefix . ?x vann:preferredNamespaceUri ?uri }",
 							new TupleQueryResultHandlerBase() {
 								@Override

@@ -7,8 +7,8 @@ import org.openrdf.model.Resource;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerException;
 
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 
 /**
  * Return the list of all members of a given Collection, optionally ordered by their label in a given language.
@@ -17,7 +17,7 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
  * @author Thomas Francart
  */
 @SuppressWarnings("serial")
-public abstract class GetMembersHelper extends SelectSPARQLHelperBase {
+public abstract class GetMembersHelper extends SelectSparqlHelperBase {
 
 	/**
 	 * @param collectionURI URI of the collection for which we want the memebers (optionnaly null to get all pairs [?collection;?member]
@@ -67,7 +67,7 @@ public abstract class GetMembersHelper extends SelectSPARQLHelperBase {
 	 * 
 	 * @author Thomas Francart
 	 */
-	public static class QueryBuilder implements SPARQLQueryBuilderIfc {
+	public static class QueryBuilder implements SparqlQueryBuilderIfc {
 
 		private String orderByLang = null;		
 

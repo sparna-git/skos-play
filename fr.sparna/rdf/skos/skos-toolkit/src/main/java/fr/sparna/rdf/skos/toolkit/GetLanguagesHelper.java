@@ -6,8 +6,8 @@ import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
 
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 /**
@@ -15,7 +15,7 @@ import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
  * 
  * @author Thomas Francart
  */
-public abstract class GetLanguagesHelper extends SelectSPARQLHelperBase {
+public abstract class GetLanguagesHelper extends SelectSparqlHelperBase {
 
 	/**
 	 * @param conceptURI URI of the concept for which we want the broaders (optionnaly null to get all pairs [?concept;?broader]
@@ -51,7 +51,7 @@ public abstract class GetLanguagesHelper extends SelectSPARQLHelperBase {
 	 * 
 	 * @author Thomas Francart
 	 */
-	public static class QueryBuilder implements SPARQLQueryBuilderIfc {
+	public static class QueryBuilder implements SparqlQueryBuilderIfc {
 
 		public QueryBuilder() { }
 

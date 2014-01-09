@@ -24,11 +24,11 @@ import fr.sparna.commons.lang.LRUCache;
 import fr.sparna.commons.lang.ListMap;
 import fr.sparna.rdf.sesame.toolkit.handler.ReadValueListHandler;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
-import fr.sparna.rdf.sesame.toolkit.query.builder.ValuesSPARQLQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.builder.ValuesSparqlQueryBuilder;
 
 /**
  * Returns a list of values for an ordered list of properties, for given resource or list of resources, in a given language.
@@ -74,20 +74,20 @@ public class PreferredPropertyReader {
 	}
 	
 	public List<Value> getValues(final java.net.URI resource) 
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 		
 		// look into the cache first
 		if(isCaching() && cache.containsKey(resource)) {
 			return cache.get(resource);
 		}
 		
-		List<SPARQLQuery> queries = new ArrayList<SPARQLQuery>();
+		List<SparqlQuery> queries = new ArrayList<SparqlQuery>();
 		
 		// for each possible property in order ...
 		for (final java.net.URI aType : this.properties) {
 			// query for the preferredLanguage
 			// if preferredLanguage is the empty string, this will query for labels without a language
-			queries.add(new SPARQLQuery(
+			queries.add(new SparqlQuery(
 					"SELECT ?o WHERE { ?s ?p ?o FILTER(lang(?o) = '"+this.preferredLanguage+"') }",
 					new HashMap<String, Object>() {{ 
 						put("s", resource);
@@ -97,7 +97,7 @@ public class PreferredPropertyReader {
 			
 			// then for the fallback language
 			if(this.fallbackLanguage != null) {
-				queries.add(new SPARQLQuery(
+				queries.add(new SparqlQuery(
 						"SELECT ?o WHERE { ?s ?p ?o FILTER(lang(?o) = '"+this.fallbackLanguage+"') }",
 						new HashMap<String, Object>() {{ 
 							put("s", resource);
@@ -118,12 +118,12 @@ public class PreferredPropertyReader {
 	}	
 	
 	public List<Value> getValues(final org.openrdf.model.URI resource) 
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 		return getValues(URI.create(resource.stringValue()));
 	}
 	
 	public Map<java.net.URI, List<Value>> getValues(Collection<java.net.URI> resources)
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 		// prepare result
 		ListMap<java.net.URI, Value> result = new ListMap<java.net.URI, Value>();
 		
@@ -170,7 +170,7 @@ public class PreferredPropertyReader {
 	}
 	
 	private Map<java.net.URI, List<Value>> getLabelsOnProperty(Set<java.net.URI> resources, final java.net.URI property) 
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 		
 		final int CHUNK_SIZE = 100;
 		ListMap<java.net.URI, Value> result = new ListMap<java.net.URI, Value>();
@@ -202,16 +202,16 @@ public class PreferredPropertyReader {
 	}
 	
 	private Map<java.net.URI, List<Value>> processChunkOnProperty(List<java.net.URI> resources, final java.net.URI property) 
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 		
 		String query = "SELECT ?s ?o WHERE { ?s ?p ?o FILTER(lang(?o) = '"+this.preferredLanguage+"') }";
-		ValuesSPARQLQueryBuilder builder = new ValuesSPARQLQueryBuilder(
-				new SPARQLQueryBuilder(query),
+		ValuesSparqlQueryBuilder builder = new ValuesSparqlQueryBuilder(
+				new SparqlQueryBuilder(query),
 				"s",
-				Arrays.asList(URIUtil.toResourceArray(resources, repository.getValueFactory()))
+				Arrays.asList(UriUtil.toResourceArray(resources, repository.getValueFactory()))
 		);
 		
-		SPARQLQuery q = new SPARQLQuery(
+		SparqlQuery q = new SparqlQuery(
 				builder,
 				new HashMap<String, Object>() {{ 
 					put("p", property);
@@ -219,7 +219,7 @@ public class PreferredPropertyReader {
 		);
 		
 		final ListMap<java.net.URI, Value> result = new ListMap<java.net.URI, Value>();
-		Perform.on(this.repository).select(new SelectSPARQLHelper(
+		Perform.on(this.repository).select(new SelectSparqlHelper(
 				q,
 				new TupleQueryResultHandlerBase() {
 
@@ -253,13 +253,13 @@ public class PreferredPropertyReader {
 		this.properties = properties;
 	}
 
-	private List<Value> findValues(List<SPARQLQuery> queries) 
-	throws SPARQLPerformException {
+	private List<Value> findValues(List<SparqlQuery> queries) 
+	throws SparqlPerformException {
 		ReadValueListHandler h = new ReadValueListHandler();
 		
 		// for each query
-		for (SPARQLQuery aQuery : queries) {
-			Perform.on(this.repository).select(new SelectSPARQLHelper(
+		for (SparqlQuery aQuery : queries) {
+			Perform.on(this.repository).select(new SelectSparqlHelper(
 					aQuery,
 					h
 			));

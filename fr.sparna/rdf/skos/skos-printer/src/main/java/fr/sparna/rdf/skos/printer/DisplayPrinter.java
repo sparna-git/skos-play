@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.xml.XSLProcessor;
 import fr.sparna.commons.xml.fop.FopProcessor;
-import fr.sparna.rdf.skos.printer.schema.Display;
+import fr.sparna.rdf.skos.printer.schema.KosDocument;
 
 public class DisplayPrinter {
 
@@ -39,11 +39,11 @@ public class DisplayPrinter {
 	
 	
 	public void printToPdf(
-			Display display,
+			KosDocument document,
 			File outputFile
 	) throws FOPException, TransformerException, IOException, JAXBException {
 		Marshaller m = createMarshaller();
-		debugJAXBMarshalling(m, display);
+		debugJAXBMarshalling(m, document);
 		
 		FopProcessor p = new FopProcessor();
 		p.setDebugFo(debug);
@@ -55,18 +55,18 @@ public class DisplayPrinter {
 			}
 		}
 		p.processToFile(
-				new JAXBSource(m, display),
+				new JAXBSource(m, document),
 				t,
 				outputFile
 		);
 	}
 	
 	public void printToPdf(
-			Display display,
+			KosDocument document,
 			OutputStream os
 	) throws FOPException, TransformerException, IOException, JAXBException {
 		Marshaller m = createMarshaller();
-		debugJAXBMarshalling(m, display);
+		debugJAXBMarshalling(m, document);
 		
 		FopProcessor p = new FopProcessor();
 		p.setDebugFo(debug);
@@ -78,14 +78,14 @@ public class DisplayPrinter {
 			}
 		}
 		p.process(
-				new JAXBSource(m, display),
+				new JAXBSource(m, document),
 				t,
 				os
 		);
 	}
 	
 	public void printToHtml(
-			Display display,
+			KosDocument document,
 			File htmlFile
 	) throws FileNotFoundException, JAXBException, TransformerException {
 		
@@ -101,17 +101,17 @@ public class DisplayPrinter {
 		}
 		
 		printToHtml(
-				display,
+				document,
 				new BufferedOutputStream(new FileOutputStream(htmlFile))
 		);
 	}
 	
 	public void printToHtml(
-			Display display,
+			KosDocument document,
 			OutputStream os
 	) throws FileNotFoundException, JAXBException, TransformerException {
 		Marshaller m = createMarshaller();
-		debugJAXBMarshalling(m, display);
+		debugJAXBMarshalling(m, document);
 		
 		try {
 			StreamSource xslSource = new StreamSource(this.getClass().getClassLoader().getResourceAsStream(STYLESHEET_DISPLAY_TO_HTML));
@@ -121,7 +121,7 @@ public class DisplayPrinter {
 					t.setParameter(aKey, this.transformerParams.get(aKey));
 				}
 			}
-			t.transform(new JAXBSource(m, display), new StreamResult(os));
+			t.transform(new JAXBSource(m, document), new StreamResult(os));
 		} finally {
 			if(os != null) {
 				try {
@@ -142,12 +142,12 @@ public class DisplayPrinter {
 		}
 	}
 	
-	private void debugJAXBMarshalling(Marshaller m, Display display) throws JAXBException {
+	private void debugJAXBMarshalling(Marshaller m, KosDocument document) throws JAXBException {
 		if(debug) {
 			File debugFile = new File(".DisplayPrinter-debug.xml");
 			log.debug("Will debug JAXB Marshalling in "+debugFile.getAbsolutePath());
 			m.setProperty("jaxb.formatted.output", true);
-			m.marshal(display, debugFile);
+			m.marshal(document, debugFile);
 		}		
 	}
 

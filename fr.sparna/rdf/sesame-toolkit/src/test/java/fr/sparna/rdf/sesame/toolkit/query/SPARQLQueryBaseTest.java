@@ -18,7 +18,7 @@ public class SPARQLQueryBaseTest {
 	public void testToString() throws Exception {
 		
 		// TEST AVEC UNE URI
-		SPARQLQuery q1 = new SPARQLQuery(
+		SparqlQuery q1 = new SparqlQuery(
 				"SELECT ?uri WHERE { ?uri a ?type }",
 				new HashMap<String, Object>() {{
 					put("type", URI.create("http://www.test.com"));
@@ -28,7 +28,7 @@ public class SPARQLQueryBaseTest {
 		Assert.assertTrue(q1.toString().equals("SELECT ?uri WHERE { ?uri a <http://www.test.com> }"));
 		
 		// TEST AVEC UN LITERAL
-		SPARQLQuery q2 = new SPARQLQuery(
+		SparqlQuery q2 = new SparqlQuery(
 				"SELECT ?uri WHERE { ?uri a $type }",
 				new HashMap<String, Object>() {{
 					put("type", "toto");
@@ -40,7 +40,7 @@ public class SPARQLQueryBaseTest {
 		final Repository r = new LocalMemoryRepositoryFactory().createNewRepository();
 		
 		// TEST AVEC UNE URI OpenRDF
-		SPARQLQuery q3 = new SPARQLQuery(
+		SparqlQuery q3 = new SparqlQuery(
 				"SELECT ?uri WHERE { ?uri a $type }",
 				new HashMap<String, Object>() {{
 					put("type", r.getValueFactory().createURI("http://www.test.com"));
@@ -50,7 +50,7 @@ public class SPARQLQueryBaseTest {
 		Assert.assertTrue(q3.toString().equals("SELECT ?uri WHERE { ?uri a <http://www.test.com> }"));
 		
 		// TEST AVEC UNE LANGUE
-		SPARQLQuery q4 = new SPARQLQuery(
+		SparqlQuery q4 = new SparqlQuery(
 				"SELECT ?uri WHERE { ?uri a $type }",
 				new HashMap<String, Object>() {{
 					put("type", r.getValueFactory().createLiteral("toto", "fr"));
@@ -60,7 +60,7 @@ public class SPARQLQueryBaseTest {
 		Assert.assertTrue(q4.toString().equals("SELECT ?uri WHERE { ?uri a \"toto\"@fr }"));
 		
 		// TEST AVEC UN DATATYPE
-		SPARQLQuery q5 = new SPARQLQuery(
+		SparqlQuery q5 = new SparqlQuery(
 				"SELECT ?uri WHERE { ?uri a $type }",
 				new HashMap<String, Object>() {{
 					put("type", r.getValueFactory().createLiteral("toto", r.getValueFactory().createURI("http://www.mydatatype.com")));

@@ -53,7 +53,7 @@ public class ClearRepository implements RepositoryOperationIfc {
 	/**
 	 * Turns a list of Strings into a list of Resource objects using the given ValueFactory.
 	 * 
-	 * @deprecated use URIUtil instead
+	 * @deprecated use UriUtil instead
 	 * @param uris
 	 * @param factory
 	 * @return an array of ressources

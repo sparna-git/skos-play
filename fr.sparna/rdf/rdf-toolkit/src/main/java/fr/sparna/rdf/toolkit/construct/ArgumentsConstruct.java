@@ -1,6 +1,7 @@
 package fr.sparna.rdf.toolkit.construct;
 
 import java.io.File;
+import java.util.List;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -12,10 +13,10 @@ public class ArgumentsConstruct {
 	@Parameter(
 			names = { "-i", "--input" },
 			description = "RDF files, directory, endpoint URL, or Spring config",
-			required = true
+			required = true,
+			variableArity = true
 	)
-	// TODO : pouvoir passer une List<String> en utilisant variableArity = true  
-	private String input;
+	private List<String> input;
 	
 	@Parameter(
 			names = { "-q", "--queries" },
@@ -33,14 +34,14 @@ public class ArgumentsConstruct {
 	)
 	private File output; 
 
-	public String getInput() {
+	public List<String> getInput() {
 		return input;
 	}
 
-	public void setInput(String input) {
+	public void setInput(List<String> input) {
 		this.input = input;
 	}
-	
+
 	public File getQueryDirectoryOrFile() {
 		return queryDirectoryOrFile;
 	}

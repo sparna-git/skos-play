@@ -10,8 +10,8 @@ import org.openrdf.model.URI;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerException;
 
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 
 
 /**
@@ -21,7 +21,7 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
  * @author Thomas Francart
  */
 @SuppressWarnings("serial")
-public abstract class GetLabelsHelper extends SelectSPARQLHelperBase {
+public abstract class GetLabelsHelper extends SelectSparqlHelperBase {
 	
 	public GetLabelsHelper(
 			final java.net.URI concept,
@@ -77,7 +77,7 @@ public abstract class GetLabelsHelper extends SelectSPARQLHelperBase {
 	protected abstract void handleLabel(Resource concept, URI labelType, String label, String lang)
 	throws TupleQueryResultHandlerException;
 	
-	public static class QueryBuilder implements SPARQLQueryBuilderIfc {
+	public static class QueryBuilder implements SparqlQueryBuilderIfc {
 
 		// includes pref labels by default
 		private boolean includePrefLabels = true;

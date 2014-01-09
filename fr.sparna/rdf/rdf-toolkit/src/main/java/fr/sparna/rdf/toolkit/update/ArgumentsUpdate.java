@@ -16,10 +16,10 @@ public class ArgumentsUpdate {
 	@Parameter(
 			names = { "-i", "--input" },
 			description = "RDF files, directory, endpoint URL, or Spring config",
-			required = true
-	)
-	// TODO : pouvoir passer une List<String> en utilisant variableArity = true  
-	private String input;
+			required = true,
+			variableArity = true
+	) 
+	private List<String> input;
 	
 	@Parameter(
 			names = { "-o", "--output" },
@@ -64,11 +64,11 @@ public class ArgumentsUpdate {
 		this.updateDirectory = updateDirectory;
 	}
 
-	public String getInput() {
+	public List<String> getInput() {
 		return input;
 	}
 
-	public void setInput(String input) {
+	public void setInput(List<String> input) {
 		this.input = input;
 	}
 

@@ -8,7 +8,7 @@ import org.openrdf.repository.Repository;
 
 import fr.sparna.rdf.sesame.toolkit.handler.DebugHandler;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
 import fr.sparna.rdf.sesame.toolkit.repository.EndpointRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
@@ -82,7 +82,7 @@ public class SessionData {
 	public static void main(String...strings) throws Exception {
 		RepositoryBuilder builder = new RepositoryBuilder(new EndpointRepositoryFactory("http://poolparty.reegle.info/PoolParty/sparql/glossary", false));
 		Repository repository = builder.createNewRepository();
-		Perform.on(repository).select(new SelectSPARQLHelper(
+		Perform.on(repository).select(new SelectSparqlHelper(
 				"PREFIX skos:<http://www.w3.org/2004/02/skos/core#> SELECT (COUNT(?concept) AS ?nbOfConcepts) WHERE { ?concept a skos:Concept . } ",
 				new DebugHandler()
 		));

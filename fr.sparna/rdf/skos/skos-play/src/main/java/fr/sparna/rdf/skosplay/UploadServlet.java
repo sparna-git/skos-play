@@ -28,17 +28,17 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.i18n.StrictResourceBundleControl;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.EndpointRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.FactoryConfiguration;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryException;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromStream;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromURL;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromUrl;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
 import fr.sparna.web.config.Configuration;
 
@@ -78,7 +78,7 @@ public class UploadServlet extends HttpServlet {
 	) throws ServletException, IOException {
 		
 		// retrieve session
-		SessionData sessionData = SessionData.get(request.getSession());
+		final SessionData sessionData = SessionData.get(request.getSession());
 		
 		// retrieve resource bundle for error messages
 		ResourceBundle b = ResourceBundle.getBundle(
@@ -125,7 +125,7 @@ public class UploadServlet extends HttpServlet {
 			case URL : {
 				// get url param
 				String urlParam = (request.getParameter(PARAM_URL) != null && !request.getParameter(PARAM_URL).equals(""))?request.getParameter(PARAM_URL):null;
-				localRepositoryBuilder.addOperation(new LoadFromURL(new URL(urlParam), false));
+				localRepositoryBuilder.addOperation(new LoadFromUrl(new URL(urlParam), false));
 				repository = localRepositoryBuilder.createNewRepository();
 				break;
 			}
@@ -158,7 +158,7 @@ public class UploadServlet extends HttpServlet {
 		
 //		try {
 //			// apply inference
-//			ApplyUpdates au = new ApplyUpdates(SPARQLUpdate.fromUpdateList(SKOSRules.getRulesetLite()));
+//			ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getRulesetLite()));
 //			au.execute(repository);
 //		} catch (RepositoryOperationException e1) {
 //			doError(request, response, e1.getMessage());
@@ -168,7 +168,7 @@ public class UploadServlet extends HttpServlet {
 		int count = -1;
 		try {			
 			// check that data does not contain more than X concepts
-			count = Perform.on(repository).count(new SPARQLQuery(new SPARQLQueryBuilder(this, "CountConcepts.rq")));
+			count = Perform.on(repository).count(new SparqlQuery(new SparqlQueryBuilder(this, "CountConcepts.rq")));
 			
 			// check that data contains at least one SKOS Concept
 			if(count <= 0) {
@@ -196,7 +196,7 @@ public class UploadServlet extends HttpServlet {
 				);
 				return;
 			}
-		} catch (SPARQLPerformException e) {
+		} catch (SparqlPerformException e) {
 			e.printStackTrace();
 			doError(request, response, e);
 			return;
@@ -222,30 +222,30 @@ public class UploadServlet extends HttpServlet {
 		
 		try {
 			// ask if some hierarchy exists
-			if(!Perform.on(repository).ask(new SPARQLQuery(new SPARQLQueryBuilder(this, "AskBroadersOrNarrowers.rq")))) {
+			if(!Perform.on(repository).ask(new SparqlQuery(new SparqlQueryBuilder(this, "AskBroadersOrNarrowers.rq")))) {
 				printFormData.setEnableHierarchical(false);
 				printFormData.getWarningMessages().add(b.getString("upload.warning.noHierarchyFound"));
 			}
-		} catch (SPARQLPerformException e) {
+		} catch (SparqlPerformException e) {
 			printFormData.setEnableHierarchical(false);
 			printFormData.getWarningMessages().add(b.getString("upload.warning.noHierarchyFound"));
 		}
 		
 		try {
 			// ask if some translations exists
-			if(!Perform.on(repository).ask(new SPARQLQuery(new SPARQLQueryBuilder(this, "AskTranslatedConcepts.rq")))) {
+			if(!Perform.on(repository).ask(new SparqlQuery(new SparqlQueryBuilder(this, "AskTranslatedConcepts.rq")))) {
 				printFormData.setEnableTranslations(false);
 				printFormData.getWarningMessages().add(b.getString("upload.warning.noTranslationsFound"));
 			}
-		} catch (SPARQLPerformException e) {
+		} catch (SparqlPerformException e) {
 			printFormData.setEnableTranslations(false);
 			printFormData.getWarningMessages().add(b.getString("upload.warning.noTranslationsFound"));
 		}
 			
 		try {
 			// retrieve number of concepts per concept schemes
-			Perform.on(repository).select(new SelectSPARQLHelper(
-					new SPARQLQueryBuilder(this, "ConceptCountByConceptSchemes.rq"),
+			Perform.on(repository).select(new SelectSparqlHelper(
+					new SparqlQueryBuilder(this, "ConceptCountByConceptSchemes.rq"),
 					new TupleQueryResultHandlerBase() {
 
 						@Override
@@ -262,7 +262,7 @@ public class UploadServlet extends HttpServlet {
 													((Literal)bindingSet.getValue("conceptCount")).intValue()
 													:0
 									);
-								} catch (SPARQLPerformException e) {
+								} catch (SparqlPerformException e) {
 									throw new TupleQueryResultHandlerException(e);
 								}
 							}
@@ -271,19 +271,22 @@ public class UploadServlet extends HttpServlet {
 			));
 			
 			// retrieve list of declared languages in the data
-			Perform.on(repository).select(new SelectSPARQLHelper(
-					new SPARQLQueryBuilder(this, "ListOfSkosLanguages.rq"),
+			Perform.on(repository).select(new SelectSparqlHelper(
+					new SparqlQueryBuilder(this, "ListOfSkosLanguages.rq"),
 					new TupleQueryResultHandlerBase() {
 
 						@Override
 						public void handleSolution(BindingSet bindingSet)
 						throws TupleQueryResultHandlerException {
-							printFormData.getLanguages().add(bindingSet.getValue("language").stringValue());
+							printFormData.getLanguages().put(
+									bindingSet.getValue("language").stringValue(),
+									fr.sparna.rdf.sesame.toolkit.languages.Languages.getInstance().withIso639P1(bindingSet.getValue("language").stringValue()).displayIn(sessionData.getUserLocale().getLanguage())
+							);
 						}
 						
 					}
 			));
-		} catch (SPARQLPerformException e) {
+		} catch (SparqlPerformException e) {
 			doError(request, response, e);
 			return;
 		}

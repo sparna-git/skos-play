@@ -14,7 +14,7 @@
 
     <groupId>fr.sparna.commons</groupId>
     <artifactId>sparna-commons-fop</artifactId>
-    <version>0.32-SNAPSHOT</version>
+    <version>0.33-SNAPSHOT</version>
 
     <name>Sparna Commons: FOP and PDF</name>
     <description>FOP and PDF-related utilities</description>

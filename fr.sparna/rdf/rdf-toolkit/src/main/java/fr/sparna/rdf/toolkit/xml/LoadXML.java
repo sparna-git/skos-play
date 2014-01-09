@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromXML;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromXml;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
 import fr.sparna.rdf.toolkit.ToolkitCommandIfc;
 
@@ -33,7 +33,7 @@ public class LoadXML implements ToolkitCommandIfc {
 				new LocalMemoryRepositoryFactory()
 		);
 		// add the LoadFromXML operation
-		factory.addOperation(new LoadFromXML(new File(args.getInput()), args.getXsl()));
+		factory.addOperation(new LoadFromXml(new File(args.getInput()), args.getXsl()));
 		// obtain repository loaded with data
 		Repository r = factory.createNewRepository();
 

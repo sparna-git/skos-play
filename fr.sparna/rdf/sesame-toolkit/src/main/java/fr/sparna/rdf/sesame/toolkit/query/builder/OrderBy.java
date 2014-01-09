@@ -5,7 +5,7 @@ package fr.sparna.rdf.sesame.toolkit.query.builder;
  * the field to order on, and a boolean indicating if the ordering should be in
  * ascending or descending order.
  * 
- * <p>This is used by {@link PagingSPARQLQueryBuilder}.
+ * <p>This is used by {@link PagingSparqlQueryBuilder}.
  * 
  * @author Thomas Francart
  */

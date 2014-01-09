@@ -10,7 +10,7 @@ import org.openrdf.repository.Repository;
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 
 /**
@@ -36,7 +36,7 @@ public class SimpleSKOSTreePrinter {
 	}
 
 	public String printTree() 
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 		SKOSTreeBuilder builder = new SKOSTreeBuilder(this.repository, this.displayLanguage);
 		List<GenericTree<SKOSTreeNode>> trees = builder.buildTrees();
 		
@@ -52,7 +52,7 @@ public class SimpleSKOSTreePrinter {
 	}
 
 	private String printConceptRec(GenericTreeNode<SKOSTreeNode> aNode, int depth) 
-	throws SPARQLPerformException {
+	throws SparqlPerformException {
 		final StringBuffer buffer = new StringBuffer();
 		
 		// print tabs

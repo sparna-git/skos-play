@@ -14,14 +14,14 @@ import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.sail.memory.MemoryStore;
 
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
 
 public class SPARQLQueryBuilderTest {
 
 	@Test
 	public void test1() throws Exception {
 		// String s = new ResourceSPARQLQueryBuilder("fr/sparna/rdf/sesame/toolkit/query/builder/test.rq").getSPARQL();
-		String s = new SPARQLQueryBuilder(this, "test.rq").getSPARQL();
+		String s = new SparqlQueryBuilder(this, "test.rq").getSPARQL();
 		Assert.assertTrue(s != null);
 	}
 	
@@ -54,7 +54,7 @@ public class SPARQLQueryBuilderTest {
 		
 		final Literal literal = r.getValueFactory().createLiteral(new Date());
 		
-		SPARQLQuery q = new SPARQLQuery(
+		SparqlQuery q = new SparqlQuery(
 				buffer.toString(),
 				new HashMap<String, Object>() {{
 					put("modificationDate", literal);

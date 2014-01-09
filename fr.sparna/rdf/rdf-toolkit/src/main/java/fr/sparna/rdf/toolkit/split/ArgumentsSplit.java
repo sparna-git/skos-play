@@ -1,5 +1,7 @@
 package fr.sparna.rdf.toolkit.split;
 
+import java.util.List;
+
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
@@ -7,18 +9,19 @@ import com.beust.jcommander.Parameters;
 public class ArgumentsSplit {
 
 	@Parameter(
-			names = "-i",
-			description = "SKOS file, directory or config file to print",
-			required = true
-	)
-	private String input;
+			names = { "-i", "--input" },
+			description = "RDF files, directory, endpoint URL, or Spring config",
+			required = true,
+			variableArity = true
+	) 
+	private List<String> input;
 
-	public String getInput() {
+	public List<String> getInput() {
 		return input;
 	}
 
-	public void setInput(String input) {
+	public void setInput(List<String> input) {
 		this.input = input;
 	}
-	
+
 }

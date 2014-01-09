@@ -13,7 +13,7 @@ import org.openrdf.rio.RDFHandler;
 import org.openrdf.rio.RDFHandlerException;
 
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryTransaction;
-import fr.sparna.rdf.sesame.toolkit.util.URIUtil;
+import fr.sparna.rdf.sesame.toolkit.util.UriUtil;
 
 /**
  * A handler that copies the resulting statements to a target repository. If the target repository
@@ -73,7 +73,7 @@ public class CopyStatementRDFHandler implements RDFHandler {
 		}
 		// on traduit les URIs des graphes cibles en Value Sesame
 		// une bonne fois pour toute
-		this.targetGraphsResources = URIUtil.toResourceArray(this.targetGraphs, this.targetRepository.getValueFactory());
+		this.targetGraphsResources = UriUtil.toResourceArray(this.targetGraphs, this.targetRepository.getValueFactory());
 		// for the moment we don't have results, reset the number and keep it in previous count
 		this.previousResultStatementsCount = this.resultStatementsCount;
 		this.resultStatementsCount = 0;
@@ -137,7 +137,7 @@ public class CopyStatementRDFHandler implements RDFHandler {
 
 	/**
 	 * After handling the result of a query, returns the number of statements processed.
-	 * <p>This is used in the {@link fr.sparna.rdf.sesame.toolkit.util.SimpleSPARQLInferenceEngine SimpleSPARQLInferenceEngine}
+	 * <p>This is used in the {@link fr.sparna.rdf.sesame.toolkit.util.SimpleSparqlInferenceEngine SimpleSparqlInferenceEngine}
 	 * 
 	 * @return the number of processed statements
 	 */
@@ -149,7 +149,7 @@ public class CopyStatementRDFHandler implements RDFHandler {
 	 * Returns the number of statements handled by this instance the previous time it was used.
 	 * The previous number of statements is initiazed to the last number of statements processed in the
 	 * startRDF method.
-	 * <p><p>This is used in the {@link fr.sparna.rdf.sesame.toolkit.util.SimpleSPARQLInferenceEngine SimpleSPARQLInferenceEngine}
+	 * <p><p>This is used in the {@link fr.sparna.rdf.sesame.toolkit.util.SimpleSparqlInferenceEngine SimpleSparqlInferenceEngine}
 	 * 
 	 * @return the number of processed statements the previous time this handler was used
 	 */

@@ -26,38 +26,38 @@ import fr.sparna.rdf.sesame.toolkit.bd.BoundedDescriptionGeneratorIfc;
 import fr.sparna.rdf.sesame.toolkit.bd.BoundedDescriptionHandlerAdapter;
 import fr.sparna.rdf.sesame.toolkit.bd.ConciseBoundedDescriptionGenerator;
 import fr.sparna.rdf.sesame.toolkit.bd.LabeledConciseBoundedDescriptionGenerator;
-import fr.sparna.rdf.sesame.toolkit.handler.CSVHandler;
+import fr.sparna.rdf.sesame.toolkit.handler.CsvHandler;
 import fr.sparna.rdf.sesame.toolkit.handler.CopyStatementRDFHandler;
 import fr.sparna.rdf.sesame.toolkit.handler.CountStatementHandler;
 import fr.sparna.rdf.sesame.toolkit.handler.DebugHandler;
 import fr.sparna.rdf.sesame.toolkit.handler.MultipleRDFHandler;
 import fr.sparna.rdf.sesame.toolkit.handler.SplittingRDFHandler;
-import fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelper;
+import fr.sparna.rdf.sesame.toolkit.query.ConstructSparqlHelper;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLUpdate;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlUpdate;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
 import fr.sparna.rdf.sesame.toolkit.query.builder.OrderBy;
-import fr.sparna.rdf.sesame.toolkit.query.builder.PagingSPARQLQueryBuilder;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
+import fr.sparna.rdf.sesame.toolkit.query.builder.PagingSparqlQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 import fr.sparna.rdf.sesame.toolkit.repository.ConfigRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.EndpointRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.FactoryConfiguration;
-import fr.sparna.rdf.sesame.toolkit.repository.OWLIMConfigProvider;
+import fr.sparna.rdf.sesame.toolkit.repository.OwlimConfigProvider;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryException;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.ApplyUpdates;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.InferFromSPARQL;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.InferFromSparql;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromSPARQL;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromSparql;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromStream;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromString;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromURL;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromXML;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromUrl;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromXml;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.ThreadedRepositoryOperation;
 import fr.sparna.rdf.sesame.toolkit.util.Namespaces;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
@@ -68,8 +68,8 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
  * <a href="#section1">RepositoryBuilder : easily create Sesame repositories</a><br />
  * <a href="#section2">RepositoryOperationIfc : load data when a repository is created</a><br />
  * <a href="#section3">RepositoryFactoryIfc : create other types of Repositories</a><br />
- * <a href="#section4">SPARQLQueryBuilderIfc : read SPARQL queries from different sources</a><br />
- * <a href="#section5">SPARQLQueryIfc : create SPARQL queries</a><br />
+ * <a href="#section4">SparqlQueryBuilderIfc : read SPARQL queries from different sources</a><br />
+ * <a href="#section5">SparqlQueryIfc : create SPARQL queries</a><br />
  * <a href="#section6">Perform and helpers : execute SPARQL queries</a><br />
  * <a href="#section7">Handlers : some utility handlers</a><br />
  * <a href="#section8">Utilities</a><br />
@@ -127,19 +127,19 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
  * <li>
  * 		Basic operations are {@link fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory},
  * 		{@link fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromString} to load inline RDF data,
- * 		{@link fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromURL} to load data from a URL, and
+ * 		{@link fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromUrl} to load data from a URL, and
  * 		{@link fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromStream} that can be used to load RDF data from
  * 		a resource on the classpath.
  * 		{@.jcite -- basicOperations1}
  * </li>
  * <li>
- * 		The {@link fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromSPARQL} operation executes a serie of
+ * 		The {@link fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromSparql} operation executes a serie of
  * 		SPARQL CONSTRUCT queries read from a directory on a given endpoint, and loads the resulting triples in
  * 		the constructed Repository
  * 		{@.jcite -- loadFromSPARQL1}
  * </li>
  * <li>
- * 		The {@link fr.sparna.rdf.sesame.toolkit.repository.operation.InferFromSPARQL} operation applies recursively a serie of
+ * 		The {@link fr.sparna.rdf.sesame.toolkit.repository.operation.InferFromSparql} operation applies recursively a serie of
  * 		SPARQL CONSTRUCT queries on the source repository and saves the resulting triples in the repository, until no additionnal results are found.
  * 		{@.jcite -- inferFromSPARQL1}
  * </li>
@@ -149,7 +149,7 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
  * 		{@.jcite -- applyUpdates1}
  * </li>
  * <li>
- * 		The {@link fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromXML} operation applies an XSL transformation
+ * 		The {@link fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromXml} operation applies an XSL transformation
  * 		onto an XML file or a list of XML files contained in a given directory, to produce RDF/XML and then load it in the repository;
  * 		{@.jcite -- loadFromXML1}
  * </li>
@@ -200,39 +200,39 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
  * <a id="section4" />
  * <br /> 
  * </li><!-- end RepositoryFactoryIfc -->
- * <li><b>SPARQLQueryBuilderIfc : reads SPARQL queries from different sources</b>
+ * <li><b>SparqlQueryBuilderIfc : reads SPARQL queries from different sources</b>
  * <p>A {@link fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc} is an abstraction for anything capable or returning
  * a SPARQL query as a String. The query could be read from a file or build programmaticaly depending on the implementation.
  * </p>
  * <ol>
  * <li>
- * 		The base implemention is {@link fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder} that allows
+ * 		The base implemention is {@link fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder} that allows
  * 		to construct SPARQL queries from String, File, InputStream, classpath Resources.
  * 		{@.jcite -- queryBuilder1}
  * </li>
  * <li>
- * 		{@link fr.sparna.rdf.sesame.toolkit.query.builder.PagingSPARQLQueryBuilder} wraps another SparqlQueryBuilderIfc and
+ * 		{@link fr.sparna.rdf.sesame.toolkit.query.builder.PagingSparqlQueryBuilder} wraps another SparqlQueryBuilderIfc and
  * 		adds LIMIT, OFFSET and ORDER BY clauses to it
  * 		{@.jcite -- pagingSparqlQueryBuilder1}
  * </li>
  * </ol> 
  * <a id="section5" />
  * <br />
- * </li><!-- end SPARQLQueryBuilderIfc -->
- * <li><b>SPARQLQueryIfc : create SPARQL queries</b>
+ * </li><!-- end SparqlQueryBuilderIfc -->
+ * <li><b>SparqlQueryIfc : create SPARQL queries</b>
  * <p>
- * 		{@link fr.sparna.rdf.sesame.toolkit.query.SPARQLQueryIfc}s represents a SPARQL query along with all its
+ * 		{@link fr.sparna.rdf.sesame.toolkit.query.SparqlQueryIfc}s represents a SPARQL query along with all its
  * 		execution parameters :<br />
  *		- The SPARQL query itself as a String;<br />
  *		- The variable bindings of the query;<br />
  *		- The default graph on which the query will be executed;<br />
  *		- The available named graph in the query;<br />
  *		<br/>
- *		{@link fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery} is a concrete implementation of SPARQLQueryIfc that
+ *		{@link fr.sparna.rdf.sesame.toolkit.query.SparqlQuery} is a concrete implementation of SparqlQueryIfc that
  *		uses a {@link fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc} to return the SPARQL String.
  *		<br/>
- *		{@link fr.sparna.rdf.sesame.toolkit.query.SPARQLUpdateIfc} and its concrete implementation
- *		{@link fr.sparna.rdf.sesame.toolkit.query.SPARQLUpdate} are subclasses of SPARQLQuery with the additionnal following parameters :
+ *		{@link fr.sparna.rdf.sesame.toolkit.query.SparqlUpdateIfc} and its concrete implementation
+ *		{@link fr.sparna.rdf.sesame.toolkit.query.SparqlUpdate} are subclasses of SparqlQuery with the additionnal following parameters :
  *		- The default insert graph in which triples will be inserted;<br />
  *		- The default graphs in which triples will be deleted.<br />
  * </p>
@@ -252,13 +252,13 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
  * </ol>
  * <a id="section6" />
  * <br />
- * </li><!-- end SPARQLQueryIfc -->
+ * </li><!-- end SparqlQueryIfc -->
  * <li><b>Perform and helpers : execute SPARQL queries</b>
  * <p>
- * 	{@link fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperIfc} and {@link fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelperIfc} represents
+ * 	{@link fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperIfc} and {@link fr.sparna.rdf.sesame.toolkit.query.ConstructSparqlHelperIfc} represents
  * 	the association of a SPARQL query and of the code capable of processing the result of the query. In other words,
- * 	a SelectSPARQLHelperIfc is the composition of a SPARQLQueryIfc + a TupleQueryResultHandler from Sesame, and a ConstructSPARQLHelperIfc
- * 	is the composition of a SPARQLQueryIfc + a RDFHandler from Sesame.
+ * 	a SelectSparqlHelperIfc is the composition of a SparqlQueryIfc + a TupleQueryResultHandler from Sesame, and a ConstructSparqlHelperIfc
+ * 	is the composition of a SparqlQueryIfc + a RDFHandler from Sesame.
  * </p>
  * <p>
  * 	Both of these abstractions can be passed to a {@link fr.sparna.rdf.sesame.toolkit.query.Perform} to be executed.
@@ -267,30 +267,30 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
  * </p>
  * <ol>
  * <li>
- * 		Simple cases with a SPARQL query as a String are easily adressed by constructing a SelectSPARQLHelper with the String, associate the appropriate
+ * 		Simple cases with a SPARQL query as a String are easily adressed by constructing a SelectSparqlHelper with the String, associate the appropriate
  * 		TupleQueryResultHandler, and pass them to the Perform class. The "on(Repository)" static method tells the Perform class to execute the query
  * 		on the given Repository.<br />
- * 		You need to catch {@link fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException} when performing
+ * 		You need to catch {@link fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException} when performing
  * 		a SPARQL query.
  * 		{@.jcite -- perform1}
  * </li>
  * <li>
- * 		Here is another example where the SPARQLQuery is constructed inline.
+ * 		Here is another example where the SparqlQuery is constructed inline.
  * 		{@.jcite -- perform2}
  * </li>
  * <li>
- * 		The Perform object can be configured with the same parameters as a SPARQLQueryIfc : 
+ * 		The Perform object can be configured with the same parameters as a SparqlQueryIfc : 
  * 		includeInferred, defaultGraph, namedGraphs, defaultInsertGraph and defaultRemoveGraphs. All queries
  * 		processed by the same Perform instance will be applied the same parameters, unless they are overidden
- * 		in the SPARQLQuery itself.
+ * 		in the SparqlQuery itself.
  * 		{@.jcite -- perform3}
  * </li>
  * <li>
- * 		{@link fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperIfc} comes in two implementations : 
- *  	{@link fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper} is a simple composition subclass to use most of the time, and
- *  	{@link fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase} is used when you want to create subclasses. The same goes
- *  	with the implementations of {@link fr.sparna.rdf.sesame.toolkit.query.ConstructSPARQLHelperIfc}.<br />
- * 		Here is an example using SelectSPARQLHelperBase to work with subclasses instead of composition
+ * 		{@link fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperIfc} comes in two implementations : 
+ *  	{@link fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper} is a simple composition subclass to use most of the time, and
+ *  	{@link fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase} is used when you want to create subclasses. The same goes
+ *  	with the implementations of {@link fr.sparna.rdf.sesame.toolkit.query.ConstructSparqlHelperIfc}.<br />
+ * 		Here is an example using SelectSparqlHelperBase to work with subclasses instead of composition
  * 		{@.jcite -- selectSPARQLHelperBase1}
  * </li>
  * <li>
@@ -300,7 +300,7 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
  * </ol>
  * <a id="section7" />
  * <br />
- * </li><!-- end SelectSPARQLHelperIfc, ConstructSPARQLHelperIfc -->
+ * </li><!-- end SelectSparqlHelperIfc, ConstructSparqlHelperIfc -->
  * <li><b>TupleQueryResultHandler and RDFHandler</b>
  * <p>
  * 		Some useful Handlers are also provided
@@ -311,7 +311,7 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
  * 		or on a given OutputStream. See the previous examples.
  * </li>
  * <li>
- * 		The {@link fr.sparna.rdf.sesame.toolkit.handler.CSVHandler} generates a Comma Separated Value file
+ * 		The {@link fr.sparna.rdf.sesame.toolkit.handler.CsvHandler} generates a Comma Separated Value file
  * 		from the result of a SPARQL SELECT query.
  * 		{@.jcite -- csvHandler1}
  * </li>
@@ -430,7 +430,7 @@ public class Documentation {
 		// to load from inline RDF data
 		builder.addOperation(new LoadFromString("@prefix foo: <http://www.foo.com/> foo:A foo:B foo:C . foo:A foo:D \"A name\"@en"));
 		// to load from a URL
-		builder.addOperation(new LoadFromURL(new URL("http://dbpedia.org/resource/Berlin")));
+		builder.addOperation(new LoadFromUrl(new URL("http://dbpedia.org/resource/Berlin")));
 		// to load from a classpath resource. RDF Format is deduced with the resource file extension
 		Object anyObject = null;
 		builder.addOperation(new LoadFromStream(anyObject, "path/to/resource.ttl"));
@@ -441,7 +441,7 @@ public class Documentation {
 		// -- loadFromSPARQL1
 		String endpointURL = "http://dbpedia.org/sparql";
 		File directoryContainingSPARQL = new File("/path/to/directory/containing/sparql/construct/queries");
-		RepositoryBuilder builder = new RepositoryBuilder(new LoadFromSPARQL(RepositoryBuilder.fromString(endpointURL), directoryContainingSPARQL));
+		RepositoryBuilder builder = new RepositoryBuilder(new LoadFromSparql(RepositoryBuilder.fromString(endpointURL), directoryContainingSPARQL));
 		Repository r = builder.createNewRepository();
 		// -- loadFromSPARQL1
 	}
@@ -449,7 +449,7 @@ public class Documentation {
 	private static void inferFromSPARQL1() throws Exception {
 		// -- inferFromSPARQL1
 		File directoryContainingSPARQL = new File("/path/to/directory/containing/sparql/construct/queries");
-		RepositoryBuilder builder = new RepositoryBuilder(new InferFromSPARQL(directoryContainingSPARQL));
+		RepositoryBuilder builder = new RepositoryBuilder(new InferFromSparql(directoryContainingSPARQL));
 		Repository r = builder.createNewRepository();
 		// -- inferFromSPARQL1
 	}
@@ -460,14 +460,14 @@ public class Documentation {
 		// load from a file or directory
 		builder.addOperation(new LoadFromFileOrDirectory("/path/to/file/or/directory"));
 		// apply updates contained in files in a repository
-		builder.addOperation(new ApplyUpdates(SPARQLUpdate.fromUpdateDirectory(new File("/path/to/directory/containing/sparql/updates"))));
+		builder.addOperation(new ApplyUpdates(SparqlUpdate.fromUpdateDirectory(new File("/path/to/directory/containing/sparql/updates"))));
 		// -- applyUpdates1
 	}
 	
 	private static void loadFromXML1() throws Exception {
 		// -- loadFromXML1
 		File directoryContainingSPARQL = new File("/path/to/directory/containing/sparql/construct/queries");
-		LoadFromXML operation = new LoadFromXML(
+		LoadFromXml operation = new LoadFromXml(
 				new File("/path/to/xml/file/r/directory"),
 				new File("/path/to/stylesheet")
 		);
@@ -527,9 +527,9 @@ public class Documentation {
 	private static void configRepositoryFactory1() throws Exception {
 		// -- configRepositoryFactory1
 		// to get OWL inference
-		ConfigRepositoryFactory crf = new ConfigRepositoryFactory(OWLIMConfigProvider.OWL_REDUCED_CONFIG_PROVIDER);
+		ConfigRepositoryFactory crf = new ConfigRepositoryFactory(OwlimConfigProvider.OWL_REDUCED_CONFIG_PROVIDER);
 		// to get RDFS inference, use :
-		// ConfigRepositoryFactory crf = new ConfigRepositoryFactory(OWLIMConfigProvider.OWL_REDUCED_CONFIG_PROVIDER);
+		// ConfigRepositoryFactory crf = new ConfigRepositoryFactory(OwlimConfigProvider.OWL_REDUCED_CONFIG_PROVIDER);
 		// you can write your custom RuleSet and load it with :
 		// ConfigRepositoryFactory crf = new ConfigRepositoryFactory("owlim-base.ttl", "/path/to/custom-rulset.pie");
 		RepositoryBuilder builder = new RepositoryBuilder(crf);
@@ -542,15 +542,15 @@ public class Documentation {
 		// -- queryBuilder1
 		// simplest constructor with a String
 		String sparql = "SELECT DISTINCT ?type WHERE { ?x a ?type }";
-		SPARQLQueryBuilder b1 = new SPARQLQueryBuilder(sparql);
+		SparqlQueryBuilder b1 = new SparqlQueryBuilder(sparql);
 		System.out.println(b1.getSPARQL());
 		// reads a SPARQL query from a File
-		SPARQLQueryBuilder b2 = new SPARQLQueryBuilder(new File("/path/to/sparql/file.rq"));
+		SparqlQueryBuilder b2 = new SparqlQueryBuilder(new File("/path/to/sparql/file.rq"));
 		System.out.println(b2.getSPARQL());
 		// reads a SPARQL query from a classpath resource
 		// put the sparql query file in the same java package as the class that is using it
 		Object user = null;
-		SPARQLQueryBuilder b3 = new SPARQLQueryBuilder(user, "myQuery.rq");
+		SparqlQueryBuilder b3 = new SparqlQueryBuilder(user, "myQuery.rq");
 		System.out.println(b2.getSPARQL());
 		// -- queryBuilder1
 	}
@@ -559,13 +559,13 @@ public class Documentation {
 		// -- pagingSparqlQueryBuilder1
 		// simplest implementation of StringSPARQLQueryBuilder
 		String sparql = "SELECT DISTINCT ?type WHERE { ?x a ?type }";
-		SPARQLQueryBuilder b1 = new SPARQLQueryBuilder(sparql);
+		SparqlQueryBuilder b1 = new SparqlQueryBuilder(sparql);
 		System.out.println(b1.getSPARQL());
-		PagingSPARQLQueryBuilder b2 = new PagingSPARQLQueryBuilder(b1, 10, 10);
+		PagingSparqlQueryBuilder b2 = new PagingSparqlQueryBuilder(b1, 10, 10);
 		// should print :
 		// SELECT DISTINCT ?type WHERE { ?x a ?type } OFFSET 10 LIMIT 10
 		System.out.println(b2.getSPARQL());
-		b2 = new PagingSPARQLQueryBuilder(b1, 10, 10, new OrderBy("type", false));
+		b2 = new PagingSparqlQueryBuilder(b1, 10, 10, new OrderBy("type", false));
 		// should print :
 		// SELECT DISTINCT ?type WHERE { ?x a ?type } ORDER BY DESC(?type) OFFSET 10 LIMIT 10
 		System.out.println(b2.getSPARQL());
@@ -575,13 +575,13 @@ public class Documentation {
 	private static void sparqlQuery1() throws Exception {
 		// -- sparqlQuery1
 		// Simple String constructor
-		SPARQLQuery q1 = new SPARQLQuery("SELECT ?x WHERE { ?x a ?type }");
-		// Or use a SPARQLQueryBuilderIfc instead
-		SPARQLQuery q2 = new SPARQLQuery(new SPARQLQueryBuilder(new File("/path/to/file.rq")));
+		SparqlQuery q1 = new SparqlQuery("SELECT ?x WHERE { ?x a ?type }");
+		// Or use a SparqlQueryBuilderIfc instead
+		SparqlQuery q2 = new SparqlQuery(new SparqlQueryBuilder(new File("/path/to/file.rq")));
 		// use the variable bindings to bind the "type" variable to the value "http://xmlns.com/foaf/0.1/Person"
 		// this is equivalent to the query SELECT DISTINCT ?x WHERE { ?x a <http://xmlns.com/foaf/0.1/Person> }
 		// except the original query can be written once and reused with different values each time
-		SPARQLQuery q3 = new SPARQLQuery(
+		SparqlQuery q3 = new SparqlQuery(
 				"SELECT ?x WHERE { ?x a ?type }",
 				new HashMap<String, Object>(){{
 					put("type", java.net.URI.create("http://xmlns.com/foaf/0.1/Person"));
@@ -593,16 +593,16 @@ public class Documentation {
 	private static void sparqlQuery2() throws Exception {
 		// -- sparqlQuery2
 		final Repository r = RepositoryBuilder.fromString("/path/to/rdf/file.ttl");
-		SPARQLQueryBuilderIfc theQuery = new SPARQLQueryBuilder("SELECT ?x WHERE { ?x a ?type }");
+		SparqlQueryBuilderIfc theQuery = new SparqlQueryBuilder("SELECT ?x WHERE { ?x a ?type }");
 		// binding with a java.net.URI
-		SPARQLQuery q = new SPARQLQuery(
+		SparqlQuery q = new SparqlQuery(
 				theQuery,
 				new HashMap<String, Object>(){{
 					put("type", java.net.URI.create("http://xmlns.com/foaf/0.1/Person"));
 				}}
 		);
 		// binding with a Value from the ValueFactory
-		SPARQLQuery q2 = new SPARQLQuery(
+		SparqlQuery q2 = new SparqlQuery(
 				theQuery,
 				new HashMap<String, Object>(){{
 					put("type", r.getValueFactory().createURI("http://xmlns.com/foaf/0.1/Document"));
@@ -616,8 +616,8 @@ public class Documentation {
 		final Repository r = RepositoryBuilder.fromString("/path/to/rdf/file.ttl");
 		try {
 			// Performs the query. The DebugHandler prints the result on the console
-			Perform.on(r).select(new SelectSPARQLHelper("SELECT DISTINCT ?type WHERE { ?x a ?type }", new DebugHandler()));
-		} catch (SPARQLPerformException e) {
+			Perform.on(r).select(new SelectSparqlHelper("SELECT DISTINCT ?type WHERE { ?x a ?type }", new DebugHandler()));
+		} catch (SparqlPerformException e) {
 			e.printStackTrace();
 		}
 		// -- perform1
@@ -627,8 +627,8 @@ public class Documentation {
 		// -- perform2
 		final Repository r = RepositoryBuilder.fromString("/path/to/rdf/file.ttl");
 		// Performs the query. The DebugHandler prints the result on the console
-		Perform.on(r).select(new SelectSPARQLHelper(
-				new SPARQLQuery(
+		Perform.on(r).select(new SelectSparqlHelper(
+				new SparqlQuery(
 						"SELECT ?x WHERE { ?x a ?type }",
 						new HashMap<String, Object>(){{
 							put("type", java.net.URI.create("http://xmlns.com/foaf/0.1/Document"));
@@ -646,11 +646,11 @@ public class Documentation {
 		// overriden in the query itself.
 		perform.setDefaultGraphs(Collections.singleton(java.net.URI.create("http://www.exemple.com/graph#foo")));
 		// this query will be executed in the default graph "http://www.exemple.com/graph#foo"
-		perform.select(new SelectSPARQLHelper("SELECT DISTINCT ?type WHERE { ?x a ?type }", new DebugHandler()));
-		SPARQLQuery q = new SPARQLQuery("SELECT DISTINCT ?type WHERE { ?x a ?type }");
+		perform.select(new SelectSparqlHelper("SELECT DISTINCT ?type WHERE { ?x a ?type }", new DebugHandler()));
+		SparqlQuery q = new SparqlQuery("SELECT DISTINCT ?type WHERE { ?x a ?type }");
 		q.setDefaultGraphs(Collections.singleton(java.net.URI.create("http://www.another.com/graph#bar")));
 		// this query will be executed in the default graph "http://www.another.com/graph#bar"
-		perform.select(new SelectSPARQLHelper(q, new DebugHandler()));
+		perform.select(new SelectSparqlHelper(q, new DebugHandler()));
 		// -- perform3
 	}
 	
@@ -660,12 +660,12 @@ public class Documentation {
 		Perform.on(r).select(new MyHelper());
 	}
 	
-	class MyHelper extends SelectSPARQLHelperBase {
+	class MyHelper extends SelectSparqlHelperBase {
 
 		public MyHelper() {
 			// construct the helper with a SPARQL query coming from a String, a File
 			// or a classpath resource
-			super(new SPARQLQueryBuilder(new File("/path/to/sparql/query.rq")));
+			super(new SparqlQueryBuilder(new File("/path/to/sparql/query.rq")));
 			// could be :
 			// super("SELECT ?x ?label WHERE { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label }");
 		}
@@ -687,8 +687,8 @@ public class Documentation {
 		// -- perform4
 		try {
 			final Repository r = RepositoryBuilder.fromString("/path/to/rdf/directory");
-			Perform.on(r).select(new SelectSPARQLHelper(
-					new SPARQLQuery("SELECT ?x ?label WHERE { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label }"),
+			Perform.on(r).select(new SelectSparqlHelper(
+					new SparqlQuery("SELECT ?x ?label WHERE { ?x <http://www.w3.org/2000/01/rdf-schema#label> ?label }"),
 					
 					new TupleQueryResultHandlerBase() {
 						@Override
@@ -702,7 +702,7 @@ public class Documentation {
 			));
 		} catch (RepositoryFactoryException e) {
 			e.printStackTrace();
-		} catch (SPARQLPerformException e) {
+		} catch (SparqlPerformException e) {
 			e.printStackTrace();
 		}
 		// -- perform4
@@ -712,9 +712,9 @@ public class Documentation {
 		// -- csvHandler1
 		final Repository r = RepositoryBuilder.fromString("/path/to/rdf/file.ttl");
 		// Performs the query, and outputs CSV results in the given file
-		Perform.on(r).select(new SelectSPARQLHelper(
+		Perform.on(r).select(new SelectSparqlHelper(
 				"SELECT DISTINCT ?type WHERE { ?x a ?type }",
-				new CSVHandler(
+				new CsvHandler(
 						new PrintWriter(new FileOutputStream("/path/to/output/file.csv")),
 						// true to add quotes around the values
 						true,
@@ -745,7 +745,7 @@ public class Documentation {
 		final Repository r = RepositoryBuilder.fromString("/path/to/rdf/file.ttl");
 		// Performs the query. and copies resulting triples into a new graph in the repository
 		// this is equivalent to an INSERT ... WHERE ... query
-		Perform.on(r).construct(new ConstructSPARQLHelper(
+		Perform.on(r).construct(new ConstructSparqlHelper(
 				"CONSTRUCT { ?s a <http://www.exemple.com/Adult> } WHERE { ?s <http://www.exemple.com/age> ?age . FILTER(?age > 18) }",
 				new CopyStatementRDFHandler(r, java.net.URI.create("http://www.exemple.com/anotherGraphURI"))
 		));
@@ -764,7 +764,7 @@ public class Documentation {
 						new CopyStatementRDFHandler(r, java.net.URI.create("http://www.exemple.com/anotherGraphURI"))
 				}));
 		// Performs the query. Data gets copied ...
-		Perform.on(r).construct(new ConstructSPARQLHelper(
+		Perform.on(r).construct(new ConstructSparqlHelper(
 				"CONSTRUCT { ?s a <http://www.exemple.com/Adult> } WHERE { ?s <http://www.exemple.com/age> ?age . FILTER(?age > 18) }",
 				h
 		));
@@ -778,7 +778,7 @@ public class Documentation {
 		RepositoryBuilder builder = new RepositoryBuilder();
 		builder.addOperation(new LoadFromFileOrDirectory("/path/to/rdf/file.ttl"));
 		// apply some updates to it
-		builder.addOperation(new ApplyUpdates(SPARQLUpdate.fromUpdateDirectory(new File("/path/to/directory/containing/sparql/updates"))));
+		builder.addOperation(new ApplyUpdates(SparqlUpdate.fromUpdateDirectory(new File("/path/to/directory/containing/sparql/updates"))));
 		Repository r = builder.createNewRepository();
 		// automatically picks up the right RDF format
 		// sorts the statements autoamtically by subject, predicate, and objet
@@ -800,19 +800,19 @@ public class Documentation {
 		// reads RDF files contained in a directory and load them in a repository
 		Repository r = RepositoryBuilder.fromString("/directory/containing/rdf/files");
 		// apply some SPARQL updates on it, by reading a list of *.rq files in another directory
-		ApplyUpdates upd = new ApplyUpdates(SPARQLUpdate.fromUpdateDirectory(new File("/directory/containing/sparql/updates")));
+		ApplyUpdates upd = new ApplyUpdates(SparqlUpdate.fromUpdateDirectory(new File("/directory/containing/sparql/updates")));
 		upd.execute(r);
 		// perform a query on it
-		Perform.on(r).select(new SelectSPARQLHelper(
+		Perform.on(r).select(new SelectSparqlHelper(
 				"SELECT DISTINCT ?type WHERE { [] a ?type }",
 				// will print result on the console
 				new DebugHandler()
 		));
 		// perform another query coming from a file
-		Perform.on(r).select(new SelectSPARQLHelper(
-				new SPARQLQueryBuilder(new File("/path/to/sparql/file.rq")),
+		Perform.on(r).select(new SelectSparqlHelper(
+				new SparqlQueryBuilder(new File("/path/to/sparql/file.rq")),
 				// will output result in a CSV file
-				new CSVHandler(new PrintWriter(new File("/path/to/output/file.csv")))
+				new CsvHandler(new PrintWriter(new File("/path/to/output/file.csv")))
 		));
 		// output repository content (with updates applied) in another single file
 		RepositoryWriter.writeToFile("/path/to/output/file.ttl", r);
@@ -828,7 +828,7 @@ public class Documentation {
 		RepositoryConnection connection = r.getConnection();
 		
 		// perform a query on it
-		TupleQueryResult tqr = Perform.on(connection).selectResult(new SPARQLQuery(
+		TupleQueryResult tqr = Perform.on(connection).selectResult(new SparqlQuery(
 				"SELECT DISTINCT ?type WHERE { [] a ?type }"
 		));
 		// process result
@@ -842,7 +842,7 @@ public class Documentation {
 	
 	private static void testCustomFunction(Repository repository) throws Exception {
 		Perform.on(repository).select(
-				new SelectSPARQLHelper(
+				new SelectSparqlHelper(
 						"PREFIX sparna:<http://www.sparna.fr/rdf/sesame/toolkit/functions#> " +
 						"SELECT ?x ?label ?score WHERE {" +
 						" ?x <http://www.w3.org/2004/02/skos/core#prefLabel> ?label ." +

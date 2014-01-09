@@ -7,8 +7,8 @@ import org.openrdf.model.Resource;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerException;
 
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 
 /**
  * Return the list of all broader concepts of a given concept, optionally ordered by their label in a given language.
@@ -18,7 +18,7 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderIfc;
  * @author Thomas Francart
  */
 @SuppressWarnings("serial")
-public abstract class GetBroadersHelper extends SelectSPARQLHelperBase {
+public abstract class GetBroadersHelper extends SelectSparqlHelperBase {
 
 	/**
 	 * @param conceptURI URI of the concept for which we want the broaders (optionnaly null to get all pairs [?concept;?broader]
@@ -68,7 +68,7 @@ public abstract class GetBroadersHelper extends SelectSPARQLHelperBase {
 	 * 
 	 * @author Thomas Francart
 	 */
-	public static class QueryBuilder implements SPARQLQueryBuilderIfc {
+	public static class QueryBuilder implements SparqlQueryBuilderIfc {
 
 		private String orderByLang = null;		
 

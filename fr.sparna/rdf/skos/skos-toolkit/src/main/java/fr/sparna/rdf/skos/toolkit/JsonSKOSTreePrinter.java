@@ -21,9 +21,9 @@ import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
 import fr.sparna.commons.tree.GenericTreeVisitorException;
 import fr.sparna.commons.tree.GenericTreeVisitorIfc;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLUpdate;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilderList;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlUpdate;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderList;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.ApplyUpdates;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
@@ -40,14 +40,14 @@ public class JsonSKOSTreePrinter {
 	}
 	
 	public String printToString(GenericTree<SKOSTreeNode> tree) 
-	throws SPARQLPerformException, IOException, JsonGenerationException {
+	throws SparqlPerformException, IOException, JsonGenerationException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		print(tree, baos);
 		return baos.toString("UTF-8");
 	}
 	
 	public void print(GenericTree<SKOSTreeNode> tree, OutputStream out) 
-	throws SPARQLPerformException, IOException, JsonGenerationException {
+	throws SparqlPerformException, IOException, JsonGenerationException {
 		JsonFactory jsonF = new JsonFactory();
 		// let's write to the stream, using UTF-8 encoding (only sensible one)
 		JsonGenerator jg = jsonF.createGenerator(out, JsonEncoding.UTF8);
@@ -70,8 +70,8 @@ public class JsonSKOSTreePrinter {
 		jg.close();
 	}
 	
-	private void printConceptRec(GenericTreeNode<SKOSTreeNode> aNode, final JsonGenerator jg, Map<URI, List<Value>> labels) 
-	throws SPARQLPerformException, JsonGenerationException, IOException {
+	private void printConceptRec(GenericTreeNode<SKOSTreeNode> aNode, final JsonGenerator jg, Map<URI, List<Value	>> labels) 
+	throws SparqlPerformException, JsonGenerationException, IOException {
 		
 		jg.writeStartObject();
 		// write URI
@@ -129,7 +129,7 @@ public class JsonSKOSTreePrinter {
 				"test:_3 a skos:Concept ; skos:prefLabel \"B\"@fr; skos:broader test:_1 ."
 		);
 		
-		ApplyUpdates au = new ApplyUpdates(SPARQLUpdate.fromUpdateList(SPARQLQueryBuilderList.fromClasspathDirectory("rules/inference-lite")));
+		ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SparqlQueryBuilderList.fromClasspathDirectory("rules/inference-lite")));
 		au.execute(r);
 		
 		RepositoryWriter.writeToFile("output.ttl", r);
@@ -143,7 +143,7 @@ public class JsonSKOSTreePrinter {
 //		JsonSKOSTreePrinter jsonPrinter = new JsonSKOSTreePrinter(new LabelReader(r, "fr"));
 //		System.out.println(jsonPrinter.printToString(trees.get(0)));
 		
-//		Perform.on(r).select(new SelectSPARQLHelper(
+//		Perform.on(r).select(new SelectSparqlHelper(
 //				"SELECT ?uri ?label WHERE { ?uri <"+SKOS.PREF_LABEL+"> ?label . } VALUES ?uri { <http://www.test.fr/skos/_1> <http://www.test.fr/skos/_2> }",
 //				new DebugHandler()
 //		));

@@ -11,7 +11,7 @@
 
 	<groupId>fr.sparna.rdf</groupId>
 	<artifactId>rdf-toolkit</artifactId>
-	<version>0.32-SNAPSHOT</version>
+	<version>0.33-SNAPSHOT</version>
 
 	<name>Sparna RDF : rdf-toolkit</name>
 	<description>Command-line utilities to manipulate RDF data</description>

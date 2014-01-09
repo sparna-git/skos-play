@@ -12,8 +12,8 @@ import org.openrdf.sail.memory.MemoryStore;
 
 import fr.sparna.rdf.sesame.toolkit.handler.DebugHandler;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSPARQLHelper;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
 
 public class ValuesSPARQLQueryBuilderTest {
 
@@ -24,13 +24,13 @@ public class ValuesSPARQLQueryBuilderTest {
 		Repository r = new SailRepository(new MemoryStore());
 		r.initialize();
 		
-		ValuesSPARQLQueryBuilder builder = new ValuesSPARQLQueryBuilder(
-				new SPARQLQueryBuilder(sparql),
+		ValuesSparqlQueryBuilder builder = new ValuesSparqlQueryBuilder(
+				new SparqlQueryBuilder(sparql),
 				"x",
 				Arrays.asList(new Value[] { r.getValueFactory().createURI("http://www.exemple.fr")})
 		);
 		System.out.println(builder.getSPARQL());
-		Perform.on(r).select(new SelectSPARQLHelper(builder, new DebugHandler()));
+		Perform.on(r).select(new SelectSparqlHelper(builder, new DebugHandler()));
 	}
 	
 }

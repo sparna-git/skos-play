@@ -7,12 +7,12 @@ import java.util.List;
 import org.openrdf.repository.Repository;
 
 import fr.sparna.commons.io.FileUtil;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLQuery;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLQueryIfc;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SPARQLQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlQueryIfc;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.AutoDetectRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
-import fr.sparna.rdf.sesame.toolkit.util.SimpleSPARQLInferenceEngine;
+import fr.sparna.rdf.sesame.toolkit.util.SimpleSparqlInferenceEngine;
 import fr.sparna.rdf.toolkit.ToolkitCommandIfc;
 
 public class InferSPARQL implements ToolkitCommandIfc {
@@ -26,14 +26,14 @@ public class InferSPARQL implements ToolkitCommandIfc {
 		Repository inputRepository = new AutoDetectRepositoryFactory(args.getInput()).createNewRepository();
 
 		// init rules
-		List<SPARQLQueryIfc> helpers = new ArrayList<SPARQLQueryIfc>();
+		List<SparqlQueryIfc> helpers = new ArrayList<SparqlQueryIfc>();
 		List<File> sparqls = FileUtil.listFilesRecursive(args.getQueryDirectory());
 		for (final File file : sparqls) {
-			helpers.add(new SPARQLQuery(new SPARQLQueryBuilder(file)));
+			helpers.add(new SparqlQuery(new SparqlQueryBuilder(file)));
 		}
 		
 		// init inference engine
-		SimpleSPARQLInferenceEngine engine = new SimpleSPARQLInferenceEngine(
+		SimpleSparqlInferenceEngine engine = new SimpleSparqlInferenceEngine(
 				inputRepository,
 				helpers
 		);

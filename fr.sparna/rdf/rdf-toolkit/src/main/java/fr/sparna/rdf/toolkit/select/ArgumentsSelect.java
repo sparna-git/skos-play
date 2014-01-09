@@ -18,6 +18,7 @@ public class ArgumentsSelect {
 	@Parameter(
 			names = { "-i", "--input" },
 			description = "RDF files, directory, endpoint URL, or Spring config",
+			required = true,
 			variableArity = true
 	)
 	private List<String> input;
