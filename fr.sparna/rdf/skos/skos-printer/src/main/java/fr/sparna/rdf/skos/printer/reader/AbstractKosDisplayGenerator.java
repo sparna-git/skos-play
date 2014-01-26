@@ -35,7 +35,7 @@ public abstract class AbstractKosDisplayGenerator {
 		this(repository, UUID.randomUUID().toString());
 	}
 
-	public KosDisplay generateDisplay(String mainLang, final URI conceptScheme, BodyReader bodyReader) 
+	public KosDisplay generateDisplay(String mainLang, final URI conceptScheme) 
 	throws SparqlPerformException {
 		// prevent null language
 		if(mainLang == null) {
@@ -45,7 +45,7 @@ public abstract class AbstractKosDisplayGenerator {
 		this.initTagsBundle(mainLang);
 		
 		// sets the ID on the generated display and return
-		KosDisplay display = this.doGenerate(mainLang, conceptScheme, bodyReader);
+		KosDisplay display = this.doGenerate(mainLang, conceptScheme);
 		display.setDisplayId(this.displayId);
 		return display;
 	}
@@ -57,7 +57,7 @@ public abstract class AbstractKosDisplayGenerator {
 		}
 	}
 	
-	protected abstract KosDisplay doGenerate(String mainLang, final URI conceptScheme, BodyReader bodyReader)
+	protected abstract KosDisplay doGenerate(String mainLang, final URI conceptScheme)
 	throws SparqlPerformException ;
 
 	public String getDisplayId() {

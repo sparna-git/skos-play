@@ -11,12 +11,12 @@ import org.openrdf.query.BindingSet;
  * @author Thomas Francart
  *
  */
-public class UriToURIBindingSetReader implements KeyValueBindingSetReaderIfc<URI, URI> {
+public class UriToUriBindingSetReader implements KeyValueBindingSetReaderIfc<URI, URI> {
 
 	protected String keyVarName;
 	protected String valueVarName;
 	
-	public UriToURIBindingSetReader(String keyVarName, String valueVarName) {
+	public UriToUriBindingSetReader(String keyVarName, String valueVarName) {
 		super();
 		this.keyVarName = keyVarName;
 		this.valueVarName = valueVarName;

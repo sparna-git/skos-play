@@ -11,7 +11,7 @@ import org.openrdf.model.URI;
  * @author Thomas Francart
  *
  */
-public class UriMappingGenerator implements KeyMappingGeneratorIfc<URI> {
+public class UriKeyMappingGenerator implements KeyMappingGeneratorIfc<URI> {
 
 	protected String varName;
 
@@ -19,7 +19,7 @@ public class UriMappingGenerator implements KeyMappingGeneratorIfc<URI> {
 	 * 
 	 * @param varName the name of the query variable to which values will be bounded
 	 */
-	public UriMappingGenerator(String varName) {
+	public UriKeyMappingGenerator(String varName) {
 		super();
 		this.varName = varName;
 	}

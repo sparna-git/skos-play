@@ -32,7 +32,6 @@ import fr.sparna.rdf.skos.printer.schema.KwicEntry;
 import fr.sparna.rdf.skos.printer.schema.KwicIndex;
 import fr.sparna.rdf.skos.printer.schema.Label;
 import fr.sparna.rdf.skos.printer.schema.Section;
-import fr.sparna.rdf.skos.printer.schema.StyledString;
 import fr.sparna.rdf.skos.toolkit.GetLabelsInSchemeHelper;
 
 public class KwicIndexGenerator extends AbstractKosDisplayGenerator {
@@ -49,7 +48,7 @@ public class KwicIndexGenerator extends AbstractKosDisplayGenerator {
 	}
 	
 	@Override
-	protected KosDisplay doGenerate(String mainLang, URI conceptScheme, BodyReader bodyReader)
+	protected KosDisplay doGenerate(String mainLang, URI conceptScheme)
 	throws SparqlPerformException {
 		// build our display	
 		KosDisplay d = new KosDisplay();

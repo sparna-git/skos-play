@@ -55,11 +55,11 @@ public class TranslationTableDisplayGenerator extends AbstractKosDisplayGenerato
 	}
 
 	@Override
-	public KosDisplay doGenerate(final String lang, final URI conceptScheme, BodyReader bodyReader) 
+	public KosDisplay doGenerate(final String lang, final URI conceptScheme) 
 	throws SparqlPerformException {
 
 		// init ConceptBlockReader
-		this.cbReader.initInternal(lang, conceptScheme, this.displayId, bodyReader.getMainDisplayId());
+		this.cbReader.initInternal(lang, conceptScheme, this.displayId);
 		
 		// prepare body
 		KosDisplay d = new KosDisplay();
@@ -152,8 +152,16 @@ public class TranslationTableDisplayGenerator extends AbstractKosDisplayGenerato
 			s.setTable(newTable);
 			for (QueryResultRow aRow : queryResultRows) {
 				// siouxerie pour éviter les ID dupliquées dans le cas où un libellé serait le même dans les 2 langues
-				ConceptBlock cb1 = cbReader.readConceptBlock(aRow.conceptURI, aRow.label1, cbReader.computeConceptBlockId(aRow.conceptURI, aRow.label1+"-"+lang), true);
-				ConceptBlock cb2 = cbReader.readConceptBlock(aRow.conceptURI, aRow.label2, cbReader.computeConceptBlockId(aRow.conceptURI, aRow.label2+"-"+this.targetLanguage), true);
+				ConceptBlock cb1 = cbReader.readConceptBlock(
+						aRow.conceptURI,
+						aRow.label1,
+						cbReader.computeConceptBlockId(aRow.conceptURI, aRow.label1+"-"+lang),
+						true);
+				ConceptBlock cb2 = cbReader.readConceptBlock(
+						aRow.conceptURI,
+						aRow.label2,
+						cbReader.computeConceptBlockId(aRow.conceptURI, aRow.label2+"-"+this.targetLanguage),
+						true);
 				newTable.getRow().add(SchemaFactory.createRow(cb1, cb2));
 			}
 			d.getSection().add(s);

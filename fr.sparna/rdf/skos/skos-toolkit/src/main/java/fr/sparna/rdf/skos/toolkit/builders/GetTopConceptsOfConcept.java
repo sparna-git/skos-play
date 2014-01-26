@@ -5,8 +5,8 @@ import org.openrdf.model.URI;
 import fr.sparna.rdf.sesame.toolkit.reader.KeyMappingGeneratorIfc;
 import fr.sparna.rdf.sesame.toolkit.reader.KeyValueBindingSetReaderIfc;
 import fr.sparna.rdf.sesame.toolkit.reader.KeyValueSparqlQueryBuilder;
-import fr.sparna.rdf.sesame.toolkit.reader.UriMappingGenerator;
-import fr.sparna.rdf.sesame.toolkit.reader.UriToURIBindingSetReader;
+import fr.sparna.rdf.sesame.toolkit.reader.UriKeyMappingGenerator;
+import fr.sparna.rdf.sesame.toolkit.reader.UriToUriBindingSetReader;
 import fr.sparna.rdf.skos.toolkit.SKOS;
 
 /**
@@ -48,12 +48,12 @@ public class GetTopConceptsOfConcept extends KeyValueSparqlQueryBuilder<URI, URI
 
 	@Override
 	public KeyMappingGeneratorIfc<URI> getKeyMappingGenerator() {
-		return new UriMappingGenerator(KEY_VAR_NAME);
+		return new UriKeyMappingGenerator(KEY_VAR_NAME);
 	}
 
 	@Override
 	public KeyValueBindingSetReaderIfc<URI, URI> getKeyValueBindingSetReader() {
-		return new UriToURIBindingSetReader(KEY_VAR_NAME, VALUE_VAR_NAME);
+		return new UriToUriBindingSetReader(KEY_VAR_NAME, VALUE_VAR_NAME);
 	}
 	
 }

@@ -63,11 +63,11 @@ public class ConceptListDisplayGenerator extends AbstractKosDisplayGenerator {
 	}
 
 	@Override
-	public KosDisplay doGenerate(final String lang, final URI conceptScheme, BodyReader bodyReader) 
+	public KosDisplay doGenerate(final String lang, final URI conceptScheme) 
 	throws SparqlPerformException {
 
 		// init ConceptBlockReader
-		this.cbReader.initInternal(lang, conceptScheme, this.displayId, bodyReader.getMainDisplayId());
+		this.cbReader.initInternal(lang, conceptScheme, this.displayId);
 		
 		// build our display
 		KosDisplay d = new KosDisplay();
@@ -177,7 +177,9 @@ public class ConceptListDisplayGenerator extends AbstractKosDisplayGenerator {
 		KosDocumentHeader header = headerReader.read("fr", (args.length > 1)?URI.create(args[1]):null);
 		document.setHeader(header);
 		
-		ConceptListDisplayGenerator reader = new ConceptListDisplayGenerator(r, new ConceptBlockReader(r, EXPANDED_SKOS_PROPERTIES));
+		ConceptBlockReader cbReader = new ConceptBlockReader(r);
+		cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES);
+		ConceptListDisplayGenerator reader = new ConceptListDisplayGenerator(r, cbReader);
 		BodyReader bodyReader = new BodyReader(reader);
 		document.setBody(bodyReader.readBody("fr", (args.length > 1)?URI.create(args[1]):null));
 

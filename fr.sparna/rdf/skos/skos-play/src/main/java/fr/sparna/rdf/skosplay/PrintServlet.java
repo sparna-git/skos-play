@@ -190,7 +190,8 @@ public class PrintServlet extends HttpServlet {
 				break;
 			}
 			case ALPHABETICAL_EXPANDED : {			
-				ConceptBlockReader cbr = new ConceptBlockReader(r, AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
+				ConceptBlockReader cbr = new ConceptBlockReader(r);
+				cbr.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
 				cbr.setIncludeTopConcepts(true);
 				bodyReader = new BodyReader(new AlphaIndexDisplayGenerator(r, cbr));
 				break;
@@ -204,7 +205,8 @@ public class PrintServlet extends HttpServlet {
 //				break;
 //			}
 			case CONCEPTLISTING : {
-				ConceptBlockReader cbr = new ConceptBlockReader(r, ConceptListDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
+				ConceptBlockReader cbr = new ConceptBlockReader(r);
+				cbr.setSkosPropertiesToRead(ConceptListDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
 				cbr.setIncludeTopConcepts(true);
 				List<String> additionalLanguages = new ArrayList<String>();
 				for (String aLang : SessionData.get(request.getSession()).getPrintFormData().getLanguages().keySet()) {
@@ -227,7 +229,10 @@ public class PrintServlet extends HttpServlet {
 				List<AbstractKosDisplayGenerator> generators = new ArrayList<AbstractKosDisplayGenerator>();
 					
 				// alphabetical display
-				ConceptBlockReader alphaCbReader = new ConceptBlockReader(r, AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
+				ConceptBlockReader alphaCbReader = new ConceptBlockReader(r);
+				alphaCbReader.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
+				alphaCbReader.setIncludeTopConcepts(true);
+				alphaCbReader.setLinkDestinationIdPrefix("hier");
 				AlphaIndexDisplayGenerator alphaGen = new AlphaIndexDisplayGenerator(
 						r,
 						alphaCbReader,
@@ -236,15 +241,16 @@ public class PrintServlet extends HttpServlet {
 				generators.add(alphaGen);
 				
 				// hierarchical display
+				ConceptBlockReader hierCbReader = new ConceptBlockReader(r);
+				hierCbReader.setLinkDestinationIdPrefix("alpha");
 				HierarchicalDisplayGenerator hierarchyGen = new HierarchicalDisplayGenerator(
 						r,
-						new ConceptBlockReader(r),
+						hierCbReader,
 						"hier"
 				);
 				generators.add(hierarchyGen);
 				
-				bodyReader = new BodyReader(generators, alphaGen.getDisplayId());
-				
+				bodyReader = new BodyReader(generators);				
 				
 				break;
 			}
@@ -262,8 +268,11 @@ public class PrintServlet extends HttpServlet {
 				}
 					
 				// alphabetical display
-				ConceptBlockReader alphaCbReader = new ConceptBlockReader(r, AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
+				ConceptBlockReader alphaCbReader = new ConceptBlockReader(r);
+				alphaCbReader.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
+				alphaCbReader.setIncludeTopConcepts(true);
 				alphaCbReader.setAdditionalLabelLanguagesToInclude(additionalLanguages);
+				alphaCbReader.setLinkDestinationIdPrefix("hier");
 				AlphaIndexDisplayGenerator alphaGen = new AlphaIndexDisplayGenerator(
 						r,
 						alphaCbReader,
@@ -272,9 +281,11 @@ public class PrintServlet extends HttpServlet {
 				generators.add(alphaGen);
 				
 				// hierarchical display
+				ConceptBlockReader hierCbReader = new ConceptBlockReader(r);
+				hierCbReader.setLinkDestinationIdPrefix("alpha");
 				HierarchicalDisplayGenerator hierarchyGen = new HierarchicalDisplayGenerator(
 						r,
-						new ConceptBlockReader(r),
+						hierCbReader,
 						"hier"
 				);
 				generators.add(hierarchyGen);
@@ -282,15 +293,17 @@ public class PrintServlet extends HttpServlet {
 				// add translation tables for each additional languages
 				for (int i=0;i<additionalLanguages.size(); i++) {
 					String anAdditionalLang = additionalLanguages.get(i);
+					ConceptBlockReader aCbReader = new ConceptBlockReader(r);
+					aCbReader.setLinkDestinationIdPrefix("alpha");
 					TranslationTableReverseDisplayGenerator ttGen = new TranslationTableReverseDisplayGenerator(
 							r,
-							new ConceptBlockReader(r),
+							aCbReader,
 							anAdditionalLang,
 							"trans"+i);
 					generators.add(ttGen);
 				}
 				
-				bodyReader = new BodyReader(generators, alphaGen.getDisplayId());
+				bodyReader = new BodyReader(generators);
 				
 				break;
 			}

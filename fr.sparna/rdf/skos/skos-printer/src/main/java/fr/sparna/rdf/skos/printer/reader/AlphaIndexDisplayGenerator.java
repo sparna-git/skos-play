@@ -67,11 +67,11 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 	}
 
 	@Override
-	public KosDisplay doGenerate(String lang, final URI conceptScheme, BodyReader bodyReader) 
+	public KosDisplay doGenerate(String lang, final URI conceptScheme) 
 	throws SparqlPerformException {
 				
 		// init ConceptBlockReader
-		this.cbReader.initInternal(lang, conceptScheme, this.displayId, bodyReader.getMainDisplayId());
+		this.cbReader.initInternal(lang, conceptScheme, this.displayId);
 		
 		// init display
 		KosDisplay d = new KosDisplay();
@@ -197,7 +197,9 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 		KosDocumentHeader header = headerReader.read("en", (args.length > 1)?URI.create(args[1]):null);
 		document.setHeader(header);
 		
-		AlphaIndexDisplayGenerator reader = new AlphaIndexDisplayGenerator(r, new ConceptBlockReader(r, EXPANDED_SKOS_PROPERTIES));
+		ConceptBlockReader cbReader = new ConceptBlockReader(r);
+		cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES);
+		AlphaIndexDisplayGenerator reader = new AlphaIndexDisplayGenerator(r, cbReader);
 		BodyReader bodyReader = new BodyReader(reader);		
 		document.setBody(bodyReader.readBody("en", (args.length > 1)?URI.create(args[1]):null));
 

@@ -161,8 +161,11 @@
 			<xsl:for-each select="ancestor::disp:node">...</xsl:for-each>
 			<xsl:if test="ancestor::disp:node">&#160;</xsl:if>
 			
-			<!-- print its conceptBlock data -->
-			<xsl:apply-templates select="disp:nodeData/disp:conceptBlock/disp:label" />	
+			<!--
+				print its conceptBlock data. Avoid recursing in disp:conceptBlock to avoir generating an fo:block that would
+				print the label after a line break after the indentation
+			 -->
+			<fo:inline id="{disp:nodeData/disp:conceptBlock/@id}"><xsl:apply-templates select="disp:nodeData/disp:conceptBlock/disp:label" /></fo:inline>
 			
 			<!-- recurse -->
 			<xsl:apply-templates select="disp:node" />

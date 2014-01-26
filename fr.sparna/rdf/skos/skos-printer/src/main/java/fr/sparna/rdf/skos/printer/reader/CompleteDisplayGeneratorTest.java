@@ -51,8 +51,10 @@ public class CompleteDisplayGeneratorTest {
 		});
 			
 		// alphabetical display
-		ConceptBlockReader alphaCbReader = new ConceptBlockReader(r, AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
+		ConceptBlockReader alphaCbReader = new ConceptBlockReader(r);
+		alphaCbReader.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
 		alphaCbReader.setAdditionalLabelLanguagesToInclude(additionalLangs);
+		alphaCbReader.setLinkDestinationIdPrefix("hier");
 		AlphaIndexDisplayGenerator alphaGen = new AlphaIndexDisplayGenerator(
 				r,
 				alphaCbReader,
@@ -61,9 +63,11 @@ public class CompleteDisplayGeneratorTest {
 		generators.add(alphaGen);
 		
 		// hierarchical display
+		ConceptBlockReader hierCbReader = new ConceptBlockReader(r);
+		hierCbReader.setLinkDestinationIdPrefix("alpha");
 		HierarchicalDisplayGenerator hierarchyGen = new HierarchicalDisplayGenerator(
 				r,
-				new ConceptBlockReader(r),
+				hierCbReader,
 				"hier"
 		);
 		generators.add(hierarchyGen);
@@ -71,15 +75,17 @@ public class CompleteDisplayGeneratorTest {
 		// add translation tables for each additional languages
 		for (int i=0;i<additionalLangs.size(); i++) {
 			String anAdditionalLang = additionalLangs.get(i);
+			ConceptBlockReader aCbReader = new ConceptBlockReader(r);
+			aCbReader.setLinkDestinationIdPrefix("alpha");
 			TranslationTableReverseDisplayGenerator ttGen = new TranslationTableReverseDisplayGenerator(
 					r,
-					new ConceptBlockReader(r),
+					aCbReader,
 					anAdditionalLang,
 					"trans"+i);
 			generators.add(ttGen);
 		}
 		
-		BodyReader bodyReader = new BodyReader(generators, alphaGen.getDisplayId());
+		BodyReader bodyReader = new BodyReader(generators);
 		document.setBody(bodyReader.readBody("en", (args.length > 1)?URI.create(args[1]):null));
 		
 		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();

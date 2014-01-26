@@ -55,11 +55,11 @@ public class TranslationTableReverseDisplayGenerator extends AbstractKosDisplayG
 	}
 
 	@Override
-	public KosDisplay doGenerate(final String lang, final URI conceptScheme, BodyReader bodyReader) 
+	public KosDisplay doGenerate(final String lang, final URI conceptScheme) 
 	throws SparqlPerformException {
 
 		// init ConceptBlockReader
-		this.cbReader.initInternal(lang, conceptScheme, this.displayId, bodyReader.getMainDisplayId());
+		this.cbReader.initInternal(lang, conceptScheme, this.displayId);
 		
 		// prepare body
 		KosDisplay d = new KosDisplay();
@@ -119,10 +119,13 @@ public class TranslationTableReverseDisplayGenerator extends AbstractKosDisplayG
 		));
 		s.setTable(newTable);
 		for (QueryResultRow aRow : queryResultRows) {
-			// siouxerie pour éviter les ID dupliquées dans le cas où un libellé serait le même dans les 2 langues
-			ConceptBlock cb1 = cbReader.readConceptBlock(aRow.conceptURI, aRow.label2, cbReader.computeConceptBlockId(aRow.conceptURI, aRow.label2+"-"+this.targetLanguage), false);
-			ConceptBlock cb2 = cbReader.readConceptBlock(aRow.conceptURI, aRow.label1, cbReader.computeConceptBlockId(aRow.conceptURI, aRow.label1+"-"+lang), false);
-			newTable.getRow().add(SchemaFactory.createRow(cb1, cb2));
+			// don't display rows that would start with an empty label in the first column
+			if(aRow.label2 != null && !aRow.label2.equals("")) {
+				// siouxerie pour éviter les ID dupliquées dans le cas où un libellé serait le même dans les 2 langues
+				ConceptBlock cb1 = cbReader.readConceptBlock(aRow.conceptURI, aRow.label2, cbReader.computeConceptBlockId(aRow.conceptURI, aRow.label2+"-"+this.targetLanguage), false);
+				ConceptBlock cb2 = cbReader.readConceptBlock(aRow.conceptURI, aRow.label1, cbReader.computeConceptBlockId(aRow.conceptURI, aRow.label1+"-"+lang), false);
+				newTable.getRow().add(SchemaFactory.createRow(cb1, cb2));
+			}
 		}
 		d.getSection().add(s);
 		

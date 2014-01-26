@@ -2,7 +2,6 @@ package fr.sparna.rdf.skos.printer.reader;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -50,42 +49,24 @@ public class ConceptBlockReader {
 	// link prefixes, to make links point to a concept block in another display
 	protected String linkDestinationIdPrefix;
 	
-	public ConceptBlockReader(
-			Repository repository,
-			List<String> skosPropertiesToRead,
-			List<String> additionalLabelLanguagesToInclude
-	) {
-		super();
-		this.repository = repository;
-		this.skosPropertiesToRead = skosPropertiesToRead;
-		this.additionalLabelLanguagesToInclude = additionalLabelLanguagesToInclude;
-	}	
-	
-	public ConceptBlockReader(
-			Repository repository,
-			List<String> skosPropertiesToRead
-	) {
-		this(repository, skosPropertiesToRead, null);
-	}
+	// already generated IDs, to avoid clashes
+	protected List<String> generatedIds = new ArrayList<String>();
 	
 	public ConceptBlockReader(
 			Repository repository
 	) {
-		this(repository, null);
-	}
+		super();
+		this.repository = repository;
+	}	
 	
 	// called by a DisplayGenerator
 	protected void initInternal(
 			String lang,
 			final URI conceptScheme,
-			String conceptBlockIdPrefix,
-			String linkDestinationIdPrefix
+			String conceptBlockIdPrefix
 	) {
 		this.skosTags = SKOSTags.getInstance(lang);
-		this.setIncludeTopConcepts(includeTopConcepts);
-		
 		this.conceptBlockIdPrefix = conceptBlockIdPrefix;
-		this.linkDestinationIdPrefix = linkDestinationIdPrefix;
 		
 		// no concept scheme filtering here - we want to be able to read prefLabel independently from the conceptScheme
 		prefLabelReader = new PropertyReader(
@@ -148,7 +129,7 @@ public class ConceptBlockReader {
 						anAdditionalLang, 
 						new KeyValueReader<UriLang, Literal>(
 								repository,
-								new GetLabels(SKOS.PREF_LABEL, anAdditionalLang, conceptScheme.toString())
+								new GetLabels(SKOS.PREF_LABEL, anAdditionalLang, (conceptScheme != null)?conceptScheme.toString():null)
 						)
 				);
 			}
@@ -159,7 +140,7 @@ public class ConceptBlockReader {
 	throws SparqlPerformException {
 		ConceptBlock cb = SchemaFactory.createConceptBlock(computeConceptBlockId(uri, altLabel), uri, SchemaFactory.createLabel(altLabel, "alt"));
 		cb.getAtt().add(SchemaFactory.createAttLink(
-				computeRefId(uri, prefLabel),
+				computeRefId(uri, prefLabel, true),
 				uri,
 				prefLabel,
 				this.skosTags.getStringForURI(SKOS.PREF_LABEL),
@@ -194,12 +175,14 @@ public class ConceptBlockReader {
 	public ConceptBlock readConceptBlock(final String uri, String prefLabel, String blockId, boolean setLabelAsPref)
 	throws SparqlPerformException {
 		
+		// if we are not in the master section, we will generate a link on the label,
+		// pointing to the corresponding entry in the master section
 		final ConceptBlock cb;
 		if(!this.conceptBlockIdPrefix.equals(this.linkDestinationIdPrefix)) {
 			cb = SchemaFactory.createConceptBlock(
 					blockId,
 					uri,
-					SchemaFactory.createLabelLink(computeRefId(uri, prefLabel), uri, prefLabel, setLabelAsPref?"pref":null)
+					SchemaFactory.createLabelLink(computeRefId(uri, prefLabel, false), uri, prefLabel, setLabelAsPref?"pref":null)
 					);
 		} else {
 			cb = SchemaFactory.createConceptBlock(
@@ -214,15 +197,18 @@ public class ConceptBlockReader {
 			for (Map.Entry<String, KeyValueReader<UriLang, Literal>> anEntry : this.additionalLabelLanguagesReaders.entrySet()) {
 				String lang = anEntry.getKey();
 				
-				cb.getAtt().add(
-						SchemaFactory.createAtt(
-								LabelReader.display(anEntry.getValue().read(new UriLang(uri, lang))),
-								// set the language code as the attribute key
-								lang,
-								null
-						)
-				);
-				
+				String labelInOtherLanguage = LabelReader.display(anEntry.getValue().read(new UriLang(uri, lang)));
+				// don't display if there is no label for this language
+				if(labelInOtherLanguage != null && !labelInOtherLanguage.equals("")) {
+					cb.getAtt().add(
+							SchemaFactory.createAtt(
+									labelInOtherLanguage,
+									// set the language code as the attribute key
+									lang,
+									null
+							)
+					);					
+				}				
 			}
 		}
 		
@@ -244,7 +230,7 @@ public class ConceptBlockReader {
 					String refPrefLabel = (prefs.size() > 0)?prefs.get(0).stringValue():aRef.stringValue();
 					cb.getAtt().add(
 							SchemaFactory.createAttLink(
-									computeRefId(aRef.stringValue(), refPrefLabel),
+									computeRefId(aRef.stringValue(), refPrefLabel, true),
 									aRef.stringValue(),
 									refPrefLabel,
 									this.skosTags.getString(predicateReader.getPropertyURI()),
@@ -260,10 +246,9 @@ public class ConceptBlockReader {
 			for (org.openrdf.model.URI top : tops) {
 				List<Value> prefs = prefLabelReader.read(URI.create(top.stringValue()));
 				String refPrefLabel = (prefs.size() > 0)?prefs.get(0).stringValue():top.stringValue();
-				String entryRef = Integer.toString((top.stringValue()+refPrefLabel).hashCode());
 				cb.getAtt().add(
 					SchemaFactory.createAttLink(
-							entryRef,
+							computeRefId(top.stringValue(), refPrefLabel, true),
 							top.stringValue(),
 							refPrefLabel,
 							skosTags.getString(SKOSTags.KEY_TOP_CONCEPT),
@@ -279,13 +264,21 @@ public class ConceptBlockReader {
 	public String computeConceptBlockId(String uri, String label) {
 		// Generate an ID for this concept block, based on the URI and the prefLabel.
 		// We need to be able to regenerate the same ID when building a reference to this concept
-		String conceptBlockId = ((this.conceptBlockIdPrefix != null)?this.conceptBlockIdPrefix:"")+Integer.toString((uri+label).hashCode());
-		return conceptBlockId;
+		
+		int hashCode = (uri+label).hashCode();
+		String generatedBlockId = ((this.conceptBlockIdPrefix != null)?this.conceptBlockIdPrefix:"")+Integer.toString(hashCode);
+		while(this.generatedIds.contains(generatedBlockId)) {
+			hashCode = hashCode + 1;
+			generatedBlockId = ((this.conceptBlockIdPrefix != null)?this.conceptBlockIdPrefix:"")+Integer.toString(hashCode);
+		}
+		this.generatedIds.add(generatedBlockId);
+		return generatedBlockId;
 	}
 	
-	public String computeRefId(String uri, String label) {
+	public String computeRefId(String uri, String label, boolean isInternalToThisSection) {
 		// recreate the same ID for the concept we are referencing
-		String entryRefId = ((this.linkDestinationIdPrefix != null)?this.linkDestinationIdPrefix:"")+Integer.toString((uri+label).hashCode());	
+		String refPrefix = (isInternalToThisSection)?((this.conceptBlockIdPrefix != null)?this.conceptBlockIdPrefix:""):((this.linkDestinationIdPrefix != null)?this.linkDestinationIdPrefix:"");
+		String entryRefId = refPrefix+Integer.toString((uri+label).hashCode());	
 		return entryRefId;
 	}
 
@@ -315,6 +308,22 @@ public class ConceptBlockReader {
 
 	public void setAdditionalLabelLanguagesToInclude(List<String> additionalLabelLanguagesToInclude) {
 		this.additionalLabelLanguagesToInclude = additionalLabelLanguagesToInclude;
+	}
+
+	public String getConceptBlockIdPrefix() {
+		return conceptBlockIdPrefix;
+	}
+
+	public void setConceptBlockIdPrefix(String conceptBlockIdPrefix) {
+		this.conceptBlockIdPrefix = conceptBlockIdPrefix;
+	}
+
+	public String getLinkDestinationIdPrefix() {
+		return linkDestinationIdPrefix;
+	}
+
+	public void setLinkDestinationIdPrefix(String linkDestinationIdPrefix) {
+		this.linkDestinationIdPrefix = linkDestinationIdPrefix;
 	}
 	
 }

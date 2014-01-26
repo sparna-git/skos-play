@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.ling.dictionary.DelaDictionary;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SPARQLPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryTransaction;
 
 /**
@@ -37,13 +37,13 @@ public class FlexionsAdder {
 		this.flexionsProperty = flexionsProperty;
 	}
 	
-	public void addFlexions(Repository repository, List<java.net.URI> conceptSchemesToExclude) throws RepositoryException, SPARQLPerformException {
+	public void addFlexions(Repository repository, List<java.net.URI> conceptSchemesToExclude) throws RepositoryException, SparqlPerformException {
 		DelaDictionary dico = new DelaDictionary(DelaDictionary.class.getClassLoader().getResourceAsStream("dela/dela_fr.lst"), "UTF-8", "fr");
 		FlexionsAdderHelper helper = new FlexionsAdderHelper(dico, repository, conceptSchemesToExclude);
 		Perform.on(repository).select(helper);
 	}	
 	
-	public void addFlexions(Repository repository) throws RepositoryException, SPARQLPerformException {
+	public void addFlexions(Repository repository) throws RepositoryException, SparqlPerformException {
 		addFlexions(repository, null);
 	}
 

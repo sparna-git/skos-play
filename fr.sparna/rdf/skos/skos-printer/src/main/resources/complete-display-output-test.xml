@@ -2,7 +2,7 @@
 <kosDocument xmlns="http://www.sparna.fr/thesaurus-display">
     <header/>
     <body>
-        <kosDisplay main="true" column-count="2" displayId="alpha">
+        <kosDisplay column-count="2" displayId="alpha">
             <section title="A">
                 <list>
                     <listItem>
@@ -18,7 +18,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1957586469" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330C">
                             <label>
-<str style="pref">Access to higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330C" refId="hier-1957586469" style="pref">Access to higher education</link>
                             </label>
                             <att type="es">
 <str>Acceso a la educación superior</str>
@@ -58,7 +58,7 @@
                     <listItem>
                         <conceptBlock id="alpha-155104190" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#920A">
                             <label>
-<str style="pref">Acronyms</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#920A" refId="hier-155104190" style="pref">Acronyms</link>
                             </label>
                             <att type="es">
 <str>Siglas</str>
@@ -84,7 +84,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1711757497" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#361A">
                             <label>
-<str style="pref">Adult education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#361A" refId="hier-1711757497" style="pref">Adult education</link>
                             </label>
                             <att type="es">
 <str>Educación para adultos</str>
@@ -109,7 +109,7 @@
                     <listItem>
                         <conceptBlock id="alpha2072681486" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#361B">
                             <label>
-<str style="pref">Adult educators</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#361B" refId="hier2072681486" style="pref">Adult educators</link>
                             </label>
                             <att type="es">
 <str>Educadores para adultos</str>
@@ -128,7 +128,7 @@
                     <listItem>
                         <conceptBlock id="alpha802691105" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#361C">
                             <label>
-<str style="pref">Adult learning</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#361C" refId="hier802691105" style="pref">Adult learning</link>
                             </label>
                             <att type="es">
 <str>Aprendizaje en la edad adulta</str>
@@ -173,7 +173,7 @@
                     <listItem>
                         <conceptBlock id="alpha737726399" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#060A">
                             <label>
-<str style="pref">Agrarian reform</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#060A" refId="hier737726399" style="pref">Agrarian reform</link>
                             </label>
                             <att type="es">
 <str>Reforma agraria</str>
@@ -205,7 +205,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1551636063" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#340A">
                             <label>
-<str style="pref">Agricultural education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#340A" refId="hier-1551636063" style="pref">Agricultural education</link>
                             </label>
                             <att type="es">
 <str>Educación agrícola</str>
@@ -240,7 +240,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1546244271" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#060B">
                             <label>
-<str style="pref">Agriculture</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#060B" refId="hier-1546244271" style="pref">Agriculture</link>
                             </label>
                             <att type="es">
 <str>Agricultura</str>
@@ -278,7 +278,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1193127278" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#710B">
                             <label>
-<str style="pref">Aid recipients</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#710B" refId="hier-1193127278" style="pref">Aid recipients</link>
                             </label>
                             <att type="es">
 <str>Beneficiarios de los subsidios</str>
@@ -344,7 +344,7 @@
                     <listItem>
                         <conceptBlock id="alpha1238624295" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#960A">
                             <label>
-<str style="pref">Archives</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#960A" refId="hier1238624295" style="pref">Archives</link>
                             </label>
                             <att type="es">
 <str>Archivos</str>
@@ -367,7 +367,7 @@
                     <listItem>
                         <conceptBlock id="alpha1883826501" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#940A">
                             <label>
-<str style="pref">Atlases</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#940A" refId="hier1883826501" style="pref">Atlases</link>
                             </label>
                             <att type="es">
 <str>Atlas</str>
@@ -390,7 +390,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1609142752" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#311A">
                             <label>
-<str style="pref">Basic education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#311A" refId="hier-1609142752" style="pref">Basic education</link>
                             </label>
                             <att type="es">
 <str>Educación básica</str>
@@ -447,7 +447,7 @@
                     <listItem>
                         <conceptBlock id="alpha290015185" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#010A">
                             <label>
-<str style="pref">Basic needs</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#010A" refId="hier290015185" style="pref">Basic needs</link>
                             </label>
                             <att type="es">
 <str>Necesidades Básicas</str>
@@ -495,7 +495,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1573030154" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#970A">
                             <label>
-<str style="pref">Bibliographical research</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#970A" refId="hier-1573030154" style="pref">Bibliographical research</link>
                             </label>
                             <att type="es">
 <str>Investigación bibliográfica</str>
@@ -530,7 +530,7 @@
                     <listItem>
                         <conceptBlock id="alpha-944696011" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#950A">
                             <label>
-<str style="pref">Bibliographies</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#950A" refId="hier-944696011" style="pref">Bibliographies</link>
                             </label>
                             <att type="es">
 <str>Bibliografías</str>
@@ -546,7 +546,7 @@
                     <listItem>
                         <conceptBlock id="alpha2019650114" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#730A">
                             <label>
-<str style="pref">Bi-lateral aid</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#730A" refId="hier2019650114" style="pref">Bi-lateral aid</link>
                             </label>
                             <att type="es">
 <str>Ayuda bilateral</str>
@@ -568,7 +568,7 @@
                     <listItem>
                         <conceptBlock id="alpha1997313938" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#660A">
                             <label>
-<str style="pref">Bilingual education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#660A" refId="hier1997313938" style="pref">Bilingual education</link>
                             </label>
                             <att type="es">
 <str>Educación bilingüe</str>
@@ -602,7 +602,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1953205034" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#920B">
                             <label>
-<str style="pref">Biographical dictionaries</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#920B" refId="hier-1953205034" style="pref">Biographical dictionaries</link>
                             </label>
                             <att type="es">
 <str>Diccionarios bibliográficos</str>
@@ -638,7 +638,7 @@
                     <listItem>
                         <conceptBlock id="alpha-913020173" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#660B">
                             <label>
-<str style="pref">Books and reading</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#660B" refId="hier-913020173" style="pref">Books and reading</link>
                             </label>
                             <att type="es">
 <str>Libros y lectura</str>
@@ -669,7 +669,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1202973163" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220A">
                             <label>
-<str style="pref">Brain drain</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220A" refId="hier-1202973163" style="pref">Brain drain</link>
                             </label>
                             <att type="es">
 <str>Fuga de cerebros</str>
@@ -688,7 +688,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1932872637" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#430A">
                             <label>
-<str style="pref">Budgets and budgeting in education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#430A" refId="hier-1932872637" style="pref">Budgets and budgeting in education</link>
                             </label>
                             <att type="es">
 <str>Presupuestos en educación</str>
@@ -774,7 +774,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1838689055" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#850A">
                             <label>
-<str style="pref">Child development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#850A" refId="hier-1838689055" style="pref">Child development</link>
                             </label>
                             <att type="es">
 <str>Desarrollo del niño</str>
@@ -806,7 +806,7 @@
                     <listItem>
                         <conceptBlock id="alpha1478603447" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100A">
                             <label>
-<str style="pref">Children</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100A" refId="hier1478603447" style="pref">Children</link>
                             </label>
                             <att type="es">
 <str>Infancia</str>
@@ -874,7 +874,7 @@
                     <listItem>
                         <conceptBlock id="alpha1564911694" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#231B">
                             <label>
-<str style="pref">Classification of educational systems</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#231B" refId="hier1564911694" style="pref">Classification of educational systems</link>
                             </label>
                             <att type="es">
 <str>Clasificación de los sistemas educativos</str>
@@ -896,7 +896,7 @@
                     <listItem>
                         <conceptBlock id="alpha-705049447" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070A">
                             <label>
-<str style="pref">Classification of occupations</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070A" refId="hier-705049447" style="pref">Classification of occupations</link>
                             </label>
                             <att type="es">
 <str>Clasificación de los empleos</str>
@@ -912,7 +912,7 @@
                     <listItem>
                         <conceptBlock id="alpha292870248" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#860A">
                             <label>
-<str style="pref">Classroom observation</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#860A" refId="hier292870248" style="pref">Classroom observation</link>
                             </label>
                             <att type="es">
 <str>Observación de clases</str>
@@ -941,7 +941,7 @@
                     <listItem>
                         <conceptBlock id="alpha-2135784708" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#850D">
                             <label>
-<str style="pref">Cognitive development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#850D" refId="hier-2135784708" style="pref">Cognitive development</link>
                             </label>
                             <att type="es">
 <str>Desarrollo cognitivo</str>
@@ -1003,7 +1003,7 @@
                     <listItem>
                         <conceptBlock id="alpha1374609752" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#160A">
                             <label>
-<str style="pref">Communication</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#160A" refId="hier1374609752" style="pref">Communication</link>
                             </label>
                             <att type="es">
 <str>Comunicación</str>
@@ -1031,7 +1031,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1123605094" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#160C">
                             <label>
-<str style="pref">Communication policies</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#160C" refId="hier-1123605094" style="pref">Communication policies</link>
                             </label>
                             <att type="es">
 <str>Políticas de la comunicación</str>
@@ -1054,7 +1054,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1478149561" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#970E">
                             <label>
-<str style="pref">Communication skills</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#970E" refId="hier-1478149561" style="pref">Communication skills</link>
                             </label>
                             <att type="es">
 <str>Técnica de comunicación</str>
@@ -1086,7 +1086,7 @@
                     <listItem>
                         <conceptBlock id="alpha-968681590" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120A">
                             <label>
-<str style="pref">Community development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120A" refId="hier-968681590" style="pref">Community development</link>
                             </label>
                             <att type="es">
 <str>Desarrollo comunitario</str>
@@ -1102,7 +1102,7 @@
                     <listItem>
                         <conceptBlock id="alpha812613173" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#340C">
                             <label>
-<str style="pref">Community education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#340C" refId="hier812613173" style="pref">Community education</link>
                             </label>
                             <att type="es">
 <str>Educación comunitaria</str>
@@ -1159,7 +1159,7 @@
                     <listItem>
                         <conceptBlock id="alpha141217657" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#830A">
                             <label>
-<str style="pref">Comparative education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#830A" refId="hier141217657" style="pref">Comparative education</link>
                             </label>
                             <att type="es">
 <str>Educación comparada</str>
@@ -1191,7 +1191,7 @@
                     <listItem>
                         <conceptBlock id="alpha2026687950" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#380A">
                             <label>
-<str style="pref">Compensatory education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#380A" refId="hier2026687950" style="pref">Compensatory education</link>
                             </label>
                             <att type="es">
 <str>Educación compensatoria</str>
@@ -1245,7 +1245,7 @@
                     <listItem>
                         <conceptBlock id="alpha622031699" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#640A">
                             <label>
-<str style="pref">Computer uses in education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#640A" refId="hier622031699" style="pref">Computer uses in education</link>
                             </label>
                             <att type="es">
 <str>Uso de la informática en la educación</str>
@@ -1279,7 +1279,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1745791749" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470E">
                             <label>
-<str style="pref">Conditions of employment for teachers</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470E" refId="hier-1745791749" style="pref">Conditions of employment for teachers</link>
                             </label>
                             <att type="es">
 <str>Condiciones de empleo docente</str>
@@ -1331,7 +1331,7 @@
                     <listItem>
                         <conceptBlock id="alpha-758539898" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#970B">
                             <label>
-<str style="pref">Correspondence, report writing, style, editing, electronic publishing</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#970B" refId="hier-758539898" style="pref">Correspondence, report writing, style, editing, electronic publishing</link>
                             </label>
                             <att type="es">
 <str>Correspondencia redacción de informes estilo edición publicaciones electrónicas</str>
@@ -1387,7 +1387,7 @@
                     <listItem>
                         <conceptBlock id="alpha632782720" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#270D">
                             <label>
-<str style="pref">Cost-effectiveness of education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#270D" refId="hier632782720" style="pref">Cost-effectiveness of education</link>
                             </label>
                             <att type="es">
 <str>Costo-eficacia de la educación</str>
@@ -1418,7 +1418,7 @@
                     <listItem>
                         <conceptBlock id="alpha1183802494" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#331F">
                             <label>
-<str style="pref">Costs and cost-effectiveness of higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#331F" refId="hier1183802494" style="pref">Costs and cost-effectiveness of higher education</link>
                             </label>
                             <att type="es">
 <str>Costos y costo-eficacia en la educación superior</str>
@@ -1478,7 +1478,7 @@
                     <listItem>
                         <conceptBlock id="alpha-397480671" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#020A">
                             <label>
-<str style="pref">Country economic studies</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#020A" refId="hier-397480671" style="pref">Country economic studies</link>
                             </label>
                             <att type="es">
 <str>Estudios económicos por país</str>
@@ -1524,7 +1524,7 @@
                     <listItem>
                         <conceptBlock id="alpha1289513716" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#870D">
                             <label>
-<str style="pref">Cross National Studies</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#870D" refId="hier1289513716" style="pref">Cross National Studies</link>
                             </label>
                             <att type="es">
 <str>Comparaciones internacionales</str>
@@ -1568,7 +1568,7 @@
                     <listItem>
                         <conceptBlock id="alpha-288033126" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100B">
                             <label>
-<str style="pref">Culture and cultural policies</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100B" refId="hier-288033126" style="pref">Culture and cultural policies</link>
                             </label>
                             <att type="es">
 <str>Cultura y políticas culturales</str>
@@ -1584,7 +1584,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1044265095" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330F">
                             <label>
-<str style="pref">Curriculum</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330F" refId="hier-1044265095" style="pref">Curriculum</link>
                             </label>
                             <att type="es">
 <str>Curriculum</str>
@@ -1606,7 +1606,7 @@
                     <listItem>
                         <conceptBlock id="alpha1107310638" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650A">
                             <label>
-<str style="pref">Curriculum development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650A" refId="hier1107310638" style="pref">Curriculum development</link>
                             </label>
                             <att type="es">
 <str>Desarrollo curricular</str>
@@ -1652,7 +1652,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1147764343" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#860B">
                             <label>
-<str style="pref">Curriculum Evaluation</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#860B" refId="hier-1147764343" style="pref">Curriculum Evaluation</link>
                             </label>
                             <att type="es">
 <str>Evaluación del curriculum</str>
@@ -1668,7 +1668,7 @@
                     <listItem>
                         <conceptBlock id="alpha245127357" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650B">
                             <label>
-<str style="pref">Curriculum outlines</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650B" refId="hier245127357" style="pref">Curriculum outlines</link>
                             </label>
                             <att type="es">
 <str>Programas de estudio</str>
@@ -1718,7 +1718,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1445930838" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#450A">
                             <label>
-<str style="pref">Decentralization</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#450A" refId="hier-1445930838" style="pref">Decentralization</link>
                             </label>
                             <att type="es">
 <str>Descentralización</str>
@@ -1762,7 +1762,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1524573953" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#030B">
                             <label>
-<str style="pref">Decision-making</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#030B" refId="hier-1524573953" style="pref">Decision-making</link>
                             </label>
                             <att type="es">
 <str>Toma de decisiones</str>
@@ -1784,7 +1784,7 @@
                     <listItem>
                         <conceptBlock id="alpha1462445488" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#240B">
                             <label>
-<str style="pref">Decision-making and Policy-making in education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#240B" refId="hier1462445488" style="pref">Decision-making and Policy-making in education</link>
                             </label>
                             <att type="es">
 <str>Toma de decisiones en educación</str>
@@ -1815,7 +1815,7 @@
                     <listItem>
                         <conceptBlock id="alpha1830342564" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330G">
                             <label>
-<str style="pref">Demand for higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330G" refId="hier1830342564" style="pref">Demand for higher education</link>
                             </label>
                             <att type="es">
 <str>Demanda de educación superior</str>
@@ -1854,7 +1854,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1855637288" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#080A">
                             <label>
-<str style="pref">Demographic analysis</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#080A" refId="hier-1855637288" style="pref">Demographic analysis</link>
                             </label>
                             <att type="es">
 <str>Análisis demográfico</str>
@@ -1899,7 +1899,7 @@
                     <listItem>
                         <conceptBlock id="alpha-654071675" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261A">
                             <label>
-<str style="pref">Determinants of education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261A" refId="hier-654071675" style="pref">Determinants of education</link>
                             </label>
                             <att type="es">
 <str>Determinantes de la educación</str>
@@ -1927,7 +1927,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1630749920" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#150A">
                             <label>
-<str style="pref">Development administration</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#150A" refId="hier-1630749920" style="pref">Development administration</link>
                             </label>
                             <att type="es">
 <str>Desarrollo de la administración</str>
@@ -1949,7 +1949,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1895735792" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#010B">
                             <label>
-<str style="pref">Development and growth</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#010B" refId="hier-1895735792" style="pref">Development and growth</link>
                             </label>
                             <att type="es">
 <str>Desarrollo y crecimiento</str>
@@ -2006,7 +2006,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1731286279" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#020B">
                             <label>
-<str style="pref">Development planning: country studies</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#020B" refId="hier-1731286279" style="pref">Development planning: country studies</link>
                             </label>
                             <att type="es">
 <str>Planificación del desarrollo: estudios por país</str>
@@ -2038,7 +2038,7 @@
                     <listItem>
                         <conceptBlock id="alpha784694587" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#920C">
                             <label>
-<str style="pref">Directories and yearbooks</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#920C" refId="hier784694587" style="pref">Directories and yearbooks</link>
                             </label>
                             <att type="es">
 <str>Directorios y anuarios</str>
@@ -2067,7 +2067,7 @@
                     <listItem>
                         <conceptBlock id="alpha-499830705" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330E">
                             <label>
-<str style="pref">Distance and open learning in higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330E" refId="hier-499830705" style="pref">Distance and open learning in higher education</link>
                             </label>
                             <att type="es">
 <str>Educación superior abierta y a distancia</str>
@@ -2086,7 +2086,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1344770503" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#360A">
                             <label>
-<str style="pref">Distance education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#360A" refId="hier-1344770503" style="pref">Distance education</link>
                             </label>
                             <att type="es">
 <str>Educación a distancia</str>
@@ -2152,7 +2152,7 @@
                     <listItem>
                         <conceptBlock id="alpha-502892500" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#310A">
                             <label>
-<str style="pref">Early childhood education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#310A" refId="hier-502892500" style="pref">Early childhood education</link>
                             </label>
                             <att type="es">
 <str>Educación de la primera infancia</str>
@@ -2222,7 +2222,7 @@
                     <listItem>
                         <conceptBlock id="alpha-483496117" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#090A">
                             <label>
-<str style="pref">Economic integration</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#090A" refId="hier-483496117" style="pref">Economic integration</link>
                             </label>
                             <att type="es">
 <str>Integración económica</str>
@@ -2247,7 +2247,7 @@
                     <listItem>
                         <conceptBlock id="alpha931370325" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#010C">
                             <label>
-<str style="pref">Economic science</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#010C" refId="hier931370325" style="pref">Economic science</link>
                             </label>
                             <att type="es">
 <str>Ciencias económicas</str>
@@ -2275,7 +2275,7 @@
                     <listItem>
                         <conceptBlock id="alpha1027877695" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#270A">
                             <label>
-<str style="pref">Economics of education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#270A" refId="hier1027877695" style="pref">Economics of education</link>
                             </label>
                             <att type="es">
 <str>Economía de la educación</str>
@@ -2315,7 +2315,7 @@
                     <listItem>
                         <conceptBlock id="alpha-415297756" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#331C">
                             <label>
-<str style="pref">Economics of higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#331C" refId="hier-415297756" style="pref">Economics of higher education</link>
                             </label>
                             <att type="es">
 <str>Economía de la educación superior</str>
@@ -2347,7 +2347,7 @@
                     <listItem>
                         <conceptBlock id="alpha1227988972" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220B">
                             <label>
-<str style="pref">Education, employment and work</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220B" refId="hier1227988972" style="pref">Education, employment and work</link>
                             </label>
                             <att type="es">
 <str>Educación, empleo y trabajo</str>
@@ -2387,7 +2387,7 @@
                     <listItem>
                         <conceptBlock id="alpha630680741" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#810A">
                             <label>
-<str style="pref">Educational alternatives</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#810A" refId="hier630680741" style="pref">Educational alternatives</link>
                             </label>
                             <att type="es">
 <str>Alternativas en educación</str>
@@ -2424,7 +2424,7 @@
                     <listItem>
                         <conceptBlock id="alpha-813516622" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#351A">
                             <label>
-<str style="pref">Educational and vocational guidance</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#351A" refId="hier-813516622" style="pref">Educational and vocational guidance</link>
                             </label>
                             <att type="es">
 <str>Orientación escolar y vocacional</str>
@@ -2478,7 +2478,7 @@
                     <listItem>
                         <conceptBlock id="alpha996449563" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#740A">
                             <label>
-<str style="pref">Educational assistance</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#740A" refId="hier996449563" style="pref">Educational assistance</link>
                             </label>
                             <att type="es">
 <str>Asistencia a la educación</str>
@@ -2506,7 +2506,7 @@
                     <listItem>
                         <conceptBlock id="alpha535563519" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#820A">
                             <label>
-<str style="pref">Educational change process</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#820A" refId="hier535563519" style="pref">Educational change process</link>
                             </label>
                             <att type="es">
 <str>Procesos del cambio educativo</str>
@@ -2550,7 +2550,7 @@
                     <listItem>
                         <conceptBlock id="alpha449142208" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#430B">
                             <label>
-<str style="pref">Educational costs</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#430B" refId="hier449142208" style="pref">Educational costs</link>
                             </label>
                             <att type="es">
 <str>Costos de la educación</str>
@@ -2608,7 +2608,7 @@
                     <listItem>
                         <conceptBlock id="alpha324293989" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261C">
                             <label>
-<str style="pref">Educational equality</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261C" refId="hier324293989" style="pref">Educational equality</link>
                             </label>
                             <att type="es">
 <str>Igualdad en educación</str>
@@ -2657,7 +2657,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1153901374" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#860C">
                             <label>
-<str style="pref">Educational evaluation</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#860C" refId="hier-1153901374" style="pref">Educational evaluation</link>
                             </label>
                             <att type="es">
 <str>Evaluación educativa</str>
@@ -2691,7 +2691,7 @@
                     <listItem>
                         <conceptBlock id="alpha347908184" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#430C">
                             <label>
-<str style="pref">Educational expenditure</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#430C" refId="hier347908184" style="pref">Educational expenditure</link>
                             </label>
                             <att type="es">
 <str>Gastos de la educación</str>
@@ -2704,7 +2704,7 @@
                     <listItem>
                         <conceptBlock id="alpha65068807" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#440A">
                             <label>
-<str style="pref">Educational facilities</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#440A" refId="hier65068807" style="pref">Educational facilities</link>
                             </label>
                             <att type="es">
 <str>Instalaciones educativas</str>
@@ -2726,7 +2726,7 @@
                     <listItem>
                         <conceptBlock id="alpha-498132590" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#430D">
                             <label>
-<str style="pref">Educational finance</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#430D" refId="hier-498132590" style="pref">Educational finance</link>
                             </label>
                             <att type="es">
 <str>Financiamiento de la educación</str>
@@ -2760,7 +2760,7 @@
                     <listItem>
                         <conceptBlock id="alpha-2038847584" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#230A">
                             <label>
-<str style="pref">Educational forecasting</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#230A" refId="hier-2038847584" style="pref">Educational forecasting</link>
                             </label>
                             <att type="es">
 <str>Previsión en materia de educación</str>
@@ -2788,7 +2788,7 @@
                     <listItem>
                         <conceptBlock id="alpha1134442448" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#810B">
                             <label>
-<str style="pref">Educational futures</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#810B" refId="hier1134442448" style="pref">Educational futures</link>
                             </label>
                             <att type="es">
 <str>Futuro de la educación</str>
@@ -2836,7 +2836,7 @@
                     <listItem>
                         <conceptBlock id="alpha-2138847309" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#810C">
                             <label>
-<str style="pref">Educational history</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#810C" refId="hier-2138847309" style="pref">Educational history</link>
                             </label>
                             <att type="es">
 <str>Historia de la educación</str>
@@ -2852,7 +2852,7 @@
                     <listItem>
                         <conceptBlock id="alpha-926052628" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#231C">
                             <label>
-<str style="pref">Educational indicators</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#231C" refId="hier-926052628" style="pref">Educational indicators</link>
                             </label>
                             <att type="es">
 <str>Indicadores de la educación</str>
@@ -2887,7 +2887,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1268608918" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#961A">
                             <label>
-<str style="pref">Educational information</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#961A" refId="hier-1268608918" style="pref">Educational information</link>
                             </label>
                             <att type="es">
 <str>Información sobre educación</str>
@@ -2918,7 +2918,7 @@
                     <listItem>
                         <conceptBlock id="alpha1304856461" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#820B">
                             <label>
-<str style="pref">Educational innovations</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#820B" refId="hier1304856461" style="pref">Educational innovations</link>
                             </label>
                             <att type="es">
 <str>Innovación educativa</str>
@@ -2949,7 +2949,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1769575526" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#960B">
                             <label>
-<str style="pref">Educational libraries and resource centres</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#960B" refId="hier-1769575526" style="pref">Educational libraries and resource centres</link>
                             </label>
                             <att type="es">
 <str>Bibliotecas escolares y centros de material didáctico</str>
@@ -2977,7 +2977,7 @@
                     <listItem>
                         <conceptBlock id="alpha1658530278" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#410A">
                             <label>
-<str style="pref">Educational Management</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#410A" refId="hier1658530278" style="pref">Educational Management</link>
                             </label>
                             <att type="es">
 <str>Gestión educativa</str>
@@ -3033,7 +3033,7 @@
                     <listItem>
                         <conceptBlock id="alpha386291498" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#620A">
                             <label>
-<str style="pref">Educational materials</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#620A" refId="hier386291498" style="pref">Educational materials</link>
                             </label>
                             <att type="es">
 <str>Material didáctico</str>
@@ -3076,7 +3076,7 @@
                     <listItem>
                         <conceptBlock id="alpha391572567" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#870A">
                             <label>
-<str style="pref">Educational measurement</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#870A" refId="hier391572567" style="pref">Educational measurement</link>
                             </label>
                             <att type="es">
 <str>Evaluación de conocimientos</str>
@@ -3122,7 +3122,7 @@
                     <listItem>
                         <conceptBlock id="alpha1105481970" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#230B">
                             <label>
-<str style="pref">Educational models</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#230B" refId="hier1105481970" style="pref">Educational models</link>
                             </label>
                             <att type="es">
 <str>Modelos educativos</str>
@@ -3144,7 +3144,7 @@
                     <listItem>
                         <conceptBlock id="alpha162172211" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#810D">
                             <label>
-<str style="pref">Educational philosophy</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#810D" refId="hier162172211" style="pref">Educational philosophy</link>
                             </label>
                             <att type="es">
 <str>Filosofía de la educación</str>
@@ -3175,7 +3175,7 @@
                     <listItem>
                         <conceptBlock id="alpha1982859494" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#250A">
                             <label>
-<str style="pref">Educational planning</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#250A" refId="hier1982859494" style="pref">Educational planning</link>
                             </label>
                             <att type="es">
 <str>Planeamiento de la educación</str>
@@ -3197,7 +3197,7 @@
                     <listItem>
                         <conceptBlock id="alpha-700452331" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#210A">
                             <label>
-<str style="pref">Educational planning: country studies</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#210A" refId="hier-700452331" style="pref">Educational planning: country studies</link>
                             </label>
                             <att type="es">
 <str>Planeamiento de la educación: estudios por país</str>
@@ -3219,7 +3219,7 @@
                     <listItem>
                         <conceptBlock id="alpha-49552648" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#230C">
                             <label>
-<str style="pref">Educational planning methods</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#230C" refId="hier-49552648" style="pref">Educational planning methods</link>
                             </label>
                             <att type="es">
 <str>Métodos de planeamiento de la educación</str>
@@ -3283,7 +3283,7 @@
                     <listItem>
                         <conceptBlock id="alpha855987748" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#210B">
                             <label>
-<str style="pref">Educational plans</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#210B" refId="hier855987748" style="pref">Educational plans</link>
                             </label>
                             <att type="es">
 <str>Planes de la educación</str>
@@ -3308,7 +3308,7 @@
                     <listItem>
                         <conceptBlock id="alpha398989527" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#210C">
                             <label>
-<str style="pref">Educational policies</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#210C" refId="hier398989527" style="pref">Educational policies</link>
                             </label>
                             <att type="es">
 <str>Políticas educativas</str>
@@ -3334,7 +3334,7 @@
                     <listItem>
                         <conceptBlock id="alpha-67747236" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#230D">
                             <label>
-<str style="pref">Educational projects and programmes</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#230D" refId="hier-67747236" style="pref">Educational projects and programmes</link>
                             </label>
                             <att type="es">
 <str>Proyectos y programas educativos</str>
@@ -3362,7 +3362,7 @@
                     <listItem>
                         <conceptBlock id="alpha2059952397" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#850B">
                             <label>
-<str style="pref">Educational psychology</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#850B" refId="hier2059952397" style="pref">Educational psychology</link>
                             </label>
                             <att type="es">
 <str>Psicología de la educación</str>
@@ -3384,7 +3384,7 @@
                     <listItem>
                         <conceptBlock id="alpha-480841020" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#630B">
                             <label>
-<str style="pref">Educational radio and television</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#630B" refId="hier-480841020" style="pref">Educational radio and television</link>
                             </label>
                             <att type="es">
 <str>Radio y televisión educativas</str>
@@ -3397,7 +3397,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1267890220" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#210D">
                             <label>
-<str style="pref">Educational reforms</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#210D" refId="hier-1267890220" style="pref">Educational reforms</link>
                             </label>
                             <att type="es">
 <str>Reformas educativas</str>
@@ -3431,7 +3431,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1390549447" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#910A">
                             <label>
-<str style="pref">Educational research</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#910A" refId="hier-1390549447" style="pref">Educational research</link>
                             </label>
                             <att type="es">
 <str>Investigación en educación</str>
@@ -3468,7 +3468,7 @@
                     <listItem>
                         <conceptBlock id="alpha-95728899" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#910B">
                             <label>
-<str style="pref">Educational research methodology</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#910B" refId="hier-95728899" style="pref">Educational research methodology</link>
                             </label>
                             <att type="es">
 <str>Metodología de la investigación en educación</str>
@@ -3509,7 +3509,7 @@
                     <listItem>
                         <conceptBlock id="alpha-796254638" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#810E">
                             <label>
-<str style="pref">Educational sciences</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#810E" refId="hier-796254638" style="pref">Educational sciences</link>
                             </label>
                             <att type="es">
 <str>Ciencias de la educación</str>
@@ -3525,7 +3525,7 @@
                     <listItem>
                         <conceptBlock id="alpha-285105747" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#480A">
                             <label>
-<str style="pref">Educational statistics</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#480A" refId="hier-285105747" style="pref">Educational statistics</link>
                             </label>
                             <att type="es">
 <str>Estadísticas en educación</str>
@@ -3570,7 +3570,7 @@
                     <listItem>
                         <conceptBlock id="alpha1001433678" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#430E">
                             <label>
-<str style="pref">Educational vouchers</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#430E" refId="hier1001433678" style="pref">Educational vouchers</link>
                             </label>
                             <att type="es">
 <str>Bonos para la educación</str>
@@ -3589,7 +3589,7 @@
                     <listItem>
                         <conceptBlock id="alpha866670218" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#271A">
                             <label>
-<str style="pref">Educational wastage</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#271A" refId="hier866670218" style="pref">Educational wastage</link>
                             </label>
                             <att type="es">
 <str>Abandono escolar</str>
@@ -3633,7 +3633,7 @@
                     <listItem>
                         <conceptBlock id="alpha353062653" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#260A">
                             <label>
-<str style="pref">Education and development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#260A" refId="hier353062653" style="pref">Education and development</link>
                             </label>
                             <att type="es">
 <str>Educación y desarrollo</str>
@@ -3683,7 +3683,7 @@
                     <listItem>
                         <conceptBlock id="alpha-584926970" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#260B">
                             <label>
-<str style="pref">Education and modernization</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#260B" refId="hier-584926970" style="pref">Education and modernization</link>
                             </label>
                             <att type="es">
 <str>Educación y modernización</str>
@@ -3705,7 +3705,7 @@
                     <listItem>
                         <conceptBlock id="alpha940995686" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#260C">
                             <label>
-<str style="pref">Education and national integration</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#260C" refId="hier940995686" style="pref">Education and national integration</link>
                             </label>
                             <att type="es">
 <str>Educación e integración nacional</str>
@@ -3731,7 +3731,7 @@
                     <listItem>
                         <conceptBlock id="alpha-2089831126" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261B">
                             <label>
-<str style="pref">Education and Society</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261B" refId="hier-2089831126" style="pref">Education and Society</link>
                             </label>
                             <att type="es">
 <str>Educación y sociedad</str>
@@ -3784,7 +3784,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1514882699" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#740B">
                             <label>
-<str style="pref">Education co-operation</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#740B" refId="hier-1514882699" style="pref">Education co-operation</link>
                             </label>
                             <att type="es">
 <str>Cooperación en educación</str>
@@ -3809,7 +3809,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1124169952" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261K">
                             <label>
-<str style="pref">Education for All, EFA</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261K" refId="hier-1124169952" style="pref">Education for All, EFA</link>
                             </label>
                             <att type="es">
 <str>Educación para Todos, EPT</str>
@@ -3868,7 +3868,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1877393560" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#510A">
                             <label>
-<str style="pref">Education in Africa</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#510A" refId="hier-1877393560" style="pref">Education in Africa</link>
                             </label>
                             <att type="es">
 <str>Educación en Africa</str>
@@ -3902,7 +3902,7 @@
                     <listItem>
                         <conceptBlock id="alpha-39816297" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#520A">
                             <label>
-<str style="pref">Education in Asia</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#520A" refId="hier-39816297" style="pref">Education in Asia</link>
                             </label>
                             <att type="es">
 <str>Educación en Asia</str>
@@ -3946,7 +3946,7 @@
                     <listItem>
                         <conceptBlock id="alpha1818839228" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#260D">
                             <label>
-<str style="pref">Education in developing countries</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#260D" refId="hier1818839228" style="pref">Education in developing countries</link>
                             </label>
                             <att type="es">
 <str>Educación en los países en vías de desarrollo</str>
@@ -3977,7 +3977,7 @@
                     <listItem>
                         <conceptBlock id="alpha726747757" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#540A">
                             <label>
-<str style="pref">Education in Europe</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#540A" refId="hier726747757" style="pref">Education in Europe</link>
                             </label>
                             <att type="es">
 <str>Educación en Europa</str>
@@ -4005,7 +4005,7 @@
                     <listItem>
                         <conceptBlock id="alpha-632041075" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#550A">
                             <label>
-<str style="pref">Education in Latin America and the Caribbean</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#550A" refId="hier-632041075" style="pref">Education in Latin America and the Caribbean</link>
                             </label>
                             <att type="es">
 <str>Educación en América Latina y el Caribe</str>
@@ -4046,7 +4046,7 @@
                     <listItem>
                         <conceptBlock id="alpha-766685270" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#560A">
                             <label>
-<str style="pref">Education in North America</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#560A" refId="hier-766685270" style="pref">Education in North America</link>
                             </label>
                             <att type="es">
 <str>Educación en Norteamérica</str>
@@ -4094,7 +4094,7 @@
                     <listItem>
                         <conceptBlock id="alpha-398226411" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#530A">
                             <label>
-<str style="pref">Education in the Arab States</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#530A" refId="hier-398226411" style="pref">Education in the Arab States</link>
                             </label>
                             <att type="es">
 <str>Educación en los países árabes</str>
@@ -4134,7 +4134,7 @@
                     <listItem>
                         <conceptBlock id="alpha793420214" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#380H">
                             <label>
-<str style="pref">Education in the context of HIV and AIDS</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#380H" refId="hier793420214" style="pref">Education in the context of HIV and AIDS</link>
                             </label>
                             <att type="es">
 <str>Educación en el contexto del VIH y SIDA</str>
@@ -4156,7 +4156,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1506439630" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#570A">
                             <label>
-<str style="pref">Education in the Pacific</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#570A" refId="hier-1506439630" style="pref">Education in the Pacific</link>
                             </label>
                             <att type="es">
 <str>Educación en la región del Pacífico</str>
@@ -4247,7 +4247,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1057249258" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#380B">
                             <label>
-<str style="pref">Emergency and Refugee Education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#380B" refId="hier-1057249258" style="pref">Emergency and Refugee Education</link>
                             </label>
                             <att type="es">
 <str>Educación en situaciones de emergencia y para refugiados</str>
@@ -4273,7 +4273,7 @@
                     <listItem>
                         <conceptBlock id="alpha2003429063" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220C">
                             <label>
-<str style="pref">Employment</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220C" refId="hier2003429063" style="pref">Employment</link>
                             </label>
                             <att type="es">
 <str>Empleo</str>
@@ -4349,7 +4349,7 @@
                     <listItem>
                         <conceptBlock id="alpha246876847" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220D">
                             <label>
-<str style="pref">Employment - rural</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220D" refId="hier246876847" style="pref">Employment - rural</link>
                             </label>
                             <att type="es">
 <str>Empleo rural</str>
@@ -4387,7 +4387,7 @@
                     <listItem>
                         <conceptBlock id="alpha124116241" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220E">
                             <label>
-<str style="pref">Employment - urban and informal sector</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220E" refId="hier124116241" style="pref">Employment - urban and informal sector</link>
                             </label>
                             <att type="es">
 <str>Empleo urbano y sector informal</str>
@@ -4431,7 +4431,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1435777526" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220F">
                             <label>
-<str style="pref">Employment - youth</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220F" refId="hier-1435777526" style="pref">Employment - youth</link>
                             </label>
                             <att type="es">
 <str>Empleo juvenil</str>
@@ -4477,7 +4477,7 @@
                     <listItem>
                         <conceptBlock id="alpha756183989" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#932A">
                             <label>
-<str style="pref">Encyclopaedias</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#932A" refId="hier756183989" style="pref">Encyclopaedias</link>
                             </label>
                             <att type="es">
 <str>Enciclopedias</str>
@@ -4490,7 +4490,7 @@
                     <listItem>
                         <conceptBlock id="alpha932645353" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#010D">
                             <label>
-<str style="pref">Endogenous development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#010D" refId="hier932645353" style="pref">Endogenous development</link>
                             </label>
                             <att type="es">
 <str>Desarrollo interno</str>
@@ -4503,7 +4503,7 @@
                     <listItem>
                         <conceptBlock id="alpha-946796949" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#090B">
                             <label>
-<str style="pref">Energy</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#090B" refId="hier-946796949" style="pref">Energy</link>
                             </label>
                             <att type="es">
 <str>Energía</str>
@@ -4536,7 +4536,7 @@
                     <listItem>
                         <conceptBlock id="alpha-498838742" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#230E">
                             <label>
-<str style="pref">Enrolment projections</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#230E" refId="hier-498838742" style="pref">Enrolment projections</link>
                             </label>
                             <att type="es">
 <str>Proyecciones de la matrícula</str>
@@ -4570,7 +4570,7 @@
                     <listItem>
                         <conceptBlock id="alpha1263029938" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#090E">
                             <label>
-<str style="pref">Enterprises (public and private)</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#090E" refId="hier1263029938" style="pref">Enterprises (public and private)</link>
                             </label>
                             <att type="es">
 <str>Empresas (públicas y privadas)</str>
@@ -4609,7 +4609,7 @@
                     <listItem>
                         <conceptBlock id="alpha356073969" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#060D">
                             <label>
-<str style="pref">Environment</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#060D" refId="hier356073969" style="pref">Environment</link>
                             </label>
                             <att type="es">
 <str>Medio ambiente</str>
@@ -4631,7 +4631,7 @@
                     <listItem>
                         <conceptBlock id="alpha1517035178" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650E">
                             <label>
-<str style="pref">Environmental education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650E" refId="hier1517035178" style="pref">Environmental education</link>
                             </label>
                             <att type="es">
 <str>Enseñanza del medio ambiente</str>
@@ -4657,7 +4657,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1502661374" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070B">
                             <label>
-<str style="pref">Equality in employment</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070B" refId="hier-1502661374" style="pref">Equality in employment</link>
                             </label>
                             <att type="es">
 <str>Igualdad laboral</str>
@@ -4692,7 +4692,7 @@
                     <listItem>
                         <conceptBlock id="alpha1394414600" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330I">
                             <label>
-<str style="pref">Equivalences</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330I" refId="hier1394414600" style="pref">Equivalences</link>
                             </label>
                             <att type="es">
 <str>Equivalencias</str>
@@ -4721,7 +4721,7 @@
                     <listItem>
                         <conceptBlock id="alpha-2055620243" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#720B">
                             <label>
-<str style="pref">European Community</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#720B" refId="hier-2055620243" style="pref">European Community</link>
                             </label>
                             <att type="es">
 <str>Comunidad europea</str>
@@ -4747,7 +4747,7 @@
                     <listItem>
                         <conceptBlock id="alpha1629421200" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330J">
                             <label>
-<str style="pref">Evaluation in higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330J" refId="hier1629421200" style="pref">Evaluation in higher education</link>
                             </label>
                             <att type="es">
 <str>Evaluación en educación superior</str>
@@ -4845,7 +4845,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1070459049" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#630D">
                             <label>
-<str style="pref">Evaluation of educational technology</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#630D" refId="hier-1070459049" style="pref">Evaluation of educational technology</link>
                             </label>
                             <att type="es">
 <str>Evaluación de la tecnología educativa</str>
@@ -4881,7 +4881,7 @@
                     <listItem>
                         <conceptBlock id="alpha-902498711" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#860F">
                             <label>
-<str style="pref">Evaluation of social programmes</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#860F" refId="hier-902498711" style="pref">Evaluation of social programmes</link>
                             </label>
                             <att type="es">
 <str>Evaluación de los programas sociales</str>
@@ -4919,7 +4919,7 @@
                     <listItem>
                         <conceptBlock id="alpha1102209723" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#870B">
                             <label>
-<str style="pref">Examinations</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#870B" refId="hier1102209723" style="pref">Examinations</link>
                             </label>
                             <att type="es">
 <str>Exámenes</str>
@@ -4996,7 +4996,7 @@
                     <listItem>
                         <conceptBlock id="alpha958079804" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#331D">
                             <label>
-<str style="pref">Financing of higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#331D" refId="hier958079804" style="pref">Financing of higher education</link>
                             </label>
                             <att type="es">
 <str>Financiamiento de la educación superior</str>
@@ -5053,7 +5053,7 @@
                     <listItem>
                         <conceptBlock id="alpha767234497" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#060E">
                             <label>
-<str style="pref">Food</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#060E" refId="hier767234497" style="pref">Food</link>
                             </label>
                             <att type="es">
 <str>Alimentación</str>
@@ -5202,7 +5202,7 @@
                     <listItem>
                         <conceptBlock id="alpha-779757976" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#010E">
                             <label>
-<str style="pref">Future studies</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#010E" refId="hier-779757976" style="pref">Future studies</link>
                             </label>
                             <att type="es">
 <str>Estudios futuros</str>
@@ -5251,7 +5251,7 @@
                     <listItem>
                         <conceptBlock id="alpha-20286047" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120B">
                             <label>
-<str style="pref">Geography</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120B" refId="hier-20286047" style="pref">Geography</link>
                             </label>
                             <att type="es">
 <str>Geografía</str>
@@ -5289,7 +5289,7 @@
                     <listItem>
                         <conceptBlock id="alpha-2066224720" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#380C">
                             <label>
-<str style="pref">Gifted children</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#380C" refId="hier-2066224720" style="pref">Gifted children</link>
                             </label>
                             <att type="es">
 <str>Niños superdotados</str>
@@ -5302,7 +5302,7 @@
                     <listItem>
                         <conceptBlock id="alpha-901839359" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#390A">
                             <label>
-<str style="pref">Girls and women's education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#390A" refId="hier-901839359" style="pref">Girls and women's education</link>
                             </label>
                             <att type="es">
 <str>Educación de niñas y mujeres</str>
@@ -5327,7 +5327,7 @@
                     <listItem>
                         <conceptBlock id="alpha239329530" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330D">
                             <label>
-<str style="pref">Globalization and internationalization of higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330D" refId="hier239329530" style="pref">Globalization and internationalization of higher education</link>
                             </label>
                             <att type="es">
 <str>Globalización e internacionalización de la educación superior</str>
@@ -5375,7 +5375,7 @@
                     <listItem>
                         <conceptBlock id="alpha1590020815" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#420A">
                             <label>
-<str style="pref">Grading and grouping</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#420A" refId="hier1590020815" style="pref">Grading and grouping</link>
                             </label>
                             <att type="es">
 <str>Clasificación y agrupamiento de los alumnos</str>
@@ -5434,7 +5434,7 @@
                     <listItem>
                         <conceptBlock id="alpha-486902208" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#060F">
                             <label>
-<str style="pref">Health</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#060F" refId="hier-486902208" style="pref">Health</link>
                             </label>
                             <att type="es">
 <str>Salud</str>
@@ -5459,7 +5459,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1375349183" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650F">
                             <label>
-<str style="pref">Health education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650F" refId="hier-1375349183" style="pref">Health education</link>
                             </label>
                             <att type="es">
 <str>Educación sanitaria</str>
@@ -5500,7 +5500,7 @@
                     <listItem>
                         <conceptBlock id="alpha-130715218" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330M">
                             <label>
-<str style="pref">Higher education and development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330M" refId="hier-130715218" style="pref">Higher education and development</link>
                             </label>
                             <att type="es">
 <str>Educación superior y desarrollo</str>
@@ -5572,7 +5572,7 @@
                     <listItem>
                         <conceptBlock id="alpha685160080" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#440B">
                             <label>
-<str style="pref">Higher education facilities</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#440B" refId="hier685160080" style="pref">Higher education facilities</link>
                             </label>
                             <att type="es">
 <str>Instalaciones para educación superior</str>
@@ -5594,7 +5594,7 @@
                     <listItem>
                         <conceptBlock id="alpha-636526427" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330A">
                             <label>
-<str style="pref">Higher education in developed countries</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330A" refId="hier-636526427" style="pref">Higher education in developed countries</link>
                             </label>
                             <att type="es">
 <str>Educación superior en países desarrollados</str>
@@ -5634,7 +5634,7 @@
                     <listItem>
                         <conceptBlock id="alpha1566639365" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330B">
                             <label>
-<str style="pref">Higher education in developing countries</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330B" refId="hier1566639365" style="pref">Higher education in developing countries</link>
                             </label>
                             <att type="es">
 <str>Educación superior en países en vías de desarrollo</str>
@@ -5656,7 +5656,7 @@
                     <listItem>
                         <conceptBlock id="alpha1606452462" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#331A">
                             <label>
-<str style="pref">Higher education planning</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#331A" refId="hier1606452462" style="pref">Higher education planning</link>
                             </label>
                             <att type="es">
 <str>Planeamiento de la educación superior</str>
@@ -5730,7 +5730,7 @@
                     <listItem>
                         <conceptBlock id="alpha-585647759" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#060H">
                             <label>
-<str style="pref">HIV and AIDS</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#060H" refId="hier-585647759" style="pref">HIV and AIDS</link>
                             </label>
                             <att type="es">
 <str>VIH y SIDA</str>
@@ -5749,7 +5749,7 @@
                     <listItem>
                         <conceptBlock id="alpha-161296040" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#060G">
                             <label>
-<str style="pref">Housing</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#060G" refId="hier-161296040" style="pref">Housing</link>
                             </label>
                             <att type="es">
 <str>Vivienda</str>
@@ -5765,7 +5765,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1966176420" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#970C">
                             <label>
-<str style="pref">How to study, how to do research</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#970C" refId="hier-1966176420" style="pref">How to study, how to do research</link>
                             </label>
                             <att type="es">
 <str>Guías del estudiante y del investigador</str>
@@ -5790,7 +5790,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1229807083" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#270C">
                             <label>
-<str style="pref">Human capital</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#270C" refId="hier-1229807083" style="pref">Human capital</link>
                             </label>
                             <att type="es">
 <str>Capital humano</str>
@@ -5809,7 +5809,7 @@
                     <listItem>
                         <conceptBlock id="alpha1530467786" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100G">
                             <label>
-<str style="pref">Human development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100G" refId="hier1530467786" style="pref">Human development</link>
                             </label>
                             <att type="es">
 <str>Desarrollo humano</str>
@@ -5896,7 +5896,7 @@
                     <listItem>
                         <conceptBlock id="alpha1853985252" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100C">
                             <label>
-<str style="pref">Human rights</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100C" refId="hier1853985252" style="pref">Human rights</link>
                             </label>
                             <att type="es">
 <str>Derechos humanos</str>
@@ -5923,7 +5923,7 @@
                     <listItem>
                         <conceptBlock id="alpha2058335118" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#240C">
                             <label>
-<str style="pref">Implementation of educational plans and educational reforms and policies</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#240C" refId="hier2058335118" style="pref">Implementation of educational plans and educational reforms and policies</link>
                             </label>
                             <att type="es">
 <str>Implementación de los planes y las reformas y políticas educativas</str>
@@ -5994,7 +5994,7 @@
                     <listItem>
                         <conceptBlock id="alpha738309432" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#090C">
                             <label>
-<str style="pref">Industrial development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#090C" refId="hier738309432" style="pref">Industrial development</link>
                             </label>
                             <att type="es">
 <str>Desarrollo industrial</str>
@@ -6043,7 +6043,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1746626600" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#350A">
                             <label>
-<str style="pref">Industry and education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#350A" refId="hier-1746626600" style="pref">Industry and education</link>
                             </label>
                             <att type="es">
 <str>Industria y educación</str>
@@ -6068,7 +6068,7 @@
                     <listItem>
                         <conceptBlock id="alpha2103876184" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#110A">
                             <label>
-<str style="pref">Inequality</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#110A" refId="hier2103876184" style="pref">Inequality</link>
                             </label>
                             <att type="es">
 <str>Desigualdad</str>
@@ -6120,7 +6120,7 @@
                     <listItem>
                         <conceptBlock id="alpha-815150124" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#980A">
                             <label>
-<str style="pref">Informatics and computers</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#980A" refId="hier-815150124" style="pref">Informatics and computers</link>
                             </label>
                             <att type="es">
 <str>Informática y computadoras</str>
@@ -6149,7 +6149,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1973703081" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#960D">
                             <label>
-<str style="pref">Information systems</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#960D" refId="hier-1973703081" style="pref">Information systems</link>
                             </label>
                             <att type="es">
 <str>Sistemas de información</str>
@@ -6184,7 +6184,7 @@
                     <listItem>
                         <conceptBlock id="alpha696284986" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330N">
                             <label>
-<str style="pref">Innovations in higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330N" refId="hier696284986" style="pref">Innovations in higher education</link>
                             </label>
                             <att type="es">
 <str>Innovación en educación superior</str>
@@ -6255,7 +6255,7 @@
                     <listItem>
                         <conceptBlock id="alpha371272267" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#410B">
                             <label>
-<str style="pref">Inspection</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#410B" refId="hier371272267" style="pref">Inspection</link>
                             </label>
                             <att type="es">
 <str>Supervisión / Inspección</str>
@@ -6271,7 +6271,7 @@
                     <listItem>
                         <conceptBlock id="alpha1184427019" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#331B">
                             <label>
-<str style="pref">Institutional management in higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#331B" refId="hier1184427019" style="pref">Institutional management in higher education</link>
                             </label>
                             <att type="es">
 <str>Gestión institucional en la educación superior</str>
@@ -6323,7 +6323,7 @@
                     <listItem>
                         <conceptBlock id="alpha500640938" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#250C">
                             <label>
-<str style="pref">Integration with other plans</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#250C" refId="hier500640938" style="pref">Integration with other plans</link>
                             </label>
                             <att type="es">
 <str>Integración con otros planes</str>
@@ -6349,7 +6349,7 @@
                     <listItem>
                         <conceptBlock id="alpha-798250715" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100F">
                             <label>
-<str style="pref">Interethnic relations</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100F" refId="hier-798250715" style="pref">Interethnic relations</link>
                             </label>
                             <att type="es">
 <str>Relaciones interétnicas</str>
@@ -6381,7 +6381,7 @@
                     <listItem>
                         <conceptBlock id="alpha1920181899" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#710A">
                             <label>
-<str style="pref">International co-operation</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#710A" refId="hier1920181899" style="pref">International co-operation</link>
                             </label>
                             <att type="es">
 <str>Cooperación internacional</str>
@@ -6436,7 +6436,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1612639078" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#720A">
                             <label>
-<str style="pref">International organizations</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#720A" refId="hier-1612639078" style="pref">International organizations</link>
                             </label>
                             <att type="es">
 <str>Organizaciones internacionales</str>
@@ -6475,7 +6475,7 @@
                     <listItem>
                         <conceptBlock id="alpha-746272304" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#710C">
                             <label>
-<str style="pref">Investment in/by developing countries</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#710C" refId="hier-746272304" style="pref">Investment in/by developing countries</link>
                             </label>
                             <att type="es">
 <str>Inversión en y por los países en vías de desarrollo</str>
@@ -6494,7 +6494,7 @@
                     <listItem>
                         <conceptBlock id="alpha-587582001" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#260E">
                             <label>
-<str style="pref">Islamic education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#260E" refId="hier-587582001" style="pref">Islamic education</link>
                             </label>
                             <att type="es">
 <str>Educación islámica</str>
@@ -6519,7 +6519,7 @@
                     <listItem>
                         <conceptBlock id="alpha-309363035" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120C">
                             <label>
-<str style="pref">Island countries</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120C" refId="hier-309363035" style="pref">Island countries</link>
                             </label>
                             <att type="es">
 <str>Países insulares</str>
@@ -6574,7 +6574,7 @@
                     <listItem>
                         <conceptBlock id="alpha336458498" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070D">
                             <label>
-<str style="pref">Labour</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070D" refId="hier336458498" style="pref">Labour</link>
                             </label>
                             <att type="es">
 <str>Trabajo</str>
@@ -6642,7 +6642,7 @@
                     <listItem>
                         <conceptBlock id="alpha1593551922" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070F">
                             <label>
-<str style="pref">Labour migration</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070F" refId="hier1593551922" style="pref">Labour migration</link>
                             </label>
                             <att type="es">
 <str>Migración de la mano de obra</str>
@@ -6664,7 +6664,7 @@
                     <listItem>
                         <conceptBlock id="alpha-503669668" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070G">
                             <label>
-<str style="pref">Labour relations</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070G" refId="hier-503669668" style="pref">Labour relations</link>
                             </label>
                             <att type="es">
 <str>Relaciones laborales</str>
@@ -6692,7 +6692,7 @@
                     <listItem>
                         <conceptBlock id="alpha711592317" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070H">
                             <label>
-<str style="pref">Labour statistics</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070H" refId="hier711592317" style="pref">Labour statistics</link>
                             </label>
                             <att type="es">
 <str>Estadísticas relacionadas con el trabajo</str>
@@ -6737,7 +6737,7 @@
                     <listItem>
                         <conceptBlock id="alpha1223771314" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#660C">
                             <label>
-<str style="pref">Language and education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#660C" refId="hier1223771314" style="pref">Language and education</link>
                             </label>
                             <att type="es">
 <str>Lengua y educación</str>
@@ -6753,7 +6753,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1424029079" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#930A">
                             <label>
-<str style="pref">Language dictionaries</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#930A" refId="hier-1424029079" style="pref">Language dictionaries</link>
                             </label>
                             <att type="es">
 <str>Diccionarios de lengua</str>
@@ -6779,7 +6779,7 @@
                     <listItem>
                         <conceptBlock id="alpha1976541245" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#660E">
                             <label>
-<str style="pref">Language policy</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#660E" refId="hier1976541245" style="pref">Language policy</link>
                             </label>
                             <att type="es">
 <str>Política lingüística</str>
@@ -6817,7 +6817,7 @@
                     <listItem>
                         <conceptBlock id="alpha-577903094" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#960C">
                             <label>
-<str style="pref">Library and information science</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#960C" refId="hier-577903094" style="pref">Library and information science</link>
                             </label>
                             <att type="es">
 <str>Bibliotecas e información científica</str>
@@ -6845,7 +6845,7 @@
                     <listItem>
                         <conceptBlock id="alpha1541771103" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#361E">
                             <label>
-<str style="pref">Lifelong education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#361E" refId="hier1541771103" style="pref">Lifelong education</link>
                             </label>
                             <att type="es">
 <str>Educación permanente</str>
@@ -6870,7 +6870,7 @@
                     <listItem>
                         <conceptBlock id="alpha55554495" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330O">
                             <label>
-<str style="pref">Lifelong education and the university</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330O" refId="hier55554495" style="pref">Lifelong education and the university</link>
                             </label>
                             <att type="es">
 <str>Educación continua y universidad</str>
@@ -6905,7 +6905,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1146247475" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#362A">
                             <label>
-<str style="pref">Literacy</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#362A" refId="hier-1146247475" style="pref">Literacy</link>
                             </label>
                             <att type="es">
 <str>Alfabetización</str>
@@ -6940,7 +6940,7 @@
                     <listItem>
                         <conceptBlock id="alpha1597525856" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#362B">
                             <label>
-<str style="pref">Literacy methods</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#362B" refId="hier1597525856" style="pref">Literacy methods</link>
                             </label>
                             <att type="es">
 <str>Métodos de alfabetización</str>
@@ -6959,7 +6959,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1512635377" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#362C">
                             <label>
-<str style="pref">Literacy personnel</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#362C" refId="hier-1512635377" style="pref">Literacy personnel</link>
                             </label>
                             <att type="es">
 <str>Personal de alfabetización</str>
@@ -6984,7 +6984,7 @@
                     <listItem>
                         <conceptBlock id="alpha-702698713" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#362D">
                             <label>
-<str style="pref">Literacy programmes</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#362D" refId="hier-702698713" style="pref">Literacy programmes</link>
                             </label>
                             <att type="es">
 <str>Programas de alfabetización</str>
@@ -7042,7 +7042,7 @@
                     <listItem>
                         <conceptBlock id="alpha-116230844" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#150B">
                             <label>
-<str style="pref">Local government</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#150B" refId="hier-116230844" style="pref">Local government</link>
                             </label>
                             <att type="es">
 <str>Administración local</str>
@@ -7128,7 +7128,7 @@
                     <listItem>
                         <conceptBlock id="alpha-747136769" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#140A">
                             <label>
-<str style="pref">Management</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#140A" refId="hier-747136769" style="pref">Management</link>
                             </label>
                             <att type="es">
 <str>Gestión</str>
@@ -7174,7 +7174,7 @@
                     <listItem>
                         <conceptBlock id="alpha-921032888" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#140B">
                             <label>
-<str style="pref">Management education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#140B" refId="hier-921032888" style="pref">Management education</link>
                             </label>
                             <att type="es">
 <str>Gestión educativa</str>
@@ -7206,7 +7206,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1468193398" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220G">
                             <label>
-<str style="pref">Manpower</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220G" refId="hier-1468193398" style="pref">Manpower</link>
                             </label>
                             <att type="es">
 <str>Mano de obra</str>
@@ -7281,7 +7281,7 @@
                     <listItem>
                         <conceptBlock id="alpha2077354702" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220H">
                             <label>
-<str style="pref">Manpower - high level</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220H" refId="hier2077354702" style="pref">Manpower - high level</link>
                             </label>
                             <att type="es">
 <str>Mano de obra -  alto nivel</str>
@@ -7359,7 +7359,7 @@
                     <listItem>
                         <conceptBlock id="alpha1647411569" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220I">
                             <label>
-<str style="pref">Manpower planning</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220I" refId="hier1647411569" style="pref">Manpower planning</link>
                             </label>
                             <att type="es">
 <str>Planificación de la mano de obra</str>
@@ -7531,7 +7531,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1036186708" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#080B">
                             <label>
-<str style="pref">Migration</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#080B" refId="hier-1036186708" style="pref">Migration</link>
                             </label>
                             <att type="es">
 <str>Migración</str>
@@ -7582,7 +7582,7 @@
                     <listItem>
                         <conceptBlock id="alpha563192074" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#410C">
                             <label>
-<str style="pref">Ministries of Education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#410C" refId="hier563192074" style="pref">Ministries of Education</link>
                             </label>
                             <att type="es">
 <str>Ministerios de educación</str>
@@ -7608,7 +7608,7 @@
                     <listItem>
                         <conceptBlock id="alpha-838982458" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#030E">
                             <label>
-<str style="pref">Models and simulation</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#030E" refId="hier-838982458" style="pref">Models and simulation</link>
                             </label>
                             <att type="es">
 <str>Modelos y simulacros</str>
@@ -7640,7 +7640,7 @@
                     <listItem>
                         <conceptBlock id="alpha376109641" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#660F">
                             <label>
-<str style="pref">Modern language instruction</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#660F" refId="hier376109641" style="pref">Modern language instruction</link>
                             </label>
                             <att type="es">
 <str>Enseñanza de lenguas modernas</str>
@@ -7665,7 +7665,7 @@
                     <listItem>
                         <conceptBlock id="alpha116911536" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#660G">
                             <label>
-<str style="pref">Mother tongue instruction</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#660G" refId="hier116911536" style="pref">Mother tongue instruction</link>
                             </label>
                             <att type="es">
 <str>Enseñanza de la lengua materna</str>
@@ -7696,7 +7696,7 @@
                     <listItem>
                         <conceptBlock id="alpha-377205916" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261D">
                             <label>
-<str style="pref">Multicultural education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261D" refId="hier-377205916" style="pref">Multicultural education</link>
                             </label>
                             <att type="es">
 <str>Educación multicultural</str>
@@ -7771,7 +7771,7 @@
                     <listItem>
                         <conceptBlock id="alpha-154777125" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#020D">
                             <label>
-<str style="pref">National accounts and budgets</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#020D" refId="hier-154777125" style="pref">National accounts and budgets</link>
                             </label>
                             <att type="es">
 <str>Cuentas y presupuestos nacionales</str>
@@ -7790,7 +7790,7 @@
                     <listItem>
                         <conceptBlock id="alpha-500312695" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#050A">
                             <label>
-<str style="pref">National accounts and budgets (methodology)</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#050A" refId="hier-500312695" style="pref">National accounts and budgets (methodology)</link>
                             </label>
                             <att type="es">
 <str>Cuentas y presupuestos nacionales (metodología)</str>
@@ -7878,7 +7878,7 @@
                     <listItem>
                         <conceptBlock id="alpha-177822725" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#030F">
                             <label>
-<str style="pref">Network analysis (PERT)</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#030F" refId="hier-177822725" style="pref">Network analysis (PERT)</link>
                             </label>
                             <att type="es">
 <str>Análisis de la red (PERT)</str>
@@ -7913,7 +7913,7 @@
                     <listItem>
                         <conceptBlock id="alpha1363500543" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#980C">
                             <label>
-<str style="pref">New Information and Communication Technologies (NICT), Internet</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#980C" refId="hier1363500543" style="pref">New Information and Communication Technologies (NICT), Internet</link>
                             </label>
                             <att type="es">
 <str>Nuevas tecnologías de la comunicación y de la información NTCI Internet</str>
@@ -7939,7 +7939,7 @@
                     <listItem>
                         <conceptBlock id="alpha954596858" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#380D">
                             <label>
-<str style="pref">Nomad, minority and migrant education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#380D" refId="hier954596858" style="pref">Nomad, minority and migrant education</link>
                             </label>
                             <att type="es">
 <str>Educación para minorías nómadas y migrantes</str>
@@ -7992,7 +7992,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1925906636" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#360B">
                             <label>
-<str style="pref">Non-formal education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#360B" refId="hier-1925906636" style="pref">Non-formal education</link>
                             </label>
                             <att type="es">
 <str>Educación no formal</str>
@@ -8029,7 +8029,7 @@
                     <listItem>
                         <conceptBlock id="alpha958953473" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#720F">
                             <label>
-<str style="pref">Nongovernmental organizations, NGOs</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#720F" refId="hier958953473" style="pref">Nongovernmental organizations, NGOs</link>
                             </label>
                             <att type="es">
 <str>Organizaciones no gubernamentales ONGs</str>
@@ -8099,7 +8099,7 @@
                     <listItem>
                         <conceptBlock id="alpha-750675945" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220J">
                             <label>
-<str style="pref">Occupational and educational structure of the labour force</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220J" refId="hier-750675945" style="pref">Occupational and educational structure of the labour force</link>
                             </label>
                             <att type="es">
 <str>Estructura ocupacional y educativa de la mano de obra</str>
@@ -8115,7 +8115,7 @@
                     <listItem>
                         <conceptBlock id="alpha1910019858" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220K">
                             <label>
-<str style="pref">Occupational mobility</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#220K" refId="hier1910019858" style="pref">Occupational mobility</link>
                             </label>
                             <att type="es">
 <str>Movilidad ocupacional</str>
@@ -8177,7 +8177,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1543849996" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#140C">
                             <label>
-<str style="pref">Organization theory</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#140C" refId="hier-1543849996" style="pref">Organization theory</link>
                             </label>
                             <att type="es">
 <str>Teoría de la organización</str>
@@ -8246,7 +8246,7 @@
                     <listItem>
                         <conceptBlock id="alpha1693942820" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120D">
                             <label>
-<str style="pref">Participation</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120D" refId="hier1693942820" style="pref">Participation</link>
                             </label>
                             <att type="es">
 <str>Participación</str>
@@ -8287,7 +8287,7 @@
                     <listItem>
                         <conceptBlock id="alpha1526966855" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100D">
                             <label>
-<str style="pref">Peacebuilding</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100D" refId="hier1526966855" style="pref">Peacebuilding</link>
                             </label>
                             <att type="es">
 <str>Consolidación de la paz</str>
@@ -8342,7 +8342,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1493927273" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#230F">
                             <label>
-<str style="pref">PERT in education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#230F" refId="hier-1493927273" style="pref">PERT in education</link>
                             </label>
                             <att type="es">
 <str>PERT en educación</str>
@@ -8384,7 +8384,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1093608033" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#030G">
                             <label>
-<str style="pref">Planning and plan implementation</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#030G" refId="hier-1093608033" style="pref">Planning and plan implementation</link>
                             </label>
                             <att type="es">
 <str>Planificación e implementación de planes</str>
@@ -8471,7 +8471,7 @@
                     <listItem>
                         <conceptBlock id="alpha-440164807" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#262A">
                             <label>
-<str style="pref">Political socialization</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#262A" refId="hier-440164807" style="pref">Political socialization</link>
                             </label>
                             <att type="es">
 <str>Socialización política</str>
@@ -8499,7 +8499,7 @@
                     <listItem>
                         <conceptBlock id="alpha2110630461" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100E">
                             <label>
-<str style="pref">Politics and government</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100E" refId="hier2110630461" style="pref">Politics and government</link>
                             </label>
                             <att type="es">
 <str>Política y gobierno</str>
@@ -8527,7 +8527,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1336701790" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#262B">
                             <label>
-<str style="pref">Politics of education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#262B" refId="hier-1336701790" style="pref">Politics of education</link>
                             </label>
                             <att type="es">
 <str>Aspectos políticos de la educación</str>
@@ -8564,7 +8564,7 @@
                     <listItem>
                         <conceptBlock id="alpha1250368329" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330P">
                             <label>
-<str style="pref">Politics of higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330P" refId="hier1250368329" style="pref">Politics of higher education</link>
                             </label>
                             <att type="es">
 <str>Política de la educación superior</str>
@@ -8589,7 +8589,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1873650110" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#080C">
                             <label>
-<str style="pref">Population and development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#080C" refId="hier-1873650110" style="pref">Population and development</link>
                             </label>
                             <att type="es">
 <str>Población y desarrollo</str>
@@ -8608,7 +8608,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1878062224" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#080D">
                             <label>
-<str style="pref">Population and education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#080D" refId="hier-1878062224" style="pref">Population and education</link>
                             </label>
                             <att type="es">
 <str>Población y educación</str>
@@ -8630,7 +8630,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1989737868" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650H">
                             <label>
-<str style="pref">Population education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650H" refId="hier-1989737868" style="pref">Population education</link>
                             </label>
                             <att type="es">
 <str>Educación en materia de población</str>
@@ -8646,7 +8646,7 @@
                     <listItem>
                         <conceptBlock id="alpha48356101" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#080E">
                             <label>
-<str style="pref">Population policy, family planning</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#080E" refId="hier48356101" style="pref">Population policy, family planning</link>
                             </label>
                             <att type="es">
 <str>Política demográfica planificación familiar</str>
@@ -8668,7 +8668,7 @@
                     <listItem>
                         <conceptBlock id="alpha-2064918224" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#080F">
                             <label>
-<str style="pref">Population statistics</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#080F" refId="hier-2064918224" style="pref">Population statistics</link>
                             </label>
                             <att type="es">
 <str>Estadísticas sobre población</str>
@@ -8687,7 +8687,7 @@
                     <listItem>
                         <conceptBlock id="alpha1427392027" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#080G">
                             <label>
-<str style="pref">Population trends and problems</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#080G" refId="hier1427392027" style="pref">Population trends and problems</link>
                             </label>
                             <att type="es">
 <str>Tendencias y problemas de la población</str>
@@ -8706,7 +8706,7 @@
                     <listItem>
                         <conceptBlock id="alpha1118242257" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#320A">
                             <label>
-<str style="pref">Post-compulsory education (16-19 years)</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#320A" refId="hier1118242257" style="pref">Post-compulsory education (16-19 years)</link>
                             </label>
                             <att type="es">
 <str>Educación pos-obligatoria (16-19 años)</str>
@@ -8750,7 +8750,7 @@
                     <listItem>
                         <conceptBlock id="alpha-829387401" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330L">
                             <label>
-<str style="pref">Postgraduate education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330L" refId="hier-829387401" style="pref">Postgraduate education</link>
                             </label>
                             <att type="es">
 <str>Educación universitaria (estudios de postgrado)</str>
@@ -8766,7 +8766,7 @@
                     <listItem>
                         <conceptBlock id="alpha279862178" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#362E">
                             <label>
-<str style="pref">Post-literacy</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#362E" refId="hier279862178" style="pref">Post-literacy</link>
                             </label>
                             <att type="es">
 <str>Pos-alfabetización</str>
@@ -8795,7 +8795,7 @@
                     <listItem>
                         <conceptBlock id="alpha1884038602" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#010F">
                             <label>
-<str style="pref">Poverty</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#010F" refId="hier1884038602" style="pref">Poverty</link>
                             </label>
                             <att type="es">
 <str>Pobreza</str>
@@ -8893,7 +8893,7 @@
                     <listItem>
                         <conceptBlock id="alpha1970749428" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#310B">
                             <label>
-<str style="pref">Primary and universal education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#310B" refId="hier1970749428" style="pref">Primary and universal education</link>
                             </label>
                             <att type="es">
 <str>Educación primaria y universal</str>
@@ -8963,7 +8963,7 @@
                     <listItem>
                         <conceptBlock id="alpha-932527918" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#410D">
                             <label>
-<str style="pref">Private education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#410D" refId="hier-932527918" style="pref">Private education</link>
                             </label>
                             <att type="es">
 <str>Educación privada</str>
@@ -9044,7 +9044,7 @@
                     <listItem>
                         <conceptBlock id="alpha1074903288" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330Q">
                             <label>
-<str style="pref">Professional education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330Q" refId="hier1074903288" style="pref">Professional education</link>
                             </label>
                             <att type="es">
 <str>Educación profesional</str>
@@ -9106,7 +9106,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1950357906" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#030I">
                             <label>
-<str style="pref">Programme and project management, monitoring and evaluation</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#030I" refId="hier-1950357906" style="pref">Programme and project management, monitoring and evaluation</link>
                             </label>
                             <att type="es">
 <str>Gestión, monitoreo, y evaluación de programas y proyectos</str>
@@ -9167,7 +9167,7 @@
                     <listItem>
                         <conceptBlock id="alpha1926180054" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#150C">
                             <label>
-<str style="pref">Public administration</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#150C" refId="hier1926180054" style="pref">Public administration</link>
                             </label>
                             <att type="es">
 <str>Administración pública</str>
@@ -9204,7 +9204,7 @@
                     <listItem>
                         <conceptBlock id="alpha1306062883" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#050C">
                             <label>
-<str style="pref">Public Finance</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#050C" refId="hier1306062883" style="pref">Public Finance</link>
                             </label>
                             <att type="es">
 <str>Finanzas públicas</str>
@@ -9232,7 +9232,7 @@
                     <listItem>
                         <conceptBlock id="alpha1070930085" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#420B">
                             <label>
-<str style="pref">Public Private Partnership in Education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#420B" refId="hier1070930085" style="pref">Public Private Partnership in Education</link>
                             </label>
                             <att type="es">
 <str>Alianza Público Privada por la Educación</str>
@@ -9304,7 +9304,7 @@
                     <listItem>
                         <conceptBlock id="alpha984686718" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#870C">
                             <label>
-<str style="pref">Qualifications</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#870C" refId="hier984686718" style="pref">Qualifications</link>
                             </label>
                             <att type="es">
 <str>Calificaciones</str>
@@ -9332,7 +9332,7 @@
                     <listItem>
                         <conceptBlock id="alpha1917575549" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#250B">
                             <label>
-<str style="pref">Quality of education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#250B" refId="hier1917575549" style="pref">Quality of education</link>
                             </label>
                             <att type="es">
 <str>Calidad de la educación</str>
@@ -9446,7 +9446,7 @@
                     <listItem>
                         <conceptBlock id="alpha-278527026" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#361F">
                             <label>
-<str style="pref">Recurrent education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#361F" refId="hier-278527026" style="pref">Recurrent education</link>
                             </label>
                             <att type="es">
 <str>Educación continua</str>
@@ -9477,7 +9477,7 @@
                     <listItem>
                         <conceptBlock id="alpha692389345" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330R">
                             <label>
-<str style="pref">Reform of higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330R" refId="hier692389345" style="pref">Reform of higher education</link>
                             </label>
                             <att type="es">
 <str>Reforma de la educación superior</str>
@@ -9509,7 +9509,7 @@
                     <listItem>
                         <conceptBlock id="alpha203055608" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120E">
                             <label>
-<str style="pref">Regional development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120E" refId="hier203055608" style="pref">Regional development</link>
                             </label>
                             <att type="es">
 <str>Desarrollo regional</str>
@@ -9546,7 +9546,7 @@
                     <listItem>
                         <conceptBlock id="alpha1653822103" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120F">
                             <label>
-<str style="pref">Regional disparities</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120F" refId="hier1653822103" style="pref">Regional disparities</link>
                             </label>
                             <att type="es">
 <str>Disparidades regionales</str>
@@ -9565,7 +9565,7 @@
                     <listItem>
                         <conceptBlock id="alpha-163189638" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#450B">
                             <label>
-<str style="pref">Regional disparities in education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#450B" refId="hier-163189638" style="pref">Regional disparities in education</link>
                             </label>
                             <att type="es">
 <str>Disparidades regionales en educación</str>
@@ -9630,7 +9630,7 @@
                     <listItem>
                         <conceptBlock id="alpha-2123485987" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#450C">
                             <label>
-<str style="pref">Regional planning of education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#450C" refId="hier-2123485987" style="pref">Regional planning of education</link>
                             </label>
                             <att type="es">
 <str>Planeamiento regional de la educación</str>
@@ -9674,7 +9674,7 @@
                     <listItem>
                         <conceptBlock id="alpha-232635472" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261E">
                             <label>
-<str style="pref">Religion and education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261E" refId="hier-232635472" style="pref">Religion and education</link>
                             </label>
                             <att type="es">
 <str>Religión y educación</str>
@@ -9710,7 +9710,7 @@
                     <listItem>
                         <conceptBlock id="alpha-612088083" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#170B">
                             <label>
-<str style="pref">Research and development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#170B" refId="hier-612088083" style="pref">Research and development</link>
                             </label>
                             <att type="es">
 <str>Investigación y desarrollo</str>
@@ -9738,7 +9738,7 @@
                     <listItem>
                         <conceptBlock id="alpha-390361346" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330S">
                             <label>
-<str style="pref">Research on higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330S" refId="hier-390361346" style="pref">Research on higher education</link>
                             </label>
                             <att type="es">
 <str>Investigación sobre la educación superior</str>
@@ -9751,7 +9751,7 @@
                     <listItem>
                         <conceptBlock id="alpha-2129943563" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#430F">
                             <label>
-<str style="pref">Resource allocation</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#430F" refId="hier-2129943563" style="pref">Resource allocation</link>
                             </label>
                             <att type="es">
 <str>Asignación de recursos</str>
@@ -9773,7 +9773,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1869717918" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#270E">
                             <label>
-<str style="pref">Returns to education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#270E" refId="hier-1869717918" style="pref">Returns to education</link>
                             </label>
                             <att type="es">
 <str>Rendimiento en materia educativa</str>
@@ -9804,7 +9804,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1192206187" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#910G">
                             <label>
-<str style="pref">Reviews of educational research</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#910G" refId="hier-1192206187" style="pref">Reviews of educational research</link>
                             </label>
                             <att type="es">
 <str>Investigación en educación</str>
@@ -9840,7 +9840,7 @@
                     <listItem>
                         <conceptBlock id="alpha895644885" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120G">
                             <label>
-<str style="pref">Rural development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120G" refId="hier895644885" style="pref">Rural development</link>
                             </label>
                             <att type="es">
 <str>Desarrollo rural</str>
@@ -9896,7 +9896,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1797501979" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#340D">
                             <label>
-<str style="pref">Rural education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#340D" refId="hier-1797501979" style="pref">Rural education</link>
                             </label>
                             <att type="es">
 <str>Educación rural</str>
@@ -10036,7 +10036,7 @@
                     <listItem>
                         <conceptBlock id="alpha271582884" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#420E">
                             <label>
-<str style="pref">School calendars</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#420E" refId="hier271582884" style="pref">School calendars</link>
                             </label>
                             <att type="es">
 <str>Calendarios escolares</str>
@@ -10081,7 +10081,7 @@
                     <listItem>
                         <conceptBlock id="alpha1420007681" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#410E">
                             <label>
-<str style="pref">School leaving age</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#410E" refId="hier1420007681" style="pref">School leaving age</link>
                             </label>
                             <att type="es">
 <str>Finalización de la escolaridad obligatoria</str>
@@ -10104,7 +10104,7 @@
                     <listItem>
                         <conceptBlock id="alpha715733071" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#450D">
                             <label>
-<str style="pref">School locations</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#450D" refId="hier715733071" style="pref">School locations</link>
                             </label>
                             <att type="es">
 <str>Localización de escuelas</str>
@@ -10129,7 +10129,7 @@
                     <listItem>
                         <conceptBlock id="alpha-405385162" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#420C">
                             <label>
-<str style="pref">School management</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#420C" refId="hier-405385162" style="pref">School management</link>
                             </label>
                             <att type="es">
 <str>Gestión escolar</str>
@@ -10198,7 +10198,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1787797200" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#420D">
                             <label>
-<str style="pref">School size, class size</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#420D" refId="hier-1787797200" style="pref">School size, class size</link>
                             </label>
                             <att type="es">
 <str>Dimensión de la escuela dimensión de la clase</str>
@@ -10227,7 +10227,7 @@
                     <listItem>
                         <conceptBlock id="alpha1873002610" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#170C">
                             <label>
-<str style="pref">Science and technology</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#170C" refId="hier1873002610" style="pref">Science and technology</link>
                             </label>
                             <att type="es">
 <str>Ciencia y tecnología</str>
@@ -10252,7 +10252,7 @@
                     <listItem>
                         <conceptBlock id="alpha-222085129" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#170D">
                             <label>
-<str style="pref">Science and technology for development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#170D" refId="hier-222085129" style="pref">Science and technology for development</link>
                             </label>
                             <att type="es">
 <str>Ciencia y tecnología para el desarrollo</str>
@@ -10277,7 +10277,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1416626292" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650I">
                             <label>
-<str style="pref">Science education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650I" refId="hier-1416626292" style="pref">Science education</link>
                             </label>
                             <att type="es">
 <str>Enseñanza de las ciencias</str>
@@ -10321,7 +10321,7 @@
                     <listItem>
                         <conceptBlock id="alpha1964238991" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#170E">
                             <label>
-<str style="pref">Science policies</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#170E" refId="hier1964238991" style="pref">Science policies</link>
                             </label>
                             <att type="es">
 <str>Política científica</str>
@@ -10353,7 +10353,7 @@
                     <listItem>
                         <conceptBlock id="alpha974209635" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#320B">
                             <label>
-<str style="pref">Secondary education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#320B" refId="hier974209635" style="pref">Secondary education</link>
                             </label>
                             <att type="es">
 <str>Educación secundaria</str>
@@ -10641,7 +10641,7 @@
                     <listItem>
                         <conceptBlock id="alpha1185592942" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261F">
                             <label>
-<str style="pref">Social demand for education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261F" refId="hier1185592942" style="pref">Social demand for education</link>
                             </label>
                             <att type="es">
 <str>Demanda social de la educación</str>
@@ -10692,7 +10692,7 @@
                     <listItem>
                         <conceptBlock id="alpha-30568448" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#010H">
                             <label>
-<str style="pref">Socialism, Marxism</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#010H" refId="hier-30568448" style="pref">Socialism, Marxism</link>
                             </label>
                             <att type="es">
 <str>Socialismo Marxismo</str>
@@ -10714,7 +10714,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1146721918" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#810F">
                             <label>
-<str style="pref">Socialist theories of education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#810F" refId="hier-1146721918" style="pref">Socialist theories of education</link>
                             </label>
                             <att type="es">
 <str>Teorías socialistas en educación</str>
@@ -10736,7 +10736,7 @@
                     <listItem>
                         <conceptBlock id="alpha-12651719" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261H">
                             <label>
-<str style="pref">Socialization and schooling</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261H" refId="hier-12651719" style="pref">Socialization and schooling</link>
                             </label>
                             <att type="es">
 <str>Socialización y escolarización</str>
@@ -10755,7 +10755,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1366430941" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#110C">
                             <label>
-<str style="pref">Social mobility</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#110C" refId="hier-1366430941" style="pref">Social mobility</link>
                             </label>
                             <att type="es">
 <str>Movilidad social</str>
@@ -10771,7 +10771,7 @@
                     <listItem>
                         <conceptBlock id="alpha1798689901" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100H">
                             <label>
-<str style="pref">Social planning and social policy</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100H" refId="hier1798689901" style="pref">Social planning and social policy</link>
                             </label>
                             <att type="es">
 <str>Planificación y políticas sociales</str>
@@ -10803,7 +10803,7 @@
                     <listItem>
                         <conceptBlock id="alpha450581124" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#110D">
                             <label>
-<str style="pref">Social research methods</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#110D" refId="hier450581124" style="pref">Social research methods</link>
                             </label>
                             <att type="es">
 <str>Métodos de investigación en ciencias sociales</str>
@@ -10843,7 +10843,7 @@
                     <listItem>
                         <conceptBlock id="alpha55596497" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261G">
                             <label>
-<str style="pref">Social returns to education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261G" refId="hier55596497" style="pref">Social returns to education</link>
                             </label>
                             <att type="es">
 <str>Beneficios sociales de la educación</str>
@@ -10862,7 +10862,7 @@
                     <listItem>
                         <conceptBlock id="alpha1911049157" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#110E">
                             <label>
-<str style="pref">Social sciences</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#110E" refId="hier1911049157" style="pref">Social sciences</link>
                             </label>
                             <att type="es">
 <str>Ciencias Sociales</str>
@@ -10921,7 +10921,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1450381803" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650J">
                             <label>
-<str style="pref">Social studies</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650J" refId="hier-1450381803" style="pref">Social studies</link>
                             </label>
                             <att type="es">
 <str>Estudios sociales</str>
@@ -10952,7 +10952,7 @@
                     <listItem>
                         <conceptBlock id="alpha-342200169" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#020C">
                             <label>
-<str style="pref">Socio-economic development plans</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#020C" refId="hier-342200169" style="pref">Socio-economic development plans</link>
                             </label>
                             <att type="es">
 <str>Planes de desarrollo económico y social</str>
@@ -10968,7 +10968,7 @@
                     <listItem>
                         <conceptBlock id="alpha701425586" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#040A">
                             <label>
-<str style="pref">Socio-economic indicators</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#040A" refId="hier701425586" style="pref">Socio-economic indicators</link>
                             </label>
                             <att type="es">
 <str>Indicadores socio-económicos</str>
@@ -11016,7 +11016,7 @@
                     <listItem>
                         <conceptBlock id="alpha-996822879" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261I">
                             <label>
-<str style="pref">Sociology of education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261I" refId="hier-996822879" style="pref">Sociology of education</link>
                             </label>
                             <att type="es">
 <str>Sociología de la educación</str>
@@ -11041,7 +11041,7 @@
                     <listItem>
                         <conceptBlock id="alpha-675164298" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330T">
                             <label>
-<str style="pref">Sociology of higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330T" refId="hier-675164298" style="pref">Sociology of higher education</link>
                             </label>
                             <att type="es">
 <str>Sociología de la educación superior</str>
@@ -11082,7 +11082,7 @@
                     <listItem>
                         <conceptBlock id="alpha854865673" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261J">
                             <label>
-<str style="pref">Sociology of the school</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#261J" refId="hier854865673" style="pref">Sociology of the school</link>
                             </label>
                             <att type="es">
 <str>Sociología de la escuela</str>
@@ -11107,7 +11107,7 @@
                     <listItem>
                         <conceptBlock id="alpha-816335285" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#980B">
                             <label>
-<str style="pref">Software and programming languages</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#980B" refId="hier-816335285" style="pref">Software and programming languages</link>
                             </label>
                             <att type="es">
 <str>Software y lenguajes de programación</str>
@@ -11120,7 +11120,7 @@
                     <listItem>
                         <conceptBlock id="alpha-839870017" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#380E">
                             <label>
-<str style="pref">Special education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#380E" refId="hier-839870017" style="pref">Special education</link>
                             </label>
                             <att type="es">
 <str>Educación especial</str>
@@ -11159,7 +11159,7 @@
                     <listItem>
                         <conceptBlock id="alpha-66542322" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#020E">
                             <label>
-<str style="pref">Statistical data</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#020E" refId="hier-66542322" style="pref">Statistical data</link>
                             </label>
                             <att type="es">
 <str>Datos estadísticos</str>
@@ -11187,7 +11187,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1424630289" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#040B">
                             <label>
-<str style="pref">Statistical methods</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#040B" refId="hier-1424630289" style="pref">Statistical methods</link>
                             </label>
                             <att type="es">
 <str>Métodos estadísticos</str>
@@ -11227,7 +11227,7 @@
                     <listItem>
                         <conceptBlock id="alpha583290348" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#231A">
                             <label>
-<str style="pref">Statistical methods in educational planning - EMIS</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#231A" refId="hier583290348" style="pref">Statistical methods in educational planning - EMIS</link>
                             </label>
                             <att type="es">
 <str>Métodos estadísticos en el planeamiento de la educación - EMIS</str>
@@ -11258,7 +11258,7 @@
                     <listItem>
                         <conceptBlock id="alpha796935252" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#040C">
                             <label>
-<str style="pref">Statistics - applications</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#040C" refId="hier796935252" style="pref">Statistics - applications</link>
                             </label>
                             <att type="es">
 <str>Estadísticas -  aplicaciones</str>
@@ -11313,7 +11313,7 @@
                     <listItem>
                         <conceptBlock id="alpha50753047" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#430G">
                             <label>
-<str style="pref">Student finance</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#430G" refId="hier50753047" style="pref">Student finance</link>
                             </label>
                             <att type="es">
 <str>Financiamiento de estudiantes</str>
@@ -11341,7 +11341,7 @@
                     <listItem>
                         <conceptBlock id="alpha1861260331" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#331E">
                             <label>
-<str style="pref">Student finance in higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#331E" refId="hier1861260331" style="pref">Student finance in higher education</link>
                             </label>
                             <att type="es">
 <str>Financiamiento de estudiantes de educación superior</str>
@@ -11400,7 +11400,7 @@
                     <listItem>
                         <conceptBlock id="alpha-931976859" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330U">
                             <label>
-<str style="pref">Students</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330U" refId="hier-931976859" style="pref">Students</link>
                             </label>
                             <att type="es">
 <str>Alumnos</str>
@@ -11425,7 +11425,7 @@
                     <listItem>
                         <conceptBlock id="alpha537279515" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#870E">
                             <label>
-<str style="pref">Studies of achievement</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#870E" refId="hier537279515" style="pref">Studies of achievement</link>
                             </label>
                             <att type="es">
 <str>Estudios de rendimiento</str>
@@ -11453,7 +11453,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1286410468" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#930B">
                             <label>
-<str style="pref">Subject dictionaries</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#930B" refId="hier-1286410468" style="pref">Subject dictionaries</link>
                             </label>
                             <att type="es">
 <str>Diccionarios temáticos</str>
@@ -11482,7 +11482,7 @@
                     <listItem>
                         <conceptBlock id="alpha1799500759" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#040D">
                             <label>
-<str style="pref">Surveys and sampling</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#040D" refId="hier1799500759" style="pref">Surveys and sampling</link>
                             </label>
                             <att type="es">
 <str>Encuestas y muestreo</str>
@@ -11507,7 +11507,7 @@
                     <listItem>
                         <conceptBlock id="alpha-111681283" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#030J">
                             <label>
-<str style="pref">Systems analysis</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#030J" refId="hier-111681283" style="pref">Systems analysis</link>
                             </label>
                             <att type="es">
 <str>Análisis de sistemas</str>
@@ -11523,7 +11523,7 @@
                     <listItem>
                         <conceptBlock id="alpha-648642188" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#230H">
                             <label>
-<str style="pref">Systems analysis in education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#230H" refId="hier-648642188" style="pref">Systems analysis in education</link>
                             </label>
                             <att type="es">
 <str>Análisis de sistemas en educación</str>
@@ -11546,7 +11546,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1203133217" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#970D">
                             <label>
-<str style="pref">Tables</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#970D" refId="hier-1203133217" style="pref">Tables</link>
                             </label>
                             <att type="es">
 <str>Tablas</str>
@@ -11559,7 +11559,7 @@
                     <listItem>
                         <conceptBlock id="alpha-271684819" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470B">
                             <label>
-<str style="pref">Teacher associations</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470B" refId="hier-271684819" style="pref">Teacher associations</link>
                             </label>
                             <att type="es">
 <str>Asociaciones docentes</str>
@@ -11572,7 +11572,7 @@
                     <listItem>
                         <conceptBlock id="alpha334316203" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470D">
                             <label>
-<str style="pref">Teacher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470D" refId="hier334316203" style="pref">Teacher education</link>
                             </label>
                             <att type="es">
 <str>Capacitación docente</str>
@@ -11609,7 +11609,7 @@
                     <listItem>
                         <conceptBlock id="alpha748857047" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#860G">
                             <label>
-<str style="pref">Teacher evaluation</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#860G" refId="hier748857047" style="pref">Teacher evaluation</link>
                             </label>
                             <att type="es">
 <str>Evaluación de docentes</str>
@@ -11625,7 +11625,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1615478825" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470F">
                             <label>
-<str style="pref">Teacher improvement</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470F" refId="hier-1615478825" style="pref">Teacher improvement</link>
                             </label>
                             <att type="es">
 <str>Perfeccionamiento docente</str>
@@ -11666,7 +11666,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1164650259" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470A">
                             <label>
-<str style="pref">Teachers</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470A" refId="hier-1164650259" style="pref">Teachers</link>
                             </label>
                             <att type="es">
 <str>Docentes</str>
@@ -11679,7 +11679,7 @@
                     <listItem>
                         <conceptBlock id="alpha2101870729" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470H">
                             <label>
-<str style="pref">Teacher salaries</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470H" refId="hier2101870729" style="pref">Teacher salaries</link>
                             </label>
                             <att type="es">
 <str>Salarios docentes</str>
@@ -11708,7 +11708,7 @@
                     <listItem>
                         <conceptBlock id="alpha-694867407" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330V">
                             <label>
-<str style="pref">Teachers in higher education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330V" refId="hier-694867407" style="pref">Teachers in higher education</link>
                             </label>
                             <att type="es">
 <str>Docentes en la educación superior</str>
@@ -11739,7 +11739,7 @@
                     <listItem>
                         <conceptBlock id="alpha700161812" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470I">
                             <label>
-<str style="pref">Teacher status</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470I" refId="hier700161812" style="pref">Teacher status</link>
                             </label>
                             <att type="es">
 <str>Categorías de los docentes</str>
@@ -11758,7 +11758,7 @@
                     <listItem>
                         <conceptBlock id="alpha1716315475" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#610A">
                             <label>
-<str style="pref">Teacher-student relations</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#610A" refId="hier1716315475" style="pref">Teacher-student relations</link>
                             </label>
                             <att type="es">
 <str>Relaciones maestro-alumno</str>
@@ -11789,7 +11789,7 @@
                     <listItem>
                         <conceptBlock id="alpha558864194" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470J">
                             <label>
-<str style="pref">Teacher supply and demand</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#470J" refId="hier558864194" style="pref">Teacher supply and demand</link>
                             </label>
                             <att type="es">
 <str>Oferta y demanda de docentes</str>
@@ -11824,7 +11824,7 @@
                     <listItem>
                         <conceptBlock id="alpha404243432" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#610B">
                             <label>
-<str style="pref">Teaching-learning strategies</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#610B" refId="hier404243432" style="pref">Teaching-learning strategies</link>
                             </label>
                             <att type="es">
 <str>Estrategias de enseñanza y aprendizaje</str>
@@ -11886,7 +11886,7 @@
                     <listItem>
                         <conceptBlock id="alpha2083982510" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330W">
                             <label>
-<str style="pref">Teaching methods</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#330W" refId="hier2083982510" style="pref">Teaching methods</link>
                             </label>
                             <att type="es">
 <str>Métodos pedagógicos</str>
@@ -11928,7 +11928,7 @@
                     <listItem>
                         <conceptBlock id="alpha1018049830" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#350B">
                             <label>
-<str style="pref">Technical and vocational education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#350B" refId="hier1018049830" style="pref">Technical and vocational education</link>
                             </label>
                             <att type="es">
 <str>Educación técnica y vocacional</str>
@@ -11963,7 +11963,7 @@
                     <listItem>
                         <conceptBlock id="alpha-471983265" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#710D">
                             <label>
-<str style="pref">Technical co-operation</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#710D" refId="hier-471983265" style="pref">Technical co-operation</link>
                             </label>
                             <att type="es">
 <str>Cooperación técnica</str>
@@ -11982,7 +11982,7 @@
                     <listItem>
                         <conceptBlock id="alpha-576340195" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#710E">
                             <label>
-<str style="pref">Technical co-operation among developing countries</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#710E" refId="hier-576340195" style="pref">Technical co-operation among developing countries</link>
                             </label>
                             <att type="es">
 <str>Cooperación técnica entre países en vías de desarrollo</str>
@@ -12008,7 +12008,7 @@
                     <listItem>
                         <conceptBlock id="alpha267688516" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#170H">
                             <label>
-<str style="pref">Technological change</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#170H" refId="hier267688516" style="pref">Technological change</link>
                             </label>
                             <att type="es">
 <str>Cambio tecnológico</str>
@@ -12034,7 +12034,7 @@
                     <listItem>
                         <conceptBlock id="alpha1999099416" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#170I">
                             <label>
-<str style="pref">Technology transfer</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#170I" refId="hier1999099416" style="pref">Technology transfer</link>
                             </label>
                             <att type="es">
 <str>Transferencia de tecnología</str>
@@ -12063,7 +12063,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1819328045" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#870F">
                             <label>
-<str style="pref">Testing</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#870F" refId="hier-1819328045" style="pref">Testing</link>
                             </label>
                             <att type="es">
 <str>Pruebas</str>
@@ -12102,7 +12102,7 @@
                     <listItem>
                         <conceptBlock id="alpha673731487" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#931A">
                             <label>
-<str style="pref">Thesauri</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#931A" refId="hier673731487" style="pref">Thesauri</link>
                             </label>
                             <att type="es">
 <str>Tesauros</str>
@@ -12128,7 +12128,7 @@
                     <listItem>
                         <conceptBlock id="alpha-433566940" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#090F">
                             <label>
-<str style="pref">Tourism</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#090F" refId="hier-433566940" style="pref">Tourism</link>
                             </label>
                             <att type="es">
 <str>Turismo</str>
@@ -12151,7 +12151,7 @@
                     <listItem>
                         <conceptBlock id="alpha-981807044" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#090G">
                             <label>
-<str style="pref">Trade</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#090G" refId="hier-981807044" style="pref">Trade</link>
                             </label>
                             <att type="es">
 <str>Comercio</str>
@@ -12183,7 +12183,7 @@
                     <listItem>
                         <conceptBlock id="alpha1804132542" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#410F">
                             <label>
-<str style="pref">Training educational administrators</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#410F" refId="hier1804132542" style="pref">Training educational administrators</link>
                             </label>
                             <att type="es">
 <str>Capacitación de los administradores de la educación</str>
@@ -12224,7 +12224,7 @@
                     <listItem>
                         <conceptBlock id="alpha1645677750" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#240D">
                             <label>
-<str style="pref">Training educational planners</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#240D" refId="hier1645677750" style="pref">Training educational planners</link>
                             </label>
                             <att type="es">
 <str>Capacitación de planificadores de la educación</str>
@@ -12246,7 +12246,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1765399546" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#150D">
                             <label>
-<str style="pref">Training for public and development administration</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#150D" refId="hier-1765399546" style="pref">Training for public and development administration</link>
                             </label>
                             <att type="es">
 <str>Capacitación para la administración pública</str>
@@ -12329,7 +12329,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1240078967" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#720C">
                             <label>
-<str style="pref">UNESCO</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#720C" refId="hier-1240078967" style="pref">UNESCO</link>
                             </label>
                             <att type="es">
 <str>UNESCO</str>
@@ -12345,7 +12345,7 @@
                     <listItem>
                         <conceptBlock id="alpha863420966" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#720D">
                             <label>
-<str style="pref">United Nations</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#720D" refId="hier863420966" style="pref">United Nations</link>
                             </label>
                             <att type="es">
 <str>Naciones Unidas</str>
@@ -12391,7 +12391,7 @@
                     <listItem>
                         <conceptBlock id="alpha991672697" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#331G">
                             <label>
-<str style="pref">University enterprise partnership</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#331G" refId="hier991672697" style="pref">University enterprise partnership</link>
                             </label>
                             <att type="es">
 <str>Colaboración entre universidad y empresa</str>
@@ -12459,7 +12459,7 @@
                     <listItem>
                         <conceptBlock id="alpha-2037661620" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120H">
                             <label>
-<str style="pref">Urban development</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#120H" refId="hier-2037661620" style="pref">Urban development</link>
                             </label>
                             <att type="es">
 <str>Desarrollo urbano</str>
@@ -12493,7 +12493,7 @@
                     <listItem>
                         <conceptBlock id="alpha536873244" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#340E">
                             <label>
-<str style="pref">Urban education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#340E" refId="hier536873244" style="pref">Urban education</link>
                             </label>
                             <att type="es">
 <str>Educación urbana</str>
@@ -12568,7 +12568,7 @@
                     <listItem>
                         <conceptBlock id="alpha258732512" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#910H">
                             <label>
-<str style="pref">Use of educational research</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#910H" refId="hier258732512" style="pref">Use of educational research</link>
                             </label>
                             <att type="es">
 <str>Uso de la investigación educativa</str>
@@ -12598,7 +12598,7 @@
                     <listItem>
                         <conceptBlock id="alpha-2011792371" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650G">
                             <label>
-<str style="pref">Values and peace education</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#650G" refId="hier-2011792371" style="pref">Values and peace education</link>
                             </label>
                             <att type="es">
 <str>Educación sobre los valores y en pro de la paz</str>
@@ -12620,7 +12620,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1616186954" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#350C">
                             <label>
-<str style="pref">Vocational education teachers</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#350C" refId="hier-1616186954" style="pref">Vocational education teachers</link>
                             </label>
                             <att type="es">
 <str>Profesores de educación vocacional</str>
@@ -12674,7 +12674,7 @@
                     <listItem>
                         <conceptBlock id="alpha-112932189" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070I">
                             <label>
-<str style="pref">Wages</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070I" refId="hier-112932189" style="pref">Wages</link>
                             </label>
                             <att type="es">
 <str>Salarios</str>
@@ -12719,7 +12719,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1234734274" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100I">
                             <label>
-<str style="pref">Women</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100I" refId="hier-1234734274" style="pref">Women</link>
                             </label>
                             <att type="es">
 <str>Mujer</str>
@@ -12741,7 +12741,7 @@
                     <listItem>
                         <conceptBlock id="alpha-881944443" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070J">
                             <label>
-<str style="pref">Women and work</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070J" refId="hier-881944443" style="pref">Women and work</link>
                             </label>
                             <att type="es">
 <str>Mujer y Trabajo</str>
@@ -12789,7 +12789,7 @@
                     <listItem>
                         <conceptBlock id="alpha249970748" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#350D">
                             <label>
-<str style="pref">Work experience programmes</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#350D" refId="hier249970748" style="pref">Work experience programmes</link>
                             </label>
                             <att type="es">
 <str>Programas de experiencia laboral</str>
@@ -12838,7 +12838,7 @@
                     <listItem>
                         <conceptBlock id="alpha-864802574" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070L">
                             <label>
-<str style="pref">Working conditions</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#070L" refId="hier-864802574" style="pref">Working conditions</link>
                             </label>
                             <att type="es">
 <str>Condiciones laborales</str>
@@ -12928,7 +12928,7 @@
                     <listItem>
                         <conceptBlock id="alpha406737570" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#720E">
                             <label>
-<str style="pref">World Bank</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#720E" refId="hier406737570" style="pref">World Bank</link>
                             </label>
                             <att type="es">
 <str>Banco Mundial</str>
@@ -12965,7 +12965,7 @@
                     <listItem>
                         <conceptBlock id="alpha-1204249934" uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100J">
                             <label>
-<str style="pref">Youth</str>
+<link uri="http://www.iiep.unesco.org/Ontology/ThemeClassification#100J" refId="hier-1204249934" style="pref">Youth</link>
                             </label>
                             <att type="es">
 <str>Juventud</str>
@@ -16846,7 +16846,7 @@
             </section>
         </kosDisplay>
         <kosDisplay displayId="trans0">
-            <section title="fr">
+            <section title="French">
                 <table>
                     <tableHeader>
                         <cell>
@@ -22108,7 +22108,7 @@
             </section>
         </kosDisplay>
         <kosDisplay displayId="trans1">
-            <section title="es">
+            <section title="Spanish">
                 <table>
                     <tableHeader>
                         <cell>

@@ -13,19 +13,15 @@ public class BodyReader {
 
 	// generators for display contained in this body
 	protected List<AbstractKosDisplayGenerator> generators;
-
-	// ID of the main display in the body
-	protected String mainDisplayId;
 	
-	public BodyReader(List<AbstractKosDisplayGenerator> generators, String mainDisplayId) {
+	public BodyReader(List<AbstractKosDisplayGenerator> generators) {
 		super();
 		this.generators = generators;
-		this.mainDisplayId = mainDisplayId;
 	}
 	
 	public BodyReader(AbstractKosDisplayGenerator generator) {
 		// the main display ID is automatically the ID of the single generator
-		this(Collections.singletonList(generator), generator.getDisplayId());
+		this(Collections.singletonList(generator));
 	}
 	
 	public KosDocumentBody readBody(String mainLang, URI conceptScheme) 
@@ -33,23 +29,11 @@ public class BodyReader {
 		KosDocumentBody body = new KosDocumentBody();
 		
 		for (AbstractKosDisplayGenerator aGenerator : this.generators) {
-			KosDisplay display = aGenerator.generateDisplay(mainLang, conceptScheme, this);
-			// if this is the main display in the body, mark it as such
-			if(display.getDisplayId().equals(this.mainDisplayId)) {
-				display.setMain(true);
-			}
+			KosDisplay display = aGenerator.generateDisplay(mainLang, conceptScheme);
 			body.getKosDisplay().add(display);
 		}
 		
 		return body;
-	}
-
-	public String getMainDisplayId() {
-		return mainDisplayId;
-	}
-
-	public void setMainDisplayId(String mainDisplayId) {
-		this.mainDisplayId = mainDisplayId;
 	}
 	
 }

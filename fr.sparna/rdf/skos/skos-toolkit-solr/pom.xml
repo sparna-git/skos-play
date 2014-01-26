@@ -5,7 +5,7 @@
     <parent>
         <groupId>fr.sparna.rdf.skos</groupId>
         <artifactId>sparna-skos</artifactId>
-        <version>0.42</version>
+        <version>0.44</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -31,6 +31,11 @@
 	        <artifactId>slf4j-api</artifactId>
 	    </dependency>
 
+		<dependency> 
+		  <groupId>org.slf4j</groupId>
+		  <artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.openrdf.sesame</groupId>
 			<artifactId>sesame-runtime</artifactId>
@@ -49,6 +54,31 @@
         <dependency>
             <groupId>fr.sparna.rdf.skos</groupId>
             <artifactId>skos-toolkit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-common</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-core</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+
+        <!-- for an embedded SolR server -->
+        <dependency>
+           <groupId>javax.servlet</groupId>
+           <artifactId>servlet-api</artifactId>
+           <version>2.5</version>
         </dependency>
 
     </dependencies>

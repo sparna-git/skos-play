@@ -62,12 +62,12 @@ public class HierarchicalDisplayGenerator extends AbstractKosDisplayGenerator {
 	}
 
 	@Override
-	public KosDisplay doGenerate(final String lang, final URI conceptScheme, BodyReader bodyReader) 
+	public KosDisplay doGenerate(final String lang, final URI conceptScheme) 
 	throws SparqlPerformException {
 		log.debug("Reading hierarchical structure in '"+lang+"' for conceptScheme '"+conceptScheme+"'...");
 		
 		// init ConceptBlockReader
-		this.cbReader.initInternal(lang, conceptScheme, this.displayId, bodyReader.getMainDisplayId());
+		this.cbReader.initInternal(lang, conceptScheme, this.displayId);
 		
 		// read types - this could be preloaded
 		PropertyReader typeReader = new PropertyReader(repository, URI.create(RDF.TYPE.stringValue()));
@@ -154,7 +154,9 @@ public class HierarchicalDisplayGenerator extends AbstractKosDisplayGenerator {
 		KosDocumentHeader header = headerReader.read("en", (args.length > 1)?URI.create(args[1]):null);
 		document.setHeader(header);
 		
-		HierarchicalDisplayGenerator reader = new HierarchicalDisplayGenerator(r, new ConceptBlockReader(r, EXPANDED_SKOS_PROPERTIES));
+		ConceptBlockReader cbReader = new ConceptBlockReader(r);
+		cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES);
+		HierarchicalDisplayGenerator reader = new HierarchicalDisplayGenerator(r, cbReader);
 		BodyReader bodyReader = new BodyReader(reader);
 		document.setBody(bodyReader.readBody("en", (args.length > 1)?URI.create(args[1]):null));
 

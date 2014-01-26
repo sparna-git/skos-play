@@ -5,17 +5,27 @@ import org.openrdf.model.URI;
 
 import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 
-public class KeyValueSparqlHelperBase<Key, Value> implements KeyValueSparqlHelperIfc<Key, Value> {
+/**
+ * A base implementation of KeyValueHelperIfc<Key, Value> that takes together a 
+ * SparqlQueryBuilderIfc, a corresponding KeyMappingGeneratorIfc, and a corresponding 
+ * KeyValueBindingSetReaderIfc.
+ * 
+ * @author Thomas Francart
+ *
+ * @param <Key>
+ * @param <Value>
+ */
+public class KeyValueHelperBase<Key, Value> implements KeyValueHelperIfc<Key, Value> {
 
 	protected SparqlQueryBuilderIfc SPARQLQueryBuilder;
 	protected KeyMappingGeneratorIfc<Key> keyMappingGenerator;
 	protected KeyValueBindingSetReaderIfc<Key, Value> keyValueBindingSetReader;
 
-	public KeyValueSparqlHelperBase() {
+	public KeyValueHelperBase() {
 		super();
 	}
 
-	public KeyValueSparqlHelperBase(
+	public KeyValueHelperBase(
 			SparqlQueryBuilderIfc SPARQLQueryBuilder,
 			KeyMappingGeneratorIfc<Key> keyMappingGenerator,
 			KeyValueBindingSetReaderIfc<Key, Value> keyValueBindingSetReader
@@ -53,26 +63,26 @@ public class KeyValueSparqlHelperBase<Key, Value> implements KeyValueSparqlHelpe
 		this.keyValueBindingSetReader = keyValueBindingSetReader;
 	}
 
-	public static KeyValueSparqlHelperBase<URI, URI> createURIHelper(
+	public static KeyValueHelperBase<URI, URI> createURIHelper(
 			SparqlQueryBuilderIfc builder,
 			String keyVarName,
 			String valueVarName
 	) {
-		return new KeyValueSparqlHelperBase<URI, URI>(
+		return new KeyValueHelperBase<URI, URI>(
 			builder,
-			new UriMappingGenerator(keyVarName),
-			new UriToURIBindingSetReader(keyVarName, valueVarName)			
+			new UriKeyMappingGenerator(keyVarName),
+			new UriToUriBindingSetReader(keyVarName, valueVarName)			
 		);
 	}
 	
-	public static KeyValueSparqlHelperBase<URI, Literal> createLiteralHelper(
+	public static KeyValueHelperBase<URI, Literal> createLiteralHelper(
 			SparqlQueryBuilderIfc builder,
 			String keyVarName,
 			String valueVarName
 	) {
-		return new KeyValueSparqlHelperBase<URI, Literal>(
+		return new KeyValueHelperBase<URI, Literal>(
 			builder,
-			new UriMappingGenerator(keyVarName),
+			new UriKeyMappingGenerator(keyVarName),
 			new UriToLiteralBindingSetReader(keyVarName, valueVarName)			
 		);
 	}

@@ -36,12 +36,12 @@ public class KeyValueReader<Key, Value> {
 	// the cache of values
 	private ListMap<Key, Value> cache;
 
-	private KeyValueSparqlHelperIfc<Key, Value> helper;
+	private KeyValueHelperIfc<Key, Value> helper;
 	
 
 	public KeyValueReader(
 			Repository repository,
-			KeyValueSparqlHelperIfc<Key, Value> helper
+			KeyValueHelperIfc<Key, Value> helper
 	) {
 		this.repository = repository;
 		this.helper = helper;

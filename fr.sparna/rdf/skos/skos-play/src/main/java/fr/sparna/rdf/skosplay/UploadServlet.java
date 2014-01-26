@@ -196,6 +196,8 @@ public class UploadServlet extends HttpServlet {
 				);
 				return;
 			}
+			
+			
 		} catch (SparqlPerformException e) {
 			e.printStackTrace();
 			doError(request, response, e);
