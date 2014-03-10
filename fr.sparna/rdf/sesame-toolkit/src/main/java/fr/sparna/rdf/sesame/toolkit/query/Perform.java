@@ -101,6 +101,8 @@ public class Perform {
 		super();
 		this.connection = connection;
 		this.includeInferred = includeInferred;
+		// sets the Repository from the one fetched from the connection
+		this.repository = this.connection.getRepository();
 	}
 	
 	/**
