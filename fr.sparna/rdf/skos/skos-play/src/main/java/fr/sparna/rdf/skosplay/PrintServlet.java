@@ -315,6 +315,10 @@ public class PrintServlet extends HttpServlet {
 			document.setBody(bodyReader.readBody(language, scheme));
 
 			DisplayPrinter printer = new DisplayPrinter();
+			// TODO : use Spring for configuration for easier debugging config
+			// for the moment we desactivate debugging completely
+			printer.setDebug(false);
+			
 			switch(outputType) {
 			case HTML : {
 				printer.printToHtml(document, response.getOutputStream());
