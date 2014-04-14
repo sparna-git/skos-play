@@ -34,6 +34,7 @@ public class DisplayPrinter {
 	public static String STYLESHEET_DISPLAY_TO_FOP = "stylesheets/display-to-fop.xsl";
 	
 	protected boolean debug = true;
+	protected String debugPath = null;
 	
 	protected Map<String, Object> transformerParams = new HashMap<String, Object>();
 	
@@ -47,6 +48,7 @@ public class DisplayPrinter {
 		
 		FopProcessor p = new FopProcessor();
 		p.setDebugFo(debug);
+		p.setDebugPath(this.debugPath);
 		StreamSource xslSource = new StreamSource(this.getClass().getClassLoader().getResourceAsStream(STYLESHEET_DISPLAY_TO_FOP));
 		Transformer t = XSLProcessor.createDefaultProcessor().createTransformer(xslSource);
 		if(this.transformerParams != null) {
@@ -70,6 +72,7 @@ public class DisplayPrinter {
 		
 		FopProcessor p = new FopProcessor();
 		p.setDebugFo(debug);
+		p.setDebugPath(this.debugPath);
 		StreamSource xslSource = new StreamSource(this.getClass().getClassLoader().getResourceAsStream(STYLESHEET_DISPLAY_TO_FOP));
 		Transformer t = XSLProcessor.createDefaultProcessor().createTransformer(xslSource);
 		if(this.transformerParams != null) {
@@ -144,7 +147,7 @@ public class DisplayPrinter {
 	
 	private void debugJAXBMarshalling(Marshaller m, KosDocument document) throws JAXBException {
 		if(debug) {
-			File debugFile = new File(".DisplayPrinter-debug.xml");
+			File debugFile = new File(((debugPath != null)?debugPath:"")+".DisplayPrinter-debug.xml");
 			log.debug("Will debug JAXB Marshalling in "+debugFile.getAbsolutePath());
 			m.setProperty("jaxb.formatted.output", true);
 			m.marshal(document, debugFile);
@@ -165,5 +168,13 @@ public class DisplayPrinter {
 
 	public void setTransformerParams(Map<String, Object> transformerParams) {
 		this.transformerParams = transformerParams;
+	}
+
+	public String getDebugPath() {
+		return debugPath;
+	}
+
+	public void setDebugPath(String debugPath) {
+		this.debugPath = debugPath;
 	}	
 }
