@@ -24,6 +24,7 @@ public class FopProcessor {
 
 	protected String outputMimeType = MimeConstants.MIME_PDF;
 	protected boolean debugFo = false;
+	protected String debugPath = null;
 	
 	public Fop createFop(OutputStream outStream) throws FOPException, TransformerException {
 		// create an instance of fop factory
@@ -77,7 +78,7 @@ public class FopProcessor {
 		Result res = new SAXResult(fop.getDefaultHandler());
 		
 		if(debugFo) {
-			File debugFile = new File(".FopProcessor-debug.xml");
+			File debugFile = new File(((debugPath != null)?debugPath:"")+".FopProcessor-debug.xml");
 			if(!debugFile.exists()) {
 				try {
 					debugFile.createNewFile();
@@ -140,6 +141,14 @@ public class FopProcessor {
 
 	public void setDebugFo(boolean debugFo) {
 		this.debugFo = debugFo;
+	}
+
+	public String getDebugPath() {
+		return debugPath;
+	}
+
+	public void setDebugPath(String debugPath) {
+		this.debugPath = debugPath;
 	}	
 	
 }
