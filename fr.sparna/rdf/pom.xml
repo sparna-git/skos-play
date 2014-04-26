@@ -4,7 +4,7 @@
 
     <groupId>fr.sparna.rdf</groupId>
     <artifactId>sparna-rdf</artifactId>
-    <version>2-SNAPSHOT</version>
+    <version>3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -30,22 +30,6 @@
         <module>jena-repository</module>
         <module>dbpedia-lookup-client</module>
     </modules>
-
-    <repositories>
-        <repository>
-            <id>openrdf</id>
-            <name>OpenRDF Repository</name>
-            <url>http://repo.aduna-software.org/maven2/releases</url>
-	        <releases>
-                <updatePolicy>never</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </releases>
-            <snapshots>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <properties>
       <sesame.version>2.7.1</sesame.version>
