@@ -181,31 +181,56 @@
     	</sequence>
     </complexType>
     <element name="kwicIndex" type="disp:kwicIndex"></element>
-	
-	<complexType name="kwicEntry">
-		<annotation>
-        	<documentation>Representation of a KWIC index entry.</documentation>
-        </annotation>
-        <sequence>
-        	<element minOccurs="1" maxOccurs="1" ref="disp:label">
-        		<annotation><documentation>Stores the complete label + the type pref / alt</documentation></annotation>
-        	</element>
-        </sequence>
-        <attribute name="uri" type="anyURI">
-        	<annotation><documentation>URI of the corresponding concept</documentation></annotation>
-        </attribute>
-        <attribute name="before" type="string">
-        	<annotation><documentation>Beginning of the string entry, may be empty.</documentation></annotation>
-        </attribute>
-        <attribute name="keyLabel" type="string">
-        	<annotation><documentation>Part of the label that corresponds to the index entry</documentation></annotation>
-        </attribute>
-        <attribute name="after" type="string">
-        	<annotation><documentation>End of the string entry, may be empty.</documentation></annotation>
-        </attribute>
+
+    <complexType name="kwicEntry">
+    	<annotation>
+    		<documentation>
+    			Representation of a KWIC index entry.
+    		</documentation>
+    	</annotation>
+    	<sequence>
+    		<element minOccurs="1" maxOccurs="1" ref="disp:label">
+    			<annotation>
+    				<documentation>
+    					Stores the complete label + the type pref / alt
+    				</documentation>
+    			</annotation>
+    		</element>
+    		<element ref="disp:att" minOccurs="0" maxOccurs="1"></element>
+    	</sequence>
+    	<attribute name="uri" type="anyURI">
+    		<annotation>
+    			<documentation>
+    				URI of the corresponding concept
+    			</documentation>
+    		</annotation>
+    	</attribute>
+    	<attribute name="before" type="string">
+    		<annotation>
+    			<documentation>
+    				Beginning of the string entry, may be empty.
+    			</documentation>
+    		</annotation>
+    	</attribute>
+    	<attribute name="key" type="string">
+    		<annotation>
+    			<documentation>
+    				Part of the label that corresponds to the index
+    				entry
+    			</documentation>
+    		</annotation>
+    	</attribute>
+    	<attribute name="after" type="string">
+    		<annotation>
+    			<documentation>
+    				End of the string entry, may be empty.
+    			</documentation>
+    		</annotation>
+    	</attribute>
+    	<attribute name="id" type="ID"></attribute>
     </complexType>
-	
-	<!-- End KWIC Index -->
+
+    <!-- End KWIC Index -->
 	
 	<!-- conceptBlock -->
 	

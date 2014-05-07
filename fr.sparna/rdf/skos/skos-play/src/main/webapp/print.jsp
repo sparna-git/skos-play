@@ -157,6 +157,11 @@
 								<input type="radio" name="display" id="complete_multilingual" value="complete_multilingual" hierarchical="true">
 								<fmt:message key="print.form.displayType.complete_multilingual" />
 								<span class="help-inline"><fmt:message key="print.form.displayType.complete_multilingual.help" /></span>
+							</label>
+							<label class="radio">
+								<input type="radio" name="display" id="permuted_index" value="permuted_index">
+								<fmt:message key="print.form.displayType.permuted_index" />
+								<span class="help-inline"><fmt:message key="print.form.displayType.permuted_index.help" /></span>
 							</label>						
 						</div>
 					</div>

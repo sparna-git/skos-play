@@ -46,8 +46,8 @@ public class IndexPrinter {
 				paddingSpaces += " ";
 			}
 			s.append(paddingSpaces+anEntry.getBefore());
-			s.append(" "+anEntry.getKeyLabel());
-			s.append(" "+anEntry.getAfter());
+			s.append(" "+anEntry.getKey());
+			s.append(anEntry.getAfter());
 			s.append("\n");
 		}
 		
@@ -58,7 +58,7 @@ public class IndexPrinter {
 		StringBuffer s = new StringBuffer();
 		
 		for (KwicEntry anEntry : kwic.getEntry()) {
-			s.append(anEntry.getKeyLabel());
+			s.append(anEntry.getKey());
 			s.append(" "+anEntry.getAfter());
 			if(!anEntry.getBefore().equals("")) {
 				s.append(" ("+anEntry.getBefore()+" ~)");

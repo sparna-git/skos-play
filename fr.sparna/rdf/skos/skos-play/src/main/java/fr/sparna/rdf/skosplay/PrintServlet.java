@@ -32,6 +32,7 @@ import fr.sparna.rdf.skos.printer.reader.ConceptBlockReader;
 import fr.sparna.rdf.skos.printer.reader.ConceptListDisplayGenerator;
 import fr.sparna.rdf.skos.printer.reader.HeaderReader;
 import fr.sparna.rdf.skos.printer.reader.HierarchicalDisplayGenerator;
+import fr.sparna.rdf.skos.printer.reader.KwicIndexGenerator;
 import fr.sparna.rdf.skos.printer.reader.TranslationTableDisplayGenerator;
 import fr.sparna.rdf.skos.printer.reader.TranslationTableReverseDisplayGenerator;
 import fr.sparna.rdf.skos.printer.schema.KosDocument;
@@ -70,6 +71,7 @@ public class PrintServlet extends HttpServlet {
 		TREELAYOUT,
 		COMPLETE_MONOLINGUAL,
 		COMPLETE_MULTILINGUAL,
+		PERMUTED_INDEX
 	}
 	
 	@Override
@@ -221,6 +223,10 @@ public class PrintServlet extends HttpServlet {
 			}
 			case TRANSLATION_TABLE : {
 				bodyReader = new BodyReader(new TranslationTableDisplayGenerator(r, new ConceptBlockReader(r), targetLanguage));
+				break;
+			}
+			case PERMUTED_INDEX : {
+				bodyReader = new BodyReader(new KwicIndexGenerator(r));
 				break;
 			}
 			case COMPLETE_MONOLINGUAL : {

@@ -140,9 +140,10 @@ public class DefaultConfiguration extends Configuration {
             log.info("Configuration loaded from {}", cfgFilePath);
         }
         catch (IOException e) {
-            RuntimeException error = new RuntimeException("Configuration file not found : "+this.applicationPropertiesFile, e);
-            log.error(error.getMessage());
-            throw error;
+//            RuntimeException error = new RuntimeException("Configuration file not found : "+this.applicationPropertiesFile, e);
+//            log.error(error.getMessage());
+//            throw error;
+        	log.error("Configuration file not found : "+this.applicationPropertiesFile);
         }
         return config;
     }
@@ -174,17 +175,23 @@ public class DefaultConfiguration extends Configuration {
     	VersatileProperties p = (defaults != null)?
                                         new VersatileProperties(defaults):
                                         new VersatileProperties();
+                                        
         InputStream in = null;
         try {
             if (owner == null) {
                 // No owner specified. => Use default classloader.
                 owner = this.getClass();
             }
-            in = owner.getClassLoader().getResourceAsStream(filePath);
-            if (in == null) {
-                in = new FileInputStream(filePath);
-            }
-            p.load(in);
+            try {
+				in = owner.getClassLoader().getResourceAsStream(filePath);
+				if (in == null) {
+				    in = new FileInputStream(filePath);
+				}
+				p.load(in);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+				return p;
+			}
         }
         finally {
             if (in != null) {

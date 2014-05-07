@@ -33,7 +33,7 @@ public class CompleteDisplayGeneratorTest {
 		
 		// build and set header
 		HeaderReader headerReader = new HeaderReader(r);
-		KosDocumentHeader header = headerReader.read("en", (args.length > 1)?URI.create(args[1]):null);
+		KosDocumentHeader header = headerReader.read("fr", (args.length > 1)?URI.create(args[1]):null);
 		document.setHeader(header);
 		
 		// prepare a list of generators
@@ -44,7 +44,7 @@ public class CompleteDisplayGeneratorTest {
 		Perform.on(r).select(new GetLanguagesHelper() {			
 			@Override
 			protected void handleLang(Literal lang) throws TupleQueryResultHandlerException {
-				if(!lang.stringValue().equals("en") && !lang.stringValue().equals("")) {
+				if(!lang.stringValue().equals("fr") && !lang.stringValue().equals("")) {
 					additionalLangs.add(lang.stringValue());
 				}
 			}
@@ -86,7 +86,7 @@ public class CompleteDisplayGeneratorTest {
 		}
 		
 		BodyReader bodyReader = new BodyReader(generators);
-		document.setBody(bodyReader.readBody("en", (args.length > 1)?URI.create(args[1]):null));
+		document.setBody(bodyReader.readBody("fr", (args.length > 1)?URI.create(args[1]):null));
 		
 		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
 		m.setProperty("jaxb.formatted.output", true);

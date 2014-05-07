@@ -38,6 +38,8 @@
 				le truc ci-dessous est un "if exists" : on concat '1' (la valeur par défaut), avec ce qu'il y a potentiellement
 				dans l'attribut, puis on prend la substring de ça, soit en commençant à 1 (le premier caractère) s'il n'y avait
 				rien dans l'attribut, soit en commencant au second caractere s'il y avait qq chose dans l'attribut.
+				
+				Donc le résultat c'est le contenu de l'attribut @column-count, ou bien 1 s'il n'y a rien.
 			-->
 			<fo:region-body column-count="{substring(concat('1', @column-count), 1 + (1 * boolean(@column-count)))}" column-gap="5pt" margin-bottom="1cm" />
 			<fo:region-before extent="1cm" />
@@ -138,7 +140,7 @@
 
 	<!-- Display a list -->
 	<xsl:template match="disp:list">
-		<fo:block font-size="90%">
+		<fo:block font-size="80%">
 			<xsl:for-each select="disp:listItem">
 				<fo:block margin-top="9pt">
 					<xsl:apply-templates select="disp:conceptBlock" />
@@ -146,6 +148,47 @@
 			</xsl:for-each>
 		</fo:block>
 	</xsl:template>
+	
+		<!-- display a KWIC index -->
+	<xsl:template match="disp:kwicIndex">
+		<fo:block font-size="70%">			
+			<fo:table>
+				<fo:table-column column-width="35%"/>
+				<fo:table-column column-width="65%"/>
+				<fo:table-body>
+					<xsl:apply-templates />
+				</fo:table-body>
+			</fo:table>			
+		</fo:block>
+	</xsl:template>
+	
+	<xsl:template match="disp:entry">
+		<fo:table-row>
+			<fo:table-cell>
+				<fo:block margin-right="6px" text-align="right">
+					<fo:inline keep-together.within-line="always">
+						<xsl:call-template name="doStyledString">
+							<xsl:with-param name="string" select="@before" />
+							<xsl:with-param name="style" select="disp:label/disp:str/@style" />
+						</xsl:call-template>
+					</fo:inline>
+				</fo:block>
+			</fo:table-cell>
+			<fo:table-cell>
+				<fo:block>
+					<fo:inline keep-together.within-line="always">
+						<xsl:call-template name="doStyledString">
+							<xsl:with-param name="string" select="concat(@key, @after)" />
+							<xsl:with-param name="style" select="disp:label/disp:str/@style" />
+						</xsl:call-template>
+						&#160;
+						<xsl:apply-templates select="disp:att" mode="inline" />
+					</fo:inline>
+				</fo:block>
+			</fo:table-cell>
+		</fo:table-row>
+	</xsl:template>
+	
 	
 	<!-- Display a tree -->
 	<xsl:template match="disp:tree">
@@ -233,6 +276,10 @@
 		<fo:block font-size="smaller"><xsl:value-of select="@type" /> : <xsl:apply-templates /></fo:block>
 	</xsl:template>
 	
+	<xsl:template match="disp:att" mode="inline">
+		<fo:inline font-size="smaller"><xsl:value-of select="@type" /> : <xsl:apply-templates /></fo:inline>
+	</xsl:template>
+	
 	<xsl:template match="disp:link">
         <fo:basic-link internal-destination="{@refId}">
           <xsl:call-template name="styledString" />
@@ -244,15 +291,24 @@
 	</xsl:template>
 	
 	<xsl:template name="styledString">
+		<xsl:call-template name="doStyledString">
+			<xsl:with-param name="string" select="text()" />
+			<xsl:with-param name="style" select="@style" />
+		</xsl:call-template>
+	</xsl:template>
+	
+	<xsl:template name="doStyledString">
+		<xsl:param name="string" />
+		<xsl:param name="style" />
 		<xsl:choose>
-			<xsl:when test="@style = 'pref'">
-				<fo:inline font-weight="bold"><xsl:value-of select="text()" /></fo:inline>
+			<xsl:when test="$style = 'pref'">
+				<fo:inline font-weight="bold"><xsl:value-of select="$string" /></fo:inline>
 			</xsl:when>
-			<xsl:when test="@style = 'alt'">
-				<fo:inline font-style="italic"><xsl:value-of select="text()" /></fo:inline>
+			<xsl:when test="$style = 'alt'">
+				<fo:inline font-style="italic"><xsl:value-of select="$string" /></fo:inline>
 			</xsl:when>
 			<xsl:otherwise>
-				<fo:inline><xsl:value-of select="text()" /></fo:inline>
+				<fo:inline><xsl:value-of select="$string" /></fo:inline>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

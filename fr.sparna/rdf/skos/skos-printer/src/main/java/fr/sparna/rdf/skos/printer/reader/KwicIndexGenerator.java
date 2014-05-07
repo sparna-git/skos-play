@@ -1,11 +1,9 @@
 package fr.sparna.rdf.skos.printer.reader;
 
 import java.io.File;
-import java.math.BigInteger;
 import java.net.URI;
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -24,7 +22,9 @@ import org.slf4j.LoggerFactory;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.reader.IndexPrinter.DisplayMode;
+import fr.sparna.rdf.skos.printer.schema.Att;
 import fr.sparna.rdf.skos.printer.schema.KosDisplay;
 import fr.sparna.rdf.skos.printer.schema.KosDocument;
 import fr.sparna.rdf.skos.printer.schema.KosDocumentHeader;
@@ -38,6 +38,8 @@ public class KwicIndexGenerator extends AbstractKosDisplayGenerator {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
+	protected ConceptBlockReader conceptBlockReader;
+	protected KwicIndexTokenizerIfc tokenizer;
 	
 	public KwicIndexGenerator(Repository r, String displayId) {
 		super(r, displayId);
@@ -50,8 +52,15 @@ public class KwicIndexGenerator extends AbstractKosDisplayGenerator {
 	@Override
 	protected KosDisplay doGenerate(String mainLang, URI conceptScheme)
 	throws SparqlPerformException {
+		
+		// build a tokenizer based on language (for stopwords)
+		this.tokenizer = new LuceneKwicTokenizer(mainLang);
+		
 		// build our display	
 		KosDisplay d = new KosDisplay();
+		
+		conceptBlockReader = new ConceptBlockReader(this.repository);
+		conceptBlockReader.initInternal(mainLang, conceptScheme, this.displayId);
 		
 		final List<QueryResultRow> queryResultRows = new ArrayList<QueryResultRow>();
 		GetLabelsInSchemeHelper helper = new GetLabelsInSchemeHelper(
@@ -79,7 +88,7 @@ public class KwicIndexGenerator extends AbstractKosDisplayGenerator {
 		s.setKwicIndex(kwic);
 		List<KwicEntry> entries = new ArrayList<KwicEntry>();
 		for (QueryResultRow aRow : queryResultRows) {
-			List<KwicEntry> local = buildKwicEntries(aRow);
+			List<KwicEntry> local = buildKwicEntries(aRow, mainLang);
 			for (KwicEntry kwicEntry : local) {
 				boolean found = false;
 				for (KwicEntry existingEntry : entries) {
@@ -108,16 +117,16 @@ public class KwicIndexGenerator extends AbstractKosDisplayGenerator {
 				if(o1 == null && o2 == null) return 0;
 				if(o1 == null) return -1;
 				if(o2 == null) return 1;
-				return collator.compare(o1.getKeyLabel(), o2.getKeyLabel());
+				return collator.compare(o1.getKey(), o2.getKey());
 			}			
 		});
 		kwic.getEntry().addAll(entries);
-		log.debug(IndexPrinter.debug(kwic, DisplayMode.KWIC));
+		// log.debug(IndexPrinter.debug(kwic, DisplayMode.KWIC));
 		
 		d.getSection().add(s);
 		
 		// ask for two columns
-		d.setColumnCount(BigInteger.valueOf(2));
+		// d.setColumnCount(BigInteger.valueOf(2));
 
 		return d;	
 	}
@@ -129,7 +138,7 @@ public class KwicIndexGenerator extends AbstractKosDisplayGenerator {
 	}
 	
 	protected boolean equals(KwicEntry e1, KwicEntry e2) {
-		if(e1.getKeyLabel() != null && e2.getKeyLabel() != null && !e1.getKeyLabel().equals(e2.getKeyLabel())) {
+		if(e1.getKey() != null && e2.getKey() != null && !e1.getKey().equals(e2.getKey())) {
 			return false;
 		}
 		if(e1.getBefore() != null && e2.getBefore() != null && !e1.getBefore().equals(e2.getBefore())) {
@@ -142,24 +151,45 @@ public class KwicIndexGenerator extends AbstractKosDisplayGenerator {
 		return true;
 	}
 	
-	protected List<KwicEntry> buildKwicEntries(QueryResultRow r) {
+	protected List<KwicEntry> buildKwicEntries(QueryResultRow r, String lang) {
 		List<KwicEntry> entries = new ArrayList<KwicEntry>();
-		String labelToProcess = (r.prefLabel != null)?r.prefLabel:r.label;
+		String labelToProcess = r.label;
 		
 		// create label and type
-		Label label = SchemaFactory.createLabel(labelToProcess, (r.prefLabel != null)?"pref":"alt");
+		Label label = SchemaFactory.createLabel(labelToProcess, (r.prefLabel != null)?"alt":"pref");
 		
-		String[] words = labelToProcess.split(" ");
+		String[] words = tokenizer.tokenize(labelToProcess);	
+		
+		int currentOffset = 0;
 		for(int i=0; i<words.length; i++) {
 			String token = words[i];
 			if(token.length() > 1) {
-				entries.add(SchemaFactory.createKwicEntry(
+				String before = labelToProcess.substring(0, labelToProcess.indexOf(token, currentOffset));
+				String after = labelToProcess.substring(labelToProcess.indexOf(token, currentOffset) + token.length());
+				KwicEntry entry = SchemaFactory.createKwicEntry(
+						this.conceptBlockReader.computeConceptBlockId(r.conceptURI, labelToProcess),
+						r.conceptURI,
 						label,
-						implode(Arrays.copyOfRange(words, 0, i)),
+						((before.length() > 40)?"..."+before.substring(before.length()-37):before),
 						token,
-						implode(Arrays.copyOfRange(words, i+1, words.length))
-				));
+						((after.length() > 40)?after.substring(0, 37)+"...":after)
+				);
+				
+				// if the entry corresponds to an alt label, add a reference to its pref
+				if(r.prefLabel != null) {
+					Att a = SchemaFactory.createAttLink(
+							this.conceptBlockReader.computeRefId(r.conceptURI, r.prefLabel, true),
+							r.conceptURI,
+							((r.prefLabel.length() > 40)?r.prefLabel.substring(0, 37)+"...":r.prefLabel),
+							SKOSTags.getInstance(lang).getString("prefLabel"),
+							"pref"
+					);
+					entry.setAtt(a);
+				}
+				
+				entries.add(entry);
 			}
+			currentOffset = labelToProcess.indexOf(token, currentOffset);
 		}
 				
 		return entries;
@@ -176,6 +206,16 @@ public class KwicIndexGenerator extends AbstractKosDisplayGenerator {
 		return sb.toString();
 	}
 	
+	protected static int occurs(String[] words, String occurrence) {
+		int result = 0;
+		for(int i=0;i<words.length;i++) {
+			if(words[i].equals(occurrence)) {
+				result++;
+			}
+		}
+		return result;
+	}
+	
 	
 	public static void main(String... args) throws Exception {			
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
@@ -188,21 +228,23 @@ public class KwicIndexGenerator extends AbstractKosDisplayGenerator {
 		
 		// build and set header
 		HeaderReader headerReader = new HeaderReader(r);
-		KosDocumentHeader header = headerReader.read("en", (args.length > 1)?URI.create(args[1]):null);
+		KosDocumentHeader header = headerReader.read("fr", (args.length > 1)?URI.create(args[1]):null);
 		document.setHeader(header);
 		
+		// KwicIndexGenerator reader = new KwicIndexGenerator(r, new SimpleKwicTokenizer());
 		KwicIndexGenerator reader = new KwicIndexGenerator(r);
 		BodyReader bodyReader = new BodyReader(reader);
-		document.setBody(bodyReader.readBody("en", (args.length > 1)?URI.create(args[1]):null));
+		document.setBody(bodyReader.readBody("fr", (args.length > 1)?URI.create(args[1]):null));
 
 		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
 		m.setProperty("jaxb.formatted.output", true);
 		// m.marshal(display, System.out);
 		m.marshal(document, new File("src/main/resources/kwic-output-test.xml"));
 		
-//		DisplayPrinter printer = new DisplayPrinter();
-//		printer.printToHtml(document, new File("display-test.html"));
-//		printer.printToPdf(document, new File("display-test.pdf"));
+		DisplayPrinter printer = new DisplayPrinter();
+		printer.setDebug(true);
+		printer.printToHtml(document, new File("display-test.html"));
+		printer.printToPdf(document, new File("display-test.pdf"));
 
 	}
 

@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.handler.ReadSingleIntegerHandler;
 import fr.sparna.rdf.sesame.toolkit.handler.ReadSingleValueHandler;
+import fr.sparna.rdf.sesame.toolkit.handler.ReadStringListHandler;
 import fr.sparna.rdf.sesame.toolkit.handler.ReadValueListHandler;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
 
@@ -364,6 +365,21 @@ public class Perform {
 	public List<Value> readList(SparqlQueryIfc query) 
 	throws SparqlPerformException {
 		ReadValueListHandler handler = new ReadValueListHandler();
+		this.select(new SelectSparqlHelper(query, handler));
+		return handler.getResult();
+	}
+	
+	/**
+	 * Convenience method that directly execute a query with a single binding and possibly multiple lines of result,
+	 * and directly returns the results as a String List, allowing it to be called in <code>List<String> v = Perform.on(repository).readStringList(...)</code>
+	 * 
+	 * @param query
+	 * @return
+	 * @throws SparqlPerformException
+	 */
+	public List<String> readStringList(SparqlQueryIfc query) 
+	throws SparqlPerformException {
+		ReadStringListHandler handler = new ReadStringListHandler();
 		this.select(new SelectSparqlHelper(query, handler));
 		return handler.getResult();
 	}

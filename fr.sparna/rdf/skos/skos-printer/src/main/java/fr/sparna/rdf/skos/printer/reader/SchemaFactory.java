@@ -105,10 +105,12 @@ public class SchemaFactory {
 		return row;
 	}
 	
-	public static KwicEntry createKwicEntry(Label label, String before, String keyLabel, String after) {
+	public static KwicEntry createKwicEntry(String entryId, String uri, Label label, String before, String keyLabel, String after) {
 		KwicEntry entry = new KwicEntry();
+		entry.setId(entryId);
+		entry.setUri(uri);
 		entry.setLabel(label);
-		entry.setKeyLabel(keyLabel);
+		entry.setKey(keyLabel);
 		entry.setBefore(before);
 		entry.setAfter(after);
 		return entry;
