@@ -86,7 +86,7 @@ public abstract class GetTopMembersHelper extends SelectSparqlHelperBase {
 					"	?collection <"+SKOS.MEMBER+"> ?topmember ."+"\n" +
 					"	FILTER NOT EXISTS { ?topmember <"+SKOS.BROADER+">|^<"+SKOS.NARROWER+"> ?broader }"+"\n" +
 					((this.orderByLang != null)?
-					"	OPTIONAL { ?topmember <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(lang(?prefLabel) = '"+this.orderByLang+"')}"+"\n" +
+					"	OPTIONAL { ?topmember <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(langMatches(lang(?prefLabel), '"+this.orderByLang+"'))}"+"\n" +
 					"}" +"\n" +
 					"ORDER BY ?prefLabel"+"\n"
 					:

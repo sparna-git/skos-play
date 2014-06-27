@@ -73,7 +73,7 @@ public abstract class GetConceptsWithNoBroaderHelper extends SelectSparqlHelperB
 					"	FILTER(!bound(?broader))"+"\n"+
 					(
 							(this.orderByLang != null)?
-							"	OPTIONAL { ?concept <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(lang(?prefLabel) = '"+this.orderByLang+"')}"+"\n" +
+							"	OPTIONAL { ?concept <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(langMatches(lang(?prefLabel), '"+this.orderByLang+"'))}"+"\n" +
 							"}" +
 							" ORDER BY ?prefLabel"
 							:

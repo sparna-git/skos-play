@@ -39,7 +39,9 @@ public class SKOSTreeBuilder {
 	private Collator collator;
 	
 	private boolean ignoreExplicitTopConcepts = false;
-
+	private boolean useConceptSchemesAsFirstLevelNodes = true;
+	
+	
 	/**
 	 * Builds a SKOSTreeBuilder that will use the given PropertyReader to read the property on which
 	 * to sort the elements of the tree.
@@ -71,7 +73,7 @@ public class SKOSTreeBuilder {
 				new SKOSNodeTypeReader(new PropertyReader(repository, java.net.URI.create(RDF.TYPE.stringValue())))
 		);
 	}
-
+	
 	/**
 	 * Build all the trees found in the data. Roots are the ConceptSchemes if at least one ConceptScheme is found,
 	 * or all the Concept with no broaders if no ConceptScheme can be found in the data. If none of these can be found,
@@ -86,26 +88,25 @@ public class SKOSTreeBuilder {
 		final List<GenericTree<SKOSTreeNode>> result = new ArrayList<GenericTree<SKOSTreeNode>>();
 		
 		final List<Resource> conceptSchemeList = new ArrayList<Resource>();
-		Perform.on(repository).select(new GetConceptSchemesHelper(null) {		
-			@Override
-			protected void handleConceptScheme(Resource conceptScheme)
-			throws TupleQueryResultHandlerException {
-				try {
-					result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)conceptScheme)));
-				} catch (SparqlPerformException e) {
-					throw new TupleQueryResultHandlerException(e);
+		
+		if(this.useConceptSchemesAsFirstLevelNodes) {
+			Perform.on(repository).select(new GetConceptSchemesHelper(null) {		
+				@Override
+				protected void handleConceptScheme(Resource conceptScheme)
+				throws TupleQueryResultHandlerException {
+					conceptSchemeList.add(conceptScheme);
 				}
-			}
-		});
+			});
+		}
 		
 		if(conceptSchemeList.size() > 0) {
-			// multiple concept schemes available
+			// some concept schemes available
 			log.debug("Concept schemes exists, will take them as first level nodes");
 			
 			// set all the concept schemes as roots
 			for (Resource aConceptScheme : conceptSchemeList) {
 				result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)aConceptScheme)));
-			}		
+			}	
 		} else {
 			
 			// see if there are some top-level collections
@@ -147,6 +148,13 @@ public class SKOSTreeBuilder {
 		for (GenericTree<SKOSTreeNode> aTree : result) {
 			sortTreeRec(aTree.getRoot());
 		}
+		// and sort the trees between them
+		final SKOSTreeNodeComparator nodeComparator = new SKOSTreeNodeComparator(collator);
+		Collections.sort(result, new Comparator<GenericTree<SKOSTreeNode>>() {
+			public int compare(GenericTree<SKOSTreeNode> o1, GenericTree<SKOSTreeNode> o2) {
+				return nodeComparator.compare(o1.getRoot(), o2.getRoot());
+			}			
+		});
 		
 		return result;
 		
@@ -159,43 +167,70 @@ public class SKOSTreeBuilder {
 	 * @return
 	 * @throws SparqlPerformException
 	 */
-	public GenericTree<SKOSTreeNode> buildTree(java.net.URI root) 
+	public List<GenericTree<SKOSTreeNode>> buildTrees(final java.net.URI root) 
 	throws SparqlPerformException {
-
 		log.debug("Building SKOS Tree from root "+root);
+		
+		final List<GenericTree<SKOSTreeNode>> result = new ArrayList<GenericTree<SKOSTreeNode>>();
+		
+		boolean useGivenRootAsRoot = false;
+		if(this.useConceptSchemesAsFirstLevelNodes) {
+			// no matter if the given URI is a concept scheme, we will make it a single tree root
+			useGivenRootAsRoot = true;
+		} else {
+			// test if the given URI is a concept scheme
+			final List<String> conceptSchemeList = new ArrayList<String>();
+			Perform.on(repository).select(new GetConceptSchemesHelper(null) {		
+				@Override
+				protected void handleConceptScheme(Resource conceptScheme)
+				throws TupleQueryResultHandlerException {
+					conceptSchemeList.add(conceptScheme.stringValue());
+				}
+			});
 			
-		GenericTreeNode<SKOSTreeNode> treeRoot = buildTreeRec(this.repository.getValueFactory().createURI(root.toString()));
+			if(conceptSchemeList.contains(root.toString())) {
+				// given URI _is_ a concept scheme URI, and we don't want to use it as a first level node
+				useGivenRootAsRoot = false;
+			} else {
+				useGivenRootAsRoot = true;
+			}
+		}
+		
+		if(useGivenRootAsRoot) {
+			result.add(new GenericTree<SKOSTreeNode>(
+					buildTreeRec(this.repository.getValueFactory().createURI(root.toString()))
+			));
+		} else {
+			GenericTree<SKOSTreeNode> originalTree = new GenericTree<SKOSTreeNode>(
+					buildTreeRec(this.repository.getValueFactory().createURI(root.toString()))
+			);
+			for (GenericTreeNode<SKOSTreeNode> aChild : originalTree.getRoot().getChildren()) {
+				result.add(new GenericTree<SKOSTreeNode>(
+						aChild
+				));
+			}
+		}
 
-		// sort tree before returning it
-		sortTreeRec(treeRoot);
-
-		return new GenericTree<SKOSTreeNode>(treeRoot);
+		// sort trees before returning them
+		for (GenericTree<SKOSTreeNode> aTree : result) {
+			sortTreeRec(aTree.getRoot());
+		}
+		// and sort the trees between them
+		final SKOSTreeNodeComparator nodeComparator = new SKOSTreeNodeComparator(collator);
+		Collections.sort(result, new Comparator<GenericTree<SKOSTreeNode>>() {
+			public int compare(GenericTree<SKOSTreeNode> o1, GenericTree<SKOSTreeNode> o2) {
+				return nodeComparator.compare(o1.getRoot(), o2.getRoot());
+			}			
+		});
+		
+		return result;
 	}
 	
 	
 
 	private void sortTreeRec(GenericTreeNode<SKOSTreeNode> aNode) {
 		if(aNode.getChildren() != null) {
-			Collections.sort(aNode.getChildren(), new Comparator<GenericTreeNode<SKOSTreeNode>>() {
-
-				@Override
-				public int compare(GenericTreeNode<SKOSTreeNode> o1, GenericTreeNode<SKOSTreeNode> o2) {
-					if(o1.getData().getSortCriteria() == null) {
-						if(o2.getData().getSortCriteria() == null) {
-							return 0;
-						} else {
-							return -1;
-						}
-					} else {
-						if(o2.getData().getSortCriteria() == null) {
-							return 1;
-						} else {
-							return collator.compare(o1.getData().getSortCriteria(), o2.getData().getSortCriteria());
-						}
-					}
-				}
-			
-			});
+			Collections.sort(aNode.getChildren(), new SKOSTreeNodeComparator(collator));
 			
 			for (GenericTreeNode<SKOSTreeNode> aChild : aNode.getChildren()) {
 				sortTreeRec(aChild);
@@ -325,6 +360,15 @@ public class SKOSTreeBuilder {
 
 	public void setIgnoreExplicitTopConcepts(boolean ignoreExplicitTopConcepts) {
 		this.ignoreExplicitTopConcepts = ignoreExplicitTopConcepts;
+	}
+
+	public boolean isUseConceptSchemesAsFirstLevelNodes() {
+		return useConceptSchemesAsFirstLevelNodes;
+	}
+
+	public void setUseConceptSchemesAsFirstLevelNodes(
+			boolean useConceptSchemesAsFirstLevelNodes) {
+		this.useConceptSchemesAsFirstLevelNodes = useConceptSchemesAsFirstLevelNodes;
 	}
 
 }

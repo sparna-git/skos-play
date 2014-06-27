@@ -89,12 +89,12 @@ public abstract class GetConceptsInSchemeHelper extends SelectSparqlHelperBase {
 					((this.conceptScheme != null)?"?concept <"+SKOS.IN_SCHEME+"> ?scheme . ":"") +
 					"	{ " +
 					"		{ " +
-							"   ?concept <"+SKOS.PREF_LABEL+"> ?label FILTER(lang(?label) = '"+this.lang+"') " +
+							"   ?concept <"+SKOS.PREF_LABEL+"> ?label FILTER(langMatches(lang(?label), '"+this.lang+"')) " +
 							" }" +
 							" UNION {" +
 							// il faut qu'on ait au moins un critere positif sinon ca ne fonctionne pas
 							"	?concept a <"+SKOS.CONCEPT+"> . " +
-							"	FILTER NOT EXISTS { ?concept <"+SKOS.PREF_LABEL+"> ?nopref . FILTER(lang(?nopref) = '"+this.lang+"') }" +
+							"	FILTER NOT EXISTS { ?concept <"+SKOS.PREF_LABEL+"> ?nopref . FILTER(langMatches(lang(?nopref), '"+this.lang+"')) }" +
 							"   BIND(str(?concept) as ?label)" +
 							" }" +
 					"	}" +

@@ -60,7 +60,7 @@ public abstract class GetTopConceptsHelper extends SelectSparqlHelperBase {
 					"WHERE {"+"\n" +
 					"	?scheme <"+SKOS.HAS_TOP_CONCEPT+">|^<"+SKOS.TOP_CONCEPT_OF+"> ?top"+"\n" +
 					((this.orderByLang != null)?
-					"	OPTIONAL { ?top <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(lang(?prefLabel) = '"+this.orderByLang+"')}"+"\n" +
+					"	OPTIONAL { ?top <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(langMatches(lang(?prefLabel), '"+this.orderByLang+"'))}"+"\n" +
 					"}" +
 					" ORDER BY ?prefLabel"
 					:

@@ -96,8 +96,8 @@ public abstract class GetTranslationTableInSchemeHelper extends SelectSparqlHelp
 					"WHERE {"+"\n" +
 					"	?concept a <"+SKOS.CONCEPT+"> ."+"\n" +
 					((this.conceptScheme != null)?"?concept <"+SKOS.IN_SCHEME+"> ?scheme . ":"")+"\n" +
-					" OPTIONAL { ?concept <"+SKOS.PREF_LABEL+"> ?label1 FILTER(lang(?label1) = '"+this.lang1+"') }"+"\n" +
-					" OPTIONAL { ?concept <"+SKOS.PREF_LABEL+"> ?label2 FILTER(lang(?label2) = '"+this.lang2+"') }"+"\n" +
+					" OPTIONAL { ?concept <"+SKOS.PREF_LABEL+"> ?label1 FILTER(langMatches(lang(?label1), '"+this.lang1+"')) }"+"\n" +
+					" OPTIONAL { ?concept <"+SKOS.PREF_LABEL+"> ?label2 FILTER(langMatches(lang(?label2), '"+this.lang2+"')) }"+"\n" +
 					"}";
 					return sparql;
 		}		

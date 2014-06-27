@@ -66,7 +66,7 @@ public abstract class GetTopCollectionsHelper extends SelectSparqlHelperBase {
 					((this.addInScheme)?"	?collection <"+SKOS.IN_SCHEME+"> ?scheme ."+"\n":"") +
 					"	FILTER NOT EXISTS { ?parentCollection <"+SKOS.MEMBER+"> ?collection . }"+"\n" +
 					((this.orderByLang != null)?
-					"	OPTIONAL { ?collection <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(lang(?prefLabel) = '"+this.orderByLang+"')}"+"\n" +
+					"	OPTIONAL { ?collection <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(langMatches(lang(?prefLabel), '"+this.orderByLang+"'))}"+"\n" +
 					"}" +
 					" ORDER BY ?prefLabel"
 					:

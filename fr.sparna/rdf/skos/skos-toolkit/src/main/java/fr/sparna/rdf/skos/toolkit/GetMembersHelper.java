@@ -85,7 +85,7 @@ public abstract class GetMembersHelper extends SelectSparqlHelperBase {
 					" WHERE {"+"\n" +
 					"	?collection <"+SKOS.MEMBER+"> ?member ."+"\n" +
 					((this.orderByLang != null)?
-					"	OPTIONAL { ?member <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(lang(?prefLabel) = '"+this.orderByLang+"')}"+"\n" +
+					"	OPTIONAL { ?member <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(langMatches(lang(?prefLabel), '"+this.orderByLang+"')) }"+"\n" +
 					"}" +"\n" +
 					"ORDER BY ?prefLabel"+"\n"
 					:

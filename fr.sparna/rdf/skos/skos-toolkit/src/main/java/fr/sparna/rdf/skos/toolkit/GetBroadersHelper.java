@@ -86,7 +86,7 @@ public abstract class GetBroadersHelper extends SelectSparqlHelperBase {
 					"WHERE {"+"\n" +
 					"	?concept <"+SKOS.BROADER+">|^<"+SKOS.NARROWER+"> ?broader "+"\n" +
 					((this.orderByLang != null)?
-							"	OPTIONAL { ?broader <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(lang(?prefLabel) = '"+this.orderByLang+"')}"+"\n" +
+							"	OPTIONAL { ?broader <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(langMatches(lang(?prefLabel), '"+this.orderByLang+"'))}"+"\n" +
 							"}" +
 							"ORDER BY ?prefLabel"
 							:

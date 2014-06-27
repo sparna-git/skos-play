@@ -53,7 +53,7 @@ public abstract class GetConceptSchemesHelper extends SelectSparqlHelperBase {
 					"	?conceptScheme a <"+SKOS.CONCEPT_SCHEME+"> ."+"\n" +
 					(
 							(this.orderByLang != null)?
-									"	OPTIONAL { ?conceptScheme <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(lang(?prefLabel) = '"+this.orderByLang+"')}"+"\n" +
+									"	OPTIONAL { ?conceptScheme <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(langMatches(lang(?prefLabel), '"+this.orderByLang+"'))}"+"\n" +
 									"}" +
 									" ORDER BY ?prefLabel"
 									:

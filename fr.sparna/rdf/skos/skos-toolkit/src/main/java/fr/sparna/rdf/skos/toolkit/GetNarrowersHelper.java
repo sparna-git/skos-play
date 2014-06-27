@@ -88,7 +88,7 @@ public abstract class GetNarrowersHelper extends SelectSparqlHelperBase implemen
 			"WHERE {"+"\n" +
 			"	?concept <"+SKOS.NARROWER+">|^<"+SKOS.BROADER+"> ?narrower "+"\n" +
 			((this.orderByLang != null)?
-			"	OPTIONAL { ?narrower <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(lang(?prefLabel) = '"+this.orderByLang+"')}"+"\n" +
+			"	OPTIONAL { ?narrower <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(langMatches(lang(?prefLabel), '"+this.orderByLang+"'))}"+"\n" +
 			"}" +
 			"ORDER BY ?prefLabel"
 			:

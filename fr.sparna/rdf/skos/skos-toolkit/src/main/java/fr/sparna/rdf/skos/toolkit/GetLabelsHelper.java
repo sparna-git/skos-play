@@ -132,7 +132,7 @@ public abstract class GetLabelsHelper extends SelectSparqlHelperBase {
 			if(this.langs != null) {
 				sparql += " && (";
 				for (String aLang : this.langs) {
-					sparql += "lang(?label) = '"+aLang+"'";
+					sparql += "langMatches(lang(?label), '"+aLang+"')";
 					sparql += " || ";
 				}
 				// remove last dirt
