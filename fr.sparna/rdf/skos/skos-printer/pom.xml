@@ -6,7 +6,7 @@
 	<parent>
 	    <groupId>fr.sparna.rdf.skos</groupId>
 	    <artifactId>sparna-skos</artifactId>
-	    <version>0.46</version>
+	    <version>0.55</version>
         <relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -94,28 +94,28 @@
             <artifactId>solr-core</artifactId>
             <version>4.7.2</version>
             <!-- remove hadoop, unused and big -->
-			<exclusions>
-	            <exclusion>
-	                <groupId>org.apache.hadoop</groupId>
-	                <artifactId>hadoop-annotations</artifactId>
-	            </exclusion>
-	            <exclusion>
-	                <groupId>org.apache.hadoop</groupId>
-	                <artifactId>hadoop-auth</artifactId>
-	            </exclusion>
-	            <exclusion>
-	                <groupId>org.apache.hadoop</groupId>
-	                <artifactId>hadoop-common</artifactId>
-	            </exclusion>
-	            <exclusion>
-	                <groupId>org.apache.hadoop</groupId>
-	                <artifactId>hadoop-hdfs</artifactId>
-	            </exclusion>
-	            <exclusion>
-	                <groupId>org.apache.lucene</groupId>
-	                <artifactId>lucene-analyzers-kuromoji</artifactId>
-	            </exclusion>
-	        </exclusions>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-auth</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-common</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-hdfs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.lucene</groupId>
+                    <artifactId>lucene-analyzers-kuromoji</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 		
 	</dependencies>

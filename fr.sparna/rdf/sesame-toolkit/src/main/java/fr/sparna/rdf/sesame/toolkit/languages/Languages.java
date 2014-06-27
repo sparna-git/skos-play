@@ -74,7 +74,7 @@ public final class Languages {
 	
 	private String findWithCode(String codeProperty, String value) {
 		try {
-			Value v = Perform.on(repository).read(new SparqlQuery("SELECT ?l WHERE { ?l <"+codeProperty+"> \""+value+"\" .}"));
+			Value v = Perform.on(repository).read(new SparqlQuery("SELECT ?l WHERE { ?l <"+codeProperty+"> ?value FILTER langMatches(\""+value+"\", ?value) .}"));
 			return (v != null)?v.stringValue():null;
 		} catch (SparqlPerformException e) {
 			throw new RuntimeException(e);
@@ -108,7 +108,7 @@ public final class Languages {
 			try {
 				// if language is 'en', look for a skos:prefLabel
 				// look for rdfs:label in the given language
-				String query = "SELECT ?l WHERE { <"+this.uri+"> <"+RDFS.LABEL+"> ?l FILTER(langMatches(lang(?l), '"+language+"')) }";
+				String query = "SELECT ?l WHERE { <"+this.uri+"> <"+RDFS.LABEL+"> ?l FILTER(langMatches('"+language+"', lang(?l))) }";
 				List<Value> rdfsLabels = Perform.on(repository).readList(new SparqlQuery(query));
 				
 				// if no labels can be found in the given language, return the language code (end of the URI)

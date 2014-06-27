@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:kosDocument xmlns:ns1="http://www.sparna.fr/thesaurus-display">
+    <ns1:header/>
+    <ns1:body>
+        <ns1:kosDisplay displayId="83190c3c-3ffe-4318-9775-ee0155397764">
+            <ns1:section>
+                <ns1:table>
+                    <ns1:tableHeader>
+                        <ns1:cell>
+                            <ns1:styledString>Français</ns1:styledString>
+                        </ns1:cell>
+                        <ns1:cell>
+                            <ns1:styledString>Anglais</ns1:styledString>
+                        </ns1:cell>
+                    </ns1:tableHeader>
+                </ns1:table>
+            </ns1:section>
+        </ns1:kosDisplay>
+    </ns1:body>
+</ns1:kosDocument>

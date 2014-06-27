@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.lang.StringUtil;
 import fr.sparna.rdf.sesame.toolkit.languages.Languages;
+import fr.sparna.rdf.sesame.toolkit.languages.Languages.Language;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
@@ -128,9 +129,11 @@ public class TranslationTableDisplayGenerator extends AbstractKosDisplayGenerato
 					// et on créé une nouvelle section
 					currentSection = new Section();
 					Table newTable = new Table();
+					Language tl = Languages.getInstance().withIso639P1(this.targetLanguage);
+					Language l = Languages.getInstance().withIso639P1(lang);
 					newTable.setTableHeader(SchemaFactory.createRow(
-							SchemaFactory.createStyledString(Languages.getInstance().withIso639P1(lang).displayIn(lang)),
-							SchemaFactory.createStyledString(Languages.getInstance().withIso639P1(this.targetLanguage).displayIn(lang))
+							SchemaFactory.createStyledString((l != null)?l.displayIn(lang):lang),
+							SchemaFactory.createStyledString((tl != null)?tl.displayIn(lang):this.targetLanguage)
 					));
 					currentSection.setTable(newTable);
 					currentSection.setTitle(sectionTitle);
@@ -145,9 +148,11 @@ public class TranslationTableDisplayGenerator extends AbstractKosDisplayGenerato
 			log.debug("Single section added to output");
 			Section s = new Section();
 			Table newTable = new Table();
+			Language tl = Languages.getInstance().withIso639P1(this.targetLanguage);
+			Language l = Languages.getInstance().withIso639P1(lang);
 			newTable.setTableHeader(SchemaFactory.createRow(
-					SchemaFactory.createStyledString(Languages.getInstance().withIso639P1(lang).displayIn(lang)),
-					SchemaFactory.createStyledString(Languages.getInstance().withIso639P1(this.targetLanguage).displayIn(lang))
+					SchemaFactory.createStyledString((l != null)?l.displayIn(lang):lang),
+					SchemaFactory.createStyledString((tl != null)?tl.displayIn(lang):this.targetLanguage)
 			));
 			s.setTable(newTable);
 			for (QueryResultRow aRow : queryResultRows) {
@@ -181,19 +186,21 @@ public class TranslationTableDisplayGenerator extends AbstractKosDisplayGenerato
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
 		org.apache.log4j.Logger.getLogger("fr.sparna.rdf").setLevel(org.apache.log4j.Level.TRACE);
 		
+		final String LANG = "fr";
+		
 		Repository r = RepositoryBuilder.fromString(args[0]);
 		
 		// build result document
 		KosDocument document = new KosDocument();
 		
 		// build and set header
-		HeaderReader headerReader = new HeaderReader(r);
-		KosDocumentHeader header = headerReader.read("fr", (args.length > 1)?URI.create(args[1]):null);
+		HeaderAndFooterReader headerReader = new HeaderAndFooterReader(r);
+		KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?URI.create(args[1]):null);
 		document.setHeader(header);
 		
 		TranslationTableDisplayGenerator reader = new TranslationTableDisplayGenerator(r, new ConceptBlockReader(r), "en");
 		BodyReader bodyReader = new BodyReader(reader);
-		document.setBody(bodyReader.readBody("fr", (args.length > 1)?URI.create(args[1]):null));
+		document.setBody(bodyReader.readBody(LANG, (args.length > 1)?URI.create(args[1]):null));
 
 		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
 		m.setProperty("jaxb.formatted.output", true);
@@ -202,8 +209,8 @@ public class TranslationTableDisplayGenerator extends AbstractKosDisplayGenerato
 		
 		DisplayPrinter printer = new DisplayPrinter();
 		printer.setDebug(true);
-		printer.printToHtml(document, new File("display-test.html"));
-		printer.printToPdf(document, new File("display-test.pdf"));
+		printer.printToHtml(document, new File("display-test.html"), LANG);
+		printer.printToPdf(document, new File("display-test.pdf"), LANG);
 	}
 	
 }

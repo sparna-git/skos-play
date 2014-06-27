@@ -10,6 +10,7 @@
     	<sequence>
     		<element ref="disp:header" minOccurs="1" maxOccurs="1"></element>
     		<element ref="disp:body" minOccurs="1" maxOccurs="1"></element>
+    		<element ref="disp:footer"></element>
     	</sequence>
     </complexType>
     <element name="kosDocument" type="disp:kosDocument"></element>
@@ -71,7 +72,7 @@
     		<element ref="disp:list"></element>
     		<element ref="disp:tree"></element>
     		<element ref="disp:table"></element>
-    		<element ref="disp:kwicIndex"></element>
+    		<element ref="disp:index"></element>
     	</choice>
     	<attribute name="title" type="string" use="required"></attribute>
     </complexType>
@@ -172,17 +173,22 @@
 	
 	<!-- KWIC Index -->
 	
-	<complexType name="kwicIndex">
+	<complexType name="index">
 		<annotation>
-        	<documentation>Representation of a KWIC index.</documentation>
-        </annotation>
-    	<sequence>
-    		<element name="entry" type="disp:kwicEntry" minOccurs="0" maxOccurs="unbounded"></element>
-    	</sequence>
-    </complexType>
-    <element name="kwicIndex" type="disp:kwicIndex"></element>
+			<documentation>
+				Representation of a KWIC index.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element name="entry" type="disp:indexEntry" minOccurs="0"
+				maxOccurs="unbounded">
+			</element>
+		</sequence>
+		<attribute ref="disp:indexStyle"></attribute>
+	</complexType>
+	<element name="index" type="disp:index"></element>
 
-    <complexType name="kwicEntry">
+    <complexType name="indexEntry">
     	<annotation>
     		<documentation>
     			Representation of a KWIC index entry.
@@ -301,4 +307,23 @@
     </complexType>
     <element name="str" type="disp:styledString"></element>
     
+
+    <attribute name="indexStyle">
+    	<simpleType>
+    		<restriction base="string">
+    			<enumeration value="kwic"></enumeration>
+    			<enumeration value="kwac"></enumeration>
+    			<enumeration value="kwoc"></enumeration>
+    		</restriction>
+    	</simpleType>
+    </attribute>
+
+    <complexType name="kosDocumentFooter">
+    	<sequence>
+    		<element name="application" type="string"></element>
+    		<element name="title" type="string"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="footer" type="disp:kosDocumentFooter"></element>
 </schema>

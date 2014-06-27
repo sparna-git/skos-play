@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.sparna.fr/index-config" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.sparna.fr/index-config">
+
+
+
+
+
+
+
+
+
+
+    <complexType name="Config">
+    	<sequence minOccurs="1" maxOccurs="unbounded">
+    		<element name="entityConfig" type="tns:EntityConfig"></element>
+    	</sequence>
+    </complexType>
+    
+
+    <complexType name="EntityConfig">
+    	<sequence>
+    		<element name="source" type="tns:Source"></element>
+    		<element name="fieldMap" type="tns:FieldMap"></element>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="FieldMap">
+    	<sequence>
+    		<element name="field" type="tns:Field" minOccurs="1"
+    			maxOccurs="unbounded">
+    		</element>
+    	</sequence>
+    	<attribute name="uriField" type="string"></attribute>
+    </complexType>
+
+    <complexType name="Source">
+    	<choice>
+    		<element name="type" type="string"></element>
+    		<element name="sparql" type="tns:Sparql"></element>
+    	</choice>
+    </complexType>
+    
+    <complexType name="Path">
+    	<simpleContent>
+    		<extension base="string">
+    			<attribute name="lang" type="string" use="optional"></attribute>
+    		</extension>
+    	</simpleContent>
+    </complexType>
+
+
+    <complexType name="Sparql">
+    	<simpleContent>
+    		<extension base="string">
+    			<attribute name="entityVar" type="string"></attribute>
+    		</extension>
+    	</simpleContent>
+    </complexType>
+
+
+    <complexType name="Field">
+    	<choice>
+
+    		<element name="path" type="tns:Path"></element>
+    		<element name="sparql" type="tns:Sparql"></element>
+    	</choice>
+    	<attribute name="name" type="string" use="required"></attribute>
+    </complexType>
+
+
+
+
+
+
+    <element name="config" type="tns:Config"></element>
+</schema>

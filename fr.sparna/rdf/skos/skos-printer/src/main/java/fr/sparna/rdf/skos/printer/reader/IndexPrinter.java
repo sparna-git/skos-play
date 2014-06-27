@@ -2,8 +2,8 @@ package fr.sparna.rdf.skos.printer.reader;
 
 import java.security.InvalidParameterException;
 
-import fr.sparna.rdf.skos.printer.schema.KwicEntry;
-import fr.sparna.rdf.skos.printer.schema.KwicIndex;
+import fr.sparna.rdf.skos.printer.schema.Index;
+import fr.sparna.rdf.skos.printer.schema.IndexEntry;
 
 public class IndexPrinter {
 
@@ -14,7 +14,7 @@ public class IndexPrinter {
 		KWAC,
 	}
 	
-	public static String debug(KwicIndex kwic, DisplayMode mode) {
+	public static String debug(Index kwic, DisplayMode mode) {
 		switch(mode) {
 		case KWIC : {
 			return displayKwic(kwic);
@@ -28,18 +28,18 @@ public class IndexPrinter {
 		}
 	}
 	
-	public static String displayKwic(KwicIndex kwic) {
+	public static String displayKwic(Index index) {
 		StringBuffer s = new StringBuffer();
 		
 		// compute the maximum length of the 'before' part
 		int maxBeforeLength = 0;
-		for (KwicEntry anEntry : kwic.getEntry()) {
+		for (IndexEntry anEntry : index.getEntry()) {
 			if(anEntry.getBefore().length() > maxBeforeLength) {
 				maxBeforeLength = anEntry.getBefore().length();
 			}
 		}
 		
-		for (KwicEntry anEntry : kwic.getEntry()) {
+		for (IndexEntry anEntry : index.getEntry()) {
 			int missingSpaces = maxBeforeLength - anEntry.getBefore().length();
 			String paddingSpaces = "";
 			for(int i=0;i<missingSpaces;i++) {
@@ -54,10 +54,10 @@ public class IndexPrinter {
 		return s.toString();
 	}
 	
-	public static String displayKwac(KwicIndex kwic) {
+	public static String displayKwac(Index index) {
 		StringBuffer s = new StringBuffer();
 		
-		for (KwicEntry anEntry : kwic.getEntry()) {
+		for (IndexEntry anEntry : index.getEntry()) {
 			s.append(anEntry.getKey());
 			s.append(" "+anEntry.getAfter());
 			if(!anEntry.getBefore().equals("")) {

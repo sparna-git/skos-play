@@ -3,7 +3,7 @@ package fr.sparna.rdf.skos.printer.reader;
 import fr.sparna.rdf.skos.printer.schema.Att;
 import fr.sparna.rdf.skos.printer.schema.CellType;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
-import fr.sparna.rdf.skos.printer.schema.KwicEntry;
+import fr.sparna.rdf.skos.printer.schema.IndexEntry;
 import fr.sparna.rdf.skos.printer.schema.Label;
 import fr.sparna.rdf.skos.printer.schema.Link;
 import fr.sparna.rdf.skos.printer.schema.ListItem;
@@ -105,8 +105,8 @@ public class SchemaFactory {
 		return row;
 	}
 	
-	public static KwicEntry createKwicEntry(String entryId, String uri, Label label, String before, String keyLabel, String after) {
-		KwicEntry entry = new KwicEntry();
+	public static IndexEntry createIndexEntry(String entryId, String uri, Label label, String before, String keyLabel, String after) {
+		IndexEntry entry = new IndexEntry();
 		entry.setId(entryId);
 		entry.setUri(uri);
 		entry.setLabel(label);

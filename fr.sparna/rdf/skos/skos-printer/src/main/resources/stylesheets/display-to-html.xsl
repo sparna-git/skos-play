@@ -8,6 +8,10 @@
             encoding="UTF-8"
             indent="yes"/>
 	
+	<!-- application language with which we need to generate the labels -->
+	<xsl:param name="lang">en</xsl:param>
+	<xsl:variable name="labels" select="document(concat('labels-',$lang,'.xml'))" />
+	
 	<xsl:template match="/">
 		<xsl:apply-templates select="disp:kosDocument" />
 	</xsl:template>
@@ -15,12 +19,16 @@
 	<xsl:template match="disp:kosDocument">
 		<html>
 			<head>
-				<title><xsl:value-of select="disp:header/disp:title" /></title>
-				<link href="http://netdna.bootstrapcdn.com/bootswatch/2.3.2/united/bootstrap.min.css" rel="stylesheet"></link>
-				<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-				<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+				<title><xsl:value-of select="disp:header/disp:title" /> <xsl:value-of select="$labels/broader" /></title>
+				<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"></link>
+				<script src="js/jquery-1.9.1.min.js"></script>
+				<script src="bootstrap/js/bootstrap.min.js"></script>
 				<style>
-					.unstyled > li { font-size: 80% }
+					.att {
+						margin-left: 1em;
+						list-style: none;
+					}
+					.att > li { font-size: 80% }
 					
 					.ext-link {
 						background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=');
@@ -56,9 +64,13 @@
 					.kwic-row ul li {
 						display:inline;
 					}
+					
+					.kwac-row .att {
+					 	margin-bottom:0px;
+					}
 				</style>
 			</head>
-			<body>
+			<body style="margin-bottom: 40px;">
 				<div class="container">
 				
 					<!-- if more than one section, and at least have a title, generate navbar at the document level -->
@@ -93,6 +105,7 @@
 					});
 					*/
 					
+					// gestion des liens externes
 					$('.ext-uri').mouseover(function() {
 						$(this).addClass('ext-link');
 					});
@@ -105,8 +118,6 @@
 						// document.location.href = $(this).attr('title');
 					});
 					
-					// add unstyled class to all 'no' class
-					$('.no').addClass('unstyled');
 			      });					
 				</script>
 			</body>
@@ -127,6 +138,13 @@
 	</xsl:template>
 	<xsl:template match="disp:creator | disp:date | disp:version | disp:description">
 		<xsl:value-of select="." /><br /><br />
+	</xsl:template>
+	
+	<!-- Display header -->
+	<xsl:template match="disp:footer">
+		<div class="footer">
+			
+		</div>
 	</xsl:template>
 
 	<!-- Display body -->
@@ -222,11 +240,21 @@
 	</xsl:template>
 
 	<!-- display a KWIC index -->
-	<xsl:template match="disp:kwicIndex">
-		<xsl:apply-templates />
+	<xsl:template match="disp:index">
+		<xsl:choose>
+			<xsl:when test="@disp:indexStyle = 'kwic'">
+				<xsl:apply-templates mode="kwic" />
+			</xsl:when>
+			<xsl:when test="@disp:indexStyle = 'kwac'">
+				<xsl:apply-templates mode="kwac" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates mode="other" />
+			</xsl:otherwise>
+		</xsl:choose>		
 	</xsl:template>
 	
-	<xsl:template match="disp:entry">
+	<xsl:template match="disp:entry" mode="kwic">
 		<div id="{@id}" class="kwic-row {disp:label/disp:str/@style}">
 			<span>
 				<span class="kwic-left" title="{disp:label/disp:str}">
@@ -247,19 +275,37 @@
 				</span>
 			</span>
 			<xsl:if test="disp:att">
-				<ul class="no">
+				<ul class="att">
 					<xsl:apply-templates select="disp:att" />
 				</ul>
 			</xsl:if>
 		</div>
 	</xsl:template>
 
+
+	<xsl:template match="disp:entry" mode="kwac">
+		<div id="{@id}" class="kwac-row {disp:label/disp:str/@style}">
+			<span>
+				<span><xsl:value-of select="@key" /></span><span><xsl:value-of select="@after" /></span>
+				<xsl:if test="@before and @before != ''">
+					<span>, <xsl:value-of select="@before" /> ~</span>
+				</xsl:if>
+			</span>
+			<xsl:if test="disp:att">
+				<ul class="att">
+					<xsl:apply-templates select="disp:att" />
+				</ul>
+			</xsl:if>
+		</div>
+	</xsl:template>
+
+
 	<!-- display a concept block -->
 	<xsl:template match="disp:conceptBlock">
 		<div id="{@id}">
 			<span class="ext-uri" title="{@uri}"><xsl:apply-templates select="disp:label" /></span>
 			<xsl:if test="disp:att">
-				<ul class="no">
+				<ul class="att">
 					<xsl:apply-templates select="disp:att" />
 				</ul>
 			</xsl:if>
@@ -271,7 +317,25 @@
 	</xsl:template>
 	
 	<xsl:template match="disp:att">
-		<li><xsl:value-of select="@type" /> : <xsl:apply-templates /></li>
+		<li><xsl:apply-templates select="." mode="typeLabel" /> : <xsl:apply-templates /></li>
+	</xsl:template>
+	
+	<!-- select the type label if we find it, otherwise keep the type as it is (for type corresponding to languages) -->
+	<xsl:template match="disp:att" mode="typeLabel">
+		<xsl:variable name="type" select="@type" />
+		
+		<xsl:choose>
+			<xsl:when test="$labels/labels/*[name() = $type]">
+				<xsl:value-of select="$labels/labels/*[name() = $type]" />
+			</xsl:when>
+			<xsl:when test="contains($type, 'lang:')">
+				<!-- remove the 'lang:' marker -->
+				<xsl:value-of select="substring($type, 6)" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$type" />
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 	<xsl:template match="disp:link">

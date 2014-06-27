@@ -88,7 +88,7 @@ public class PreferredPropertyReader {
 			// query for the preferredLanguage
 			// if preferredLanguage is the empty string, this will query for labels without a language
 			queries.add(new SparqlQuery(
-					"SELECT ?o WHERE { ?s ?p ?o FILTER(lang(?o) = '"+this.preferredLanguage+"') }",
+					"SELECT ?o WHERE { ?s ?p ?o FILTER(langMatches(lang(?o), '"+this.preferredLanguage+"')) }",
 					new HashMap<String, Object>() {{ 
 						put("s", resource);
 						put("p", aType);
@@ -98,7 +98,7 @@ public class PreferredPropertyReader {
 			// then for the fallback language
 			if(this.fallbackLanguage != null) {
 				queries.add(new SparqlQuery(
-						"SELECT ?o WHERE { ?s ?p ?o FILTER(lang(?o) = '"+this.fallbackLanguage+"') }",
+						"SELECT ?o WHERE { ?s ?p ?o FILTER(langMatches(lang(?o), '"+this.fallbackLanguage+"')) }",
 						new HashMap<String, Object>() {{ 
 							put("s", resource);
 							put("p", aType);
@@ -204,7 +204,7 @@ public class PreferredPropertyReader {
 	private Map<java.net.URI, List<Value>> processChunkOnProperty(List<java.net.URI> resources, final java.net.URI property) 
 	throws SparqlPerformException {
 		
-		String query = "SELECT ?s ?o WHERE { ?s ?p ?o FILTER(lang(?o) = '"+this.preferredLanguage+"') }";
+		String query = "SELECT ?s ?o WHERE { ?s ?p ?o FILTER(langMatches(lang(?o), '"+this.preferredLanguage+"')) }";
 		ValuesSparqlQueryBuilder builder = new ValuesSparqlQueryBuilder(
 				new SparqlQueryBuilder(query),
 				"s",

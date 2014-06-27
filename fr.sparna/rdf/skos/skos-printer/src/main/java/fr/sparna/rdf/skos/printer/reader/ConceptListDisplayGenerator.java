@@ -47,6 +47,21 @@ public class ConceptListDisplayGenerator extends AbstractKosDisplayGenerator {
 			SKOS.EDITORIAL_NOTE,
 	});
 	
+	public static final List<String> EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS = Arrays.asList(new String[] {
+			SKOS.NOTATION,
+			SKOS.ALT_LABEL,
+			SKOSPLAY.TOP_TERM,
+			SKOS.BROADER,
+			SKOS.NARROWER,
+			SKOS.RELATED,			
+			SKOS.DEFINITION,
+			SKOS.SCOPE_NOTE,
+			SKOS.EXAMPLE,
+			SKOS.CHANGE_NOTE,			
+			SKOS.HISTORY_NOTE,
+			SKOS.EDITORIAL_NOTE,
+	});
+	
 	Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	protected ConceptBlockReader cbReader;
@@ -167,26 +182,28 @@ public class ConceptListDisplayGenerator extends AbstractKosDisplayGenerator {
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
 		org.apache.log4j.Logger.getLogger("fr.sparna.rdf").setLevel(org.apache.log4j.Level.TRACE);
 		
+		final String LANG = "fr";
+		
 		Repository r = RepositoryBuilder.fromString(args[0]);
 		
 		// build display result
 		KosDocument document = new KosDocument();
 		
 		// build and set header
-		HeaderReader headerReader = new HeaderReader(r);
-		KosDocumentHeader header = headerReader.read("fr", (args.length > 1)?URI.create(args[1]):null);
+		HeaderAndFooterReader headerReader = new HeaderAndFooterReader(r);
+		KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?URI.create(args[1]):null);
 		document.setHeader(header);
 		
 		ConceptBlockReader cbReader = new ConceptBlockReader(r);
 		cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES);
 		ConceptListDisplayGenerator reader = new ConceptListDisplayGenerator(r, cbReader);
 		BodyReader bodyReader = new BodyReader(reader);
-		document.setBody(bodyReader.readBody("fr", (args.length > 1)?URI.create(args[1]):null));
+		document.setBody(bodyReader.readBody(LANG, (args.length > 1)?URI.create(args[1]):null));
 
 		DisplayPrinter printer = new DisplayPrinter();
 		printer.setDebug(true);
-		printer.printToHtml(document, new File("display-test.html"));
-		printer.printToPdf(document, new File("display-test.pdf"));
+		printer.printToHtml(document, new File("display-test.html"), LANG);
+		printer.printToPdf(document, new File("display-test.pdf"), LANG);
 		
 //		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
 //		m.setProperty("jaxb.formatted.output", true);

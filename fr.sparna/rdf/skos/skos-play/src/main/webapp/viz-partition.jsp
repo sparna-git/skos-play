@@ -10,8 +10,8 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js" charset="utf-8"></script>
+    <script src="js/d3.v3.min.js" charset="utf-8"></script>
+    <script src="js/jquery-1.9.1.min.js" charset="utf-8"></script>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <script src="bootstrap/js/bootstrap.min.js"></script>
     <style type="text/css">

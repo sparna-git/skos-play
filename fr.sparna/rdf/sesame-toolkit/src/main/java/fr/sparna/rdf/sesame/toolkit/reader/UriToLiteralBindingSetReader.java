@@ -1,5 +1,7 @@
 package fr.sparna.rdf.sesame.toolkit.reader;
 
+import java.util.Iterator;
+
 import org.openrdf.model.Literal;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
@@ -22,6 +24,10 @@ public class UriToLiteralBindingSetReader implements KeyValueBindingSetReaderIfc
 		this.keyVarName = keyVarName;
 		this.valueVarName = valueVarName;
 	}
+	
+	public UriToLiteralBindingSetReader(String keyVarName) {
+		this(keyVarName, null);
+	}
 
 	@Override
 	public URI readKey(BindingSet binding) {
@@ -34,6 +40,24 @@ public class UriToLiteralBindingSetReader implements KeyValueBindingSetReaderIfc
 
 	@Override
 	public Literal readValue(BindingSet binding) {
+		
+		if(this.valueVarName == null) {
+			// determnie value varName automagically
+			for (Iterator<String> i = binding.getBindingNames().iterator(); i.hasNext();) {
+				String aName = i.next();
+				if(!aName.equals(this.keyVarName)) {
+					if(valueVarName != null) {
+						throw new IllegalArgumentException("SPARQL query result has more than 2 binding variables, "+this.keyVarName+", "+valueVarName+", "+aName+" (maybe others)");
+					}
+					valueVarName = aName;
+				}
+			}
+			
+			if(valueVarName == null) {
+				throw new IllegalArgumentException("Cannot find value variable name when examining query binding names. Make sure the query returns 2 variables, "+this.keyVarName+" and another one.");
+			}
+		}
+		
 		Value v = binding.getValue(this.valueVarName);
 		if(!(v instanceof Literal)) {
 			throw new IllegalArgumentException("Value "+v+" is not a Literal, check your SPARQL query");

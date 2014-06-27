@@ -14,8 +14,6 @@ import fr.sparna.rdf.skos.printer.schema.KosDisplay;
  * @author Thomas Francart.
  */
 public abstract class AbstractKosDisplayGenerator {
-
-	protected SKOSTags skosTags;
 	
 	protected Repository repository;
 	
@@ -41,20 +39,11 @@ public abstract class AbstractKosDisplayGenerator {
 		if(mainLang == null) {
 			mainLang = "";
 		}
-		
-		this.initTagsBundle(mainLang);
-		
+
 		// sets the ID on the generated display and return
 		KosDisplay display = this.doGenerate(mainLang, conceptScheme);
 		display.setDisplayId(this.displayId);
 		return display;
-	}
-	
-	protected void initTagsBundle(String lang) {
-		// init tag resource bundle if not set
-		if(this.skosTags == null) {
-			skosTags = SKOSTags.getInstance(lang);
-		}
 	}
 	
 	protected abstract KosDisplay doGenerate(String mainLang, final URI conceptScheme)

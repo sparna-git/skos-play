@@ -27,10 +27,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.i18n.StrictResourceBundleControl;
+import fr.sparna.rdf.sesame.toolkit.languages.Languages.Language;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.EndpointRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
@@ -280,9 +281,12 @@ public class UploadServlet extends HttpServlet {
 						@Override
 						public void handleSolution(BindingSet bindingSet)
 						throws TupleQueryResultHandlerException {
+							String rdfLanguage = bindingSet.getValue("language").stringValue();
+							Language l = fr.sparna.rdf.sesame.toolkit.languages.Languages.getInstance().withIso639P1(rdfLanguage);
+							String languageName = (l != null)?l.displayIn(sessionData.getUserLocale().getLanguage()):rdfLanguage;
 							printFormData.getLanguages().put(
 									bindingSet.getValue("language").stringValue(),
-									fr.sparna.rdf.sesame.toolkit.languages.Languages.getInstance().withIso639P1(bindingSet.getValue("language").stringValue()).displayIn(sessionData.getUserLocale().getLanguage())
+									languageName									
 							);
 						}
 						

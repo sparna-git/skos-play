@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<labels lang="en">
+	<altLabel>UF</altLabel>
+	<broadMatch></broadMatch>
+	<broader>BT</broader>
+	<broaderTransitive></broaderTransitive>
+	<changeNote>CN</changeNote>
+	<closeMatch></closeMatch>
+	<definition>DEF</definition>
+	<editorialNote>editorialNote</editorialNote>
+	<exactMatch></exactMatch>
+	<example>EX</example>
+	<hasTopConcept></hasTopConcept>
+	<hiddenLabel></hiddenLabel>
+	<historyNote>historyNote</historyNote>
+	<inScheme>SC</inScheme>
+	<mappingRelation></mappingRelation>
+	<member></member>
+	<memberList></memberList>
+	<narrowMatch></narrowMatch>
+	<narrower>NT</narrower>
+	<narrowerTransitive></narrowerTransitive>
+	<notation>CC</notation>
+	<note>SN</note>
+	<prefLabel>USE</prefLabel>
+	<related>RT</related>
+	<relatedMatch></relatedMatch>
+	<scopeNote>SN</scopeNote>
+	<semanticRelation></semanticRelation>
+	<topConceptOf></topConceptOf>
+	<topConcept>TT</topConcept>
+</labels>

@@ -1,26 +1,26 @@
 package fr.sparna.solr.indexing.rdf;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import org.apache.solr.common.SolrInputDocument;
 import org.junit.Before;
 import org.junit.Test;
 import org.openrdf.model.Literal;
-import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
 import org.openrdf.model.vocabulary.SKOS;
 import org.openrdf.repository.Repository;
 
+import fr.sparna.assembly.AssemblyConsumer;
+import fr.sparna.assembly.AssemblyLine;
+import fr.sparna.assembly.AssemblyStation;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.reader.KeyValueHelperFactory;
 import fr.sparna.rdf.sesame.toolkit.reader.KeyValueHelperIfc;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
-import fr.sparna.solr.indexing.IndexingConsumerIfc;
-import fr.sparna.solr.indexing.IndexingProcess;
-import fr.sparna.solr.indexing.IndexingProcessorIfc;
-import fr.sparna.solr.indexing.base.DebugIndexingConsumer;
+import fr.sparna.rdf.solr.index.SolrIndexableFactory;
+import fr.sparna.rdf.solr.index.source.SparqlRdfAssemblySource;
+import fr.sparna.rdf.solr.index.step.KeyValueRdfIndexingStation;
 
 public class RdfIndexingProcessTest {
 
@@ -38,14 +38,19 @@ public class RdfIndexingProcessTest {
 	
 	@Test
 	public void testSparqlRdfIndexingSource() throws Exception {
-		// IndexingSourceIfc<String> source = new MockIndexingSourceIfc(Arrays.asList(new String[] {"http://www.ex.fr/1", "http://www.ex.fr/2"}), "uri");
-		SparqlRdfIndexingSource source = new SparqlRdfIndexingSource(repository, new SparqlQuery("SELECT ?x WHERE { ?x a <"+SKOS.CONCEPT+"> }"));
-		List<IndexingProcessorIfc<Resource>> processors = new ArrayList<IndexingProcessorIfc<Resource>>();
+		// AssemblySource<String> source = new MockIndexingSourceIfc(Arrays.asList(new String[] {"http://www.ex.fr/1", "http://www.ex.fr/2"}), "uri");
+		SparqlRdfAssemblySource<SolrInputDocument> source = new SparqlRdfAssemblySource<SolrInputDocument>(
+				repository,
+				new SparqlQuery("SELECT ?x WHERE { ?x a <"+SKOS.CONCEPT+"> }"),
+				new SolrIndexableFactory("uri")
+		);
+		List<AssemblyStation<SolrInputDocument>> processors = new ArrayList<AssemblyStation<SolrInputDocument>>();
 		KeyValueHelperIfc<URI, Literal> helper = KeyValueHelperFactory.createUriToLiteralHelper(SKOS.NOTATION.stringValue());
-		processors.add(new KeyValueRdfIndexingProcessor(repository, "notation", helper));
-		List<IndexingConsumerIfc> consumers = Arrays.asList(new IndexingConsumerIfc[] {new DebugIndexingConsumer()});
+		processors.add(new KeyValueRdfIndexingStation(repository, "notation", helper));
+		List<AssemblyConsumer<SolrInputDocument>> consumers = new ArrayList<AssemblyConsumer<SolrInputDocument>>();
+		// consumers.add(new DebugAssemblyConsumer());
 		
-		IndexingProcess<Resource> p = new IndexingProcess<Resource>(source, processors, consumers);
+		AssemblyLine<SolrInputDocument> p = new AssemblyLine<SolrInputDocument>(source, processors, consumers);
 		p.start();
 	}
 	

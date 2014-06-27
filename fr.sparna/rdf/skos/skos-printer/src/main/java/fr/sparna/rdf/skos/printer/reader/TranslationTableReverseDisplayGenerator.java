@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.lang.StringUtil;
 import fr.sparna.rdf.sesame.toolkit.languages.Languages;
+import fr.sparna.rdf.sesame.toolkit.languages.Languages.Language;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
@@ -111,11 +112,13 @@ public class TranslationTableReverseDisplayGenerator extends AbstractKosDisplayG
 		
 		log.debug("Single section added to output");
 		Section s = new Section();
-		s.setTitle(Languages.getInstance().withIso639P1(this.targetLanguage).displayIn(lang));
+		Language tl = Languages.getInstance().withIso639P1(this.targetLanguage);
+		Language l = Languages.getInstance().withIso639P1(lang);
+		s.setTitle((tl != null)?tl.displayIn(lang):lang);
 		Table newTable = new Table();
 		newTable.setTableHeader(SchemaFactory.createRow(
-				SchemaFactory.createStyledString(Languages.getInstance().withIso639P1(this.targetLanguage).displayIn(lang)),
-				SchemaFactory.createStyledString(Languages.getInstance().withIso639P1(lang).displayIn(lang))
+				SchemaFactory.createStyledString((tl != null)?tl.displayIn(lang):this.targetLanguage),
+				SchemaFactory.createStyledString((l != null)?l.displayIn(lang):lang)
 		));
 		s.setTable(newTable);
 		for (QueryResultRow aRow : queryResultRows) {
@@ -143,19 +146,21 @@ public class TranslationTableReverseDisplayGenerator extends AbstractKosDisplayG
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
 		org.apache.log4j.Logger.getLogger("fr.sparna.rdf").setLevel(org.apache.log4j.Level.TRACE);
 		
+		final String LANG = "fr";
+		
 		Repository r = RepositoryBuilder.fromString(args[0]);
 		
 		// build result document
 		KosDocument document = new KosDocument();
 		
 		// build and set header
-		HeaderReader headerReader = new HeaderReader(r);
-		KosDocumentHeader header = headerReader.read("fr", (args.length > 1)?URI.create(args[1]):null);
+		HeaderAndFooterReader headerReader = new HeaderAndFooterReader(r);
+		KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?URI.create(args[1]):null);
 		document.setHeader(header);
 		
 		TranslationTableReverseDisplayGenerator reader = new TranslationTableReverseDisplayGenerator(r, new ConceptBlockReader(r), "en");
 		BodyReader bodyReader = new BodyReader(reader);
-		document.setBody(bodyReader.readBody("fr", (args.length > 1)?URI.create(args[1]):null));
+		document.setBody(bodyReader.readBody(LANG, (args.length > 1)?URI.create(args[1]):null));
 
 		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
 		m.setProperty("jaxb.formatted.output", true);
@@ -164,8 +169,8 @@ public class TranslationTableReverseDisplayGenerator extends AbstractKosDisplayG
 		
 		DisplayPrinter printer = new DisplayPrinter();
 		printer.setDebug(true);
-		printer.printToHtml(document, new File("display-test.html"));
-		printer.printToPdf(document, new File("display-test.pdf"));
+		printer.printToHtml(document, new File("display-test.html"), LANG);
+		printer.printToPdf(document, new File("display-test.pdf"), LANG);
 	}
 	
 }

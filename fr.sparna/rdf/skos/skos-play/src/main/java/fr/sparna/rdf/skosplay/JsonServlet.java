@@ -77,30 +77,32 @@ public class JsonServlet extends HttpServlet {
 	throws SparqlPerformException {
 		GenericTree<SKOSTreeNode> tree = new GenericTree<SKOSTreeNode>();
 		
+		List<GenericTree<SKOSTreeNode>> trees;
+		
 		if(root != null) {	
 			// generates tree				
-			tree = builder.buildTree(root);
+			trees = builder.buildTrees(root);
 		} else {
 			// fetch all trees
-			List<GenericTree<SKOSTreeNode>> trees = builder.buildTrees();
-			
-			// if only one, set it as root
-			if(trees.size() == 1) {
-				tree = trees.get(0);
-			} else {
-				// otherwise, create a fake root
-				GenericTreeNode<SKOSTreeNode> fakeRoot = new GenericTreeNode<SKOSTreeNode>();
-				fakeRoot.setData(new SKOSTreeNode(URI.create("skosplay:allData"), "", NodeType.UNKNOWN));
-
-				// add all the trees under it					
-				for (GenericTree<SKOSTreeNode> genericTree : trees) {
-					fakeRoot.addChild(genericTree.getRoot());
-				}
-				
-				// set the root of the tree
-				tree.setRoot(fakeRoot);
-			}				
+			trees = builder.buildTrees();
 		}
+			
+		// if only one, set it as root
+		if(trees.size() == 1) {
+			tree = trees.get(0);
+		} else {
+			// otherwise, create a fake root
+			GenericTreeNode<SKOSTreeNode> fakeRoot = new GenericTreeNode<SKOSTreeNode>();
+			fakeRoot.setData(new SKOSTreeNode(URI.create("skosplay:allData"), "", NodeType.UNKNOWN));
+
+			// add all the trees under it					
+			for (GenericTree<SKOSTreeNode> genericTree : trees) {
+				fakeRoot.addChild(genericTree.getRoot());
+			}
+
+			// set the root of the tree
+			tree.setRoot(fakeRoot);
+		}				
 		
 		return tree;
 	}

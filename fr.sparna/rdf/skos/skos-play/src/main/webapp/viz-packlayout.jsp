@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="js/d3.v3.min.js" charset="utf-8"></script>
     <style type="text/css">
 
 text {

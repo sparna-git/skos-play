@@ -162,7 +162,12 @@
 								<input type="radio" name="display" id="permuted_index" value="permuted_index">
 								<fmt:message key="print.form.displayType.permuted_index" />
 								<span class="help-inline"><fmt:message key="print.form.displayType.permuted_index.help" /></span>
-							</label>						
+							</label>
+							<label class="radio">
+								<input type="radio" name="display" id="kwic_index" value="kwic_index">
+								<fmt:message key="print.form.displayType.kwic_index" />
+								<span class="help-inline"><fmt:message key="print.form.displayType.kwic_index.help" /></span>
+							</label>
 						</div>
 					</div>
 					<div class="control-group">

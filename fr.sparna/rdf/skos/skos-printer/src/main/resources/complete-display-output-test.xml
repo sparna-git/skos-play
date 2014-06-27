@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:kosDocument xmlns:ns1="http://www.sparna.fr/thesaurus-display">
+    <ns1:header>
+        <ns1:title>http://data.culture.fr/thesaurus/resource/ark:/67717/T96</ns1:title>
+    </ns1:header>
+    <ns1:body>
+        <ns1:kosDisplay column-count="2" displayId="alpha">
+            <ns1:section>
+                <ns1:list/>
+            </ns1:section>
+        </ns1:kosDisplay>
+        <ns1:kosDisplay column-count="2" displayId="hier">
+            <ns1:section title="">
+                <ns1:tree>
+                    <ns1:node>
+                        <ns1:nodeData>
+                            <ns1:conceptBlock id="hier-1106806444" uri="http://data.culture.fr/thesaurus/resource/ark:/67717/T96">
+<ns1:label>
+    <ns1:link uri="http://data.culture.fr/thesaurus/resource/ark:/67717/T96" refId="alpha-1106806444">http://data.culture.fr/thesaurus/resource/ark:/67717/T96</ns1:link>
+</ns1:label>
+                            </ns1:conceptBlock>
+                        </ns1:nodeData>
+                    </ns1:node>
+                </ns1:tree>
+            </ns1:section>
+        </ns1:kosDisplay>
+    </ns1:body>
+</ns1:kosDocument>

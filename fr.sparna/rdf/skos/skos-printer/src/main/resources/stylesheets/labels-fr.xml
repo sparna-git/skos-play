@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<labels lang="fr">
+	<altLabel>EP</altLabel>
+	<broadMatch></broadMatch>
+	<broader>TG</broader>
+	<broaderTransitive></broaderTransitive>
+	<changeNote>NoteChangement</changeNote>
+	<closeMatch></closeMatch>
+	<definition>DEF</definition>
+	<editorialNote>NoteEditoriale</editorialNote>
+	<exactMatch></exactMatch>
+	<example>EX</example>
+	<hasTopConcept></hasTopConcept>
+	<hiddenLabel></hiddenLabel>
+	<historyNote>NoteHistorique</historyNote>
+	<inScheme>SC</inScheme>
+	<mappingRelation></mappingRelation>
+	<member></member>
+	<memberList></memberList>
+	<narrowMatch></narrowMatch>
+	<narrower>TS</narrower>
+	<narrowerTransitive></narrowerTransitive>
+	<notation>CC</notation>
+	<note>NE</note>
+	<prefLabel>EM</prefLabel>
+	<related>TA</related>
+	<relatedMatch></relatedMatch>
+	<scopeNote>NE</scopeNote>
+	<semanticRelation></semanticRelation>
+	<topConceptOf></topConceptOf>
+	<topConcept>TT</topConcept>
+</labels>

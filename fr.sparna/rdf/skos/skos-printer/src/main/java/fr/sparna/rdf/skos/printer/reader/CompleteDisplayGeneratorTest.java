@@ -26,14 +26,16 @@ public class CompleteDisplayGeneratorTest {
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
 		org.apache.log4j.Logger.getLogger("fr.sparna.rdf").setLevel(org.apache.log4j.Level.TRACE);
 		
+		final String LANG = "fr";
+		
 		Repository r = RepositoryBuilder.fromString(args[0]);
 		
 		// build result document
 		KosDocument document = new KosDocument();
 		
 		// build and set header
-		HeaderReader headerReader = new HeaderReader(r);
-		KosDocumentHeader header = headerReader.read("fr", (args.length > 1)?URI.create(args[1]):null);
+		HeaderAndFooterReader headerReader = new HeaderAndFooterReader(r);
+		KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?URI.create(args[1]):null);
 		document.setHeader(header);
 		
 		// prepare a list of generators
@@ -44,7 +46,7 @@ public class CompleteDisplayGeneratorTest {
 		Perform.on(r).select(new GetLanguagesHelper() {			
 			@Override
 			protected void handleLang(Literal lang) throws TupleQueryResultHandlerException {
-				if(!lang.stringValue().equals("fr") && !lang.stringValue().equals("")) {
+				if(!lang.stringValue().equals(LANG) && !lang.stringValue().equals("")) {
 					additionalLangs.add(lang.stringValue());
 				}
 			}
@@ -52,7 +54,7 @@ public class CompleteDisplayGeneratorTest {
 			
 		// alphabetical display
 		ConceptBlockReader alphaCbReader = new ConceptBlockReader(r);
-		alphaCbReader.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES);
+		alphaCbReader.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
 		alphaCbReader.setAdditionalLabelLanguagesToInclude(additionalLangs);
 		alphaCbReader.setLinkDestinationIdPrefix("hier");
 		AlphaIndexDisplayGenerator alphaGen = new AlphaIndexDisplayGenerator(
@@ -86,7 +88,7 @@ public class CompleteDisplayGeneratorTest {
 		}
 		
 		BodyReader bodyReader = new BodyReader(generators);
-		document.setBody(bodyReader.readBody("fr", (args.length > 1)?URI.create(args[1]):null));
+		document.setBody(bodyReader.readBody(LANG, (args.length > 1)?URI.create(args[1]):null));
 		
 		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
 		m.setProperty("jaxb.formatted.output", true);
@@ -94,8 +96,8 @@ public class CompleteDisplayGeneratorTest {
 		m.marshal(document, new File("src/main/resources/complete-display-output-test.xml"));
 		
 		DisplayPrinter printer = new DisplayPrinter();
-		printer.printToHtml(document, new File("display-test.html"));
-		printer.printToPdf(document, new File("display-test.pdf"));
+		printer.printToHtml(document, new File("display-test.html"), LANG);
+		printer.printToPdf(document, new File("display-test.pdf"), LANG);
 
 	}
 
