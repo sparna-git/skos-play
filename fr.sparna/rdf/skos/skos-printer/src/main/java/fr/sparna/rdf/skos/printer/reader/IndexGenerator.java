@@ -20,6 +20,7 @@ import org.openrdf.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.sparna.commons.lang.StringUtil;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
@@ -64,12 +65,9 @@ public class IndexGenerator extends AbstractKosDisplayGenerator {
 	protected KosDisplay doGenerate(String mainLang, URI conceptScheme)
 	throws SparqlPerformException {
 		
-		// build a tokenizer based on language (for stopwords)
+		// init a tokenizer based on language (for stopwords)
 		this.tokenizer = new LuceneTokenizer(mainLang);
-		
-		// build our display	
-		KosDisplay d = new KosDisplay();
-		
+				
 		conceptBlockReader = new ConceptBlockReader(this.repository);
 		conceptBlockReader.initInternal(mainLang, conceptScheme, this.displayId);
 		
@@ -94,9 +92,6 @@ public class IndexGenerator extends AbstractKosDisplayGenerator {
 		
 		Perform.on(repository).select(helper);		
 		
-		Section s = new Section();
-		Index idx = new Index();
-		s.setIndex(idx);
 		List<IndexEntry> entries = new ArrayList<IndexEntry>();
 		for (QueryResultRow aRow : queryResultRows) {
 			List<IndexEntry> local = buildIndexEntries(aRow, mainLang);
@@ -131,18 +126,59 @@ public class IndexGenerator extends AbstractKosDisplayGenerator {
 				return collator.compare(o1.getKey(), o2.getKey());
 			}			
 		});
-		idx.getEntry().addAll(entries);
-		// log.debug(IndexPrinter.debug(kwic, DisplayMode.KWIC));
 		
-		d.getSection().add(s);
+		// build our display	
+		KosDisplay d = new KosDisplay();
+		// if too many entries, add sections to the output document
+		if(entries.size() > 1000) {
+			log.debug("Large list, will add sections to the output");
+			String currentLetter = null;			
+			List<IndexEntry> currentList = new ArrayList<IndexEntry>();
+			for (IndexEntry anEntry : entries) {
+				String entrySectionTitle = StringUtil.withoutAccents(anEntry.getKey()).toUpperCase().substring(0, 1);
+				// first step only
+				if(currentLetter == null) {
+					currentLetter = entrySectionTitle;
+				}
+				
+				if(!entrySectionTitle.equals(currentLetter)) {
+					// we're on a new first character, which means new section
+					d.getSection().add(createIndexSection(currentList, currentLetter));
+					
+					// and then reset the current list for next section
+					currentList = new ArrayList<IndexEntry>();
+				} else {
+					// keep storing current list of entries
+					currentList.add(anEntry);
+				}
+				currentLetter = entrySectionTitle;
+			}
+			// and the last section...
+			d.getSection().add(createIndexSection(currentList, currentLetter));
+		} else {
+			log.debug("Single section added to output");
+			d.getSection().add(createIndexSection(entries, null));
+		}
 		
-		// set indexType and column count accordingly
-		idx.setIndexStyle(this.indexType.name().toLowerCase());
+		// set column count of the display
 		if(this.indexType != IndexType.KWIC) {
 			d.setColumnCount(BigInteger.valueOf(3));
 		}
-
+		
 		return d;	
+	}
+	
+	protected Section createIndexSection(List<IndexEntry> entries, String title) {
+		Section s = new Section();
+		s.setTitle(title);
+		Index idx = new Index();
+		
+		// set indexType
+		idx.setIndexStyle(this.indexType.name().toLowerCase());	
+		idx.getEntry().addAll(entries);
+
+		s.setIndex(idx);
+		return s;
 	}
 	
 	class QueryResultRow {
@@ -250,7 +286,7 @@ public class IndexGenerator extends AbstractKosDisplayGenerator {
 		document.setHeader(header);
 		
 		// IndexGenerator reader = new IndexGenerator(r, new SimpleTokenizer());
-		IndexGenerator reader = new IndexGenerator(r, IndexType.KWAC);
+		IndexGenerator reader = new IndexGenerator(r, IndexType.KWIC);
 		BodyReader bodyReader = new BodyReader(reader);
 		document.setBody(bodyReader.readBody(LANG, (args.length > 1)?URI.create(args[1]):null));
 

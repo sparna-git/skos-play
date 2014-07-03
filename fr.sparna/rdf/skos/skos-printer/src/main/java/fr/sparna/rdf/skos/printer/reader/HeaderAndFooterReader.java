@@ -37,8 +37,8 @@ public class HeaderAndFooterReader {
 			// TODO
 		} else {
 			// this will try to read in turn all the properties defined in a LabelReader
-			// skos:prefLabel, rdfs:label and dcterms:title
-			LabelReader labelReader = new LabelReader(this.repository, lang);
+			// skos:prefLabel, rdfs:label
+			LabelReader labelReader = new LabelReader(this.repository, "", lang);
 			// add dcterms title and dc title
 			labelReader.getProperties().add(URI.create(DCTERMS.TITLE.toString()));
 			labelReader.getProperties().add(URI.create(DC.TITLE.toString()));
@@ -89,16 +89,29 @@ public class HeaderAndFooterReader {
 		
 		if(conceptScheme == null) {
 			// TODO
-		} else {			
-			// read a title in the given language
-			String value = readProperties(
+		} else {
+			// this will try to read in turn all the properties defined in a LabelReader
+			// skos:prefLabel, rdfs:label
+			LabelReader labelReader = new LabelReader(this.repository, "", lang);
+			// add dcterms title and dc title
+			labelReader.getProperties().add(URI.create(DCTERMS.TITLE.toString()));
+			labelReader.getProperties().add(URI.create(DC.TITLE.toString()));
+			String title = LabelReader.display(labelReader.getValues(conceptScheme));
+			
+			// try to read a dcterms:issued too
+			String issued = readProperties(
 					conceptScheme,
-					Arrays.asList(new URI[]{java.net.URI.create(DCTERMS.TITLE.stringValue()), java.net.URI.create(DC.TITLE.stringValue()) }),
-					lang
+					Arrays.asList(new URI[]{java.net.URI.create(DCTERMS.ISSUED.stringValue()), java.net.URI.create(DC.DATE.stringValue()) }),
+					""
 			);
-			log.debug("Header/Footer reader reading footer title in "+lang+" : '"+value+"'");
-			if(!value.equals("")) {
-				f.setTitle(value);
+			String footer = "";
+			if(!title.equals("")) {
+				footer = title+((issued != null && !issued.equals(""))?" - "+issued:"");
+			}
+			
+			log.debug("Header/Footer reader reading footer title in "+lang+" : '"+footer+"'");
+			if(!footer.equals("")) {
+				f.setTitle(footer);
 			}
 		}
 		

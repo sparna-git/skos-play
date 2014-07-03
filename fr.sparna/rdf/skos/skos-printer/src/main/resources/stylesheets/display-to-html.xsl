@@ -255,8 +255,8 @@
 	</xsl:template>
 	
 	<xsl:template match="disp:entry" mode="kwic">
-		<div id="{@id}" class="kwic-row {disp:label/disp:str/@style}">
-			<span>
+		<div id="{@id}" class="kwic-row">
+			<span class="{disp:label/disp:str/@style}">
 				<span class="kwic-left" title="{disp:label/disp:str}">
 					<!-- &nbsp; is mandatory for values with nothing in the before part to be correctly aligned -->
 					<bdi><xsl:value-of select="@before" /></bdi><xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>

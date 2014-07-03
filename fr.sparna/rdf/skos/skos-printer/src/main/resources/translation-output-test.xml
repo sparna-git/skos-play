@@ -2,15 +2,15 @@
 <ns1:kosDocument xmlns:ns1="http://www.sparna.fr/thesaurus-display">
     <ns1:header/>
     <ns1:body>
-        <ns1:kosDisplay displayId="83190c3c-3ffe-4318-9775-ee0155397764">
+        <ns1:kosDisplay displayId="4d45627a-f12d-483d-ba49-5de6635942fc">
             <ns1:section>
                 <ns1:table>
                     <ns1:tableHeader>
                         <ns1:cell>
-                            <ns1:styledString>Français</ns1:styledString>
+                            <ns1:styledString>Français (fr)</ns1:styledString>
                         </ns1:cell>
                         <ns1:cell>
-                            <ns1:styledString>Anglais</ns1:styledString>
+                            <ns1:styledString>Anglais (en)</ns1:styledString>
                         </ns1:cell>
                     </ns1:tableHeader>
                 </ns1:table>

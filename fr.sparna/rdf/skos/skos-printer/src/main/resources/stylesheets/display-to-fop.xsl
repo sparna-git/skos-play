@@ -109,6 +109,17 @@
 		<!-- generates automatic summary, etc. ? -->
 		<!-- process kosDisplays -->
 		<xsl:apply-templates />
+		
+		<!-- if we are in a complete display with more than one section, add a blank page at the end -->
+		<xsl:if test="count(disp:kosDisplay) > 1">
+			<fo:page-sequence master-reference="pageMaster-{generate-id(disp:kosDisplay[position() = last()])}">
+				<fo:flow flow-name="xsl-region-body">
+					<!-- add a page break -->
+					<fo:block page-break-before="always" />
+				</fo:flow>
+			</fo:page-sequence>
+		</xsl:if>
+		
 	</xsl:template>
 
 
@@ -354,6 +365,16 @@
 				<fo:table-body>
 					<xsl:for-each select="disp:row">
 						<fo:table-row>
+							<xsl:choose>
+						        <xsl:when test="(position() mod 2) = 0">
+						        	<!-- even node -->
+						        	<xsl:attribute name="background-color">#FFFFFF</xsl:attribute>
+						        </xsl:when>
+						        <xsl:otherwise>
+						        	<!-- odd node -->
+						            <xsl:attribute name="background-color">#EEEEEE</xsl:attribute>
+						        </xsl:otherwise>
+						    </xsl:choose>
 							<xsl:for-each select="disp:cell">
 								<fo:table-cell>
 									<fo:block>

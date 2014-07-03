@@ -112,13 +112,11 @@ public class TranslationTableReverseDisplayGenerator extends AbstractKosDisplayG
 		
 		log.debug("Single section added to output");
 		Section s = new Section();
-		Language tl = Languages.getInstance().withIso639P1(this.targetLanguage);
-		Language l = Languages.getInstance().withIso639P1(lang);
-		s.setTitle((tl != null)?tl.displayIn(lang):lang);
+		s.setTitle(TranslationTableDisplayGenerator.displayLanguage(this.targetLanguage, lang));
 		Table newTable = new Table();
 		newTable.setTableHeader(SchemaFactory.createRow(
-				SchemaFactory.createStyledString((tl != null)?tl.displayIn(lang):this.targetLanguage),
-				SchemaFactory.createStyledString((l != null)?l.displayIn(lang):lang)
+				SchemaFactory.createStyledString(TranslationTableDisplayGenerator.displayLanguage(this.targetLanguage, lang)),
+				SchemaFactory.createStyledString(TranslationTableDisplayGenerator.displayLanguage(lang, lang))
 		));
 		s.setTable(newTable);
 		for (QueryResultRow aRow : queryResultRows) {

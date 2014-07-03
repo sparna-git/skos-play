@@ -129,11 +129,9 @@ public class TranslationTableDisplayGenerator extends AbstractKosDisplayGenerato
 					// et on créé une nouvelle section
 					currentSection = new Section();
 					Table newTable = new Table();
-					Language tl = Languages.getInstance().withIso639P1(this.targetLanguage);
-					Language l = Languages.getInstance().withIso639P1(lang);
 					newTable.setTableHeader(SchemaFactory.createRow(
-							SchemaFactory.createStyledString((l != null)?l.displayIn(lang):lang),
-							SchemaFactory.createStyledString((tl != null)?tl.displayIn(lang):this.targetLanguage)
+							SchemaFactory.createStyledString(displayLanguage(lang, lang)),
+							SchemaFactory.createStyledString(displayLanguage(this.targetLanguage, lang))
 					));
 					currentSection.setTable(newTable);
 					currentSection.setTitle(sectionTitle);
@@ -148,11 +146,9 @@ public class TranslationTableDisplayGenerator extends AbstractKosDisplayGenerato
 			log.debug("Single section added to output");
 			Section s = new Section();
 			Table newTable = new Table();
-			Language tl = Languages.getInstance().withIso639P1(this.targetLanguage);
-			Language l = Languages.getInstance().withIso639P1(lang);
 			newTable.setTableHeader(SchemaFactory.createRow(
-					SchemaFactory.createStyledString((l != null)?l.displayIn(lang):lang),
-					SchemaFactory.createStyledString((tl != null)?tl.displayIn(lang):this.targetLanguage)
+					SchemaFactory.createStyledString(displayLanguage(lang, lang)),
+					SchemaFactory.createStyledString(displayLanguage(this.targetLanguage, lang))
 			));
 			s.setTable(newTable);
 			for (QueryResultRow aRow : queryResultRows) {
@@ -180,6 +176,15 @@ public class TranslationTableDisplayGenerator extends AbstractKosDisplayGenerato
 		String conceptURI;
 		String label1;
 		String label2;
+	}
+	
+	public static String displayLanguage(String languageCode, String displayLanguage) {
+		Language l = Languages.getInstance().withIso639P1(languageCode);
+		if(l != null) {
+			return l.displayIn(displayLanguage)+" ("+languageCode+")";
+		} else {
+			return languageCode;
+		}
 	}
 	
 	public static void main(String... args) throws Exception {
