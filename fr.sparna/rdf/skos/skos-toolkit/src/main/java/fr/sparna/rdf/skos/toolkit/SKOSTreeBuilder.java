@@ -196,18 +196,32 @@ public class SKOSTreeBuilder {
 			}
 		}
 		
+		// compute tree from root
+		GenericTree<SKOSTreeNode> originalTree = new GenericTree<SKOSTreeNode>(
+				buildTreeRec(this.repository.getValueFactory().createURI(root.toString()))
+		);
+		
 		if(useGivenRootAsRoot) {
-			result.add(new GenericTree<SKOSTreeNode>(
-					buildTreeRec(this.repository.getValueFactory().createURI(root.toString()))
-			));
+			result.add(originalTree);
 		} else {
-			GenericTree<SKOSTreeNode> originalTree = new GenericTree<SKOSTreeNode>(
-					buildTreeRec(this.repository.getValueFactory().createURI(root.toString()))
-			);
+			
+			
+			int rootsWithNoChildren = 0;
 			for (GenericTreeNode<SKOSTreeNode> aChild : originalTree.getRoot().getChildren()) {
-				result.add(new GenericTree<SKOSTreeNode>(
-						aChild
-				));
+				if(aChild.getChildren().size() == 0) {
+					rootsWithNoChildren++;
+				}
+			}
+			
+			// let's try to be smart
+			if(originalTree.getNumberOfNodes() < 500 || rootsWithNoChildren > 2) {
+				result.add(originalTree);
+			} else {
+				for (GenericTreeNode<SKOSTreeNode> aChild : originalTree.getRoot().getChildren()) {
+					result.add(new GenericTree<SKOSTreeNode>(
+							aChild
+					));
+				}
 			}
 		}
 
