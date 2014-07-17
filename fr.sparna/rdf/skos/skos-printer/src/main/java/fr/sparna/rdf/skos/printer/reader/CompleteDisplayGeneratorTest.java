@@ -29,7 +29,7 @@ public class CompleteDisplayGeneratorTest {
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
 		org.apache.log4j.Logger.getLogger("fr.sparna.rdf").setLevel(org.apache.log4j.Level.TRACE);
 		
-		final String LANG = "fr";
+		final String LANG = "fr-fr";
 		
 		Repository r = RepositoryBuilder.fromString(args[0]);
 		

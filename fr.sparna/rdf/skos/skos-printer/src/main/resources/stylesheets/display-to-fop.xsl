@@ -340,6 +340,7 @@
 	<!-- process a tree node -->
 	<xsl:template match="disp:node">
 		<fo:block>
+
 			<!-- print indentation and non-breaking space if we are at least one level deep -->
 			<fo:inline font-family="Helvetica" font-weight="bold"><xsl:for-each select="ancestor::disp:node[parent::disp:node]">L </xsl:for-each></fo:inline>
 			<xsl:if test="ancestor::disp:node">&#160;</xsl:if>
@@ -463,6 +464,7 @@
 		<fo:inline font-size="11pt" font-family="Helvetica"><xsl:apply-templates /></fo:inline>
 	</xsl:template>
 	
+	<!-- Display attributes in normal mode -->
 	<xsl:template match="disp:att">
 		<fo:block font-size="smaller">
 			<xsl:if test="not(preceding-sibling::disp:att) or (preceding-sibling::disp:att[1]/@type != @type)">
@@ -472,10 +474,12 @@
 		</fo:block>
 	</xsl:template>
 	
+	<!-- Display attributes in inline mode (after the label in index entries) -->
 	<xsl:template match="disp:att" mode="inline">
 		<fo:inline font-size="smaller"><xsl:apply-templates select="." mode="typeLabel" /> : <xsl:apply-templates /></fo:inline>
 	</xsl:template>
 	
+	<!-- Display attributes in a table (to have attribute types aligned) -->
 	<xsl:template match="disp:att" mode="table">
 		<xsl:variable name="type" select="@type" />
 		
@@ -541,6 +545,9 @@
 			</xsl:when>
 			<xsl:when test="$style = 'alt'">
 				<fo:inline font-style="italic" text-decoration="line-through"><xsl:value-of select="$string" /></fo:inline>
+			</xsl:when>
+			<xsl:when test="$style = 'alt-att'">
+				<fo:inline font-style="italic"><xsl:value-of select="$string" /></fo:inline>
 			</xsl:when>
 			<xsl:otherwise>
 				<fo:inline><xsl:value-of select="$string" /></fo:inline>

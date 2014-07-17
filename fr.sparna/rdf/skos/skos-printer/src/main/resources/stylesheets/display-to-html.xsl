@@ -44,6 +44,11 @@
 					
 					.alt {
 						font-style:italic;
+						text-decoration:line-through;
+					}
+					
+					.alt-att {
+						font-style:italic;
 					}
 					
 					.kwic-left {

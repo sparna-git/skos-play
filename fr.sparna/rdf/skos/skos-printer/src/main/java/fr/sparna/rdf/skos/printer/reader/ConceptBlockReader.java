@@ -230,7 +230,7 @@ public class ConceptBlockReader {
 								SchemaFactory.createAtt(
 										((Literal)value).stringValue(),
 										SKOSTags.getString(predicateReader.getPropertyURI()),
-										(styleAttributes && predicateReader.getPropertyURI().toString().equals(SKOS.ALT_LABEL))?"alt":null
+										(styleAttributes && predicateReader.getPropertyURI().toString().equals(SKOS.ALT_LABEL))?"alt-att":null
 										)
 								);
 					} else {
