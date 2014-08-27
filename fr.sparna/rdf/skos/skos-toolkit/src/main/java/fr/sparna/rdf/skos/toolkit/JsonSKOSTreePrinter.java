@@ -90,10 +90,17 @@ public class JsonSKOSTreePrinter {
 				printConceptRec(aChild, jg, labels);
 			}
 			jg.writeEndArray();
-		} else {
-			// no children, set a size attribute of 1
-			jg.writeNumberField("size", 1);
 		}
+		
+//		else {
+//			// no children, set a size attribute of 1
+//			jg.writeNumberField("size", 1);
+//			// replace with this line to have a random size computed
+//			// jg.writeNumberField("size", Math.ceil(30*Math.random()));
+//		}
+		
+		// write the size
+		jg.writeNumberField("size", aNode.getData().getWeight());
 		
 		jg.writeEndObject();	
 	}

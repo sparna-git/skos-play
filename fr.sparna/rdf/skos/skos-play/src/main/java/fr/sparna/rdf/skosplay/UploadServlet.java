@@ -32,15 +32,20 @@ import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlUpdate;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.EndpointRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.FactoryConfiguration;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryException;
+import fr.sparna.rdf.sesame.toolkit.repository.StringRepositoryFactory;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.ApplyUpdates;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromStream;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromUrl;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationException;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
+import fr.sparna.rdf.skos.toolkit.SKOSRules;
 import fr.sparna.web.config.Configuration;
 
 public class UploadServlet extends HttpServlet {
@@ -55,9 +60,6 @@ public class UploadServlet extends HttpServlet {
 	
 	// if source == URL, the url
 	private static final String PARAM_URL = "url";
-	
-	// if source == ENDPOINT, the endpoint
-	private static final String PARAM_ENDPOINT = "endpoint";
 
 	// if source == EXAMPLE, the resource path
 	private static final String PARAM_EXAMPLE = "example";
@@ -65,11 +67,13 @@ public class UploadServlet extends HttpServlet {
 	// RDFS inference
 	private static final String PARAM_RDFS = "rdfs-inference";
 	
+	// OWL2SKOS inference
+	private static final String PARAM_OWL2SKOS = "owl2skos";
+	
 	private enum SOURCE_TYPE {
 		FILE,
 		URL,
-		EXAMPLE,
-		ENDPOINT
+		EXAMPLE
 	}
 	
 	@Override
@@ -97,16 +101,23 @@ public class UploadServlet extends HttpServlet {
 			return;
 		}
 		
+			
+		RepositoryBuilder localRepositoryBuilder;
+		
 		// determine rdfs inference
 		String rdfsParam = (request.getParameter(PARAM_RDFS) != null && !request.getParameter(PARAM_RDFS).equals(""))?request.getParameter(PARAM_RDFS):null;
 		log.debug(PARAM_RDFS+" : "+rdfsParam);
-		boolean doRdfs = (rdfsParam != null && !"".equals(rdfsParam));		
-		RepositoryBuilder localRepositoryBuilder;
+		boolean doRdfs = (rdfsParam != null && !"".equals(rdfsParam));	
 		if(doRdfs) {
 			localRepositoryBuilder = new RepositoryBuilder(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_AWARE));
 		} else {
 			localRepositoryBuilder = new RepositoryBuilder();
 		}
+		
+		// determine owl2skos inference
+		String owl2skosParam = (request.getParameter(PARAM_OWL2SKOS) != null && !request.getParameter(PARAM_OWL2SKOS).equals(""))?request.getParameter(PARAM_OWL2SKOS):null;
+		log.debug(PARAM_OWL2SKOS+" : "+owl2skosParam);
+		boolean doOwl2Skos = (owl2skosParam != null && !"".equals(owl2skosParam));	
 		
 		Repository repository;		
 		try {
@@ -122,14 +133,7 @@ public class UploadServlet extends HttpServlet {
 				localRepositoryBuilder.addOperation(new LoadFromStream(data.getInputStream(), Rio.getParserFormatForFileName(data.getName(), RDFFormat.RDFXML)));
 				repository = localRepositoryBuilder.createNewRepository();
 				break;
-			}
-			case URL : {
-				// get url param
-				String urlParam = (request.getParameter(PARAM_URL) != null && !request.getParameter(PARAM_URL).equals(""))?request.getParameter(PARAM_URL):null;
-				localRepositoryBuilder.addOperation(new LoadFromUrl(new URL(urlParam), false));
-				repository = localRepositoryBuilder.createNewRepository();
-				break;
-			}
+			}			
 			case EXAMPLE : {
 				// get resource param
 				String resourceParam = (request.getParameter(PARAM_EXAMPLE) != null && !request.getParameter(PARAM_EXAMPLE).equals(""))?request.getParameter(PARAM_EXAMPLE):null;
@@ -140,11 +144,10 @@ public class UploadServlet extends HttpServlet {
 				repository = ApplicationData.get(getServletContext()).getExampleDatas().get(resourceParam);
 				break;
 			}
-			case ENDPOINT : {				
-				// get endpoint
-				String endpointParam = (request.getParameter(PARAM_ENDPOINT) != null && !request.getParameter(PARAM_ENDPOINT).equals(""))?request.getParameter(PARAM_ENDPOINT):null;
-				RepositoryBuilder builder = new RepositoryBuilder(new EndpointRepositoryFactory(endpointParam, false));
-				repository = builder.createNewRepository();
+			case URL : {
+				// get url param
+				String urlParam = (request.getParameter(PARAM_URL) != null && !request.getParameter(PARAM_URL).equals(""))?request.getParameter(PARAM_URL):null;
+				repository = RepositoryBuilder.fromString(urlParam, doRdfs);
 				break;
 			}
 			default : {
@@ -156,6 +159,16 @@ public class UploadServlet extends HttpServlet {
 			doError(request, response, e);
 			return;
 		}
+		
+		// apply OWL2SKOS rules if needed
+		try {
+			// apply inference
+			ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getOWL2SKOSRuleset()));
+			au.execute(repository);
+		} catch (RepositoryOperationException e1) {
+			doError(request, response, e1.getMessage());
+			return;
+		}		
 		
 //		try {
 //			// apply inference

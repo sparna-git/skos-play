@@ -14,6 +14,7 @@ public class SKOSTreeNode {
 	protected java.net.URI uri;
 	protected NodeType nodeType = NodeType.UNKNOWN;
 	protected String sortCriteria;
+	protected double weight = 1.0d;
 
 	
 	public SKOSTreeNode(URI uri, String sortCriteria, NodeType nodeType) {
@@ -46,5 +47,13 @@ public class SKOSTreeNode {
 	public void setNodeType(NodeType nodeType) {
 		this.nodeType = nodeType;
 	}
+
+	public double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}	
 	
 }

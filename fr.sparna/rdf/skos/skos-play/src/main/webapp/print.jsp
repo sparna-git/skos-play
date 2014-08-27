@@ -217,7 +217,11 @@
 										<fmt:message key="print.form.displayType.partition" />
 										<span class="help-inline"><fmt:message key="print.form.displayType.partition.help" /></span>
 									</label>
-									
+									<label class="radio">
+										<input type="radio" name="viztype" id="viz-sunburst" value="sunburst" hierarchical="true">
+										<fmt:message key="print.form.displayType.sunburst" />
+										<span class="help-inline"><fmt:message key="print.form.displayType.sunburst.help" /></span>
+									</label>
 								</div>
 							</div>
 

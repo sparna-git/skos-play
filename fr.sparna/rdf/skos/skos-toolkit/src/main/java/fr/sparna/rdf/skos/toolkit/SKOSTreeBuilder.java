@@ -178,6 +178,7 @@ public class SKOSTreeBuilder {
 			// no matter if the given URI is a concept scheme, we will make it a single tree root
 			useGivenRootAsRoot = true;
 		} else {
+			log.debug("We don't want concept schemes as root nodes");
 			// test if the given URI is a concept scheme
 			final List<String> conceptSchemeList = new ArrayList<String>();
 			Perform.on(repository).select(new GetConceptSchemesHelper(null) {		
@@ -190,8 +191,10 @@ public class SKOSTreeBuilder {
 			
 			if(conceptSchemeList.contains(root.toString())) {
 				// given URI _is_ a concept scheme URI, and we don't want to use it as a first level node
+				log.debug("Given root is a concept scheme, it will not be used as a root");
 				useGivenRootAsRoot = false;
 			} else {
+				log.debug("Given root is not a concept scheme.");
 				useGivenRootAsRoot = true;
 			}
 		}
@@ -202,10 +205,9 @@ public class SKOSTreeBuilder {
 		);
 		
 		if(useGivenRootAsRoot) {
+			log.debug("Creating single tree with root node");
 			result.add(originalTree);
 		} else {
-			
-			
 			int rootsWithNoChildren = 0;
 			for (GenericTreeNode<SKOSTreeNode> aChild : originalTree.getRoot().getChildren()) {
 				if(aChild.getChildren().size() == 0) {
@@ -215,8 +217,10 @@ public class SKOSTreeBuilder {
 			
 			// let's try to be smart
 			if(originalTree.getNumberOfNodes() < 500 || rootsWithNoChildren > 2) {
+				log.debug("Concept tree ois small or contains more than 2 first-level nodes ("+rootsWithNoChildren+") with no children. Resetting to a single tree");
 				result.add(originalTree);
 			} else {
+				log.debug("Creating trees with first-level nodes");
 				for (GenericTreeNode<SKOSTreeNode> aChild : originalTree.getRoot().getChildren()) {
 					result.add(new GenericTree<SKOSTreeNode>(
 							aChild

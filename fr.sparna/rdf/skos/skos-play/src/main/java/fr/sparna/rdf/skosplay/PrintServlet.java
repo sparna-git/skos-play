@@ -2,6 +2,7 @@ package fr.sparna.rdf.skosplay;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
@@ -70,6 +71,7 @@ public class PrintServlet extends HttpServlet {
 		TRANSLATION_TABLE,
 		PARTITION,
 		TREELAYOUT,
+		SUNBURST,
 		COMPLETE_MONOLINGUAL,
 		COMPLETE_MULTILINGUAL,
 		PERMUTED_INDEX,
@@ -119,54 +121,22 @@ public class PrintServlet extends HttpServlet {
 		}
 		
 		switch(displayType) {
-		case PARTITION : {
-			// set attributes
-			// request.setAttribute("language", language);
-			// request.setAttribute("root", (scheme != null)?scheme.toString():"");
-			
-			SKOSTreeBuilder builder = new SKOSTreeBuilder(r, language);
-			try {
-				GenericTree<SKOSTreeNode> tree = JsonServlet.buildTree(builder, (scheme != null)?URI.create(scheme.toString()):null);			
-				
-				// writes json output
-				LabelReader labelReader = new LabelReader(r, language);
-				JsonSKOSTreePrinter printer = new JsonSKOSTreePrinter(labelReader);
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				printer.print(tree, baos);
-				request.setAttribute("dataset", baos.toString("UTF-8").replaceAll("'", "\\\\'"));
-				
-			} catch (SparqlPerformException e) {
-				throw new ServletException(e);
-			}
-			
-			
+		case PARTITION : {		
+			request.setAttribute("dataset", generateJSON(r, language, scheme));
 			// forward to the JSP
-			getServletContext().getRequestDispatcher("/viz-partition.jsp").forward(request, response);
-			
+			getServletContext().getRequestDispatcher("/viz-partition.jsp").forward(request, response);			
 			return;
 		}
 		case TREELAYOUT : {
-			// set attributes
-			// request.setAttribute("language", language);
-			// request.setAttribute("root", (scheme != null)?scheme.toString():"");
-			
-			SKOSTreeBuilder builder = new SKOSTreeBuilder(r, language);
-			try {
-				GenericTree<SKOSTreeNode> tree = JsonServlet.buildTree(builder, (scheme != null)?URI.create(scheme.toString()):null);			
-				
-				// writes json output
-				LabelReader labelReader = new LabelReader(r, language);
-				JsonSKOSTreePrinter printer = new JsonSKOSTreePrinter(labelReader);
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				printer.print(tree, baos);
-				request.setAttribute("dataset", baos.toString("UTF-8").replaceAll("'", "\\\\'"));
-				
-			} catch (SparqlPerformException e) {
-				throw new ServletException(e);
-			}
-			
+			request.setAttribute("dataset", generateJSON(r, language, scheme));
 			// forward to the JSP
 			getServletContext().getRequestDispatcher("/viz-treelayout.jsp").forward(request, response);
+			return;
+		}
+		case SUNBURST : {
+			request.setAttribute("dataset", generateJSON(r, language, scheme));
+			// forward to the JSP
+			getServletContext().getRequestDispatcher("/viz-sunburst.jsp").forward(request, response);
 			return;
 		}
 		default : {
@@ -244,7 +214,7 @@ public class PrintServlet extends HttpServlet {
 					
 				// alphabetical display
 				ConceptBlockReader alphaCbReader = new ConceptBlockReader(r);
-				alphaCbReader.setStyleAttributes(false);
+				alphaCbReader.setStyleAttributes(true);
 				alphaCbReader.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
 				alphaCbReader.setLinkDestinationIdPrefix("hier");
 				AlphaIndexDisplayGenerator alphaGen = new AlphaIndexDisplayGenerator(
@@ -283,7 +253,7 @@ public class PrintServlet extends HttpServlet {
 					
 				// alphabetical display
 				ConceptBlockReader alphaCbReader = new ConceptBlockReader(r);
-				alphaCbReader.setStyleAttributes(false);
+				alphaCbReader.setStyleAttributes(true);
 				alphaCbReader.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
 				alphaCbReader.setAdditionalLabelLanguagesToInclude(additionalLanguages);
 				alphaCbReader.setLinkDestinationIdPrefix("hier");
@@ -370,6 +340,25 @@ public class PrintServlet extends HttpServlet {
 		this.doGet(request, response);
 	}
 
-	
+	protected String generateJSON (
+			Repository r,
+			String language,
+			URI scheme
+	) throws ServletException {
+		SKOSTreeBuilder builder = new SKOSTreeBuilder(r, language);
+		try {
+			GenericTree<SKOSTreeNode> tree = JsonServlet.buildTree(builder, (scheme != null)?URI.create(scheme.toString()):null);			
+			
+			// writes json output
+			LabelReader labelReader = new LabelReader(r, language);
+			JsonSKOSTreePrinter printer = new JsonSKOSTreePrinter(labelReader);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			printer.print(tree, baos);
+			return baos.toString("UTF-8").replaceAll("'", "\\\\'");
+			
+		} catch (Exception e) {
+			throw new ServletException(e);
+		} 
+	}
 	
 }

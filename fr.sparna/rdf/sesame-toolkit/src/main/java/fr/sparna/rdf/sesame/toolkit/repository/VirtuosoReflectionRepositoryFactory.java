@@ -61,7 +61,7 @@ public class VirtuosoReflectionRepositoryFactory implements RepositoryFactoryIfc
 			Constructor virtuosoRepositoryClassConstructor = virtuosoRepositoryClass.getConstructor(String.class, String.class, String.class);
 			repository = (Repository)virtuosoRepositoryClassConstructor.newInstance(this.jdbcURL, this.login, this.password);
 		} catch (Exception e) {
-			throw new RepositoryFactoryException("Unable to instantiate VirtuosoRepository class, make sure the Virtuoso dependency is in your classpath",e);
+			throw new RepositoryFactoryException("Unable to instantiate class virtuoso.sesame2.driver.VirtuosoRepository, make sure the Virtuoso dependency is in your classpath",e);
 		}
 		try {
 			repository.initialize();

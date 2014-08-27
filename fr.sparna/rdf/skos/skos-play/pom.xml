@@ -8,7 +8,7 @@
     <parent>
         <groupId>fr.sparna.rdf.skos</groupId>
         <artifactId>sparna-skos</artifactId>
-        <version>0.55</version>
+        <version>0.56</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

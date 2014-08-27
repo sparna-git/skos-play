@@ -266,6 +266,18 @@ public class Perform {
 		}
 	}
 	
+	public boolean ping() {
+		PingSparqlHelper ping = new PingSparqlHelper();
+		try {
+			log.trace("Pinging...");
+			this.select(ping);
+			log.trace("Ping !");
+		} catch (SparqlPerformException e) {
+			log.trace("Failed to ping.");
+		}
+		return ping.isPinged(); 
+	}
+	
 	/**
 	 * Executes the SPARQL ASK query returned by the helper, and pass on the result to the helper.getWriter() method.
 	 * The boolean result is also returned by the method directly.

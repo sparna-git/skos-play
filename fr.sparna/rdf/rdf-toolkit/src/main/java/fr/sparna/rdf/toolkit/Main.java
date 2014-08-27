@@ -10,6 +10,8 @@ import com.beust.jcommander.ParameterException;
 import fr.sparna.cli.URIFactory;
 import fr.sparna.rdf.toolkit.construct.ArgumentsConstruct;
 import fr.sparna.rdf.toolkit.construct.Construct;
+import fr.sparna.rdf.toolkit.filter.ArgumentsFilter;
+import fr.sparna.rdf.toolkit.filter.Filter;
 import fr.sparna.rdf.toolkit.infer.ArgumentsInfer;
 import fr.sparna.rdf.toolkit.infer.ArgumentsInferBase;
 import fr.sparna.rdf.toolkit.infer.ArgumentsInferSPARQL;
@@ -46,6 +48,7 @@ public class Main {
 		
 		ADDFLEXIONS(new ArgumentsAddFlexions(), new AddFlexions()),
 		CONSTRUCT(new ArgumentsConstruct(), new Construct()),
+		FILTER(new ArgumentsFilter(), new Filter()),
 		GENERATEBROADERSYNONYMS(new ArgumentsGenerateBroaderSynonyms(), new GenerateBroaderSynonyms()),
 		GENERATELABELSYNONYMS(new ArgumentsGenerateLabelSynonyms(), new GenerateLabelSynonyms()),
 		GENERATEAUTOCOMPLETEDICTIONARY(new ArgumentsGenerateAutocompleteDictionary(), new GenerateAutocompleteDictionary()),

@@ -10,6 +10,7 @@ import org.openrdf.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.FactoryConfiguration;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromString;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromUrl;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationException;
@@ -79,6 +80,24 @@ public class RepositoryBuilder implements RepositoryFactoryIfc {
 	public static Repository fromString(String fileOrDirectoryOrEndpointURL) 
 	throws RepositoryFactoryException {
 		RepositoryBuilder builder = new RepositoryBuilder(new StringRepositoryFactory(fileOrDirectoryOrEndpointURL));
+		return builder.createNewRepository();
+	}
+	
+	/**
+	 * Shortcut to a StringRepositoryFactory.
+	 * 
+	 * @param fileOrDirectoryOrEndpointURL
+	 * @return
+	 * @throws RepositoryFactoryException
+	 */
+	public static Repository fromString(String fileOrDirectoryOrEndpointURL, boolean rdfs) 
+	throws RepositoryFactoryException {
+		RepositoryBuilder builder;
+		if(rdfs) {
+			builder = new RepositoryBuilder(new StringRepositoryFactory(fileOrDirectoryOrEndpointURL, new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_AWARE)));
+		} else {
+			builder = new RepositoryBuilder(new StringRepositoryFactory(fileOrDirectoryOrEndpointURL));
+		}
 		return builder.createNewRepository();
 	}
 

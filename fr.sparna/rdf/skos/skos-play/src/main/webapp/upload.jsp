@@ -28,7 +28,7 @@
 				document.getElementById('url').disabled = selected != 'url';
 				document.getElementById('example').disabled = selected != 'example';
 				document.getElementById('file').disabled = selected != 'file';
-				document.getElementById('endpoint').disabled = selected != 'endpoint';
+				// document.getElementById('endpoint').disabled = selected != 'endpoint';
 			}	
 			
 	    </script>
@@ -167,11 +167,13 @@
 							id="url"
 							name="url"
 							value=""
+							placeholder="http://..."
 							onkeypress="enabledInput('url');" />
 						<span class="help-block"><i><fmt:message key="upload.form.remoteUrl.help" /></i></span>
 					</div>
 				</div>
 				
+				<!--
 				<div class="control-group">
 					<label class="control-label">
 						<input
@@ -192,6 +194,7 @@
 						<span class="help-block"><i><fmt:message key="upload.form.endpoint.help" /></i></span>
 					</div>
 				</div>
+				 -->
 			</fieldset>
 			<fieldset>
 				<legend><fmt:message key="upload.form.advanced.legend" /></legend>
@@ -206,6 +209,19 @@
 							value="rdfs-inference"
 							name="rdfs-inference" />
 						<span class="help-block"><i><fmt:message key="upload.form.rdfs.help" /></i></span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">
+						<fmt:message key="upload.form.owl2skos" />
+					</label>
+					<div class="controls">
+						<input
+							type="checkbox"
+							id="owl2skos"
+							value="owl2skos"
+							name="owl2skos" />
+						<span class="help-block"><i><fmt:message key="upload.form.owl2skos.help" /></i></span>
 					</div>
 				</div>
 			</fieldset>

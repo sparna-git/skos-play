@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.openrdf.repository.Repository;
 import org.openrdf.rio.Rio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromUrl;
 
 /**
  * Tries to determine automatically the implementation of the repository to use based on a String parameter.
@@ -31,15 +34,26 @@ public class StringRepositoryFactory extends RepositoryBuilder {
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
 	protected List<String> fileOrDirectoryOrURLs = new ArrayList<String>();
-
-	public StringRepositoryFactory(String fileOrDirectoryOrURL) {
-		this(Collections.singletonList(fileOrDirectoryOrURL));
+	
+	protected RepositoryFactoryIfc localRepositoryFactory; 
+	
+	public StringRepositoryFactory(List<String> fileOrDirectoryOrURLs, RepositoryFactoryIfc localRepositoryFactory) {
+		super();
+		this.fileOrDirectoryOrURLs = fileOrDirectoryOrURLs;
+		this.localRepositoryFactory = localRepositoryFactory;
+		init();
 	}
 	
 	public StringRepositoryFactory(List<String> fileOrDirectoryOrURLs) {
-		super();
-		this.fileOrDirectoryOrURLs = fileOrDirectoryOrURLs;
-		init();
+		this(fileOrDirectoryOrURLs, new LocalMemoryRepositoryFactory());
+	}
+	
+	public StringRepositoryFactory(String fileOrDirectoryOrURL, RepositoryFactoryIfc localRepositoryFactory) {
+		this(Collections.singletonList(fileOrDirectoryOrURL), localRepositoryFactory);
+	}
+	
+	public StringRepositoryFactory(String fileOrDirectoryOrURL) {
+		this(Collections.singletonList(fileOrDirectoryOrURL), new LocalMemoryRepositoryFactory());
 	}
 	
 	protected void init() {
@@ -48,7 +62,7 @@ public class StringRepositoryFactory extends RepositoryBuilder {
 			
 			// try with a SPARQL endpoint 
 			URL url = null;
-			// make sure we work only with JDBC URL
+
 			if(value.startsWith("http")) {
 				try {
 					url = new URL(value);
@@ -57,17 +71,39 @@ public class StringRepositoryFactory extends RepositoryBuilder {
 				}
 			}
 			
-			// if URL is OK but does not correspond to anything we know, we consider it is the URL of a SPARQL endpoint
-			if(url != null && Rio.getParserFormatForFileName(url.toString()) == null) {
-				this.setRepositoryFactory(new EndpointRepositoryFactory(value, url.toString().contains("openrdf-sesame")));	
+			
+			if(url != null) {
+				if(Rio.getParserFormatForFileName(url.toString()) != null) {
+					// looks like a file we can parse, let's parse it
+					this.setRepositoryFactory(this.localRepositoryFactory);
+					this.addOperation(new LoadFromFileOrDirectory(this.fileOrDirectoryOrURLs));
+				} else {
+					// does not look like a file we can parse, try to ping it to see if it is a endpoint
+					try {
+						Repository r = new EndpointRepositoryFactory(value).createNewRepository();
+						if(Perform.on(r).ping()) {
+							this.setRepositoryFactory(new EndpointRepositoryFactory(value, url.toString().contains("openrdf-sesame")));
+						} else {
+							this.setRepositoryFactory(this.localRepositoryFactory);
+							this.addOperation(new LoadFromUrl(url));
+						}
+					} catch (RepositoryFactoryException e) {
+						// oups, something bad happened, will stick to a URL
+						e.printStackTrace();
+						this.setRepositoryFactory(this.localRepositoryFactory);
+						this.addOperation(new LoadFromUrl(url));
+					}
+				}
 			} else if(value.startsWith("jdbc:virtuoso")){
 				this.setRepositoryFactory(new VirtuosoReflectionRepositoryFactory(value));				
 			} else {
-				this.setRepositoryFactory(new LocalMemoryRepositoryFactory());
+				this.setRepositoryFactory(this.localRepositoryFactory);
 				this.addOperation(new LoadFromFileOrDirectory(this.fileOrDirectoryOrURLs));
 			}
+
 		} else {
-			this.setRepositoryFactory(new LocalMemoryRepositoryFactory());
+			// if more than one arg, consider they are necessarily files or directories
+			this.setRepositoryFactory(this.localRepositoryFactory);
 			this.addOperation(new LoadFromFileOrDirectory(this.fileOrDirectoryOrURLs));
 		}
 	}

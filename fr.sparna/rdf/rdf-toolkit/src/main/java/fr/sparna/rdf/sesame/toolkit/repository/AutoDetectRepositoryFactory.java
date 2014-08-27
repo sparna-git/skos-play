@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.openrdf.repository.Repository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionStoreException;
@@ -13,6 +15,8 @@ import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory
 
 public class AutoDetectRepositoryFactory implements RepositoryFactoryIfc {
 
+	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
+	
 	protected List<String> aParameter;
 
 	public AutoDetectRepositoryFactory(List<String> aParameter) {
@@ -28,6 +32,7 @@ public class AutoDetectRepositoryFactory implements RepositoryFactoryIfc {
 	public Repository createNewRepository() throws RepositoryFactoryException {
 		if(aParameter.size() == 1) {
 			// 1. Try with Spring
+			log.debug("Attempt to build a Repository by parsing a Spring file...");
 			RepositoryFactoryIfc factory =  new SpringRepositoryFactory(this.aParameter.get(0));
 			try {
 				return factory.createNewRepository();
@@ -42,6 +47,7 @@ public class AutoDetectRepositoryFactory implements RepositoryFactoryIfc {
 						) {
 					// la lecture avec une config Spring a echoue
 					// 2. on essaie avec un RP qui lit soit depuis une URL, soit depuis un fichier
+					log.debug("Attempt with Spring file failed ("+e1.getMessage()+"), exception indicating that the input param was not a Sping file, try by interpreting a String...");
 					factory = new StringRepositoryFactory(this.aParameter.get(0));
 					try {
 						return factory.createNewRepository();
@@ -50,7 +56,18 @@ public class AutoDetectRepositoryFactory implements RepositoryFactoryIfc {
 					}
 				} else {
 					// erreur pendant l'init de Spring : "vraie" exception Spring
-					throw new RepositoryFactoryException(e1);
+					// on essaie quand meme, au cas ou, en lisant depuis un fichier ou une URL
+					log.debug("Attempt with Spring file failed ("+e1.getMessage()+"), but param seemed to be a Spring file.");
+					log.debug("Will attempt by interpreting a String anyway...");
+					factory = new StringRepositoryFactory(this.aParameter.get(0));
+					try {
+						return factory.createNewRepository();
+					} catch (RepositoryFactoryException e2) {
+						log.debug("String interpretation failed with message '"+e2.getMessage()+"'. Will throw the initial Spring exception");
+						// throw e1, because what we tried with StringRepositoryFactory was just in case,
+						// we are interested in the Spring Exception
+						throw new RepositoryFactoryException(e1);
+					}					
 				}
 			}
 		} else {
