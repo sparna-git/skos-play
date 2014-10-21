@@ -44,8 +44,8 @@
     <!-- ** -->
      
     <root>
-        <level value="ERROR" />
-        <appender-ref ref="STDERR" />
+        <level value="DEBUG" />
+        <appender-ref ref="STDOUT" />
     </root>
  
  

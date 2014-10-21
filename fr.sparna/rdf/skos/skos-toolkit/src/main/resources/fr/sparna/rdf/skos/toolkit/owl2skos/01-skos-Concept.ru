@@ -20,4 +20,6 @@ INSERT {
 	?x a skos:Concept .
 } WHERE {
 	?x a owl:Class .
+	# Exclude OWL restrictions, etc.
+	FILTER(!isBlank(?x)) .
 }

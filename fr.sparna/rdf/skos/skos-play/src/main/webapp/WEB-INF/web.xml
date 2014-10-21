@@ -1,91 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="skos-printer" version="2.5">
+  
   <display-name>KOS Play</display-name>
+  
   <context-param>
     <param-name>javax.servlet.jsp.jstl.fmt.fallbackLocale</param-name>
     <param-value>en</param-value>
   </context-param>
-  <listener>
-    <listener-class>fr.sparna.rdf.skosplay.ConfigurationListener</listener-class>
-  </listener>
-  <filter>
-    <description>
-	        Check for multipart HttpServletRequests and parse the multipart form data so that all
-	        regular form fields are available in the parameterMap of the HttpServletRequest and that
-	        all form file fields are available as attribute of the HttpServletRequest. The attribute
-	        value of a form file field can be an instance of FileItem or FileUploadException.
-	    </description>
-    <filter-name>multipartFilter</filter-name>
-    <filter-class>fr.sparna.web.MultipartFilter</filter-class>
-  </filter>
+  
   <filter>
     <description></description>
     <filter-name>sessionFilter</filter-name>
     <filter-class>fr.sparna.rdf.skosplay.SessionFilter</filter-class>
   </filter>
+  
   <filter-mapping>
     <filter-name>sessionFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-  <filter-mapping>
-    <filter-name>multipartFilter</filter-name>
-    <url-pattern>/upload</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>multipartFilter</filter-name>
-    <url-pattern>/print</url-pattern>
-  </filter-mapping>
-  <servlet>
-    <description></description>
-    <display-name>UploadServlet</display-name>
-    <servlet-name>UploadServlet</servlet-name>
-    <servlet-class>fr.sparna.rdf.skosplay.UploadServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <description></description>
-    <display-name>PrintServlet</display-name>
-    <servlet-name>PrintServlet</servlet-name>
-    <servlet-class>fr.sparna.rdf.skosplay.PrintServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <description></description>
-    <display-name>JsonServlet</display-name>
-    <servlet-name>JsonServlet</servlet-name>
-    <servlet-class>fr.sparna.rdf.skosplay.JsonServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <description></description>
-    <display-name>AboutServlet</display-name>
-    <servlet-name>AboutServlet</servlet-name>
-    <servlet-class>fr.sparna.rdf.skosplay.AboutServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <description></description>
-    <display-name>HomeServlet</display-name>
-    <servlet-name>HomeServlet</servlet-name>
-    <servlet-class>fr.sparna.rdf.skosplay.HomeServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>UploadServlet</servlet-name>
-    <url-pattern>/upload</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>PrintServlet</servlet-name>
-    <url-pattern>/print</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>AboutServlet</servlet-name>
-    <url-pattern>/about</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>HomeServlet</servlet-name>
-    <url-pattern>/home/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>JsonServlet</servlet-name>
-    <url-pattern>/json</url-pattern>
-  </servlet-mapping>
-  <welcome-file-list>
-    <welcome-file>welcomefile.jsp</welcome-file>
-  </welcome-file-list>
+  
+	<!-- Main Spring dispatcher servlet -->
+	<servlet>
+		<servlet-name>spring-dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+		<!-- Spring va chercher un fichier de conf dans WEB-INF/[servlet-name]-servlet.xml -->
+		<servlet-name>spring-dispatcher</servlet-name>
+		<!-- ne _pas_ mettre /*, voir http://stackoverflow.com/questions/1266303/no-mapping-found-for-http-request-with-uri-web-inf-pages-apiform-jsp -->
+		<url-pattern>/home</url-pattern>
+		<url-pattern>/about</url-pattern>
+		<url-pattern>/upload</url-pattern>
+		<url-pattern>/print</url-pattern>
+		<url-pattern>/visualize</url-pattern>
+	</servlet-mapping>
+	
+	<welcome-file-list>
+		<!-- JSP welcome file that will redirect to a Spring call -->
+		<welcome-file>welcomefile.jsp</welcome-file>
+	</welcome-file-list>
+
 </web-app>

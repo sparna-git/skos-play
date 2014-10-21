@@ -21,4 +21,6 @@ INSERT {
 } WHERE {
 	?x a owl:Class .
 	?o a owl:Ontology .
+	# Exclude OWL restrictions, etc.
+	FILTER(!isBlank(?x)) .
 }

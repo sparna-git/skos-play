@@ -254,14 +254,20 @@
 	<xsl:template match="disp:index">
 		<fo:block font-size="65%">
 			<xsl:choose>
-				<xsl:when test="@disp:indexStyle = 'kwic'">							
-					<fo:table>
-						<fo:table-column column-width="35%"/>
-						<fo:table-column column-width="65%"/>
-						<fo:table-body>
-							<xsl:apply-templates mode="kwic" />
-						</fo:table-body>
-					</fo:table>				
+				<xsl:when test="@disp:indexStyle = 'kwic'">
+							<!--
+								It is possible that we generate a table with no rows, which would lead to an error.
+								Exemple : KWIC index with title-letter corresponding to excluded permutations	
+							 -->
+							<xsl:if test="disp:entry">					
+								<fo:table>
+									<fo:table-column column-width="35%"/>
+									<fo:table-column column-width="65%"/>
+									<fo:table-body>
+										<xsl:apply-templates mode="kwic" />
+									</fo:table-body>
+								</fo:table>
+							</xsl:if>			
 				</xsl:when>
 				<xsl:when test="@disp:indexStyle = 'kwac'">
 					<xsl:apply-templates mode="kwac" />

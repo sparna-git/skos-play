@@ -57,8 +57,6 @@
 		</profile>
     </profiles>
 
-    
-
     <dependencies>
 
 		<dependency>
@@ -120,7 +118,25 @@
 			<artifactId>commons-logging</artifactId>
 			<version>1.1.1</version>
 			<scope>runtime</scope>
-		</dependency>  
+		</dependency>
+
+		<dependency>
+            <groupId>virtuoso.jdbc</groupId>
+            <artifactId>virtjdbc4</artifactId>
+            <version>4-3.69</version>
+            <scope>system</scope>
+  			<systemPath>${basedir}/lib/virtuoso/jdbc/4-3.69/virtjdbc4.jar</systemPath>
+  			<optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>virtuoso.sesame2</groupId>
+            <artifactId>virt_sesame2</artifactId>
+            <version>2.7.3</version>
+            <scope>system</scope>
+  			<systemPath>${basedir}/lib/virtuoso/sesame2/2.7/virt_sesame2.jar</systemPath>
+  			<optional>true</optional>
+        </dependency>
+ 
     </dependencies>
 
 </project>

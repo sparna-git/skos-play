@@ -8,7 +8,7 @@
     <parent>
         <groupId>fr.sparna.rdf.skos</groupId>
         <artifactId>sparna-skos</artifactId>
-        <version>0.56</version>
+        <version>0.57</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -123,6 +123,11 @@
             <version>0.6.1</version>
         </dependency>
 
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
 
     </dependencies>
 

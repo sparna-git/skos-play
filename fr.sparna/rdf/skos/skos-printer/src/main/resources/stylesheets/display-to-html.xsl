@@ -24,6 +24,39 @@
 				<script src="js/jquery-1.9.1.min.js"></script>
 				<script src="bootstrap/js/bootstrap.min.js"></script>
 				<style>
+					.kwic-left {
+						float:left;
+						width:35%;
+						margin-right: 0.8em;
+						direction: rtl;
+						overflow: visible;
+						white-space:nowrap;
+					}
+					
+					.kwic-row ul {
+						list-style-type:none;
+						margin-left:0.8em;
+						display:inline;
+					}
+					
+					.kwic-row ul li {
+						display:inline;
+					}
+					
+					.kwac-row .att {
+					 	margin-bottom:0px;
+					}
+					
+					.kwac-row .alt {
+					 	font-style:italic;
+					 	text-decoration:none;
+					}
+					
+					.kwic-row .alt {
+					 	font-style:italic;
+					 	text-decoration:none;
+					}
+
 					.att {
 						margin-left: 1em;
 						list-style: none;
@@ -50,29 +83,7 @@
 					.alt-att {
 						font-style:italic;
 					}
-					
-					.kwic-left {
-						float:left;
-						width:35%;
-						margin-right: 0.8em;
-						direction: rtl;
-						overflow: visible;
-						white-space:nowrap;
-					}
-					
-					.kwic-row ul {
-						list-style-type:none;
-						margin-left:0.8em;
-						display:inline;
-					}
-					
-					.kwic-row ul li {
-						display:inline;
-					}
-					
-					.kwac-row .att {
-					 	margin-bottom:0px;
-					}
+	
 				</style>
 			</head>
 			<body style="margin-bottom: 40px;">
@@ -289,8 +300,9 @@
 
 
 	<xsl:template match="disp:entry" mode="kwac">
-		<div id="{@id}" class="kwac-row {disp:label/disp:str/@style}">
-			<span>
+		<div id="{@id}" class="kwac-row">
+			<!-- style index entry in bold or italic -->
+			<span class="{disp:label/disp:str/@style}">
 				<span><xsl:value-of select="@key" /></span><span><xsl:value-of select="@after" /></span>
 				<xsl:if test="@before and @before != ''">
 					<span>, <xsl:value-of select="@before" /> ~</span>

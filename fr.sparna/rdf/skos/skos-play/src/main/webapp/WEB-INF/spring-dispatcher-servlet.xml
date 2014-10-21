@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+	
+	<!-- Load skosplay-application.properties -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	  <property name="locations">
+	    <list>
+	        <value>file://#{systemProperties['skosplay.home']}/conf/skosplay-application.properties</value>
+	        <value>classpath:skosplay-application.properties</value>
+	    </list>
+	  </property>
+	  <property name="ignoreResourceNotFound" value="true" />
+	</bean>
+	
+	<!-- Load version.properties from the classpath -->
+	<context:property-placeholder location="classpath:version.properties"/>
+
+    <!-- scan les annotations pour trouver notamment @Controller et @Autowired -->
+    <context:component-scan base-package="fr.sparna.rdf.skosplay"/>
+
+	<!-- 	Resolves the view names to JSP in the /WEB-INF/jsp/ folder 
+			(eg. if Controller returns view name "edit", the jsp /WEB-INF/jsp/edit.jsp will ba called)
+	-->
+	<bean	id="viewResolver"
+			class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+    	<property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+    
+    <!-- For file upload -->
+    <bean id="multipartResolver"  
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+    </bean>
+    
+    <mvc:interceptors>
+		<bean class="org.springframework.web.servlet.mvc.WebContentInterceptor" p:cacheSeconds="86400" p:alwaysUseFullPath="true" >
+		    <property name="cacheMappings">
+		        <props>
+		            <!-- cache for one month -->
+		            <prop key="/cache/me/**">2592000</prop>
+		        </props>
+		    </property>
+		</bean>
+	</mvc:interceptors>
+    
+    <!-- Application Config singleton. Factory-method gets the instance via the singleton method -->
+	<!-- The bean is autowired -->
+	<bean id="skosPlayConfig" class="fr.sparna.rdf.skosplay.SkosPlayConfig" factory-method="getInstance">
+		<property name="conceptsLimit" value="${skosplay.concepts.limit:0}" />
+	</bean>
+	
+	<bean id="applicationData" class="fr.sparna.rdf.skosplay.ApplicationData">
+		<constructor-arg name="thesaurusDirectory" value="${skosplay.thesaurus.directory:@null}" />		
+		<property name="buildVersion" value="${build.version:unknown}" />
+		<property name="buildTimestamp" value="${build.timestamp:unknown}" />
+	</bean>
+	
+	<!-- Register applicationData in the ServletContext, so that it is accessible in JSP JSTL -->
+	<bean class="org.springframework.web.context.support.ServletContextAttributeExporter">
+        <property name="attributes">
+            <map>
+                <entry key="applicationData" value-ref="applicationData" />
+            </map>
+        </property>
+    </bean>
+
+</beans>

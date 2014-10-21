@@ -147,10 +147,11 @@ public class IndexGenerator extends AbstractKosDisplayGenerator {
 					
 					// and then reset the current list for next section
 					currentList = new ArrayList<IndexEntry>();
-				} else {
-					// keep storing current list of entries
-					currentList.add(anEntry);
 				}
+				
+				// keep storing current list of entries
+				currentList.add(anEntry);
+				
 				currentLetter = entrySectionTitle;
 			}
 			// and the last section...

@@ -70,17 +70,27 @@ public class SortingRDFHandler implements RDFHandler {
 				int subjectComparison = s1.getSubject().stringValue().compareTo(s2.getSubject().stringValue());
 				// si on est sur le meme sujet...
 				if(subjectComparison == 0) {
+					// si 2 rdf:type, on remonte une égalité
+					if(s1.getPredicate().equals(RDF.TYPE) && s2.getPredicate().equals(RDF.TYPE)) {
+						return 0;
+					}
+					
 					// on fait remonter le rdf:type en premier pour etre sur qu'il soit mis comme nom de la balise
 					if(s1.getPredicate().equals(RDF.TYPE)) return -1;
 					else if (s2.getPredicate().equals(RDF.TYPE)) return 1;
+					
 					// sinon on tri par predicat pour regrouper ensemble les predicats du meme type
-					else if((s1.getObject() instanceof Literal) && (s2.getObject() instanceof Resource)) {
-						return 1;
-					} else if((s1.getObject() instanceof Resource) && (s2.getObject() instanceof Literal)) {
-						return -1;
-					} else {
-						return s1.getPredicate().stringValue().compareTo(s2.getPredicate().stringValue());
-					}					
+					return s1.getPredicate().stringValue().compareTo(s2.getPredicate().stringValue());
+					
+//					// on fait remonter les objectProperties en premier... mais pourquoi ?
+//					else if((s1.getObject() instanceof Literal) && (s2.getObject() instanceof Resource)) {
+//						return 1;
+//					} else if((s1.getObject() instanceof Resource) && (s2.getObject() instanceof Literal)) {
+//						return -1;
+//					} else {
+//						// sinon on tri par predicat pour regrouper ensemble les predicats du meme type
+//						return s1.getPredicate().stringValue().compareTo(s2.getPredicate().stringValue());
+//					}					
 				} else {
 					return subjectComparison;
 				}
