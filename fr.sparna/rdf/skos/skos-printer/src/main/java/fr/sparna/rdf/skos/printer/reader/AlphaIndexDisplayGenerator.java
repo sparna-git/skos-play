@@ -24,7 +24,10 @@ import org.slf4j.LoggerFactory;
 import fr.sparna.commons.lang.StringUtil;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
+import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.FactoryConfiguration;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
 import fr.sparna.rdf.skos.printer.schema.KosDisplay;
@@ -204,7 +207,10 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
 		org.apache.log4j.Logger.getLogger("fr.sparna.rdf").setLevel(org.apache.log4j.Level.TRACE);
 		
-		Repository r = RepositoryBuilder.fromString(args[0]);
+		// Repository r = RepositoryBuilder.fromString(args[0]);
+		RepositoryBuilder localRepositoryBuilder = new RepositoryBuilder(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_AWARE));
+		localRepositoryBuilder.addOperation(new LoadFromFileOrDirectory(args[0]));
+		Repository r = localRepositoryBuilder.createNewRepository();
 		
 		// build result document
 		KosDocument document = new KosDocument();
@@ -216,7 +222,7 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 		
 		ConceptBlockReader cbReader = new ConceptBlockReader(r);
 		cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
-		cbReader.setAdditionalLabelLanguagesToInclude(Arrays.asList(new String[] { "en" , "it" }));
+		cbReader.setAdditionalLabelLanguagesToInclude(Arrays.asList(new String[] { "en" }));
 		cbReader.setStyleAttributes(false);
 		
 		AlphaIndexDisplayGenerator reader = new AlphaIndexDisplayGenerator(r, cbReader);

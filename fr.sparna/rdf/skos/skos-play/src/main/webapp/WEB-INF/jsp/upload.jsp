@@ -178,9 +178,8 @@
 							<div class="controls">
 								<input
 									type="checkbox"
-									id="rdfs-inference"
-									value="rdfs-inference"
-									name="rdfs-inference" />
+									id="rdfsInference"
+									name="rdfsInference" />
 								<span class="help-block"><i><fmt:message key="upload.form.rdfs.help" /></i></span>
 							</div>
 						</div>
@@ -192,7 +191,6 @@
 								<input
 									type="checkbox"
 									id="owl2skos"
-									value="owl2skos"
 									name="owl2skos" />
 								<span class="help-block"><i><fmt:message key="upload.form.owl2skos.help" /></i></span>
 							</div>

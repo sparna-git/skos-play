@@ -106,7 +106,7 @@ public class ConceptBlockReader {
 									this.repository,
 									URI.create(aProperty),
 									(inverseProperty != null)?"^<"+inverseProperty+">":null,
-									(SKOS.isDatatypeProperty(aProperty))?lang:null,
+									(SKOS.isDatatypeProperty(aProperty) && !aProperty.equals(SKOS.NOTATION))?lang:null,
 									URI.create(SKOS.IN_SCHEME),
 									URI.create(conceptScheme.toString())
 							)
@@ -114,7 +114,7 @@ public class ConceptBlockReader {
 									this.repository,
 									URI.create(aProperty),
 									(inverseProperty != null)?"^<"+inverseProperty+">":null,
-									(SKOS.isDatatypeProperty(aProperty))?lang:null,
+									(SKOS.isDatatypeProperty(aProperty) && !aProperty.equals(SKOS.NOTATION))?lang:null,
 									null,
 									null
 							)
