@@ -364,37 +364,59 @@
 
 	<!-- Display a table -->
 	<xsl:template match="disp:table">
-		<fo:block font-size="smaller">
-			<fo:table>
-				<fo:table-column column-width="50%"/>
-				<fo:table-column column-width="50%"/>
-				<xsl:apply-templates select="disp:tableHeader" />
-				<fo:table-body>
-					<xsl:for-each select="disp:row">
-						<fo:table-row>
-							<xsl:choose>
-						        <xsl:when test="(position() mod 2) = 0">
-						        	<!-- even node -->
-						        	<xsl:attribute name="background-color">#FFFFFF</xsl:attribute>
-						        </xsl:when>
-						        <xsl:otherwise>
-						        	<!-- odd node -->
-						            <xsl:attribute name="background-color">#EEEEEE</xsl:attribute>
-						        </xsl:otherwise>
-						    </xsl:choose>
-							<xsl:for-each select="disp:cell">
-								<fo:table-cell>
-									<fo:block>
-										<xsl:apply-templates />
-									</fo:block>
-								</fo:table-cell>
-							</xsl:for-each>
-						</fo:table-row>
-					</xsl:for-each>
-				</fo:table-body>
-			</fo:table>
-		</fo:block>
+		<!-- Prevent empty table generation, otherwise FOP gives an error. So test we have at least one row -->
+		<xsl:if test="disp:row">
+			<fo:block font-size="70%">
+				<fo:table>
+					<xsl:apply-templates select="disp:tableColumn" />			
+					<xsl:apply-templates select="disp:tableHeader" />
+					<fo:table-body>
+						<xsl:for-each select="disp:row">
+							<fo:table-row>
+								<xsl:choose>
+							        <xsl:when test="(position() mod 2) = 0">
+							        	<!-- even node -->
+							        	<xsl:attribute name="background-color">#FFFFFF</xsl:attribute>
+							        </xsl:when>
+							        <xsl:otherwise>
+							        	<!-- odd node -->
+							            <xsl:attribute name="background-color">#EEEEEE</xsl:attribute>
+							        </xsl:otherwise>
+							    </xsl:choose>
+								<xsl:for-each select="disp:cell">
+									<fo:table-cell>
+										<fo:block>
+											<xsl:apply-templates />
+										</fo:block>
+									</fo:table-cell>
+								</xsl:for-each>
+							</fo:table-row>
+						</xsl:for-each>
+					</fo:table-body>
+				</fo:table>
+			</fo:block>
+		</xsl:if>
 	</xsl:template>
+	
+	<xsl:template match="disp:tableColumn">
+		<fo:table-column column-width="{@width}%"/>
+	</xsl:template>
+	
+	<!-- generate table-column header depending on @colnum attribute on the table element -->
+	<!--
+	<xsl:template name="colnum">
+		<xsl:param name="colnum" />
+		<xsl:param name="index" />
+		
+		<xsl:if test="$index != 0">
+			<fo:table-column column-width="{format-number(100 div $colnum, '#,##')}%"/>
+			<xsl:call-template name="colnum">
+				<xsl:with-param name="colnum" select="$colnum" />
+				<xsl:with-param name="index" select="$index - 1" />
+			</xsl:call-template>
+		</xsl:if>
+	</xsl:template>
+	-->
 	
 	<xsl:template match="disp:tableHeader">
 		<fo:table-header>
@@ -467,7 +489,7 @@
 	</xsl:template>
 
 	<xsl:template match="disp:label">
-		<fo:inline font-size="11pt" font-family="Helvetica"><xsl:apply-templates /></fo:inline>
+		<fo:inline font-family="Helvetica"><xsl:apply-templates /></fo:inline>
 	</xsl:template>
 	
 	<!-- Display attributes in normal mode -->
@@ -529,14 +551,28 @@
           <xsl:call-template name="styledString" />
         </fo:basic-link>
 	</xsl:template>
+	
+	<xsl:template match="disp:linkExternal">
+        <fo:basic-link external-destination="{@uri}">
+          <xsl:call-template name="styledString" />
+        </fo:basic-link>
+	</xsl:template>
 
 	<xsl:template match="disp:str">
 		<xsl:call-template name="styledString" />
 	</xsl:template>
 	
 	<xsl:template name="styledString">
+		<xsl:variable name="value">
+			<xsl:choose>
+				<!-- output the text corresponding to the key if present -->
+				<xsl:when test="@key"><xsl:variable name="key" select="@key" /><xsl:value-of select="$labels/labels/*[name() = $key]" /></xsl:when>
+				<xsl:otherwise><xsl:value-of select="text()" /></xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		
 		<xsl:call-template name="doStyledString">
-			<xsl:with-param name="string" select="text()" />
+			<xsl:with-param name="string" select="$value" />
 			<xsl:with-param name="style" select="@style" />
 		</xsl:call-template>
 	</xsl:template>

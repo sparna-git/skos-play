@@ -176,10 +176,10 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 	private ConceptBlock buildConceptBlock(QueryResultRow aRow)
 	throws SparqlPerformException {
 		ConceptBlock cb;
-		// s'il y a un prefLabel, c'est que la valeur de "label" est un altLabel
+		// s'il y a un prefLabel, c'est que la valeur de "sourceConceptLabel" est un altLabel
 		if(aRow.prefLabel != null) {
 			cb = this.cbReader.readConceptBlockForSynonym(aRow.conceptURI, aRow.label, aRow.prefLabel);
-		// sinon, la valeur de "label" est un prefLabel
+		// sinon, la valeur de "sourceConceptLabel" est un prefLabel
 		} else {
 			cb = this.cbReader.readConceptBlock(aRow.conceptURI, aRow.label, true);
 		}

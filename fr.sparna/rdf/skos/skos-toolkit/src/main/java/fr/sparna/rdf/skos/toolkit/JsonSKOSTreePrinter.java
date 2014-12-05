@@ -11,6 +11,8 @@ import java.util.Map;
 
 import org.openrdf.model.Value;
 import org.openrdf.repository.Repository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
@@ -31,6 +33,8 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
 
 public class JsonSKOSTreePrinter {
 
+	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
+	
 	private LabelReader labelReader;
 	private boolean prettyPrinting = false;
 
@@ -61,6 +65,7 @@ public class JsonSKOSTreePrinter {
 		try {
 			URIHarvester harvester = new URIHarvester();
 			tree.visit(harvester);
+			log.debug("JsonSKOSTreePrinter : getting labels for "+harvester.uris.size()+" nodes");
 			labels = this.labelReader.getValues(harvester.uris);
 		} catch (GenericTreeVisitorException e) {
 			e.printStackTrace();
@@ -70,7 +75,7 @@ public class JsonSKOSTreePrinter {
 		jg.close();
 	}
 	
-	private void printConceptRec(GenericTreeNode<SKOSTreeNode> aNode, final JsonGenerator jg, Map<URI, List<Value	>> labels) 
+	private void printConceptRec(GenericTreeNode<SKOSTreeNode> aNode, final JsonGenerator jg, Map<URI, List<Value>> labels) 
 	throws SparqlPerformException, JsonGenerationException, IOException {
 		
 		jg.writeStartObject();
@@ -80,6 +85,11 @@ public class JsonSKOSTreePrinter {
 		// write name
 		if(labelReader != null) {
 			String label = LabelReader.display(labels.get(aNode.getData().getUri()));
+			// make sure we have a label
+			if(label == null || label.equals("")) {
+				// default to the URI if no label has been generated
+				label = aNode.getData().uri.toString();
+			}
 			jg.writeStringField("name", label);
 		}
 		

@@ -1,5 +1,9 @@
 package fr.sparna.rdf.skos.printer.reader;
 
+import javax.xml.bind.JAXBElement;
+
+import org.openrdf.query.algebra.Str;
+
 import fr.sparna.rdf.skos.printer.schema.Att;
 import fr.sparna.rdf.skos.printer.schema.CellType;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
@@ -7,15 +11,32 @@ import fr.sparna.rdf.skos.printer.schema.IndexEntry;
 import fr.sparna.rdf.skos.printer.schema.Label;
 import fr.sparna.rdf.skos.printer.schema.Link;
 import fr.sparna.rdf.skos.printer.schema.ListItem;
+import fr.sparna.rdf.skos.printer.schema.ObjectFactory;
 import fr.sparna.rdf.skos.printer.schema.RowType;
 import fr.sparna.rdf.skos.printer.schema.StyledString;
+import fr.sparna.rdf.skos.printer.schema.Table;
+import fr.sparna.rdf.skos.printer.schema.TableColumnType;
 
 
 public class SchemaFactory {
 
+	public static JAXBElement<StyledString> createStr(StyledString str) {
+		ObjectFactory factory = new fr.sparna.rdf.skos.printer.schema.ObjectFactory();
+		return factory.createStr(str);
+	}
+	
 	public static StyledString createStyledString(String s, String style) {
 		StyledString str = new StyledString();
 		str.setValue(s);
+		if(style != null) {
+			str.setStyle(style);
+		}
+		return str;
+	}
+	
+	public static StyledString createStyledKey(String key, String style) {
+		StyledString str = new StyledString();
+		str.setKey(key);
 		if(style != null) {
 			str.setStyle(style);
 		}
@@ -26,9 +47,23 @@ public class SchemaFactory {
 		return createStyledString(s, null);
 	}
 	
+	public static StyledString createStyledKey(String key) {
+		return createStyledKey(key, null);
+	}
+	
 	public static Link createLink(String entryRef, String conceptUri, String label, String style) {
 		Link l = new Link();
 		l.setRefId(entryRef);
+		l.setUri(conceptUri);
+		if(style != null) {
+			l.setStyle(style);
+		}
+		l.setValue(label);
+		return l;
+	}
+	
+	public static Link createLinkExternal(String conceptUri, String label, String style) {
+		Link l = new Link();
 		l.setUri(conceptUri);
 		if(style != null) {
 			l.setStyle(style);
@@ -76,6 +111,12 @@ public class SchemaFactory {
 		return l;
 	}
 	
+	public static Label createLabelLinkExternal(String conceptUri, String label, String style) {
+		Label l = new Label();
+		l.setLinkExternal(createLinkExternal(conceptUri, label, style));
+		return l;
+	}
+	
 	public static ConceptBlock createConceptBlock(String blockId, String uri, Label l) {
 		ConceptBlock e = new ConceptBlock();
 		e.setId(blockId);
@@ -103,6 +144,17 @@ public class SchemaFactory {
 			row.getCell().add(createCell(object));
 		}
 		return row;
+	}
+	
+	public static Table createTable(Integer... columnWidth) {
+		Table t = new Table();
+		t.setColnum(columnWidth.length);
+		for (Integer aWidth : columnWidth) {
+			TableColumnType tct = new TableColumnType();
+			tct.setWidth(aWidth);
+			t.getTableColumn().add(tct);
+		}
+		return t;
 	}
 	
 	public static IndexEntry createIndexEntry(String entryId, String uri, Label label, String before, String keyLabel, String after) {

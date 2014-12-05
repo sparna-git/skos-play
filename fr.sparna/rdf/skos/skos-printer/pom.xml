@@ -6,7 +6,7 @@
 	<parent>
 	    <groupId>fr.sparna.rdf.skos</groupId>
 	    <artifactId>sparna-skos</artifactId>
-	    <version>0.57</version>
+	    <version>0.6</version>
         <relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -116,6 +116,20 @@
                     <artifactId>lucene-analyzers-kuromoji</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!-- Jackson dependencies for JSON processing -->
+        <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
         </dependency>
 		
 	</dependencies>

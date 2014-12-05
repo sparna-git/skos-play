@@ -3,6 +3,7 @@ package fr.sparna.rdf.sesame.toolkit.handler;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.openrdf.model.URI;
@@ -18,7 +19,6 @@ import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromUrl;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationException;
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
 
 public class LoadURIHandler extends ReadValueListHandler implements TupleQueryResultHandler {
@@ -27,10 +27,17 @@ public class LoadURIHandler extends ReadValueListHandler implements TupleQueryRe
 
 	protected Repository repository;
 	protected List<URL> errors = new ArrayList<URL>();
+	protected int currentLoadCount = 0;
+	protected LoadFromUrl loader;
 	
-	public LoadURIHandler(Repository repository) {
+	public LoadURIHandler(Repository repository, LoadFromUrl loader) {
 		super();
 		this.repository = repository;
+		this.loader = loader;
+	}
+	
+	public LoadURIHandler(Repository repository) {
+		this(repository, new LoadFromUrl((List<URL>)null, true));
 	}
 
 	@Override
@@ -48,21 +55,27 @@ public class LoadURIHandler extends ReadValueListHandler implements TupleQueryRe
 			}
 		}
 		
+		currentLoadCount = 0;
 		for (URL url : urlsToLoad) {
 			// initiate a LoadFromUrl operation
-			LoadFromUrl loadOperation = new LoadFromUrl(url, true);
+			loader.setUrls(Collections.singletonList(url));
 			try {
 				// run it
-				loadOperation.execute(this.repository);
-				log.error("Sucessfully loaded : "+url);
+				loader.execute(this.repository);
+				log.debug("Sucessfully loaded : "+url);
 			} catch (Exception e) {
 				// that's a failure, keep track of it
 				log.error("Unable to load URL : "+url);
 				this.errors.add(url);
 			}
+			// keep track of current load count
+			currentLoadCount++;
 		}
 		
-		
+	}
+
+	public int getCurrentLoadCount() {
+		return currentLoadCount;
 	}
 
 	// Pour activer le debug des headers des URLs :

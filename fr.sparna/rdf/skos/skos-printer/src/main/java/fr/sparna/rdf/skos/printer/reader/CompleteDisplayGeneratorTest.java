@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -92,6 +93,18 @@ public class CompleteDisplayGeneratorTest {
 					"trans"+i);
 			generators.add(ttGen);
 		}
+		
+		// add alignement reader
+		ConceptBlockReader alignCbReader = new ConceptBlockReader(r);
+		alignCbReader.setLinkDestinationIdPrefix("alpha");
+		AlignmentDisplayGenerator alignmentGen = new AlignmentDisplayGenerator(
+				r,
+				alignCbReader,
+				"alignId",
+				new AlignmentDataHarvesterCachedLoader("/home/thomas/workspace/skosplay/alignCache")
+		);
+		alignmentGen.setSeparateByTargetScheme(false);
+		generators.add(alignmentGen);
 		
 		BodyReader bodyReader = new BodyReader(generators);
 		document.setBody(bodyReader.readBody(LANG, (args.length > 1)?URI.create(args[1]):null));

@@ -13,6 +13,7 @@ public class PrintFormData {
 	protected String successMessage;
 	protected boolean enableHierarchical = true;
 	protected boolean enableTranslations = true;
+	protected boolean enableMappings = true;
 	
 	public Map<String, String> getLanguages() {
 		return languages;
@@ -61,5 +62,13 @@ public class PrintFormData {
 	public void setEnableTranslations(boolean enableTranslations) {
 		this.enableTranslations = enableTranslations;
 	}
-	
+
+	public boolean isEnableMappings() {
+		return enableMappings;
+	}
+
+	public void setEnableMappings(boolean enableMappings) {
+		this.enableMappings = enableMappings;
+	}
+
 }

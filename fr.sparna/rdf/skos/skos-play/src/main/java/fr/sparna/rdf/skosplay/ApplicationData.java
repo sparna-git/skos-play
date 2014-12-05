@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.openrdf.repository.Repository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryException;
@@ -20,6 +22,10 @@ import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromStream;
  */
 public class ApplicationData {
 
+	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
+	
+	public static final String DEFAULT_THESAURUS_LABELS_BUNDLE = "thesaurus-labels";
+	
 	protected Map<String, Repository> exampleDatas;
 
 	protected String thesaurusDirectory;
@@ -36,40 +42,29 @@ public class ApplicationData {
 	protected void init() {
 		// load example thesaurii included in the war
         Map<String, Repository> exampleDataMap = new TreeMap<String, Repository>();
-        
-		List<String> exampleDatas = Arrays.asList(new String[]{
-				"data/unesco/unescothes.ttl",
-				"data/w/matieres.rdf",
-				"data/nyt/nyt-descriptors.ttl"
-		});
-		for (String aData : exampleDatas) {
-			try {
-				RepositoryBuilder builder = new RepositoryBuilder();
-				builder.addOperation(new LoadFromStream(this, aData));
-				exampleDataMap.put(aData, builder.createNewRepository());				
-			} catch (RepositoryFactoryException e) {
-				e.printStackTrace();
-			}
-		}
 		
 		// try to load example files included in SkosPlayProperties.PROP_THESAURUS_DIRECTORY
 		if(thesaurusDirectory != null) {
+			log.debug("Pre-loading data from "+thesaurusDirectory);
 			File thesaurusDirectoryDir = new File(thesaurusDirectory);
 			if(thesaurusDirectoryDir.exists() && thesaurusDirectoryDir.list() != null) {
 				String[] dataFiles = thesaurusDirectoryDir.list();
 				for (String aFileName : dataFiles) {
-					File aFile = new File(thesaurusDirectoryDir, aFileName);
-					try {
-						RepositoryBuilder builder = new RepositoryBuilder();
-						builder.addOperation(new LoadFromFileOrDirectory(aFile.getAbsolutePath()));
-						// use the file name as a key
-						exampleDataMap.put(aFile.getName(), builder.createNewRepository());
-					} catch (RepositoryFactoryException e) {
-						e.printStackTrace();
+					if(!aFileName.endsWith(".properties")) {
+						log.debug("Pre-loading data from file/dir "+aFileName);
+						File aFile = new File(thesaurusDirectoryDir, aFileName);
+						try {
+							RepositoryBuilder builder = new RepositoryBuilder();
+							builder.addOperation(new LoadFromFileOrDirectory(aFile.getAbsolutePath()));
+							// use the file name as a key
+							exampleDataMap.put(aFile.getName(), builder.createNewRepository());
+						} catch (RepositoryFactoryException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
-		}			
+		}
 		
 		// store example data in application data
 		this.setExampleDatas(exampleDataMap);	
@@ -97,6 +92,14 @@ public class ApplicationData {
 
 	public void setBuildTimestamp(String buildTimestamp) {
 		this.buildTimestamp = buildTimestamp;
+	}
+
+	public String getThesaurusDirectory() {
+		return thesaurusDirectory;
+	}
+
+	public void setThesaurusDirectory(String thesaurusDirectory) {
+		this.thesaurusDirectory = thesaurusDirectory;
 	}
 	
 }

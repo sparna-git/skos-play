@@ -125,17 +125,17 @@
             <dependency>
                 <groupId>fr.sparna.rdf.skos</groupId>
                 <artifactId>skos-toolkit</artifactId>
-                <version>0.57</version>
+                <version>0.6</version>
             </dependency>
             <dependency>
                 <groupId>fr.sparna.rdf.skos</groupId>
                 <artifactId>skos-toolkit-solr</artifactId>
-                <version>0.57</version>
+                <version>0.6</version>
             </dependency>
             <dependency>
                 <groupId>fr.sparna.rdf.skos</groupId>
                 <artifactId>skos-printer</artifactId>
-                <version>0.57</version>
+                <version>0.6</version>
             </dependency>
 
             <!-- Logging: SLF4J -->
@@ -188,6 +188,23 @@
                       <groupId>commons-logging</groupId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+
+            <!-- Jackson dependencies for JSON processing -->
+            <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                    <version>2.2.3</version>
+            </dependency>
+            <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                    <version>2.2.3</version>
+            </dependency>
+            <dependency>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                    <version>2.2.3</version>
             </dependency>
 
         </dependencies>

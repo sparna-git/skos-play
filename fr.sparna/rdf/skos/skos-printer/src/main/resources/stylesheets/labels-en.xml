@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <labels lang="en">
 	<altLabel>UF</altLabel>
-	<broadMatch></broadMatch>
+	<broadMatch>broad</broadMatch>
 	<broader>BT</broader>
 	<broaderTransitive></broaderTransitive>
 	<changeNote>CN</changeNote>
-	<closeMatch></closeMatch>
+	<closeMatch>close</closeMatch>
 	<definition>DEF</definition>
 	<editorialNote>editorialNote</editorialNote>
-	<exactMatch></exactMatch>
+	<exactMatch>exact</exactMatch>
 	<example>EX</example>
 	<hasTopConcept></hasTopConcept>
 	<hiddenLabel></hiddenLabel>
@@ -17,16 +17,21 @@
 	<mappingRelation></mappingRelation>
 	<member></member>
 	<memberList></memberList>
-	<narrowMatch></narrowMatch>
+	<narrowMatch>narrow</narrowMatch>
 	<narrower>NT</narrower>
 	<narrowerTransitive></narrowerTransitive>
 	<notation>CC</notation>
 	<note>SN</note>
 	<prefLabel>USE</prefLabel>
 	<related>RT</related>
-	<relatedMatch></relatedMatch>
+	<relatedMatch>related</relatedMatch>
 	<scopeNote>SN</scopeNote>
 	<semanticRelation></semanticRelation>
 	<topConceptOf></topConceptOf>
 	<topConcept>TT</topConcept>
+	<!-- Alignements -->
+	<alignmentSource>source concept</alignmentSource>
+	<alignmentType> </alignmentType>
+	<alignmentTarget>target concept</alignmentTarget>
+	<alignmentScheme> </alignmentScheme>
 </labels>

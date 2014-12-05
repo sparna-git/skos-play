@@ -208,7 +208,7 @@ public class IndexGenerator extends AbstractKosDisplayGenerator {
 		
 		boolean cutLabels = (this.indexType == IndexType.KWIC);
 		
-		// create label and type
+		// create sourceConceptLabel and type
 		Label label = SchemaFactory.createLabel(labelToProcess, (r.prefLabel != null)?"alt":"pref");
 		
 		String[] words = tokenizer.tokenize(labelToProcess);	
@@ -228,7 +228,7 @@ public class IndexGenerator extends AbstractKosDisplayGenerator {
 						((cutLabels && after.length() > 40)?after.substring(0, 37)+"...":after)
 				);
 				
-				// if the entry corresponds to an alt label, add a reference to its pref
+				// if the entry corresponds to an alt sourceConceptLabel, add a reference to its pref
 				if(r.prefLabel != null) {
 					Att a = SchemaFactory.createAttLink(
 							this.conceptBlockReader.computeRefId(r.conceptURI, r.prefLabel, true),

@@ -68,7 +68,7 @@ public class ConceptBlockReader {
 				this.repository,
 				URI.create(SKOS.PREF_LABEL),
 				// additional path
-				// TODO : could read rdfs:label ?
+				// TODO : could read rdfs:sourceConceptLabel ?
 				null,
 				// language of property to read
 				lang,
@@ -156,7 +156,7 @@ public class ConceptBlockReader {
 	
 	public ConceptBlock readConceptBlock(final String uri, boolean styleLabel)
 	throws SparqlPerformException {
-		// set label (or URI if no label can be found)
+		// set sourceConceptLabel (or URI if no sourceConceptLabel can be found)
 		String label = LabelReader.display(prefLabelReader.read(URI.create(uri)));
 		label = (label.trim().equals(""))?uri:label;
 		return this.readConceptBlock(uri, label, styleLabel);
@@ -181,7 +181,7 @@ public class ConceptBlockReader {
 		
 		final ConceptBlock cb;
 		
-		// if we are not in the master section, we will generate a link on the label,
+		// if we are not in the master section, we will generate a link on the sourceConceptLabel,
 		// pointing to the corresponding entry in the master section
 		if(!this.conceptBlockIdPrefix.equals(this.linkDestinationIdPrefix)) {
 			cb = SchemaFactory.createConceptBlock(
@@ -203,7 +203,7 @@ public class ConceptBlockReader {
 				String lang = anEntry.getKey();
 				
 				String labelInOtherLanguage = LabelReader.display(anEntry.getValue().read(new UriLang(uri, lang)));
-				// don't display if there is no label for this language
+				// don't display if there is no sourceConceptLabel for this language
 				if(labelInOtherLanguage != null && !labelInOtherLanguage.equals("")) {
 					cb.getAtt().add(
 							SchemaFactory.createAtt(

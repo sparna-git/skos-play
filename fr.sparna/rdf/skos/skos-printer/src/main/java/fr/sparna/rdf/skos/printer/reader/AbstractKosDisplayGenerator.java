@@ -26,7 +26,7 @@ public abstract class AbstractKosDisplayGenerator {
 	}
 	
 	/**
-	 * Creates a geenrator with a randomly-created displayId
+	 * Creates a generator with a randomly-created displayId
 	 * @param repository
 	 */
 	public AbstractKosDisplayGenerator(Repository repository) {

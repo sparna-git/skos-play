@@ -81,7 +81,7 @@ public class TranslationTableDisplayGenerator extends AbstractKosDisplayGenerato
 			) throws TupleQueryResultHandlerException {
 				QueryResultRow qrr = new QueryResultRow();
 				qrr.conceptURI = concept.stringValue();
-				// if no label in the main language, set the URI
+				// if no sourceConceptLabel in the main language, set the URI
 				qrr.label1 = (label1 != null)?label1.stringValue():concept.stringValue();
 				qrr.label2 = (label2 != null)?label2.stringValue():null;
 				queryResultRows.add(qrr);
@@ -128,10 +128,10 @@ public class TranslationTableDisplayGenerator extends AbstractKosDisplayGenerato
 					
 					// et on créé une nouvelle section
 					currentSection = new Section();
-					Table newTable = new Table();
+					Table newTable = SchemaFactory.createTable(50, 50);
 					newTable.setTableHeader(SchemaFactory.createRow(
-							SchemaFactory.createStyledString(displayLanguage(lang, lang)),
-							SchemaFactory.createStyledString(displayLanguage(this.targetLanguage, lang))
+							SchemaFactory.createStr(SchemaFactory.createStyledString(displayLanguage(lang, lang))),
+							SchemaFactory.createStr(SchemaFactory.createStyledString(displayLanguage(this.targetLanguage, lang)))
 					));
 					currentSection.setTable(newTable);
 					currentSection.setTitle(sectionTitle);
@@ -147,8 +147,8 @@ public class TranslationTableDisplayGenerator extends AbstractKosDisplayGenerato
 			Section s = new Section();
 			Table newTable = new Table();
 			newTable.setTableHeader(SchemaFactory.createRow(
-					SchemaFactory.createStyledString(displayLanguage(lang, lang)),
-					SchemaFactory.createStyledString(displayLanguage(this.targetLanguage, lang))
+					SchemaFactory.createStr(SchemaFactory.createStyledString(displayLanguage(lang, lang))),
+					SchemaFactory.createStr(SchemaFactory.createStyledString(displayLanguage(this.targetLanguage, lang)))
 			));
 			s.setTable(newTable);
 			for (QueryResultRow aRow : queryResultRows) {

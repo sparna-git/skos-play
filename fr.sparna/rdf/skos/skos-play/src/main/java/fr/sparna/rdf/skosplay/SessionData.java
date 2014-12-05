@@ -1,6 +1,7 @@
 package fr.sparna.rdf.skosplay;
 
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpSession;
 
@@ -23,11 +24,14 @@ public class SessionData {
 	// The user Locale
 	protected Locale userLocale;
 	
-	// The label reader (with a cache)
+	// The sourceConceptLabel reader (with a cache)
 	protected LabelReader labelReader;
 	
 	// data for the PrintForm
 	protected PrintFormData printFormData;
+	
+	// the pre-loaded data resource bundle
+	protected ResourceBundle preLoadedDataLabels;
 	
 	/**
 	 * Stores this data into session
@@ -77,6 +81,14 @@ public class SessionData {
 
 	public void setUserLocale(Locale userLocale) {
 		this.userLocale = userLocale;
+	}
+
+	public ResourceBundle getPreLoadedDataLabels() {
+		return preLoadedDataLabels;
+	}
+
+	public void setPreLoadedDataLabels(ResourceBundle preLoadedDataLabels) {
+		this.preLoadedDataLabels = preLoadedDataLabels;
 	}
 
 	public static void main(String...strings) throws Exception {

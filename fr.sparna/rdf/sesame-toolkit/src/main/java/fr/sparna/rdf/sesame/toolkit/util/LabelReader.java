@@ -4,11 +4,13 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.openrdf.model.Value;
 import org.openrdf.model.vocabulary.RDFS;
+import org.openrdf.model.vocabulary.SKOS;
 import org.openrdf.repository.Repository;
 
 import fr.sparna.commons.lang.ListMap;
@@ -23,7 +25,7 @@ public class LabelReader extends PreferredPropertyReader {
 
 	public static final List<java.net.URI> DEFAULT_LABEL_PROPERTIES = Arrays.asList(new java.net.URI[] {
 			// skos:prefLabel first
-			URI.create("http://www.w3.org/2004/02/skos/core#prefLabel"),
+			URI.create(SKOS.PREF_LABEL.toString()),
 			// rdfs:label
 			URI.create(RDFS.LABEL.toString()),
 			// dcterms title
@@ -35,9 +37,27 @@ public class LabelReader extends PreferredPropertyReader {
 	public LabelReader(
 			Repository repository,
 			List<java.net.URI> labelProperties,
+			List<String> fallbackLanguages,
+			String preferredLanguage) {
+		super(repository, labelProperties, fallbackLanguages, preferredLanguage);
+	}
+	
+	public LabelReader(Repository repository, List<String> fallbackLanguages, String preferredLanguage) {
+		this(
+				repository,
+				// make a copy of it to make editable
+				new ArrayList<URI>(DEFAULT_LABEL_PROPERTIES),
+				fallbackLanguages,
+				preferredLanguage
+		);
+	}
+	
+	public LabelReader(
+			Repository repository,
+			List<java.net.URI> labelProperties,
 			String fallbackLanguage,
 			String preferredLanguage) {
-		super(repository, labelProperties, fallbackLanguage, preferredLanguage);
+		this(repository, labelProperties, Collections.singletonList(fallbackLanguage), preferredLanguage);
 	}
 	
 	public LabelReader(Repository repository, String fallbackLanguage, String preferredLanguage) {
@@ -55,7 +75,7 @@ public class LabelReader extends PreferredPropertyReader {
 				repository,
 				// make a copy of it to make editable
 				new ArrayList<URI>(DEFAULT_LABEL_PROPERTIES),
-				null,
+				(List<String>)null,
 				preferredLanguage
 		);
 	}
@@ -101,11 +121,12 @@ public class LabelReader extends PreferredPropertyReader {
 		ListMap<java.net.URI, Value> values = (ListMap<java.net.URI, Value>)super.getValues(resources);
 				
 		// for each resources for which a value wasn't found, create a default value
+		Namespaces namespaces = Namespaces.getInstance().withRepository(this.repository);
 		for (URI uri : resources) {
-			if(!values.containsKey(uri)) {
+			if(!values.containsKey(uri) || values.get(uri).size() == 0) {
 				values.add(
 						uri, 
-						this.repository.getValueFactory().createLiteral(Namespaces.getInstance().withRepository(this.repository).shorten(uri.toString())
+						this.repository.getValueFactory().createLiteral(namespaces.shorten(uri.toString())
 				));
 			}
 		}

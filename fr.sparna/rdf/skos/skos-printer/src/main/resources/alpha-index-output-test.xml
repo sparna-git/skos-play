@@ -2,11 +2,11 @@
 <ns1:kosDocument xmlns:ns1="http://www.sparna.fr/thesaurus-display">
     <ns1:header/>
     <ns1:body>
-        <ns1:kosDisplay column-count="2" displayId="2f3f1fe2-b933-4993-addd-50c25f600f2a">
+        <ns1:kosDisplay column-count="2" displayId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9">
             <ns1:section>
                 <ns1:list>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1324468442" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101903">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91324468442" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101903">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101903" refId="1324468442" style="pref">Abeilles</ns1:link>
                             </ns1:label>
@@ -14,10 +14,10 @@
 <ns1:str>Bees</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101900" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1671441210">Insectes</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101900" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91671441210">Insectes</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101903</ns1:str>
@@ -25,7 +25,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-1602243165" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101509">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1602243165" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101509">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101509" refId="-1602243165" style="pref">Ânes</ns1:link>
                             </ns1:label>
@@ -33,10 +33,10 @@
 <ns1:str>Asses</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101509</ns1:str>
@@ -44,7 +44,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-469137027" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101705">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-469137027" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101705">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101705" refId="-469137027" style="pref">Anguilles vivantes</ns1:link>
                             </ns1:label>
@@ -52,10 +52,10 @@
 <ns1:str>Live eels</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-730900995">Poisson vivant</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-730900995">Poisson vivant</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101705</ns1:str>
@@ -63,7 +63,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a868615658" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102000">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9868615658" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102000">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102000" refId="868615658" style="pref">Animaux sauvages</ns1:link>
                             </ns1:label>
@@ -71,16 +71,16 @@
 <ns1:str>Wild animals</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1145135366">Animaux vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91145135366">Animaux vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102001" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a37839147">Eléphants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102001" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d937839147">Eléphants</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102002" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1162581810">Renards vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102002" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1162581810">Renards vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10102000</ns1:str>
@@ -88,7 +88,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1145135366" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91145135366" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="1145135366" style="pref">Animaux vivants</ns1:link>
                             </ns1:label>
@@ -96,28 +96,28 @@
 <ns1:str>Live animals</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10000000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a841634497">Fournitures, accessoires et matériel pour plantes et animaux vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10000000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9841634497">Fournitures, accessoires et matériel pour plantes et animaux vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-3956590">Oiseaux et volaille</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-3956590">Oiseaux et volaille</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-730900995">Poisson vivant</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-730900995">Poisson vivant</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101900" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1671441210">Insectes</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101900" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91671441210">Insectes</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a868615658">Animaux sauvages</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9868615658">Animaux sauvages</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10100000</ns1:str>
@@ -125,7 +125,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="-810526153" style="pref">Bétail</ns1:link>
                             </ns1:label>
@@ -133,58 +133,58 @@
 <ns1:str>Livestock</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1145135366">Animaux vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91145135366">Animaux vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101501" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1523566618">Chats</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101501" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91523566618">Chats</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101502" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a873652456">Chiens</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101502" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9873652456">Chiens</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101504" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1627047899">Vison</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101504" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91627047899">Vison</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101505" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1609285869">Rats</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101505" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1609285869">Rats</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101506" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-308470840">Chevaux</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101506" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-308470840">Chevaux</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101507" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1309331655">Mouton</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101507" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91309331655">Mouton</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101508" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-996820379">Chèvres</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101508" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-996820379">Chèvres</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101509" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1602243165">Ânes</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101509" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1602243165">Ânes</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101510" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1306356322">Souris</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101510" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91306356322">Souris</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101511" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1871666877">Porcs</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101511" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1871666877">Porcs</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101512" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1427094412">Lapins</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101512" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1427094412">Lapins</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101513" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1785919416">Cochons d'Inde</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101513" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1785919416">Cochons d'Inde</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101514" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-276229750">Primates</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101514" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-276229750">Primates</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101515" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1464574986">Tatous</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101515" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91464574986">Tatous</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101516" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1849736842">Bovins</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101516" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91849736842">Bovins</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101517" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1195609558">Chameaux</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101517" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91195609558">Chameaux</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101500</ns1:str>
@@ -192,7 +192,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-2089309789" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111304">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-2089309789" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111304">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111304" refId="-2089309789" style="pref">Bols ou équipements pour aliments d’animaux domestiques</ns1:link>
                             </ns1:label>
@@ -200,10 +200,10 @@
 <ns1:str>Pet food bowls or equipment</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10111304</ns1:str>
@@ -211,7 +211,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1849736842" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101516">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91849736842" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101516">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101516" refId="1849736842" style="pref">Bovins</ns1:link>
                             </ns1:label>
@@ -219,10 +219,10 @@
 <ns1:str>Cattle</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101516</ns1:str>
@@ -230,7 +230,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a919563305" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101808">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9919563305" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101808">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101808" refId="919563305" style="pref">Calmar vivant</ns1:link>
                             </ns1:label>
@@ -238,10 +238,10 @@
 <ns1:str>Live squid</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101808</ns1:str>
@@ -249,7 +249,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-1121782916" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101602">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1121782916" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101602">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101602" refId="-1121782916" style="pref">Canards vivants</ns1:link>
                             </ns1:label>
@@ -257,10 +257,10 @@
 <ns1:str>Live ducks</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-3956590">Oiseaux et volaille</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-3956590">Oiseaux et volaille</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101602</ns1:str>
@@ -268,7 +268,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1808731202" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101704">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91808731202" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101704">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101704" refId="1808731202" style="pref">Carpes vivantes</ns1:link>
                             </ns1:label>
@@ -276,10 +276,10 @@
 <ns1:str>Live carp</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-730900995">Poisson vivant</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-730900995">Poisson vivant</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101704</ns1:str>
@@ -287,7 +287,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1195609558" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101517">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91195609558" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101517">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101517" refId="1195609558" style="pref">Chameaux</ns1:link>
                             </ns1:label>
@@ -295,10 +295,10 @@
 <ns1:str>Camels</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101517</ns1:str>
@@ -306,7 +306,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1523566618" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101501">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91523566618" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101501">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101501" refId="1523566618" style="pref">Chats</ns1:link>
                             </ns1:label>
@@ -314,10 +314,10 @@
 <ns1:str>Cats</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101501</ns1:str>
@@ -325,7 +325,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-308470840" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101506">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-308470840" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101506">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101506" refId="-308470840" style="pref">Chevaux</ns1:link>
                             </ns1:label>
@@ -333,10 +333,10 @@
 <ns1:str>Horses</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101506</ns1:str>
@@ -344,7 +344,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-996820379" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101508">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-996820379" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101508">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101508" refId="-996820379" style="pref">Chèvres</ns1:link>
                             </ns1:label>
@@ -352,10 +352,10 @@
 <ns1:str>Goats</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101508</ns1:str>
@@ -363,7 +363,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a873652456" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101502">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9873652456" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101502">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101502" refId="873652456" style="pref">Chiens</ns1:link>
                             </ns1:label>
@@ -371,10 +371,10 @@
 <ns1:str>Dogs</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101502</ns1:str>
@@ -382,7 +382,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-1785919416" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101513">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1785919416" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101513">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101513" refId="-1785919416" style="pref">Cochons d'Inde</ns1:link>
                             </ns1:label>
@@ -390,10 +390,10 @@
 <ns1:str>Guinea pigs</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101513</ns1:str>
@@ -401,7 +401,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a160736508" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101902">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9160736508" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101902">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101902" refId="160736508" style="pref">Coléoptères</ns1:link>
                             </ns1:label>
@@ -409,10 +409,10 @@
 <ns1:str>Beetles</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101900" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1671441210">Insectes</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101900" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91671441210">Insectes</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101902</ns1:str>
@@ -420,7 +420,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-1634449273" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111307">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1634449273" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111307">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111307" refId="-1634449273" style="pref">Couvertures pour animaux domestiques</ns1:link>
                             </ns1:label>
@@ -428,10 +428,10 @@
 <ns1:str>Pet blankets</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10111307</ns1:str>
@@ -439,7 +439,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a389264213" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101805">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9389264213" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101805">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101805" refId="389264213" style="pref">Crabes vivants</ns1:link>
                             </ns1:label>
@@ -447,10 +447,10 @@
 <ns1:str>Live crabs</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101805</ns1:str>
@@ -458,7 +458,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1399579269" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101801">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91399579269" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101801">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101801" refId="1399579269" style="pref">Crevette vivante</ns1:link>
                             </ns1:label>
@@ -466,10 +466,10 @@
 <ns1:str>Live shrimp</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101801</ns1:str>
@@ -477,7 +477,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-1863823433" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1863823433" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="-1863823433" style="pref">Crustacés et invertébrés aquatiques</ns1:link>
                             </ns1:label>
@@ -485,34 +485,34 @@
 <ns1:str>Shellfish and aquatic invertebrates</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1145135366">Animaux vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91145135366">Animaux vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101801" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1399579269">Crevette vivante</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101801" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91399579269">Crevette vivante</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101802" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a808360662">Palourdes vivantes</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101802" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9808360662">Palourdes vivantes</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101803" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-666584123">Moules vivantes</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101803" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-666584123">Moules vivantes</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101804" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-932930932">Huîtres vivantes</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101804" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-932930932">Huîtres vivantes</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101805" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a389264213">Crabes vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101805" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9389264213">Crabes vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101806" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1312871084">Ormeau vivant</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101806" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91312871084">Ormeau vivant</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101807" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1745569045">Pieuvres vivantes</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101807" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91745569045">Pieuvres vivantes</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101808" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a919563305">Calmar vivant</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101808" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9919563305">Calmar vivant</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101800</ns1:str>
@@ -520,7 +520,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a404039941" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101603">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9404039941" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101603">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101603" refId="404039941" style="pref">Dindes vivantes</ns1:link>
                             </ns1:label>
@@ -528,10 +528,10 @@
 <ns1:str>Live turkeys</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-3956590">Oiseaux et volaille</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-3956590">Oiseaux et volaille</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101603</ns1:str>
@@ -539,7 +539,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a37839147" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102001">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d937839147" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102001">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102001" refId="37839147" style="pref">Eléphants</ns1:link>
                             </ns1:label>
@@ -547,10 +547,10 @@
 <ns1:str>Elephants</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a868615658">Animaux sauvages</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9868615658">Animaux sauvages</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10102001</ns1:str>
@@ -558,7 +558,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-116926358" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101605">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-116926358" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101605">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101605" refId="-116926358" style="pref">Faisans vivants</ns1:link>
                             </ns1:label>
@@ -566,10 +566,10 @@
 <ns1:str>Live pheasants</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-3956590">Oiseaux et volaille</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-3956590">Oiseaux et volaille</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101605</ns1:str>
@@ -577,7 +577,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a841634497" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10000000">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9841634497" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10000000">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10000000" refId="841634497" style="pref">Fournitures, accessoires et matériel pour plantes et animaux vivants</ns1:link>
                             </ns1:label>
@@ -585,19 +585,19 @@
 <ns1:str>Live Plant and Animal Material and Accessories and Supplies</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1145135366">Animaux vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91145135366">Animaux vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10110000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1978128769">Produits pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10110000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1978128769">Produits pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10120000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1537772424">Nourriture pour animaux</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10120000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91537772424">Nourriture pour animaux</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10000000</ns1:str>
@@ -605,7 +605,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-932930932" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101804">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-932930932" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101804">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101804" refId="-932930932" style="pref">Huîtres vivantes</ns1:link>
                             </ns1:label>
@@ -613,10 +613,10 @@
 <ns1:str>Live oysters</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101804</ns1:str>
@@ -624,7 +624,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1671441210" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101900">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91671441210" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101900">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101900" refId="1671441210" style="pref">Insectes</ns1:link>
                             </ns1:label>
@@ -632,22 +632,22 @@
 <ns1:str>Insects</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1145135366">Animaux vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91145135366">Animaux vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101901" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a884635013">Papillons</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101901" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9884635013">Papillons</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101902" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a160736508">Coléoptères</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101902" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9160736508">Coléoptères</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101903" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1324468442">Abeilles</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101903" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91324468442">Abeilles</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101904" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1709162496">Vers à soie</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101904" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1709162496">Vers à soie</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101900</ns1:str>
@@ -655,7 +655,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-1732221294" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111301">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1732221294" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111301">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111301" refId="-1732221294" style="pref">Jouets pour animaux domestiques</ns1:link>
                             </ns1:label>
@@ -663,10 +663,10 @@
 <ns1:str>Pet toys</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10111301</ns1:str>
@@ -674,7 +674,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-1427094412" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101512">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1427094412" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101512">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101512" refId="-1427094412" style="pref">Lapins</ns1:link>
                             </ns1:label>
@@ -682,10 +682,10 @@
 <ns1:str>Rabbits</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101512</ns1:str>
@@ -693,7 +693,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1650817554" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111303">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91650817554" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111303">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111303" refId="1650817554" style="pref">Litières pour animaux domestiques ou équipements pour le traitement des déchets d’animaux</ns1:link>
                             </ns1:label>
@@ -701,10 +701,10 @@
 <ns1:str>domestiques Pet litter or equipment for pet waste management</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10111303</ns1:str>
@@ -712,7 +712,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-666584123" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101803">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-666584123" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101803">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101803" refId="-666584123" style="pref">Moules vivantes</ns1:link>
                             </ns1:label>
@@ -720,10 +720,10 @@
 <ns1:str>Live mussels</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101803</ns1:str>
@@ -731,7 +731,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1309331655" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101507">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91309331655" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101507">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101507" refId="1309331655" style="pref">Mouton</ns1:link>
                             </ns1:label>
@@ -739,10 +739,10 @@
 <ns1:str>Sheep</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101507</ns1:str>
@@ -750,7 +750,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-853420215" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111306">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-853420215" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111306">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111306" refId="-853420215" style="pref">Nécessaires de dressage pour animaux domestiques</ns1:link>
                             </ns1:label>
@@ -758,10 +758,10 @@
 <ns1:str>Domestic pet training kits</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10111306</ns1:str>
@@ -769,7 +769,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1537772424" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10120000">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91537772424" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10120000">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10120000" refId="1537772424" style="pref">Nourriture pour animaux</ns1:link>
                             </ns1:label>
@@ -777,13 +777,13 @@
 <ns1:str>Animal feed</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10000000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a841634497">Fournitures, accessoires et matériel pour plantes et animaux vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10000000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9841634497">Fournitures, accessoires et matériel pour plantes et animaux vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10121500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a366714534">Nourriture pour bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10121500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9366714534">Nourriture pour bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10120000</ns1:str>
@@ -791,7 +791,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a366714534" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10121500">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9366714534" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10121500">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10121500" refId="366714534" style="pref">Nourriture pour bétail</ns1:link>
                             </ns1:label>
@@ -799,10 +799,10 @@
 <ns1:str>Livestock feed</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10120000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1537772424">Nourriture pour animaux</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10120000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91537772424">Nourriture pour animaux</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10121500</ns1:str>
@@ -810,7 +810,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a246749029" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101604">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9246749029" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101604">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101604" refId="246749029" style="pref">Oies vivantes</ns1:link>
                             </ns1:label>
@@ -818,10 +818,10 @@
 <ns1:str>Live geese</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-3956590">Oiseaux et volaille</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-3956590">Oiseaux et volaille</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101604</ns1:str>
@@ -829,7 +829,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-3956590" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-3956590" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600" refId="-3956590" style="pref">Oiseaux et volaille</ns1:link>
                             </ns1:label>
@@ -837,25 +837,25 @@
 <ns1:str>Birds and fowl</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1145135366">Animaux vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91145135366">Animaux vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101601" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1426573403">Poulets vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101601" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91426573403">Poulets vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101602" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1121782916">Canards vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101602" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1121782916">Canards vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101603" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a404039941">Dindes vivantes</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101603" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9404039941">Dindes vivantes</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101604" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a246749029">Oies vivantes</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101604" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9246749029">Oies vivantes</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101605" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-116926358">Faisans vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101605" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-116926358">Faisans vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101600</ns1:str>
@@ -863,7 +863,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1312871084" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101806">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91312871084" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101806">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101806" refId="1312871084" style="pref">Ormeau vivant</ns1:link>
                             </ns1:label>
@@ -871,10 +871,10 @@
 <ns1:str>Live abalone</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101806</ns1:str>
@@ -882,7 +882,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a808360662" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101802">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9808360662" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101802">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101802" refId="808360662" style="pref">Palourdes vivantes</ns1:link>
                             </ns1:label>
@@ -890,10 +890,10 @@
 <ns1:str>Live clams</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101802</ns1:str>
@@ -901,7 +901,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a884635013" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101901">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9884635013" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101901">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101901" refId="884635013" style="pref">Papillons</ns1:link>
                             </ns1:label>
@@ -909,10 +909,10 @@
 <ns1:str>Butterflies</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101900" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1671441210">Insectes</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101900" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91671441210">Insectes</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101901</ns1:str>
@@ -920,7 +920,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1745569045" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101807">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91745569045" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101807">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101807" refId="1745569045" style="pref">Pieuvres vivantes</ns1:link>
                             </ns1:label>
@@ -928,10 +928,10 @@
 <ns1:str>Live octopi</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101800" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1863823433">Crustacés et invertébrés aquatiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101807</ns1:str>
@@ -939,7 +939,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-730900995" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-730900995" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700" refId="-730900995" style="pref">Poisson vivant</ns1:link>
                             </ns1:label>
@@ -947,25 +947,25 @@
 <ns1:str>Live fish</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1145135366">Animaux vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10100000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91145135366">Animaux vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101701" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-928966052">Saumon vivant</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101701" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-928966052">Saumon vivant</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101702" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1721542776">Truite vivante</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101702" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1721542776">Truite vivante</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101703" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-729760245">Tilapia vivant</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101703" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-729760245">Tilapia vivant</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101704" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1808731202">Carpes vivantes</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101704" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91808731202">Carpes vivantes</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101705" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-469137027">Anguilles vivantes</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101705" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-469137027">Anguilles vivantes</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101700</ns1:str>
@@ -973,7 +973,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-1871666877" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101511">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1871666877" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101511">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101511" refId="-1871666877" style="pref">Porcs</ns1:link>
                             </ns1:label>
@@ -981,10 +981,10 @@
 <ns1:str>Swine</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101511</ns1:str>
@@ -992,7 +992,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1426573403" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101601">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91426573403" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101601">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101601" refId="1426573403" style="pref">Poulets vivants</ns1:link>
                             </ns1:label>
@@ -1000,10 +1000,10 @@
 <ns1:str>Live chickens</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-3956590">Oiseaux et volaille</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101600" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-3956590">Oiseaux et volaille</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101601</ns1:str>
@@ -1011,7 +1011,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-276229750" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101514">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-276229750" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101514">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101514" refId="-276229750" style="pref">Primates</ns1:link>
                             </ns1:label>
@@ -1019,10 +1019,10 @@
 <ns1:str>Primates</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101514</ns1:str>
@@ -1030,7 +1030,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-1241430524" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111302">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1241430524" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111302">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111302" refId="-1241430524" style="pref">Produits de toilettage pour animaux domestiques</ns1:link>
                             </ns1:label>
@@ -1038,10 +1038,10 @@
 <ns1:str>Pet grooming products</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10111302</ns1:str>
@@ -1049,7 +1049,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-1978128769" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10110000">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1978128769" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10110000">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10110000" refId="-1978128769" style="pref">Produits pour animaux domestiques</ns1:link>
                             </ns1:label>
@@ -1057,13 +1057,13 @@
 <ns1:str>Domestic pet products</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10000000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a841634497">Fournitures, accessoires et matériel pour plantes et animaux vivants</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10000000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9841634497">Fournitures, accessoires et matériel pour plantes et animaux vivants</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10110000</ns1:str>
@@ -1071,7 +1071,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-1609285869" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101505">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1609285869" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101505">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101505" refId="-1609285869" style="pref">Rats</ns1:link>
                             </ns1:label>
@@ -1079,10 +1079,10 @@
 <ns1:str>Rats</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101505</ns1:str>
@@ -1090,7 +1090,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-1162581810" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102002">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1162581810" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102002">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102002" refId="-1162581810" style="pref">Renards vivants</ns1:link>
                             </ns1:label>
@@ -1098,10 +1098,10 @@
 <ns1:str>Live foxes</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a868615658">Animaux sauvages</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10102000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9868615658">Animaux sauvages</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10102002</ns1:str>
@@ -1109,7 +1109,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-928966052" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101701">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-928966052" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101701">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101701" refId="-928966052" style="pref">Saumon vivant</ns1:link>
                             </ns1:label>
@@ -1117,10 +1117,10 @@
 <ns1:str>Live salmon</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-730900995">Poisson vivant</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-730900995">Poisson vivant</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101701</ns1:str>
@@ -1128,7 +1128,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1306356322" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101510">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91306356322" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101510">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101510" refId="1306356322" style="pref">Souris</ns1:link>
                             </ns1:label>
@@ -1136,10 +1136,10 @@
 <ns1:str>Mice</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101510</ns1:str>
@@ -1147,7 +1147,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1464574986" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101515">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91464574986" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101515">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101515" refId="1464574986" style="pref">Tatous</ns1:link>
                             </ns1:label>
@@ -1155,10 +1155,10 @@
 <ns1:str>Armadillos</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101515</ns1:str>
@@ -1166,7 +1166,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-729760245" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101703">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-729760245" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101703">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101703" refId="-729760245" style="pref">Tilapia vivant</ns1:link>
                             </ns1:label>
@@ -1174,10 +1174,10 @@
 <ns1:str>Live talapia</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-730900995">Poisson vivant</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-730900995">Poisson vivant</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101703</ns1:str>
@@ -1185,7 +1185,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a407868514" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9407868514" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="407868514" style="pref">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
                             </ns1:label>
@@ -1193,31 +1193,31 @@
 <ns1:str>Domestic pet treatments and accessories and equipment</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10110000" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1978128769">Produits pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10110000" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1978128769">Produits pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111301" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1732221294">Jouets pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111301" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1732221294">Jouets pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111302" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1241430524">Produits de toilettage pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111302" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1241430524">Produits de toilettage pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111303" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1650817554">Litières pour animaux domestiques ou équipements pour le traitement des déchets d’animaux</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111303" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91650817554">Litières pour animaux domestiques ou équipements pour le traitement des déchets d’animaux</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111304" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-2089309789">Bols ou équipements pour aliments d’animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111304" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-2089309789">Bols ou équipements pour aliments d’animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111305" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-254156607">Traitements médicamenteux pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111305" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-254156607">Traitements médicamenteux pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111306" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-853420215">Nécessaires de dressage pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111306" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-853420215">Nécessaires de dressage pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="narrower">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111307" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1634449273">Couvertures pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111307" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1634449273">Couvertures pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10111300</ns1:str>
@@ -1225,7 +1225,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-254156607" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111305">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-254156607" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111305">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111305" refId="-254156607" style="pref">Traitements médicamenteux pour animaux domestiques</ns1:link>
                             </ns1:label>
@@ -1233,10 +1233,10 @@
 <ns1:str>Medicated pet treatments</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10111300" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9407868514">Traitements, accessoires et équipements pour animaux domestiques</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10111305</ns1:str>
@@ -1244,7 +1244,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-1721542776" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101702">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1721542776" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101702">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101702" refId="-1721542776" style="pref">Truite vivante</ns1:link>
                             </ns1:label>
@@ -1252,10 +1252,10 @@
 <ns1:str>Live trout</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-730900995">Poisson vivant</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101700" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-730900995">Poisson vivant</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101702</ns1:str>
@@ -1263,7 +1263,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a-1709162496" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101904">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1709162496" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101904">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101904" refId="-1709162496" style="pref">Vers à soie</ns1:link>
                             </ns1:label>
@@ -1271,10 +1271,10 @@
 <ns1:str>Silkworms</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101900" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a1671441210">Insectes</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101900" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91671441210">Insectes</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101904</ns1:str>
@@ -1282,7 +1282,7 @@
                         </ns1:conceptBlock>
                     </ns1:listItem>
                     <ns1:listItem>
-                        <ns1:conceptBlock id="2f3f1fe2-b933-4993-addd-50c25f600f2a1627047899" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101504">
+                        <ns1:conceptBlock id="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d91627047899" uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101504">
                             <ns1:label>
 <ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101504" refId="1627047899" style="pref">Vison</ns1:link>
                             </ns1:label>
@@ -1290,10 +1290,10 @@
 <ns1:str>Mink</ns1:str>
                             </ns1:att>
                             <ns1:att type="topConcept">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c0" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-1350770624">http://deductions-software.fr/ontologies/unspsc.owl.n3#c0</ns1:link>
                             </ns1:att>
                             <ns1:att type="broader">
-<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="2f3f1fe2-b933-4993-addd-50c25f600f2a-810526153">Bétail</ns1:link>
+<ns1:link uri="http://deductions-software.fr/ontologies/unspsc.owl.n3#c10101500" refId="85e6a17f-37ea-46ee-8ec0-e10ddcddc1d9-810526153">Bétail</ns1:link>
                             </ns1:att>
                             <ns1:att type="notation">
 <ns1:str>10101504</ns1:str>

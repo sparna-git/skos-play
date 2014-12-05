@@ -75,6 +75,12 @@
 							
 							<c:forEach items="${applicationData.exampleDatas}" var="entry">
 								<option value="${entry.key}">
+									<c:catch var ="labelNotFountException">
+										 ${sessionScope['fr.sparna.rdf.skosplay.SessionData'].preLoadedDataLabels.getString(entry.key)}
+									</c:catch>
+									<c:if test = "${labelNotFountException != null}">${entry.key}</c:if>
+									
+									<!--
 									<c:set value="upload.form.providedExample.${entry.key}" var="messageKey"/>
 									<c:set value="???${pageScope.messageKey}???" var="unknownValue"/>
 									<fmt:message key="${pageScope.messageKey}" var="exampleDataName"/>
@@ -83,6 +89,7 @@
 										<c:when test="${pageScope.exampleDataName == pageScope.unknownValue}">${entry.key}</c:when>
 										<c:otherwise>${pageScope.exampleDataName}</c:otherwise>
 									</c:choose>
+									-->
 								</option>
 							</c:forEach>
 						</select>
@@ -169,7 +176,7 @@
 	   				<div class="accordion-heading">
 	   					<a class="accordion-toggle" data-toggle="collapse" data-parent="#myAccordion" href="#collapse1"><h4><fmt:message key="upload.form.advanced.legend" /></h4></a>
 	   				</div>
-	   				<div id="collapse1" class="accordion-body collapse"><div class="accordion-inner">
+	   				<div id="collapse1" class="accordion-body"><div class="accordion-inner">
 	
 						<div class="control-group">
 							<label class="control-label">

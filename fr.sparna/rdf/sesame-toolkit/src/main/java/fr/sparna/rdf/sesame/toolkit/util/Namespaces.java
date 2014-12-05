@@ -105,6 +105,11 @@ public class Namespaces {
 		}		
 	}
 	
+	/**
+	 * Returns an array with the namespace part in the first position, and local part in the second position
+	 * @param fullURI
+	 * @return
+	 */
 	public String[] split(String fullURI) {
 		// String[0] : namespace uri
 		// String[1] : local part

@@ -81,7 +81,7 @@ public class TranslationTableReverseDisplayGenerator extends AbstractKosDisplayG
 			) throws TupleQueryResultHandlerException {
 				QueryResultRow qrr = new QueryResultRow();
 				qrr.conceptURI = concept.stringValue();
-				// if no label in the main language, set the URI
+				// if no sourceConceptLabel in the main language, set the URI
 				qrr.label1 = (label1 != null)?label1.stringValue():concept.stringValue();
 				qrr.label2 = (label2 != null)?label2.stringValue():null;
 				queryResultRows.add(qrr);
@@ -113,14 +113,14 @@ public class TranslationTableReverseDisplayGenerator extends AbstractKosDisplayG
 		log.debug("Single section added to output");
 		Section s = new Section();
 		s.setTitle(TranslationTableDisplayGenerator.displayLanguage(this.targetLanguage, lang));
-		Table newTable = new Table();
+		Table newTable = SchemaFactory.createTable(50, 50);
 		newTable.setTableHeader(SchemaFactory.createRow(
-				SchemaFactory.createStyledString(TranslationTableDisplayGenerator.displayLanguage(this.targetLanguage, lang)),
-				SchemaFactory.createStyledString(TranslationTableDisplayGenerator.displayLanguage(lang, lang))
+				SchemaFactory.createStr(SchemaFactory.createStyledString(TranslationTableDisplayGenerator.displayLanguage(this.targetLanguage, lang))),
+				SchemaFactory.createStr(SchemaFactory.createStyledString(TranslationTableDisplayGenerator.displayLanguage(lang, lang)))
 		));
 		s.setTable(newTable);
 		for (QueryResultRow aRow : queryResultRows) {
-			// don't display rows that would start with an empty label in the first column
+			// don't display rows that would start with an empty sourceConceptLabel in the first column
 			if(aRow.label2 != null && !aRow.label2.equals("")) {
 				// siouxerie pour éviter les ID dupliquées dans le cas où un libellé serait le même dans les 2 langues
 				ConceptBlock cb1 = cbReader.readConceptBlock(aRow.conceptURI, aRow.label2, cbReader.computeConceptBlockId(aRow.conceptURI, aRow.label2+"-"+this.targetLanguage), false);

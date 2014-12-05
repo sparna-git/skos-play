@@ -159,6 +159,16 @@
 								<fmt:message key="print.form.displayType.kwic_index" />
 								<span class="help-inline"><fmt:message key="print.form.displayType.kwic_index.help" /></span>
 							</label>
+							<label class="radio">
+								<input type="radio" name="display" id="alignment_by_scheme" value="alignment_by_scheme">
+								<fmt:message key="print.form.displayType.alignment_by_scheme" />
+								<span class="help-inline"><fmt:message key="print.form.displayType.alignment_by_scheme.help" /></span>
+							</label>
+							<label class="radio">
+								<input type="radio" name="display" id="alignment_alpha" value="alignment_alpha">
+								<fmt:message key="print.form.displayType.alignment_alpha" />
+								<span class="help-inline"><fmt:message key="print.form.displayType.alignment_alpha.help" /></span>
+							</label>
 						</div>
 					</div>
 					<div class="control-group">
@@ -213,6 +223,11 @@
 										<fmt:message key="print.form.displayType.sunburst" />
 										<span class="help-inline"><fmt:message key="print.form.displayType.sunburst.help" /></span>
 									</label>
+									<label class="radio">
+										<input type="radio" name="viztype" id="viz-autocomplete" value="autocomplete">
+										<fmt:message key="print.form.displayType.autocomplete" />
+										<span class="help-inline"><fmt:message key="print.form.displayType.autocomplete.help" /></span>
+									</label>
 								</div>
 							</div>
 
@@ -249,6 +264,12 @@
 			</c:if>
 			// always disable target language - will be re-enabled only if translation_table can be selected
 			$('#targetLanguage').attr('disabled', 'disabled');
+			
+			// disable mappings if needed
+			<c:if test="${!data.enableMappings}">				
+				$('#alignment_by_scheme').attr('disabled', 'disabled');
+				$('#alignment_alpha').attr('disabled', 'disabled');
+			</c:if>
 			
 			
 			$(':radio[name="display"]').click(function() {				

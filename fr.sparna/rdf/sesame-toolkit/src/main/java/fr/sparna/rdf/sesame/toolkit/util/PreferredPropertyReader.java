@@ -1,7 +1,6 @@
 package fr.sparna.rdf.sesame.toolkit.util;
 
 import java.net.URI;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.openrdf.model.Literal;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
@@ -24,9 +22,9 @@ import fr.sparna.commons.lang.LRUCache;
 import fr.sparna.commons.lang.ListMap;
 import fr.sparna.rdf.sesame.toolkit.handler.ReadValueListHandler;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.query.builder.ValuesSparqlQueryBuilder;
 
@@ -43,8 +41,8 @@ public class PreferredPropertyReader {
 	// preferred language to retrieve
 	protected String preferredLanguage;
 	
-	// fallback language to retrieve if initial language was not found
-	protected String fallbackLanguage;
+	// fallback languages to retrieve if initial language was not found
+	protected List<String> fallbackLanguages;
 	
 	// list of properties to check in order for a value
 	protected List<java.net.URI> properties;
@@ -59,18 +57,55 @@ public class PreferredPropertyReader {
 	public PreferredPropertyReader(
 			Repository repository,
 			List<java.net.URI> properties,
-			String fallbackLanguage,
+			List<String> fallbackLanguages,
 			String preferredLanguage) {
-		
-		// prevent null language
-		if(preferredLanguage == null) {
-			throw new InvalidParameterException("preferredLanguage cannot be null (but can be the empty string");
-		}
 		
 		this.repository = repository;
 		this.properties = properties;
-		this.fallbackLanguage = fallbackLanguage;
+		this.fallbackLanguages = fallbackLanguages;
 		this.preferredLanguage = preferredLanguage;
+	}
+	
+	/**
+	 * @deprecated use constructor with List<String> for fallbackLanguages
+	 */
+	public PreferredPropertyReader(
+			Repository repository,
+			List<java.net.URI> properties,
+			String fallbackLanguage,
+			String preferredLanguage) {
+		this(
+				repository,
+				properties,
+				Collections.singletonList(fallbackLanguage),
+				preferredLanguage
+		);
+	}
+	
+	public PreferredPropertyReader(
+			Repository repository,
+			List<java.net.URI> properties,
+			String preferredLanguage) {	
+		this(repository, properties, preferredLanguage, null);
+	}
+	
+	public PreferredPropertyReader(
+			Repository repository,
+			java.net.URI property,
+			String preferredLanguage) {	
+		this(repository, Arrays.asList(property), preferredLanguage, null);
+	}
+	
+	public PreferredPropertyReader(
+			Repository repository,
+			List<java.net.URI> properties) {	
+		this(repository, properties, (List<String>)null, null);
+	}
+	
+	public PreferredPropertyReader(
+			Repository repository,
+			java.net.URI property) {	
+		this(repository, Arrays.asList(property), (List<String>)null, null);
 	}
 	
 	public List<Value> getValues(final java.net.URI resource) 
@@ -87,18 +122,17 @@ public class PreferredPropertyReader {
 		for (final java.net.URI aType : this.properties) {
 			// query for the preferredLanguage
 			// if preferredLanguage is the empty string, this will query for labels without a language
-			queries.add(new SparqlQuery(
-					"SELECT ?o WHERE { ?s ?p ?o FILTER(langMatches(lang(?o), '"+this.preferredLanguage+"')) }",
-					new HashMap<String, Object>() {{ 
-						put("s", resource);
-						put("p", aType);
-					}}
-			));
-			
-			// then for the fallback language
-			if(this.fallbackLanguage != null) {
+			if(this.preferredLanguage != null) {
 				queries.add(new SparqlQuery(
-						"SELECT ?o WHERE { ?s ?p ?o FILTER(langMatches(lang(?o), '"+this.fallbackLanguage+"')) }",
+						"SELECT ?o WHERE { ?s ?p ?o FILTER(langMatches(lang(?o), '"+this.preferredLanguage+"')) }",
+						new HashMap<String, Object>() {{ 
+							put("s", resource);
+							put("p", aType);
+						}}
+				));
+			} else {
+				queries.add(new SparqlQuery(
+						"SELECT ?o WHERE { ?s ?p ?o }",
 						new HashMap<String, Object>() {{ 
 							put("s", resource);
 							put("p", aType);
@@ -106,7 +140,18 @@ public class PreferredPropertyReader {
 				));
 			}
 			
-			// TODO then for values with no language ?
+			// then for the fallback languages
+			if(this.fallbackLanguages != null) {
+				for (String aLanguage : fallbackLanguages) {
+					queries.add(new SparqlQuery(
+							"SELECT ?o WHERE { ?s ?p ?o FILTER(langMatches(lang(?o), '"+aLanguage+"')) }",
+							new HashMap<String, Object>() {{ 
+								put("s", resource);
+								put("p", aType);
+							}}
+					));
+				}				
+			}
 		}
 		
 		List<Value> result = findValues(queries);
@@ -142,7 +187,7 @@ public class PreferredPropertyReader {
 		// for each property ...
 		for (URI aProperty : this.properties) {
 			// try to get a value for each of the resources for that property
-			Map<java.net.URI, List<Value>> values = getLabelsOnProperty(resourcesToProcess, aProperty);
+			Map<java.net.URI, List<Value>> values = getValuesOnProperty(resourcesToProcess, aProperty);
 			// add that to the final result
 			result.putAll(values);
 			// remove what we have found from the work to be done
@@ -169,7 +214,7 @@ public class PreferredPropertyReader {
 		return result;
 	}
 	
-	private Map<java.net.URI, List<Value>> getLabelsOnProperty(Set<java.net.URI> resources, final java.net.URI property) 
+	private Map<java.net.URI, List<Value>> getValuesOnProperty(Set<java.net.URI> resources, final java.net.URI property) 
 	throws SparqlPerformException {
 		
 		final int CHUNK_SIZE = 100;
@@ -204,13 +249,45 @@ public class PreferredPropertyReader {
 	private Map<java.net.URI, List<Value>> processChunkOnProperty(List<java.net.URI> resources, final java.net.URI property) 
 	throws SparqlPerformException {
 		
-		String query = "SELECT ?s ?o WHERE { ?s ?p ?o FILTER(langMatches(lang(?o), '"+this.preferredLanguage+"')) }";
+		Map<java.net.URI, List<Value>> result = processChunkOnPropertyAndLanguage(resources, property, this.preferredLanguage);
+		
+		if(this.fallbackLanguages != null) {
+			for (String aLanguage : this.fallbackLanguages) {
+				// now remove what was found from original list
+				resources.removeAll(result.keySet());
+				
+				// stop if we have found everything
+				if(resources.size() == 0) {
+					break;
+				}
+				
+				// and try with this language
+				Map<java.net.URI, List<Value>> fallbacklanguageResult = processChunkOnPropertyAndLanguage(resources, property, aLanguage);
+				result.putAll(fallbacklanguageResult);
+			}			
+		}
+		
+		return result;
+	}
+	
+	private Map<java.net.URI, List<Value>> processChunkOnPropertyAndLanguage(List<java.net.URI> resources, final java.net.URI property, final String language) 
+	throws SparqlPerformException {
+		
+		// if there is no preferred language, don't specify a FILTER to be able to fetch object properties
+		String query;
+		if(language != null) {
+			query = "SELECT ?s ?o WHERE { ?s ?p ?o FILTER(langMatches(lang(?o), '"+language+"')) }";
+		} else {
+			query = "SELECT ?s ?o WHERE { ?s ?p ?o }";
+		}
+		// add a VALUES with the list of URIs
 		ValuesSparqlQueryBuilder builder = new ValuesSparqlQueryBuilder(
 				new SparqlQueryBuilder(query),
 				"s",
 				Arrays.asList(UriUtil.toResourceArray(resources, repository.getValueFactory()))
 		);
 		
+		// bind the p variable to the property
 		SparqlQuery q = new SparqlQuery(
 				builder,
 				new HashMap<String, Object>() {{ 
@@ -218,19 +295,18 @@ public class PreferredPropertyReader {
 				}}
 		);
 		
+		// execute and store results
 		final ListMap<java.net.URI, Value> result = new ListMap<java.net.URI, Value>();
 		Perform.on(this.repository).select(new SelectSparqlHelper(
 				q,
 				new TupleQueryResultHandlerBase() {
-
 					@Override
 					public void handleSolution(BindingSet bindingSet)
 					throws TupleQueryResultHandlerException {
 						Resource uri = (Resource)bindingSet.getValue("s");
 						Value v = bindingSet.getValue("o");
 						result.add(URI.create(uri.stringValue()), v);
-					}
-					
+					}					
 				}
 		));
 		

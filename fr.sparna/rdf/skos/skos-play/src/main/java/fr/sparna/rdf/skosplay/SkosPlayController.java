@@ -57,8 +57,14 @@ import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromUrl;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationException;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
+import fr.sparna.rdf.skos.printer.autocomplete.Items;
+import fr.sparna.rdf.skos.printer.autocomplete.JSONWriter;
 import fr.sparna.rdf.skos.printer.reader.AbstractKosDisplayGenerator;
+import fr.sparna.rdf.skos.printer.reader.AlignmentDataHarvesterCachedLoader;
+import fr.sparna.rdf.skos.printer.reader.AlignmentDataHarvesterIfc;
+import fr.sparna.rdf.skos.printer.reader.AlignmentDisplayGenerator;
 import fr.sparna.rdf.skos.printer.reader.AlphaIndexDisplayGenerator;
+import fr.sparna.rdf.skos.printer.reader.AutocompleteItemsReader;
 import fr.sparna.rdf.skos.printer.reader.BodyReader;
 import fr.sparna.rdf.skos.printer.reader.ConceptBlockReader;
 import fr.sparna.rdf.skos.printer.reader.ConceptListDisplayGenerator;
@@ -108,13 +114,19 @@ public class SkosPlayController {
 //		HIERARCHICAL_EXPANDED,
 		CONCEPTLISTING,
 		TRANSLATION_TABLE,
-		PARTITION,
-		TREELAYOUT,
-		SUNBURST,
 		COMPLETE_MONOLINGUAL,
 		COMPLETE_MULTILINGUAL,
 		PERMUTED_INDEX,
-		KWIC_INDEX
+		KWIC_INDEX,
+		ALIGNMENT_BY_SCHEME,
+		ALIGNMENT_ALPHA
+	}
+	
+	private enum VIZ_TYPE {
+		PARTITION,
+		TREELAYOUT,
+		SUNBURST,
+		AUTOCOMPLETE
 	}
 	
 	@RequestMapping("/home")
@@ -293,7 +305,7 @@ public class SkosPlayController {
 		// store repository in the session
 		sessionData.setRepository(repository);
 		
-		// store label reader in the session
+		// store sourceConceptLabel reader in the session
 		// default to no language
 		final LabelReader labelReader = new LabelReader(repository, "", sessionData.getUserLocale().getLanguage());
 		// add dcterms title and dc title
@@ -328,6 +340,17 @@ public class SkosPlayController {
 		} catch (SparqlPerformException e) {
 			printFormData.setEnableTranslations(false);
 			printFormData.getWarningMessages().add(b.getString("upload.warning.noTranslationsFound"));
+		}
+		
+		try {
+			// ask if some alignments exists
+			if(!Perform.on(repository).ask(new SparqlQuery(new SparqlQueryBuilder(this, "AskMappings.rq")))) {
+				printFormData.setEnableMappings(false);
+				printFormData.getWarningMessages().add(b.getString("upload.warning.noMappingsFound"));
+			}
+		} catch (SparqlPerformException e) {
+			printFormData.setEnableMappings(false);
+			printFormData.getWarningMessages().add(b.getString("upload.warning.noMappingsFound"));
 		}
 			
 		try {
@@ -425,8 +448,8 @@ public class SkosPlayController {
 			HttpServletResponse response
 	) throws Exception {
 		
-		// get display type param
-		DISPLAY_TYPE displayType = (displayParam != null)?DISPLAY_TYPE.valueOf(displayParam.toUpperCase()):null;
+		// get viz type param
+		VIZ_TYPE displayType = (displayParam != null)?VIZ_TYPE.valueOf(displayParam.toUpperCase()):null;
 		
 		// get scheme param
 		URI scheme = (schemeParam.equals("no-scheme"))?null:URI.create(schemeParam);
@@ -453,6 +476,14 @@ public class SkosPlayController {
 			request.setAttribute("dataset", generateJSON(r, language, scheme));
 			// forward to the JSP
 			return new ModelAndView("viz-sunburst");
+		}
+		case AUTOCOMPLETE : {
+			AutocompleteItemsReader autocompleteReader = new AutocompleteItemsReader();
+			Items items = autocompleteReader.readItems(r, language, scheme);
+			JSONWriter writer = new JSONWriter();
+			request.setAttribute("items", writer.write(items));
+			// forward to the JSP
+			return new ModelAndView("viz-autocomplete");
 		}
 		default : {
 			throw new InvalidParameterException("Unknown display type "+displayType);
@@ -639,6 +670,22 @@ public class SkosPlayController {
 			
 			break;
 		}
+		case ALIGNMENT_ALPHA : {
+			AlignmentDataHarvesterIfc harvester = new AlignmentDataHarvesterCachedLoader(null, RDFFormat.RDFXML);
+			AlignmentDisplayGenerator adg = new AlignmentDisplayGenerator(r, new ConceptBlockReader(r), harvester);
+			// this is the difference with other alignment display
+			adg.setSeparateByTargetScheme(false);
+			bodyReader = new BodyReader(adg);
+			break;
+		}
+		case ALIGNMENT_BY_SCHEME : {
+			AlignmentDataHarvesterIfc harvester = new AlignmentDataHarvesterCachedLoader(null, RDFFormat.RDFXML);
+			AlignmentDisplayGenerator adg = new AlignmentDisplayGenerator(r, new ConceptBlockReader(r), harvester);
+			// this is the difference with other alignment display
+			adg.setSeparateByTargetScheme(true);
+			bodyReader = new BodyReader(adg);
+			break;
+		}
 		default :
 			throw new InvalidParameterException("Unknown display type "+displayType);
 		}	
@@ -693,30 +740,37 @@ public class SkosPlayController {
 		return baos.toString("UTF-8").replaceAll("'", "\\\\'");
 	}
 	
-	public static GenericTree<SKOSTreeNode> buildTree(SKOSTreeBuilder builder, URI root)
+	public GenericTree<SKOSTreeNode> buildTree(SKOSTreeBuilder builder, URI root)
 	throws SparqlPerformException {
 		GenericTree<SKOSTreeNode> tree = new GenericTree<SKOSTreeNode>();
 		
 		List<GenericTree<SKOSTreeNode>> trees;
 		
 		if(root != null) {	
-			// generates tree				
+			// generates tree
+			log.debug("Building tree with root "+root);
 			trees = builder.buildTrees(root);
 		} else {
 			// fetch all trees
+			log.debug("Building tree with no particular root ");
 			trees = builder.buildTrees();
 		}
 			
 		// if only one, set it as root
 		if(trees.size() == 1) {
+			log.debug("Single tree found in the result");
 			tree = trees.get(0);
+		} else if (trees.size() ==0) {
+			log.warn("Warning, no trees found");
 		} else {
+			log.debug("Multiple trees found ("+trees.size()+"), will create a fake root to group them all");
 			// otherwise, create a fake root
 			GenericTreeNode<SKOSTreeNode> fakeRoot = new GenericTreeNode<SKOSTreeNode>();
 			fakeRoot.setData(new SKOSTreeNode(URI.create("skosplay:allData"), "", NodeType.UNKNOWN));
 
 			// add all the trees under it					
 			for (GenericTree<SKOSTreeNode> genericTree : trees) {
+				log.debug("Addind tree under fake root : "+genericTree.getRoot().getData().getUri());
 				fakeRoot.addChild(genericTree.getRoot());
 			}
 

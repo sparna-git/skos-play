@@ -37,7 +37,7 @@ public class HeaderAndFooterReader {
 			// TODO
 		} else {
 			// this will try to read in turn all the properties defined in a LabelReader
-			// skos:prefLabel, rdfs:label
+			// skos:prefLabel, rdfs:sourceConceptLabel
 			LabelReader labelReader = new LabelReader(this.repository, "", lang);
 			// add dcterms title and dc title
 			labelReader.getProperties().add(URI.create(DCTERMS.TITLE.toString()));
@@ -91,7 +91,7 @@ public class HeaderAndFooterReader {
 			// TODO
 		} else {
 			// this will try to read in turn all the properties defined in a LabelReader
-			// skos:prefLabel, rdfs:label
+			// skos:prefLabel, rdfs:sourceConceptLabel
 			LabelReader labelReader = new LabelReader(this.repository, "", lang);
 			// add dcterms title and dc title
 			labelReader.getProperties().add(URI.create(DCTERMS.TITLE.toString()));
@@ -127,7 +127,7 @@ public class HeaderAndFooterReader {
 		PreferredPropertyReader reader = new PreferredPropertyReader(
 				this.repository,
 				uris,
-				null,
+				(List<String>)null,
 				lang
 		);
 		List<Value> v = reader.getValues(subject);

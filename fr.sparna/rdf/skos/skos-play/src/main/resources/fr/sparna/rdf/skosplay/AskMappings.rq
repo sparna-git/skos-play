@@ -1,0 +1,13 @@
+PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
+
+ASK {
+  { ?concept skos:exactMatch ?x . }
+  UNION
+  { ?concept skos:closeMatch ?x . }
+  UNION
+  { ?concept skos:relatedMatch ?x . }
+  UNION
+  { ?concept skos:broadMatch ?x . }
+  UNION
+  { ?concept skos:narrowMatch ?x . }
+}

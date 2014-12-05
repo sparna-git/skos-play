@@ -297,8 +297,11 @@
 
     <complexType name="styledString">
     	<annotation>
-        	<documentation>A span of text with an optional additional style (typically "pref" or "alt").</documentation>
-        </annotation>
+    		<documentation>
+    			A span of text with an optional additional style
+    			(typically "pref" or "alt").
+    		</documentation>
+    	</annotation>
     	<simpleContent>
     		<extension base="string">
     			<attribute name="style" type="string"></attribute>

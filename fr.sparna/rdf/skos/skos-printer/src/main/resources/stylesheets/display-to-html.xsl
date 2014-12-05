@@ -223,10 +223,14 @@
 	<!-- Display a table -->
 	<xsl:template match="disp:table">
 		<table class="table table-striped table-condensed">
-			<!-- TODO : change this for tables with more than 2 cells -->
 			<colgroup>
-               <col span="1" style="width: 50%;" />
-               <col span="1" style="width: 50%;" />
+				<xsl:apply-templates select="disp:tableColumn" />
+				<!--
+				<xsl:call-template name="colnum">
+					<xsl:with-param name="colnum" select="@colnum" />
+					<xsl:with-param name="index"  select="@colnum" />
+				</xsl:call-template>
+				 -->
             </colgroup>
 			<xsl:apply-templates select="disp:tableHeader" />
 			<tbody>
@@ -242,6 +246,26 @@
 			</tbody>
 		</table>
 	</xsl:template>
+	
+	<xsl:template match="disp:tableColumn">
+		<col span="1" style="width: {@width}%;" />
+	</xsl:template>
+	
+	<!-- generate cols header depending on @colnum attribute on the table element -->
+	<!--
+	<xsl:template name="colnum">
+		<xsl:param name="colnum" />
+		<xsl:param name="index" />
+		
+		<xsl:if test="$index != 0">
+			<col span="1" style="width: {format-number(100 div $colnum, '#,##')}%;" />
+			<xsl:call-template name="colnum">
+				<xsl:with-param name="colnum" select="$colnum" />
+				<xsl:with-param name="index" select="$index - 1" />
+			</xsl:call-template>
+		</xsl:if>
+	</xsl:template>
+	 -->
 	
 	<xsl:template match="disp:tableHeader">
 		<thead>
@@ -362,10 +386,29 @@
 		</xsl:choose>
 	</xsl:template>
 	
+	<xsl:template match="disp:linkExternal">
+        <xsl:choose>
+			<xsl:when test="@style"><a href="{@uri}" class="{@style}"><xsl:apply-templates /></a></xsl:when>
+			<xsl:otherwise><a href="{@uri}"><xsl:apply-templates /></a></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
 	<xsl:template match="disp:str">
 		<xsl:choose>
-			<xsl:when test="@style"><span class="{@style}"><xsl:value-of select="text()" /></span></xsl:when>
-			<xsl:otherwise><xsl:value-of select="text()" /></xsl:otherwise>
+			<xsl:when test="@style"><span class="{@style}">
+				<xsl:choose>
+					<!-- output the text corresponding to the key if present -->
+					<xsl:when test="@key"><xsl:variable name="key" select="@key" /><xsl:value-of select="$labels/labels/*[name() = $key]" /></xsl:when>
+					<xsl:otherwise><xsl:value-of select="text()" /></xsl:otherwise>
+				</xsl:choose>
+			</span></xsl:when>
+			<xsl:otherwise>
+				<xsl:choose>					
+					<!-- output the text corresponding to the key if present -->
+					<xsl:when test="@key"><xsl:variable name="key" select="@key" /><xsl:value-of select="$labels/labels/*[name() = $key]" /></xsl:when>
+					<xsl:otherwise><xsl:value-of select="text()" /></xsl:otherwise>
+				</xsl:choose>
+			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	

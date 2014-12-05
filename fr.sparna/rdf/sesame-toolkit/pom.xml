@@ -120,6 +120,7 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!--
 		<dependency>
             <groupId>virtuoso.jdbc</groupId>
             <artifactId>virtjdbc4</artifactId>
@@ -136,6 +137,7 @@
   			<systemPath>${basedir}/lib/virtuoso/sesame2/2.7/virt_sesame2.jar</systemPath>
   			<optional>true</optional>
         </dependency>
+    	-->
  
     </dependencies>
 
