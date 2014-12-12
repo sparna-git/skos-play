@@ -1,3 +1,10 @@
+
+# check script arguments
+if [ "$#" -ne 5 ]; then
+    echo "Usage: $0 <input_file_path> <target_graph> <vivo_url> <vivo_login> <vivo_password>" >&2
+    exit 1
+fi
+
 export TURTLE_FILE=$1
 export GRAPH_URI=$2
 export VIVO_URL=http://localhost:8080/sanctuaires
