@@ -174,6 +174,8 @@ public class SkosPlayController {
 			@RequestParam(value="rdfsInference", required=false) boolean rdfsInference,
 			// flag indicating to transform OWL to SKOS
 			@RequestParam(value="owl2skos", required=false) boolean owl2skos,
+			// flag indicating to transform SKOS-XL to SKOS
+			@RequestParam(value="skosxl2skos", required=false) boolean skosxl2skos,
 			HttpServletRequest request
 	) throws IOException {
 		
@@ -215,16 +217,22 @@ public class SkosPlayController {
 				localRepositoryBuilder.addOperation(new LoadFromStream(file.getInputStream(), Rio.getParserFormatForFileName(file.getOriginalFilename(), RDFFormat.RDFXML)));
 				repository = localRepositoryBuilder.createNewRepository();
 
-				// apply OWL2SKOS rules if needed
+				// apply rules if needed
 				try {
 					if(owl2skos) {
 						// apply inference
 						ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getOWL2SKOSRuleset()));
 						au.execute(repository);
 					}
+					
+					if(skosxl2skos) {
+						// apply inference
+						ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSKOSXLRuleset()));
+						au.execute(repository);
+					}
 				} catch (RepositoryOperationException e1) {
 					return doError(request, e1.getMessage());
-				}	
+				}
 				
 				break;
 			}			
@@ -235,6 +243,24 @@ public class SkosPlayController {
 					return doError(request, "Select an example from the list.");
 				}
 				repository = SkosPlayConfig.getInstance().getApplicationData().getExampleDatas().get(resourceParam);
+				
+				// apply rules if needed
+				try {
+					if(owl2skos) {
+						// apply inference
+						ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getOWL2SKOSRuleset()));
+						au.execute(repository);
+					}
+					
+					if(skosxl2skos) {
+						// apply inference
+						ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSKOSXLRuleset()));
+						au.execute(repository);
+					}
+				} catch (RepositoryOperationException e1) {
+					return doError(request, e1.getMessage());
+				}
+				
 				break;
 			}
 			case URL : {				

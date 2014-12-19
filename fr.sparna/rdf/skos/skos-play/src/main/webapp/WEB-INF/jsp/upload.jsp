@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" 	prefix="fmt" 	%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" 	prefix="c" 		%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <!-- setup the locale for the messages based on the language in the session -->
 <fmt:setLocale value="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language}"/>
@@ -55,6 +56,8 @@
 			<fieldset>
 				<legend><fmt:message key="upload.form.legend" /></legend>
 				
+				<!-- Ancienne partie avec une dropdown simple -->
+				<!--
 				<div class="control-group">
 					<label class="control-label">
 							<input
@@ -75,24 +78,83 @@
 							
 							<c:forEach items="${applicationData.exampleDatas}" var="entry">
 								<option value="${entry.key}">
-									<c:catch var ="labelNotFountException">
+									<c:catch var="labelNotFoundException">
 										 ${sessionScope['fr.sparna.rdf.skosplay.SessionData'].preLoadedDataLabels.getString(entry.key)}
 									</c:catch>
-									<c:if test = "${labelNotFountException != null}">${entry.key}</c:if>
-									
-									<!--
-									<c:set value="upload.form.providedExample.${entry.key}" var="messageKey"/>
-									<c:set value="???${pageScope.messageKey}???" var="unknownValue"/>
-									<fmt:message key="${pageScope.messageKey}" var="exampleDataName"/>
-	
-									<c:choose>
-										<c:when test="${pageScope.exampleDataName == pageScope.unknownValue}">${entry.key}</c:when>
-										<c:otherwise>${pageScope.exampleDataName}</c:otherwise>
-									</c:choose>
-									-->
+									<c:if test="${labelNotFoundException != null}">${entry.key}</c:if>
+								
 								</option>
 							</c:forEach>
 						</select>
+					</div>
+				</div>
+				 -->
+				
+				<!-- Nouvelle section avec une dropdown bootstrap permettant d'inclure des images -->
+				<div class="control-group">
+					<label class="control-label">
+							<input
+								type="radio"
+								name="source"
+								id="source-example"
+								value="example"
+								onchange="enabledInput('example')"
+								checked="checked" />
+							<fmt:message key="upload.form.providedExample" />
+					</label>
+					<div class="controls" style="padding-top:1em;">
+						<c:choose>
+							<c:when test="${applicationData.exampleDatas != null && fn:length(applicationData.exampleDatas) > 0 }">							
+								
+								<!--  generate the dropdown. See http://getbootstrap.com/2.3.2/components.html#dropdowns -->
+								<div class="dropdown">
+								
+									<!-- Trick to init hidden field and default selection with the first entry in the map -->					
+									<c:forEach items="${applicationData.exampleDatas}" var="entry" varStatus="status">
+										<c:if test="${status.first}">
+											<!-- Hidden field initialized with first entry key -->
+											<input
+												type="hidden"
+												name="example"
+												id="example"
+												value="${entry.key}" />
+											<!-- Display first entry label -->
+											<a id="selected" class="dropdown-toggle btn" data-toggle="dropdown" href="#"><span id="exampleLabel">${sessionScope['fr.sparna.rdf.skosplay.SessionData'].preLoadedDataLabels.getString(entry.key)}</span> <b class="caret"></b></a>
+										</c:if>
+									</c:forEach>
+								
+									<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+										<!-- Re-iterate on entries -->
+										<c:forEach items="${applicationData.exampleDatas}" var="entry">
+											<li><a class="exampleEntry" data-value="${entry.key}" href="#">
+								    			<c:catch var="labelNotFoundException">
+													 ${sessionScope['fr.sparna.rdf.skosplay.SessionData'].preLoadedDataLabels.getString(entry.key)}
+												</c:catch>
+												<c:if test="${labelNotFoundException != null}">${entry.key}</c:if>
+												
+												<!--
+												<c:set value="upload.form.providedExample.${entry.key}" var="messageKey"/>
+												<c:set value="???${pageScope.messageKey}???" var="unknownValue"/>
+												<fmt:message key="${pageScope.messageKey}" var="exampleDataName"/>
+				
+												<c:choose>
+													<c:when test="${pageScope.exampleDataName == pageScope.unknownValue}">${entry.key}</c:when>
+													<c:otherwise>${pageScope.exampleDataName}</c:otherwise>
+												</c:choose>
+												-->
+								    		</a></li>
+										</c:forEach>
+									</ul>
+								</div>
+							</c:when>							
+							<c:otherwise>
+								<!-- No values in the map, create an empty hidden field -->
+								<input
+									type="hidden"
+									name="example"
+									id="example" />
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
 				
@@ -192,6 +254,20 @@
 						</div>
 						<div class="control-group">
 							<label class="control-label">
+								<fmt:message key="upload.form.skosxl2skos" />
+							</label>
+							<div class="controls">
+								<!-- check it be default -->
+								<input
+									type="checkbox"
+									id="skosxl2skos"
+									name="skosxl2skos"
+									checked="checked" />
+								<span class="help-block"><i><fmt:message key="upload.form.skosxl2skos.help" /></i></span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">
 								<fmt:message key="upload.form.owl2skos" />
 							</label>
 							<div class="controls">
@@ -217,7 +293,14 @@
       	<jsp:include page="footer.jsp" />
       	<script>
 	      	$(document).ready(function() {
-				// disable submit button on click		
+	      		
+	      		// activate example choice
+	      		$('.exampleEntry').click(function() {
+	      			$('#example').val($(this).attr('data-value'));
+	      			$('#exampleLabel').html($(this).html());
+	      		});
+	      		
+				// disable submit button on click
 			    $('#upload_form').submit(function() {
 			    	$('#submit-button').attr('disabled', true);
 			        $('#loading').show();

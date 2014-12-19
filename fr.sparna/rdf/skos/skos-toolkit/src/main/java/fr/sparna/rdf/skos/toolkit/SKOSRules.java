@@ -27,6 +27,12 @@ public class SKOSRules {
 			"owl2skos/04-skos-inScheme.ru",
 			"owl2skos/05-skos-ConceptScheme.ru",
 	});
+	
+	public static List<String> SKOSXL_RULESET = Arrays.asList(new String[] { 
+			"skosxl2skos/S55.ru",
+			"skosxl2skos/S56.ru",
+			"skosxl2skos/S57.ru",
+	});
 
 	public static List<SparqlQueryBuilder> getRulesetLite() {
 		return SparqlQueryBuilderList.fromResources(SKOSRules.class, LITE_RULESET);
@@ -34,5 +40,9 @@ public class SKOSRules {
 	
 	public static List<SparqlQueryBuilder> getOWL2SKOSRuleset() {
 		return SparqlQueryBuilderList.fromResources(SKOSRules.class, OWL2SKOS_RULESET);
+	}
+	
+	public static List<SparqlQueryBuilder> getSKOSXLRuleset() {
+		return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOSXL_RULESET);
 	}
 }

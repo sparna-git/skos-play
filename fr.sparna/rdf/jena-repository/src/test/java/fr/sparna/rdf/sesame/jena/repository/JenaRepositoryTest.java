@@ -1,7 +1,12 @@
 package fr.sparna.rdf.sesame.jena.repository;
 
+import java.io.InputStream;
+import java.net.URL;
+
 import junit.framework.Assert;
 
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
 import org.junit.Test;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -9,6 +14,18 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class JenaRepositoryTest {
 
+	@Test
+	public void testAccentedChar() throws Exception {
+		URL url = new URL("http://fr.dbpedia.org/data/Aérodrome.xml");
+		InputStream is = url.openStream();
+		
+		
+		Model model = ModelFactory.createDefaultModel();
+		RDFDataMgr.read(model, "http://fr.dbpedia.org/resource/Aérodrome");
+		model.write(System.out, Lang.N3.getName());
+		// model.read(new URL("http://fr.dbpedia.org/resource/Aérodrome").openStream(), null);
+	}
+	
 	@Test
 	public void testRepository() throws Exception {
 		Model model = ModelFactory.createDefaultModel();

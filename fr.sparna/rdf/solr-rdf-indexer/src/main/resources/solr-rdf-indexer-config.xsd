@@ -11,21 +11,31 @@
 
 
     <complexType name="Config">
-    	<sequence minOccurs="1" maxOccurs="unbounded">
+        <annotation>
+        	<documentation>A configuration for an RDF indexing pipeline.</documentation>
+        </annotation>
+        <sequence minOccurs="1" maxOccurs="unbounded">
     		<element name="entityConfig" type="tns:EntityConfig"></element>
     	</sequence>
     </complexType>
     
 
     <complexType name="EntityConfig">
-    	<sequence>
+        <annotation>
+        	<documentation>An indexing configuration for one kind of entity.
+An entity configuration contains the definition of the set the entities, and a field map definition, defining the mapping between properties in the RDF and fields in the index.</documentation>
+        </annotation>
+        <sequence>
     		<element name="source" type="tns:Source"></element>
     		<element name="fieldMap" type="tns:FieldMap"></element>
     	</sequence>
     </complexType>
     
     <complexType name="FieldMap">
-    	<sequence>
+        <annotation>
+        	<documentation>Defines how to map properties in the data to fields in the index.</documentation>
+        </annotation>
+        <sequence>
     		<element name="field" type="tns:Field" minOccurs="1"
     			maxOccurs="unbounded">
     		</element>
@@ -34,7 +44,10 @@
     </complexType>
 
     <complexType name="Source">
-    	<choice>
+        <annotation>
+        	<documentation>The set of entities to consider for one entity configuration.</documentation>
+        </annotation>
+        <choice>
     		<element name="type" type="string"></element>
     		<element name="sparql" type="tns:Sparql"></element>
     	</choice>
@@ -59,7 +72,10 @@
 
 
     <complexType name="Field">
-    	<choice>
+        <annotation>
+        	<documentation>Defines an indexing configuration for one field in the index, either using a property path, or a sparql query.</documentation>
+        </annotation>
+        <choice>
 
     		<element name="path" type="tns:Path"></element>
     		<element name="sparql" type="tns:Sparql"></element>

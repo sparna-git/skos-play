@@ -26,7 +26,7 @@
     </appender>
      
     <appender name="SKOSPLAY_ROLLING_FILE" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="skos-play.log" />
+        <param name="File" value="${catalina.base}/logs/skos-play.log" />
         <param name="Append" value="true" />
         <param name="MaxFileSize" value="1000KB" />
         <param name="MaxBackupIndex" value="5" />
@@ -34,9 +34,35 @@
             <param name="ConversionPattern" value="[%d{ISO8601}] %-5p %m%n" />
         </layout>
     </appender>
+    
+    <!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.beans">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.springframework.context">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.apache.fop">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.openrdf">
+		<level value="info" />
+	</logger>
+    
  
     <logger name="fr.sparna.rdf" additivity="false">
-        <level value="ALL" />
+        <level value="DEBUG" />
         <appender-ref ref="SKOSPLAY_ROLLING_FILE" />
         <appender-ref ref="STDOUT" />
     </logger>
