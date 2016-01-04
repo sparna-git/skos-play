@@ -25,8 +25,13 @@ public class Translate implements ToolkitCommandIfc {
 		
 		// preparer le dumper
 		RepositoryWriter writer = new RepositoryWriter(r);
-		// on demande de trier explicitement
-		writer.setSorting(true);
+		// on demande de trier explicitement si besoin
+		if(args.isNoOrder()) {
+			writer.setSorting(false);
+		} else {
+			writer.setSorting(true);
+		}		
+		
 		// on positionne les namespaces
 		writer.setNamespacesMap(args.getNamespaceMappings());
 

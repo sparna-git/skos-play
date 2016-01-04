@@ -31,6 +31,13 @@ public class ArgumentsTranslate {
 	)
 	private List<String> namespaceMappingsStrings;
 	
+	@Parameter(
+			names = { "-no", "--no-order" },
+			description = "Don't sort triples when outputting result file",
+			required = false
+	) 
+	private boolean noOrder = false;
+	
 	public Map<String, String> getNamespaceMappings() {
 		if(this.namespaceMappingsStrings == null) {
 			return null;
@@ -64,6 +71,14 @@ public class ArgumentsTranslate {
 
 	public void setNamespaceMappingsStrings(List<String> namespaceMappingsStrings) {
 		this.namespaceMappingsStrings = namespaceMappingsStrings;
+	}
+
+	public boolean isNoOrder() {
+		return noOrder;
+	}
+
+	public void setNoOrder(boolean noOrder) {
+		this.noOrder = noOrder;
 	}
 
 }
