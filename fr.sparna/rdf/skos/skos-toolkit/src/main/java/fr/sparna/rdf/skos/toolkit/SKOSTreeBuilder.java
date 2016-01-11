@@ -293,7 +293,7 @@ public class SKOSTreeBuilder {
 			});
 			
 			// if no collection was found, we look for topConcepts declared on the scheme
-			if(ignoreExplicitTopConcepts) {
+			if(!ignoreExplicitTopConcepts) {
 				if(node.getChildren() == null || node.getChildren().size() == 0) {
 					Perform.on(repository).select(new GetTopConceptsHelper(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()), null) {
 						

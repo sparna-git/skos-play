@@ -17,7 +17,6 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.util.JAXBSource;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -28,24 +27,103 @@ import org.slf4j.LoggerFactory;
 import fr.sparna.commons.xml.ClasspathURIResolver;
 import fr.sparna.commons.xml.XSLProcessor;
 import fr.sparna.commons.xml.fop.FopProcessor;
+import fr.sparna.commons.xml.fop.FopProvider;
 import fr.sparna.rdf.skos.printer.schema.KosDocument;
 
 public class DisplayPrinter {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
-	public static String STYLESHEET_DISPLAY_TO_HTML = "stylesheets/display-to-html.xsl";
-	public static String STYLESHEET_DISPLAY_TO_FOP = "stylesheets/display-to-fop.xsl";
+	public enum Style {
+		DEFAULT(
+				"stylesheets/display-to-html.xsl",
+				"stylesheets/display-to-fop.xsl"
+		),
+		UNESCO(
+				"stylesheets/display-to-html.xsl",
+				"stylesheets/display-to-fop-unesco.xsl"
+		);
+		
+		private String htmlStylesheet;
+		private String pdfStylesheet;
+		
+		private Style(String htmlStylesheet, String pdfStylesheet) {
+			this.htmlStylesheet = htmlStylesheet;
+			this.pdfStylesheet = pdfStylesheet;
+		}
+
+		public String getHtmlStylesheet() {
+			return htmlStylesheet;
+		}
+
+		public String getPdfStylesheet() {
+			return pdfStylesheet;
+		}		
+	}
+	
+	public enum Format {
+		HTML,
+		PDF;
+	}
 	
 	private static String LANG_PARAM = "lang";
 	private static List<String> SUPPORTED_LANGUAGES = Arrays.asList(new String[]{ "en", "fr" });
+
+	protected Style style = Style.DEFAULT;
 	
-	
+	protected FopProvider fopProvider;
 	protected boolean debug = true;
 	protected String debugPath = null;
 	
 	protected Map<String, Object> transformerParams = new HashMap<String, Object>();
 	
+	/**
+	 * Default constructors that initializes a default FopProvider with no FOP config
+	 */
+	public DisplayPrinter() {
+		this.fopProvider = new FopProvider();
+	}
+
+	public DisplayPrinter(FopProvider fopProvider) {
+		super();
+		this.fopProvider = fopProvider;
+	}
+
+	public void print(
+			KosDocument document,
+			File outputFile,
+			String lang,
+			Format format
+	) throws FOPException, TransformerException, IOException, JAXBException {
+		switch(format) {
+		case HTML : {
+			printToHtml(document, outputFile, lang);
+			break;
+		}
+		case PDF : {
+			printToPdf(document, outputFile, lang);
+			break;
+		}
+		}
+	}
+	
+	public void print(
+			KosDocument document,
+			OutputStream os,
+			String lang,
+			Format format
+	) throws FOPException, TransformerException, IOException, JAXBException {
+		switch(format) {
+		case HTML : {
+			printToHtml(document, os, lang);
+			break;
+		}
+		case PDF : {
+			printToPdf(document, os, lang);
+			break;
+		}
+		}
+	}	
 	
 	public void printToPdf(
 			KosDocument document,
@@ -58,7 +136,7 @@ public class DisplayPrinter {
 		FopProcessor p = new FopProcessor();
 		p.setDebugFo(debug);
 		p.setDebugPath(this.debugPath);
-		StreamSource xslSource = new StreamSource(this.getClass().getClassLoader().getResourceAsStream(STYLESHEET_DISPLAY_TO_FOP));
+		StreamSource xslSource = new StreamSource(this.getClass().getClassLoader().getResourceAsStream(this.style.getPdfStylesheet()));
 
 		// set a classpath URI resolver so that the XSL can resolve the labels file in the "stylesheets" classpath folder
 		XSLProcessor xslProc = XSLProcessor.createDefaultProcessor();
@@ -78,6 +156,7 @@ public class DisplayPrinter {
 		p.processToFile(
 				new JAXBSource(m, document),
 				t,
+				fopProvider,
 				outputFile
 		);
 	}
@@ -93,7 +172,7 @@ public class DisplayPrinter {
 		FopProcessor p = new FopProcessor();
 		p.setDebugFo(debug);
 		p.setDebugPath(this.debugPath);
-		StreamSource xslSource = new StreamSource(this.getClass().getClassLoader().getResourceAsStream(STYLESHEET_DISPLAY_TO_FOP));
+		StreamSource xslSource = new StreamSource(this.getClass().getClassLoader().getResourceAsStream(this.style.getPdfStylesheet()));
 		
 		// set a classpath URI resolver so that the XSL can resolve the labels file in the "stylesheets" classpath folder
 		XSLProcessor xslProc = XSLProcessor.createDefaultProcessor();
@@ -109,9 +188,9 @@ public class DisplayPrinter {
 		t.setParameter(LANG_PARAM, selectLanguage(lang));
 				
 		p.process(
+				fopProvider.createFop(os),
 				new JAXBSource(m, document),
-				t,
-				os
+				t
 		);
 	}
 	
@@ -148,7 +227,7 @@ public class DisplayPrinter {
 		debugJAXBMarshalling(m, document);
 		
 		try {
-			StreamSource xslSource = new StreamSource(this.getClass().getClassLoader().getResourceAsStream(STYLESHEET_DISPLAY_TO_HTML));
+			StreamSource xslSource = new StreamSource(this.getClass().getClassLoader().getResourceAsStream(this.style.getHtmlStylesheet()));
 			
 			// set a classpath URI resolver so that the XSL can resolve the labels file in the "stylesheets" classpath folder
 			XSLProcessor xslProc = XSLProcessor.createDefaultProcessor();
@@ -223,5 +302,14 @@ public class DisplayPrinter {
 
 	public void setDebugPath(String debugPath) {
 		this.debugPath = debugPath;
-	}	
+	}
+
+	public Style getStyle() {
+		return style;
+	}
+
+	public void setStyle(Style style) {
+		this.style = style;
+	}
+	
 }

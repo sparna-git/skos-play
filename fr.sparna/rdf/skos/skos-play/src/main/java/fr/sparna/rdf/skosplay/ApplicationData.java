@@ -69,6 +69,14 @@ public class ApplicationData {
 		// store example data in application data
 		this.setExampleDatas(exampleDataMap);	
 	}
+	
+	/**
+	 * Expose SkosPlayConfig in a getter so that it is accessible in JSP pages
+	 * @return
+	 */
+	public SkosPlayConfig getSkosPlayConfig() {
+		return SkosPlayConfig.getInstance();
+	}
 
 	public Map<String, Repository> getExampleDatas() {
 		return exampleDatas;

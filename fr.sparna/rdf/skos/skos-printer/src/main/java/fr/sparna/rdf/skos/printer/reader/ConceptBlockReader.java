@@ -243,7 +243,7 @@ public class ConceptBlockReader {
 										aRef.stringValue(),
 										refPrefLabel,
 										SKOSTags.getString(predicateReader.getPropertyURI()),
-										null
+										(styleAttributes)?"pref":null
 										)
 								);
 					}
@@ -261,7 +261,7 @@ public class ConceptBlockReader {
 								refPrefLabel,
 								// TODO : need to have a Map of String properties to readers
 								SKOSTags.getString(SKOSTags.KEY_TOP_CONCEPT),
-								null
+								(styleAttributes)?"pref":null
 								)
 					);
 				}

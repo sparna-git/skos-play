@@ -6,6 +6,8 @@ import java.util.List;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.FileConverter;
 
+import fr.sparna.rdf.skos.printer.DisplayPrinter;
+
 public class ArgumentsSkosPlayCli {
 
 	@Parameter(
@@ -31,22 +33,30 @@ public class ArgumentsSkosPlayCli {
 	)
 	private String lang;
 	
-	public enum FORMAT {
-		HTML,
-		PDF
-	}
-	
 	@Parameter(
 			names = { "-f", "--format" },
-			description = "Output format. Values can be either 'html' or 'pdf'. Defaults to html."
+			description = "Output format. Values can be either 'html' or 'pdf'. Defaults to pdf."
 	)
-	private  FORMAT format = FORMAT.HTML;
+	private DisplayPrinter.Format format = DisplayPrinter.Format.PDF;
+	
+	@Parameter(
+			names = { "-s", "--style" },
+			description = "Output style. Values can be either 'default' or 'unesco'. Defaults to 'default'."
+	)
+	private  DisplayPrinter.Style style = DisplayPrinter.Style.DEFAULT;
 	
 	@Parameter(
 			names = { "-cs", "--scheme" },
 			description = "URI of ConceptScheme to print"
 	)
 	private String conceptScheme;
+	
+	@Parameter(
+			names = { "-fop", "--fopConfig" },
+			description = "FOP config file",
+			converter = FileConverter.class
+	)
+	private File fopConfig;
 
 	public List<String> getInput() {
 		return input;
@@ -72,11 +82,11 @@ public class ArgumentsSkosPlayCli {
 		this.lang = lang;
 	}
 
-	public FORMAT getFormat() {
+	public DisplayPrinter.Format getFormat() {
 		return format;
 	}
 
-	public void setFormat(FORMAT format) {
+	public void setFormat(DisplayPrinter.Format format) {
 		this.format = format;
 	}
 
@@ -87,7 +97,25 @@ public class ArgumentsSkosPlayCli {
 	public void setConceptScheme(String conceptScheme) {
 		this.conceptScheme = conceptScheme;
 	}
+
+	public File getFopConfig() {
+		return fopConfig;
+	}
+
+	public void setFopConfig(File fopConfig) {
+		this.fopConfig = fopConfig;
+	}
 	
-	
+	public String getFopConfigPath() {
+		return (getFopConfig() != null)?getFopConfig().getAbsolutePath():null;
+	}
+
+	public DisplayPrinter.Style getStyle() {
+		return style;
+	}
+
+	public void setStyle(DisplayPrinter.Style style) {
+		this.style = style;
+	}
 	
 }

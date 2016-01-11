@@ -1,0 +1,4 @@
+- fix all missed glyphs.
+- change suitable glyphs with references.
+- improve bearings of glyphs (thanks Dmitry 40in who pointed me to this)
+- improve outlines of some cyrillic glyphs 

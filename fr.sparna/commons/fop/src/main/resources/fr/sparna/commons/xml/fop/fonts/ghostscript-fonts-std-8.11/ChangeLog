@@ -1,0 +1,131 @@
+2002-11-22  Valek Filippov  <frob@df.ru>
+
+    Fixed bug that broke printing from QT.
+    
+2002-11-16  Valek Filippov  <frob@df.ru>
+
+   Fixed some cyrillic (russian) glyphs in NimbusMono.
+   NimbusMono Ascend/Descend were changed to match the visible
+   size of the other font if same point-size is used.
+
+2002-10-12  Valek Filippov  <frob@df.ru>
+
+   Regenerated coz I screwed up UIDs.
+   Partly applied Owen Tailor tweaks.
+   (Really GWW changed pfaedit autohinter after OT sugggestion,
+   so other OT tweaks are aoutomade by pfaedit)
+   
+2002-08-17  Valek Filippov  <frob@df.ru>
+
+    Regenerated from 9-aug pfaedit version.
+    Mostly for testing of new cubic->quad bezier conversion.
+
+2002-07-22  Valek Filippov  <frob@df.ru>
+
+    Regenerated from 22-07 pfaedit version.
+    I still haven't enough time for correct serbian glyphs from Danilo
+    integration =(
+
+2002-05-19  Valek Filippov  <frob@df.ru>
+
+    Regenerated from 18-05 pfaedit version.
+    Restored original UIDs.
+    Made otf versions again =)
+
+2002-03-06  Valek Filippov  <frob@df.ru>
+
+    Added pfms. Forced using of original kerning.
+    d* and s* files were missed (fixed now).
+
+2002-03-04  Valek Filippov  <frob@df.ru>
+
+    Improved Bookman and Gothic. All fonts were regenerated
+    (fix 'Delta', improved hinting). pfms are temporary excluded.
+
+2002-02-03  Valek Filippov  <frob@df.ru>
+
+    Improved Bookman Light/DemiBold. At 2002-01-07 I put
+    non latest version of Chancery -- fixed.
+
+2002-01-18  Valek Filippov  <frob@df.ru>
+
+    All fonts regenerated again, coz AEN found bug in names translation.
+    NimbusRomNo9-Regu greatly improved. NimbusRomNo9-Bold, NimbusSans{Cond}-{Regu,Bold}
+    partially improved.
+
+2002-01-07  Valek Filippov  <frob@df.ru>
+
+    Bookman improved. Chancery added.
+
+2002-01-04  Valek Filippov  <frob@df.ru>
+
+    All fonts were regenerated.
+    TTF-instructions were improved, some non-russian cyrillic
+    fixed, "fi" and "fl" ligatures ligaturized where were not.
+    Implemented some changes that Dmitry suggested,
+    NimbusMono-Regular is partially made by him.
+    Added COPYING. Generated pfm-files.
+    Added fonts.dir and fonts.scale from gnu-gs-fonts.
+    
+2001-12-14  Valek Filippov  <frob@df.ru>
+
+    Full tarball was made.
+
+    NimbusRomNo9 regenerated. Added 'numero sign',
+    'infinity' and 'Omega' (in Regu -- by Dmitry 40in).
+    OTF versions removed until the best time.
+    Dmitry supposed that URW'd presented 'beta'-version
+    of fonts to community, coz bearings for original URW
+    are not perfect. 1st attempt to fix it.  
+
+2001-12-12  Valek Filippov  <frob@df.ru>
+
+    Schoolbook extended to 'val3' and regenerated.
+    Palladio extended to 'val3' and regenerated.
+    Bookman extended to 'val3' and regenerated.
+    Gothic extended to 'val3' and regenerated.
+    Some glyphs still missed.       
+
+    NimbusMono regenerated with modern pfaedit
+    (bug with xterm fixed). Some 0x4** glyphs fixed.
+    Added "number sign" and "infinity". Thanks to
+    Dmitry 40in and Anton Zinoviev who criticized me
+    about it. 
+
+2001-12-08  Valek Filippov  <frob@df.ru>
+
+    Added updated version of NimbusSansCond.
+    Changes same like for NimbusSans
+    (except: otf version not added).
+    
+2001-12-07  Valek Filippov  <frob@df.ru>
+
+    Added updated version of NimbusMono.
+    (Lat Ext-A, full 0x400 except 'glagolic', some chars are still
+     missed; ttf hinting regenerated; otf version added;
+     'Cyr De, de, L, l, Ch, ch' fixed).
+
+2001-12-06  Valek Filippov  <frob@df.ru>
+
+    Added updated version of NimbusSans.
+    (Lat Ext-A, full 0x400 except 'glagolic', some chars are still
+     missed; ttf hinting regenerated; otf version added;
+     'Cyr De, de, L, l, Ch, ch' fixed).
+    
+2001-12-05  Valek Filippov  <frob@df.ru>
+
+    Kern pairs from original URW had missed at the 11-nov version.
+    Added OpenType version of fonts.
+
+2001-11-11  Valek Filippov <frob@df.ru>
+    
+    NimbusRomanNo9
+    Regular: added all uni0400 (except ancient cyrillic /glagolic?/).
+             04bc-04bf, 04a8-9, 04d8, 04da still missed.
+	     added all glyphs from Lat Ext-A (uni0100-017F) that was missed
+	     in original URW (45 glyphs).
+	     Most of accented chars and part of cyrillics changed
+	     with references.
+	     TTF hinting regenerated with modern PfaEdit.
+    Bold: same but also missed 0494, 04a6, 04c3
+    Italic, BoldItalic: same but missed many non-russian cyrillics.

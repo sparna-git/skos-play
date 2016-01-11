@@ -303,61 +303,63 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 				}
 			});
 			
-			
-			AlignmentRow previousRow = null;
-			Section currentSection = null;
-			Table currentTable = null;
-			for (AlignmentRow aRow : data) {
-				
-				// 1. either this is the first row (no existing section), or we are moving to a row in a new section
-				if(previousRow == null || !aRow.targetScheme.equals(previousRow.targetScheme)) {
-					previousRow = aRow;
+			// if we have some data...
+			if(data.size() > 0) {
+				AlignmentRow previousRow = null;
+				Section currentSection = null;
+				Table currentTable = null;
+				for (AlignmentRow aRow : data) {
 					
-					// if this is not the first row, we add the current section to the output
-					if(currentSection != null) {
-						d.getSection().add(currentSection);
+					// 1. either this is the first row (no existing section), or we are moving to a row in a new section
+					if(previousRow == null || !aRow.targetScheme.equals(previousRow.targetScheme)) {
+						previousRow = aRow;
+						
+						// if this is not the first row, we add the current section to the output
+						if(currentSection != null) {
+							d.getSection().add(currentSection);
+						}
+						
+						// 2. initialize a new section
+						currentSection = new Section();
+						String prefix = "Alignment with ";
+						if(lang.startsWith("fr")) {
+							prefix = "Alignement avec ";
+						}
+						currentSection.setTitle(prefix+aRow.targetSchemeLabel);
+						currentTable = SchemaFactory.createTable(40, 20, 40);
+						currentTable.setTableHeader(SchemaFactory.createRow(
+								SchemaFactory.createStr(SchemaFactory.createStyledKey("alignmentSource")),
+								SchemaFactory.createStr(SchemaFactory.createStyledKey("alignmentType")),
+								SchemaFactory.createStr(SchemaFactory.createStyledKey("alignmentTarget"))
+						));
+						currentSection.setTable(currentTable);
 					}
 					
-					// 2. initialize a new section
-					currentSection = new Section();
-					String prefix = "Alignment with ";
-					if(lang.startsWith("fr")) {
-						prefix = "Alignement avec ";
-					}
-					currentSection.setTitle(prefix+aRow.targetSchemeLabel);
-					currentTable = SchemaFactory.createTable(40, 20, 40);
-					currentTable.setTableHeader(SchemaFactory.createRow(
-							SchemaFactory.createStr(SchemaFactory.createStyledKey("alignmentSource")),
-							SchemaFactory.createStr(SchemaFactory.createStyledKey("alignmentType")),
-							SchemaFactory.createStr(SchemaFactory.createStyledKey("alignmentTarget"))
-					));
-					currentSection.setTable(currentTable);
+					// 3. add our row to the current table
+					// siouxerie pour éviter les ID dupliquées dans le cas où un libellé serait le même dans les 2 langues
+					ConceptBlock cb1 = cbReader.readConceptBlock(
+							aRow.sourceConcept,
+							aRow.sourceConceptLabel,
+							cbReader.computeConceptBlockId(aRow.sourceConcept, aRow.alignmentType+"-"+aRow.targetConcept),
+							false
+					);
+					// set a random UUID since we won't have that concept in overall output
+					// ConceptBlock cb2 = cbReader.readConceptBlock(aRow.targetConcept, aRow.targetConceptLabel, UUID.randomUUID().toString(), false);
+					ConceptBlock cb2 = SchemaFactory.createConceptBlock(
+							UUID.randomUUID().toString(),
+							aRow.targetConcept,
+							SchemaFactory.createLabelLinkExternal(aRow.targetConcept, aRow.targetConceptLabel, null)
+							);
+					JAXBElement<StyledString> type = SchemaFactory.createStr(
+								SchemaFactory.createStyledKey(aRow.alignmentType.substring(SKOS.NAMESPACE.length()), "smaller")
+					);
+					
+					currentTable.getRow().add(SchemaFactory.createRow(cb1, type, cb2));
 				}
 				
-				// 3. add our row to the current table
-				// siouxerie pour éviter les ID dupliquées dans le cas où un libellé serait le même dans les 2 langues
-				ConceptBlock cb1 = cbReader.readConceptBlock(
-						aRow.sourceConcept,
-						aRow.sourceConceptLabel,
-						cbReader.computeConceptBlockId(aRow.sourceConcept, aRow.alignmentType+"-"+aRow.targetConcept),
-						false
-				);
-				// set a random UUID since we won't have that concept in overall output
-				// ConceptBlock cb2 = cbReader.readConceptBlock(aRow.targetConcept, aRow.targetConceptLabel, UUID.randomUUID().toString(), false);
-				ConceptBlock cb2 = SchemaFactory.createConceptBlock(
-						UUID.randomUUID().toString(),
-						aRow.targetConcept,
-						SchemaFactory.createLabelLinkExternal(aRow.targetConcept, aRow.targetConceptLabel, null)
-						);
-				JAXBElement<StyledString> type = SchemaFactory.createStr(
-							SchemaFactory.createStyledKey(aRow.alignmentType.substring(SKOS.NAMESPACE.length()), "smaller")
-				);
-				
-				currentTable.getRow().add(SchemaFactory.createRow(cb1, type, cb2));
+				// add last section to the document
+				d.getSection().add(currentSection);
 			}
-			
-			// add last section to the document
-			d.getSection().add(currentSection);
 		}
 	}
 	
@@ -394,80 +396,82 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 				}
 			});
 			
-			
-			AlignmentRow previousRow = null;
-			Section currentSection = null;
-			Table currentTable = null;
-			for (AlignmentRow aRow : data) {
-				
-				// 1. either this is the first row (no existing section), or we are moving to a row in a new section
-				String currentFirstLetter = StringUtil.withoutAccents(aRow.sourceConceptLabel).toUpperCase().substring(0, 1);
-				if(
-						previousRow == null
-						||
-						!currentFirstLetter.equals(StringUtil.withoutAccents(previousRow.sourceConceptLabel).toUpperCase().substring(0, 1))
-				) {					
-					// if this is not the first row, we add the current section to the output
-					if(currentSection != null) {
-						d.getSection().add(currentSection);
+			// if we have some data...
+			if(data.size() > 0) {
+				AlignmentRow previousRow = null;
+				Section currentSection = null;
+				Table currentTable = null;
+				for (AlignmentRow aRow : data) {
+					
+					// 1. either this is the first row (no existing section), or we are moving to a row in a new section
+					String currentFirstLetter = StringUtil.withoutAccents(aRow.sourceConceptLabel).toUpperCase().substring(0, 1);
+					if(
+							previousRow == null
+							||
+							!currentFirstLetter.equals(StringUtil.withoutAccents(previousRow.sourceConceptLabel).toUpperCase().substring(0, 1))
+					) {					
+						// if this is not the first row, we add the current section to the output
+						if(currentSection != null) {
+							d.getSection().add(currentSection);
+						}
+						
+						// 2. initialize a new section
+						currentSection = new Section();
+						String title = null;
+						if(lang.startsWith("fr")) {
+							title = "Alignements - ";
+						} else {
+							title = "Mappings - ";
+						}
+						currentSection.setTitle(title+currentFirstLetter);
+						currentTable = SchemaFactory.createTable(32, 24, 12, 32);
+						currentTable.setTableHeader(SchemaFactory.createRow(
+								SchemaFactory.createStr(SchemaFactory.createStyledKey("alignmentSource")),
+								SchemaFactory.createStr(SchemaFactory.createStyledKey("alignmentScheme")),
+								SchemaFactory.createStr(SchemaFactory.createStyledKey("alignmentType")),
+								SchemaFactory.createStr(SchemaFactory.createStyledKey("alignmentTarget"))
+						));	
+						currentSection.setTable(currentTable);
 					}
 					
-					// 2. initialize a new section
-					currentSection = new Section();
-					String title = null;
-					if(lang.startsWith("fr")) {
-						title = "Alignements - ";
-					} else {
-						title = "Mappings - ";
-					}
-					currentSection.setTitle(title+currentFirstLetter);
-					currentTable = SchemaFactory.createTable(32, 24, 12, 32);
-					currentTable.setTableHeader(SchemaFactory.createRow(
-							SchemaFactory.createStr(SchemaFactory.createStyledKey("alignmentSource")),
-							SchemaFactory.createStr(SchemaFactory.createStyledKey("alignmentScheme")),
-							SchemaFactory.createStr(SchemaFactory.createStyledKey("alignmentType")),
-							SchemaFactory.createStr(SchemaFactory.createStyledKey("alignmentTarget"))
-					));	
-					currentSection.setTable(currentTable);
-				}
-				
-				// 3. add our row to the current table
-				// siouxerie pour éviter les ID dupliquées dans le cas où un libellé serait le même dans les 2 langues
-				Object cell1;
-				if(previousRow == null || !(aRow.sourceConcept.equals(previousRow.sourceConcept))) {
-					cell1 = cbReader.readConceptBlock(
-							aRow.sourceConcept,
-							aRow.sourceConceptLabel,
-							cbReader.computeConceptBlockId(aRow.sourceConcept, aRow.alignmentType+"-"+aRow.targetConcept),
-							false
-					);
-				} else {
-					cell1 = SchemaFactory.createStr(
-							SchemaFactory.createStyledString(" ")
-					);
-				}
-				// set a random UUID since we won't have that concept in overall output
-				// ConceptBlock cb2 = cbReader.readConceptBlock(aRow.targetConcept, aRow.targetConceptLabel, UUID.randomUUID().toString(), false);
-				ConceptBlock cb2 = SchemaFactory.createConceptBlock(
-						UUID.randomUUID().toString(),
-						aRow.targetConcept,
-						SchemaFactory.createLabelLinkExternal(aRow.targetConcept, aRow.targetConceptLabel, null)
+					// 3. add our row to the current table
+					// siouxerie pour éviter les ID dupliquées dans le cas où un libellé serait le même dans les 2 langues
+					Object cell1;
+					if(previousRow == null || !(aRow.sourceConcept.equals(previousRow.sourceConcept))) {
+						cell1 = cbReader.readConceptBlock(
+								aRow.sourceConcept,
+								aRow.sourceConceptLabel,
+								cbReader.computeConceptBlockId(aRow.sourceConcept, aRow.alignmentType+"-"+aRow.targetConcept),
+								false
 						);
-				JAXBElement<StyledString> type = SchemaFactory.createStr(
-							SchemaFactory.createStyledKey(aRow.alignmentType.substring(SKOS.NAMESPACE.length()))
-				);
-				JAXBElement<StyledString> targetScheme = SchemaFactory.createStr(
-						SchemaFactory.createStyledString(aRow.targetSchemeLabel)
-				);
+					} else {
+						cell1 = SchemaFactory.createStr(
+								SchemaFactory.createStyledString(" ")
+						);
+					}
+					// set a random UUID since we won't have that concept in overall output
+					// ConceptBlock cb2 = cbReader.readConceptBlock(aRow.targetConcept, aRow.targetConceptLabel, UUID.randomUUID().toString(), false);
+					ConceptBlock cb2 = SchemaFactory.createConceptBlock(
+							UUID.randomUUID().toString(),
+							aRow.targetConcept,
+							SchemaFactory.createLabelLinkExternal(aRow.targetConcept, aRow.targetConceptLabel, null)
+							);
+					JAXBElement<StyledString> type = SchemaFactory.createStr(
+								SchemaFactory.createStyledKey(aRow.alignmentType.substring(SKOS.NAMESPACE.length()))
+					);
+					JAXBElement<StyledString> targetScheme = SchemaFactory.createStr(
+							SchemaFactory.createStyledString(aRow.targetSchemeLabel)
+					);
+					
+					currentTable.getRow().add(SchemaFactory.createRow(cell1, targetScheme, type, cb2));
+					
+					// keep track of previous row
+					previousRow = aRow;
+				}
 				
-				currentTable.getRow().add(SchemaFactory.createRow(cell1, targetScheme, type, cb2));
-				
-				// keep track of previous row
-				previousRow = aRow;
+				// add last section to the document
+				d.getSection().add(currentSection);
 			}
-			
-			// add last section to the document
-			d.getSection().add(currentSection);
 		}		
 	}
 

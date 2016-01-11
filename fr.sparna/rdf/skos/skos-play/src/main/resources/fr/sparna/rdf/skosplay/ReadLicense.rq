@@ -1,0 +1,8 @@
+PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
+PREFIX dct:		<http://purl.org/dc/terms/>
+
+SELECT ?license
+WHERE {
+  ?scheme a skos:ConceptScheme .
+  ?scheme dct:license ?license .
+}

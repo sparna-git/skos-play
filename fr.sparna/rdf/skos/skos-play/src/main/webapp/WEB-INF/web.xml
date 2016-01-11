@@ -34,6 +34,7 @@
 		<url-pattern>/about</url-pattern>
 		<url-pattern>/upload</url-pattern>
 		<url-pattern>/print</url-pattern>
+		<url-pattern>/style/custom.css</url-pattern>
 		<url-pattern>/visualize</url-pattern>
 	</servlet-mapping>
 	

@@ -10,11 +10,12 @@
 
 <html>
 	<head>
-		<title>SKOS Play ! - Visualiser des thesaurus SKOS - A propos</title>
+		<title><c:out value="${applicationData.skosPlayConfig.applicationTitle}" /></title>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="bootstrap-fileupload/bootstrap-fileupload.min.css" rel="stylesheet" />
 		<link href="css/skos-play.css" rel="stylesheet" />
+		<link href="style/custom.css" rel="stylesheet" />
 		<script src="js/jquery.min.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
 		<script src="bootstrap-fileupload/bootstrap-fileupload.min.js"></script>

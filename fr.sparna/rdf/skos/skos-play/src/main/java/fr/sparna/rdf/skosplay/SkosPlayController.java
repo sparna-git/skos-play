@@ -1,6 +1,7 @@
 package fr.sparna.rdf.skosplay;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.openrdf.model.Literal;
+import org.openrdf.model.Value;
 import org.openrdf.model.vocabulary.DC;
 import org.openrdf.model.vocabulary.DCTERMS;
 import org.openrdf.query.BindingSet;
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import fr.sparna.commons.io.ReadWriteTextFile;
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
 import fr.sparna.i18n.StrictResourceBundleControl;
@@ -85,6 +88,8 @@ import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
  * The main entry point.
  * @Controller indicates this class will be the application controller, the main entry point.
  * 
+ * To add an extra RequestMapping here, add the corresponding path to web.xml mappings.
+ * 
  * @author Thomas Francart
  *
  */
@@ -94,52 +99,29 @@ public class SkosPlayController {
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Autowired
-	ServletContext servletContext;
+	protected ServletContext servletContext;
 	
 	private enum SOURCE_TYPE {
 		FILE,
 		URL,
 		EXAMPLE
 	}
-	
-	private enum OUTPUT_TYPE {
-		HTML,
-		PDF
-	}
-	
-	private enum DISPLAY_TYPE {
-		ALPHABETICAL,
-		ALPHABETICAL_EXPANDED,
-		HIERARCHICAL,
-//		HIERARCHICAL_EXPANDED,
-		CONCEPTLISTING,
-		TRANSLATION_TABLE,
-		COMPLETE_MONOLINGUAL,
-		COMPLETE_MULTILINGUAL,
-		PERMUTED_INDEX,
-		KWIC_INDEX,
-		ALIGNMENT_BY_SCHEME,
-		ALIGNMENT_ALPHA
-	}
-	
-	private enum VIZ_TYPE {
-		PARTITION,
-		TREELAYOUT,
-		SUNBURST,
-		AUTOCOMPLETE
-	}
-	
-	@RequestMapping("/home")
-	public ModelAndView home(HttpServletRequest request) {
-		
-		// retrieve resource bundle for path to home page
-		ResourceBundle b = ResourceBundle.getBundle(
-				"fr.sparna.rdf.skosplay.i18n.Bundle",
-				SessionData.get(request.getSession()).getUserLocale(),
-				new StrictResourceBundleControl()
-		);
 
-		return new ModelAndView(b.getString("home.jsp"));
+	@RequestMapping("/home")
+	public ModelAndView home(HttpServletRequest request) {	
+		if(SkosPlayConfig.getInstance().isPublishingMode()) {
+			// if publishing mode, no home page
+			return uploadForm();
+		} else {
+			// retrieve resource bundle for path to home page
+			ResourceBundle b = ResourceBundle.getBundle(
+					"fr.sparna.rdf.skosplay.i18n.Bundle",
+					SessionData.get(request.getSession()).getUserLocale(),
+					new StrictResourceBundleControl()
+			);
+
+			return new ModelAndView(b.getString("home.jsp"));
+		}		
 	}
 	
 	@RequestMapping("/about")
@@ -155,9 +137,33 @@ public class SkosPlayController {
 		return new ModelAndView(b.getString("about.jsp"));
 	}
 	
+	@RequestMapping("/style/custom.css")
+	public void style(
+			HttpServletRequest request,
+			HttpServletResponse response
+	) throws Exception {	
+		
+		if(SkosPlayConfig.getInstance().getCustomCss() != null) {
+			try {
+				log.debug("Reading and returning custom CSS from "+SkosPlayConfig.getInstance().getCustomCss());
+				String content = ReadWriteTextFile.getContents(SkosPlayConfig.getInstance().getCustomCss());
+				response.getOutputStream().write(content.getBytes());
+				response.flushBuffer();
+			} catch (FileNotFoundException e) {
+				// should not happen
+				throw e;
+			} catch (IOException e) {
+				log.error("Exception while reading custom CSS from "+SkosPlayConfig.getInstance().getCustomCss().getAbsolutePath());
+				throw e;
+			}
+		}
+	}
+	
 	@RequestMapping(value = "/upload", method = RequestMethod.GET)
-	public ModelAndView uploadForm() throws IOException {
-		return new ModelAndView("upload");
+	public ModelAndView uploadForm() {
+		// set an empty Model - just so that JSP can access SkosPlayConfig through it
+		UploadFormData data = new UploadFormData();
+		return new ModelAndView("upload", UploadFormData.KEY, data);
 	}
 	
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -186,6 +192,10 @@ public class SkosPlayController {
 		
 		// retrieve session
 		final SessionData sessionData = SessionData.get(request.getSession());
+		
+		// prepare data structure
+		final PrintFormData printFormData = new PrintFormData();
+		sessionData.setPrintFormData(printFormData);
 		
 		// retrieve resource bundle for error messages
 		ResourceBundle b = ResourceBundle.getBundle(
@@ -261,6 +271,14 @@ public class SkosPlayController {
 					return doError(request, e1.getMessage());
 				}
 				
+				// set the loaded data name
+				try {
+					printFormData.setLoadedDataName(sessionData.getPreLoadedDataLabels().getString(example));
+				} catch (Exception e) {
+					// missing label : set the key
+					printFormData.setLoadedDataName(example);
+				}
+				
 				break;
 			}
 			case URL : {				
@@ -328,6 +346,18 @@ public class SkosPlayController {
 			return doError(request, e);
 		}
 		
+		// set loaded data licence, if any
+		try {
+			Value license = Perform.on(repository).read(new SparqlQuery(new SparqlQueryBuilder(this, "ReadLicense.rq")));
+			if(license != null && license instanceof Literal) {
+				printFormData.setLoadedDataLicense(((Literal)license).stringValue());
+			}
+		} catch (SparqlPerformException e) {
+			e.printStackTrace();
+			return doError(request, e);
+		}
+		
+		
 		// store repository in the session
 		sessionData.setRepository(repository);
 		
@@ -339,44 +369,46 @@ public class SkosPlayController {
 		labelReader.getProperties().add(URI.create(DC.TITLE.toString()));
 		sessionData.setLabelReader(labelReader);
 		
-		// build data structure
-		final PrintFormData printFormData = new PrintFormData();
-		sessionData.setPrintFormData(printFormData);
-		
 		// store success message with number of concepts
 		printFormData.setSuccessMessage(MessageFormat.format(b.getString("print.message.numberOfConcepts"), count));
 		
-		try {
-			// ask if some hierarchy exists
-			if(!Perform.on(repository).ask(new SparqlQuery(new SparqlQueryBuilder(this, "AskBroadersOrNarrowers.rq")))) {
+		if(DisplayType.needHierarchyCheck() || VizType.needHierarchyCheck()) {
+			try {
+				// ask if some hierarchy exists
+				if(!Perform.on(repository).ask(new SparqlQuery(new SparqlQueryBuilder(this, "AskBroadersOrNarrowers.rq")))) {
+					printFormData.setEnableHierarchical(false);
+					printFormData.getWarningMessages().add(b.getString("upload.warning.noHierarchyFound"));
+				}
+			} catch (SparqlPerformException e) {
 				printFormData.setEnableHierarchical(false);
 				printFormData.getWarningMessages().add(b.getString("upload.warning.noHierarchyFound"));
 			}
-		} catch (SparqlPerformException e) {
-			printFormData.setEnableHierarchical(false);
-			printFormData.getWarningMessages().add(b.getString("upload.warning.noHierarchyFound"));
 		}
 		
-		try {
-			// ask if some translations exists
-			if(!Perform.on(repository).ask(new SparqlQuery(new SparqlQueryBuilder(this, "AskTranslatedConcepts.rq")))) {
+		if(DisplayType.needTranslationCheck()) {
+			try {
+				// ask if some translations exists
+				if(!Perform.on(repository).ask(new SparqlQuery(new SparqlQueryBuilder(this, "AskTranslatedConcepts.rq")))) {
+					printFormData.setEnableTranslations(false);
+					printFormData.getWarningMessages().add(b.getString("upload.warning.noTranslationsFound"));
+				}
+			} catch (SparqlPerformException e) {
 				printFormData.setEnableTranslations(false);
 				printFormData.getWarningMessages().add(b.getString("upload.warning.noTranslationsFound"));
 			}
-		} catch (SparqlPerformException e) {
-			printFormData.setEnableTranslations(false);
-			printFormData.getWarningMessages().add(b.getString("upload.warning.noTranslationsFound"));
 		}
 		
-		try {
-			// ask if some alignments exists
-			if(!Perform.on(repository).ask(new SparqlQuery(new SparqlQueryBuilder(this, "AskMappings.rq")))) {
+		if(DisplayType.needAlignmentCheck()) {
+			try {
+				// ask if some alignments exists
+				if(!Perform.on(repository).ask(new SparqlQuery(new SparqlQueryBuilder(this, "AskMappings.rq")))) {
+					printFormData.setEnableMappings(false);
+					printFormData.getWarningMessages().add(b.getString("upload.warning.noMappingsFound"));
+				}
+			} catch (SparqlPerformException e) {
 				printFormData.setEnableMappings(false);
 				printFormData.getWarningMessages().add(b.getString("upload.warning.noMappingsFound"));
 			}
-		} catch (SparqlPerformException e) {
-			printFormData.setEnableMappings(false);
-			printFormData.getWarningMessages().add(b.getString("upload.warning.noMappingsFound"));
 		}
 			
 		try {
@@ -475,7 +507,7 @@ public class SkosPlayController {
 	) throws Exception {
 		
 		// get viz type param
-		VIZ_TYPE displayType = (displayParam != null)?VIZ_TYPE.valueOf(displayParam.toUpperCase()):null;
+		VizType displayType = (displayParam != null)?VizType.valueOf(displayParam.toUpperCase()):null;
 		
 		// get scheme param
 		URI scheme = (schemeParam.equals("no-scheme"))?null:URI.create(schemeParam);
@@ -532,10 +564,10 @@ public class SkosPlayController {
 	) throws Exception {
 		
 		// get output type param
-		OUTPUT_TYPE outputType = (outputParam != null)?OUTPUT_TYPE.valueOf(outputParam.toUpperCase()):null;
+		OutputType outputType = (outputParam != null)?OutputType.valueOf(outputParam.toUpperCase()):null;
 
 		// get display type param
-		DISPLAY_TYPE displayType = (displayParam != null)?DISPLAY_TYPE.valueOf(displayParam.toUpperCase()):null;
+		DisplayType displayType = (displayParam != null)?DisplayType.valueOf(displayParam.toUpperCase()):null;
 		
 		// get scheme param
 		URI scheme = (schemeParam.equals("no-scheme"))?null:URI.create(schemeParam);
@@ -557,7 +589,7 @@ public class SkosPlayController {
 		HeaderAndFooterReader headerReader = new HeaderAndFooterReader(r);
 		headerReader.setApplicationString("Generated by SKOS Play!, sparna.fr");
 		// on désactive complètement le header pour les PDF
-		if(outputType != OUTPUT_TYPE.PDF) {
+		if(outputType != OutputType.PDF) {
 			// build and set header
 			document.setHeader(headerReader.readHeader(language, scheme));
 		}
@@ -586,7 +618,7 @@ public class SkosPlayController {
 //				displayGenerator = new HierarchicalDisplayGenerator(r, new ConceptBlockReader(r, HierarchicalDisplayGenerator.EXPANDED_SKOS_PROPERTIES));
 //				break;
 //			}
-		case CONCEPTLISTING : {
+		case CONCEPT_LISTING : {
 			ConceptBlockReader cbr = new ConceptBlockReader(r);
 			cbr.setSkosPropertiesToRead(ConceptListDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
 			List<String> additionalLanguages = new ArrayList<String>();
@@ -733,11 +765,11 @@ public class SkosPlayController {
 			response.setContentType("application/pdf");
 			// if alphabetical or concept listing display, set 2-columns layout
 			if(
-					displayType == DISPLAY_TYPE.ALPHABETICAL
+					displayType == DisplayType.ALPHABETICAL
 					||
-					displayType == DISPLAY_TYPE.CONCEPTLISTING
+					displayType == DisplayType.CONCEPT_LISTING
 					||
-					displayType == DISPLAY_TYPE.ALPHABETICAL_EXPANDED
+					displayType == DisplayType.ALPHABETICAL_EXPANDED
 			) {
 				printer.getTransformerParams().put("column-count", 2);
 			}

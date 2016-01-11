@@ -24,9 +24,11 @@ import org.slf4j.LoggerFactory;
 import fr.sparna.commons.lang.StringUtil;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlUpdate;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.FactoryConfiguration;
+import fr.sparna.rdf.sesame.toolkit.repository.operation.ApplyUpdates;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
@@ -36,6 +38,7 @@ import fr.sparna.rdf.skos.printer.schema.KosDocumentHeader;
 import fr.sparna.rdf.skos.printer.schema.Section;
 import fr.sparna.rdf.skos.toolkit.GetLabelsInSchemeHelper;
 import fr.sparna.rdf.skos.toolkit.SKOS;
+import fr.sparna.rdf.skos.toolkit.SKOSRules;
 
 public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 	
@@ -211,6 +214,10 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 		RepositoryBuilder localRepositoryBuilder = new RepositoryBuilder(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_AWARE));
 		localRepositoryBuilder.addOperation(new LoadFromFileOrDirectory(args[0]));
 		Repository r = localRepositoryBuilder.createNewRepository();
+		
+		// SKOS-XL
+		ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSKOSXLRuleset()));
+		au.execute(r);
 		
 		// build result document
 		KosDocument document = new KosDocument();

@@ -10,6 +10,7 @@ import org.openrdf.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.sparna.commons.xml.fop.FopProvider;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlUpdate;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryIfc;
@@ -85,21 +86,15 @@ public class Translation implements SkosPlayCliCommandIfc {
 		// m.marshal(display, System.out);
 		// m.marshal(document, new File("src/main/resources/alpha-index-output-test.xml"));
 		
-		DisplayPrinter printer = new DisplayPrinter();
-		switch(args.getFormat()) {
-		case HTML : {
-			printer.printToHtml(document, args.getOutput(), args.getLang());
-			break;
+		if(args.getFopConfigPath() != null) {
+			log.info("Will use FOP config file path : "+args.getFopConfigPath());
 		}
-		case PDF : {
-			printer.printToPdf(document, args.getOutput(), args.getLang());
-			break;
-		}
-		}
+		DisplayPrinter printer = new DisplayPrinter(new FopProvider(args.getFopConfigPath()));
+		printer.setStyle(args.getStyle());
+		printer.print(document, args.getOutput(), args.getLang(), args.getFormat());
 		
 		// shutdown repos
 		inputRepository.shutDown();
-
 	}
 
 }

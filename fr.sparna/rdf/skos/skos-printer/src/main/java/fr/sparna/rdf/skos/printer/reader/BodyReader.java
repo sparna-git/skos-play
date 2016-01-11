@@ -30,7 +30,9 @@ public class BodyReader {
 		
 		for (AbstractKosDisplayGenerator aGenerator : this.generators) {
 			KosDisplay display = aGenerator.generateDisplay(mainLang, conceptScheme);
-			body.getKosDisplay().add(display);
+			if(display.getSection() != null && display.getSection().size() != 0) {
+				body.getKosDisplay().add(display);
+			}
 		}
 		
 		return body;

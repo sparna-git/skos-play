@@ -13,11 +13,12 @@
 
 <html>
 	<head>
-		<title>SKOS Play ! - Visualize SKOS Thesaurus</title>
+		<title><c:out value="${applicationData.skosPlayConfig.applicationTitle}" /></title>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="bootstrap-fileupload/bootstrap-fileupload.min.css" rel="stylesheet" />
 		<link href="css/skos-play.css" rel="stylesheet" />
+		<link href="style/custom.css" rel="stylesheet" />
 		<script src="js/jquery.min.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
 		<script src="bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
@@ -51,8 +52,13 @@
 						${data.errorMessage}
 					</div>
 				</c:if>
-			</div>			
-			<form id="upload_form" action="upload" method="post" enctype="multipart/form-data" class="form-horizontal">
+			</div>	
+					
+			<form id="upload_form" action="upload" method="post" enctype="multipart/form-data" class="form-horizontal">	
+			
+			<c:choose>
+			<c:when test="${!data.skosPlayConfig.publishingMode}">	
+			
 			<fieldset>
 				<legend><fmt:message key="upload.form.legend" /></legend>
 				
@@ -158,6 +164,7 @@
 					</div>
 				</div>
 				
+				
 				<div class="control-group">
 					<label class="control-label">
 							<input
@@ -232,7 +239,6 @@
 				 -->
 			</fieldset>
 
-			
 			<div class="accordion" id="myAccordion">
 				<div class="accordion-group">
 	   				<div class="accordion-heading">
@@ -257,7 +263,7 @@
 								<fmt:message key="upload.form.skosxl2skos" />
 							</label>
 							<div class="controls">
-								<!-- check it be default -->
+								<!-- check it by default -->
 								<input
 									type="checkbox"
 									id="skosxl2skos"
@@ -282,6 +288,72 @@
 	   				</div></div>
 	   			</div><!-- end accordion-group : Advanced options -->
    			</div>
+   			
+   			<!-- end NOT publishing mode (normal mode -->
+   			</c:when>
+   			<c:otherwise>
+   			
+   				<!-- hidden fields -->
+   				<input
+					type="hidden"
+					name="source"
+					id="source-example"
+					value="example" />
+				<input
+					type="hidden"
+					id="skosxl2skos"
+					name="skosxl2skos"
+					value="true" />
+   			
+   				<label class="control-label">
+   					<fmt:message key="upload.form.publishingMode.selectVocabulary" />
+   				</label>
+   				<div class="controls" style="padding-top:1em;">
+	   				<!--  generate the dropdown. See http://getbootstrap.com/2.3.2/components.html#dropdowns -->
+					<div class="dropdown">
+					
+						<!-- Trick to init hidden field and default selection with the first entry in the map -->					
+						<c:forEach items="${applicationData.exampleDatas}" var="entry" varStatus="status">
+							<c:if test="${status.first}">
+								<!-- Hidden field initialized with first entry key -->
+								<input
+									type="hidden"
+									name="example"
+									id="example"
+									value="${entry.key}" />
+								<!-- Display first entry label -->
+								<a id="selected" class="dropdown-toggle btn" data-toggle="dropdown" href="#"><span id="exampleLabel">${sessionScope['fr.sparna.rdf.skosplay.SessionData'].preLoadedDataLabels.getString(entry.key)}</span> <b class="caret"></b></a>
+							</c:if>
+						</c:forEach>
+					
+						<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+							<!-- Re-iterate on entries -->
+							<c:forEach items="${applicationData.exampleDatas}" var="entry">
+								<li><a class="exampleEntry" data-value="${entry.key}" href="#">
+					    			<c:catch var="labelNotFoundException">
+										 ${sessionScope['fr.sparna.rdf.skosplay.SessionData'].preLoadedDataLabels.getString(entry.key)}
+									</c:catch>
+									<c:if test="${labelNotFoundException != null}">${entry.key}</c:if>
+									
+									<!--
+									<c:set value="upload.form.providedExample.${entry.key}" var="messageKey"/>
+									<c:set value="???${pageScope.messageKey}???" var="unknownValue"/>
+									<fmt:message key="${pageScope.messageKey}" var="exampleDataName"/>
+	
+									<c:choose>
+										<c:when test="${pageScope.exampleDataName == pageScope.unknownValue}">${entry.key}</c:when>
+										<c:otherwise>${pageScope.exampleDataName}</c:otherwise>
+									</c:choose>
+									-->
+					    		</a></li>
+							</c:forEach>
+						</ul>
+					</div>
+				</div>
+   			
+   			
+   			</c:otherwise>
+   			</c:choose>
 			
 			<div class="form-actions">
 				<button type="submit" id="submit-button" class="btn btn-large btn-primary"><fmt:message key="next" /></button>

@@ -21,22 +21,9 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 
 public class FopProcessor {
-
-	protected String outputMimeType = MimeConstants.MIME_PDF;
+	
 	protected boolean debugFo = false;
 	protected String debugPath = null;
-	
-	public Fop createFop(OutputStream outStream) throws FOPException, TransformerException {
-		// create an instance of fop factory
-		FopFactory fopFactory = FopFactory.newInstance();
-		// a user agent is needed for transformation
-		FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
-
-		// Construct fop with desired output format
-		Fop fop = fopFactory.newFop(this.outputMimeType, foUserAgent, outStream);
-
-		return fop;
-	}
 
 	/**
 	 * Generates a PDF based on XSL-FO transformation of input XML.
@@ -67,13 +54,11 @@ public class FopProcessor {
 	 * @throws TransformerException
 	 */
 	public void process(
+			Fop fop,
 			Source xmlSource,
-			Transformer t,
-			OutputStream outStream
+			Transformer t
 	) throws FOPException, TransformerException {
-
-		// Construct fop with desired output format
-		Fop fop = createFop(outStream);
+		
 		// Resulting SAX events (the generated FO) must be piped through to FOP
 		Result res = new SAXResult(fop.getDefaultHandler());
 		
@@ -105,6 +90,7 @@ public class FopProcessor {
 	public void processToFile(
 		Source xmlSource,
 		Transformer t,
+		FopProvider fopProvider,
 		File outputFile
 	) throws FOPException, TransformerException, IOException {
 		
@@ -117,7 +103,7 @@ public class FopProcessor {
 		
 	    BufferedOutputStream buf = new java.io.BufferedOutputStream(new java.io.FileOutputStream(outputFile));
 		try {
-			this.process(xmlSource, t, buf);
+			this.process(fopProvider.createFop(buf), xmlSource, t);
 		} finally {
 			if(buf != null) { 
 				buf.flush();
@@ -125,14 +111,6 @@ public class FopProcessor {
 				try { buf.close(); } catch(IOException ignore) { ignore.printStackTrace();	} 
 			}
 		}
-	}
-
-	public String getOutputMimeType() {
-		return outputMimeType;
-	}
-
-	public void setOutputMimeType(String outputMimeType) {
-		this.outputMimeType = outputMimeType;
 	}
 
 	public boolean isDebugFo() {

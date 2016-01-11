@@ -1,6 +1,7 @@
 package fr.sparna.rdf.skosplay;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -14,6 +15,42 @@ public class PrintFormData {
 	protected boolean enableHierarchical = true;
 	protected boolean enableTranslations = true;
 	protected boolean enableMappings = true;
+	protected String loadedDataName;
+	protected String loadedDataLicense;
+	
+	/**
+	 * Access a display type based on its name, because we can't access constant from JSTL / EL
+	 */
+	public Map<String, DisplayType> getDisplayType() {
+		Map<String, DisplayType> map = new HashMap<String, DisplayType>();
+		for (DisplayType type : DisplayType.values()) {
+			map.put(type.toString(), type);
+		}
+		return map;
+	}
+	
+	/**
+	 * Access a viz type based on its name, because we can't access constant from JSTL / EL 
+	 */
+	public Map<String, VizType> getVizType() {
+		Map<String, VizType> map = new HashMap<String, VizType>();
+		for (VizType type : VizType.values()) {
+			map.put(type.toString(), type);
+		}
+		return map;
+	}
+	
+	/**
+	 * Access an output type based on its name, because we can't access constant from JSTL / EL 
+	 */
+	public Map<String, OutputType> getOutputType() {
+		Map<String, OutputType> map = new HashMap<String, OutputType>();
+		for (OutputType type : OutputType.values()) {
+			map.put(type.toString(), type);
+		}
+		return map;
+	}
+	
 	
 	public Map<String, String> getLanguages() {
 		return languages;
@@ -69,6 +106,22 @@ public class PrintFormData {
 
 	public void setEnableMappings(boolean enableMappings) {
 		this.enableMappings = enableMappings;
+	}
+
+	public String getLoadedDataName() {
+		return loadedDataName;
+	}
+
+	public void setLoadedDataName(String loadedDataName) {
+		this.loadedDataName = loadedDataName;
+	}
+
+	public String getLoadedDataLicense() {
+		return loadedDataLicense;
+	}
+
+	public void setLoadedDataLicense(String loadedDataLicense) {
+		this.loadedDataLicense = loadedDataLicense;
 	}
 
 }

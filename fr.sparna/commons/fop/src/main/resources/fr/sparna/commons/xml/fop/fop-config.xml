@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<fop>
+  <renderers>
+    <renderer mime="application/pdf">
+       <fonts>
+        
+          <!--
+           <font kerning="no" embed-url="file:///home/thomas/workspace/02-Sources/sparna/fr.sparna/rdf/skos/skos-printer/src/main/resources/fonts/ghostscript-fonts-std-8.11/n019003l.pfb" embedding-mode="full">
+               <font-triplet name="Nimbus Sans L" style="normal" weight="normal" />
+           </font>
+           <font kerning="no" embed-url="file:///home/thomas/workspace/02-Sources/sparna/fr.sparna/rdf/skos/skos-printer/src/main/resources/fonts/ghostscript-fonts-std-8.11/n019004l.pfb" embedding-mode="full">
+               <font-triplet name="Nimbus Sans L" style="normal" weight="bold" />
+           </font>
+           <font kerning="no" embed-url="file:///home/thomas/workspace/02-Sources/sparna/fr.sparna/rdf/skos/skos-printer/src/main/resources/fonts/ghostscript-fonts-std-8.11/n019023l.pfb" embedding-mode="full">
+               <font-triplet name="Nimbus Sans L" style="italic" weight="normal" />
+           </font>
+           <font kerning="no" embed-url="file:///home/thomas/workspace/02-Sources/sparna/fr.sparna/rdf/skos/skos-printer/src/main/resources/fonts/ghostscript-fonts-std-8.11/n019024l.pfb" embedding-mode="full">
+               <font-triplet name="Nimbus Sans L" style="italic" weight="bold" />
+           </font>
+          -->
+
+          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n019003l.pfb" embedding-mode="full">
+               <font-triplet name="Nimbus Sans L" style="normal" weight="normal" />
+          </font>
+          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n019004l.pfb" embedding-mode="full">
+               <font-triplet name="Nimbus Sans L" style="normal" weight="bold" />
+          </font>
+          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n019023l.pfb" embedding-mode="full">
+               <font-triplet name="Nimbus Sans L" style="italic" weight="normal" />
+          </font>
+          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n019024l.pfb" embedding-mode="full">
+               <font-triplet name="Nimbus Sans L" style="italic" weight="bold" />
+          </font>
+
+          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n021003l.pfb" embedding-mode="full">
+               <font-triplet name="Nimbus Roman No9 L" style="normal" weight="normal" />
+          </font>
+          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n021004l.pfb" embedding-mode="full">
+               <font-triplet name="Nimbus Roman No9 L" style="normal" weight="bold" />
+          </font>
+          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n021023l.pfb" embedding-mode="full">
+               <font-triplet name="Nimbus Roman No9 L" style="italic" weight="normal" />
+          </font>
+          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n021024l.pfb" embedding-mode="full">
+               <font-triplet name="Nimbus Roman No9 L" style="italic" weight="bold" />
+          </font>
+         
+          <!-- register all the fonts found in a directory -->
+          <!--
+          <directory>/home/thomas/workspace/02-Sources/sparna/fr.sparna/rdf/skos/skos-printer/src/main/resources/fonts/NimbusSansL</directory>
+          -->
+          
+
+          <!-- register all the fonts found in a directory and all of its sub directories (use with care) -->
+          <!-- <directory recursive="true">C:\MyFonts2</directory> -->
+
+          <!-- automatically detect operating system installed fonts -->
+          <!-- <auto-detect/> -->
+       </fonts>
+    </renderer>
+  </renderers>
+</fop>

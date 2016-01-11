@@ -12,6 +12,13 @@ public class UploadFormData {
 
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
+	}	
+	
+	/**
+	 * Expose application config to the page
+	 */
+	public SkosPlayConfig getSkosPlayConfig() {
+		return SkosPlayConfig.getInstance();
 	}
 	
 }
