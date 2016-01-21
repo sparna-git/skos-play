@@ -2,6 +2,7 @@ package fr.sparna.rdf.skos.printer.reader;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -18,6 +19,7 @@ import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
 import fr.sparna.rdf.skos.toolkit.SKOS;
+import fr.sparna.rdf.skos.toolkit.builders.GetCollectionsOfConcept;
 import fr.sparna.rdf.skos.toolkit.builders.GetLabels;
 import fr.sparna.rdf.skos.toolkit.builders.GetTopConceptsOfConcept;
 
@@ -28,8 +30,9 @@ public class ConceptBlockReader {
 	// list of URIs of SKOS properties to read for each concept block
 	protected List<String> skosPropertiesToRead;
 	// additional readers corresponding to skosPropertiesToRead
-	// TODO : need to make ProeprtyReader and KeyValueReader implement the same interface
-	protected List<Object> additionalReaders = new ArrayList<Object>();
+	// each reader is associated to the property URI to insert in the result
+	// TODO : need to make PropertyReader and KeyValueReader implement the same interface
+	protected Map<String, Object> additionalReaders = new HashMap<String, Object>();
 
 	// prefLabelReader
 	protected PropertyReader prefLabelReader;
@@ -43,6 +46,7 @@ public class ConceptBlockReader {
 	protected String conceptBlockIdPrefix;
 	// link prefixes, to make links point to a concept block in another display
 	protected String linkDestinationIdPrefix;
+	// whether or not to add a style ('pref', 'alt', etc.) to the attributes for each concept block
 	protected boolean styleAttributes = true;
 	
 	// already generated IDs, to avoid clashes
@@ -68,7 +72,6 @@ public class ConceptBlockReader {
 				this.repository,
 				URI.create(SKOS.PREF_LABEL),
 				// additional path
-				// TODO : could read rdfs:sourceConceptLabel ?
 				null,
 				// language of property to read
 				lang,
@@ -81,26 +84,30 @@ public class ConceptBlockReader {
 		prefLabelReader.setPreLoad(false);
 
 		// setup additional readers
-		this.additionalReaders = new ArrayList<Object>();
+		this.additionalReaders = new HashMap<String, Object>();
 		
 		// for each SKOS property to read...
 		if(this.skosPropertiesToRead != null) {
 			for (String aProperty : this.skosPropertiesToRead) {
 				
 				if(aProperty.equals(SKOSPLAY.TOP_TERM)) {
-
-					additionalReaders.add(
+					additionalReaders.put(SKOSPLAY.TOP_TERM,
 						new KeyValueReader<org.openrdf.model.URI, org.openrdf.model.URI>(
 								repository,
 								new GetTopConceptsOfConcept(null)
-					));
-					
+					));					
+				} else if(aProperty.equals(SKOSPLAY.MEMBER_OF)) {
+					additionalReaders.put(SKOSPLAY.MEMBER_OF,
+						new KeyValueReader<org.openrdf.model.URI, org.openrdf.model.URI>(
+								repository,
+								new GetCollectionsOfConcept(null)
+					));					
 				} else {
 					
 					// add a PropertyReader to read the corresponding property
 					// or its inverse property
 					String inverseProperty = SKOS.getInverseOf(aProperty);
-					additionalReaders.add(
+					additionalReaders.put(aProperty,
 							(conceptScheme != null)
 							?new PropertyReader(
 									this.repository,
@@ -217,7 +224,9 @@ public class ConceptBlockReader {
 			}
 		}
 		
-		for (Object o : additionalReaders) {
+		for (Map.Entry<String, Object> entry : additionalReaders.entrySet()) {
+			
+			Object o = entry.getValue();
 			
 			if(o instanceof PropertyReader) {
 				PropertyReader predicateReader = (PropertyReader)o;
@@ -229,7 +238,7 @@ public class ConceptBlockReader {
 						cb.getAtt().add(
 								SchemaFactory.createAtt(
 										((Literal)value).stringValue(),
-										SKOSTags.getString(predicateReader.getPropertyURI()),
+										SKOSTags.getStringForURI(entry.getKey()),
 										(styleAttributes && predicateReader.getPropertyURI().toString().equals(SKOS.ALT_LABEL))?"alt-att":null
 										)
 								);
@@ -242,25 +251,27 @@ public class ConceptBlockReader {
 										computeRefId(aRef.stringValue(), refPrefLabel, true),
 										aRef.stringValue(),
 										refPrefLabel,
-										SKOSTags.getString(predicateReader.getPropertyURI()),
+										SKOSTags.getStringForURI(entry.getKey()),
 										(styleAttributes)?"pref":null
 										)
 								);
 					}
 				}			
 			} else if(o instanceof KeyValueReader) {
-				KeyValueReader<org.openrdf.model.URI, org.openrdf.model.URI> trReader = (KeyValueReader<org.openrdf.model.URI, org.openrdf.model.URI>)o;
-				List<org.openrdf.model.URI> tops = trReader.read(ValueFactoryImpl.getInstance().createURI(uri));
-				for (org.openrdf.model.URI top : tops) {
-					List<Value> prefs = prefLabelReader.read(URI.create(top.stringValue()));
-					String refPrefLabel = (prefs.size() > 0)?prefs.get(0).stringValue():top.stringValue();
+				// get the result of the reader
+				KeyValueReader<org.openrdf.model.URI, org.openrdf.model.URI> reader = (KeyValueReader<org.openrdf.model.URI, org.openrdf.model.URI>)o;
+				List<org.openrdf.model.URI> values = reader.read(ValueFactoryImpl.getInstance().createURI(uri));
+				
+				// lookup the label of the values
+				for (org.openrdf.model.URI aValue : values) {
+					List<Value> prefs = prefLabelReader.read(URI.create(aValue.stringValue()));
+					String refPrefLabel = (prefs.size() > 0)?prefs.get(0).stringValue():aValue.stringValue();
 					cb.getAtt().add(
 						SchemaFactory.createAttLink(
-								computeRefId(top.stringValue(), refPrefLabel, true),
-								top.stringValue(),
+								computeRefId(aValue.stringValue(), refPrefLabel, true),
+								aValue.stringValue(),
 								refPrefLabel,
-								// TODO : need to have a Map of String properties to readers
-								SKOSTags.getString(SKOSTags.KEY_TOP_CONCEPT),
+								SKOSTags.getString(entry.getKey()),
 								(styleAttributes)?"pref":null
 								)
 					);

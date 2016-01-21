@@ -28,7 +28,9 @@
 	<scopeNote>NE</scopeNote>
 	<semanticRelation></semanticRelation>
 	<topConceptOf></topConceptOf>
-	<topConcept>TT</topConcept>
+	<!-- SKOS Play specific -->
+	<topTerm>TT</topTerm>
+	<memberOf>MT</memberOf>
 	<!-- Alignements -->
 	<alignmentSource>concept source</alignmentSource>
 	<alignmentType> </alignmentType>

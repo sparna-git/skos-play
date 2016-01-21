@@ -62,14 +62,18 @@ public class NormalizeLabels implements SkosPlayCliCommandIfc {
 		List<Statement> statements = new ArrayList<Statement>();
 		for (Map.Entry<Resource, List<Literal>> anEntry : labels.entrySet()) {
 			for (Literal aLabel : anEntry.getValue()) {
-				statements.add(outputRepository.getValueFactory().createStatement(
-						anEntry.getKey(),
-						outputRepository.getValueFactory().createURI(SKOS.HIDDEN_LABEL),
-						outputRepository.getValueFactory().createLiteral(
-								fr.sparna.commons.lang.StringUtil.withoutAccents(aLabel.getLabel()), 
-								aLabel.getLanguage()
-						)
-				));
+				String withoutAccents = fr.sparna.commons.lang.StringUtil.withoutAccents(aLabel.getLabel());
+				// only add the unaccented variant if different from the original label
+				if(!withoutAccents.equals(aLabel.getLabel())) {
+					statements.add(outputRepository.getValueFactory().createStatement(
+							anEntry.getKey(),
+							outputRepository.getValueFactory().createURI(SKOS.HIDDEN_LABEL),
+							outputRepository.getValueFactory().createLiteral(
+									fr.sparna.commons.lang.StringUtil.withoutAccents(withoutAccents), 
+									aLabel.getLanguage()
+							)
+					));
+				}
 			}
 		}
 		

@@ -31,6 +31,7 @@ import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.Fact
 import fr.sparna.rdf.sesame.toolkit.repository.operation.ApplyUpdates;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
+import fr.sparna.rdf.skos.printer.DisplayPrinter.Style;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
 import fr.sparna.rdf.skos.printer.schema.KosDisplay;
 import fr.sparna.rdf.skos.printer.schema.KosDocument;
@@ -61,6 +62,21 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 	public static final List<String> EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS = Arrays.asList(new String[] {
 			SKOS.ALT_LABEL,
 			SKOSPLAY.TOP_TERM,
+			SKOS.BROADER,
+			SKOS.NARROWER,
+			SKOS.RELATED,
+			SKOS.NOTATION,
+			SKOS.DEFINITION,
+			SKOS.SCOPE_NOTE,
+			SKOS.EXAMPLE,			
+			SKOS.CHANGE_NOTE,			
+			SKOS.HISTORY_NOTE,
+			SKOS.EDITORIAL_NOTE,
+	});
+	
+	public static final List<String> EXPANDED_SKOS_PROPERTIES_WITH_MT = Arrays.asList(new String[] {
+			SKOS.ALT_LABEL,
+			SKOSPLAY.MEMBER_OF,
 			SKOS.BROADER,
 			SKOS.NARROWER,
 			SKOS.RELATED,
@@ -228,9 +244,8 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 		document.setHeader(header);
 		
 		ConceptBlockReader cbReader = new ConceptBlockReader(r);
-		cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
-		cbReader.setAdditionalLabelLanguagesToInclude(Arrays.asList(new String[] { "en" }));
-		cbReader.setStyleAttributes(false);
+		cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES_WITH_MT);
+		cbReader.setAdditionalLabelLanguagesToInclude(Arrays.asList(new String[] { "en", "es", "ru" }));
 		
 		AlphaIndexDisplayGenerator reader = new AlphaIndexDisplayGenerator(r, cbReader);
 		BodyReader bodyReader = new BodyReader(reader);		
@@ -242,6 +257,7 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 		m.marshal(document, new File("src/main/resources/alpha-index-output-test.xml"));
 		
 		DisplayPrinter printer = new DisplayPrinter();
+		printer.setStyle(Style.UNESCO);
 		printer.printToHtml(document, new File("display-test.html"), LANG);
 		printer.printToPdf(document, new File("display-test.pdf"), LANG);
 

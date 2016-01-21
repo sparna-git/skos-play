@@ -88,7 +88,8 @@ public class Complete implements SkosPlayCliCommandIfc {
 			
 		// alphabetical display
 		ConceptBlockReader alphaCbReader = new ConceptBlockReader(inputRepository);
-		alphaCbReader.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
+		// alphaCbReader.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
+		alphaCbReader.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_MT);
 		if(args.isMultilingual()) {
 			alphaCbReader.setAdditionalLabelLanguagesToInclude(additionalLangs);
 		}

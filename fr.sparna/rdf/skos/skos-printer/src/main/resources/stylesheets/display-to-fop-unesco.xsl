@@ -472,42 +472,61 @@
 				<!-- 
 					<xsl:if test="disp:att[@type != 'definition' and @type != 'scopeNote' and not(contains(@type, 'lang:'))]">
 				 -->
-				<!-- all the attributes except definition, scopeNote and translations -->
-				<xsl:if test="disp:att[@type != 'definition' and not(contains(@type, 'lang:'))]">
-					<fo:table font-size="80%">
-						<fo:table-column column-width="2.5em"/>
-						<fo:table-column />
-						<fo:table-body>
-							<xsl:apply-templates select="disp:att[@type != 'definition' and not(contains(@type, 'lang:'))]" mode="table" />
-						</fo:table-body>
-					</fo:table>
-				</xsl:if>
-				
-				<!-- UNESCO -->				
-				<fo:block text-align="justify" font-family="Times" font-size="95%">
-					<xsl:if test="disp:att[@type = 'definition']/*">
-						<fo:block font-family="Nimbus Roman No9 L, Times" margin-top="0.7mm" line-height="95%">
-							<xsl:apply-templates select="disp:att[@type = 'definition']/*" />
-						</fo:block>
-					</xsl:if>
-					
-					<!--
-					<xsl:if test="disp:att[@type = 'scopeNote']/*">
-						<fo:block margin-top="0.7mm" line-height="95%">
-							<fo:inline font-family="ZapfDingbats">&#x2605;</fo:inline>
-							<fo:inline font-family="Nimbus Roman No9 L, Times" font-style="italic">&#160;<xsl:apply-templates select="disp:att[@type = 'scopeNote']/*" /></fo:inline>
-						</fo:block>
-					</xsl:if>
-					-->
-				</fo:block>
-				
-				
-				<!--  Now display all the translations in other languages -->
+				 
+				<!-- 1. Translations -->
 				<xsl:if test="disp:att[contains(@type, 'lang:')]">
-					<fo:block font-family="Nimbus Sans L, Helvetica" font-size="smaller" font-style="italic" margin-top="0.7mm">
+					<fo:block font-family="Nimbus Sans L, Helvetica" font-size="smaller" font-style="italic" margin-bottom="0.7mm">
 						<xsl:apply-templates select="disp:att[contains(@type, 'lang:')]" />
 					</fo:block>
 				</xsl:if>
+				
+				<!-- 2. SN -->
+				<!-- 
+				<xsl:if test="disp:att[@type = 'scopeNote']">
+					<fo:block text-align="justify" font-family="Nimbus Roman No9 L, Times"  font-style="italic" margin-top="0.7mm"  margin-bottom="0.7mm" line-height="95%">
+						<xsl:apply-templates select="disp:att[@type = 'scopeNote']" />
+					</fo:block>
+				</xsl:if>
+				 -->
+				
+				<!-- 3. ISO-25964 - order -->
+				<fo:table font-size="80%">
+					<fo:table-column column-width="2.5em"/>
+					<fo:table-column />
+					<fo:table-body>
+						<!-- 1. SN -->
+						<xsl:apply-templates select="disp:att[@type = 'scopeNote']" mode="table" />
+						<!-- 2. UF -->
+						<xsl:apply-templates select="disp:att[@type = 'altLabel']" mode="table" />
+						<!-- 3. TT or MT -->
+						<xsl:apply-templates select="disp:att[@type = 'topTerm']" mode="table" />
+						<!-- 4. BT -->
+						<xsl:apply-templates select="disp:att[@type = 'broader']" mode="table" />
+						<!-- 5. NT -->
+						<xsl:apply-templates select="disp:att[@type = 'narrower']" mode="table" />
+						<!-- 6. RT -->
+						<xsl:apply-templates select="disp:att[@type = 'related']" mode="table" />
+						<!-- 7. definition -->
+						<xsl:apply-templates select="disp:att[@type = 'definition']" mode="table" />
+						<!-- 8. historyNote -->
+						<xsl:apply-templates select="disp:att[@type = 'historyNote']" mode="table" />
+						<!-- 9. MT / SC subjectCategory -->
+						<xsl:apply-templates select="disp:att[@type = 'memberOf']" mode="table" />
+						<!-- 10. Anything else not above -->
+						<xsl:apply-templates select="disp:att[
+								@type != 'scopeNote'
+							and @type != 'altLabel'
+							and @type != 'topTerm'
+							and @type != 'broader'
+							and @type != 'narrower'
+							and @type != 'related'
+							and @type != 'definition'
+							and @type != 'historyNote'
+							and @type != 'memberOf'
+							and not(contains(@type, 'lang:'))
+						]" mode="table" />
+					</fo:table-body>
+				</fo:table>		
 				
 			</xsl:if>
 		</fo:block>
@@ -548,12 +567,12 @@
 			<fo:table-cell>
 				<xsl:choose>
 					<xsl:when test="@type = 'definition' or @type = 'scopeNote'">
-						<fo:block font-style="italic" font-family="Nimbus Roman No9 L, Times">
+						<fo:block text-align="justify" font-style="italic" font-family="Nimbus Roman No9 L, Times">
 							<xsl:apply-templates />
 						</fo:block>
 					</xsl:when>
 					<xsl:otherwise>
-						<fo:block font-size="smaller" text-align="justify" font-family="Nimbus Sans L, Helvetica">
+						<fo:block font-family="Nimbus Sans L, Helvetica">
 							<xsl:apply-templates />
 						</fo:block>					
 					</xsl:otherwise>

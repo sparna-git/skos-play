@@ -6,4 +6,6 @@ public final class SKOSPLAY {
 	
 	public static final String TOP_TERM = "topTerm";
 	
+	public static final String MEMBER_OF = "memberOf";
+	
 }

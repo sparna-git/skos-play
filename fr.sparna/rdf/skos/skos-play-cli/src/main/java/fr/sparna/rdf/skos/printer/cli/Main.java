@@ -13,6 +13,8 @@ import fr.sparna.rdf.skos.printer.cli.alphabetical.Alphabetical;
 import fr.sparna.rdf.skos.printer.cli.alphabetical.ArgumentsAlphabetical;
 import fr.sparna.rdf.skos.printer.cli.complete.ArgumentsComplete;
 import fr.sparna.rdf.skos.printer.cli.complete.Complete;
+import fr.sparna.rdf.skos.printer.cli.index.ArgumentsIndex;
+import fr.sparna.rdf.skos.printer.cli.index.Index;
 import fr.sparna.rdf.skos.printer.cli.normalize.ArgumentsNormalizeLabels;
 import fr.sparna.rdf.skos.printer.cli.normalize.NormalizeLabels;
 import fr.sparna.rdf.skos.printer.cli.translation.ArgumentsTranslation;
@@ -28,6 +30,7 @@ public class Main {
 		COMPLETE(new ArgumentsComplete(), new Complete()),
 		TRANSLATION(new ArgumentsTranslation(), new Translation()),
 		NORMALIZE(new ArgumentsNormalizeLabels(), new NormalizeLabels()),
+		INDEX(new ArgumentsIndex(), new Index()),
 		;
 		
 		private SkosPlayCliCommandIfc command;
