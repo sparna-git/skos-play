@@ -99,9 +99,13 @@ public class TranslationTableReverseDisplayGenerator extends AbstractKosDisplayG
 		Collections.sort(queryResultRows, new Comparator<QueryResultRow>() {
 			@Override
 			public int compare(QueryResultRow o1, QueryResultRow o2) {
-				if(o1 == null && o2 == null) return 0;
+				// both are null
+				if((o1 == null || o1.label2 == null) && (o2 == null || o2.label2 == null)) return 0;
+				// only o1 is null
 				if(o1 == null || o1.label2 == null) return 1;
+				// only o2 is null
 				if(o2 == null || o2.label2 == null) return -1;
+				// none is null
 				return collator.compare(
 						o1.label2,
 						o2.label2

@@ -99,8 +99,7 @@ public class TranslationTableDisplayGenerator extends AbstractKosDisplayGenerato
 		Collections.sort(queryResultRows, new Comparator<QueryResultRow>() {
 			@Override
 			public int compare(QueryResultRow o1, QueryResultRow o2) {
-				System.out.println(o1+" / "+o2);
-				if(o1 == null && o2 == null) return 0;
+				if((o1 == null || o1.label1 == null) && (o2 == null || o2.label1 == null)) return 0;
 				if(o1 == null || o1.label1 == null) return 1;
 				if(o2 == null || o2.label1 == null) return -1;
 				return collator.compare(
