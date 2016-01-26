@@ -243,6 +243,12 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 		KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?URI.create(args[1]):null);
 		document.setHeader(header);
 		
+		// build and set metadata
+		DocumentMetadataReader metaReader = new DocumentMetadataReader(r);
+		document.setKosDocumentMetadata(
+				metaReader.readKosDocumentMetadata(LANG, (args.length > 1)?URI.create(args[1]):null)
+		);
+		
 		ConceptBlockReader cbReader = new ConceptBlockReader(r);
 		cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES_WITH_MT);
 		cbReader.setAdditionalLabelLanguagesToInclude(Arrays.asList(new String[] { "en", "es", "ru" }));

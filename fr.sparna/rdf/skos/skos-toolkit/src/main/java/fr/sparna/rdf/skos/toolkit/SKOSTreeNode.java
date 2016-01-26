@@ -11,8 +11,11 @@ public class SKOSTreeNode {
 		UNKNOWN
 	}
 	
+	// Corresponding Concept URI
 	protected java.net.URI uri;
+	// Type of node (Concept vs. Collection)
 	protected NodeType nodeType = NodeType.UNKNOWN;
+	// the criteria on which to sort
 	protected String sortCriteria;
 	protected double weight = 1.0d;
 

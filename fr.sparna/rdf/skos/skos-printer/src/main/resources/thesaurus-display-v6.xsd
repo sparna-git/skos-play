@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema targetNamespace="http://www.sparna.fr/thesaurus-display" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:disp="http://www.sparna.fr/thesaurus-display">
+<schema 
+	targetNamespace="http://www.sparna.fr/thesaurus-display"
+	elementFormDefault="qualified"
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:disp="http://www.sparna.fr/thesaurus-display"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+>
+
+	<!-- Import DCTerms -->
+	<import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/dc.xsd" />
 
 	<!-- Document and header -->
 
@@ -13,6 +22,7 @@
         	<documentation>Represent an entire document. This is the root element.</documentation>
         </annotation>
     	<sequence>
+    		<element ref="disp:kosDocumentMetadata" minOccurs="0" maxOccurs="1"></element>
     		<element ref="disp:header" minOccurs="1" maxOccurs="1"></element>
     		<element ref="disp:body" minOccurs="1" maxOccurs="1"></element>
     		<element ref="disp:footer"></element>
@@ -350,5 +360,14 @@
     <complexType name="tableColumnType">
     	<attribute name="width" type="double" use="required"></attribute>
     </complexType>
+    
+    <element name="kosDocumentMetadata" type="dc:elementContainer" />
 
+	<!--
+    <complexType name="kosDocumentMetadata">
+    	<sequence minOccurs="0" maxOccurs="unbounded">
+    		<any namespace="http://purl.org/dc/elements/1.1/" />
+    	</sequence>
+    </complexType>
+     -->
 </schema>

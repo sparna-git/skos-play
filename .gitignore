@@ -7,3 +7,7 @@ build/
 target/
 .sesame-toolkit-repositories/
 pom.xml.releaseBackup
+.DisplayPrinter-debug.xml
+.FopProcessor-debug.xml
+output.pdf
+display-test.pdf

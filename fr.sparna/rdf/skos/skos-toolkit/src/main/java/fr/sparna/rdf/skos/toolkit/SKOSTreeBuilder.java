@@ -33,7 +33,7 @@ public class SKOSTreeBuilder {
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 	
 	protected Repository repository;
-	protected PropertyReader sortCriteriaReader;
+	protected SKOSNodeSortCriteriaReader sortCriteriaReader;
 	protected SKOSNodeTypeReader nodeTypeReader;
 
 	private Collator collator;
@@ -49,7 +49,7 @@ public class SKOSTreeBuilder {
 	 * @param repository			The repository to read data from
 	 * @param sortCriteriaReader	A PropertyReader to read the property that will be used to sort the elements of the tree
 	 */
-	public SKOSTreeBuilder(Repository repository, PropertyReader sortCriteriaReader, SKOSNodeTypeReader nodeTypeReader) {
+	public SKOSTreeBuilder(Repository repository, SKOSNodeSortCriteriaReader sortCriteriaReader, SKOSNodeTypeReader nodeTypeReader) {
 		super();
 		this.repository = repository;
 		this.sortCriteriaReader = sortCriteriaReader;
@@ -69,7 +69,7 @@ public class SKOSTreeBuilder {
 	public SKOSTreeBuilder(Repository repository, String lang) {
 		this(
 				repository,
-				new PropertyReader(repository, java.net.URI.create(SKOS.PREF_LABEL), lang),
+				new SKOSNodeSortCriteriaPropertyReader(new PropertyReader(repository, java.net.URI.create(SKOS.PREF_LABEL), lang)),
 				new SKOSNodeTypeReader(new PropertyReader(repository, java.net.URI.create(RDF.TYPE.stringValue())))
 		);
 	}
@@ -217,7 +217,7 @@ public class SKOSTreeBuilder {
 			
 			// let's try to be smart
 			if(originalTree.getNumberOfNodes() < 500 || rootsWithNoChildren > 2) {
-				log.debug("Concept tree ois small or contains more than 2 first-level nodes ("+rootsWithNoChildren+") with no children. Resetting to a single tree");
+				log.debug("Concept tree is small or contains more than 2 first-level nodes ("+rootsWithNoChildren+") with no children. Resetting to a single tree");
 				result.add(originalTree);
 			} else {
 				log.debug("Creating trees with first-level nodes");
@@ -261,9 +261,10 @@ public class SKOSTreeBuilder {
 	throws SparqlPerformException {
 
 		// fetch sort criteria - usually prefLabel in a given language
-		List<Value> sortCriterias = this.sortCriteriaReader.read(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()));
+		// List<Value> sortCriterias = this.sortCriteriaReader.read(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()));
 		// usually there would be only one
-		String sortCriteria = (sortCriterias != null && sortCriterias.size() > 0)?sortCriterias.get(0).stringValue():null;				
+		// String sortCriteria = (sortCriterias != null && sortCriterias.size() > 0)?sortCriterias.get(0).stringValue():null;				
+		String sortCriteria = this.sortCriteriaReader.readSortCriteria(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()));
 		
 		// fetch node type
 		final NodeType nodeType = this.nodeTypeReader.readNodeType(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()));

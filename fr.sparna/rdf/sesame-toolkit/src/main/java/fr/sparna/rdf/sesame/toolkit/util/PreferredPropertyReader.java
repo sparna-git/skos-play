@@ -27,6 +27,8 @@ import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.query.builder.ValuesSparqlQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.reader.KeyValueHelperBase;
+import fr.sparna.rdf.sesame.toolkit.reader.KeyValueHelperIfc;
 
 /**
  * Returns a list of values for an ordered list of properties, for given resource or list of resources, in a given language.
@@ -327,6 +329,14 @@ public class PreferredPropertyReader {
 
 	public void setProperties(List<java.net.URI> properties) {
 		this.properties = properties;
+	}
+
+	public String getPreferredLanguage() {
+		return preferredLanguage;
+	}
+
+	public List<String> getFallbackLanguages() {
+		return fallbackLanguages;
 	}
 
 	private List<Value> findValues(List<SparqlQuery> queries) 

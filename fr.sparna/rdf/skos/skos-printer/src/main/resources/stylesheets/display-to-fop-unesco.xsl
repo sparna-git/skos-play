@@ -3,7 +3,9 @@
 	version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:disp="http://www.sparna.fr/thesaurus-display"
-	xmlns:fo="http://www.w3.org/1999/XSL/Format">
+	xmlns:fo="http://www.w3.org/1999/XSL/Format"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"	
+>
 	
 	<!-- application language with which we need to generate the labels -->
 	<xsl:param name="lang">en</xsl:param>	
@@ -22,10 +24,40 @@
 				<xsl:apply-templates select="disp:body/disp:kosDisplay" mode="layout-master-set" />
 			</fo:layout-master-set>
 
+			<!-- Include XMP metadata -->
+			<xsl:apply-templates select="disp:kosDocumentMetadata" />
+
 			<!-- the first display will print the header -->		
 			<xsl:apply-templates select="disp:body" />
 		
 		</fo:root>
+	</xsl:template>
+	
+	<xsl:template match="disp:kosDocumentMetadata">
+		<xsl:if test="child::*">
+			<fo:declarations>
+				<x:xmpmeta xmlns:x="adobe:ns:meta/">
+					<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	      				<rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">
+	      					<xsl:for-each select="child::*">
+	      						<xsl:copy-of select="." />
+	      					</xsl:for-each>	      					
+	      				</rdf:Description>
+	      				<rdf:Description rdf:about=''
+						  xmlns='http://ns.adobe.com/pdf/1.3/'
+						  xmlns:pdf='http://ns.adobe.com/pdf/1.3/'>
+						  <pdf:Producer>SKOS-Play - Sparna</pdf:Producer>
+						  <pdf:Keywords><xsl:value-of select="dc:subject" /></pdf:Keywords>
+						  <pdf:CreationDate></pdf:CreationDate>
+						  <pdf:ModDate><xsl:value-of select="dc:date" /></pdf:ModDate>
+						  <pdf:Author><xsl:value-of select="dc:creator" /></pdf:Author>
+						  <pdf:Title><xsl:value-of select="dc:title" /></pdf:Title>
+						  <pdf:Subject><xsl:value-of select="dc:subject" /></pdf:Subject>
+						 </rdf:Description>
+	      			</rdf:RDF>
+				</x:xmpmeta>				 
+			</fo:declarations>		
+		</xsl:if>
 	</xsl:template>
 	
 	<!-- generates a different page master for each display, to have different column-count for each of them -->
@@ -304,7 +336,7 @@
 		<fo:table-row>
 			<fo:table-cell>
 				<fo:block margin-right="6px" text-align="right">
-					<fo:inline keep-together.within-line="always">
+					<fo:inline keep-together.within-line="always" font-family="Nimbus Sans L, Helvetica">
 						<xsl:call-template name="doStyledString">
 							<xsl:with-param name="string" select="@before" />
 							<xsl:with-param name="style" select="disp:label/disp:str/@style" />
@@ -314,7 +346,7 @@
 			</fo:table-cell>
 			<fo:table-cell>
 				<fo:block>
-					<fo:inline keep-together.within-line="always">
+					<fo:inline keep-together.within-line="always" font-family="Nimbus Sans L, Helvetica">
 						<xsl:call-template name="doStyledString">
 							<xsl:with-param name="string" select="concat(@key, @after)" />
 							<xsl:with-param name="style" select="disp:label/disp:str/@style" />
@@ -328,7 +360,7 @@
 	</xsl:template>
 	
 	<xsl:template match="disp:entry" mode="kwac">
-		<fo:block>
+		<fo:block font-family="Nimbus Sans L, Helvetica">
 			<xsl:variable name="s"><xsl:value-of select="@key" /><xsl:value-of select="@after" /><xsl:if test="@before and @before != ''">, <xsl:value-of select="@before" /> ~</xsl:if></xsl:variable>
 			<xsl:call-template name="doStyledString">
 				<xsl:with-param name="string" select="$s" />

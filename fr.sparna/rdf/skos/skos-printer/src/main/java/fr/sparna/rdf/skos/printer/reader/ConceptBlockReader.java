@@ -37,6 +37,9 @@ public class ConceptBlockReader {
 	// prefLabelReader
 	protected PropertyReader prefLabelReader;
 	
+	// notationReader
+	protected PropertyReader notationReader;
+	
 	// should we include linguistic equivalents ?
 	protected List<String> additionalLabelLanguagesToInclude = null;
 	// use a TreeMap to garantee ordering by language code
@@ -82,6 +85,12 @@ public class ConceptBlockReader {
 		);
 		// if we need to disable preload
 		prefLabelReader.setPreLoad(false);
+		
+		notationReader = new PropertyReader(
+				this.repository,
+				URI.create(SKOS.NOTATION)
+		);
+		notationReader.setPreLoad(false);
 
 		// setup additional readers
 		this.additionalReaders = new HashMap<String, Object>();
@@ -161,10 +170,16 @@ public class ConceptBlockReader {
 	}
 	
 	
-	public ConceptBlock readConceptBlock(final String uri, boolean styleLabel)
+	public ConceptBlock readConceptBlock(final String uri, boolean styleLabel, boolean prependNotation)
 	throws SparqlPerformException {
 		// set sourceConceptLabel (or URI if no sourceConceptLabel can be found)
 		String label = LabelReader.display(prefLabelReader.read(URI.create(uri)));
+		
+		if(prependNotation) {
+			List<Value> notations = notationReader.read(URI.create(uri));
+			label = ((notations.size() > 0)?notations.get(0).stringValue()+" ":"")+label;
+		}
+		
 		label = (label.trim().equals(""))?uri:label;
 		return this.readConceptBlock(uri, label, styleLabel);
 	}
@@ -266,11 +281,19 @@ public class ConceptBlockReader {
 				for (org.openrdf.model.URI aValue : values) {
 					List<Value> prefs = prefLabelReader.read(URI.create(aValue.stringValue()));
 					String refPrefLabel = (prefs.size() > 0)?prefs.get(0).stringValue():aValue.stringValue();
+					
+					String refNotation = null;
+					if(entry.getKey().equals(SKOSPLAY.MEMBER_OF)) {
+						// in case we are referencing a collection / micro-thesaurus, attempt to fetch the notation (UNESCO thesaurus)
+						List<Value> notations = notationReader.read(URI.create(aValue.stringValue()));
+						refNotation = (notations.size() > 0)?notations.get(0).stringValue():null;
+					}
+					
 					cb.getAtt().add(
 						SchemaFactory.createAttLink(
 								computeRefId(aValue.stringValue(), refPrefLabel, true),
 								aValue.stringValue(),
-								refPrefLabel,
+								((refNotation != null)?refNotation+" ":"")+refPrefLabel,
 								SKOSTags.getString(entry.getKey()),
 								(styleAttributes)?"pref":null
 								)

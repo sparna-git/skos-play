@@ -10,6 +10,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
 import org.apache.log4j.Level;
+import org.openrdf.model.Value;
 import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.repository.Repository;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import fr.sparna.commons.tree.GenericTreeNode;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
+import fr.sparna.rdf.sesame.toolkit.util.PreferredPropertyReader;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
@@ -32,6 +34,7 @@ import fr.sparna.rdf.skos.printer.schema.NodeData;
 import fr.sparna.rdf.skos.printer.schema.Section;
 import fr.sparna.rdf.skos.printer.schema.Tree;
 import fr.sparna.rdf.skos.toolkit.SKOS;
+import fr.sparna.rdf.skos.toolkit.SKOSNodeSortCriteriaPreferredPropertyReader;
 import fr.sparna.rdf.skos.toolkit.SKOSNodeTypeReader;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeBuilder;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode;
@@ -77,8 +80,14 @@ public class HierarchicalDisplayGenerator extends AbstractKosDisplayGenerator {
 		SKOSNodeTypeReader nodeTypeReader = new SKOSNodeTypeReader(typeReader);
 		
 		// init the tree builder
-		// TODO : we use the same same PrefLabelReader as the ConceptBlockReader - dunno if this can cause problems
-		SKOSTreeBuilder treeBuilder = new SKOSTreeBuilder(repository, this.cbReader.getPrefLabelReader(), nodeTypeReader);
+		// First sort on the notation, then the prefLabel if notation is not available
+		PreferredPropertyReader ppr = new PreferredPropertyReader(
+				repository,
+				Arrays.asList(new URI[] { URI.create(SKOS.NOTATION), URI.create(SKOS.PREF_LABEL) }),
+				lang
+		);
+		ppr.setCaching(true);
+		SKOSTreeBuilder treeBuilder = new SKOSTreeBuilder(repository, new SKOSNodeSortCriteriaPreferredPropertyReader(ppr), nodeTypeReader);
 		treeBuilder.setUseConceptSchemesAsFirstLevelNodes(false);
 		
 		// build our display
@@ -94,10 +103,23 @@ public class HierarchicalDisplayGenerator extends AbstractKosDisplayGenerator {
 			log.debug("Finish reading "+skosTrees.size()+" trees");
 		}
 		
+		PropertyReader notationReader = new PropertyReader(
+				this.repository,
+				URI.create(SKOS.NOTATION)
+		);
+		notationReader.setPreLoad(false);
+		
 		for (GenericTree<SKOSTreeNode> genericTree : skosTrees) {
 			Section s = new Section();
 			// sets the name of the root node as section title
-			s.setTitle(LabelReader.display(this.cbReader.getPrefLabelReader().read(genericTree.getRoot().getData().getUri())));				
+			String title = LabelReader.display(this.cbReader.getPrefLabelReader().read(genericTree.getRoot().getData().getUri()));
+			
+			// prepend notation
+			List<Value> notations = notationReader.read(genericTree.getRoot().getData().getUri());
+			String aNotation = (notations.size() > 0)?notations.get(0).stringValue():null;
+			title = ((aNotation != null)?aNotation+" ":"")+title;
+			
+			s.setTitle(title);				
 			
 			Tree t = new Tree();
 			s.setTree(t);
@@ -120,7 +142,12 @@ public class HierarchicalDisplayGenerator extends AbstractKosDisplayGenerator {
 		NodeData nd = new NodeData();
 		n.setNodeData(nd);
 		
-		ConceptBlock cb = this.cbReader.readConceptBlock(treeNode.getData().getUri().toString(), false);
+		ConceptBlock cb = this.cbReader.readConceptBlock(
+				treeNode.getData().getUri().toString(),
+				false,
+				// attempt to prepend a notation if node type is collection
+				(treeNode.getData().getNodeType() == SKOSTreeNode.NodeType.COLLECTION)
+		);
 		nd.setConceptBlock(cb);
 		
 		// recurse on children
