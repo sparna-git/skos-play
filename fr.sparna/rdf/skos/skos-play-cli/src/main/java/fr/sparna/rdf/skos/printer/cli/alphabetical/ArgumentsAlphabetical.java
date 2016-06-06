@@ -5,7 +5,7 @@ import com.beust.jcommander.Parameters;
 
 import fr.sparna.rdf.skos.printer.cli.ArgumentsSkosPlayCli;
 
-@Parameters(commandDescription = "Generates a complete report.")
+@Parameters(commandDescription = "Generates an alphabetical report.")
 public class ArgumentsAlphabetical extends ArgumentsSkosPlayCli {
 	
 	@Parameter(

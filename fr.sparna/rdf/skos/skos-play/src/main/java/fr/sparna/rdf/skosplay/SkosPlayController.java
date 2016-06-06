@@ -237,7 +237,7 @@ public class SkosPlayController {
 					
 					if(skosxl2skos) {
 						// apply inference
-						ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSKOSXLRuleset()));
+						ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSkosXl2SkosRuleset()));
 						au.execute(repository);
 					}
 				} catch (RepositoryOperationException e1) {
@@ -264,7 +264,7 @@ public class SkosPlayController {
 					
 					if(skosxl2skos) {
 						// apply inference
-						ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSKOSXLRuleset()));
+						ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSkosXl2SkosRuleset()));
 						au.execute(repository);
 					}
 				} catch (RepositoryOperationException e1) {

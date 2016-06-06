@@ -8,7 +8,7 @@ import com.beust.jcommander.converters.FileConverter;
 
 import fr.sparna.rdf.skos.printer.cli.ArgumentsSkosPlayCli;
 
-@Parameters(commandDescription = "Generates a complete report.")
+@Parameters(commandDescription = "Generates an alignment report.")
 public class ArgumentsAlignment extends ArgumentsSkosPlayCli {
 	
 	@Parameter(

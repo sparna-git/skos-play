@@ -232,7 +232,7 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 		Repository r = localRepositoryBuilder.createNewRepository();
 		
 		// SKOS-XL
-		ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSKOSXLRuleset()));
+		ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSkosXl2SkosRuleset()));
 		au.execute(r);
 		
 		// build result document

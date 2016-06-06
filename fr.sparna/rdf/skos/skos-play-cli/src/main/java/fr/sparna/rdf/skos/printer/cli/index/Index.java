@@ -45,7 +45,7 @@ public class Index implements SkosPlayCliCommandIfc {
 		Repository inputRepository = factory.createNewRepository();
 
 		// SKOS-XL
-		ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSKOSXLRuleset()));
+		ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSkosXl2SkosRuleset()));
 		au.execute(inputRepository);
 		
 		// build result document

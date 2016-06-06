@@ -127,12 +127,13 @@ public class SKOSTreeBuilder {
 					result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)aCollection)));
 				}
 			} else {
-				log.debug("No concept schemes and no collections exists, will fetch all concepts without broaders.");
+				log.debug("No concept schemes and no collections exists, will look for all explicit top-levels concepts.");
 				
-				// fetch all concepts with no broaders
-				Perform.on(repository).select(new GetConceptsWithNoBroaderHelper(null) {
+				// fetch all concepts explicitely marked as top concepts
+				Perform.on(repository).select(new GetTopConceptsHelper(null) {
+					
 					@Override
-					protected void handleConceptWithNoBroader(Resource noBroader)
+					protected void handleTopConcept(Resource noBroader)
 					throws TupleQueryResultHandlerException {
 						try {
 							result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)noBroader)));
@@ -141,6 +142,23 @@ public class SKOSTreeBuilder {
 						}
 					}
 				});
+				
+				if(result.size() == 0) {
+					log.debug("No explicit top concepts found, will fetch all concepts without broaders.");
+					
+					// fetch all concepts with no broaders
+					Perform.on(repository).select(new GetConceptsWithNoBroaderHelper(null) {
+						@Override
+						protected void handleConceptWithNoBroader(Resource noBroader)
+						throws TupleQueryResultHandlerException {
+							try {
+								result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)noBroader)));
+							} catch (SparqlPerformException e) {
+								throw new TupleQueryResultHandlerException(e);
+							}
+						}
+					});
+				}				
 			}			
 		}
 		

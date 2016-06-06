@@ -13,10 +13,14 @@ import fr.sparna.rdf.skos.printer.cli.alphabetical.Alphabetical;
 import fr.sparna.rdf.skos.printer.cli.alphabetical.ArgumentsAlphabetical;
 import fr.sparna.rdf.skos.printer.cli.complete.ArgumentsComplete;
 import fr.sparna.rdf.skos.printer.cli.complete.Complete;
+import fr.sparna.rdf.skos.printer.cli.hierarchical.ArgumentsHierarchical;
+import fr.sparna.rdf.skos.printer.cli.hierarchical.Hierarchical;
 import fr.sparna.rdf.skos.printer.cli.index.ArgumentsIndex;
 import fr.sparna.rdf.skos.printer.cli.index.Index;
 import fr.sparna.rdf.skos.printer.cli.normalize.ArgumentsNormalizeLabels;
 import fr.sparna.rdf.skos.printer.cli.normalize.NormalizeLabels;
+import fr.sparna.rdf.skos.printer.cli.skos2skosxl.ArgumentsSkos2SkosXl;
+import fr.sparna.rdf.skos.printer.cli.skos2skosxl.Skos2SkosXl;
 import fr.sparna.rdf.skos.printer.cli.translation.ArgumentsTranslation;
 import fr.sparna.rdf.skos.printer.cli.translation.Translation;
 
@@ -27,10 +31,12 @@ public class Main {
 		
 		ALIGNMENT(new ArgumentsAlignment(), new Alignment()),
 		ALPHABETICAL(new ArgumentsAlphabetical(), new Alphabetical()),
+		HIERARCHICAL(new ArgumentsHierarchical(), new Hierarchical()),
 		COMPLETE(new ArgumentsComplete(), new Complete()),
 		TRANSLATION(new ArgumentsTranslation(), new Translation()),
 		NORMALIZE(new ArgumentsNormalizeLabels(), new NormalizeLabels()),
 		INDEX(new ArgumentsIndex(), new Index()),
+		SKOS2SKOSXL(new ArgumentsSkos2SkosXl(), new Skos2SkosXl()),
 		;
 		
 		private SkosPlayCliCommandIfc command;

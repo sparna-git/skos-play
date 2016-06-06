@@ -28,10 +28,26 @@ public class SKOSRules {
 			"owl2skos/05-skos-ConceptScheme.ru",
 	});
 	
-	public static List<String> SKOSXL_RULESET = Arrays.asList(new String[] { 
+	public static List<String> SKOSXL2SKOS_RULESET = Arrays.asList(new String[] { 
 			"skosxl2skos/S55.ru",
 			"skosxl2skos/S56.ru",
 			"skosxl2skos/S57.ru",
+	});
+	
+	public static List<String> SKOS2SKOSXL_URI_RULESET = Arrays.asList(new String[] { 
+			"skos2skosxl/S55-S56-S57-URIs.ru"
+	});
+	
+	public static List<String> SKOS2SKOSXL_BNODE_RULESET = Arrays.asList(new String[] { 
+			"skos2skosxl/S55-S56-S57-bnodes.ru"
+	});
+	
+	public static List<String> SKOS2SKOSXL_NOTES_URI_RULESET = Arrays.asList(new String[] { 
+			"skos2skosxl/S16-URIs.ru"
+	});
+	
+	public static List<String> SKOS2SKOSXL_NOTES_BNODE_RULESET = Arrays.asList(new String[] { 
+			"skos2skosxl/S16-bnodes.ru"
 	});
 
 	public static List<SparqlQueryBuilder> getRulesetLite() {
@@ -42,7 +58,24 @@ public class SKOSRules {
 		return SparqlQueryBuilderList.fromResources(SKOSRules.class, OWL2SKOS_RULESET);
 	}
 	
-	public static List<SparqlQueryBuilder> getSKOSXLRuleset() {
-		return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOSXL_RULESET);
+	public static List<SparqlQueryBuilder> getSkosXl2SkosRuleset() {
+		return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOSXL2SKOS_RULESET);
 	}
+	
+	public static List<SparqlQueryBuilder> getSkos2SkosXlRuleset(boolean useBnodes) {
+		if(useBnodes) {
+			return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOS2SKOSXL_BNODE_RULESET);
+		} else {
+			return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOS2SKOSXL_URI_RULESET);
+		}
+	}
+	
+	public static List<SparqlQueryBuilder> getSkos2SkosXlNotesURIRuleset(boolean useBnodes) {
+		if(useBnodes) {
+			return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOS2SKOSXL_NOTES_BNODE_RULESET);
+		} else {
+			return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOS2SKOSXL_NOTES_URI_RULESET);
+		}
+	}
+
 }

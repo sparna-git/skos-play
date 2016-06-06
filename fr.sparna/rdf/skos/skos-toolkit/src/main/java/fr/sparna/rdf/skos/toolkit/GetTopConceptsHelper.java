@@ -32,6 +32,16 @@ public abstract class GetTopConceptsHelper extends SelectSparqlHelperBase {
 		);
 	}
 
+	/**
+	 * @param orderByLang		a 2-letters ISO-code of a language to order the list on the labels of this language,
+	 * or null to disable ordering.
+	 */
+	public GetTopConceptsHelper(String orderByLang) {
+		super(
+				new QueryBuilder(orderByLang)		
+		);
+	}
+
 	@Override
 	public void handleSolution(BindingSet binding)
 	throws TupleQueryResultHandlerException {
