@@ -14,7 +14,7 @@
 
     <groupId>fr.sparna.rdf.skos</groupId>
     <artifactId>skos-play</artifactId>
-    <!-- version inherited from parent pom -->
+    <version>0.6.4</version>
     <packaging>war</packaging>
 
     <name>Sparna SKOS : SKOS-Play</name>
