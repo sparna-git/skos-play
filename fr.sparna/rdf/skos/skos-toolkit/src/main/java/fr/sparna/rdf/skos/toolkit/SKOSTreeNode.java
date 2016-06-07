@@ -8,6 +8,7 @@ public class SKOSTreeNode {
 		CONCEPT,
 		CONCEPT_SCHEME,
 		COLLECTION,
+		COLLECTION_AS_ARRAY,
 		UNKNOWN
 	}
 	

@@ -27,7 +27,6 @@ import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
 import fr.sparna.rdf.skos.printer.schema.KosDisplay;
 import fr.sparna.rdf.skos.printer.schema.KosDocument;
-import fr.sparna.rdf.skos.printer.schema.KosDocumentFooter;
 import fr.sparna.rdf.skos.printer.schema.KosDocumentHeader;
 import fr.sparna.rdf.skos.printer.schema.Node;
 import fr.sparna.rdf.skos.printer.schema.NodeData;
@@ -77,7 +76,7 @@ public class HierarchicalDisplayGenerator extends AbstractKosDisplayGenerator {
 		// read types - this could be preloaded
 		PropertyReader typeReader = new PropertyReader(repository, URI.create(RDF.TYPE.stringValue()));
 		typeReader.setPreLoad(false);
-		SKOSNodeTypeReader nodeTypeReader = new SKOSNodeTypeReader(typeReader);
+		SKOSNodeTypeReader nodeTypeReader = new SKOSNodeTypeReader(typeReader, this.repository);
 		
 		// init the tree builder
 		// First sort on the notation, then the prefLabel if notation is not available
@@ -171,7 +170,7 @@ public class HierarchicalDisplayGenerator extends AbstractKosDisplayGenerator {
 		org.apache.log4j.Logger.getLogger("httpclient.wire").setLevel(Level.DEBUG);
 		org.apache.log4j.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.DEBUG);
 		
-		final String LANG = "fr-fr";
+		final String LANG = "fr";
 		
 		Repository r = RepositoryBuilder.fromString(args[0]);
 		

@@ -9,7 +9,6 @@ import java.util.Locale;
 
 import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
-import org.openrdf.model.Value;
 import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
@@ -19,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperIfc;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
@@ -40,6 +40,7 @@ public class SKOSTreeBuilder {
 	
 	private boolean ignoreExplicitTopConcepts = false;
 	private boolean useConceptSchemesAsFirstLevelNodes = true;
+	private boolean handleThesaurusArrays = true;
 	
 	
 	/**
@@ -70,7 +71,10 @@ public class SKOSTreeBuilder {
 		this(
 				repository,
 				new SKOSNodeSortCriteriaPropertyReader(new PropertyReader(repository, java.net.URI.create(SKOS.PREF_LABEL), lang)),
-				new SKOSNodeTypeReader(new PropertyReader(repository, java.net.URI.create(RDF.TYPE.stringValue())))
+				new SKOSNodeTypeReader(
+						new PropertyReader(repository, java.net.URI.create(RDF.TYPE.stringValue())),
+						repository
+				)
 		);
 	}
 	
@@ -115,19 +119,26 @@ public class SKOSTreeBuilder {
 				@Override
 				protected void handleTopCollection(Resource top)
 				throws TupleQueryResultHandlerException {
-					topCollectionsList.add(top);
+					try {
+						// exclude the ones we consider as thesaurus arrays
+						if(nodeTypeReader.readNodeType(java.net.URI.create(top.stringValue())) != NodeType.COLLECTION_AS_ARRAY) {
+							topCollectionsList.add(top);
+						}
+					} catch (SparqlPerformException e) {
+						throw new TupleQueryResultHandlerException(e);
+					}
 				}				
 			});
 			
 			if(topCollectionsList.size() > 0) {
-				log.debug("Collections exist, will take them as first level nodes");
+				log.debug("Collections existat top-level, will take them as first level nodes");
 				
 				// set all the collections as root
 				for (Resource aCollection : topCollectionsList) {
 					result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)aCollection)));
 				}
 			} else {
-				log.debug("No concept schemes and no collections exists, will look for all explicit top-levels concepts.");
+				log.debug("No concept schemes and no top-level collections exists, will look for all explicit top-levels concepts.");
 				
 				// fetch all concepts explicitely marked as top concepts
 				Perform.on(repository).select(new GetTopConceptsHelper(null) {
@@ -271,8 +282,7 @@ public class SKOSTreeBuilder {
 			for (GenericTreeNode<SKOSTreeNode> aChild : aNode.getChildren()) {
 				sortTreeRec(aChild);
 			}
-		}
-		
+		}		
 	}
 	
 	private GenericTreeNode<SKOSTreeNode> buildTreeRec(URI conceptOrConceptSchemeOrCollection)
@@ -303,7 +313,10 @@ public class SKOSTreeBuilder {
 				protected void handleTopCollection(Resource top)
 				throws TupleQueryResultHandlerException {
 					try {
-						node.addChild(buildTreeRec((URI)top));
+						// exclude the ones we consider as thesaurus arrays
+						if(nodeTypeReader.readNodeType(java.net.URI.create(top.stringValue())) != NodeType.COLLECTION_AS_ARRAY) {
+							node.addChild(buildTreeRec((URI)top));
+						}
 					} catch (SparqlPerformException e) {
 						throw new TupleQueryResultHandlerException(e);
 					}
@@ -363,24 +376,63 @@ public class SKOSTreeBuilder {
 			});
 			break;
 		}
-		// in case of an unknown type, attempt to read it like a concept
-		case UNKNOWN : {
-			log.warn("Unable to determine node type of : "+conceptOrConceptSchemeOrCollection);
-		}
-		case CONCEPT : {			
-			Perform.on(repository).select(new GetNarrowersHelper(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()), null) {
+		case COLLECTION_AS_ARRAY : {
+			log.debug("Found a Collection URI considered as ThesaurusArry : "+conceptOrConceptSchemeOrCollection);
+			Perform.on(repository).select(new GetMembersHelper(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()), null) {
 				
 				@Override
-				protected void handleNarrowerConcept(Resource parent, Resource narrower)
+				protected void handleMember(Resource collection, Resource member)
 				throws TupleQueryResultHandlerException {
 					try {
-						node.addChild(buildTreeRec((URI)narrower));
+						node.addChild(buildTreeRec((URI)member));
 					} catch (SparqlPerformException e) {
 						throw new TupleQueryResultHandlerException(e);
 					}
 				}
 				
 			});
+			break;
+		}
+		
+		// in case of an unknown type, attempt to read it like a concept
+		case UNKNOWN : {
+			log.warn("Unable to determine node type of : "+conceptOrConceptSchemeOrCollection);
+		}
+		case CONCEPT : {
+			
+			SelectSparqlHelperIfc narrowerHelper = null;
+			if(this.handleThesaurusArrays) {
+				// tries to handle ThesaurusArrays
+				narrowerHelper = new GetNarrowersOrNarrowerThesaurusArraysHelper(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()), null) {
+					
+					@Override
+					protected void handleNarrower(Resource parent, Resource narrower)
+					throws TupleQueryResultHandlerException {
+						try {
+							node.addChild(buildTreeRec((URI)narrower));
+						} catch (SparqlPerformException e) {
+							throw new TupleQueryResultHandlerException(e);
+						}
+					}
+					
+				};
+			} else {
+				// simple narrower recursion
+				narrowerHelper = new GetNarrowersHelper(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()), null) {
+					
+					@Override
+					protected void handleNarrowerConcept(Resource parent, Resource narrower)
+					throws TupleQueryResultHandlerException {
+						try {
+							node.addChild(buildTreeRec((URI)narrower));
+						} catch (SparqlPerformException e) {
+							throw new TupleQueryResultHandlerException(e);
+						}
+					}					
+				};
+			}
+			
+			Perform.on(repository).select(narrowerHelper);
 			break;
 		}
 		default : {
@@ -403,9 +455,16 @@ public class SKOSTreeBuilder {
 		return useConceptSchemesAsFirstLevelNodes;
 	}
 
-	public void setUseConceptSchemesAsFirstLevelNodes(
-			boolean useConceptSchemesAsFirstLevelNodes) {
+	public void setUseConceptSchemesAsFirstLevelNodes(boolean useConceptSchemesAsFirstLevelNodes) {
 		this.useConceptSchemesAsFirstLevelNodes = useConceptSchemesAsFirstLevelNodes;
+	}
+
+	public boolean isHandleThesaurusArrays() {
+		return handleThesaurusArrays;
+	}
+
+	public void setHandleThesaurusArrays(boolean handleThesaurusArrays) {
+		this.handleThesaurusArrays = handleThesaurusArrays;
 	}
 
 }
