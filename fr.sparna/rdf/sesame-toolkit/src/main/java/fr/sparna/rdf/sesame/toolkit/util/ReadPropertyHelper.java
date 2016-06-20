@@ -156,7 +156,7 @@ public abstract class ReadPropertyHelper extends SelectSparqlHelperBase implemen
 				sparql.append("   ?subject ?additionalCriteriaPredicate ?additionalCriteriaObject ."+"\n");
 			}
 			if(this.lang != null) {
-				sparql.append("   FILTER(lang(?object) = '"+this.lang+"')"+"\n");
+				sparql.append("   FILTER(langMatches(lang(?object), '"+this.lang+"'))"+"\n");
 			}
 			sparql.append("} ");
 			

@@ -8,13 +8,12 @@
     <parent>
         <groupId>fr.sparna.rdf.skos</groupId>
         <artifactId>sparna-skos</artifactId>
-        <version>0.6.3</version>
+        <version>0.7.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>fr.sparna.rdf.skos</groupId>
     <artifactId>skos-play</artifactId>
-    <version>0.6.4</version>
     <packaging>war</packaging>
 
     <name>Sparna SKOS : SKOS-Play</name>

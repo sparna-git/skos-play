@@ -54,7 +54,13 @@ public class SKOSNodeTypeReader {
 					}					
 				});
 				
-				if(broaders.size() == 1) {
+				// either they have a single parent, or no parent at all for arrays
+				// that are at the first level of the thesaurus
+				if(
+						broaders.size() == 1
+						||
+						broaders.size() == 0
+				) {
 					return NodeType.COLLECTION_AS_ARRAY;
 				} else {
 					return NodeType.COLLECTION;

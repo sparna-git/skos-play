@@ -169,7 +169,25 @@ public class SKOSTreeBuilder {
 							}
 						}
 					});
-				}				
+				}
+				
+				// add top-level thesaurus arrays
+				log.debug("Adding roots corresponding to top-level collections that are thesaurus arrays");
+				Perform.on(repository).select(new GetTopCollectionsHelper(null, null) {				
+					@Override
+					protected void handleTopCollection(Resource top)
+					throws TupleQueryResultHandlerException {
+						try {
+							// exclude the ones we consider as thesaurus arrays
+							if(nodeTypeReader.readNodeType(java.net.URI.create(top.stringValue())) == NodeType.COLLECTION_AS_ARRAY) {
+								result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)top)));
+							}
+						} catch (SparqlPerformException e) {
+							throw new TupleQueryResultHandlerException(e);
+						}
+					}				
+				});
+				
 			}			
 		}
 		
@@ -325,39 +343,58 @@ public class SKOSTreeBuilder {
 			});
 			
 			// if no collection was found, we look for topConcepts declared on the scheme
-			if(!ignoreExplicitTopConcepts) {
-				if(node.getChildren() == null || node.getChildren().size() == 0) {
+			if(node.getChildren() == null || node.getChildren().size() == 0) {
+				if(!ignoreExplicitTopConcepts) {
 					Perform.on(repository).select(new GetTopConceptsHelper(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()), null) {
-						
+
 						@Override
 						protected void handleTopConcept(Resource top)
-						throws TupleQueryResultHandlerException {
+								throws TupleQueryResultHandlerException {
 							try {
 								node.addChild(buildTreeRec((URI)top));
 							} catch (SparqlPerformException e) {
 								throw new TupleQueryResultHandlerException(e);
 							}
 						}
-						
+
 					});
 				}
-			}
-			
-			// if no explicit hasTopConcept or istopConceptOf was found, get the concepts of that scheme with no broader info
-			if(node.getChildren() == null || node.getChildren().size() == 0) {
-				Perform.on(repository).select(new GetConceptsWithNoBroaderHelper(null, java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue())) {
+
+				// if no explicit hasTopConcept or istopConceptOf was found, get the concepts of that scheme with no broader info
+				if(node.getChildren() == null || node.getChildren().size() == 0) {
+					Perform.on(repository).select(new GetConceptsWithNoBroaderHelper(null, java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue())) {
+						@Override
+						protected void handleConceptWithNoBroader(Resource noBroader)
+								throws TupleQueryResultHandlerException {
+							try {
+								node.addChild(buildTreeRec((URI)noBroader));
+							} catch (SparqlPerformException e) {
+								throw new TupleQueryResultHandlerException(e);
+							}
+						}
+					});
+				}
+				
+				// add top-level thesaurus arrays
+				log.debug("Adding top-level collections that are thesaurus arrays");
+				Perform.on(repository).select(new GetTopCollectionsHelper(null, null) {				
 					@Override
-					protected void handleConceptWithNoBroader(Resource noBroader)
+					protected void handleTopCollection(Resource top)
 					throws TupleQueryResultHandlerException {
 						try {
-							node.addChild(buildTreeRec((URI)noBroader));
+							// exclude the ones we consider as thesaurus arrays
+							if(nodeTypeReader.readNodeType(java.net.URI.create(top.stringValue())) == NodeType.COLLECTION_AS_ARRAY) {
+								node.addChild(buildTreeRec((URI)top));
+							}
 						} catch (SparqlPerformException e) {
 							throw new TupleQueryResultHandlerException(e);
 						}
-					}
-				});
+					}				
+				});				
 			}
 			break;
+			
+			
 		}
 		case COLLECTION : {
 			log.debug("Found a Collection URI : "+conceptOrConceptSchemeOrCollection);
