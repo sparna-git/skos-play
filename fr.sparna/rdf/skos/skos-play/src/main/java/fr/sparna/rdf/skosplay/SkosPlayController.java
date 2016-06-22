@@ -9,6 +9,7 @@ import java.security.InvalidParameterException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -21,6 +22,7 @@ import org.openrdf.model.Literal;
 import org.openrdf.model.Value;
 import org.openrdf.model.vocabulary.DC;
 import org.openrdf.model.vocabulary.DCTERMS;
+import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.TupleQueryResultHandlerBase;
 import org.openrdf.query.TupleQueryResultHandlerException;
@@ -59,6 +61,8 @@ import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromStream;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromUrl;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationException;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
+import fr.sparna.rdf.sesame.toolkit.util.PreferredPropertyReader;
+import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.autocomplete.Items;
 import fr.sparna.rdf.skos.printer.autocomplete.JSONWriter;
@@ -79,6 +83,9 @@ import fr.sparna.rdf.skos.printer.reader.TranslationTableDisplayGenerator;
 import fr.sparna.rdf.skos.printer.reader.TranslationTableReverseDisplayGenerator;
 import fr.sparna.rdf.skos.printer.schema.KosDocument;
 import fr.sparna.rdf.skos.toolkit.JsonSKOSTreePrinter;
+import fr.sparna.rdf.skos.toolkit.SKOS;
+import fr.sparna.rdf.skos.toolkit.SKOSNodeSortCriteriaPreferredPropertyReader;
+import fr.sparna.rdf.skos.toolkit.SKOSNodeTypeReader;
 import fr.sparna.rdf.skos.toolkit.SKOSRules;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeBuilder;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode;
@@ -786,7 +793,22 @@ public class SkosPlayController {
 			String language,
 			URI scheme
 	) throws Exception {
-		SKOSTreeBuilder builder = new SKOSTreeBuilder(r, language);
+		
+		// Careful : we need to use the same init code here than in the hierarhical display generator to get a consistent output
+		PreferredPropertyReader ppr = new PreferredPropertyReader(
+				r,
+				Arrays.asList(new URI[] { URI.create(SKOS.NOTATION), URI.create(SKOS.PREF_LABEL) }),
+				language
+		);
+		ppr.setCaching(true);
+		
+		PropertyReader typeReader = new PropertyReader(r, URI.create(RDF.TYPE.stringValue()));
+		typeReader.setPreLoad(false);
+		SKOSNodeTypeReader nodeTypeReader = new SKOSNodeTypeReader(typeReader, r);
+		
+		SKOSTreeBuilder builder = new SKOSTreeBuilder(r, new SKOSNodeSortCriteriaPreferredPropertyReader(ppr), nodeTypeReader);
+		
+		builder.setUseConceptSchemesAsFirstLevelNodes(false);
 
 		GenericTree<SKOSTreeNode> tree = buildTree(builder, (scheme != null)?URI.create(scheme.toString()):null);			
 		

@@ -1,9 +1,11 @@
 package fr.sparna.rdf.skos.toolkit;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
+import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
 
@@ -12,6 +14,8 @@ import fr.sparna.commons.tree.GenericTreeNode;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.sesame.toolkit.util.PreferredPropertyReader;
+import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 
 /**
  * Prints a SKOS tree as a String
@@ -38,6 +42,10 @@ public class SimpleSKOSTreePrinter {
 	public String printTree() 
 	throws SparqlPerformException {
 		SKOSTreeBuilder builder = new SKOSTreeBuilder(this.repository, this.displayLanguage);
+		return printTree(builder);
+	}
+	
+	public String printTree(SKOSTreeBuilder builder) throws SparqlPerformException {
 		List<GenericTree<SKOSTreeNode>> trees = builder.buildTrees();
 		
 		final StringBuffer buffer = new StringBuffer();
@@ -72,7 +80,9 @@ public class SimpleSKOSTreePrinter {
 			}
 		});
 		// remove trailing ", "
-		buffer.delete(buffer.length() - 2, buffer.length());
+		if(buffer.length() > 2) {
+			buffer.delete(buffer.length() - 2, buffer.length());
+		}
 
 		// add URI
 		buffer.append(" ("+aNode.getData().getUri().toString()+")"+"\n");
@@ -95,20 +105,39 @@ public class SimpleSKOSTreePrinter {
 //				"test:_3 a skos:Concept ; skos:inScheme test:_anotherScheme ; skos:prefLabel \"B\"@fr; skos:broader test:_1 ."
 //		);
 		
-		Repository r = RepositoryBuilder.fromRdf(
-				"@prefix skos: <"+SKOS.NAMESPACE+"> ."+"\n" +
-				"@prefix test: <http://www.test.fr/skos/> ."+"\n" +
-				"test:_col2 a skos:Collection ; skos:prefLabel \"la deuxieme collection\"@fr ; skos:member test:_x, test:_y ." +
-				"test:_col a skos:Collection ; skos:prefLabel \"la collection\"@fr ; skos:member test:_1, test:_2, test:_3 ." +
-				"test:_1 a skos:Concept ; skos:prefLabel \"11111\"@fr ." +
-				"test:_2 a skos:Concept ; skos:prefLabel \"a\"@fr; skos:broader test:_1 ." +
-				"test:_3 a skos:Concept ; skos:prefLabel \"B\"@fr; skos:broader test:_1 ." +
-				"test:_x a skos:Concept ; skos:prefLabel \"x\"@fr ." +
-				"test:_y a skos:Concept ; skos:prefLabel \"y\"@fr ."
-		);
+//		Repository r = RepositoryBuilder.fromRdf(
+//				"@prefix skos: <"+SKOS.NAMESPACE+"> ."+"\n" +
+//				"@prefix test: <http://www.test.fr/skos/> ."+"\n" +
+//				"test:_col2 a skos:Collection ; skos:prefLabel \"la deuxieme collection\"@fr ; skos:member test:_x, test:_y ." +
+//				"test:_col a skos:Collection ; skos:prefLabel \"la collection\"@fr ; skos:member test:_1, test:_2, test:_3 ." +
+//				"test:_1 a skos:Concept ; skos:prefLabel \"11111\"@fr ." +
+//				"test:_2 a skos:Concept ; skos:prefLabel \"a\"@fr; skos:broader test:_1 ." +
+//				"test:_3 a skos:Concept ; skos:prefLabel \"B\"@fr; skos:broader test:_1 ." +
+//				"test:_x a skos:Concept ; skos:prefLabel \"x\"@fr ." +
+//				"test:_y a skos:Concept ; skos:prefLabel \"y\"@fr ."
+//		);
 		
-		SimpleSKOSTreePrinter printer = new SimpleSKOSTreePrinter(r, "fr");
-		System.out.println(printer.printTree());
+		Repository r = RepositoryBuilder.fromString(args[0]);
+		String language = args[1];
+		
+		PreferredPropertyReader ppr = new PreferredPropertyReader(
+				r,
+				Arrays.asList(new java.net.URI[] { java.net.URI.create(SKOS.NOTATION), java.net.URI.create(SKOS.PREF_LABEL) }),
+				language
+		);
+		ppr.setCaching(true);
+		
+		PropertyReader typeReader = new PropertyReader(r, java.net.URI.create(RDF.TYPE.stringValue()));
+		typeReader.setPreLoad(false);
+		SKOSNodeTypeReader nodeTypeReader = new SKOSNodeTypeReader(typeReader, r);
+		
+		SKOSTreeBuilder builder = new SKOSTreeBuilder(r, new SKOSNodeSortCriteriaPreferredPropertyReader(ppr), nodeTypeReader);
+		
+		builder.setUseConceptSchemesAsFirstLevelNodes(false);
+		
+		// print
+		SimpleSKOSTreePrinter printer = new SimpleSKOSTreePrinter(r, language);
+		System.out.println(printer.printTree(builder));
 	}
 
 }

@@ -6,7 +6,7 @@ import com.beust.jcommander.Parameters;
 import fr.sparna.rdf.skos.printer.cli.ArgumentsSkosPlayCli;
 import fr.sparna.rdf.skos.printer.reader.IndexGenerator;
 
-@Parameters(commandDescription = "Generates a complete report.")
+@Parameters(commandDescription = "Generates a index report.")
 public class ArgumentsIndex extends ArgumentsSkosPlayCli {
 	
 	@Parameter(

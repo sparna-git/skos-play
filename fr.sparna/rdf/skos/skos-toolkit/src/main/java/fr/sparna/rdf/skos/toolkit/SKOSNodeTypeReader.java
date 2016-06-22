@@ -15,6 +15,7 @@ import fr.sparna.commons.lang.Function;
 import fr.sparna.commons.lang.Lists;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
 
@@ -54,15 +55,24 @@ public class SKOSNodeTypeReader {
 					}					
 				});
 				
-				// either they have a single parent, or no parent at all for arrays
-				// that are at the first level of the thesaurus
+				// either they have a single parent...
 				if(
 						broaders.size() == 1
-						||
-						broaders.size() == 0
 				) {
 					return NodeType.COLLECTION_AS_ARRAY;
 				} else {
+					// or no parent at all... which can mean 2 things...
+					if(broaders.size() == 0) {
+						// if no broaders were found, test if the collection actually has only concepts as members
+						// and not colletions, like Domains in the UNESCO thesaurus
+						if(Perform.on(repository).ask(new SparqlQuery(new HasOnlyConceptMembersQuery(node.toString()).getSPARQL()))) {
+							// then we consider it a top-level ThesaurusArray
+							return NodeType.COLLECTION_AS_ARRAY;
+						} else {
+							// otherwise, it is a simple collection
+							return NodeType.COLLECTION;
+						}
+					}
 					return NodeType.COLLECTION;
 				}				
 				

@@ -131,7 +131,7 @@ public class SKOSTreeBuilder {
 			});
 			
 			if(topCollectionsList.size() > 0) {
-				log.debug("Collections existat top-level, will take them as first level nodes");
+				log.debug("Collections exist at top-level, will take them as first level nodes");
 				
 				// set all the collections as root
 				for (Resource aCollection : topCollectionsList) {
@@ -185,7 +185,7 @@ public class SKOSTreeBuilder {
 						} catch (SparqlPerformException e) {
 							throw new TupleQueryResultHandlerException(e);
 						}
-					}				
+					}
 				});
 				
 			}			
@@ -414,7 +414,7 @@ public class SKOSTreeBuilder {
 			break;
 		}
 		case COLLECTION_AS_ARRAY : {
-			log.debug("Found a Collection URI considered as ThesaurusArry : "+conceptOrConceptSchemeOrCollection);
+			log.debug("Found a Collection URI considered as ThesaurusArray : "+conceptOrConceptSchemeOrCollection);
 			Perform.on(repository).select(new GetMembersHelper(java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue()), null) {
 				
 				@Override
