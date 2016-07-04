@@ -63,6 +63,7 @@ import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationExce
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
 import fr.sparna.rdf.sesame.toolkit.util.PreferredPropertyReader;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
+import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.autocomplete.Items;
 import fr.sparna.rdf.skos.printer.autocomplete.JSONWriter;
@@ -554,8 +555,28 @@ public class SkosPlayController {
 			throw new InvalidParameterException("Unknown display type "+displayType);
 		}
 		}
-		
 	}
+	
+	@RequestMapping(
+			value = "/getData",
+			method = RequestMethod.GET
+	)
+	public void getData(
+			HttpServletRequest request,
+			HttpServletResponse response
+	) throws Exception {
+		
+		// retrieve data from session
+		Repository r = SessionData.get(request.getSession()).getRepository();
+		
+		// serialize and return data
+		RepositoryWriter writer = new RepositoryWriter(r);
+		writer.writeToStream(response.getOutputStream(), RDFFormat.TURTLE);
+		
+		// flush
+		response.flushBuffer();
+	}
+	
 	
 	
 	@RequestMapping(value = "/print", method = RequestMethod.POST)

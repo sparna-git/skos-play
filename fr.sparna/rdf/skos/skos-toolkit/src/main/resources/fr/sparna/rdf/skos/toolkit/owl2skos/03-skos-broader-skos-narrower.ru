@@ -21,5 +21,12 @@ INSERT {
 	?parent skos:narrower ?x .
 } WHERE {
 	?x rdfs:subClassOf ?parent .
-	FILTER(?parent != <http://www.w3.org/2002/07/owl#Thing> && ?parent != ?x)
+	FILTER(
+		?parent != owl:Thing
+		&&
+		?parent != ?x
+		&&
+		# exclude Restrictions
+		!isBlank(?parent)
+	)
 }

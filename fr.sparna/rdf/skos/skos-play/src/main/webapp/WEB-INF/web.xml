@@ -36,6 +36,7 @@
 		<url-pattern>/print</url-pattern>
 		<url-pattern>/style/custom.css</url-pattern>
 		<url-pattern>/visualize</url-pattern>
+		<url-pattern>/getData</url-pattern>
 	</servlet-mapping>
 	
 	<welcome-file-list>
