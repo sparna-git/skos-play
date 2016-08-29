@@ -1,0 +1,116 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>fr.sparna.rdf.datapress</groupId>
+        <artifactId>sparna-datapress</artifactId>
+        <version>0.7.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+	<groupId>fr.sparna.rdf.datapress</groupId>
+	<artifactId>datapress-core</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>Data Press Core</name>
+	<description>Extraction API for extracting JSON-LD, RDFa and Microdata from a web page</description>
+
+	<organization>
+		<name>Sparna</name>
+		<url>http://www.sparna.fr/</url>
+	</organization>
+
+
+	<properties>
+		<spring.version>4.2.6.RELEASE</spring.version>
+	</properties>
+
+	<build>
+		<plugins>
+
+		</plugins>
+	</build>
+
+	<dependencies>
+
+	  <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+      </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+		<dependency> 
+		  <groupId>org.slf4j</groupId>
+		  <artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+		
+		<!--  Spring dependency -->
+		<!--
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		-->
+		
+        <dependency>
+            <groupId>org.semarglproject</groupId>
+            <artifactId>semargl-rdfa</artifactId>
+            <version>0.6.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>nu.validator</groupId>
+            <artifactId>htmlparser</artifactId>
+            <version>1.4.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.sparna.rdf</groupId>
+            <artifactId>microdata-parser</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.sparna.commons</groupId>
+            <artifactId>sparna-commons-io</artifactId>
+            <version>0.33-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.sparna.commons</groupId>
+            <artifactId>sparna-commons-xml</artifactId>
+            <version>0.33-SNAPSHOT</version>
+        </dependency>
+
+		<dependency>
+		    <groupId>org.eclipse.rdf4j</groupId>
+		    <artifactId>rdf4j-runtime</artifactId>
+		    <version>2.0</version>
+		</dependency>
+
+		<!-- Theoretically we need this, but it is brought by rdf4j JSON-LD parser -->
+		<!-- We remove it because otherwise it conflicts and does not work -->
+		<!--
+		<dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.2.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-codec</groupId>
+                    <artifactId>commons-codec</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    	-->
+
+	</dependencies>
+
+</project>
