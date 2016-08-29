@@ -170,7 +170,8 @@ public class HierarchicalDisplayGenerator extends AbstractKosDisplayGenerator {
 		org.apache.log4j.Logger.getLogger("httpclient.wire").setLevel(Level.DEBUG);
 		org.apache.log4j.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.DEBUG);
 		
-		final String LANG = "fr";
+		// final String LANG = "fr";
+		final String LANG = null;
 		
 		Repository r = RepositoryBuilder.fromString(args[0]);
 		

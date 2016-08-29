@@ -520,6 +520,9 @@ public class SkosPlayController {
 		// get scheme param
 		URI scheme = (schemeParam.equals("no-scheme"))?null:URI.create(schemeParam);
 		
+		// update source language param - only for translations
+		language = (language.equals("no-language"))?null:language;
+		
 		// retrieve data from session
 		Repository r = SessionData.get(request.getSession()).getRepository();
 		
@@ -599,6 +602,9 @@ public class SkosPlayController {
 		
 		// get scheme param
 		URI scheme = (schemeParam.equals("no-scheme"))?null:URI.create(schemeParam);
+		
+		// update source language param - only for translations
+		language = (language.equals("no-language"))?null:language;
 		
 		// get target language param - only for translations
 		String targetLanguage = (targetLanguageParam != null)?(targetLanguageParam.equals("no-language")?null:targetLanguageParam):null;

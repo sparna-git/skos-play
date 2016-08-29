@@ -1,0 +1,14 @@
+
+mvn -o dependency:tree -Dincludes=fr.sparna.*
+
+
+[INFO] fr.sparna.rdf.skos:skos-play:war:0.7.0
+[INFO] +- fr.sparna.commons:sparna-commons-lang:jar:0.33-SNAPSHOT:compile
+[INFO] +- fr.sparna.rdf:sesame-toolkit:jar:0.33-SNAPSHOT:compile
+[INFO] |  +- fr.sparna.commons:sparna-commons-io:jar:0.33-SNAPSHOT:compile
+[INFO] |  \- fr.sparna.commons:sparna-commons-xml:jar:0.33-SNAPSHOT:compile
+[INFO] +- fr.sparna.rdf.skos:skos-toolkit:jar:0.7.0:compile
+[INFO] |  \- fr.sparna.commons:sparna-commons-tree:jar:0.33-SNAPSHOT:compile
+[INFO] \- fr.sparna.rdf.skos:skos-printer:jar:0.7.0:compile
+[INFO]    \- fr.sparna.commons:sparna-commons-fop:jar:0.33-SNAPSHOT:compile
+

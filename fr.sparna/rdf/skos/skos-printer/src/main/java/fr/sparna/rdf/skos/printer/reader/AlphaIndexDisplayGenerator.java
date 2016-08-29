@@ -221,7 +221,8 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 //				"test:_3 a skos:Concept ; skos:inScheme test:_anotherScheme ; skos:prefLabel \"D-3-pref\"@fr ."
 //		);
 		
-		final String LANG = "fr";
+		// final String LANG = "fr";
+		final String LANG = null;
 		
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
 		org.apache.log4j.Logger.getLogger("fr.sparna.rdf").setLevel(org.apache.log4j.Level.TRACE);

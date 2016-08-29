@@ -1,5 +1,6 @@
 package fr.sparna.rdf.skos.toolkit;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,12 +27,22 @@ public class SKOSRules {
 			"owl2skos/03-skos-broader-skos-narrower.ru",
 			"owl2skos/04-skos-inScheme.ru",
 			"owl2skos/05-skos-ConceptScheme.ru",
+			"owl2skos/06-skos-definition.ru",
 	});
 	
 	public static List<String> SKOSXL2SKOS_RULESET = Arrays.asList(new String[] { 
 			"skosxl2skos/S55.ru",
 			"skosxl2skos/S56.ru",
 			"skosxl2skos/S57.ru",
+			// special handling of skos:definition from VocBench
+			"skosxl2skos/reified-definition.ru",
+	});
+	
+	public static List<String> SKOSXL2SKOS_CLEAN_RULESET = Arrays.asList(new String[] { 
+			"skosxl2skos/clean-S55.ru",
+			"skosxl2skos/clean-S56.ru",
+			"skosxl2skos/clean-S57.ru",
+			"skosxl2skos/clean-reified-definition.ru",
 	});
 	
 	public static List<String> SKOS2SKOSXL_URI_RULESET = Arrays.asList(new String[] { 
@@ -59,7 +70,17 @@ public class SKOSRules {
 	}
 	
 	public static List<SparqlQueryBuilder> getSkosXl2SkosRuleset() {
-		return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOSXL2SKOS_RULESET);
+		return getSkosXl2SkosRuleset(false);
+	}
+	
+	public static List<SparqlQueryBuilder> getSkosXl2SkosRuleset(boolean cleanXl) {
+		if(cleanXl) {
+			List<String> rules = new ArrayList<String>(SKOSXL2SKOS_RULESET);
+			rules.addAll(SKOSXL2SKOS_CLEAN_RULESET);
+			return SparqlQueryBuilderList.fromResources(SKOSRules.class, rules);
+		} else {
+			return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOSXL2SKOS_RULESET);
+		}
 	}
 	
 	public static List<SparqlQueryBuilder> getSkos2SkosXlRuleset(boolean useBnodes) {

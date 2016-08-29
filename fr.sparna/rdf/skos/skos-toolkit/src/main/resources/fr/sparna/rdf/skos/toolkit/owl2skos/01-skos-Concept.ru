@@ -19,7 +19,11 @@ PREFIX vcard:<http://www.w3.org/2006/vcard/ns#>
 INSERT {
 	?x a skos:Concept .
 } WHERE {
-	?x a owl:Class .
+	{
+		{ ?x a owl:Class . }
+		UNION
+		{ ?x a rdfs:Class . }
+	}
 	# Exclude OWL restrictions, etc.
 	FILTER(!isBlank(?x)) .
 }

@@ -1,7 +1,6 @@
 #
-# Generates the skos:inScheme on skos:Concept
+# Generates the skos:definition based on the rdfs:comment
 #
-# @title skos:inScheme on skos:Concept
 # @author Thomas Francart
 # @tag dataset
 #
@@ -17,14 +16,7 @@ PREFIX vcard:<http://www.w3.org/2006/vcard/ns#>
 
 
 INSERT {
-	?x skos:inScheme ?o .
+	?x skos:definition ?p .
 } WHERE {
-	{
-		{ ?x a owl:Class . }
-		UNION
-		{ ?x a rdfs:Class . }
-	}
-	?o a owl:Ontology .
-	# Exclude OWL restrictions, etc.
-	FILTER(!isBlank(?x)) .
+	?x rdfs:comment ?p .
 }
