@@ -16,12 +16,12 @@
 		<title><c:out value="${applicationData.skosPlayConfig.applicationTitle}" /></title>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="bootstrap-fileupload/bootstrap-fileupload.min.css" rel="stylesheet" />
+		<link href="bootstrap-fileupload/jasny-bootstrap.min.css" rel="stylesheet" />
 		<link href="css/skos-play.css" rel="stylesheet" />
 		<link href="style/custom.css" rel="stylesheet" />
 		<script src="js/jquery.min.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
-		<script src="bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
+		<script src="bootstrap-fileupload/jasny-bootstrap.min.js"></script>
 
 		<script type="text/javascript">
 	
@@ -97,18 +97,20 @@
 				 -->
 				
 				<!-- Nouvelle section avec une dropdown bootstrap permettant d'inclure des images -->
-				<div class="control-group">
-					<label class="control-label">
-							<input
+				<div class="form-group">
+					<input
+								class="col-sm-1"
 								type="radio"
 								name="source"
 								id="source-example"
 								value="example"
 								onchange="enabledInput('example')"
 								checked="checked" />
+					<label  class="col-sm-2 control-label">
+							
 							<fmt:message key="upload.form.providedExample" />
 					</label>
-					<div class="controls" style="padding-top:1em;">
+					<div class="col-sm-9" style="padding-top:1em;">
 						<c:choose>
 							<c:when test="${applicationData.exampleDatas != null && fn:length(applicationData.exampleDatas) > 0 }">							
 								
@@ -125,11 +127,11 @@
 												id="example"
 												value="${entry.key}" />
 											<!-- Display first entry label -->
-											<a id="selected" class="dropdown-toggle btn" data-toggle="dropdown" href="#"><span id="exampleLabel">${sessionScope['fr.sparna.rdf.skosplay.SessionData'].preLoadedDataLabels.getString(entry.key)}</span> <b class="caret"></b></a>
+											<a id="selected" class="btn btn-default dropdown-toggle " data-toggle="dropdown" href="#"><span  id="exampleLabel">${sessionScope['fr.sparna.rdf.skosplay.SessionData'].preLoadedDataLabels.getString(entry.key)}</span> <b class="caret"></b></a>
 										</c:if>
 									</c:forEach>
 								
-									<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+									<ul class=" dropdown-menu" role="menu" aria-labelledby="dLabel">
 										<!-- Re-iterate on entries -->
 										<c:forEach items="${applicationData.exampleDatas}" var="entry">
 											<li><a class="exampleEntry" data-value="${entry.key}" href="#">
@@ -165,51 +167,77 @@
 				</div>
 				
 				
-				<div class="control-group">
-					<label class="control-label">
-							<input
+				<div class="form-group">
+					<input
+								class="col-sm-1"
 								type="radio"
 								name="source"
 								id="source-file"
 								value="file"
 								onchange="enabledInput('file')" />
+					
+					<label class="col-sm-2 control-label">
+							
+							
 							<fmt:message key="upload.form.localFile" />
 					</label>
-					<div class="controls">
-						<div class="fileupload fileupload-new" data-provides="fileupload">
+					<div class="col-sm-9" >
+						<div class="fileinput fileinput-new input-group" data-provides="fileinput" id="fileupload">
+						  <div class="form-control" data-trigger="fileinput">
+						  	<i class="glyphicon glyphicon-file fileinput-exists"></i> 
+						  	<span class="fileinput-filename"></span>
+						  </div>
+						  <span class="input-group-addon btn btn-default btn-file">
+						  	<span class="fileinput-new">
+						  		<fmt:message key="upload.form.localFile.select" />
+						  	</span>
+						  	<span class="fileinput-exists">
+						  		<fmt:message key="upload.form.localFile.change" />
+						  	</span>
+						  	<input type="file" name="file" id="file"onchange="enabledInput('file')" >
+						  </span>
+						  <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput"><fmt:message key="upload.form.localFile.remove" /></a>
+						</div>
+						
+						
+						<!-- <div class="fileinput fileinput-new" data-provides="fileinput">
 							<div class="input-append">
 								<div class="uneditable-input span4">
-									<i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span>
+									<i class="icon-file fileinput-exists"></i> <span class="fileinput-preview"></span>
 								</div>
 								<span class="btn btn-file">
-									<span class="fileupload-new"><fmt:message key="upload.form.localFile.select" /></span>
-									<span class="fileupload-exists"><fmt:message key="upload.form.localFile.change" /></span>
+									<span class="fileinput-new"></span>
+									<span class="fileinput-exists"></span>
 									<input type="file" name="file" id="file" onchange="enabledInput('file')" />
 								</span>
-								<a href="#" class="btn fileupload-exists" data-dismiss="fileupload"><fmt:message key="upload.form.localFile.remove" /></a>
+								<a href="#" class="btn fileinput-exists" data-dismiss="fileinput"></a>
 							</div>
-						</div>
+						</div>-->
 						<span class="help-block"><i><fmt:message key="upload.form.localFile.help" /></i></span>
 					</div>
 				</div>
 				
-				<div class="control-group">
-					<label class="control-label">
-						<input
+				<div class="form-group">
+					<input
+							class="col-sm-1"
 							type="radio"
 							name="source"
 							id="source-url"
 							value="url"
 							onchange="enabledInput('url')" />
+					<label class="col-sm-2 control-label">
+						
 						<fmt:message key="upload.form.remoteUrl" />
 					</label>
-					<div class="controls">
+					<div class="col-sm-9" >
 						<input
+							
 							type="text"
 							id="url"
 							name="url"
 							value=""
 							placeholder="http://..."
+							class="form-control"
 							onkeypress="enabledInput('url');" />
 						<span class="help-block"><i><fmt:message key="upload.form.remoteUrl.help" /></i></span>
 					</div>
@@ -239,18 +267,18 @@
 				 -->
 			</fieldset>
 
-			<div class="accordion" id="myAccordion">
-				<div class="accordion-group">
-	   				<div class="accordion-heading">
+			<div class="panel-group" id="myAccordion">
+				<div class="panel panel-default">
+	   				<div class="panel-heading">
 	   					<a class="accordion-toggle" data-toggle="collapse" data-parent="#myAccordion" href="#collapse1"><h4><fmt:message key="upload.form.advanced.legend" /></h4></a>
 	   				</div>
-	   				<div id="collapse1" class="accordion-body"><div class="accordion-inner">
+	   				<div id="collapse1" class="panel-collapse collapse in" ><div class="panel-body">
 	
-						<div class="control-group">
-							<label class="control-label">
+						<div class="form-group">
+							<label class="col-sm-2">
 								<fmt:message key="upload.form.rdfs" />
 							</label>
-							<div class="controls">
+							<div class="col-sm-10">
 								<input
 									type="checkbox"
 									id="rdfsInference"
@@ -258,11 +286,11 @@
 								<span class="help-block"><i><fmt:message key="upload.form.rdfs.help" /></i></span>
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label">
+						<div class="form-group">
+							<label class="col-sm-2">
 								<fmt:message key="upload.form.skosxl2skos" />
 							</label>
-							<div class="controls">
+							<div class="col-sm-10">
 								<!-- check it by default -->
 								<input
 									type="checkbox"
@@ -272,11 +300,11 @@
 								<span class="help-block"><i><fmt:message key="upload.form.skosxl2skos.help" /></i></span>
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label">
+						<div class="form-group">
+							<label class="col-sm-2">
 								<fmt:message key="upload.form.owl2skos" />
 							</label>
-							<div class="controls">
+							<div class="col-sm-10">
 								<input
 									type="checkbox"
 									id="owl2skos"
@@ -305,10 +333,10 @@
 					name="skosxl2skos"
 					value="true" />
    			
-   				<label class="control-label">
+   				<label class="col-sm-2">
    					<fmt:message key="upload.form.publishingMode.selectVocabulary" />
    				</label>
-   				<div class="controls" style="padding-top:1em;">
+   				<div class="col-sm-10" style="padding-top:1em;">
 	   				<!--  generate the dropdown. See http://getbootstrap.com/2.3.2/components.html#dropdowns -->
 					<div class="dropdown">
 					
@@ -356,7 +384,7 @@
    			</c:choose>
 			
 			<div class="form-actions">
-				<button type="submit" id="submit-button" class="btn btn-large btn-primary"><fmt:message key="next" /></button>
+				<button type="submit" id="submit-button" class="btn btn-primary btn-lg "><fmt:message key="next" /></button>
 				<img src="images/ajax-loader.gif" id="loading" hidden="hidden" />
 			</div>
 			

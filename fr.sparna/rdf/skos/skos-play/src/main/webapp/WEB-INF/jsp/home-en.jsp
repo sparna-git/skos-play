@@ -49,8 +49,8 @@
 				<br />
 				<br />
 				<div style="text-align:center">
-                  	<a href="upload"><button class="btn btn-large btn-primary">Start Here</button></a>
-                  	<a href="about"><button class="btn btn-large" type="button">Learn More</button></a>                
+                  	<a href="upload"><button class="btn btn-primary btn-lg ">Start Here</button></a>
+                  	<a href="about"><button class="btn btn-default btn-lg" type="button">Learn More</button></a>                
               </div>
 			</div>
       	</div>
