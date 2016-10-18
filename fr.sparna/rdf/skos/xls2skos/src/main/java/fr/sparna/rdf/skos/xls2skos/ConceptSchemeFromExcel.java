@@ -5,6 +5,7 @@ import static fr.sparna.rdf.skos.xls2skos.ExcelHelper.getColumnNames;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -134,6 +135,20 @@ public class ConceptSchemeFromExcel {
 	 * @return
 	 */
 	public List<Model> processFile(File input) {
+		try {
+			Workbook workbook = WorkbookFactory.create(input);
+			return processWorkbook(workbook);
+		} catch (Exception e) {
+			throw Xls2SkosException.rethrow(e);
+		}			
+	}
+	
+	/**
+	 * Parses an InputStream into a Workbook, and defer processing to processWorkbook(Workbook workbook)
+	 * @param input
+	 * @return
+	 */
+	public List<Model> processInputStream(InputStream input) {
 		try {
 			Workbook workbook = WorkbookFactory.create(input);
 			return processWorkbook(workbook);
@@ -533,6 +548,19 @@ public class ConceptSchemeFromExcel {
 		// me.loadAllToFile(new File("/home/thomas/sparna/00-Clients/Sparna/20-Repositories/sparna/fr.sparna/rdf/skos/xls2skos/src/test/resources/test-libreoffice.ods"));
 		me.processFile(new File("/home/thomas/sparna/00-Clients/Sparna/20-Repositories/sparna/fr.sparna/rdf/skos/xls2skos/src/test/resources/testExcelNative.xlsx"));
 		// me.processFile(new File("/home/thomas/sparna/00-Clients/Luxembourg/02-Migration/jolux-controlled-voc-travail-20161012.xlsx"));
+	}
+	
+	
+	public static void runLikeInSkosPlay(
+			InputStream input,
+			OutputStream output,
+			String lang
+	) throws Exception {
+		OutputStreamModelWriter modelWriter = new OutputStreamModelWriter(output);
+		ConceptSchemeFromExcel converter = new ConceptSchemeFromExcel(modelWriter, lang);
+		converter.setGenerateXl(false);
+		converter.setGenerateXlDefinitions(false);
+		converter.processInputStream(input);
 	}
 
 }

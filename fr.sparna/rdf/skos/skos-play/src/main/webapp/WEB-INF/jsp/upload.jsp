@@ -406,10 +406,10 @@
 			        $('#loading').show();
 			    });
 				
-		      	$(window).unload(function() {
-		      		$('#loading').hide();
+			    $(window).on('beforeunload', function(){
+			    	$('#loading').hide();
 				    $('#submit-button').attr('disabled', false);
-		      	});
+			    }
 	      	});
 	      	
 
