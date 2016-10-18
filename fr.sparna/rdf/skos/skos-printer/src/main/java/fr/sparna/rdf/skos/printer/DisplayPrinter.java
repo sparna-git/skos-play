@@ -15,6 +15,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.util.JAXBSource;
+import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
@@ -37,18 +38,22 @@ public class DisplayPrinter {
 	public enum Style {
 		DEFAULT(
 				"stylesheets/display-to-html.xsl",
+				"stylesheets/display-to-html-tree.xsl",
 				"stylesheets/display-to-fop.xsl"
 		),
 		UNESCO(
 				"stylesheets/display-to-html.xsl",
+				"stylesheets/display-to-html-tree.xsl",
 				"stylesheets/display-to-fop-unesco.xsl"
 		);
 		
 		private String htmlStylesheet;
+		private String htmlTreeStylesheet;
 		private String pdfStylesheet;
 		
-		private Style(String htmlStylesheet, String pdfStylesheet) {
+		private Style(String htmlStylesheet, String htmlTreeStylesheet, String pdfStylesheet) {
 			this.htmlStylesheet = htmlStylesheet;
+			this.htmlTreeStylesheet = htmlTreeStylesheet;
 			this.pdfStylesheet = pdfStylesheet;
 		}
 
@@ -58,7 +63,16 @@ public class DisplayPrinter {
 
 		public String getPdfStylesheet() {
 			return pdfStylesheet;
-		}		
+		}
+
+		public String getHtmlTreeStylesheet() {
+			return htmlTreeStylesheet;
+		}
+
+		public void setHtmlTreeStylesheet(String htmlTreeStylesheet) {
+			this.htmlTreeStylesheet = htmlTreeStylesheet;
+		}	
+		
 	}
 	
 	public enum Format {
@@ -214,20 +228,73 @@ public class DisplayPrinter {
 		printToHtml(
 				document,
 				new BufferedOutputStream(new FileOutputStream(htmlFile)),
+				new StreamSource(this.getClass().getClassLoader().getResourceAsStream(this.style.getHtmlStylesheet())),
 				lang
 		);
 	}
+
+	public void printToHtml(
+			KosDocument document,
+			OutputStream os,
+			String lang
+	) throws FileNotFoundException, JAXBException, TransformerException {
+		this.printToHtml(
+				document,
+				os,
+				new StreamSource(this.getClass().getClassLoader().getResourceAsStream(this.style.getHtmlStylesheet())),
+				lang
+		);	
+	}
+
+	public void printToHtmlTree(
+			KosDocument document,
+			File htmlFile,
+			String lang
+	) throws FileNotFoundException, JAXBException, TransformerException {
+		
+		if(!htmlFile.exists()) {
+			try {
+				if(htmlFile.getParentFile() != null) {
+					htmlFile.getParentFile().mkdirs();
+				}
+				htmlFile.createNewFile();
+			} catch (IOException ignore) {
+				ignore.printStackTrace();
+			}
+		}
+		
+		printToHtml(
+				document,
+				new BufferedOutputStream(new FileOutputStream(htmlFile)),
+				new StreamSource(this.getClass().getClassLoader().getResourceAsStream(this.style.getHtmlTreeStylesheet())),
+				lang
+		);
+	}
+
+	public void printToHtmlTree(
+			KosDocument document,
+			OutputStream os,
+			String lang
+	) throws FileNotFoundException, JAXBException, TransformerException {
+		this.printToHtml(
+				document,
+				os,
+				new StreamSource(this.getClass().getClassLoader().getResourceAsStream(this.style.getHtmlTreeStylesheet())),
+				lang
+		);	
+	}
+	
 	
 	public void printToHtml(
 			KosDocument document,
 			OutputStream os,
+			Source xslSource,
 			String lang
 	) throws FileNotFoundException, JAXBException, TransformerException {
 		Marshaller m = createMarshaller();
 		debugJAXBMarshalling(m, document);
 		
 		try {
-			StreamSource xslSource = new StreamSource(this.getClass().getClassLoader().getResourceAsStream(this.style.getHtmlStylesheet()));
 			
 			// set a classpath URI resolver so that the XSL can resolve the labels file in the "stylesheets" classpath folder
 			XSLProcessor xslProc = XSLProcessor.createDefaultProcessor();
