@@ -32,7 +32,7 @@ public class Skos2SkosXl implements SkosPlayCliCommandIfc {
 		au.execute(inputRepository);
 		
 		if(args.isIncludeNotes()) {
-			au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSkos2SkosXlNotesURIRuleset(args.isUseBnodes())));
+			au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSkos2SkosXlNotesRuleset(args.isUseBnodes())));
 			au.execute(inputRepository);
 		}
 		
