@@ -153,23 +153,32 @@
 								<label class="radio">
 									<input type="radio" name="display" id="alphabetical" value="alphabetical">
 									<fmt:message key="print.form.displayType.alphabetical" />
-									<span class="help-inline"><fmt:message key="print.form.displayType.alphabetical.help" /></span>
 								</label>
+								<span class="help-inline"><fmt:message key="print.form.displayType.alphabetical.help" /></span>
 							</c:if>
 							<c:if test="${data.displayType.ALPHABETICAL_EXPANDED.enabled}">
 								<label class="radio">
 									<input type="radio" name="display" id="alphabetical_expanded" value="alphabetical_expanded">
 									<fmt:message key="print.form.displayType.alphabetical_expanded" />
-									<span class="help-inline"><fmt:message key="print.form.displayType.alphabetical_expanded.help" /></span>
 								</label>
+								<span class="help-inline"><fmt:message key="print.form.displayType.alphabetical_expanded.help" /></span>
 							</c:if>
 							<c:if test="${data.displayType.HIERARCHICAL.enabled}">
 								<label class="radio">
 									<input type="radio" name="display" id="hierarchical" value="hierarchical" hierarchical="true">
 									<fmt:message key="print.form.displayType.hierarchical" />
-									<span class="help-inline"><fmt:message key="print.form.displayType.hierarchical.help" /></span>
 								</label>
+								<span class="help-inline"><fmt:message key="print.form.displayType.hierarchical.help" /></span>
 							</c:if>
+							
+							<c:if test="${data.displayType.HIERARCHICAL_TREE.enabled}">
+								<label class="radio">
+									<input type="radio" name="display" id="hierarchical_tree" value="hierarchical_tree" hierarchical="true">
+									<fmt:message key="print.form.displayType.hierarchical_tree" />
+								</label>
+								<span class="help-inline"><fmt:message key="print.form.displayType.hierarchical_tree.help" /></span>
+							</c:if>
+							
 							<c:if test="${data.displayType.COMPLETE_MONOLINGUAL.enabled}">
 								<label class="radio">
 									<input type="radio" name="display" id="complete_monolingual" value="complete_monolingual" hierarchical="true">

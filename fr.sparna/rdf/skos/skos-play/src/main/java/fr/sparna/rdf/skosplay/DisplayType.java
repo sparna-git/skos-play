@@ -5,6 +5,7 @@ public enum DisplayType {
 	ALPHABETICAL(false, false, false),
 	ALPHABETICAL_EXPANDED(false, false, false),
 	HIERARCHICAL(true, false, false),
+	HIERARCHICAL_TREE(true, false, false),
 	CONCEPT_LISTING(false, false, false),
 	TRANSLATION_TABLE(false, true, false),
 	COMPLETE_MONOLINGUAL(false, true, false),

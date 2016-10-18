@@ -546,6 +546,11 @@ public class SkosPlayController {
 			// forward to the JSP
 			return new ModelAndView("viz-sunburst");
 		}
+		/*case TREEMAP : {
+			request.setAttribute("dataset", generateJSON(r, language, scheme));
+			// forward to the JSP
+			return new ModelAndView("viz-treemap");
+		}*/
 		case AUTOCOMPLETE : {
 			AutocompleteItemsReader autocompleteReader = new AutocompleteItemsReader();
 			Items items = autocompleteReader.readItems(r, language, scheme);
@@ -645,6 +650,10 @@ public class SkosPlayController {
 			break;
 		}
 		case HIERARCHICAL : {
+			bodyReader = new BodyReader(new HierarchicalDisplayGenerator(r, new ConceptBlockReader(r)));
+			break;
+		}
+		case HIERARCHICAL_TREE : {
 			bodyReader = new BodyReader(new HierarchicalDisplayGenerator(r, new ConceptBlockReader(r)));
 			break;
 		}
@@ -792,7 +801,16 @@ public class SkosPlayController {
 		
 		switch(outputType) {
 		case HTML : {
-			printer.printToHtml(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
+			if(displayType==DisplayType.HIERARCHICAL)
+			{
+				printer.printToHtml(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
+				
+			}
+			if(displayType==DisplayType.HIERARCHICAL_TREE)
+			{
+				printer.printToHtmlTree(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
+				
+			}
 			break;
 		}
 		case PDF : {
