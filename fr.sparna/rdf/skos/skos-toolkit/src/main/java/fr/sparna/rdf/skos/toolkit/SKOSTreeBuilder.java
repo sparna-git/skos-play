@@ -360,7 +360,7 @@ public class SKOSTreeBuilder {
 					});
 				}
 
-				// if no explicit hasTopConcept or istopConceptOf was found, get the concepts of that scheme with no broader info
+				// if no explicit hasTopConcept or topConceptOf was found, get the concepts of that scheme with no broader info
 				if(node.getChildren() == null || node.getChildren().size() == 0) {
 					Perform.on(repository).select(new GetConceptsWithNoBroaderHelper(null, java.net.URI.create(conceptOrConceptSchemeOrCollection.stringValue())) {
 						@Override
