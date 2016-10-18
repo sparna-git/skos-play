@@ -91,7 +91,7 @@ public class SKOSRules {
 		}
 	}
 	
-	public static List<SparqlQueryBuilder> getSkos2SkosXlNotesURIRuleset(boolean useBnodes) {
+	public static List<SparqlQueryBuilder> getSkos2SkosXlNotesRuleset(boolean useBnodes) {
 		if(useBnodes) {
 			return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOS2SKOSXL_NOTES_BNODE_RULESET);
 		} else {
