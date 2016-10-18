@@ -7,10 +7,10 @@
 <fmt:setBundle basename="fr.sparna.rdf.skosplay.i18n.Bundle"/>
 
 			<div class="page-header">
-				<div class="row">
-			    	<div class="span6" id="header-logo"><h1>SKOS Play !</h1></div>
-			    	<div class="span6" id="header-menu">
-			    		<ul class="nav nav-pills pull-right">
+				<div class="container-fluid">
+ 			    	<div class="col-md-6" id="header-logo"><h1>SKOS Play !</h1></div>
+			    	<div class="col-md-6" id="header-menu">
+			    		<ul class="nav navbar-nav navbar-right">
 			    			<li id="header-pill-home" ${param.active == 'home' ? 'class="active"' : ''}><a href="home"><i class="glyphicon glyphicon-home"></i>&nbsp;<fmt:message key="menu.home" /></a></li>
 			    			<li id="header-pill-upload" ${param.active == 'upload' ? 'class="active"' : ''}><a href="upload"><i class="glyphicon glyphicon-play"></i>&nbsp;<fmt:message key="menu.start" /></a></li>
 					    	<li id="header-pill-about" ${param.active == 'about' ? 'class="active"' : ''}><a href="about"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;<fmt:message key="menu.about" /></a></li>
@@ -48,5 +48,4 @@
 								</div>
 							
 					</div>
-			          		
-	      	
+    	

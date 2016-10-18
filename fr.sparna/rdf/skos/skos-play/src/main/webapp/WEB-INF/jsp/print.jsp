@@ -247,16 +247,20 @@
 					</c:choose>
 					
 					<div class="form-actions">
-						<script>document.write('<a href="'+document.referrer+'"><button id="previous-button-print" class="btn btn-lg btn-default" type="button"><fmt:message key="previous" /></button></a>');</script>
-						<button id="submit-button-print" type="submit" class="btn btn-lg btn-primary"><fmt:message key="print.form.print" /></button>
-						<img src="images/ajax-loader.gif" id="loading-print" hidden="hidden" />
+						<div class="col-sm-offset-2">
+							<script>document.write('<a href="'+document.referrer+'"><button id="previous-button-print" class="btn btn-lg btn-default" type="button"><fmt:message key="previous" /></button></a>');</script>
+							<button id="submit-button-print" type="submit" class="btn btn-lg btn-primary"><fmt:message key="print.form.print" /></button>
+							<img src="images/ajax-loader.gif" id="loading-print" hidden="hidden" />
+						</div>
 					</div>   				
     				
     				</form>
 
    				</div></div>
    			</div><!-- end accordion-group : Print -->
-   			<div class="panel-group" >
+   			
+   			
+   			<div class="panel-group" style="padding-top: 2em;">
     			<div class="panel panel-default">
 	   				<div class="panel-heading">
    					<!-- make "visualize" always visible and uncollapsible
@@ -313,18 +317,22 @@
 						</div>
 		
 						<div class="form-actions">
-							<script>document.write('<a href="'+document.referrer+'"><button id="previous-button-viz" class="btn btn-lg btn-default" type="button"><fmt:message key="previous" /></button></a>');</script>
-							<button id="submit-button-viz" type="submit" class="btn btn-lg btn-primary"><fmt:message key="print.form.visualize" /></button>
-							<img src="images/ajax-loader.gif" id="loading-viz" hidden="hidden" />
+							<div class="col-sm-offset-2">
+								<script>document.write('<a href="'+document.referrer+'"><button id="previous-button-viz" class="btn btn-lg btn-default" type="button"><fmt:message key="previous" /></button></a>');</script>
+								<button id="submit-button-viz" type="submit" class="btn btn-lg btn-primary"><fmt:message key="print.form.visualize" /></button>
+								<img src="images/ajax-loader.gif" id="loading-viz" hidden="hidden" />
+							</div>
 						</div>
 		
 					</form>
 			
 	   				</div></div>
-   			</div><!-- end accordion-group : Visualise -->
-   		</div><!-- end accordion -->
+	   			</div>
+   			</div>
+   		</div><!-- end panel-group : accordion2 -->
 			
       	</div>
+      	
       	<jsp:include page="footer.jsp" />
       	<script>
 		
@@ -391,13 +399,12 @@
 		    });
 			
 			// re-enable buttons for click on browser back
-			$(window).unload(function() {
+			$(window).on('beforeunload', function(){
 	      		$('#loading-print, #loading-hide').hide();
 			    $('#submit-button-print, #submit-button-viz').attr('disabled', false);
 			    $('#previous-button-print, #previous-button-viz').attr('disabled', false);
 			    $('#targetLanguage').attr('disabled', false);
-	      	});
-
+		     });
 	    });
 		</script>
 	</body>

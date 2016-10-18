@@ -177,12 +177,10 @@
 								onchange="enabledInput('file')" />
 					
 					<label class="col-sm-2 control-label">
-							
-							
 							<fmt:message key="upload.form.localFile" />
 					</label>
 					<div class="col-sm-9" >
-						<div class="fileinput fileinput-new input-group" data-provides="fileinput" id="fileupload">
+						<div class="fileinput fileinput-new input-group" data-provides="fileinput" id="fileupload" style="width:60%;">
 						  <div class="form-control" data-trigger="fileinput">
 						  	<i class="glyphicon glyphicon-file fileinput-exists"></i> 
 						  	<span class="fileinput-filename"></span>
@@ -384,8 +382,10 @@
    			</c:choose>
 			
 			<div class="form-actions">
-				<button type="submit" id="submit-button" class="btn btn-primary btn-lg "><fmt:message key="next" /></button>
-				<img src="images/ajax-loader.gif" id="loading" hidden="hidden" />
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" id="submit-button" class="btn btn-primary btn-lg "><fmt:message key="next" /></button>
+					<img src="images/ajax-loader.gif" id="loading" hidden="hidden" />
+				</div>
 			</div>
 			
 			</form>
