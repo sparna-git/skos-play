@@ -1,7 +1,5 @@
 package fr.sparna.rdf.datapress.jsonld;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
 
@@ -19,16 +17,13 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import fr.sparna.commons.xml.SimpleNamespaceContext;
 import fr.sparna.rdf.datapress.DataPress;
-import fr.sparna.rdf.datapress.DataPressBase;
 import fr.sparna.rdf.datapress.DataPressException;
-import nu.validator.htmlparser.common.XmlViolationPolicy;
-import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
+import fr.sparna.rdf.datapress.DataPressSource;
 
-public class JsonLDPress extends DataPressBase implements DataPress {
+public class JsonLDPress implements DataPress {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
@@ -38,20 +33,12 @@ public class JsonLDPress extends DataPressBase implements DataPress {
 		
 	}
 	
-	public void press(byte[] in, String documentUrl, RDFHandler out) throws DataPressException {
-		log.debug(this.getClass().getSimpleName()+" - Pressing {}", documentUrl);
+	public void press(DataPressSource in, RDFHandler out) throws DataPressException {
+		log.debug(this.getClass().getSimpleName()+" - Pressing {}", in.getIri());
 		long start = System.currentTimeMillis();
 
 		// I. Turn into DOM
-		Document dom;
-		try {
-			log.debug("Turning into DOM");
-			dom = this.createDOM(in);
-		} catch (SAXException e) {
-			throw new DataPressException(e);
-		} catch (IOException e) {
-			throw new DataPressException(e);
-		}
+		Document dom = in.getContentDom();
 
 		// II.Extract script tags
 		NodeList nodes = null;
@@ -82,7 +69,7 @@ public class JsonLDPress extends DataPressBase implements DataPress {
 
 	            try {
 	            	// parse and use documentUrl as base URI
-					parser.parse(new StringReader(e.getTextContent()), documentUrl);
+					parser.parse(new StringReader(e.getTextContent()), in.getIri().stringValue());
 				} catch (Exception e1) {
 					log.error("Exception while parsing JSON-LD : {}, moving to next JSON-LD piece"+e1.getMessage());
 					e1.printStackTrace();
@@ -92,13 +79,7 @@ public class JsonLDPress extends DataPressBase implements DataPress {
 		
 		
 
-		log.debug(this.getClass().getSimpleName()+" - Done pressing {} in {}ms", documentUrl, System.currentTimeMillis()-start);
-	}
-
-	private Document createDOM(byte[] in) throws SAXException, IOException {
-		ByteArrayInputStream bais = new ByteArrayInputStream(in);
-		HtmlDocumentBuilder builder = new HtmlDocumentBuilder(XmlViolationPolicy.ALTER_INFOSET);
-		return builder.parse(bais);
+		log.debug(this.getClass().getSimpleName()+" - Done pressing {} in {}ms", in.getIri(), System.currentTimeMillis()-start);
 	}
 
 }

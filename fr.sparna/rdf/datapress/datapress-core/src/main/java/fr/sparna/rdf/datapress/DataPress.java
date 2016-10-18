@@ -5,13 +5,7 @@ import org.eclipse.rdf4j.rio.RDFHandler;
 public interface DataPress {
 	
 	public void press(
-			byte[] in,
-			String documentUrl,
-			RDFHandler out
-	) throws DataPressException;
-	
-	public void press(
-			String uri,
+			DataPressSource in,
 			RDFHandler out
 	) throws DataPressException;
 	

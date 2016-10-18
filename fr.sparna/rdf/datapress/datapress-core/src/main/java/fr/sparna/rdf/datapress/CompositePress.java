@@ -6,7 +6,7 @@ import org.eclipse.rdf4j.rio.RDFHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CompositePress extends DataPressBase implements DataPress {
+public class CompositePress implements DataPress {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 	
@@ -14,16 +14,15 @@ public class CompositePress extends DataPressBase implements DataPress {
 	
 	@Override
 	public void press(
-			byte[] in,
-			String documentUrl,
+			DataPressSource in,
 			RDFHandler out
 	) throws DataPressException {
-		log.debug("Presse {}", documentUrl);
+		log.debug("Presse {}", in.getIri());
 		
 		if(presses != null) {
 			for (DataPress aPress : this.presses) {
 				try {
-					aPress.press(in, documentUrl, out);
+					aPress.press(in , out);
 				} catch (Exception e) {
 					log.error("Error in press {} : {}",aPress.getClass().getSimpleName(), e.getMessage());
 					e.printStackTrace();

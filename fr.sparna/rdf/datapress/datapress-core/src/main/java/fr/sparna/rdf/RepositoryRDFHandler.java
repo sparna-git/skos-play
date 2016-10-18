@@ -84,6 +84,7 @@ public class RepositoryRDFHandler implements RDFHandler {
 			if(this.targetGraphsResources == null) {
 				this.transaction.add(s);
 			} else {
+				System.out.println("handle statement in "+this.targetGraphsResources[0]+" : "+s);
 				this.transaction.add(s, this.targetGraphsResources);
 			}
 			// increment statement count

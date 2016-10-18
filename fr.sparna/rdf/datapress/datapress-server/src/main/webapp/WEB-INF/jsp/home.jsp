@@ -62,15 +62,15 @@
 			<br />
 			<h4>Presser le jus</h4>
 			<ul>
-				<li>/api/presse?uri=&lt;mon uri&gt;</li>
-				<li><a href="api/presse?uri=http://sparna.fr">/api/presse?uri=http://sparna.fr</a></li>
-				<li><a href="api/presse?uri=http://grify.coopaxis.fr">/api/presse?uri=http://grify.coopaxis.fr</a></li>
+				<li>/api/v1/presse?uri=&lt;mon uri&gt;</li>
+				<li><a href="api/v1/presse?uri=http://sparna.fr">/api/v1/presse?uri=http://sparna.fr</a></li>
+				<li><a href="api/v1/presse?uri=http://grify.coopaxis.fr">/api/v1/presse?uri=http://grify.coopaxis.fr</a></li>
 			</ul>
 			<h4>Presser et Stocker dans la cuve</h4>
 			<ul>
-				<li>/api/stocke?uri=&lt;mon uri&gt;</li>
-				<li><a href="api/stocke?uri=http://sparna.fr">/api/stocke?uri=http://sparna.fr</a></li>
-				<li><a href="api/stocke?uri=http://grify.coopaxis.fr">/api/stocke?uri=http://grify.coopaxis.fr</a></li>
+				<li>/api/v1/stocke?uri=&lt;mon uri&gt;</li>
+				<li><a href="api/v1/stocke?uri=http://sparna.fr">/api/v1/stocke?uri=http://sparna.fr</a></li>
+				<li><a href="api/v1/stocke?uri=http://grify.coopaxis.fr">/api/v1/stocke?uri=http://grify.coopaxis.fr</a></li>
 			</ul>
           </div><!-- /.blog-post -->
 

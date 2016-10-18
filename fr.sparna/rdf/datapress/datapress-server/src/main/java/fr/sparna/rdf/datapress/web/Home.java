@@ -2,6 +2,7 @@ package fr.sparna.rdf.datapress.web;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,28 @@ public class Home {
 	@RequestMapping("/presser")
 	public ModelAndView presser(HttpServletRequest request) {	
 		return new ModelAndView("input");	
+	}
+	
+	@RequestMapping("/sparql")
+	public ModelAndView sparql(
+			HttpServletRequest request,
+			HttpServletResponse response
+	) {
+		SparqlPageData page = new SparqlPageData();
+		page.setEndpoint(Config.getInstance().getRepository());
+		
+		return new ModelAndView("sparql", SparqlPageData.KEY, page);	
+	}
+	
+	@RequestMapping("/dashboard")
+	public ModelAndView dashboard(
+			HttpServletRequest request,
+			HttpServletResponse response
+	) {
+		DashboardData page = new DashboardData();
+		page.setEndpoint(Config.getInstance().getRepository());
+		
+		return new ModelAndView("dashboard", DashboardData.KEY, page);	
 	}
 
 }

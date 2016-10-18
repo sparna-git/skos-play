@@ -91,7 +91,9 @@
     <bean id="handlerFactory" class="fr.sparna.rdf.datapress.DataPressHandlerFactory">
     	<property name="filterXhtml" value="true" />
     	<property name="autoTrim" value="true" />
-    	<property name="filterEmpty" value="true" />    	
+    	<property name="filterEmpty" value="true" />
+    	<property name="filterRdfa" value="true" />     
+    	<property name="normalizeHttpSchemaOrg" value="true" />	
     	<property name="excludedProperties"><ref bean="excludedProperties"/></property>
     </bean>
     
