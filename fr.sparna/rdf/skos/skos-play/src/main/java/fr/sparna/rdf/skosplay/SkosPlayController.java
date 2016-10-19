@@ -174,6 +174,15 @@ public class SkosPlayController {
 		return new ModelAndView("upload", UploadFormData.KEY, data);
 	}
 	
+	@RequestMapping(value = "/convert", method = RequestMethod.GET)
+	public ModelAndView convertForm() {
+		// set an empty Model - just so that JSP can access SkosPlayConfig through it
+		UploadFormData data = new UploadFormData();
+		return new ModelAndView("convert", UploadFormData.KEY, data);
+	}
+	
+	
+	
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public ModelAndView upload(
 			// radio box indicating type of input
