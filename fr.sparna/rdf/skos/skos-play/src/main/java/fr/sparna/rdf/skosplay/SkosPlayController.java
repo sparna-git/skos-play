@@ -194,7 +194,7 @@ public class SkosPlayController {
 		ConvertFromData data = new ConvertFromData();
 		return new ModelAndView("convert", ConvertFromData.KEY, data);
 	}
-	
+
 
 	@RequestMapping(value = "/convert", method = RequestMethod.POST)
 	public ModelAndView convertRDF(			
@@ -213,15 +213,13 @@ public class SkosPlayController {
 		URL urls;
 		InputStream url_Input = null;
 		DataInputStream content;
-		String lien="http://localhost:8080/skos-play/excel_test/testExcelNative.xlsx";
-		SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());
+		String lien="http://localhost:8080/skos-play/excel_test/testExcelNative.xlsx";//url fichier example
+		SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());//source, it's can be: file, url
 		RDFFormat theFormat = RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format);
 		final SessionData sessionData = SessionData.get(request.getSession());
-
 		language_copie=language;
 		OutputStreamModelWriter modelWriter;
 		ZipOutputStreamModelWriter modelWriter1;
-
 		// prepare data structure
 		final PrintFormData printFormData = new PrintFormData();
 		sessionData.setPrintFormData(printFormData);
@@ -229,7 +227,6 @@ public class SkosPlayController {
 		boolean generatexl=false;
 		if(usexl)
 		{
-			log.debug("******************usexl checked*********************");
 			generatexl=true;
 			generatexl_copie=generatexl;
 
@@ -239,31 +236,17 @@ public class SkosPlayController {
 			generatexl_copie=generatexl;
 
 		}
-
-
-
-		// retrieve resource bundle for error messages
-		ResourceBundle b = ResourceBundle.getBundle(
-				"fr.sparna.rdf.skosplay.i18n.Bundle",
-				sessionData.getUserLocale(),
-				new StrictResourceBundleControl()
-				);
-
 		/**************************CONVERSION RDF**************************/
 		switch(source) {
 
 		case EXAMPLE : {
-			log.debug("*************************URL choisi********************");
-
+			
 			if(useZip)
 			{
-				log.debug("**********************useZip checked*************************");
-				log.debug("*ZIPXL*="+generatexl);	
 				try{
 
-					// Open an input stream from the url //
 					urls = new URL(lien);
-					url_Input = urls.openStream(); // throws an IOException
+					url_Input = urls.openStream(); 
 					content = new DataInputStream(new BufferedInputStream(url_Input));
 					response.setContentType("application/zip");	
 					modelWriter=new OutputStreamModelWriter(response.getOutputStream());
@@ -287,7 +270,7 @@ public class SkosPlayController {
 					}
 				} 
 			}else{
-				log.debug("*FILEXL*="+generatexl);	
+		
 				try{
 
 					urls = new URL(lien);
@@ -300,7 +283,7 @@ public class SkosPlayController {
 
 				}catch(MalformedURLException errors) {
 					errors.printStackTrace();
-					return doErrorfile(request, b.getString("error")); 
+					return doErrorfile(request, errors.getMessage()); 
 				} catch (IOException ioeErrors) {
 					ioeErrors.printStackTrace();
 					return doErrorfile(request,ioeErrors.getMessage()); 
@@ -318,14 +301,11 @@ public class SkosPlayController {
 		}
 
 		case FILE : {
-			log.debug("***********************FILE choisi**************************");
 			if(file.isEmpty()) {
 				return doErrorfile(request, "Uploaded file is empty");
 			}
 			if(useZip)
 			{
-				log.debug("**********************useZip checked*************************");
-				log.debug("*ZIPXL*="+generatexl);
 				try{
 
 					response.setContentType("application/zip");
@@ -336,12 +316,10 @@ public class SkosPlayController {
 
 					errors.printStackTrace();
 					return doErrorfile(request, errors.getMessage()); 
-
 				}
 				catch(FileNotFoundException errors) {         
 					errors.printStackTrace();
 					return doErrorfile(request, errors.getMessage()); 
-
 				}
 
 			}
@@ -354,31 +332,24 @@ public class SkosPlayController {
 					generateType(modelWriter,file.getInputStream());
 				}
 				catch(FileFormatException errors) {
-					//errors.printStackTrace();
-					return doErrorfile(request, b.getString("error")); 
+					errors.printStackTrace();
+					return doErrorfile(request, errors.getMessage()); 
 				}
 				catch(FileNotFoundException errors) {
-					//errors.printStackTrace();
+					errors.printStackTrace();
 					return doErrorfile(request, errors.getMessage()); 
 				}
 			}
 			break;
 		}
 		case URL: {
-			log.debug("*************************URL choisi********************");
-
 			if(url.isEmpty()) {
 				return doErrorfile(request, "Uploaded link file is empty");
 			}
-
 			if(useZip)
 			{
-				log.debug("**********************useZip checked*************************");
-				log.debug("*ZIPXL*="+generatexl);	
 				try{
-					//----------------------------------------------//
-					// Open an input stream from the url.  //
-					//----------------------------------------------//
+
 					urls = new URL(url);
 					url_Input = urls.openStream(); // throws an IOException
 					content = new DataInputStream(new BufferedInputStream(url_Input));
@@ -389,10 +360,7 @@ public class SkosPlayController {
 				}catch(MalformedURLException errors) {
 					errors.printStackTrace();
 					return doErrorfile(request, errors.getMessage()); 
-
-
 				} catch (IOException ioeErrors) {
-
 					ioeErrors.printStackTrace();
 					return doErrorfile(request, ioeErrors.getMessage()); 
 				}
@@ -409,28 +377,19 @@ public class SkosPlayController {
 			}
 			else{
 
-				log.debug("*FILEXL*="+generatexl);	
 				try{
-					//----------------------------------------------//
-					// Open an input stream from the url.  //
-					//----------------------------------------------//
 					urls = new URL(url);
 					url_Input = urls.openStream(); // throws an IOException
 					content = new DataInputStream(new BufferedInputStream(url_Input));
 					modelWriter=new OutputStreamModelWriter(response.getOutputStream());
 					response.setContentType(modelWriter.getFormat().getDefaultMIMEType());
 					generateType(modelWriter,content);
-
 				}catch(MalformedURLException errors) {
-					//errors.printStackTrace();
+					errors.printStackTrace();
 					return doErrorfile(request, errors.getMessage()); 
-
-
 				} catch (IOException ioeErrors) {
-
-					//ioeErrors.printStackTrace();
+					ioeErrors.printStackTrace();
 					return doErrorfile(request,ioeErrors.getMessage()); 
-
 				}
 				finally {
 
@@ -446,9 +405,6 @@ public class SkosPlayController {
 		}
 		default:
 			break;
-
-
-
 		}
 		return null;
 	}
