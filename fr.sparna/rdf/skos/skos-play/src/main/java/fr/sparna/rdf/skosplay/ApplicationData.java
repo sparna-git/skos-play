@@ -29,13 +29,14 @@ public class ApplicationData {
 	protected Map<String, Repository> exampleDatas;
 
 	protected String thesaurusDirectory;
+	
 	protected String buildVersion;	
 	protected String buildTimestamp;
 	
 	public ApplicationData(String thesaurusDirectory) {
 		super();
 		this.thesaurusDirectory = thesaurusDirectory;
-		
+	
         this.init();	
 	}
 	
@@ -69,6 +70,7 @@ public class ApplicationData {
 		// store example data in application data
 		this.setExampleDatas(exampleDataMap);	
 	}
+	
 	
 	/**
 	 * Expose SkosPlayConfig in a getter so that it is accessible in JSP pages

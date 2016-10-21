@@ -49,6 +49,7 @@
 				<br />
 				<br />
 				<div style="text-align:center">
+					<a href="convert"><button class="btn btn-primary btn-lg ">Convert</button></a>
                   	<a href="upload"><button class="btn btn-primary btn-lg ">Start Here</button></a>
                   	<a href="about"><button class="btn btn-default btn-lg" type="button">Learn More</button></a>                
               </div>

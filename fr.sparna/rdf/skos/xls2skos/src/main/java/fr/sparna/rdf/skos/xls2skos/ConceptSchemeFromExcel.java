@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Level;
 import org.apache.poi.ss.usermodel.Row;
@@ -39,6 +38,8 @@ import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import fr.sparna.commons.io.InputStreamUtil;
 
 
 
@@ -369,7 +370,8 @@ public class ConceptSchemeFromExcel {
 				for (String aString : SKOS2SKOSXL_URI_RULESET) {
 					// Load SPARQL query definition
 			        InputStream src = this.getClass().getResourceAsStream(aString);		        
-					String sparql = IOUtils.toString(src);
+					String sparql = InputStreamUtil.readToString(src);
+					
 					Update u = c.prepareUpdate(sparql);
 					u.execute();
 				}
@@ -383,7 +385,7 @@ public class ConceptSchemeFromExcel {
 				for (String aString : SKOS2SKOSXL_NOTES_URI_RULESET) {
 					// Load SPARQL query definition
 			        InputStream src = this.getClass().getResourceAsStream(aString);		        
-					String sparql = IOUtils.toString(src);
+					String sparql = InputStreamUtil.readToString(src);
 					Update u = c.prepareUpdate(sparql);
 					u.execute();
 				}

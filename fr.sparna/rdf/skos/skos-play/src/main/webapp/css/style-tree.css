@@ -1,0 +1,66 @@
+ul {
+    padding: 0em;
+}
+
+ul li, ul li ul li {
+    position:relative;
+    top:0;
+    bottom:0;
+    padding-bottom: 4px;
+
+}
+
+ul li ul {
+    margin-left: 4em;
+}
+
+li {
+    list-style-type: none;
+}
+
+li a {
+    padding:0 0 0 10px;
+    position: relative;
+   
+}
+span
+{
+	
+}
+li a:hover {
+    text-decoration: none;
+}
+
+a.addBorderBefore:before {
+    content: "";
+    display: inline-block;
+    width: 2px;
+    height: 28px;
+    position: absolute;
+    left: -47px;
+    top:-16px;
+    /*border-left: 1px solid gray;*/
+}
+
+li:before {
+    content: "";
+    display: inline-block;
+    width: 25px;
+    height: 0;
+    
+    position: relative;
+    left: 0em;
+    top:1em;
+    /*border-top: 1px solid gray;*/
+}
+
+ul li ul li:last-child:after, ul li:last-child:after {
+    content: '';
+    display: block;
+    width: 1em;
+    height: 1em;
+    position: relative;
+    background: #fff;
+    top: 9px;
+    left: -1px;
+}

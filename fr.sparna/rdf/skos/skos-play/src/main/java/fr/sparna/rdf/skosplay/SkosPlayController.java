@@ -1,8 +1,13 @@
 package fr.sparna.rdf.skosplay;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.security.InvalidParameterException;
@@ -18,6 +23,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileUploadBase.InvalidContentTypeException;
+import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 import org.openrdf.model.Literal;
 import org.openrdf.model.Value;
 import org.openrdf.model.vocabulary.DC;
@@ -28,6 +35,7 @@ import org.openrdf.query.TupleQueryResultHandlerBase;
 import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.repository.Repository;
 import org.openrdf.rio.RDFFormat;
+import org.openrdf.rio.RDFWriterRegistry;
 import org.openrdf.rio.Rio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,6 +99,10 @@ import fr.sparna.rdf.skos.toolkit.SKOSRules;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeBuilder;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
+import fr.sparna.rdf.skos.xls2skos.ConceptSchemeFromExcel;
+import fr.sparna.rdf.skos.xls2skos.ModelWriterIfc;
+import fr.sparna.rdf.skos.xls2skos.OutputStreamModelWriter;
+import fr.sparna.rdf.skos.xls2skos.ZipOutputStreamModelWriter;
 
 /**
  * The main entry point.
@@ -105,7 +117,8 @@ import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
 public class SkosPlayController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
-
+	private boolean generatexl_copie=false;
+	private String language_copie;
 	@Autowired
 	protected ServletContext servletContext;
 	
@@ -120,6 +133,7 @@ public class SkosPlayController {
 		if(SkosPlayConfig.getInstance().isPublishingMode()) {
 			// if publishing mode, no home page
 			return uploadForm();
+			
 		} else {
 			// retrieve resource bundle for path to home page
 			ResourceBundle b = ResourceBundle.getBundle(
@@ -177,9 +191,268 @@ public class SkosPlayController {
 	@RequestMapping(value = "/convert", method = RequestMethod.GET)
 	public ModelAndView convertForm() {
 		// set an empty Model - just so that JSP can access SkosPlayConfig through it
-		UploadFormData data = new UploadFormData();
-		return new ModelAndView("convert", UploadFormData.KEY, data);
+		ConvertFromData data = new ConvertFromData();
+		return new ModelAndView("convert", ConvertFromData.KEY, data);
 	}
+	
+
+	@RequestMapping(value = "/convert", method = RequestMethod.POST)
+	public ModelAndView convertRDF(			
+			@RequestParam(value="source", required=true) String sourceString,
+			@RequestParam(value="file", required=false) MultipartFile file,			
+			@RequestParam(value="language", required=false) String language,
+			@RequestParam(value="url", required=false) String url,
+			@RequestParam(value="output", required=false) String format,
+			@RequestParam(value="example", required=false) String Example,
+			@RequestParam(value="usexl", required=false) boolean usexl,
+			@RequestParam(value="usezip", required=false) boolean useZip,
+			HttpServletRequest request,
+			HttpServletResponse response			
+			) throws IOException {
+		log.debug("convert(source="+sourceString+",file="+file+",language="+language+"url="+url+"ex="+Example+")");
+		URL urls;
+		InputStream url_Input = null;
+		DataInputStream content;
+		String lien="http://localhost:8080/skos-play/excel_test/testExcelNative.xlsx";
+		SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());
+		RDFFormat theFormat = RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format);
+		final SessionData sessionData = SessionData.get(request.getSession());
+
+		language_copie=language;
+		OutputStreamModelWriter modelWriter;
+		ZipOutputStreamModelWriter modelWriter1;
+
+		// prepare data structure
+		final PrintFormData printFormData = new PrintFormData();
+		sessionData.setPrintFormData(printFormData);
+		//generate skos-xl checked
+		boolean generatexl=false;
+		if(usexl)
+		{
+			log.debug("******************usexl checked*********************");
+			generatexl=true;
+			generatexl_copie=generatexl;
+
+		}else
+		{
+			generatexl=false;
+			generatexl_copie=generatexl;
+
+		}
+
+
+
+		// retrieve resource bundle for error messages
+		ResourceBundle b = ResourceBundle.getBundle(
+				"fr.sparna.rdf.skosplay.i18n.Bundle",
+				sessionData.getUserLocale(),
+				new StrictResourceBundleControl()
+				);
+
+		/**************************CONVERSION RDF**************************/
+		switch(source) {
+
+		case EXAMPLE : {
+			log.debug("*************************URL choisi********************");
+
+			if(useZip)
+			{
+				log.debug("**********************useZip checked*************************");
+				log.debug("*ZIPXL*="+generatexl);	
+				try{
+
+					// Open an input stream from the url //
+					urls = new URL(lien);
+					url_Input = urls.openStream(); // throws an IOException
+					content = new DataInputStream(new BufferedInputStream(url_Input));
+					response.setContentType("application/zip");	
+					modelWriter=new OutputStreamModelWriter(response.getOutputStream());
+					generateType(modelWriter,content);
+				}
+				catch(MalformedURLException errors) {
+					errors.printStackTrace();
+					return doErrorfile(request,errors.getMessage());
+
+				} 
+				catch (IOException ioeErrors) {
+					ioeErrors.printStackTrace();
+					return doErrorfile(request,ioeErrors.getMessage());
+				}
+				finally {
+					try {
+						url_Input.close();
+					} 
+					catch (IOException ioe) {
+
+					}
+				} 
+			}else{
+				log.debug("*FILEXL*="+generatexl);	
+				try{
+
+					urls = new URL(lien);
+					url_Input = urls.openStream(); // throws an IOException
+					content = new DataInputStream(new BufferedInputStream(url_Input));
+					modelWriter=new OutputStreamModelWriter(response.getOutputStream());
+					//modelWriter.setFormat(theFormat);
+					response.setContentType(modelWriter.getFormat().getDefaultMIMEType());
+					generateType(modelWriter,content);
+
+				}catch(MalformedURLException errors) {
+					errors.printStackTrace();
+					return doErrorfile(request, b.getString("error")); 
+				} catch (IOException ioeErrors) {
+					ioeErrors.printStackTrace();
+					return doErrorfile(request,ioeErrors.getMessage()); 
+				}
+				finally {
+					try {
+						url_Input.close();
+					} catch (IOException ioe) {
+
+					}
+				} 
+			}
+
+			break;
+		}
+
+		case FILE : {
+			log.debug("***********************FILE choisi**************************");
+			if(file.isEmpty()) {
+				return doErrorfile(request, "Uploaded file is empty");
+			}
+			if(useZip)
+			{
+				log.debug("**********************useZip checked*************************");
+				log.debug("*ZIPXL*="+generatexl);
+				try{
+
+					response.setContentType("application/zip");
+					modelWriter1=new ZipOutputStreamModelWriter(response.getOutputStream());
+					generateType(modelWriter1,file.getInputStream());
+				}
+				catch(FileFormatException errors) {
+
+					errors.printStackTrace();
+					return doErrorfile(request, errors.getMessage()); 
+
+				}
+				catch(FileNotFoundException errors) {         
+					errors.printStackTrace();
+					return doErrorfile(request, errors.getMessage()); 
+
+				}
+
+			}
+			else{	
+
+				try{
+					log.debug("*FileInf*="+generatexl);
+					modelWriter=new OutputStreamModelWriter(response.getOutputStream());
+					response.setContentType(modelWriter.getFormat().getDefaultMIMEType());
+					generateType(modelWriter,file.getInputStream());
+				}
+				catch(FileFormatException errors) {
+					//errors.printStackTrace();
+					return doErrorfile(request, b.getString("error")); 
+				}
+				catch(FileNotFoundException errors) {
+					//errors.printStackTrace();
+					return doErrorfile(request, errors.getMessage()); 
+				}
+			}
+			break;
+		}
+		case URL: {
+			log.debug("*************************URL choisi********************");
+
+			if(url.isEmpty()) {
+				return doErrorfile(request, "Uploaded link file is empty");
+			}
+
+			if(useZip)
+			{
+				log.debug("**********************useZip checked*************************");
+				log.debug("*ZIPXL*="+generatexl);	
+				try{
+					//----------------------------------------------//
+					// Open an input stream from the url.  //
+					//----------------------------------------------//
+					urls = new URL(url);
+					url_Input = urls.openStream(); // throws an IOException
+					content = new DataInputStream(new BufferedInputStream(url_Input));
+					response.setContentType("application/zip");	
+					modelWriter1=new ZipOutputStreamModelWriter(response.getOutputStream());
+					generateType(modelWriter1,content);
+
+				}catch(MalformedURLException errors) {
+					errors.printStackTrace();
+					return doErrorfile(request, errors.getMessage()); 
+
+
+				} catch (IOException ioeErrors) {
+
+					ioeErrors.printStackTrace();
+					return doErrorfile(request, ioeErrors.getMessage()); 
+				}
+				finally {
+
+					try {
+						if(url_Input != null) {
+							url_Input.close();
+						}
+					} catch (IOException ioe) {
+
+					}
+				} 
+			}
+			else{
+
+				log.debug("*FILEXL*="+generatexl);	
+				try{
+					//----------------------------------------------//
+					// Open an input stream from the url.  //
+					//----------------------------------------------//
+					urls = new URL(url);
+					url_Input = urls.openStream(); // throws an IOException
+					content = new DataInputStream(new BufferedInputStream(url_Input));
+					modelWriter=new OutputStreamModelWriter(response.getOutputStream());
+					response.setContentType(modelWriter.getFormat().getDefaultMIMEType());
+					generateType(modelWriter,content);
+
+				}catch(MalformedURLException errors) {
+					//errors.printStackTrace();
+					return doErrorfile(request, errors.getMessage()); 
+
+
+				} catch (IOException ioeErrors) {
+
+					//ioeErrors.printStackTrace();
+					return doErrorfile(request,ioeErrors.getMessage()); 
+
+				}
+				finally {
+
+					try {
+						url_Input.close();
+					} catch (IOException ioe) {
+
+					}
+				} 
+			}
+
+			break;
+		}
+		default:
+			break;
+
+
+
+		}
+		return null;
+	}
+
 	
 	
 	
@@ -508,6 +781,16 @@ public class SkosPlayController {
 		request.setAttribute(UploadFormData.KEY, data);
 		return new ModelAndView("upload");
 	}
+	
+	protected ModelAndView doErrorfile(
+			HttpServletRequest request,
+			String message
+	) {
+		ConvertFromData data = new ConvertFromData();
+		data.setErrorMessagefile(message);
+		request.setAttribute(ConvertFromData.KEY, data);
+		return new ModelAndView("convert");
+	}
 
 	
 	@RequestMapping(
@@ -593,6 +876,7 @@ public class SkosPlayController {
 		// flush
 		response.flushBuffer();
 	}
+	
 	
 	
 	
@@ -913,6 +1197,13 @@ public class SkosPlayController {
 		}				
 		
 		return tree;
+	}
+	public void generateType (ModelWriterIfc Writer, InputStream filefrom)
+	{
+		 ConceptSchemeFromExcel converter = new ConceptSchemeFromExcel(Writer, language_copie);
+		 converter.setGenerateXl(generatexl_copie);
+		 converter.setGenerateXlDefinitions(generatexl_copie);
+		 converter.processInputStream(filefrom);
 	}
 	
 }

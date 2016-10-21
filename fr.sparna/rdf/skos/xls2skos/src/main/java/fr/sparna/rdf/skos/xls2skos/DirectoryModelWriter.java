@@ -1,7 +1,10 @@
 package fr.sparna.rdf.skos.xls2skos;
 
-import org.apache.commons.io.Charsets;
-import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.net.URLEncoder;
+
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
@@ -14,9 +17,7 @@ import org.eclipse.rdf4j.rio.RDFWriter;
 import org.eclipse.rdf4j.rio.RDFWriterRegistry;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.net.URLEncoder;
+import fr.sparna.commons.io.ReadWriteTextFile;
 
 /**
  * Saves each Model in a separate file in the given directory, and optionnaly generates a graph file for easy loading into Virtuoso.
@@ -55,7 +56,7 @@ public class DirectoryModelWriter implements ModelWriterIfc {
 			
 			if(saveGraphFile) {
 				File graphFile = new File(outputFolder, filename + ".rdf.graph");
-				FileUtils.write(graphFile, graph, Charsets.UTF_8);
+				ReadWriteTextFile.setContents(graphFile, graph, "UTF-8");
 			}
 		} catch(Exception e) {
 			throw Xls2SkosException.rethrow(e);

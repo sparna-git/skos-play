@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URLEncoder;
-import java.util.UUID;
+import java.nio.charset.Charset;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.commons.io.Charsets;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
@@ -44,7 +42,7 @@ public class ZipOutputStreamModelWriter implements ModelWriterIfc {
 				f.createNewFile();
 			}
 			this.underlyingStream = new FileOutputStream(f);
-			this.out = new ZipOutputStream(this.underlyingStream, Charsets.UTF_8);
+			this.out = new ZipOutputStream(this.underlyingStream, Charset.forName("UTF-8"));
 			this.out.setLevel(9);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -55,7 +53,7 @@ public class ZipOutputStreamModelWriter implements ModelWriterIfc {
 		super();
 		try {
 			this.underlyingStream = underlyingStream;
-			this.out = new ZipOutputStream(this.underlyingStream, Charsets.UTF_8);
+			this.out = new ZipOutputStream(this.underlyingStream, Charset.forName("UTF-8"));
 			this.out.setLevel(9);
 		} catch (Exception e) {
 			throw new RuntimeException(e);

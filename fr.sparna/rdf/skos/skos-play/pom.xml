@@ -108,7 +108,10 @@
             <groupId>fr.sparna.rdf.skos</groupId>
             <artifactId>skos-printer</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>fr.sparna.rdf.skos</groupId>
+            <artifactId>xls2skos</artifactId>
+        </dependency>
 
         <!-- Semargl and Semargl Sesame integration for RDFa parsing -->
         <dependency>

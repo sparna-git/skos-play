@@ -1,0 +1,117 @@
+/*
+ * jQuery Editable Select
+ * https://github.com/shaoyun/jquery-editable-select
+ *
+ * Copyright (c) 2016 Shaoyun
+ * Licensed under the GPL license.
+ */
+ .ui-select-wrap {
+    border: 1px solid #E5E5E5;
+    height: 30px;
+    width: 30%;
+    min-width: 120px;
+    outline: none;
+    color:#444;
+    position: relative;
+    margin-bottom: 10px;
+}
+.ui-select-wrap > .selected {
+    float: left;
+    height: 30px;
+    line-height: 20px;
+    display: table;
+    width:100%;
+    cursor: pointer;
+}
+
+.ui-select-wrap > .selected span {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 13px;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+    font-size: 14px;
+}
+
+.ui-select-wrap .dropdown-box {
+    border: 1px solid #E5E5E5;
+    border-top: none;
+    display: none;
+    position: absolute;
+    top: 30px;
+    z-index: 2;
+    background-color: #fff;
+    padding: 5px 0;
+    left: -1px;
+}
+
+.ui-select-wrap .inputbox {
+    clear: both;
+    margin: 0 5px;
+    margin-right: 7px;
+    margin-top: 5px;
+}
+.ui-select-wrap .inputbox input[type=text]{
+    border:1px solid #E5E5E5;
+    width: 100%;
+    padding: 5px 5px;
+    outline: none;
+}
+.ui-select-wrap ul {
+    clear: both;
+    list-style: none;
+    padding: 0;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+    -webkit-padding-start: 0;
+    margin-top: 5px;
+}
+.ui-select-wrap ul li {
+    margin-left: 5px;
+    margin-right: 5px;
+    line-height: 30px;
+    cursor: pointer;
+    padding:0 8px;
+    font-size: 12px;
+    
+}
+.ui-select-wrap ul li.over {
+    background-color: #EEEEEE;
+    color: #333;
+}
+.ui-select-wrap .ui-button {
+    border-left: 1px solid #E5E5E5;
+    float: right;
+    display: table-cell;
+    cursor: pointer;
+    height: 100%;
+    color: #999999;
+    width: 40px;
+    text-align: center;
+}
+.ui-select-wrap .ui-button i {
+    margin-top: 7px;
+}
+.ui-select-wrap:focus {
+    border-color: #999999;
+}
+.ui-select-wrap:focus .dropdown-box {
+    border-color: #999999;
+}
+.ui-select-wrap:focus .ui-button {
+    border-left: none;
+}
+
+.ui-select-wrap.focus {
+    border-color: #999999;
+}
+.ui-select-wrap.focus .dropdown-box {
+    border-color: #999999;
+}
+.ui-select-wrap.focus .ui-button {
+    border-left: none;
+}

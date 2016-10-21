@@ -137,6 +137,11 @@
                 <artifactId>skos-printer</artifactId>
                 <version>0.7.1</version>
             </dependency>
+            <dependency>
+                <groupId>fr.sparna.rdf.skos</groupId>
+                <artifactId>xls2skos</artifactId>
+                <version>0.7.0</version>
+            </dependency>
 
             <!-- Logging: SLF4J -->
             <dependency>
