@@ -95,31 +95,38 @@
 				</style>
 			</head>
 			<body style="margin-bottom: 40px;">
+				<div role="navigation" class="navbar navbar-fixed-top" style="margin:auto; text-align:center;">
+			     	<label for="btn">expand/collapse all(déplier/replier tout)</label>
+			    </div>
 				<div class="container">
 				
 					<!-- if more than one section, and at least have a title, generate navbar at the document level -->
 					<xsl:if test="count(disp:body/disp:kosDisplay/disp:section[@title]) > 1">
 						
 					    	<div class="navbar navbar-fixed-bottom" role ="navigation">
-					        	<table > 
-					        	<tr >
+					    	<div class="navbar-header">
+						      <a class="navbar-brand" href="#"></a>
+						    </div>
+					        	 <div class="container-fluid">
 					        		<xsl:for-each select="disp:body/disp:kosDisplay/disp:section">
 										
-										
-             								<td ><a  class="btn btn-primary" href="#{@title}"><xsl:value-of select="@title" /></a>
-             							</td>
+										<ul class="nav navbar-nav">
+             								<li><a  class="btn btn-primary" href="#{@title}"><xsl:value-of select="@title" /></a> </li>
+             							</ul>
         								
 									</xsl:for-each>
-					      		</tr>
-        						</table>
+								</div>
+					      		
 					    	</div>
 					   
 					</xsl:if>
 				
 					<xsl:apply-templates />
 				</div>
+				
 				<script><![CDATA[
 			      $(document).ready(function () {
+			      jQuery(".tree ul").hide();
 					// add external link behavior to every external link
 					/*
 					$('span[title]:not(:has(a))').mouseover(function() {
@@ -177,26 +184,49 @@
 					    $this.closest('ul').find("li").children("ul").css("margin-top","5px");
 					  };*/
 					});
-					// Add bold in li and levels above
-					
+					/***Add a button to expand or collapse all****/
+					$('div.navbar-fixed-top').each(function(){
+			              $this = $(this);
+			              $this.prepend("<a href='#' id='btn' style=' width:4%; margin-top:10px;' class='btn btn-primary'><span  class='glyphicon glyphicon-plus'  aria-hidden='true'></span><span class='glyphicon glyphicon-minus' aria-hidden='true' style='display:none;'></span></a>");
+			              $this.children("a").not(":last").removeClass().addClass("toogle");
+			          });
 					// Add button to expand and condense
 					$('ul li.hasSubmenu').each(function(){
+					  
 					  $this = $(this);
-					  $this.prepend("<a href='#'><span  class='glyphicon glyphicon-plus' style='display:none;' aria-hidden='true'></span><span class='glyphicon glyphicon-minus' aria-hidden='true' ></span></a>");
+					  $this.prepend("<a href='#'><span  class='glyphicon glyphicon-plus'  aria-hidden='true'></span><span class='glyphicon glyphicon-minus' aria-hidden='true' style='display:none;'></span></a>");
 					  $this.children("a").not(":last").removeClass().addClass("toogle");
+            		 
+           	
 					});
-					
-					
-					
+								
 					// Actions to expand and consense
 					$('ul li.hasSubmenu > a').click(function(){
+					  
 					  $this = $(this);
-					  $this.closest("li").children("ul").toggle("slow");
-					  $this.children("span").toggle();
-					  return false;
+						 $this.closest("li").children("ul").toggle("slow");
+						 $this.children("span").toggle();
+						 return false;
 					});
-					
-			      });			      	
+					/**when button expand all is cliked->expand all tree**/
+					$('div.navbar-fixed-top > a').click(function(){
+		                
+		                $("span.glyphicon").toggle();
+		                console.log("I'm in");
+		                $('li.hasSubmenu>a').each(function(){
+		                $("ul li.hasSubmenu>ul").toggle();      
+		                return false;
+	                });
+	               return false;
+	            }); 
+									
+			     
+			     
+			      
+			      
+			 });
+			      	
+			            	
 				]]></script>
 			</body>
 		</html>
@@ -206,7 +236,7 @@
 	
 	<!-- Display header -->
 	<xsl:template match="disp:header">
-		<div class="header">
+		<div class="header" style="margin-top: 50px;">
 		<h1><xsl:value-of select="disp:title" /></h1>
 			<div>
 				<xsl:apply-templates select="disp:creator" />
@@ -262,9 +292,13 @@
 	</xsl:template>
 	
 	<!-- Display a tree -->
+	
 	<xsl:template match="disp:tree">
-		<div class="display" >
-			<ul class="tree" >
+	  
+	  		<div class="display" >
+	  		
+			<ul class="tree">
+				
 				<xsl:apply-templates select="disp:node" />
 			</ul>
 			
