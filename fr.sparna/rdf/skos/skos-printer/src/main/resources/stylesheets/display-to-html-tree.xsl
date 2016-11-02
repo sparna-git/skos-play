@@ -95,10 +95,11 @@
 				</style>
 			</head>
 			<body style="margin-bottom: 40px;">
+				
+				<div class="container">
 				<div role="navigation" class="navbar navbar-fixed-top" style="margin:auto; text-align:center;">
 			     	<label for="btn">expand/collapse all(déplier/replier tout)</label>
 			    </div>
-				<div class="container">
 				
 					<!-- if more than one section, and at least have a title, generate navbar at the document level -->
 					<xsl:if test="count(disp:body/disp:kosDisplay/disp:section[@title]) > 1">
