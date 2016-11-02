@@ -7,6 +7,8 @@ import javax.servlet.http.HttpSession;
 
 import org.openrdf.repository.Repository;
 
+import com.google.api.client.auth.oauth2.Credential;
+
 import fr.sparna.rdf.sesame.toolkit.handler.DebugHandler;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
@@ -33,6 +35,9 @@ public class SessionData {
 	// the pre-loaded data resource bundle
 	protected ResourceBundle preLoadedDataLabels;
 	
+	protected GoogleAuthHelper googleAuthHelper;
+
+
 	/**
 	 * Stores this data into session
 	 * @param session
@@ -89,6 +94,14 @@ public class SessionData {
 
 	public void setPreLoadedDataLabels(ResourceBundle preLoadedDataLabels) {
 		this.preLoadedDataLabels = preLoadedDataLabels;
+	}
+
+	public GoogleAuthHelper getGoogleAuthHelper() {
+		return googleAuthHelper;
+	}
+
+	public void setGoogleAuthHelper(GoogleAuthHelper googleAuthHelper) {
+		this.googleAuthHelper = googleAuthHelper;
 	}
 
 	public static void main(String...strings) throws Exception {

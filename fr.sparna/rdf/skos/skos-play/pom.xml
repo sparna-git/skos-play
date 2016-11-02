@@ -112,6 +112,8 @@
             <groupId>fr.sparna.rdf.skos</groupId>
             <artifactId>xls2skos</artifactId>
         </dependency>
+        
+        
 
         <!-- Semargl and Semargl Sesame integration for RDFa parsing -->
         <dependency>
@@ -130,7 +132,27 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
         </dependency>
+        <dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+            <version>1.22.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.oauth-client</groupId>
+			<artifactId>google-oauth-client-jetty</artifactId>
+            <version>1.22.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-drive</artifactId>
+            <version>v3-rev47-1.22.0</version>
+		</dependency>
+		
+        
 
     </dependencies>
+       
 
 </project>

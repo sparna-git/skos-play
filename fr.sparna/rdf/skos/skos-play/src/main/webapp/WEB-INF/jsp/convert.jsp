@@ -32,6 +32,7 @@
 				document.getElementById('url').disabled = selected != 'url';
 				document.getElementById('example').disabled = selected != 'example';
 				document.getElementById('file').disabled = selected != 'file';
+				document.getElementById('id').disabled = selected != 'id';
 				
 			}	
 			
@@ -143,7 +144,32 @@
 							onkeypress="enabledInput('url');" style="width:80%;"/>
 						<span class="help-block"><i><fmt:message key="upload.form.remoteUrl_Excel.help" /></i></span>
 					</div>
-				</div>
+					</div>
+							<div class="form-group">
+						<input
+								class="col-sm-1"
+								type="radio"
+								name="source"
+								id="source-id"
+								value="id"
+								onchange="enabledInput('id')" />
+						<label class="col-sm-2 control-label">
+							
+							<fmt:message key="upload.form.remoteUrl_Excel_Google" />
+						</label>
+						<div class="col-sm-9" >
+							<input
+								
+								type="text"
+								id="id"
+								name="id"
+								value=""
+								placeholder="ex:1aNS3e1tpW1CCaDFpN97zEz3g9aULjStCXagTdDVgu"
+								class="form-control"
+								onkeypress="enabledInput('id');" style="width:80%;"/>
+							<span class="help-block"><i><fmt:message key="upload.form.remoteUrl_Excel_Google.help" /></i></span>
+						</div>
+					</div>
 				
 			</fieldset>
 			<legend></legend>
