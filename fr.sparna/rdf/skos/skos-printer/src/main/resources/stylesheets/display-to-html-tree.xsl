@@ -23,13 +23,8 @@
 				<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"></link>
 				
 				<!-- <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css"></link>  -->
-				
-				
 				<script src="js/jquery.min.js"></script>
 				<script src="bootstrap/js/bootstrap.min.js"></script>
-				
-
-				
     			
 				<style>
 					.kwic-left {
@@ -94,11 +89,11 @@
 							
 				</style>
 			</head>
-			<body style="margin-bottom: 40px;">
+			<body >
 				
 				<div class="container">
 				<div role="navigation" class="navbar navbar-fixed-top" style="margin:auto; text-align:center;">
-			     	<label for="btn">expand/collapse all(déplier/replier tout)</label>
+			     	<label >expand/collapse all(déplier/replier tout)</label>
 			    </div>
 				
 					<!-- if more than one section, and at least have a title, generate navbar at the document level -->
@@ -127,7 +122,7 @@
 				
 				<script><![CDATA[
 			      $(document).ready(function () {
-			      jQuery(".tree ul").hide();
+			      
 					// add external link behavior to every external link
 					/*
 					$('span[title]:not(:has(a))').mouseover(function() {
