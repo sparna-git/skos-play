@@ -1,21 +1,19 @@
 package fr.sparna.rdf.sesame.jena.repository;
 
-import info.aduna.iteration.CloseableIteration;
-
 import java.util.Iterator;
 
 import org.openjena.jenasesame.util.Convert;
-import org.openrdf.model.Statement;
-import org.openrdf.model.ValueFactory;
-import org.openrdf.repository.RepositoryException;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.repository.RepositoryException;
 
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 /**
- * An Iterator<org.openrdf.model.Statement> wrapping a Jena StmtIterator
+ * An Iterator<org.eclipse.rdf4j.model.Statement> wrapping a Jena StmtIterator
  * and doing the convertion between Jena Statement and Sesame Statement
  * at each iteration.
- * This is used to build a CloseableIteration<org.openrdf.model.Statement, RepositoryException>
+ * This is used to build a CloseableIteration<org.eclipse.rdf4j.model.Statement, RepositoryException>
  * easily from a Jena StmtIterator
  * 
  * @author Thomas Francart

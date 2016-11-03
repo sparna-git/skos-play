@@ -1,40 +1,38 @@
 package fr.sparna.rdf.sesame.jena.repository;
 
-import info.aduna.iteration.CloseableIteration;
-import info.aduna.iteration.CloseableIteratorIteration;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.openjena.jenasesame.util.Convert;
-import org.openrdf.model.Namespace;
-import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
-import org.openrdf.model.impl.NamespaceImpl;
-import org.openrdf.query.BooleanQuery;
-import org.openrdf.query.GraphQuery;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.Query;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.TupleQuery;
-import org.openrdf.query.Update;
-import org.openrdf.query.algebra.evaluation.iterator.CollectionIteration;
-import org.openrdf.query.parser.ParsedBooleanQuery;
-import org.openrdf.query.parser.ParsedGraphQuery;
-import org.openrdf.query.parser.ParsedOperation;
-import org.openrdf.query.parser.ParsedTupleQuery;
-import org.openrdf.query.parser.QueryParserUtil;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.RepositoryResult;
-import org.openrdf.repository.UnknownTransactionStateException;
-import org.openrdf.repository.base.RepositoryConnectionBase;
-import org.openrdf.rio.RDFHandler;
-import org.openrdf.rio.RDFHandlerException;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Namespace;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.impl.NamespaceImpl;
+import org.eclipse.rdf4j.query.BooleanQuery;
+import org.eclipse.rdf4j.query.GraphQuery;
+import org.eclipse.rdf4j.query.MalformedQueryException;
+import org.eclipse.rdf4j.query.Query;
+import org.eclipse.rdf4j.query.QueryLanguage;
+import org.eclipse.rdf4j.query.TupleQuery;
+import org.eclipse.rdf4j.query.Update;
+import org.eclipse.rdf4j.query.algebra.evaluation.iterator.CollectionIteration;
+import org.eclipse.rdf4j.query.parser.ParsedBooleanQuery;
+import org.eclipse.rdf4j.query.parser.ParsedGraphQuery;
+import org.eclipse.rdf4j.query.parser.ParsedOperation;
+import org.eclipse.rdf4j.query.parser.ParsedTupleQuery;
+import org.eclipse.rdf4j.query.parser.QueryParserUtil;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.repository.RepositoryResult;
+import org.eclipse.rdf4j.repository.UnknownTransactionStateException;
+import org.eclipse.rdf4j.repository.base.RepositoryConnectionBase;
+import org.eclipse.rdf4j.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
 
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
@@ -161,7 +159,7 @@ public class JenaRepositoryConnection extends RepositoryConnectionBase implement
 	@Override
 	public void exportStatements(
 			Resource s,
-			URI p,
+			IRI p,
 			Value o,
 			boolean includeInferred,
 			RDFHandler handler,
@@ -190,7 +188,7 @@ public class JenaRepositoryConnection extends RepositoryConnectionBase implement
 	@Override
 	public RepositoryResult<Statement> getStatements(
 			Resource s,
-			URI p,
+			IRI p,
 			Value o,
 			boolean includeInferred,
 			Resource... contexts)
@@ -205,7 +203,7 @@ public class JenaRepositoryConnection extends RepositoryConnectionBase implement
 				(o == null)?null:Convert.valueToRDFNode(repository.model, o)
 		);
 		
-		CloseableIteration<Statement, RepositoryException> iteration = new CloseableIteratorIteration<Statement, RepositoryException>(
+		org.eclipse.rdf4j.common.iteration.CloseableIteratorIteration<Statement, RepositoryException> iteration = new org.eclipse.rdf4j.common.iteration.CloseableIteratorIteration<Statement, RepositoryException>(
 				new JenaStatementIterator(it, this.getValueFactory())
 		);
 		
@@ -232,7 +230,7 @@ public class JenaRepositoryConnection extends RepositoryConnectionBase implement
 	@Override
 	protected void addWithoutCommit(
 			Resource s,
-			URI p,
+			IRI p,
 			Value o,
 			Resource... contexts)
 	throws RepositoryException {
@@ -255,7 +253,7 @@ public class JenaRepositoryConnection extends RepositoryConnectionBase implement
 	@Override
 	protected void removeWithoutCommit(
 			Resource s,
-			URI p,
+			IRI p,
 			Value o,
 			Resource... contexts
 	) throws RepositoryException {

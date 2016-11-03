@@ -3,11 +3,11 @@ package fr.sparna.rdf.skos.toolkit;
 import java.net.URI;
 import java.util.HashMap;
 
-import org.openrdf.model.Literal;
-import org.openrdf.model.Resource;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.repository.Repository;
 
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;

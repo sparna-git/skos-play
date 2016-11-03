@@ -3,8 +3,8 @@ package fr.sparna.rdf.sesame.toolkit.repository;
 import java.lang.reflect.Constructor;
 import java.security.InvalidParameterException;
 
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryException;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryException;
 
 public class VirtuosoReflectionRepositoryFactory implements RepositoryFactoryIfc {
 

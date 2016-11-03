@@ -4,10 +4,10 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openrdf.model.Literal;
-import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.repository.Repository;
-import org.openrdf.rio.RDFFormat;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.rio.RDFFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

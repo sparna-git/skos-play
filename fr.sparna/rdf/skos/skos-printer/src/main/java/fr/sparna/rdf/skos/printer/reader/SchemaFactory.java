@@ -2,7 +2,7 @@ package fr.sparna.rdf.skos.printer.reader;
 
 import javax.xml.bind.JAXBElement;
 
-import org.openrdf.query.algebra.Str;
+import org.eclipse.rdf4j.query.algebra.Str;
 
 import fr.sparna.rdf.skos.printer.schema.Att;
 import fr.sparna.rdf.skos.printer.schema.CellType;

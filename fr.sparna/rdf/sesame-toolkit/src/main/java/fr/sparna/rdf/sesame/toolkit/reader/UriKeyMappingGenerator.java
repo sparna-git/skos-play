@@ -3,7 +3,7 @@ package fr.sparna.rdf.sesame.toolkit.reader;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.URI;
 
 /**
  * An implementation of KeyMappingGeneratorIfc that maps a given URI to a given variable name.

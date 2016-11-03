@@ -1,9 +1,9 @@
 package fr.sparna.rdf.sesame.toolkit.repository;
 
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.http.HTTPRepository;
-import org.openrdf.repository.sparql.SPARQLRepository;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.repository.http.HTTPRepository;
+import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 
 /**
  * Creates a Sesame Repository that connects to a SPARQL endpoint.

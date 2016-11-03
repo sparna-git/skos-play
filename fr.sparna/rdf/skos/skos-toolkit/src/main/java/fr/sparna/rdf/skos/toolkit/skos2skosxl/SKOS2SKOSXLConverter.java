@@ -1,6 +1,6 @@
 package fr.sparna.rdf.skos.toolkit.skos2skosxl;
 
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 
 public class SKOS2SKOSXLConverter {
 

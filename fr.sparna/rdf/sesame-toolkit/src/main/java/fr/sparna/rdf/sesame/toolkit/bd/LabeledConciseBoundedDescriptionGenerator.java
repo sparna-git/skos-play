@@ -6,15 +6,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.openrdf.model.Graph;
-import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.ValueFactoryImpl;
-import org.openrdf.model.vocabulary.RDFS;
-import org.openrdf.repository.Repository;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.helpers.RDFHandlerBase;
+import org.eclipse.rdf4j.model.Graph;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.model.impl.ValueFactoryImpl;
+import org.eclipse.rdf4j.model.vocabulary.RDFS;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.helpers.RDFHandlerBase;
 
 public class LabeledConciseBoundedDescriptionGenerator extends ConciseBoundedDescriptionGenerator implements BoundedDescriptionGeneratorIfc {
 
@@ -130,7 +131,7 @@ public class LabeledConciseBoundedDescriptionGenerator extends ConciseBoundedDes
 								// statements for this subject
 								aResource,
 								// with this predicate
-								aPredicate,
+								SimpleValueFactory.getInstance().createIRI(aPredicate.stringValue()),
 								// no matter the value
 								null,
 								// yes, include inferred

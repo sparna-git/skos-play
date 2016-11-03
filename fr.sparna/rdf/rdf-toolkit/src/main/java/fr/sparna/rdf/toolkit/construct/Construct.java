@@ -3,7 +3,7 @@ package fr.sparna.rdf.toolkit.construct;
 import java.io.File;
 import java.util.List;
 
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

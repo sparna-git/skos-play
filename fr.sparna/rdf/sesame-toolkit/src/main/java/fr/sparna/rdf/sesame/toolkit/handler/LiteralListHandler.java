@@ -3,13 +3,13 @@ package fr.sparna.rdf.sesame.toolkit.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openrdf.model.Literal;
-import org.openrdf.model.Resource;
-import org.openrdf.model.Value;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.TupleQueryResultHandler;
-import org.openrdf.query.TupleQueryResultHandlerBase;
-import org.openrdf.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQueryResultHandler;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 
 /**
  * Stores the result of a SPARQL query with a single binding representing an RDF Literal

@@ -3,7 +3,7 @@ package fr.sparna.rdf.skos.printer.reader;
 import java.net.URI;
 import java.util.UUID;
 
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.skos.printer.schema.KosDisplay;

@@ -2,8 +2,8 @@ package fr.sparna.rdf.sesame.toolkit.query;
 
 import java.util.List;
 
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 
 public class PingSparqlHelper extends SelectSparqlHelperBase implements SelectSparqlHelperIfc {
 

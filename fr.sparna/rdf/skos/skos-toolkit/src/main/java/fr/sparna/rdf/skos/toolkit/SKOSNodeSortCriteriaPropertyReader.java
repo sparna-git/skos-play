@@ -3,7 +3,7 @@ package fr.sparna.rdf.skos.toolkit;
 import java.net.URI;
 import java.util.List;
 
-import org.openrdf.model.Value;
+import org.eclipse.rdf4j.model.Value;
 
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;

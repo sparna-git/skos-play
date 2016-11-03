@@ -1,8 +1,8 @@
 package fr.sparna.rdf.sesame.toolkit.reader;
 
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
-import org.openrdf.query.BindingSet;
+import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.query.BindingSet;
 
 /**
  * An implementation of KeyValueBindingSetReaderIfc that reads a URI as the key and a URI

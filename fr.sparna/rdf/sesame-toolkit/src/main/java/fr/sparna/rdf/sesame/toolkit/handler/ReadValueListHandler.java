@@ -3,11 +3,11 @@ package fr.sparna.rdf.sesame.toolkit.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openrdf.model.Value;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.TupleQueryResultHandler;
-import org.openrdf.query.TupleQueryResultHandlerBase;
-import org.openrdf.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQueryResultHandler;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 
 /**
  * Reads a query result consisting of a single value (Resource or Literal) possibly with multiple lines in the result set

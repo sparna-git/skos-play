@@ -1,6 +1,6 @@
 package fr.sparna.rdf.skos.printer.cli.skosxl2skos;
 
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

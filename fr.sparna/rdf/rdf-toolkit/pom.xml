@@ -83,37 +83,37 @@
 						</manifestEntries>
 		 			</transformer>
 		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-	      				<resource>META-INF/services/org.openrdf.query.algebra.evaluation.function.Function</resource>
+	      				<resource>META-INF/services/org.eclipse.rdf4j.query.algebra.evaluation.function.Function</resource>
 	      			</transformer>
 		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-	      				<resource>META-INF/services/org.openrdf.query.parser.QueryParserFactory</resource>
+	      				<resource>META-INF/services/org.eclipse.rdf4j.query.parser.QueryParserFactory</resource>
 	      			</transformer>
 		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-	      				<resource>META-INF/services/org.openrdf.query.resultio.BooleanQueryResultParserFactory</resource>
+	      				<resource>META-INF/services/org.eclipse.rdf4j.query.resultio.BooleanQueryResultParserFactory</resource>
 	      			</transformer>
 		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-	      				<resource>META-INF/services/org.openrdf.query.resultio.BooleanQueryResultWriterFactory</resource>
+	      				<resource>META-INF/services/org.eclipse.rdf4j.query.resultio.BooleanQueryResultWriterFactory</resource>
 	      			</transformer>
 		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-	      				<resource>META-INF/services/org.openrdf.query.resultio.TupleQueryResultParserFactory</resource>
+	      				<resource>META-INF/services/org.eclipse.rdf4j.query.resultio.TupleQueryResultParserFactory</resource>
 	      			</transformer>
 		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-	      				<resource>META-INF/services/org.openrdf.query.resultio.TupleQueryResultWriterFactory</resource>
+	      				<resource>META-INF/services/org.eclipse.rdf4j.query.resultio.TupleQueryResultWriterFactory</resource>
 	      			</transformer>
 		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-	      				<resource>META-INF/services/org.openrdf.repository.config.RepositoryFactory</resource>
+	      				<resource>META-INF/services/org.eclipse.rdf4j.repository.config.RepositoryFactory</resource>
 	      			</transformer>
 		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-	      				<resource>META-INF/services/org.openrdf.rio.RDFParserFactory</resource>
+	      				<resource>META-INF/services/org.eclipse.rdf4j.rio.RDFParserFactory</resource>
 	      			</transformer>
 		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-	      				<resource>META-INF/services/org.openrdf.rio.RDFWriterFactory</resource>
+	      				<resource>META-INF/services/org.eclipse.rdf4j.rio.RDFWriterFactory</resource>
 	      			</transformer>
 		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-	      				<resource>META-INF/services/org.openrdf.sail.config.SailFactory</resource>
+	      				<resource>META-INF/services/org.eclipse.rdf4j.sail.config.SailFactory</resource>
 	      			</transformer>
 		 			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-	      				<resource>META-INF/services/org.openrdf.sail.rdbms.RdbmsProvider</resource>
+	      				<resource>META-INF/services/org.eclipse.rdf4j.sail.rdbms.RdbmsProvider</resource>
 	      			</transformer>
 	      			<!-- accumulation des schemas Spring -->
 	      			<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
@@ -148,10 +148,11 @@
 		  <artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.openrdf.sesame</groupId>
-			<artifactId>sesame-runtime</artifactId>
-		</dependency>
+       <dependency>
+               <groupId>org.eclipse.rdf4j</groupId>
+               <artifactId>rdf4j-runtime</artifactId>
+               <version>2.0</version>
+       </dependency>
 
 		<dependency>
 			<groupId>fr.sparna.rdf</groupId>

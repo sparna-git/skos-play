@@ -8,10 +8,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.openrdf.model.Value;
-import org.openrdf.model.vocabulary.RDFS;
-import org.openrdf.model.vocabulary.SKOS;
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.vocabulary.RDFS;
+import org.eclipse.rdf4j.model.vocabulary.SKOS;
+import org.eclipse.rdf4j.repository.Repository;
 
 import fr.sparna.commons.lang.ListMap;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
@@ -110,7 +110,7 @@ public class LabelReader extends PreferredPropertyReader {
 	}	
 	
 	@Override
-	public List<Value> getValues(final org.openrdf.model.URI resource) 
+	public List<Value> getValues(final org.eclipse.rdf4j.model.URI resource) 
 	throws SparqlPerformException {
 		return getValues(URI.create(resource.stringValue()));
 	}

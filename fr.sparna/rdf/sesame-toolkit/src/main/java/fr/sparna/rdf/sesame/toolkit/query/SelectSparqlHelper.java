@@ -1,6 +1,6 @@
 package fr.sparna.rdf.sesame.toolkit.query;
 
-import org.openrdf.query.TupleQueryResultHandler;
+import org.eclipse.rdf4j.query.TupleQueryResultHandler;
 
 import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 

@@ -1,9 +1,9 @@
 package fr.sparna.rdf.sesame.toolkit.iterator;
 
-import org.openrdf.model.Resource;
-import org.openrdf.model.Value;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResult;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.query.QueryEvaluationException;
+import org.eclipse.rdf4j.query.TupleQueryResult;
 
 import fr.sparna.commons.lang.ClosableIterator;
 

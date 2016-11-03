@@ -4,13 +4,13 @@
 
 package org.openjena.jenasesame.util;
 
-import org.openrdf.model.BNode;
-import org.openrdf.model.Literal;
-import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
-import org.openrdf.model.ValueFactory;
+import org.eclipse.rdf4j.model.BNode;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.ValueFactory;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -30,7 +30,7 @@ public class Convert
     {
         if(value.getLanguage() != null)
         {
-            return Node.createLiteral(value.getLabel(), value.getLanguage(), false);
+            return Node.createLiteral(value.getLabel(), value.getLanguage().get(), false);
         }
         if(value.getDatatype() != null)
         {
@@ -48,7 +48,7 @@ public class Convert
         }
         else if(value.getLanguage() != null && !"".equals(value.getLanguage()))
         {
-            return nextModel.createLiteral(value.stringValue(), value.getLanguage());
+            return nextModel.createLiteral(value.stringValue(), value.getLanguage().get());
         }
         else
         {
@@ -139,20 +139,20 @@ public class Convert
     }
     
     /* BEGIN ADDED BY THOMAS FRANCART */
-    public static org.openrdf.model.URI propertyToURI(
+    public static org.eclipse.rdf4j.model.URI propertyToURI(
     		final ValueFactory factory,
     		final com.hp.hpl.jena.rdf.model.Property p
     ) {
     	return factory.createURI(p.getURI());
     }  
     
-    public static org.openrdf.model.Statement statementToSesameStatement(
+    public static org.eclipse.rdf4j.model.Statement statementToSesameStatement(
     		final ValueFactory factory,
             final com.hp.hpl.jena.rdf.model.Statement stmt
     ) {
-    	final org.openrdf.model.Resource subject = Convert.nodeToValueResource(factory, stmt.getSubject().asNode());
-    	final org.openrdf.model.URI predicate = Convert.propertyToURI(factory, stmt.getPredicate());
-    	final org.openrdf.model.Value object = Convert.nodeToValue(factory, stmt.getObject().asNode());
+    	final org.eclipse.rdf4j.model.Resource subject = Convert.nodeToValueResource(factory, stmt.getSubject().asNode());
+    	final org.eclipse.rdf4j.model.URI predicate = Convert.propertyToURI(factory, stmt.getPredicate());
+    	final org.eclipse.rdf4j.model.Value object = Convert.nodeToValue(factory, stmt.getObject().asNode());
     	
         return factory.createStatement(subject, predicate, object);
     }

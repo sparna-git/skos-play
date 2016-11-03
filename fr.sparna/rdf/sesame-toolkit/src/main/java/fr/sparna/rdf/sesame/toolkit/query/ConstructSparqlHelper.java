@@ -1,6 +1,6 @@
 package fr.sparna.rdf.sesame.toolkit.query;
 
-import org.openrdf.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFHandler;
 
 import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 

@@ -2,10 +2,10 @@ package fr.sparna.rdf.sesame.toolkit.query.builder;
 
 import java.util.List;
 
-import org.openrdf.model.Value;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.sail.SailRepository;
-import org.openrdf.sail.memory.MemoryStore;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.sail.memory.MemoryStore;
 
 public class ValuesSparqlQueryBuilder implements SparqlQueryBuilderIfc {
 	
@@ -40,7 +40,7 @@ public class ValuesSparqlQueryBuilder implements SparqlQueryBuilderIfc {
 			sparql.append(" VALUES ?"+var+"");
 			sparql.append(" { ");
 			for (Value aValue : this.values) {
-				if(aValue instanceof org.openrdf.model.URI) {
+				if(aValue instanceof org.eclipse.rdf4j.model.URI) {
 					sparql.append("<"+aValue.stringValue()+">");
 				} else {
 					sparql.append(aValue.toString());

@@ -3,9 +3,9 @@ package fr.sparna.rdf.sesame.toolkit.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openrdf.model.Statement;
-import org.openrdf.rio.RDFHandler;
-import org.openrdf.rio.RDFHandlerException;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
 
 /**
  * Wraps a List of <code>RDFHandler</code>, and delegates the calls to startRDF, endRDF, handleStatement, handleNamespace, and handleComment

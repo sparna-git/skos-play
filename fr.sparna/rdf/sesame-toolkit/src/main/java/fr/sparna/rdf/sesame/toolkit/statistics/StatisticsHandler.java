@@ -6,11 +6,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.openrdf.model.Literal;
-import org.openrdf.model.Statement;
-import org.openrdf.model.vocabulary.RDF;
-import org.openrdf.rio.RDFHandler;
-import org.openrdf.rio.RDFHandlerException;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
 
 /**
  * Gather statistics on the result of a CONSTRUCT query or an entire repository if used in the
@@ -123,9 +123,9 @@ public class StatisticsHandler implements RDFHandler {
 			}
 		}
 		// on compte les sujets et les blankNodes
-		if(s.getSubject() instanceof org.openrdf.model.URI) {
+		if(s.getSubject() instanceof org.eclipse.rdf4j.model.URI) {
 			this.setOfSubjectURI.add(s.getSubject().stringValue());
-		} else if(s.getSubject() instanceof org.openrdf.model.BNode) {
+		} else if(s.getSubject() instanceof org.eclipse.rdf4j.model.BNode) {
 			this.setOfSubjectBlankNodes.add(s.getSubject().stringValue());
 		} else {
 			System.out.println("What is this type of subject !?"+s.getSubject().getClass().getCanonicalName());

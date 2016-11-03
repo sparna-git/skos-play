@@ -7,20 +7,22 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 
-import org.openrdf.model.Literal;
-import org.openrdf.model.Resource;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.TupleQueryResult;
-import org.openrdf.query.TupleQueryResultHandlerBase;
-import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFHandler;
-import org.openrdf.rio.RDFWriterRegistry;
-import org.openrdf.rio.Rio;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQueryResult;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFWriterFactory;
+import org.eclipse.rdf4j.rio.RDFWriterRegistry;
+import org.eclipse.rdf4j.rio.Rio;
 
 import fr.sparna.rdf.sesame.toolkit.bd.BoundedDescriptionGeneratorIfc;
 import fr.sparna.rdf.sesame.toolkit.bd.BoundedDescriptionHandlerAdapter;
@@ -244,8 +246,8 @@ import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
  * </li>
  * <li>
  * 		The objects you can pass in the Map<String, Object> can be of the following types :<br />
- * 		- a java.net.URI or a java.net.URL will be interpreted as an org.openrdf.model.URI<br />
- * 		- an org.openrdf.model.Value or one of its subclass (URI, Literal, BNode) will be inserted as it is<br />
+ * 		- a java.net.URI or a java.net.URL will be interpreted as an org.eclipse.rdf4j.model.URI<br />
+ * 		- an org.eclipse.rdf4j.model.Value or one of its subclass (URI, Literal, BNode) will be inserted as it is<br />
  *      - any other class will be passed as a String in a Literal, using toString()
  * 		{@.jcite -- sparqlQuery2}
  * </li>
@@ -859,13 +861,13 @@ public class Documentation {
 		BoundedDescriptionGeneratorIfc generator = new ConciseBoundedDescriptionGenerator(repository);
 		generator.exportBoundedDescription(
 				repository.getValueFactory().createURI("http://thes.world-tourism.org#CIRCUIT_TOURISTIQUE"),
-				new BoundedDescriptionHandlerAdapter(RDFWriterRegistry.getInstance().get(RDFFormat.N3).getWriter(System.out))
+				new BoundedDescriptionHandlerAdapter(RDFWriterRegistry.getInstance().get(RDFFormat.N3).get().getWriter(System.out))
 		);
 		System.out.println();
 		generator = new LabeledConciseBoundedDescriptionGenerator(repository, java.net.URI.create("http://www.w3.org/2004/02/skos/core#prefLabel"));
 		generator.exportBoundedDescription(
 				repository.getValueFactory().createURI("http://thes.world-tourism.org#CIRCUIT_TOURISTIQUE"),
-				new BoundedDescriptionHandlerAdapter(RDFWriterRegistry.getInstance().get(RDFFormat.N3).getWriter(System.out))
+				new BoundedDescriptionHandlerAdapter(RDFWriterRegistry.getInstance().get(RDFFormat.N3).get().getWriter(System.out))
 		);
 	}
 	
@@ -873,7 +875,7 @@ public class Documentation {
 	public static void main(String...strings) throws Exception {
 		final String test = "/home/thomas/Téléchargements/NAL_Thesaurus_2013_SKOS.xml";
 		// System.out.println(RDFFormat.forFileName(test.replaceAll(".xml", ".rdf"), RDFFormat.RDFXML));
-		System.out.println(Rio.getParserFormatForFileName(test, RDFFormat.RDFXML));
+		System.out.println(Rio.getParserFormatForFileName(test).orElse(RDFFormat.RDFXML));
 	}
 	
 }

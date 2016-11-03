@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.openrdf.model.Literal;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.TupleQueryResultHandlerBase;
-import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.repository.Repository;
-import org.openrdf.rio.RDFFormat;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.rio.RDFFormat;
 
 import fr.sparna.rdf.sesame.toolkit.languages.Languages.Language;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
@@ -179,7 +179,7 @@ public class SkosPlayModel {
 									conceptCountByConceptSchemes.put(
 											new LabeledResource(
 													java.net.URI.create(bindingSet.getValue("scheme").stringValue()),
-													LabelReader.display(labelReader.getValues((org.openrdf.model.URI)bindingSet.getValue("scheme")))
+													LabelReader.display(labelReader.getValues((org.eclipse.rdf4j.model.URI)bindingSet.getValue("scheme")))
 											),
 											(bindingSet.getValue("conceptCount") != null)?
 													((Literal)bindingSet.getValue("conceptCount")).intValue()

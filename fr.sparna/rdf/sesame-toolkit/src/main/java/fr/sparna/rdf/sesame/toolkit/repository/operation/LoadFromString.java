@@ -6,11 +6,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.openrdf.model.vocabulary.RDF;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.rio.RDFFormat;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.Rio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +59,7 @@ public class LoadFromString extends AbstractLoadOperation implements RepositoryO
 			}));
 			if(this.rdfFormat != null) {
 				log.debug("Will use this RDF format : "+this.rdfFormat);
-				formats.retainAll(Collections.singletonList(RDFFormat.valueOf(this.rdfFormat)));
+				formats.retainAll(Collections.singletonList(Rio.getParserFormatForFileName(this.rdfFormat).orElse(RDFFormat.RDFXML)));
 			} else {
 				log.debug("No RDF format specified. Will use all formats : "+formats);
 			}

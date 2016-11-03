@@ -8,7 +8,7 @@ import java.util.HashMap;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;

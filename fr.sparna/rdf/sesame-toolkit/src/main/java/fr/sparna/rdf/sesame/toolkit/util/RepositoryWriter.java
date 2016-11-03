@@ -13,18 +13,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openrdf.query.GraphQuery;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFHandler;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.RDFWriterFactory;
-import org.openrdf.rio.RDFWriterRegistry;
+import org.eclipse.rdf4j.query.GraphQuery;
+import org.eclipse.rdf4j.query.MalformedQueryException;
+import org.eclipse.rdf4j.query.QueryEvaluationException;
+import org.eclipse.rdf4j.query.QueryLanguage;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.RDFWriterFactory;
+import org.eclipse.rdf4j.rio.RDFWriterRegistry;
+import org.eclipse.rdf4j.rio.Rio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -215,7 +216,7 @@ public class RepositoryWriter {
 		
 		this.writeToStream(
 				new FileOutputStream(fout),
-				RDFFormat.forFileName(fout.getName(),RDFFormat.RDFXML)
+				Rio.getParserFormatForFileName(fout.getName()).orElse(RDFFormat.RDFXML)
 		);
 		
 		log.debug("Done dumping.");
@@ -258,7 +259,7 @@ public class RepositoryWriter {
 		
 		// use pretty print RDF/XML handler
 		try {
-			RDFWriterRegistry.getInstance().add((RDFWriterFactory)this.getClass().getClassLoader().loadClass("org.openrdf.rio.rdfxml.util.RDFXMLPrettyWriterFactory").newInstance());
+			RDFWriterRegistry.getInstance().add((RDFWriterFactory)this.getClass().getClassLoader().loadClass("org.eclipse.rdf4j.rio.rdfxml.util.RDFXMLPrettyWriterFactory").newInstance());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -268,7 +269,7 @@ public class RepositoryWriter {
 		log.debug("Will use charset : "+charset.toString());
 		
 		// picks up the correct RDF format based on target file extension (.rdf, .n3, .ttl, etc...)
-		RDFHandler writer = RDFWriterRegistry.getInstance().get(format).getWriter(new OutputStreamWriter(stream,charset));
+		RDFHandler writer = RDFWriterRegistry.getInstance().get(format).get().getWriter(new OutputStreamWriter(stream,charset));
 		
 		if(sorting) {
 			writer = new SortingRDFHandler(writer);

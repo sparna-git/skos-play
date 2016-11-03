@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.openrdf.model.Resource;
-import org.openrdf.model.Value;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.TupleQueryResultHandlerBase;
-import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.repository.Repository;
 
 import fr.sparna.commons.lang.LRUCache;
 import fr.sparna.commons.lang.ListMap;
@@ -164,7 +164,7 @@ public class PreferredPropertyReader {
 		return result;
 	}	
 	
-	public List<Value> getValues(final org.openrdf.model.URI resource) 
+	public List<Value> getValues(final org.eclipse.rdf4j.model.URI resource) 
 	throws SparqlPerformException {
 		return getValues(URI.create(resource.stringValue()));
 	}

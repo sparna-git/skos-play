@@ -2,7 +2,7 @@ package fr.sparna.rdf.sesame.toolkit.repository;
 
 import java.io.InputStream;
 
-import org.openrdf.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFFormat;
 
 /**
  * Returns a config for a Sesame repository (used by ConfigRepositoryProvider).

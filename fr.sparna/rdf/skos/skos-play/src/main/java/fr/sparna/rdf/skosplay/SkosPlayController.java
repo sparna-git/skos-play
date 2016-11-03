@@ -27,18 +27,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
-import org.openrdf.model.Literal;
-import org.openrdf.model.Value;
-import org.openrdf.model.vocabulary.DC;
-import org.openrdf.model.vocabulary.DCTERMS;
-import org.openrdf.model.vocabulary.RDF;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.TupleQueryResultHandlerBase;
-import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.repository.Repository;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFWriterRegistry;
-import org.openrdf.rio.Rio;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.vocabulary.DC;
+import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFWriterRegistry;
+import org.eclipse.rdf4j.rio.Rio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -667,7 +667,7 @@ public class SkosPlayController {
 				}
 
 				log.debug("Uploaded file name is "+file.getOriginalFilename());
-				localRepositoryBuilder.addOperation(new LoadFromStream(file.getInputStream(), Rio.getParserFormatForFileName(file.getOriginalFilename(), RDFFormat.RDFXML)));
+				localRepositoryBuilder.addOperation(new LoadFromStream(file.getInputStream(), Rio.getParserFormatForFileName(file.getOriginalFilename()).orElse(RDFFormat.RDFXML)));
 				repository = localRepositoryBuilder.createNewRepository();
 
 				// apply rules if needed
@@ -868,7 +868,7 @@ public class SkosPlayController {
 									printFormData.getConceptCountByConceptSchemes().put(
 											new LabeledResource(
 													java.net.URI.create(bindingSet.getValue("scheme").stringValue()),
-													LabelReader.display(labelReader.getValues((org.openrdf.model.URI)bindingSet.getValue("scheme")))
+													LabelReader.display(labelReader.getValues((org.eclipse.rdf4j.model.URI)bindingSet.getValue("scheme")))
 													),
 											(bindingSet.getValue("conceptCount") != null)?
 													((Literal)bindingSet.getValue("conceptCount")).intValue()

@@ -3,10 +3,10 @@ package fr.sparna.rdf.skos.toolkit;
 import java.util.List;
 import java.util.Set;
 
-import org.openrdf.model.Resource;
-import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryException;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +70,7 @@ public class FlexionsAdder {
 		@Override
 		protected void handleLabel(
 				Resource concept,
-				org.openrdf.model.URI labelType,
+				org.eclipse.rdf4j.model.URI labelType,
 				String label,
 				String lang)
 		throws TupleQueryResultHandlerException {

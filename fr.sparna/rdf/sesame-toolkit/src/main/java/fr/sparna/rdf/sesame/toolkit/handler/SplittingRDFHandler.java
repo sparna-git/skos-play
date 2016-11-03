@@ -5,13 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.openrdf.model.Statement;
-import org.openrdf.repository.Repository;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFHandler;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.RDFWriter;
-import org.openrdf.rio.RDFWriterRegistry;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.RDFWriter;
+import org.eclipse.rdf4j.rio.RDFWriterRegistry;
+import org.eclipse.rdf4j.rio.Rio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -177,8 +178,8 @@ public class SplittingRDFHandler implements RDFHandler {
 		}
 		// recreate RDF writer
 		this.currentWriter = RDFWriterRegistry.getInstance().get(
-				RDFFormat.forFileName(this.baseOutputFileName, RDFFormat.RDFXML)).getWriter(outputStream)
-		;
+				Rio.getParserFormatForFileName(this.baseOutputFileName).orElse(RDFFormat.RDFXML)
+		).get().getWriter(outputStream);
 	}
 	
 	/**

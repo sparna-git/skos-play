@@ -3,7 +3,7 @@ package fr.sparna.rdf.sesame.toolkit.util.NamespacesTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 
 import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.util.Namespaces;

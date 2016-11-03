@@ -5,17 +5,19 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.openrdf.model.Resource;
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
-import org.openrdf.model.vocabulary.RDF;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.RepositoryResult;
-import org.openrdf.repository.base.RepositoryConnectionWrapper;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFParseException;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.repository.RepositoryResult;
+import org.eclipse.rdf4j.repository.base.RepositoryConnectionWrapper;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFParseException;
+import org.eclipse.rdf4j.rio.Rio;
 
 public class ContextCachingRepositoryConnection extends RepositoryConnectionWrapper {
 
@@ -82,7 +84,7 @@ public class ContextCachingRepositoryConnection extends RepositoryConnectionWrap
 	@Override
 	protected void addWithoutCommit(
 			Resource subject,
-			URI predicate,
+			IRI predicate,
 			Value object,
 			Resource... contexts
 	) throws RepositoryException {
@@ -124,9 +126,9 @@ public class ContextCachingRepositoryConnection extends RepositoryConnectionWrap
 		Repository r = new LocalMemoryRepositoryFactory().createNewRepository();
 		ContextCachingRepositoryConnection cc = new ContextCachingRepositoryConnection(r, r.getConnection());
 		cc.setAutoCommit(false);
-		cc.add(new URL(TEST_URL), RDF.NAMESPACE, RDFFormat.forFileName(TEST_URL, RDFFormat.RDFXML), r.getValueFactory().createURI(TEST_URL));
+		cc.add(new URL(TEST_URL), RDF.NAMESPACE, Rio.getParserFormatForFileName(TEST_URL).orElse(RDFFormat.RDFXML), r.getValueFactory().createURI(TEST_URL));
 		cc.commit();
-		cc.add(new URL(TEST_URL), RDF.NAMESPACE, RDFFormat.forFileName(TEST_URL, RDFFormat.RDFXML), r.getValueFactory().createURI(TEST_URL));
+		cc.add(new URL(TEST_URL), RDF.NAMESPACE, Rio.getParserFormatForFileName(TEST_URL).orElse(RDFFormat.RDFXML), r.getValueFactory().createURI(TEST_URL));
 	}
 		
 }

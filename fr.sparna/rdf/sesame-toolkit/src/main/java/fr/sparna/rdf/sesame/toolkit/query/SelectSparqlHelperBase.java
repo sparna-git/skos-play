@@ -3,10 +3,10 @@ package fr.sparna.rdf.sesame.toolkit.query;
 import java.util.List;
 import java.util.Map;
 
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryResultHandlerException;
-import org.openrdf.query.TupleQueryResultHandler;
-import org.openrdf.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.QueryResultHandlerException;
+import org.eclipse.rdf4j.query.TupleQueryResultHandler;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 
 import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 

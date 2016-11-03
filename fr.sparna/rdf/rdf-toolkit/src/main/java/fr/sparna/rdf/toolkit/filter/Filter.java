@@ -5,13 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFHandler;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.RDFWriterRegistry;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.RDFWriterRegistry;
+import org.eclipse.rdf4j.rio.Rio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +67,7 @@ public class Filter implements ToolkitCommandIfc {
 				}
 				
 				// picks up the correct RDF format based on target file extension (.rdf, .n3, .ttl, etc...)
-				RDFHandler writer = RDFWriterRegistry.getInstance().get(RDFFormat.forFileName(inputFile.getName())).getWriter(new FileOutputStream(outputFile));
+				RDFHandler writer = RDFWriterRegistry.getInstance().get(Rio.getParserFormatForFileName(inputFile.getName()).orElse(RDFFormat.RDFXML)).get().getWriter(new FileOutputStream(outputFile));
 				filter.setHandler(writer);
 				
 				RepositoryConnection c = null;

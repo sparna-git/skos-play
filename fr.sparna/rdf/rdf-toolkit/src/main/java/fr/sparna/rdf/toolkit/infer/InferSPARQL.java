@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 
 import fr.sparna.commons.io.FileUtil;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;

@@ -2,7 +2,7 @@ package fr.sparna.rdf.toolkit.update;
 
 import java.net.URISyntaxException;
 
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 
 import fr.sparna.rdf.sesame.toolkit.query.SparqlUpdate;
 import fr.sparna.rdf.sesame.toolkit.repository.AutoDetectRepositoryFactory;

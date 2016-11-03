@@ -2,7 +2,7 @@ package fr.sparna.rdf.sesame.toolkit.repository.operation;
 
 import java.util.concurrent.CountDownLatch;
 
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

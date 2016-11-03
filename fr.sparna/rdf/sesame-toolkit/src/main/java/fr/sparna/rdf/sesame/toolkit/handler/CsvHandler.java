@@ -3,10 +3,10 @@ package fr.sparna.rdf.sesame.toolkit.handler;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.TupleQueryResultHandler;
-import org.openrdf.query.TupleQueryResultHandlerBase;
-import org.openrdf.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQueryResultHandler;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 
 /**
  * Generates a Comma Separated Value file from the result of a SPARQL SELECT query.

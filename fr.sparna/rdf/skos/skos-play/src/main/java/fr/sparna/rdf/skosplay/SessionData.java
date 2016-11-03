@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpSession;
 
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 
 import com.google.api.client.auth.oauth2.Credential;
 

@@ -1,9 +1,9 @@
 package fr.sparna.rdf.sesame.jena.repository;
 
-import org.openrdf.model.ValueFactory;
-import org.openrdf.query.Update;
-import org.openrdf.query.UpdateExecutionException;
-import org.openrdf.query.impl.AbstractUpdate;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.query.Update;
+import org.eclipse.rdf4j.query.UpdateExecutionException;
+import org.eclipse.rdf4j.query.impl.AbstractUpdate;
 
 import com.hp.hpl.jena.rdf.model.Model;
 

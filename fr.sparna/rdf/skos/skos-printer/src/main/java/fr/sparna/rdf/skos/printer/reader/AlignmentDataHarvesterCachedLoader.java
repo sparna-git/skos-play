@@ -2,11 +2,11 @@ package fr.sparna.rdf.skos.printer.reader;
 
 import java.net.URI;
 
-import org.openrdf.model.vocabulary.RDFS;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.rio.RDFFormat;
+import org.eclipse.rdf4j.model.vocabulary.RDFS;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.rio.RDFFormat;
 
 import fr.sparna.rdf.sesame.toolkit.handler.LoadURIHandler;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;

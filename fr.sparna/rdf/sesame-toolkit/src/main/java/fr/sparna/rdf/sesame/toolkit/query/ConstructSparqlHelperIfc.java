@@ -1,6 +1,6 @@
 package fr.sparna.rdf.sesame.toolkit.query;
 
-import org.openrdf.rio.RDFHandler;
+import org.eclipse.rdf4j.rio.RDFHandler;
 
 /**
  * An object that associates a SPARQL query (an instance of a {@link SparqlQueryIfc}) and a

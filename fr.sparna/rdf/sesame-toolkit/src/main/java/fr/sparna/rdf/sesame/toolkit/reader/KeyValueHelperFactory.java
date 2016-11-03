@@ -1,7 +1,7 @@
 package fr.sparna.rdf.sesame.toolkit.reader;
 
-import org.openrdf.model.Literal;
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.URI;
 
 import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;

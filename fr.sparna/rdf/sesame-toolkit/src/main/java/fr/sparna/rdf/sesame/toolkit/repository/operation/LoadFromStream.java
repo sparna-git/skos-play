@@ -3,13 +3,13 @@ package fr.sparna.rdf.sesame.toolkit.repository.operation;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.openrdf.model.vocabulary.RDF;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFParseException;
-import org.openrdf.rio.Rio;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFParseException;
+import org.eclipse.rdf4j.rio.Rio;
 
 import fr.sparna.rdf.sesame.toolkit.util.RepositoryConnectionDoorman;
 
@@ -60,7 +60,7 @@ public class LoadFromStream extends AbstractLoadOperation implements RepositoryO
 	public LoadFromStream(Object owner, String resource) {
 		this(
 				owner.getClass().getResourceAsStream(resource),
-				Rio.getParserFormatForFileName(resource, RDFFormat.RDFXML),
+				Rio.getParserFormatForFileName(resource).orElse(RDFFormat.RDFXML),
 				RDF.NAMESPACE
 		);
 	}

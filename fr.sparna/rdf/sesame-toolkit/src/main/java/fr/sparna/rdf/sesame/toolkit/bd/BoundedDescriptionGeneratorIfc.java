@@ -1,6 +1,6 @@
 package fr.sparna.rdf.sesame.toolkit.bd;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.URI;
 
 
 /**

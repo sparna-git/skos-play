@@ -7,24 +7,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.openrdf.model.Value;
-import org.openrdf.model.ValueFactory;
-import org.openrdf.query.BooleanQuery;
-import org.openrdf.query.GraphQuery;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.Operation;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.TupleQuery;
-import org.openrdf.query.TupleQueryResult;
-import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.query.Update;
-import org.openrdf.query.UpdateExecutionException;
-import org.openrdf.query.impl.DatasetImpl;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.rio.RDFHandlerException;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.query.BooleanQuery;
+import org.eclipse.rdf4j.query.GraphQuery;
+import org.eclipse.rdf4j.query.MalformedQueryException;
+import org.eclipse.rdf4j.query.Operation;
+import org.eclipse.rdf4j.query.QueryEvaluationException;
+import org.eclipse.rdf4j.query.QueryLanguage;
+import org.eclipse.rdf4j.query.TupleQuery;
+import org.eclipse.rdf4j.query.TupleQueryResult;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.query.Update;
+import org.eclipse.rdf4j.query.UpdateExecutionException;
+import org.eclipse.rdf4j.query.impl.DatasetImpl;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -460,8 +461,8 @@ public class Perform {
 			for (Map.Entry<String, Object> anEntry : bindings.entrySet()) {
 				// avoid setting null values
 				if(anEntry.getValue() != null) {
-					if(anEntry.getValue() instanceof org.openrdf.model.Value) {
-						o.setBinding(anEntry.getKey(), (org.openrdf.model.Value)anEntry.getValue());
+					if(anEntry.getValue() instanceof org.eclipse.rdf4j.model.Value) {
+						o.setBinding(anEntry.getKey(), (org.eclipse.rdf4j.model.Value)anEntry.getValue());
 					} else 	if(anEntry.getValue() instanceof java.net.URI) {
 						o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createURI(((java.net.URI)anEntry.getValue()).toString()));
 					} else 	if(anEntry.getValue() instanceof java.net.URL) {
@@ -510,26 +511,26 @@ public class Perform {
 					namedGraphs != null
 			) {
 				for (URI uri : namedGraphs) {
-					dataset.addNamedGraph(vf.createURI(uri.toString()));
+					dataset.addNamedGraph((IRI) vf.createURI(uri.toString()));
 				}
 			}
 			if(
 					defaultGraphs != null
 			) {
 				for (URI uri : defaultGraphs) {
-					dataset.addDefaultGraph(vf.createURI(uri.toString()));
+					dataset.addDefaultGraph((IRI) vf.createURI(uri.toString()));
 				}
 			}
 			if(
 				defaultInsertGraph != null	
 			) {
-				dataset.setDefaultInsertGraph(vf.createURI(defaultInsertGraph.toString()));
+				dataset.setDefaultInsertGraph((IRI) vf.createURI(defaultInsertGraph.toString()));
 			}
 			if(
 					defaultRemoveGraphs != null	
 			) {
 				for (URI uri : defaultRemoveGraphs) {
-					dataset.addDefaultRemoveGraph(vf.createURI(uri.toString()));
+					dataset.addDefaultRemoveGraph((IRI) vf.createURI(uri.toString()));
 				}
 			}
 			o.setDataset(dataset);

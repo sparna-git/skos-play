@@ -10,13 +10,13 @@ import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.DateUtil;
-import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.URI;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 
 public final class ValueGeneratorFactory {
 
-	public static ValueGeneratorIfc resources(IRI property, char separator) {
+	public static ValueGeneratorIfc resources(URI property, char separator) {
 		return (model, subject, value) -> {
 			if (StringUtils.isBlank(value)) {
 				return null;
@@ -25,13 +25,13 @@ public final class ValueGeneratorFactory {
 			Arrays.stream(
 					StringUtils.split(value, separator)
 					).forEach(
-							uri -> model.add(subject, property, SimpleValueFactory.getInstance().createIRI(ConceptSchemeFromExcel.fixUri(uri.trim())))
+							uri -> model.add(subject, property, SimpleValueFactory.getInstance().createURI(ConceptSchemeFromExcel.fixUri(uri.trim())))
 			);
 			return null;
 		};
 	}
 	
-	public static ValueGeneratorIfc resourcesOrLiteral(IRI property, char separator, String lang) {	
+	public static ValueGeneratorIfc resourcesOrLiteral(URI property, char separator, String lang) {	
 		return (model, subject, value) -> {
 			if (StringUtils.isBlank(value)) {
 				return null;
@@ -42,7 +42,7 @@ public final class ValueGeneratorFactory {
 				Arrays.stream(
 						StringUtils.split(value, separator)
 						).forEach(
-								uri -> model.add(subject, property, SimpleValueFactory.getInstance().createIRI(ConceptSchemeFromExcel.fixUri(uri.trim())))
+								uri -> model.add(subject, property, SimpleValueFactory.getInstance().createURI(ConceptSchemeFromExcel.fixUri(uri.trim())))
 				);
 			} else {
 				// consider it like a literal
@@ -53,7 +53,7 @@ public final class ValueGeneratorFactory {
 		};
 	}
 
-	public static ValueGeneratorIfc dateLiteral(IRI property) {
+	public static ValueGeneratorIfc dateLiteral(URI property) {
 		return (model, subject, value) -> {
 
 			if (StringUtils.isBlank(value)) return null;
@@ -72,24 +72,24 @@ public final class ValueGeneratorFactory {
 		};
 	}
 
-	public static ValueGeneratorIfc langLiteral(IRI property, String lang) {
+	public static ValueGeneratorIfc langLiteral(URI property, String lang) {
 		return (model, subject, value) -> {
 			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value, lang));
 			return null;
 		};
 	}
 
-	public static ValueGeneratorIfc plainLiteral(IRI property) {
+	public static ValueGeneratorIfc plainLiteral(URI property) {
 		return (model, subject, value) -> {
 			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value));
 			return null;
 		};
 	}
 
-	public static ValueGeneratorIfc skosXlLabel(IRI xlLabelProperty) {
+	public static ValueGeneratorIfc skosXlLabel(URI xlLabelProperty) {
 		return (model, subject, value) -> {
 			String labelUri = ConceptSchemeFromExcel.fixUri(value);
-			IRI labelResource = SimpleValueFactory.getInstance().createIRI(labelUri);
+			URI labelResource = SimpleValueFactory.getInstance().createURI(labelUri);
 			model.add(labelResource, RDF.TYPE, SKOSXL.LABEL);
 			model.add(subject, xlLabelProperty, labelResource);
 			return labelResource;

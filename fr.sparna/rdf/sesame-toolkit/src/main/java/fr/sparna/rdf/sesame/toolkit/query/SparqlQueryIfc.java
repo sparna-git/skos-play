@@ -27,11 +27,11 @@ public interface SparqlQueryIfc {
 	 * 
 	 * <p>Bindings values are interpreted as follow :
 	 * <ul>
-	 *   <li>If the value of the binding is an instance of org.openrdf.model.Value (either a Literal, a URI or a BNode)
+	 *   <li>If the value of the binding is an instance of org.eclipse.rdf4j.model.Value (either a Literal, a URI or a BNode)
 	 *   then it is passed as is to the query binding</li>
-	 *   <li>If the value of the binding is an instance of java.net.URI or java.net.URL, an org.openrdf.model.URI will be
+	 *   <li>If the value of the binding is an instance of java.net.URI or java.net.URL, an org.eclipse.rdf4j.model.URI will be
 	 *   constructed from it and passed to the query binding</li>
-	 *   <li>In every other cases the toString() method will be called on the binding value and an org.openrdf.model.Literal
+	 *   <li>In every other cases the toString() method will be called on the binding value and an org.eclipse.rdf4j.model.Literal
 	 *   instance will be constructed from it and passed to the query binding.</li>
 	 * </ul>
 	 * 

@@ -1,6 +1,6 @@
 package fr.sparna.rdf.sesame.toolkit.statistics;
 
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 
 public class VoidGoogleChartsPrinter {
 

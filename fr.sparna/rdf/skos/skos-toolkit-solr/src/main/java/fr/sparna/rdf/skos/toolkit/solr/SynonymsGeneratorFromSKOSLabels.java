@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openrdf.model.Resource;
-import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,7 +126,7 @@ public class SynonymsGeneratorFromSKOSLabels {
 		@Override
 		protected void handleLabel(
 				Resource concept,
-				org.openrdf.model.URI labelType,
+				org.eclipse.rdf4j.model.URI labelType,
 				String label,
 				String lang)
 				throws TupleQueryResultHandlerException {

@@ -1,6 +1,6 @@
 package fr.sparna.rdf.sesame.toolkit.repository;
 
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 
 /**
  * Creates and returns initialized Sesame repositories.

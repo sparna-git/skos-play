@@ -1,6 +1,6 @@
 package fr.sparna.rdf.sesame.toolkit.query;
 
-import org.openrdf.query.resultio.BooleanQueryResultWriter;
+import org.eclipse.rdf4j.query.resultio.BooleanQueryResultWriter;
 
 import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
 

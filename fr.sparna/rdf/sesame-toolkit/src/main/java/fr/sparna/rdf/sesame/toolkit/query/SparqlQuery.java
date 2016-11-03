@@ -152,10 +152,10 @@ public class SparqlQuery implements SparqlQueryIfc {
 						||
 						value instanceof java.net.URL
 						||
-						value instanceof org.openrdf.model.URI
+						value instanceof org.eclipse.rdf4j.model.URI
 				) {
 					replacement = "<"+value.toString()+">";
-				} else if (value instanceof org.openrdf.model.Value) {
+				} else if (value instanceof org.eclipse.rdf4j.model.Value) {
 					replacement = value.toString();
 				} else {
 					replacement = "\""+value.toString()+"\"";

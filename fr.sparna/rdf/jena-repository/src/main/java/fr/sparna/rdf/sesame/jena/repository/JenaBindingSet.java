@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.openjena.jenasesame.util.Convert;
-import org.openrdf.model.Value;
-import org.openrdf.model.ValueFactory;
-import org.openrdf.query.Binding;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.impl.BindingImpl;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.query.Binding;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.impl.BindingImpl;
 
 import com.hp.hpl.jena.query.QuerySolution;
 

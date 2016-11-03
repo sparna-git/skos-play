@@ -1,6 +1,6 @@
 package fr.sparna.rdf.skos.toolkit.builders;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.URI;
 
 import fr.sparna.rdf.sesame.toolkit.reader.KeyMappingGeneratorIfc;
 import fr.sparna.rdf.sesame.toolkit.reader.KeyValueBindingSetReaderIfc;

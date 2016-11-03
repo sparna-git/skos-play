@@ -3,7 +3,7 @@ package fr.sparna.rdf.sesame.toolkit.repository.operation;
 import java.io.File;
 import java.util.List;
 
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 
 import fr.sparna.rdf.sesame.toolkit.query.SparqlQueryIfc;
 

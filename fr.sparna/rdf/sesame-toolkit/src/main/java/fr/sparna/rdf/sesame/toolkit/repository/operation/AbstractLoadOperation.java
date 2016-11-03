@@ -2,7 +2,7 @@ package fr.sparna.rdf.sesame.toolkit.repository.operation;
 
 import java.net.URI;
 
-import org.openrdf.model.vocabulary.RDF;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
 
 /**
  * Defines common properties for operations that loads data in the repository, typically

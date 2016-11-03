@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.openrdf.model.Literal;
-import org.openrdf.model.Value;
-import org.openrdf.model.impl.ValueFactoryImpl;
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.impl.ValueFactoryImpl;
+import org.eclipse.rdf4j.repository.Repository;
 
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.reader.KeyValueReader;
@@ -101,13 +101,13 @@ public class ConceptBlockReader {
 				
 				if(aProperty.equals(SKOSPLAY.TOP_TERM)) {
 					additionalReaders.put(SKOSPLAY.TOP_TERM,
-						new KeyValueReader<org.openrdf.model.URI, org.openrdf.model.URI>(
+						new KeyValueReader<org.eclipse.rdf4j.model.URI, org.eclipse.rdf4j.model.URI>(
 								repository,
 								new GetTopConceptsOfConcept(null)
 					));					
 				} else if(aProperty.equals(SKOSPLAY.MEMBER_OF)) {
 					additionalReaders.put(SKOSPLAY.MEMBER_OF,
-						new KeyValueReader<org.openrdf.model.URI, org.openrdf.model.URI>(
+						new KeyValueReader<org.eclipse.rdf4j.model.URI, org.eclipse.rdf4j.model.URI>(
 								repository,
 								new GetCollectionsOfConcept(null)
 					));					
@@ -258,7 +258,7 @@ public class ConceptBlockReader {
 										)
 								);
 					} else {
-						org.openrdf.model.URI aRef = (org.openrdf.model.URI)value;
+						org.eclipse.rdf4j.model.URI aRef = (org.eclipse.rdf4j.model.URI)value;
 						List<Value> prefs = prefLabelReader.read(URI.create(aRef.stringValue()));
 						String refPrefLabel = (prefs.size() > 0)?prefs.get(0).stringValue():aRef.stringValue();
 						cb.getAtt().add(
@@ -274,11 +274,11 @@ public class ConceptBlockReader {
 				}			
 			} else if(o instanceof KeyValueReader) {
 				// get the result of the reader
-				KeyValueReader<org.openrdf.model.URI, org.openrdf.model.URI> reader = (KeyValueReader<org.openrdf.model.URI, org.openrdf.model.URI>)o;
-				List<org.openrdf.model.URI> values = reader.read(ValueFactoryImpl.getInstance().createURI(uri));
+				KeyValueReader<org.eclipse.rdf4j.model.URI, org.eclipse.rdf4j.model.URI> reader = (KeyValueReader<org.eclipse.rdf4j.model.URI, org.eclipse.rdf4j.model.URI>)o;
+				List<org.eclipse.rdf4j.model.URI> values = reader.read(ValueFactoryImpl.getInstance().createURI(uri));
 				
 				// lookup the label of the values
-				for (org.openrdf.model.URI aValue : values) {
+				for (org.eclipse.rdf4j.model.URI aValue : values) {
 					List<Value> prefs = prefLabelReader.read(URI.create(aValue.stringValue()));
 					String refPrefLabel = (prefs.size() > 0)?prefs.get(0).stringValue():aValue.stringValue();
 					

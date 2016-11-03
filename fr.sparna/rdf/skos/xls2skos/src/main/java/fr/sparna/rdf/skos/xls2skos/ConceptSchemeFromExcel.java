@@ -118,9 +118,9 @@ public class ConceptSchemeFromExcel {
 		valueGenerators.put("skosxl:hiddenLabel",	ValueGeneratorFactory.skosXlLabel(SKOSXL.HIDDEN_LABEL));
 		valueGenerators.put("skosxl:literalForm", 	ValueGeneratorFactory.langLiteral(SKOSXL.LITERAL_FORM, this.lang));
 		// other concepts metadata
-		valueGenerators.put("euvoc:status", 		ValueGeneratorFactory.resources(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#status"), ','));		
-		valueGenerators.put("euvoc:startDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createIRI("http://eurovoc.europa.eu/schema#startDate")));
-		valueGenerators.put("euvoc:endDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createIRI("http://eurovoc.europa.eu/schema#endDate")));
+		valueGenerators.put("euvoc:status", 		ValueGeneratorFactory.resources(SimpleValueFactory.getInstance().createURI("http://publications.europa.eu/ontology/euvoc#status"), ','));		
+		valueGenerators.put("euvoc:startDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createURI("http://eurovoc.europa.eu/schema#startDate")));
+		valueGenerators.put("euvoc:endDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createURI("http://eurovoc.europa.eu/schema#endDate")));
 		valueGenerators.put("dct:created", 			ValueGeneratorFactory.dateLiteral(DCTERMS.CREATED));
 		valueGenerators.put("dct:modified", 		ValueGeneratorFactory.dateLiteral(DCTERMS.MODIFIED));
 		// a source can be a literal or a URI
@@ -234,7 +234,7 @@ public class ConceptSchemeFromExcel {
 		SimpleValueFactory svf = SimpleValueFactory.getInstance();
 
 		String csUri = fixUri(uri);		
-		Resource csResource = svf.createIRI(csUri);
+		Resource csResource = svf.createURI(csUri);
 		model.add(csResource, RDF.TYPE, SKOS.CONCEPT_SCHEME);
 		
 		// read the prefixes in the top 20 rows
@@ -427,7 +427,7 @@ public class ConceptSchemeFromExcel {
 				ValueGeneratorIfc valueAdder = valueGenerators.get(columnNames.get(colIndex));
 				if(valueAdder == null && expandUri(columnNames.get(colIndex), prefixes) != null) {
 					valueAdder = ValueGeneratorFactory.resourcesOrLiteral(
-							SimpleValueFactory.getInstance().createIRI(expandUri(columnNames.get(colIndex), prefixes)),
+							SimpleValueFactory.getInstance().createURI(expandUri(columnNames.get(colIndex), prefixes)),
 							',',
 							lang
 					);
@@ -455,8 +455,8 @@ public class ConceptSchemeFromExcel {
 
 		public RowBuilder(Model model, String uri) {
 			this.model = model;
-			conceptResource = SimpleValueFactory.getInstance().createIRI(uri);
-			// model.add(SimpleValueFactory.getInstance().createIRI(uri), RDF.TYPE, SKOS.CONCEPT);
+			conceptResource = SimpleValueFactory.getInstance().createURI(uri);
+			// model.add(SimpleValueFactory.getInstance().createURI(uri), RDF.TYPE, SKOS.CONCEPT);
 			// set the current subject to the conceptResource by default
 			subject = conceptResource;
 		}

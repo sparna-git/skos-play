@@ -1,8 +1,8 @@
 package fr.sparna.rdf.sesame.jena.repository;
 
-import org.openrdf.query.BooleanQuery;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.impl.AbstractQuery;
+import org.eclipse.rdf4j.query.BooleanQuery;
+import org.eclipse.rdf4j.query.QueryEvaluationException;
+import org.eclipse.rdf4j.query.impl.AbstractQuery;
 
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;

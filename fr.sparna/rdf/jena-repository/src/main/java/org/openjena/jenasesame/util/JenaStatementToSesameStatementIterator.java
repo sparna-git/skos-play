@@ -5,8 +5,8 @@ package org.openjena.jenasesame.util;
 
 import java.util.Iterator;
 
-import org.openrdf.model.Statement;
-import org.openrdf.model.ValueFactory;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.ValueFactory;
 
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 

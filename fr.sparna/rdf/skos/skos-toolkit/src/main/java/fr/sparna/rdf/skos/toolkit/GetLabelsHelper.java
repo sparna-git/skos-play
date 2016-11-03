@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.openrdf.model.Literal;
-import org.openrdf.model.Resource;
-import org.openrdf.model.URI;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 
 import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
@@ -71,7 +71,7 @@ public abstract class GetLabelsHelper extends SelectSparqlHelperBase {
 		Resource concept = (Resource)binding.getValue("concept");
 		URI labelType = (URI)binding.getValue("labelType");
 		Literal label = (Literal)binding.getValue("label");
-		this.handleLabel(concept, labelType, label.stringValue(), label.getLanguage());
+		this.handleLabel(concept, labelType, label.stringValue(), label.getLanguage().get());
 	}
 	
 	protected abstract void handleLabel(Resource concept, URI labelType, String label, String lang)

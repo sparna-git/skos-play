@@ -1,7 +1,7 @@
 package fr.sparna.rdf.sesame.toolkit.iterator;
 
-import org.openrdf.model.Resource;
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.repository.Repository;
 
 import fr.sparna.commons.lang.ClosableIterator;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;

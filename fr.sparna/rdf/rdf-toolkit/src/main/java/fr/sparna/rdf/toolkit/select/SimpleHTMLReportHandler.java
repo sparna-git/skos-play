@@ -3,11 +3,11 @@ package fr.sparna.rdf.toolkit.select;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.openrdf.model.URI;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.TupleQueryResultHandler;
-import org.openrdf.query.TupleQueryResultHandlerBase;
-import org.openrdf.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.TupleQueryResultHandler;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 
 /**
  * Generates a (very) simple HTML page displaying the results of a SELECT query.

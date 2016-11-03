@@ -6,13 +6,13 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 
-import org.openrdf.model.vocabulary.RDF;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFParseException;
-import org.openrdf.rio.Rio;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFParseException;
+import org.eclipse.rdf4j.rio.Rio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +71,7 @@ public class LoadFromFileOrDirectory extends AbstractLoadOperation implements Re
 										// a default format based on the file extension. The only difference is that it will
 										// not default to RDF/XML
 										// on suppose que c'est du RDF/XML par defaut
-										Rio.getParserFormatForFileName(anRdf, RDFFormat.RDFXML),
+										Rio.getParserFormatForFileName(anRdf).orElse(RDFFormat.RDFXML),
 										(autoNamedGraphs)?repository.getValueFactory().createURI(anRdfFile.toURI().toString()):((this.targetGraph != null)?repository.getValueFactory().createURI(this.targetGraph.toString()):null)
 								);
 							} catch (RepositoryException e) {
@@ -146,7 +146,7 @@ public class LoadFromFileOrDirectory extends AbstractLoadOperation implements Re
 						aFileOrDirectory,
 						// TODO : mettre le namespace par defaut comme un parametre ?
 						RDF.NAMESPACE,
-						Rio.getParserFormatForFileName(aFileOrDirectory.getName(), RDFFormat.RDFXML),
+						Rio.getParserFormatForFileName(aFileOrDirectory.getName()).orElse(RDFFormat.RDFXML),
 						(autoNamedGraphs)?
 								connection.getRepository().getValueFactory().createURI(context.toString())
 								:((this.targetGraph != null)?connection.getRepository().getValueFactory().createURI(this.targetGraph.toString()):null)

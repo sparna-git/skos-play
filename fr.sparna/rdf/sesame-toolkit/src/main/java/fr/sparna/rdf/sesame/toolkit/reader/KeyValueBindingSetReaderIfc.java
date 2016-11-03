@@ -1,6 +1,6 @@
 package fr.sparna.rdf.sesame.toolkit.reader;
 
-import org.openrdf.query.BindingSet;
+import org.eclipse.rdf4j.query.BindingSet;
 
 /**
  * An abstraction for objects capable of reading a key and its associated value from a SPARQL

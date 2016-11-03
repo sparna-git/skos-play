@@ -3,22 +3,23 @@ package fr.sparna.rdf.sesame.jena.repository;
 import java.io.File;
 import java.io.FileInputStream;
 
-import org.openrdf.model.Statement;
-import org.openrdf.model.ValueFactory;
-import org.openrdf.model.impl.ValueFactoryImpl;
-import org.openrdf.model.vocabulary.RDF;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.TupleQueryResultHandlerBase;
-import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.RepositoryResult;
-import org.openrdf.repository.base.RepositoryBase;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.helpers.RDFHandlerBase;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.ValueFactoryImpl;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.QueryLanguage;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.repository.RepositoryResult;
+import org.eclipse.rdf4j.repository.base.RepositoryBase;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFHandlerException;
+import org.eclipse.rdf4j.rio.Rio;
+import org.eclipse.rdf4j.rio.helpers.RDFHandlerBase;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -102,7 +103,7 @@ public class JenaRepository extends RepositoryBase implements Repository {
 	
 	public static void main(String... args) throws Exception {
 		Model model = ModelFactory.createDefaultModel();
-		model.read(new FileInputStream(args[0]), RDF.NAMESPACE, RDFFormat.forFileName(args[0]).getName());
+		model.read(new FileInputStream(args[0]), RDF.NAMESPACE, Rio.getParserFormatForFileName(args[0]).orElse(RDFFormat.RDFXML).getName());
 		JenaRepository repository = new JenaRepository(model);
 		repository.initialize();
 		repository.getConnection().prepareTupleQuery(QueryLanguage.SPARQL, "SELECT DISTINCT ?type WHERE { ?x a ?type }").evaluate(new TupleQueryResultHandlerBase() {

@@ -1,10 +1,10 @@
 package fr.sparna.rdf.sesame.toolkit.functions;
 
-import org.openrdf.model.Literal;
-import org.openrdf.model.Value;
-import org.openrdf.model.ValueFactory;
-import org.openrdf.query.algebra.evaluation.ValueExprEvaluationException;
-import org.openrdf.query.algebra.evaluation.function.Function;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.query.algebra.evaluation.ValueExprEvaluationException;
+import org.eclipse.rdf4j.query.algebra.evaluation.function.Function;
 
 /**
  * A SPARQL function to trim a String literal. Leading and trailing whitespaces
@@ -43,7 +43,7 @@ public class TrimFunction implements Function {
 		if(value.getDatatype() != null) {
 			return valueFactory.createLiteral(value.stringValue().trim(), value.getDatatype());
 		} else if(value.getLanguage() != null) {
-			return valueFactory.createLiteral(value.stringValue().trim(), value.getLanguage());
+			return valueFactory.createLiteral(value.stringValue().trim(), value.getLanguage().get());
 		} else {
 			return valueFactory.createLiteral(value.stringValue().trim());
 		}
