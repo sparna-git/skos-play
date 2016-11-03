@@ -215,8 +215,7 @@
 								<select style=" width:50%;"  required name="output" >
 						
 									<option value="application/rdf+xml" selected="selected">RDF/XML</option>
-									<option value="text/turtle">Turtle</option>	
-									<option value="application/rdf+json">RDF/JSON</option>	 
+									<option value="text/turtle">Turtle</option>		 
 									<option value="application/x-trig">TriG</option>
 									<option value="text/plain">N-Triples</option>
 									<option value="text/x-nquads">N-Quads</option>
@@ -254,7 +253,9 @@
 							</label>
 							
 						</div>
-						<div class="form-group">
+						<!-- ****GENERATE GRAPH****** -->
+						
+						<!-- <div class="form-group">
 							<div class="col-sm-1">
 								<input
 									type="checkbox"
@@ -264,9 +265,11 @@
 							</div>
 							<label class="col-sm-4">
 								<fmt:message key="upload.form.usegraph" />
-							</label>
+							</label> 
+							</div>
+							-->
 							
-						</div>
+						
 						
 	   				</div></div>
 	   			</div><!-- end accordion-group : Advanced options -->

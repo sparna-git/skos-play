@@ -213,6 +213,7 @@ public class SkosPlayController {
 			@RequestParam(value="usexl", required=false) boolean usexl,
 			@RequestParam(value="usezip", required=false) boolean useZip,
 			@RequestParam(value="language", required=false) String language,
+			@RequestParam(value="output", required=false) String format,
 			HttpServletRequest request,
 			HttpServletResponse response
 			) 
@@ -225,7 +226,6 @@ public class SkosPlayController {
 		final SessionData sessionData = SessionData.get(request.getSession());
 
 
-
 		OutputStreamModelWriter modelWriter;
 
 		ZipOutputStreamModelWriter modelWriter1;
@@ -233,6 +233,8 @@ public class SkosPlayController {
 		Credential credential;
 
 		boolean generatexl=false;
+		
+		
 
 		ConvertFromData data = new ConvertFromData();
 
@@ -250,6 +252,7 @@ public class SkosPlayController {
 
 		if(code_return!=null)
 		{
+			RDFFormat theFormat=RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format).get();//format;
 			GoogleAuthHelper me = sessionData.getGoogleAuthHelper();
 			DataInputStream content;
 			me.setAuthorizationCode(code_return);
@@ -272,12 +275,16 @@ public class SkosPlayController {
 					fluxLecture = new ByteArrayInputStream(outputStream.toByteArray());
 
 					content = new DataInputStream(new BufferedInputStream(fluxLecture));
+					
+					
 
 					// lancer la conversion et récupérer le résultat en mémoire
 
 					ByteArrayOutputStream conversionResult = new ByteArrayOutputStream();
 
 					modelWriter1 = new ZipOutputStreamModelWriter(conversionResult);
+					
+					modelWriter1.setFormat(theFormat);
 
 					generateType(modelWriter1,content,language,generatexl);
 
@@ -325,6 +332,8 @@ public class SkosPlayController {
 					ByteArrayOutputStream conversionResult = new ByteArrayOutputStream();
 
 					modelWriter = new OutputStreamModelWriter(conversionResult);
+					
+					modelWriter.setFormat(theFormat);
 
 					generateType(modelWriter,content,language,generatexl);
 
@@ -374,10 +383,10 @@ public class SkosPlayController {
 			HttpServletResponse response			
 			) throws Exception {
 		
-			log.debug("convert(source="+sourceString+",file="+file+",language="+language+"url="+url+"ex="+Example+")");
+			log.debug("convert(source="+sourceString+",file="+file+"format="+format+",language="+language+"url="+url+"ex="+Example+")");
 		
 			SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());//source, it's can be: file, url or ID (for google file)
-			//RDFFormat theFormat = RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format);//format
+			RDFFormat theFormat = RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format).get();//format
 			
 			final SessionData sessionData = SessionData.get(request.getSession());
 			
@@ -396,12 +405,14 @@ public class SkosPlayController {
 			//generate skos-xl checked
 			boolean generatexl=false;
 			
+			
 			InputStream url_Input = null;
 			
 			
 			URL urls;
 			
 			DataInputStream content;
+			
 			
 		if(usexl)
 		{
@@ -421,7 +432,7 @@ public class SkosPlayController {
 		case ID:   {							
 			log.debug("*fichier choisi->via id google drive->conversion");
 			log.debug("Demande d'autorisation d'accès au fichier google drive");
-			String url_Redirect="http://localhost:8080/skos-play/convert?id="+id+"&usezip="+useZip+"&usexl="+usexl+"&language="+language;
+			String url_Redirect="http://localhost:8080/skos-play/convert?id="+id+"&usezip="+useZip+"&usexl="+usexl+"&language="+language+"&output="+format;
 			GoogleAuthHelper me = new GoogleAuthHelper(url_Redirect);
 			me.setScopes(Arrays.asList(DriveScopes.DRIVE));
 			me.setApplicationName("SKOS Play");
@@ -443,6 +454,7 @@ public class SkosPlayController {
 									content = new DataInputStream(new BufferedInputStream(url_Input));
 									response.setContentType("application/zip");	
 									modelWriter1=new ZipOutputStreamModelWriter(response.getOutputStream());
+									modelWriter1.setFormat(theFormat);
 									generateType(modelWriter1,content,language,generatexl);
 								}
 								catch(MalformedURLException errors) {
@@ -470,7 +482,7 @@ public class SkosPlayController {
 									url_Input = urls.openStream(); // throws an IOException
 									content = new DataInputStream(new BufferedInputStream(url_Input));
 									modelWriter=new OutputStreamModelWriter(response.getOutputStream());
-									//modelWriter.setFormat(theFormat);
+									modelWriter.setFormat(theFormat);
 									response.setContentType(modelWriter.getFormat().getDefaultMIMEType());
 									generateType(modelWriter,content,language,generatexl);
 
@@ -503,6 +515,7 @@ public class SkosPlayController {
 					log.debug("*fichier choisi en local ->conversion en Zip="+generatexl);
 					response.setContentType("application/zip");
 					modelWriter1=new ZipOutputStreamModelWriter(response.getOutputStream());
+					modelWriter1.setFormat(theFormat);
 					generateType(modelWriter1,file.getInputStream(),language,generatexl);
 				}
 				catch(FileFormatException errors) {
@@ -521,6 +534,7 @@ public class SkosPlayController {
 				try{
 					log.debug("*fichier choisi en local->Conversion en SKOS-xl*="+generatexl);
 					modelWriter=new OutputStreamModelWriter(response.getOutputStream());
+					modelWriter.setFormat(theFormat);
 					response.setContentType(modelWriter.getFormat().getDefaultMIMEType());
 					generateType(modelWriter,file.getInputStream(),language,generatexl);
 				}
@@ -550,6 +564,7 @@ public class SkosPlayController {
 					content = new DataInputStream(new BufferedInputStream(url_Input));
 					response.setContentType("application/zip");	
 					modelWriter1=new ZipOutputStreamModelWriter(response.getOutputStream());
+					modelWriter1.setFormat(theFormat);
 					generateType(modelWriter1,content,language,generatexl);
 
 				}catch(MalformedURLException errors) {
@@ -578,6 +593,7 @@ public class SkosPlayController {
 					url_Input = urls.openStream(); // throws an IOException
 					content = new DataInputStream(new BufferedInputStream(url_Input));
 					modelWriter=new OutputStreamModelWriter(response.getOutputStream());
+					modelWriter.setFormat(theFormat);
 					response.setContentType(modelWriter.getFormat().getDefaultMIMEType());
 					generateType(modelWriter,content,language,generatexl);
 				}catch(MalformedURLException errors) {
