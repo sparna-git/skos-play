@@ -92,8 +92,8 @@
 			<body >
 				
 				<div class="container">
-				<div role="navigation" class="navbar navbar-fixed-top" style="margin:auto; text-align:center;">
-			     	<label >expand/collapse all(déplier/replier tout)</label>
+				<div role="navigation" class="navbar navbar-fixed-top" style="margin-left:800px;">
+			     	
 			    </div>
 				
 					<!-- if more than one section, and at least have a title, generate navbar at the document level -->
@@ -183,14 +183,14 @@
 					/***Add a button to expand or collapse all****/
 					$('div.navbar-fixed-top').each(function(){
 			              $this = $(this);
-			              $this.prepend("<a href='#' id='btn' style=' width:4%; margin-top:10px;' class='btn btn-primary'><span  class='glyphicon glyphicon-plus'  aria-hidden='true'></span><span class='glyphicon glyphicon-minus' aria-hidden='true' style='display:none;'></span></a>");
+			              $this.prepend("<a href='#' id='btn' style=' width:6%; margin-top:10px;' class='btn btn-primary'><span  class='glyphicon glyphicon-plus'  aria-hidden='true' style='display:none;'>All</span><span class='glyphicon glyphicon-minus' aria-hidden='true' >All</span></a>");
 			              $this.children("a").not(":last").removeClass().addClass("toogle");
 			          });
 					// Add button to expand and condense
 					$('ul li.hasSubmenu').each(function(){
 					  
 					  $this = $(this);
-					  $this.prepend("<a href='#'><span  class='glyphicon glyphicon-plus'  aria-hidden='true'></span><span class='glyphicon glyphicon-minus' aria-hidden='true' style='display:none;'></span></a>");
+					  $this.prepend("<a href='#'><span  class='glyphicon glyphicon-plus'  style='display:none;' aria-hidden='true'></span><span class='glyphicon glyphicon-minus' aria-hidden='true' ></span></a>");
 					  $this.children("a").not(":last").removeClass().addClass("toogle");
             		 
            	
@@ -199,7 +199,7 @@
 					// Actions to expand and consense
 					$('ul li.hasSubmenu > a').click(function(){
 					  
-					  $this = $(this);
+					     $this = $(this);
 						 $this.closest("li").children("ul").toggle("slow");
 						 $this.children("span").toggle();
 						 return false;
@@ -207,12 +207,22 @@
 					/**when button expand all is cliked->expand all tree**/
 					$('div.navbar-fixed-top > a').click(function(){
 		                
-		                $("span.glyphicon").toggle();
-		                console.log("I'm in");
-		                $('li.hasSubmenu>a').each(function(){
-		                $("ul li.hasSubmenu>ul").toggle();      
-		                return false;
-	                });
+			             	$('li.hasSubmenu>a').each(function(){
+			             	      $this = $(this);
+								 $this.closest("li").children("ul").toggle("slow");
+								 $this.children("span").toggle();
+				             /*	if($( 'span.glyphicon-minus' ).css('visibility') == 'hidden')
+				             	{
+				                	$("ul li.hasSubmenu>ul").toggle();
+				                	$( 'span.glyphicon-plus' ).toggle();  
+				                }
+				                else{ 
+				                	$("span.glyphicon-minus").toggle();
+				                	$("ul li.hasSubmenu>ul").toggle();
+				                }   */ 
+				                
+	                		});
+	                		
 	               return false;
 	            }); 
 									
