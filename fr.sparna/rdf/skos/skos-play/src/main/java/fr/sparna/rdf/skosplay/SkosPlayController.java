@@ -25,6 +25,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.vocabulary.DC;
@@ -50,6 +51,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
+import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
 
 import fr.sparna.commons.io.ReadWriteTextFile;
 import fr.sparna.commons.tree.GenericTree;
@@ -249,10 +252,23 @@ public class SkosPlayController {
 			log.debug("L'utilisateur s'est connecté le code retour est="+code_return);
 			
 			Drive service=me.getDriveService(credential);
+			
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			service.files().export(id_fichier, MIME_TYPE_EXCEL).executeMediaAndDownloadTo(outputStream);
-			InputStream fluxLecture = new ByteArrayInputStream(outputStream.toByteArray());
-			DataInputStream content = new DataInputStream(new BufferedInputStream(fluxLecture));
+			if(id_fichier.length()!=44)
+			{
+				
+				return doErrorConvert(request, "ID Google incorrect, the height must be equal to 44"); 	
+					
+			}
+			InputStream fluxLecture;
+			DataInputStream content;
+			try {
+				service.files().export(id_fichier, MIME_TYPE_EXCEL).executeMediaAndDownloadTo(outputStream);
+				fluxLecture = new ByteArrayInputStream(outputStream.toByteArray());
+				content = new DataInputStream(new BufferedInputStream(fluxLecture));
+			} catch (Exception e1) {
+				return doErrorConvert(request, e1.getMessage()); 
+			}
 			
 			try
 			{
@@ -268,6 +284,7 @@ public class SkosPlayController {
 				
 				ConvertFromData data = new ConvertFromData();
 				data.setGoogleId(id_fichier);
+				
 				return new ModelAndView("convert", ConvertFromData.KEY, data);
 
 				// écrire le résultat dans la response				
@@ -329,9 +346,16 @@ public class SkosPlayController {
 		InputStream in = null;
 		switch(source) {
 
-		case GOOGLE:   {							
-			log.debug("*Conversion à partir d'une Google Spreadsheet : "+googleId);
-			String url_Redirect="http://localhost:8080/skos-play/convert?id="+googleId+"&usezip="+useZip+"&usexl="+usexl+"&language="+language+"&output="+URLEncoder.encode(format, "UTF-8");
+		case GOOGLE:   {	
+			
+				log.debug("*Conversion à partir d'une Google Spreadsheet : "+googleId);
+			
+			if(googleId.isEmpty())
+			{
+				return doErrorConvert(request, "Google ID is empty");
+			}
+			
+			String url_Redirect=baseURL.toString()+"/skos-play/convert?id="+googleId+"&usezip="+useZip+"&usexl="+usexl+"&language="+language+"&output="+URLEncoder.encode(format, "UTF-8");
 			log.debug("URL de redirection : "+url_Redirect);
 			GoogleAuthHelper me = new GoogleAuthHelper(url_Redirect);
 			me.setScopes(Arrays.asList(DriveScopes.DRIVE));
@@ -340,7 +364,7 @@ public class SkosPlayController {
 			SessionData.get(request.getSession()).setGoogleAuthHelper(me);
 			//redirection vers google pour l'autorisation
 			response.sendRedirect(me.getAuthorizationUrl());
-
+		
 			// on sort tout de suite de la méthode après avoir fait un redirect
 			return null;
 		}					
@@ -349,7 +373,7 @@ public class SkosPlayController {
 			log.debug("*Conversion à partir d'un fichier d'exemple : "+Example);
 			
 			// url fichier example
-			String lien="http://localhost:8080/skos-play/excel_test/testExcelNative.xlsx";
+			String lien=baseURL.toString()+"/skos-play/excel_test/testExcelNative.xlsx";
 			
 			URL urls = new URL(lien);
 			InputStream urlInputStream = urls.openStream(); // throws an IOException

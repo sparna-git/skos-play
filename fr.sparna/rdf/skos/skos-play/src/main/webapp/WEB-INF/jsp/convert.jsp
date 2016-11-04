@@ -264,7 +264,7 @@
 				<div class="col-sm-offset-2 col-sm-10">
 					<button type="submit"  id="submit-button" class="btn btn-info btn-lg "><fmt:message key="convert" /></button>
 					<img src="images/ajax-loader.gif" id="loading" hidden="hidden" />
-					<span style="margin-left:20px;"><fmt:message key="convert.form.luxembourg" /></span><a target="_blank"><img src="images/logo-luxembourg.png" /></a>
+					<span class="help-block" style="margin-left:120px; margin-top:-40px;"> <i><fmt:message key="convert.form.luxembourg" /></i><img src="images/logo-luxembourg.png" /></span>
 				</div>
 				
 			</div>
