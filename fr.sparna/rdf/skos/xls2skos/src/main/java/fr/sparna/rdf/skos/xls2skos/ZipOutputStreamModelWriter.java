@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.net.URLEncoder;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -29,6 +30,8 @@ public class ZipOutputStreamModelWriter implements ModelWriterIfc {
 	private OutputStream underlyingStream;
 	private ZipOutputStream out;
 	private RDFFormat format = RDFFormat.RDFXML;
+	private String graphSuffix = null;
+	private boolean saveGraphFile = true;
 	
 	public ZipOutputStreamModelWriter(ZipOutputStream out) {
 		super();
@@ -67,10 +70,10 @@ public class ZipOutputStreamModelWriter implements ModelWriterIfc {
 	public void saveGraphModel(String graph, Model model) {
 		try {
 			// declare a new ZipEntry in the Zip file
-			// graph = graph + "/graph";
+			graph = graph + ((this.graphSuffix != null)?graphSuffix:"");
 			
-			// String entryname = URLEncoder.encode(graph, "UTF-8") + format.getDefaultFileExtension();
-			String entryname = graph.substring(graph.lastIndexOf('/')+1) + "." + format.getDefaultFileExtension();
+			String entryname = URLEncoder.encode(graph, "UTF-8") + "." + format.getDefaultFileExtension();
+			// String entryname = graph.substring(graph.lastIndexOf('/')+1) + "." + format.getDefaultFileExtension();
 			System.out.println(entryname);
 			out.putNextEntry(new ZipEntry(entryname));
 			
@@ -80,6 +83,13 @@ public class ZipOutputStreamModelWriter implements ModelWriterIfc {
 			
 			// close the entry
 			out.closeEntry();
+			
+			if(saveGraphFile) {
+				String graphFileName = entryname + ".graph";
+				out.putNextEntry(new ZipEntry(graphFileName));
+				out.write(graph.getBytes());
+			}
+			
 		} catch(Exception e) {
 			throw Xls2SkosException.rethrow(e);
 		}
@@ -95,8 +105,24 @@ public class ZipOutputStreamModelWriter implements ModelWriterIfc {
 		c.setNamespace("dcterms", DCTERMS.NAMESPACE);
 		c.add(model);
 		c.export(handler);
+	}	
+	
+	public String getGraphSuffix() {
+		return graphSuffix;
+	}
+
+	public void setGraphSuffix(String graphSuffix) {
+		this.graphSuffix = graphSuffix;
 	}
 	
+	public boolean isSaveGraphFile() {
+		return saveGraphFile;
+	}
+
+	public void setSaveGraphFile(boolean saveGraphFile) {
+		this.saveGraphFile = saveGraphFile;
+	}
+
 	@Override
 	public void beginWorkbook() {
 

@@ -35,14 +35,16 @@ public class ExcelHelper {
 	public static List<String> getColumnNames(Sheet worksheet, int rowNumber) {
 		List<String> columnNames = new ArrayList<>();
 		Row row = worksheet.getRow(rowNumber);
-		for (int i = 0; true; i++) {
-			Cell cell = row.getCell(i);
-			if (null == cell) break;
-			String columnName = cell.getStringCellValue();
-			if (StringUtils.isBlank(columnName)) {
-				break;
+		if(row != null) {
+			for (int i = 0; true; i++) {
+				Cell cell = row.getCell(i);
+				if (null == cell) break;
+				String columnName = cell.getStringCellValue();
+				if (StringUtils.isBlank(columnName)) {
+					break;
+				}
+				columnNames.add(columnName);
 			}
-			columnNames.add(columnName);
 		}
 		return columnNames;
 	}

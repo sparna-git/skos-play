@@ -9,6 +9,7 @@ import org.eclipse.rdf4j.repository.Repository;
 
 import com.google.api.client.auth.oauth2.Credential;
 
+import fr.sparna.google.GoogleAuthHelper;
 import fr.sparna.rdf.sesame.toolkit.handler.DebugHandler;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;

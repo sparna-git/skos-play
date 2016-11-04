@@ -233,8 +233,14 @@ public class ConceptSchemeFromExcel {
 		Model model = new LinkedHashModelFactory().createEmptyModel();
 		SimpleValueFactory svf = SimpleValueFactory.getInstance();
 
-		String csUri = fixUri(uri);		
-		Resource csResource = svf.createURI(csUri);
+		String csUri = fixUri(uri);
+		
+		// if the URI was already processed, this is an exception
+		if(this.csModels.containsKey(csUri)) {
+			throw new Xls2SkosException("Duplicate ConceptScheme found : "+csUri+" - make sure it is declared only once in the file.");
+		}
+		
+		Resource csResource = svf.createIRI(csUri);
 		model.add(csResource, RDF.TYPE, SKOS.CONCEPT_SCHEME);
 		
 		// read the prefixes in the top 20 rows
@@ -247,7 +253,8 @@ public class ConceptSchemeFromExcel {
 			if(sheet.getRow(rowIndex) != null) {
 				String prefixKeyword = getCellValue(sheet.getRow(rowIndex).getCell(0));
 				// if we have the "prefix" keyword...
-				if(prefixKeyword.toUpperCase().startsWith("PREFIX")) {
+				// note : we add a null check here because there are problems with some sheets
+				if(prefixKeyword != null && prefixKeyword.toUpperCase().startsWith("PREFIX")) {
 					// and we have the prefix and namespaces defined...
 					String prefix = getCellValue(sheet.getRow(rowIndex).getCell(1));
 					if(StringUtils.isNotBlank(prefix)) {
@@ -263,8 +270,10 @@ public class ConceptSchemeFromExcel {
 			}
 		}
 
-		int topRows = 1;
-		for (int rowIndex = topRows; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+		
+		
+		int headerRowIndex = 1;
+		for (int rowIndex = headerRowIndex; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
 			// test if we find a header in columns 2 and 3, this indicates the header line
 			if(sheet.getRow(rowIndex) != null) {
 				String valueColumnB = getCellValue(sheet.getRow(rowIndex).getCell(1));
@@ -282,14 +291,21 @@ public class ConceptSchemeFromExcel {
 									expandUri(valueColumnC, prefixes) != null
 							)
 				) {
-					topRows = rowIndex;
+					headerRowIndex = rowIndex;
 					break;
 				}
 			}
 		}
 		
+		// si la ligne d'entete n'a pas été trouvée, on ne génère que le ConceptScheme
+		if(headerRowIndex == 1) {
+			log.info("Could not find header row index in sheet "+sheet.getSheetName());
+			// we are assuming a header row index of 10 to be able to read at least the ConceptScheme header, even with no concept in it.
+			headerRowIndex = 10;
+		}
+		
 		// read the properties on the concept scheme by reading the top rows
-		for (int rowIndex = 1; rowIndex <= topRows; rowIndex++) {
+		for (int rowIndex = 1; rowIndex <= headerRowIndex; rowIndex++) {
 			if(sheet.getRow(rowIndex) != null) {
 				String key = getCellValue(sheet.getRow(rowIndex).getCell(0));
 				String value = getCellValue(sheet.getRow(rowIndex).getCell(1));
@@ -300,10 +316,10 @@ public class ConceptSchemeFromExcel {
 		}		
 
 		// read the column names from the header row
-		List<String> columnNames = getColumnNames(sheet, topRows);
+		List<String> columnNames = getColumnNames(sheet, headerRowIndex);
 		
 		// read the rows after the header and process each row
-		for (int rowIndex = (topRows + 1); rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+		for (int rowIndex = (headerRowIndex + 1); rowIndex <= sheet.getLastRowNum(); rowIndex++) {
 			Row r = sheet.getRow(rowIndex);
 			if(r != null) {
 				handleRow(model, columnNames, prefixes, r);
@@ -441,7 +457,7 @@ public class ConceptSchemeFromExcel {
 		
 		// if, after row processing, no rdf:type was generated, then we consider the row to be a skos:Concept
 		// this allows to generate something else that skos:Concept
-		if(!model.contains(rowBuilder.conceptResource, RDF.TYPE, null)) {
+		if(rowBuilder != null && !model.contains(rowBuilder.conceptResource, RDF.TYPE, null)) {
 			model.add(rowBuilder.conceptResource, RDF.TYPE, SKOS.CONCEPT);
 		}
 		
@@ -533,22 +549,24 @@ public class ConceptSchemeFromExcel {
 		
 		
 		// Method 1 : save each scheme to a separate directory
-		DirectoryModelWriter ms = new DirectoryModelWriter(new File("/home/thomas/sparna/00-Clients/Luxembourg/02-Migration"));
-		ms.setSaveGraphFile(false);
+//		DirectoryModelWriter writer = new DirectoryModelWriter(new File("/home/thomas/sparna/00-Clients/Luxembourg/02-Migration/controlled-vocabularies-xls2skos/cv-from-xls2skos"));
+//		writer.setSaveGraphFile(true);
+//		writer.setGraphSuffix("/graph");
 		
 		// Method 2 : save everything to a single SKOS file
 		// OutputStreamModelWriter ms = new OutputStreamModelWriter(new File("/home/thomas/controlled-vocabularies.ttl"));
 		
 		// Method 3 : save each scheme to a separate entry in a ZIP file.
-		// ZipOutputStreamModelWriter ms = new ZipOutputStreamModelWriter(new File("/home/thomas/controlled-vocabularies.zip"));
-		// ms.setFormat(RDFFormat.TURTLE);
+		ZipOutputStreamModelWriter writer = new ZipOutputStreamModelWriter(new File("/home/thomas/sparna/00-Clients/Luxembourg/02-Migration/controlled-vocabularies-xls2skos/cv-from-xls2skos.zip"));
+		writer.setSaveGraphFile(true);
+		writer.setGraphSuffix("/graph");
 		
-		ConceptSchemeFromExcel me = new ConceptSchemeFromExcel(ms, "en");
+		ConceptSchemeFromExcel me = new ConceptSchemeFromExcel(writer, "fr");
 		me.setGenerateXl(false);
 		me.setGenerateXlDefinitions(false);
 		// me.loadAllToFile(new File("/home/thomas/sparna/00-Clients/Sparna/20-Repositories/sparna/fr.sparna/rdf/skos/xls2skos/src/test/resources/test-excel-saved-from-libreoffice.xlsx"));
 		// me.loadAllToFile(new File("/home/thomas/sparna/00-Clients/Sparna/20-Repositories/sparna/fr.sparna/rdf/skos/xls2skos/src/test/resources/test-libreoffice.ods"));
-		me.processFile(new File("/home/thomas/sparna/00-Clients/Sparna/20-Repositories/sparna/fr.sparna/rdf/skos/xls2skos/src/test/resources/testExcelNative.xlsx"));
+		me.processFile(new File("/home/thomas/sparna/00-Clients/Luxembourg/02-Migration/controlled-vocabularies-xls2skos/jolux-controlled-voc-travail-20161026-recup.xlsx"));
 		// me.processFile(new File("/home/thomas/sparna/00-Clients/Luxembourg/02-Migration/jolux-controlled-voc-travail-20161012.xlsx"));
 	}
 	

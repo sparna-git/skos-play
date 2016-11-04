@@ -1,6 +1,5 @@
 package fr.sparna.rdf.skosplay;
 
-import java.awt.Desktop;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -9,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -50,13 +48,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 
 import fr.sparna.commons.io.ReadWriteTextFile;
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
+import fr.sparna.google.GoogleAuthHelper;
 import fr.sparna.i18n.StrictResourceBundleControl;
 import fr.sparna.rdf.sesame.toolkit.languages.Languages.Language;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
@@ -128,15 +126,6 @@ public class SkosPlayController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 	
-
-	
-	
-	
-	
-	
-	
-	
-	
 	@Autowired
 	protected ServletContext servletContext;
 	
@@ -144,7 +133,7 @@ public class SkosPlayController {
 		FILE,
 		URL,
 		EXAMPLE,
-		ID,
+		GOOGLE,
 	}
 
 	@RequestMapping("/home")
@@ -217,7 +206,7 @@ public class SkosPlayController {
 			HttpServletRequest request,
 			HttpServletResponse response
 			) 
-					throws IOException 
+	throws IOException 
 	{
 		String code_return=request.getParameter("code");
 
@@ -373,7 +362,7 @@ public class SkosPlayController {
 			@RequestParam(value="source", required=true) String sourceString,
 			@RequestParam(value="file", required=false) MultipartFile file,			
 			@RequestParam(value="language", required=false) String language,
-			@RequestParam(value="id", required=false) String id,//ID for google drive file
+			@RequestParam(value="google", required=false) String googleId,//ID for google drive file
 			@RequestParam(value="url", required=false) String url,
 			@RequestParam(value="output", required=false) String format,
 			@RequestParam(value="example", required=false) String Example,
@@ -383,246 +372,112 @@ public class SkosPlayController {
 			HttpServletResponse response			
 			) throws Exception {
 		
-			log.debug("convert(source="+sourceString+",file="+file+"format="+format+",language="+language+"url="+url+"ex="+Example+")");
-		
-			SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());//source, it's can be: file, url or ID (for google file)
-			RDFFormat theFormat = RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format).get();//format
+			log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+usexl+",useZip="+useZip+"language="+language+",url="+url+",ex="+Example+")");
 			
-			final SessionData sessionData = SessionData.get(request.getSession());
-			
-			String lien="http://localhost:8080/skos-play/excel_test/testExcelNative.xlsx";//url fichier example
-			
-			
-			OutputStreamModelWriter modelWriter;
-			
-			ZipOutputStreamModelWriter modelWriter1;
-			
-			// prepare data structure
-			final PrintFormData printFormData = new PrintFormData();
-			
-			sessionData.setPrintFormData(printFormData);
-			
-			//generate skos-xl checked
-			boolean generatexl=false;
-			
-			
-			InputStream url_Input = null;
-			
-			
-			URL urls;
-			
-			DataInputStream content;
-			
-			
-		if(usexl)
-		{
-			generatexl=true;
-			
-
-		}else
-		{
-			generatexl=false;
-			
-
-		}
+			//source, it's can be: file, url or google
+			SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());
+			// format
+			RDFFormat theFormat = RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format).orElse(RDFFormat.RDFXML);		
 		
 		/**************************CONVERSION RDF**************************/
+			
+			
+		InputStream in = null;
 		switch(source) {
 
-		case ID:   {							
+		case GOOGLE:   {							
 			log.debug("*fichier choisi->via id google drive->conversion");
 			log.debug("Demande d'autorisation d'accès au fichier google drive");
-			String url_Redirect="http://localhost:8080/skos-play/convert?id="+id+"&usezip="+useZip+"&usexl="+usexl+"&language="+language+"&output="+format;
+			String url_Redirect="http://localhost:8080/skos-play/convert?id="+googleId+"&usezip="+useZip+"&usexl="+usexl+"&language="+language+"&output="+format;
 			GoogleAuthHelper me = new GoogleAuthHelper(url_Redirect);
 			me.setScopes(Arrays.asList(DriveScopes.DRIVE));
 			me.setApplicationName("SKOS Play");
-			sessionData.setGoogleAuthHelper(me);	// enregistrement en session			    	
-			response.sendRedirect(me.getAuthorizationUrl());//redirection vers google pour l'autorisation
+			// enregistrement en session
+			SessionData.get(request.getSession()).setGoogleAuthHelper(me);
+			//redirection vers google pour l'autorisation
+			response.sendRedirect(me.getAuthorizationUrl());
 
-			break;
-		}
-					
+			// on sort tout de suite de la méthode après avoir fait un redirect
+			return null;
+		}					
 			
 		case EXAMPLE : {
+			log.debug("*Conversion à partir d'un fichier d'exemple : "+Example);
 			
-							if(useZip)
-							{
-								try{
-									log.debug("*fichier choisi->exemple->conversion en Zip*="+generatexl);
-									urls = new URL(lien);
-									url_Input = urls.openStream(); 
-									content = new DataInputStream(new BufferedInputStream(url_Input));
-									response.setContentType("application/zip");	
-									modelWriter1=new ZipOutputStreamModelWriter(response.getOutputStream());
-									modelWriter1.setFormat(theFormat);
-									generateType(modelWriter1,content,language,generatexl);
-								}
-								catch(MalformedURLException errors) {
-									errors.printStackTrace();
-									return doErrorfile(request,errors.getMessage());
-				
-								} 
-								catch (IOException ioeErrors) {
-									ioeErrors.printStackTrace();
-									return doErrorfile(request,ioeErrors.getMessage());
-								}
-								finally {
-									try {
-										url_Input.close();
-									} 
-									catch (IOException ioe) {
-
-									}
-								} 
-							}else{
-
-								try{
-									log.debug("*fichier choisi ->exemple->conversion en SKOS-xls*="+generatexl);
-									urls = new URL(lien);
-									url_Input = urls.openStream(); // throws an IOException
-									content = new DataInputStream(new BufferedInputStream(url_Input));
-									modelWriter=new OutputStreamModelWriter(response.getOutputStream());
-									modelWriter.setFormat(theFormat);
-									response.setContentType(modelWriter.getFormat().getDefaultMIMEType());
-									generateType(modelWriter,content,language,generatexl);
-
-								}catch(MalformedURLException errors) {
-									errors.printStackTrace();
-									return doErrorfile(request, errors.getMessage()); 
-								} catch (IOException ioeErrors) {
-									ioeErrors.printStackTrace();
-									return doErrorfile(request,ioeErrors.getMessage()); 
-								}
-								finally {
-									try {
-										url_Input.close();
-									} catch (IOException ioe) {
-
-									}
-								} 
-							}
-
-							break;
-		}
-
-		case FILE : {
-			if(file.isEmpty()) {
-				return doErrorfile(request, "Uploaded file is empty");
-			}
-			if(useZip)
-			{
-				try{
-					log.debug("*fichier choisi en local ->conversion en Zip="+generatexl);
-					response.setContentType("application/zip");
-					modelWriter1=new ZipOutputStreamModelWriter(response.getOutputStream());
-					modelWriter1.setFormat(theFormat);
-					generateType(modelWriter1,file.getInputStream(),language,generatexl);
-				}
-				catch(FileFormatException errors) {
-
-					errors.printStackTrace();
-					return doErrorfile(request, errors.getMessage()); 
-				}
-				catch(FileNotFoundException errors) {         
-					errors.printStackTrace();
-					return doErrorfile(request, errors.getMessage()); 
-				}
-
-			}
-			else{	
-
-				try{
-					log.debug("*fichier choisi en local->Conversion en SKOS-xl*="+generatexl);
-					modelWriter=new OutputStreamModelWriter(response.getOutputStream());
-					modelWriter.setFormat(theFormat);
-					response.setContentType(modelWriter.getFormat().getDefaultMIMEType());
-					generateType(modelWriter,file.getInputStream(),language,generatexl);
-				}
-				catch(FileFormatException errors) {
-					errors.printStackTrace();
-					return doErrorfile(request, errors.getMessage()); 
-				}
-				catch(FileNotFoundException errors) {
-					errors.printStackTrace();
-					return doErrorfile(request, errors.getMessage()); 
-				}
-			}
+			// url fichier example
+			String lien="http://localhost:8080/skos-play/excel_test/testExcelNative.xlsx";
+			
+			URL urls = new URL(lien);
+			InputStream urlInputStream = urls.openStream(); // throws an IOException
+			in = new DataInputStream(new BufferedInputStream(urlInputStream));
 
 			break;
 		}
-
+		case FILE : {
+			log.debug("*Conversion à partir d'un fichier uploadé : "+file.getName());
+			if(file.isEmpty()) {
+				return doErrorfile(request, "Uploaded file is empty");
+			}		
+			
+			in = file.getInputStream();
+			break;
+		}
 		case URL: {
+			log.debug("*Conversion à partir d'une URL : "+url);
 			if(url.isEmpty()) {
 				return doErrorfile(request, "Uploaded link file is empty");
 			}
-			if(useZip)
-			{
-				try{
-					log.debug("*fichier choisi via url->conversion en Zip*="+generatexl);
-					urls = new URL(url);
-					url_Input = urls.openStream(); // throws an IOException
-					content = new DataInputStream(new BufferedInputStream(url_Input));
-					response.setContentType("application/zip");	
-					modelWriter1=new ZipOutputStreamModelWriter(response.getOutputStream());
-					modelWriter1.setFormat(theFormat);
-					generateType(modelWriter1,content,language,generatexl);
-
-				}catch(MalformedURLException errors) {
-					errors.printStackTrace();
-					return doErrorfile(request, errors.getMessage()); 
-				} catch (IOException ioeErrors) {
-					ioeErrors.printStackTrace();
-					return doErrorfile(request, ioeErrors.getMessage()); 
-				}
-				finally {
-
-					try {
-						if(url_Input != null) {
-							url_Input.close();
-						}
-					} catch (IOException ioe) {
-
-					}
-				} 
+			
+			try {
+				URL urls = new URL(url);
+				InputStream urlInputStream = urls.openStream(); // throws an IOException
+				in = new DataInputStream(new BufferedInputStream(urlInputStream));
+			} catch(MalformedURLException errors) {
+				errors.printStackTrace();
+				return doErrorfile(request, errors.getMessage()); 
+			} catch (IOException ioeErrors) {
+				ioeErrors.printStackTrace();
+				return doErrorfile(request, ioeErrors.getMessage()); 
 			}
-			else{
-
-				try{
-					log.debug("*fichier choisi via url->conversion en SKOS-xl*="+generatexl);
-					urls = new URL(url);
-					url_Input = urls.openStream(); // throws an IOException
-					content = new DataInputStream(new BufferedInputStream(url_Input));
-					modelWriter=new OutputStreamModelWriter(response.getOutputStream());
-					modelWriter.setFormat(theFormat);
-					response.setContentType(modelWriter.getFormat().getDefaultMIMEType());
-					generateType(modelWriter,content,language,generatexl);
-				}catch(MalformedURLException errors) {
-					errors.printStackTrace();
-					return doErrorfile(request, errors.getMessage()); 
-				} catch (IOException ioeErrors) {
-					ioeErrors.printStackTrace();
-					return doErrorfile(request,ioeErrors.getMessage()); 
-				}
-				finally {
-
-					try {
-						url_Input.close();
-					} catch (IOException ioe) {
-
-					}
-				} 
-			}
-
+			
 			break;
 		}
 		default:
 			break;
 		}
 
+		try {
+			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+usexl);			
+			// initialisation du modelWriter
+			ModelWriterIfc modelWriter;
+			if(useZip) {
+				modelWriter = new ZipOutputStreamModelWriter(response.getOutputStream());
+				((ZipOutputStreamModelWriter)modelWriter).setFormat(theFormat);
+			} else {
+				modelWriter=new OutputStreamModelWriter(response.getOutputStream());
+				((OutputStreamModelWriter)modelWriter).setFormat(theFormat);				
+			}
+			
+			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
+			response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());	
+			generateType(modelWriter,in,language,usexl);
+		} finally {
+			try {
+				if(in != null) {
+					in.close();
+				}
+			} catch (IOException ioe) { }
+		}
+		
 		return null;
 	}
-
-
+	
+	private void generateType(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl) {
+		ConceptSchemeFromExcel converter = new ConceptSchemeFromExcel(Writer, lang);
+		converter.setGenerateXl(generatexl);
+		converter.setGenerateXlDefinitions(generatexl);
+		converter.processInputStream(filefrom);
+	}
 
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -1366,13 +1221,6 @@ public class SkosPlayController {
 		}				
 
 		return tree;
-	}
-	public void generateType (ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl)
-	{
-		ConceptSchemeFromExcel converter = new ConceptSchemeFromExcel(Writer, lang);
-		converter.setGenerateXl(generatexl);
-		converter.setGenerateXlDefinitions(generatexl);
-		converter.processInputStream(filefrom);
 	}
 
 }

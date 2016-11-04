@@ -1,4 +1,4 @@
-package fr.sparna.rdf.skosplay;
+package fr.sparna.google;
 import java.awt.Desktop;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

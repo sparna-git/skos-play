@@ -30,6 +30,7 @@ public class DirectoryModelWriter implements ModelWriterIfc {
 	private File outputFolder;
 	private boolean saveGraphFile = true;
 	private RDFFormat format = RDFFormat.RDFXML;
+	private String graphSuffix = null;
 	
 	public DirectoryModelWriter(File outputFolder) {
 		super();
@@ -41,10 +42,11 @@ public class DirectoryModelWriter implements ModelWriterIfc {
 	 */
 	@Override
 	public void saveGraphModel(String graph, Model model) {
-		graph = graph + "/graph";
+		graph = graph + ((this.graphSuffix != null)?graphSuffix:"");
+		
 		try {
 			String filename = URLEncoder.encode(graph, "UTF-8");
-			File file = new File(outputFolder, filename + format.getDefaultFileExtension());
+			File file = new File(outputFolder, filename + "." + format.getDefaultFileExtension());
 			try (FileOutputStream fos = new FileOutputStream(file)) {
 				RDFWriter w = RDFWriterRegistry.getInstance().get(format).get().getWriter(fos);
 				exportModel(model, w);
@@ -55,7 +57,7 @@ public class DirectoryModelWriter implements ModelWriterIfc {
 			}
 			
 			if(saveGraphFile) {
-				File graphFile = new File(outputFolder, filename + ".rdf.graph");
+				File graphFile = new File(outputFolder, file.getName() + ".graph");
 				ReadWriteTextFile.setContents(graphFile, graph, "UTF-8");
 			}
 		} catch(Exception e) {
@@ -74,6 +76,14 @@ public class DirectoryModelWriter implements ModelWriterIfc {
 		c.add(model);
 		c.export(handler);
 	} 
+
+	public String getGraphSuffix() {
+		return graphSuffix;
+	}
+
+	public void setGraphSuffix(String graphSuffix) {
+		this.graphSuffix = graphSuffix;
+	}
 
 	@Override
 	public void beginWorkbook() {

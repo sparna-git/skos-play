@@ -47,12 +47,20 @@
 					<li style="line-height: 1.3em;">to <em>publish</em> it when it is shared on the web.</li>
 				</ul> 
 				<br />
-				<br />
 				<div style="text-align:center">
-					<a href="convert"><button class="btn btn-primary btn-lg ">Convert</button></a>
                   	<a href="upload"><button class="btn btn-primary btn-lg ">Start Here</button></a>
                   	<a href="about"><button class="btn btn-default btn-lg" type="button">Learn More</button></a>                
-              </div>
+              	</div>
+              	<hr />
+              	<p><span style="color: #772953;"><span class="glyphicon glyphicon glyphicon-certificate" aria-hidden="true"></span></span>&nbsp;SKOS Play also provides a way to convert Excel spreadsheets to <a href="http://www.w3.org/TR/2009/REC-skos-reference-20090818/" target="_blank">SKOS</a> files.</p>
+              	<p>This makes it easy to produce SKOS files for taxonomies and authorities list.</p>
+              	<p>The converter can even generate data in other RDF vocabularies.</p>
+				<br />
+              	<div style="text-align:center">
+					<a href="convert"><button class="btn btn-info btn-lg ">Convert Excel to SKOS</button></a>         
+              	</div>
+              	<br />
+              	<br />
 			</div>
       	</div>
       	<jsp:include page="footer.jsp" />

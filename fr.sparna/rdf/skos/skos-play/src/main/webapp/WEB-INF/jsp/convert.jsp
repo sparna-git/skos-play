@@ -32,7 +32,7 @@
 				document.getElementById('url').disabled = selected != 'url';
 				document.getElementById('example').disabled = selected != 'example';
 				document.getElementById('file').disabled = selected != 'file';
-				document.getElementById('id').disabled = selected != 'id';
+				document.getElementById('google').disabled = selected != 'google';
 				
 			}	
 			
@@ -59,9 +59,6 @@
 					
 			<form id="upload_form" action="convert" method="post" enctype="multipart/form-data" class="form-horizontal">	
 			
-			<c:choose>
-			<c:when test="${!data.skosPlayConfig.publishingMode}">	
-			
 			<fieldset>
 				<legend><fmt:message key="convert.form.legend" /></legend>
 				 
@@ -79,7 +76,7 @@
 					</label>
 					<div class="col-sm-9" >
 						<select style=" width:80%;" class="ui-select" name="example" id="example">
-							<option value="E1">Exemple 1</option>	 
+							<option value="E1">Simple example 1</option>	 
 						</select>
 					</div>
 			    </div>	
@@ -152,93 +149,86 @@
 								name="source"
 								id="source-id"
 								value="id"
-								onchange="enabledInput('id')" />
-						<label class="col-sm-2 control-label">
-							
+								onchange="enabledInput('google')" />
+						<label class="col-sm-2 control-label">							
 							<fmt:message key="upload.form.remoteUrl_Excel_Google" />
 						</label>
 						<div class="col-sm-9" >
-							<input
-								
+							<input								
 								type="text"
-								id="id"
-								name="id"
+								id="google"
+								name="google"
 								value=""
-								placeholder="ex:1aNS3e1tpW1CCaDFpN97zEz3g9aULjStCXagTdDVgu"
+								placeholder="1aNS3e1tpW1CCaDFpN97zEz3g9aULjStCXagTdDVgu"
 								class="form-control"
-								onkeypress="enabledInput('id');" style="width:80%;"/>
+								onkeypress="enabledInput('google');" style="width:80%;"/>
 							<span class="help-block"><i><fmt:message key="upload.form.remoteUrl_Excel_Google.help" /></i></span>
 						</div>
 					</div>
 				
 			</fieldset>
-			<legend></legend>
 			
-			<!-- -CHOIX DU LANGAGE -->
-		
-					
-				
-			<div class="form-group" style="margin-left:105px; ">
-					
+			<!-- Choix de la langue -->		
+			<fieldset>
+				<legend><fmt:message key="convert.form.legend" /></legend>
+				<div class="form-group" style="margin-left:105px; ">					
 					<label class="col-sm-2 control-label">
 							<fmt:message key="print.form.language.legend" />
 					</label>
 					<div class="col-sm-10" >
-						<select style=" width:35%;" class="ui-select" required name="language" id="lg">
-				
-							<option value="en">en</option>
-									 
-							<option value="fr">fr</option>
-									 
-							<option value="de">de</option>
-						 
+						<select style=" width:35%;" class="ui-select" required name="language" id="lg">				
+							<option value="en">en</option>									 
+							<option value="fr">fr</option>									 
+							<option value="de">de</option>						 
 						</select>
 					</div>
-			</div>	
+				</div>	
+			</fieldset>
 			
-			
+			<br />
+			<br />
 
 			<div class="panel-group" id="myAccordion">
 				<div class="panel panel-default">
 	   				<div class="panel-heading">
 	   					<a class="accordion-toggle" data-toggle="collapse" data-parent="#myAccordion" href="#collapse1"><h4><fmt:message key="upload.form.advanced.legend" /></h4></a>
 	   				</div>
-	   				<div id="collapse1" class="panel-collapse collapse in" ><div class="panel-body">
+	   				<div id="collapse1" class="panel-collapse collapse in"><div class="panel-body">
 						
-						<div class="form-group" style="margin-left:100px;">
-					
-							<label style="margin-left:-160px;" class="col-sm-4 control-label">
-									<fmt:message key="print.form.outputFormat_rdf.legend" />
-							</label>
-							
-							<div class="col-sm-7" >
-								<select style=" width:50%;"  required name="output" >
-						
+						<div class="form-group">
+							<div class="col-sm-4">							
+								<label>
+										<fmt:message key="print.form.outputFormat_rdf.legend" />
+								</label>
+							</div>
+							<div class="col-sm-1">
+								<select  required name="output" >						
 									<option value="application/rdf+xml" selected="selected">RDF/XML</option>
 									<option value="text/turtle">Turtle</option>		 
 									<option value="application/x-trig">TriG</option>
 									<option value="text/plain">N-Triples</option>
 									<option value="text/x-nquads">N-Quads</option>
-									<option value="text/n3">N3</option>
-								 
+									<option value="text/n3">N3</option>								 
 								</select>
-							</div>
-							
+							</div>						
 						</div>	
 						<div class="form-group">
+							<label class="col-sm-4">
+								<fmt:message key="upload.form.useskosxl" />
+							</label>
 							<div class="col-sm-1">
 								<input
 									type="checkbox"
 									id="useskosxl"
 									name="useskosxl" />
 								<span class="help-block"><i></i></span>
-							</div>
-							<label class="col-sm-4">
-								<fmt:message key="upload.form.useskosxl" />
-							</label>
-							
+							</div>													
 						</div>
+						
 						<div class="form-group">
+							<label class="col-sm-4">
+								<fmt:message key="upload.form.usezip" />
+							</label>
 							<div class="col-sm-1">
 								<!-- check it by default -->
 								<input
@@ -247,11 +237,7 @@
 									name="usezip"
 									checked="checked" />
 								<span class="help-block"><i></i></span>
-							</div>
-							<label class="col-sm-4">
-								<fmt:message key="upload.form.usezip" />
-							</label>
-							
+							</div>														
 						</div>
 						<!-- ****GENERATE GRAPH****** -->
 						
@@ -268,23 +254,14 @@
 							</label> 
 							</div>
 							-->
-							
-						
 						
 	   				</div></div>
 	   			</div><!-- end accordion-group : Advanced options -->
    			</div>		
-					
-			<legend></legend>
-   			
-   			<!-- end NOT publishing mode (normal mode -->
-   			</c:when>
-   		
-   			</c:choose>
 			
 			<div class="form-actions">
 				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit"  id="submit-button" class="btn btn-primary btn-lg "><fmt:message key="convert" /></button>
+					<button type="submit"  id="submit-button" class="btn btn-info btn-lg "><fmt:message key="convert" /></button>
 					<img src="images/ajax-loader.gif" id="loading" hidden="hidden" />
 				</div>
 			</div>
@@ -307,10 +284,10 @@
 			        $('#loading').show();
 			    });
 				
-		      	$(window).unload(function() {
-		      		$('#loading').hide();
+			    $(window).on('beforeunload', function(){
+			    	$('#loading').hide();
 				    $('#submit-button').attr('disabled', false);
-		      	});
+			    }
 	      	});
 	      	
 
