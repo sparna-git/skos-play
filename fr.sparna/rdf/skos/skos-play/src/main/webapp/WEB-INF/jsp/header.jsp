@@ -13,6 +13,7 @@
 			    		<ul class="nav nav-pills navbar-right">
 			    			<li id="header-pill-home" ${param.active == 'home' ? 'class="active"' : ''}><a href="home"><i class="glyphicon glyphicon-home"></i>&nbsp;<fmt:message key="menu.home" /></a></li>
 			    			<li id="header-pill-upload" ${param.active == 'upload' ? 'class="active"' : ''}><a href="upload"><i class="glyphicon glyphicon-play"></i>&nbsp;<fmt:message key="menu.start" /></a></li>
+			    			<li id="header-pill-convert" ${param.active == 'convert' ? 'class="active"' : ''}><a href="convert"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;<fmt:message key="menu.convert" /></a></li>
 					    	<li id="header-pill-about" ${param.active == 'about' ? 'class="active"' : ''}><a href="about"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;<fmt:message key="menu.about" /></a></li>
 					    	<li id="header-pill-forum"><a href="https://groups.google.com/d/forum/skos-play-discuss" target="_blank"><i class="glyphicon glyphicon-user"></i>&nbsp;<fmt:message key="menu.feedback" /></a></li>
 							<li id="header-pill-lang" >

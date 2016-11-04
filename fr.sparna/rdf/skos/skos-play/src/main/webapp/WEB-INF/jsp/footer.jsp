@@ -6,7 +6,7 @@
 <fmt:setLocale value="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language}"/>
 <fmt:setBundle basename="fr.sparna.rdf.skosplay.i18n.Bundle"/>
 
-      	<footer id="footer">
+      	<footer id="footer" style="margin-top:30px;">
       	SKOS Play! by <a href="http://francart.fr" target="_blank">Thomas Francart</a>, <a href="http://sparna.fr" target="_blank"><img src="images/sparna.png" /></a>
       	&nbsp;|&nbsp;
       	<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.fr"><img alt="Licence Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>

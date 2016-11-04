@@ -72,13 +72,14 @@
 							checked="checked"
 							onchange="enabledInput('example')" />					
 					<label class="col-sm-2 control-label">
-							<fmt:message key="upload.form.providedExample_Excel" />
+							<fmt:message key="convert.form.providedExample" />
 					</label>
 					<div class="col-sm-9" >
 						<select style=" width:80%;" class="ui-select" name="example" id="example">
 							<option value="E1">Simple example 1</option>	 
 						</select>
 					</div>
+					<a href="excel_test/testExcelNative.xlsx" style="margin-left:15px;"><fmt:message key="convert.form.Example.download" /></a>
 			    </div>	
 			
 				
@@ -93,7 +94,7 @@
 								onchange="enabledInput('file')" />
 					
 					<label class="col-sm-2 control-label">
-							<fmt:message key="upload.form.localFile" />
+							<fmt:message key="convert.form.localFile" />
 					</label>
 					<div class="col-sm-9" >
 						<div class="fileinput fileinput-new input-group"  data-provides="fileinput" id="fileupload" style="width:80%;">
@@ -103,18 +104,18 @@
 						  </div>
 						  <span class="input-group-addon btn btn-default btn-file">
 						  	<span class="fileinput-new">
-						  		<fmt:message key="upload.form.localFile.select" />
+						  		<fmt:message key="convert.form.localFile.select" />
 						  	</span>
 						  	<span class="fileinput-exists">
-						  		<fmt:message key="upload.form.localFile.change" />
+						  		<fmt:message key="convert.form.localFile.change" />
 						  	</span>
 						  	<input type="file"  name="file" id="file" onchange="enabledInput('file')" >
 						  </span>
-						  <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput"><fmt:message key="upload.form.localFile.remove" /></a>
+						  <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput"><fmt:message key="convert.form.localFile.remove" /></a>
 						</div>
 						
 						
-						<span class="help-block"><i><fmt:message key="upload.form.localFile.help_Excel" /></i></span>
+						<span class="help-block"><i><fmt:message key="convert.form.localFile.help" /></i></span>
 					</div>
 				</div>
 				<div class="form-group">
@@ -127,7 +128,7 @@
 							onchange="enabledInput('url')" />
 					<label class="col-sm-2 control-label">
 						
-						<fmt:message key="upload.form.remoteUrl_Excel" />
+						<fmt:message key="convert.form.remoteUrl" />
 					</label>
 					<div class="col-sm-9" >
 						<input
@@ -139,7 +140,7 @@
 							placeholder="http://..."
 							class="form-control"
 							onkeypress="enabledInput('url');" style="width:80%;"/>
-						<span class="help-block"><i><fmt:message key="upload.form.remoteUrl_Excel.help" /></i></span>
+						<span class="help-block"><i><fmt:message key="convert.form.remoteUrl.help" /></i></span>
 					</div>
 					</div>
 							<div class="form-group">
@@ -147,11 +148,11 @@
 								class="col-sm-1"
 								type="radio"
 								name="source"
-								id="source-id"
-								value="id"
+								id="source-google"
+								value="google"
 								onchange="enabledInput('google')" />
 						<label class="col-sm-2 control-label">							
-							<fmt:message key="upload.form.remoteUrl_Excel_Google" />
+							<fmt:message key="convert.form.remoteUrl.Google" />
 						</label>
 						<div class="col-sm-9" >
 							<input								
@@ -162,7 +163,7 @@
 								placeholder="1aNS3e1tpW1CCaDFpN97zEz3g9aULjStCXagTdDVgu"
 								class="form-control"
 								onkeypress="enabledInput('google');" style="width:80%;"/>
-							<span class="help-block"><i><fmt:message key="upload.form.remoteUrl_Excel_Google.help" /></i></span>
+							<span class="help-block"><i><fmt:message key="convert.form.remoteUrl.Google.help" /></i></span>
 						</div>
 					</div>
 				
@@ -170,13 +171,13 @@
 			
 			<!-- Choix de la langue -->		
 			<fieldset>
-				<legend><fmt:message key="convert.form.legend" /></legend>
+				<legend><fmt:message key="convert.form.legend.language" /></legend>
 				<div class="form-group" style="margin-left:105px; ">					
 					<label class="col-sm-2 control-label">
-							<fmt:message key="print.form.language.legend" />
+							<fmt:message key="convert.form.language.legend" />
 					</label>
-					<div class="col-sm-10" >
-						<select style=" width:35%;" class="ui-select" required name="language" id="lg">				
+					<div class="col-sm-10" style=" width:80%;">
+						<select id="choice_Language" class="ui-select " required name="language" id="lg">				
 							<option value="en">en</option>									 
 							<option value="fr">fr</option>									 
 							<option value="de">de</option>						 
@@ -191,14 +192,14 @@
 			<div class="panel-group" id="myAccordion">
 				<div class="panel panel-default">
 	   				<div class="panel-heading">
-	   					<a class="accordion-toggle" data-toggle="collapse" data-parent="#myAccordion" href="#collapse1"><h4><fmt:message key="upload.form.advanced.legend" /></h4></a>
+	   					<a class="accordion-toggle" data-toggle="collapse" data-parent="#myAccordion" href="#collapse1"><h4><fmt:message key="convert.form.advanced.legend" /></h4></a>
 	   				</div>
 	   				<div id="collapse1" class="panel-collapse collapse in"><div class="panel-body">
 						
 						<div class="form-group">
 							<div class="col-sm-4">							
 								<label>
-										<fmt:message key="print.form.outputFormat_rdf.legend" />
+										<fmt:message key="convert.form.outputFormat.legend" />
 								</label>
 							</div>
 							<div class="col-sm-1">
@@ -214,7 +215,7 @@
 						</div>	
 						<div class="form-group">
 							<label class="col-sm-4">
-								<fmt:message key="upload.form.useskosxl" />
+								<fmt:message key="convert.form.useskosxl" />
 							</label>
 							<div class="col-sm-1">
 								<input
@@ -227,7 +228,7 @@
 						
 						<div class="form-group">
 							<label class="col-sm-4">
-								<fmt:message key="upload.form.usezip" />
+								<fmt:message key="convert.form.usezip" />
 							</label>
 							<div class="col-sm-1">
 								<!-- check it by default -->
@@ -263,7 +264,9 @@
 				<div class="col-sm-offset-2 col-sm-10">
 					<button type="submit"  id="submit-button" class="btn btn-info btn-lg "><fmt:message key="convert" /></button>
 					<img src="images/ajax-loader.gif" id="loading" hidden="hidden" />
+					<span style="margin-left:20px;"><fmt:message key="convert.form.luxembourg" /></span><a target="_blank"><img src="images/logo-luxembourg.png" /></a>
 				</div>
+				
 			</div>
 			
 			</form>
@@ -299,7 +302,7 @@
 	 
 	$(function(){
 	 
-	//$('select').editableSelect();
+	$('#choice_Language').editableSelect();
 	 
 	});
 	 

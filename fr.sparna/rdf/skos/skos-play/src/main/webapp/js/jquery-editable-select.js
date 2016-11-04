@@ -20,12 +20,12 @@
             if($select.attr('data-editable') && $select.attr('data-editable') == 'false') {
                 opts.editable = false;
             }
-            var html = '<div class="' + opts.warpClass + '" tabindex="-1">'
-            + '<div class="selected"><span></span>'
+            var html = '<div class="' + opts.warpClass + '" tabindex="-1" style="border-radius:5px;">'
+            + '<div class="selected" ><span></span>'
             + '<a class="ui-button"><i class="fa fa-angle-down"></i></a></div>'
-            + '<div class="dropdown-box">';
+            + '<div class="dropdown-box"style="border-radius:5px;">';
             html += (opts.editable ?
-                '<div class="inputbox"><input type="text" placeholder="Enter your text" /></div>' : '');
+                '<div class="inputbox"><input type="text"  class="form-control" placeholder="Enter your language" /></div>' : '');
 
             html += '<ul></ul></div></div>';
 
