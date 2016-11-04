@@ -24,7 +24,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.xmlbeans.impl.piccolo.io.FileFormatException;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.vocabulary.DC;
@@ -105,9 +104,8 @@ import fr.sparna.rdf.skos.toolkit.SKOSTreeBuilder;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
 import fr.sparna.rdf.skos.xls2skos.ConceptSchemeFromExcel;
+import fr.sparna.rdf.skos.xls2skos.ModelWriterFactory;
 import fr.sparna.rdf.skos.xls2skos.ModelWriterIfc;
-import fr.sparna.rdf.skos.xls2skos.OutputStreamModelWriter;
-import fr.sparna.rdf.skos.xls2skos.ZipOutputStreamModelWriter;
 
 
 
@@ -125,6 +123,7 @@ import fr.sparna.rdf.skos.xls2skos.ZipOutputStreamModelWriter;
 public class SkosPlayController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
+	private static final String MIME_TYPE_EXCEL = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"; 
 	
 	@Autowired
 	protected ServletContext servletContext;
@@ -199,7 +198,7 @@ public class SkosPlayController {
 	@RequestMapping(value = "/convert", method = RequestMethod.GET)
 	public ModelAndView convertForm(
 			@RequestParam(value="id", required=false) String id_fichier,
-			@RequestParam(value="usexl", required=false) boolean usexl,
+			@RequestParam(value="usexl", required=false) boolean useXl,
 			@RequestParam(value="usezip", required=false) boolean useZip,
 			@RequestParam(value="language", required=false) String language,
 			@RequestParam(value="output", required=false) String format,
@@ -208,151 +207,56 @@ public class SkosPlayController {
 			) 
 	throws IOException 
 	{
-		String code_return=request.getParameter("code");
-
-		InputStream fluxLecture=null;
-
-		final SessionData sessionData = SessionData.get(request.getSession());
-
-
-		OutputStreamModelWriter modelWriter;
-
-		ZipOutputStreamModelWriter modelWriter1;
-
-		Credential credential;
-
-		boolean generatexl=false;
 		
-		
+		String code_return=request.getParameter("code");		
 
-		ConvertFromData data = new ConvertFromData();
-
-		if(usexl)
-		{
-			generatexl=true;
-
-
-		}else
-		{
-			generatexl=false;
-
-
-		}
-
-		if(code_return!=null)
-		{
+		if(code_return!=null) {
+			final SessionData sessionData = SessionData.get(request.getSession());
 			RDFFormat theFormat=RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format).get();//format;
 			GoogleAuthHelper me = sessionData.getGoogleAuthHelper();
-			DataInputStream content;
 			me.setAuthorizationCode(code_return);
-			credential=me.exchangeCode();
+			Credential credential=me.exchangeCode();
 			log.debug("L'utilisateur s'est connecté le code retour est="+code_return);
-
-			if(useZip)
+			
+			Drive service=me.getDriveService(credential);
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			service.files().export(id_fichier, MIME_TYPE_EXCEL).executeMediaAndDownloadTo(outputStream);
+			InputStream fluxLecture = new ByteArrayInputStream(outputStream.toByteArray());
+			DataInputStream content = new DataInputStream(new BufferedInputStream(fluxLecture));
+			
+			try
 			{
-				log.debug("L'utilisateur a demandé d'avoir un format zip");
-				try
-				{
-					log.debug("Exécution de la convertion en format zip");
+				log.debug("Exécution de la conversion");
 
-					Drive service=me.getDriveService(credential);
+				// lancer la conversion et récupérer le résultat en mémoire
+				ByteArrayOutputStream conversionResult = new ByteArrayOutputStream();
+				generateType(new ModelWriterFactory(useZip, theFormat).buildNewModelWriter(conversionResult),content,language,useXl);
 
-					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+				// écrire le résultat dans la response
+				// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
+				response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());
+				OutputStream out = response.getOutputStream();
+				out.write(conversionResult.toByteArray());
+				out.flush();
+				log.debug("Conversion terminée");
+				return null;
+			} catch(Exception e) {
+				e.printStackTrace();
+				return doErrorConvert(request,e.getMessage());
+			}
 
-					service.files().export(id_fichier, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").executeMediaAndDownloadTo(outputStream);
-
-					fluxLecture = new ByteArrayInputStream(outputStream.toByteArray());
-
-					content = new DataInputStream(new BufferedInputStream(fluxLecture));
-					
-					
-
-					// lancer la conversion et récupérer le résultat en mémoire
-
-					ByteArrayOutputStream conversionResult = new ByteArrayOutputStream();
-
-					modelWriter1 = new ZipOutputStreamModelWriter(conversionResult);
-					
-					modelWriter1.setFormat(theFormat);
-
-					generateType(modelWriter1,content,language,generatexl);
-
-					// écrire le résultat dans la response
-
-					response.setContentType("application/zip");
-
-					OutputStream out = response.getOutputStream();
-
-					out.write(conversionResult.toByteArray());
-					out.flush();
-					log.debug("Conversion en format zip terminée");
-					return null;
-				} catch(Exception e) {
-					e.printStackTrace();
-					return doErrorfile(request,e.getMessage());
-				}
-
-				finally {
-					try {
-						if(fluxLecture!= null) {
-							fluxLecture.close();
-						}
-					} 
-					catch (IOException ioe) { }
-				}
-			}else{
-				log.debug("L'utilisateur a demandé d'avoir un  skos-xls for labels");
-				try
-				{
-					log.debug("Exécution de la convertion en skos-xls for labels");
-
-					Drive service=me.getDriveService(credential);
-
-					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-					service.files().export(id_fichier, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").executeMediaAndDownloadTo(outputStream);
-
-					fluxLecture = new ByteArrayInputStream(outputStream.toByteArray());
-
-					content = new DataInputStream(new BufferedInputStream(fluxLecture));
-
-					// lancer la conversion et récupérer le résultat en mémoire
-
-					ByteArrayOutputStream conversionResult = new ByteArrayOutputStream();
-
-					modelWriter = new OutputStreamModelWriter(conversionResult);
-					
-					modelWriter.setFormat(theFormat);
-
-					generateType(modelWriter,content,language,generatexl);
-
-					// écrire le résultat dans la response
-					response.setContentType(modelWriter.getFormat().getDefaultMIMEType());
-
-					OutputStream out = response.getOutputStream();
-
-					out.write(conversionResult.toByteArray());
-
-					out.flush();
-
-					log.debug("Conversion en en skos-xls for labels terminée");
-					return null;
-				} catch(Exception e) {
-					e.printStackTrace();
-					return doErrorfile(request,e.getMessage());
-				}
-
-				finally {
-					try {
-						if(fluxLecture!= null) {
-							fluxLecture.close();
-						}
-					} 
-					catch (IOException ioe) { }
-				}
+			finally {
+				try {
+					if(fluxLecture!= null) {
+						fluxLecture.close();
+					}
+				} 
+				catch (IOException ioe) { }
 			}
 		}
 
+		// si pas de code en paramètre, on renvoie vers la page de formulaire
+		ConvertFromData data = new ConvertFromData();
 		return new ModelAndView("convert", ConvertFromData.KEY, data);
 	}
 
@@ -370,14 +274,18 @@ public class SkosPlayController {
 			@RequestParam(value="usezip", required=false) boolean useZip,
 			HttpServletRequest request,
 			HttpServletResponse response			
-			) throws Exception {
+	) throws Exception {
 		
-			log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+usexl+",useZip="+useZip+"language="+language+",url="+url+",ex="+Example+")");
-			
-			//source, it's can be: file, url or google
-			SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());
-			// format
-			RDFFormat theFormat = RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format).orElse(RDFFormat.RDFXML);		
+		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+usexl+",useZip="+useZip+"language="+language+",url="+url+",ex="+Example+")");
+
+		//source, it can be: file, example, url or google
+		SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());
+		// format
+		RDFFormat theFormat = RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format).orElse(RDFFormat.RDFXML);		
+
+		// voir http://stackoverflow.com/questions/4931323/whats-the-difference-between-getrequesturi-and-getpathinfo-methods-in-httpservl
+		URL baseURL = new URL("http://"+request.getServerName()+((request.getServerPort() != 80)?":"+request.getServerPort():""));
+		log.debug("Base URL is "+baseURL.toString());
 		
 		/**************************CONVERSION RDF**************************/
 			
@@ -386,12 +294,12 @@ public class SkosPlayController {
 		switch(source) {
 
 		case GOOGLE:   {							
-			log.debug("*fichier choisi->via id google drive->conversion");
-			log.debug("Demande d'autorisation d'accès au fichier google drive");
+			log.debug("*Conversion à partir d'une Google Spreadsheet : "+googleId);
 			String url_Redirect="http://localhost:8080/skos-play/convert?id="+googleId+"&usezip="+useZip+"&usexl="+usexl+"&language="+language+"&output="+format;
+			log.debug("URL de redirection : "+url_Redirect);
 			GoogleAuthHelper me = new GoogleAuthHelper(url_Redirect);
 			me.setScopes(Arrays.asList(DriveScopes.DRIVE));
-			me.setApplicationName("SKOS Play");
+			me.setApplicationName("SKOS Play !");
 			// enregistrement en session
 			SessionData.get(request.getSession()).setGoogleAuthHelper(me);
 			//redirection vers google pour l'autorisation
@@ -416,7 +324,7 @@ public class SkosPlayController {
 		case FILE : {
 			log.debug("*Conversion à partir d'un fichier uploadé : "+file.getName());
 			if(file.isEmpty()) {
-				return doErrorfile(request, "Uploaded file is empty");
+				return doErrorConvert(request, "Uploaded file is empty");
 			}		
 			
 			in = file.getInputStream();
@@ -425,7 +333,7 @@ public class SkosPlayController {
 		case URL: {
 			log.debug("*Conversion à partir d'une URL : "+url);
 			if(url.isEmpty()) {
-				return doErrorfile(request, "Uploaded link file is empty");
+				return doErrorConvert(request, "Uploaded link file is empty");
 			}
 			
 			try {
@@ -434,10 +342,10 @@ public class SkosPlayController {
 				in = new DataInputStream(new BufferedInputStream(urlInputStream));
 			} catch(MalformedURLException errors) {
 				errors.printStackTrace();
-				return doErrorfile(request, errors.getMessage()); 
+				return doErrorConvert(request, errors.getMessage()); 
 			} catch (IOException ioeErrors) {
 				ioeErrors.printStackTrace();
-				return doErrorfile(request, ioeErrors.getMessage()); 
+				return doErrorConvert(request, ioeErrors.getMessage()); 
 			}
 			
 			break;
@@ -447,20 +355,10 @@ public class SkosPlayController {
 		}
 
 		try {
-			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+usexl);			
-			// initialisation du modelWriter
-			ModelWriterIfc modelWriter;
-			if(useZip) {
-				modelWriter = new ZipOutputStreamModelWriter(response.getOutputStream());
-				((ZipOutputStreamModelWriter)modelWriter).setFormat(theFormat);
-			} else {
-				modelWriter=new OutputStreamModelWriter(response.getOutputStream());
-				((OutputStreamModelWriter)modelWriter).setFormat(theFormat);				
-			}
-			
+			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+usexl);
 			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
 			response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());	
-			generateType(modelWriter,in,language,usexl);
+			generateType(new ModelWriterFactory(useZip, theFormat).buildNewModelWriter(response.getOutputStream()),in,language,usexl);
 		} finally {
 			try {
 				if(in != null) {
@@ -806,7 +704,7 @@ public class SkosPlayController {
 		return new ModelAndView("upload");
 	}
 
-	protected ModelAndView doErrorfile(
+	protected ModelAndView doErrorConvert(
 			HttpServletRequest request,
 			String message
 			) {
