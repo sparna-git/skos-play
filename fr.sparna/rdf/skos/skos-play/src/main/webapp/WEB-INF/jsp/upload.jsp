@@ -409,7 +409,7 @@
 			    $(window).on('beforeunload', function(){
 			    	$('#loading').hide();
 				    $('#submit-button').attr('disabled', false);
-			    }
+			    });
 	      	});
 	      	
 
