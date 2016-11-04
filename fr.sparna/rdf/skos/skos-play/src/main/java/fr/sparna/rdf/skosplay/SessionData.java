@@ -1,5 +1,6 @@
 package fr.sparna.rdf.skosplay;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -38,7 +39,10 @@ public class SessionData {
 	
 	protected GoogleAuthHelper googleAuthHelper;
 
-
+	protected ByteArrayOutputStream googleConversionResult;
+	
+	protected String googleConversionResultContentType;
+	
 	/**
 	 * Stores this data into session
 	 * @param session
@@ -103,6 +107,22 @@ public class SessionData {
 
 	public void setGoogleAuthHelper(GoogleAuthHelper googleAuthHelper) {
 		this.googleAuthHelper = googleAuthHelper;
+	}
+
+	public ByteArrayOutputStream getGoogleConversionResult() {
+		return googleConversionResult;
+	}
+
+	public void setGoogleConversionResult(ByteArrayOutputStream googleConversionResult) {
+		this.googleConversionResult = googleConversionResult;
+	}
+
+	public String getGoogleConversionResultContentType() {
+		return googleConversionResultContentType;
+	}
+
+	public void setGoogleConversionResultContentType(String googleConversionResultContentType) {
+		this.googleConversionResultContentType = googleConversionResultContentType;
 	}
 
 	public static void main(String...strings) throws Exception {

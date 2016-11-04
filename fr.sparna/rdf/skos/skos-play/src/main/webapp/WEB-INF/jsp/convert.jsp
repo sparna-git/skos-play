@@ -159,7 +159,7 @@
 								type="text"
 								id="google"
 								name="google"
-								value=""
+								value="${data.googleId}"
 								placeholder="1aNS3e1tpW1CCaDFpN97zEz3g9aULjStCXagTdDVgu"
 								class="form-control"
 								onkeypress="enabledInput('google');" style="width:80%;"/>
@@ -290,7 +290,12 @@
 			    $(window).on('beforeunload', function(){
 			    	$('#loading').hide();
 				    $('#submit-button').attr('disabled', false);
-			    }
+			    });
+			    
+			    <c:if test="${data.googleId != null}">
+			    	enabledInput('google');
+			    	window.open('downloadGoogleResult', '_blank');
+			    </c:if>
 	      	});
 	      	
 
