@@ -210,16 +210,8 @@
 			             	$('li.hasSubmenu>a').each(function(){
 			             	      $this = $(this);
 								 $this.closest("li").children("ul").toggle("slow");
-								 $this.children("span").toggle();
-				             /*	if($( 'span.glyphicon-minus' ).css('visibility') == 'hidden')
-				             	{
-				                	$("ul li.hasSubmenu>ul").toggle();
-				                	$( 'span.glyphicon-plus' ).toggle();  
-				                }
-				                else{ 
-				                	$("span.glyphicon-minus").toggle();
-				                	$("ul li.hasSubmenu>ul").toggle();
-				                }   */ 
+								 $this.children("span.glyphicon").toggle();
+				                 return false;
 				                
 	                		});
 	                		
