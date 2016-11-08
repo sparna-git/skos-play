@@ -30,18 +30,7 @@
 		<!-- Spring va chercher un fichier de conf dans WEB-INF/[servlet-name]-servlet.xml -->
 		<servlet-name>spring-dispatcher</servlet-name>
 		<!-- ne _pas_ mettre /*, voir http://stackoverflow.com/questions/1266303/no-mapping-found-for-http-request-with-uri-web-inf-pages-apiform-jsp -->
-		<!--
-		<url-pattern>/home</url-pattern>
-		<url-pattern>/about</url-pattern>
-		<url-pattern>/upload</url-pattern>
-		<url-pattern>/convert</url-pattern>
-		<url-pattern>/downloadGoogleResult</url-pattern>
-		<url-pattern>/print</url-pattern>
-		<url-pattern>/style/custom.css</url-pattern>
-		<url-pattern>/visualize</url-pattern>
-		<url-pattern>/getData</url-pattern>
-		-->
-		<url-pattern>/</url-pattern>
+		<url-pattern>/</url-pattern> 
 	</servlet-mapping>
 	
 	<welcome-file-list>

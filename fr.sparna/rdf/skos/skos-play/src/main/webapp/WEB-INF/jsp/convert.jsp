@@ -33,8 +33,40 @@
 				document.getElementById('example').disabled = selected != 'example';
 				document.getElementById('file').disabled = selected != 'file';
 				document.getElementById('google').disabled = selected != 'google';
+				if((selected!='google')||(selected!='url'))
+					{
+					 document.formulaire.google.style.borderColor = "gray";
+					 document.formulaire.url.style.borderColor = "gray";
+					 $('#length').hide();
+					}
+				
+			   if(selected==='google')
+				verifID();
+				
 				
 			}	
+			
+			function verifID(){
+      			var currlength = $('#google').val().length;
+	      		 if((currlength!=44))
+	      			 {
+		      			document.formulaire.google.style.borderColor = "#f5500c";
+	      				$('#length').show();
+	      				
+	      			 }else{
+	      				 
+	      				document.formulaire.google.style.borderColor = "#80ff00";
+	      				$('#length').hide();
+	      			 }
+	      		 
+      		 }
+			function dowloadExample(){
+				var urlExample= $('#example option:selected').val();
+		    	var exampleText= $('#example option:selected').text();
+			    $('#lien').removeAttr('href');
+			    $('#lien').attr('href', urlExample);
+			    $('a#lien').text('Télécharger le fichier d\'exemple fourni '+exampleText);
+			}
 			
 	    </script>
 
@@ -57,7 +89,7 @@
 				</c:if>
 			</div>	
 					
-			<form id="upload_form" action="convert" method="post" enctype="multipart/form-data" class="form-horizontal">	
+			<form id="upload_form" action="convert" method="post"name="formulaire" enctype="multipart/form-data" class="form-horizontal">	
 			
 			<fieldset>
 				<legend><fmt:message key="convert.form.legend" /></legend>
@@ -75,11 +107,14 @@
 							<fmt:message key="convert.form.providedExample" />
 					</label>
 					<div class="col-sm-9" >
-						<select style=" width:80%;" class="ui-select" name="example" id="example">
-							<option value="E1">Simple example 1</option>	 
+						<select style=" width:80%;" class="ui-select" name="example" id="example" onchange="dowloadExample()">
+							<option value="${data.baseUrl}/excel_test/testExcelNative.xlsx" >Simple example 1</option>
+							<option value="${data.baseUrl}/excel_test/test2.xlsx">Simple example 2</option>	 
 						</select>
 					</div>
-					<a href="excel_test/testExcelNative.xlsx" style="margin-left:15px;"><fmt:message key="convert.form.Example.download" /></a>
+					
+						<a id="lien" href="${data.baseUrl}/excel_test/testExcelNative.xlsx" style="margin-left:15px;"><fmt:message key="convert.form.Example.download" /></a>
+					
 			    </div>	
 			
 				
@@ -155,6 +190,7 @@
 							<fmt:message key="convert.form.remoteUrl.Google" />
 						</label>
 						<div class="col-sm-9" >
+						<span id="length" hidden="hidden" ><fmt:message   key="convert.form.length.googleID.error" /></span>
 							<input								
 								type="text"
 								id="google"
@@ -162,6 +198,7 @@
 								value="${data.googleId}"
 								placeholder="1aNS3e1tpW1CCaDFpN97zEz3g9aULjStCXagTdDVgu"
 								class="form-control"
+								onchange="verifID()"
 								onkeypress="enabledInput('google');" style="width:80%;"/>
 							<span class="help-block"><i><fmt:message key="convert.form.remoteUrl.Google.help" /></i></span>
 						</div>
@@ -275,6 +312,7 @@
       	<script>
 	      	$(document).ready(function() {
 	      		
+	      		 
 	      		// activate example choice
 	      		$('.exampleEntry').click(function() {
 	      			$('#example').val($(this).attr('data-value'));
@@ -291,11 +329,16 @@
 			    	$('#loading').hide();
 				    $('#submit-button').attr('disabled', false);
 			    });
-			    
+		   		
 			    <c:if test="${data.googleId != null}">
 			    	enabledInput('google');
 			    	window.open('downloadGoogleResult', '_blank');
 			    </c:if>
+			    
+			    	
+			    	
+			   
+			   
 	      	});
 	      	
 

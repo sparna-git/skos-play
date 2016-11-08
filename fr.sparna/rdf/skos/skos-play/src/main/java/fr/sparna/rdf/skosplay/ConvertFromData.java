@@ -6,6 +6,7 @@ public class ConvertFromData {
 
 	protected String errorMessagefile;
 	protected String googleId;
+	protected String baseUrl;
 
 	public String getErrorMessagefile() {
 		return errorMessagefile;
@@ -21,6 +22,14 @@ public class ConvertFromData {
 
 	public void setGoogleId(String googleId) {
 		this.googleId = googleId;
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
 	}
 
 	/**

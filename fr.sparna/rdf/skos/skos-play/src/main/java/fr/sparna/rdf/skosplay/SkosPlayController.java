@@ -128,10 +128,10 @@ public class SkosPlayController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 	private static final String MIME_TYPE_EXCEL = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"; 
-	
+
 	@Autowired
 	protected ServletContext servletContext;
-	
+
 	private enum SOURCE_TYPE {
 		FILE,
 		URL,
@@ -144,38 +144,38 @@ public class SkosPlayController {
 		if(SkosPlayConfig.getInstance().isPublishingMode()) {
 			// if publishing mode, no home page
 			return uploadForm();
-			
+
 		} else {
 			// retrieve resource bundle for path to home page
 			ResourceBundle b = ResourceBundle.getBundle(
 					"fr.sparna.rdf.skosplay.i18n.Bundle",
 					SessionData.get(request.getSession()).getUserLocale(),
 					new StrictResourceBundleControl()
-			);
+					);
 
 			return new ModelAndView(b.getString("home.jsp"));
 		}		
 	}
-	
+
 	@RequestMapping("/about")
 	public ModelAndView about(HttpServletRequest request) {
-		
+
 		// retrieve resource bundle for error messages
 		ResourceBundle b = ResourceBundle.getBundle(
 				"fr.sparna.rdf.skosplay.i18n.Bundle",
 				SessionData.get(request.getSession()).getUserLocale(),
 				new StrictResourceBundleControl()
-		);
+				);
 
 		return new ModelAndView(b.getString("about.jsp"));
 	}
-	
+
 	@RequestMapping("/style/custom.css")
 	public void style(
 			HttpServletRequest request,
 			HttpServletResponse response
-	) throws Exception {	
-		
+			) throws Exception {	
+
 		if(SkosPlayConfig.getInstance().getCustomCss() != null) {
 			try {
 				log.debug("Reading and returning custom CSS from "+SkosPlayConfig.getInstance().getCustomCss());
@@ -198,7 +198,6 @@ public class SkosPlayController {
 		UploadFormData data = new UploadFormData();
 		return new ModelAndView("upload", UploadFormData.KEY, data);
 	}
-	
 	/**
 	 * Méthode de téléchargement du résultat de la conversion google stockée dans la session
 	 * 
@@ -211,7 +210,7 @@ public class SkosPlayController {
 	public ModelAndView downloadGoogleResult(
 			HttpServletRequest request,
 			HttpServletResponse response
-	) throws IOException  {
+			) throws IOException  {
 		log.debug("downloadGoogleResult");
 		// 1. récupérer la session de l'utilisateur
 		final SessionData sessionData = SessionData.get(request.getSession());
@@ -225,8 +224,8 @@ public class SkosPlayController {
 		out.flush();
 		return null;
 	}
-	
-	
+
+
 	@RequestMapping(value = "/convert", method = RequestMethod.GET)
 	public ModelAndView convertForm(
 			@RequestParam(value="id", required=false) String id_fichier,
@@ -237,8 +236,8 @@ public class SkosPlayController {
 			HttpServletRequest request,
 			HttpServletResponse response
 			) 
-	throws IOException  {
-		
+					throws IOException  {
+
 		String code_return=request.getParameter("code");		
 
 		if(code_return!=null) {
@@ -246,70 +245,18 @@ public class SkosPlayController {
 			final SessionData sessionData = SessionData.get(request.getSession());
 			// format
 			RDFFormat theFormat=RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format).orElse(RDFFormat.RDFXML);
-			GoogleAuthHelper me = sessionData.getGoogleAuthHelper();
-			me.setAuthorizationCode(code_return);
-			Credential credential=me.exchangeCode();
+			GoogleAuthHelper auth = sessionData.getGoogleAuthHelper();
+			auth.setAuthorizationCode(code_return);
+			Credential credential=auth.exchangeCode();
+			sessionData.setGoogleCredential(credential);
 			log.debug("L'utilisateur s'est connecté le code retour est="+code_return);
-			
-			Drive service=me.getDriveService(credential);
-			
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			if(id_fichier.length()!=44)
-			{
-				
-				return doErrorConvert(request, "ID Google incorrect, the height must be equal to 44"); 	
-					
-			}
-			InputStream fluxLecture;
-			DataInputStream content;
-			try {
-				service.files().export(id_fichier, MIME_TYPE_EXCEL).executeMediaAndDownloadTo(outputStream);
-				fluxLecture = new ByteArrayInputStream(outputStream.toByteArray());
-				content = new DataInputStream(new BufferedInputStream(fluxLecture));
-			} catch (Exception e1) {
-				return doErrorConvert(request, e1.getMessage()); 
-			}
-			
-			try
-			{
-				log.debug("Exécution de la conversion");
-				// lancer la conversion et récupérer le résultat en mémoire
-				ByteArrayOutputStream conversionResult = new ByteArrayOutputStream();
-				generateType(new ModelWriterFactory(useZip, theFormat).buildNewModelWriter(conversionResult),content,language,useXl);
-				log.debug("Conversion terminée");
-				
-				sessionData.setGoogleConversionResult(conversionResult);
-				// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
-				sessionData.setGoogleConversionResultContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());
-				
-				ConvertFromData data = new ConvertFromData();
-				data.setGoogleId(id_fichier);
-				
-				return new ModelAndView("convert", ConvertFromData.KEY, data);
-
-				// écrire le résultat dans la response				
-//				response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());
-//				OutputStream out = response.getOutputStream();
-//				out.write(conversionResult.toByteArray());
-//				out.flush();				
-//				return null;
-			} catch(Exception e) {
-				e.printStackTrace();
-				return doErrorConvert(request,e.getMessage());
-			}
-
-			finally {
-				try {
-					if(fluxLecture!= null) {
-						fluxLecture.close();
-					}
-				} 
-				catch (IOException ioe) { }
-			}
+			Drive service=auth.getDriveService(credential);
+			return convert(service,id_fichier,sessionData,useXl,useZip,language,theFormat, request);
 		}
-
 		// si pas de code en paramètre, on renvoie vers la page de formulaire
 		ConvertFromData data = new ConvertFromData();
+		URL baseURL = new URL("http://"+request.getServerName()+((request.getServerPort() != 80)?":"+request.getServerPort():"")+request.getContextPath());
+		data.setBaseUrl(baseURL.toString());
 		return new ModelAndView("convert", ConvertFromData.KEY, data);
 	}
 
@@ -327,66 +274,72 @@ public class SkosPlayController {
 			@RequestParam(value="usezip", required=false) boolean useZip,
 			HttpServletRequest request,
 			HttpServletResponse response			
-	) throws Exception {
-		
-		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+usexl+",useZip="+useZip+"language="+language+",url="+url+",ex="+Example+")");
+			) throws Exception {
 
+		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+usexl+",useZip="+useZip+"language="+language+",url="+url+",ex="+Example+")");
+		final SessionData sessionData = SessionData.get(request.getSession());
 		//source, it can be: file, example, url or google
 		SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());
 		// format
 		RDFFormat theFormat = RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format).orElse(RDFFormat.RDFXML);		
-
-		// voir http://stackoverflow.com/questions/4931323/whats-the-difference-between-getrequesturi-and-getpathinfo-methods-in-httpservl
-		URL baseURL = new URL("http://"+request.getServerName()+((request.getServerPort() != 80)?":"+request.getServerPort():""));
+		URL baseURL = new URL("http://"+request.getServerName()+((request.getServerPort() != 80)?":"+request.getServerPort():"")+request.getContextPath());
 		log.debug("Base URL is "+baseURL.toString());
-		
+		ConvertFromData data = new ConvertFromData();
+		data.setBaseUrl(baseURL.toString());
 		/**************************CONVERSION RDF**************************/
-			
-			
 		InputStream in = null;
 		switch(source) {
 
 		case GOOGLE:   {	
-			
-				log.debug("*Conversion à partir d'une Google Spreadsheet : "+googleId);
-			
+
+			log.debug("*Conversion à partir d'une Google Spreadsheet : "+googleId);
+
 			if(googleId.isEmpty())
 			{
 				return doErrorConvert(request, "Google ID is empty");
 			}
-			
-			String url_Redirect=baseURL.toString()+"/skos-play/convert?id="+googleId+"&usezip="+useZip+"&usexl="+usexl+"&language="+language+"&output="+URLEncoder.encode(format, "UTF-8");
+
+			String url_Redirect=baseURL.toString()+"/convert?id="+googleId+"&usezip="+useZip+"&usexl="+usexl+"&language="+language+"&output="+URLEncoder.encode(format, "UTF-8");
 			log.debug("URL de redirection : "+url_Redirect);
-			GoogleAuthHelper me = new GoogleAuthHelper(url_Redirect);
-			me.setScopes(Arrays.asList(DriveScopes.DRIVE));
-			me.setApplicationName("SKOS Play !");
-			// enregistrement en session
-			SessionData.get(request.getSession()).setGoogleAuthHelper(me);
-			//redirection vers google pour l'autorisation
-			response.sendRedirect(me.getAuthorizationUrl());
-		
-			// on sort tout de suite de la méthode après avoir fait un redirect
-			return null;
+			Credential credential=sessionData.getGoogleCredential();
+			if(credential!=null)
+			{	
+				log.debug("credential found->authorization already granted");
+				log.debug("conversion en cours...");
+				
+				GoogleAuthHelper auth=sessionData.getGoogleAuthHelper();
+				Drive service=auth.getDriveService(credential);
+				return convert(service,googleId,sessionData,usexl,useZip,language,theFormat,request);
+
+			}else{
+				log.debug("credential not found->authorization process");
+				GoogleAuthHelper me = new GoogleAuthHelper(url_Redirect);
+				me.setScopes(Arrays.asList(DriveScopes.DRIVE));
+				me.setApplicationName("SKOS Play !");
+				// enregistrement en session
+				SessionData.get(request.getSession()).setGoogleAuthHelper(me);
+				//redirection vers google pour l'autorisation
+				response.sendRedirect(me.getAuthorizationUrl());
+				// on sort tout de suite de la méthode après avoir fait un redirect
+				return null;
+			}
 		}					
-			
+
 		case EXAMPLE : {
 			log.debug("*Conversion à partir d'un fichier d'exemple : "+Example);
-			
-			// url fichier example
-			String lien=baseURL.toString()+"/skos-play/excel_test/testExcelNative.xlsx";
-			
-			URL urls = new URL(lien);
+			URL urls = new URL(Example);
 			InputStream urlInputStream = urls.openStream(); // throws an IOException
 			in = new DataInputStream(new BufferedInputStream(urlInputStream));
 
 			break;
 		}
 		case FILE : {
+
 			log.debug("*Conversion à partir d'un fichier uploadé : "+file.getName());
 			if(file.isEmpty()) {
 				return doErrorConvert(request, "Uploaded file is empty");
 			}		
-			
+
 			in = file.getInputStream();
 			break;
 		}
@@ -395,7 +348,7 @@ public class SkosPlayController {
 			if(url.isEmpty()) {
 				return doErrorConvert(request, "Uploaded link file is empty");
 			}
-			
+
 			try {
 				URL urls = new URL(url);
 				InputStream urlInputStream = urls.openStream(); // throws an IOException
@@ -407,7 +360,7 @@ public class SkosPlayController {
 				ioeErrors.printStackTrace();
 				return doErrorConvert(request, ioeErrors.getMessage()); 
 			}
-			
+
 			break;
 		}
 		default:
@@ -426,15 +379,71 @@ public class SkosPlayController {
 				}
 			} catch (IOException ioe) { }
 		}
-		
+
 		return null;
 	}
-	
+
 	private void generateType(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl) {
 		ConceptSchemeFromExcel converter = new ConceptSchemeFromExcel(Writer, lang);
 		converter.setGenerateXl(generatexl);
 		converter.setGenerateXlDefinitions(generatexl);
 		converter.processInputStream(filefrom);
+	}
+	private ModelAndView convert(
+			Drive service, 
+			String id_fichier, 
+			SessionData sessionData, 
+			boolean useXl, 
+			boolean useZip, 
+			String language, 
+			RDFFormat theFormat, 
+			HttpServletRequest request
+			)
+	{
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+		InputStream fluxLecture;
+		DataInputStream content;
+		try {
+			service.files().export(id_fichier, MIME_TYPE_EXCEL).executeMediaAndDownloadTo(outputStream);
+			fluxLecture = new ByteArrayInputStream(outputStream.toByteArray());
+			content = new DataInputStream(new BufferedInputStream(fluxLecture));
+		} catch (Exception e1) {
+			String msg = e1.getMessage();
+			int indexOfBeginMessage = msg.lastIndexOf("\"message\":")+"\"message\":".length()+2;
+			int indexOfEndMessage = msg.indexOf("\"", indexOfBeginMessage);
+			log.debug("message d'erreur lié à l'ID google->"+msg.substring(indexOfBeginMessage, indexOfEndMessage));
+			return doErrorConvert(request,"Google message : \""+msg.substring(indexOfBeginMessage, indexOfEndMessage)+"\""); 
+		}
+
+		try
+		{
+			log.debug("Exécution de la conversion");
+			// lancer la conversion et récupérer le résultat en mémoire
+			ByteArrayOutputStream conversionResult = new ByteArrayOutputStream();
+			generateType(new ModelWriterFactory(useZip, theFormat).buildNewModelWriter(conversionResult),content,language,useXl);
+			log.debug("Conversion terminée");
+			sessionData.setGoogleConversionResult(conversionResult);
+			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
+			sessionData.setGoogleConversionResultContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());
+
+			ConvertFromData data = new ConvertFromData();
+			data.setGoogleId(id_fichier);
+
+			return new ModelAndView("convert", ConvertFromData.KEY, data);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return doErrorConvert(request,e.getMessage());
+		}
+
+		finally {
+			try {
+				if(fluxLecture!= null) {
+					fluxLecture.close();
+				}
+			} 
+			catch (IOException ioe) { }
+		}
 	}
 
 

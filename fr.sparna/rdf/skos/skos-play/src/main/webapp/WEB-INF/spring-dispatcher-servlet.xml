@@ -36,6 +36,10 @@
 
     <!-- scan les annotations pour trouver notamment @Controller et @Autowired -->
     <context:component-scan base-package="fr.sparna.rdf.skosplay"/>
+    
+    <!-- Map toutes les URLs qui ne sont pas mappées vers des méthodes vers des fichiers statiques -->
+    <mvc:default-servlet-handler/>
+	<mvc:annotation-driven />
 
 	<!-- 	Resolves the view names to JSP in the /WEB-INF/jsp/ folder 
 			(eg. if Controller returns view name "edit", the jsp /WEB-INF/jsp/edit.jsp will ba called)

@@ -3,6 +3,7 @@ package fr.sparna.google;
 
 import java.awt.Desktop;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
@@ -15,10 +16,12 @@ import org.apache.log4j.Logger;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.*;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 
@@ -54,8 +57,8 @@ public class GoogleAuthHelper {
     protected GoogleClientSecrets googleClientSecrets = this.importClientSecrets();
     protected String applicationName = null;
     protected String redirectUri;
-    // protected String baseRedirectUri = "http://localhost:8080/skos-play/convert";
-
+     
+   
     // =========================================================================
     // CONSTRUCTORS
     // =========================================================================
@@ -105,9 +108,9 @@ public class GoogleAuthHelper {
             }
 
             flow = new GoogleAuthorizationCodeFlow
-                    .Builder(httpTransport, jsonFactory, googleClientSecrets, scopes)
-                    .setApprovalPrompt(approvalPrompt)
-                    .setAccessType("offline").build();
+			        .Builder(httpTransport, jsonFactory, googleClientSecrets, scopes)
+			        .setApprovalPrompt(approvalPrompt)
+			        .setAccessType("offline").build();
             generateStateToken();
         }
         return flow;
@@ -122,7 +125,7 @@ public class GoogleAuthHelper {
     public Credential exchangeCode() throws IOException {
         this.flow = getFlow();
         Credential credential = null;
-
+        
         if (refreshToken == null) {
             GoogleTokenResponse response = flow.newTokenRequest(authorizationCode)
                     .setRedirectUri(redirectUri)
@@ -134,7 +137,7 @@ public class GoogleAuthHelper {
                     .setJsonFactory(jsonFactory)
                     .setClientSecrets(googleClientSecrets)
                     .build();
-            credential.setFromTokenResponse(response);
+            credential.setFromTokenResponse(response);            
         } else {
             credential = new GoogleCredential.Builder()
                     .setJsonFactory(jsonFactory)
@@ -162,6 +165,7 @@ public class GoogleAuthHelper {
      */
     public String getAuthorizationUrl() {
         this.flow = getFlow();
+
         GoogleAuthorizationCodeRequestUrl urlBuilder = flow.newAuthorizationUrl()
                 .setRedirectUri(redirectUri)
                 .setState(stateToken);

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.eclipse.rdf4j.repository.Repository;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.services.drive.Drive;
 
 import fr.sparna.google.GoogleAuthHelper;
 import fr.sparna.rdf.sesame.toolkit.handler.DebugHandler;
@@ -43,6 +44,10 @@ public class SessionData {
 	
 	protected String googleConversionResultContentType;
 	
+	protected Credential googleCredential;
+	
+	protected Drive service;
+	
 	/**
 	 * Stores this data into session
 	 * @param session
@@ -69,6 +74,14 @@ public class SessionData {
 		this.repository = repository;
 	}
 	
+	public Credential getGoogleCredential() {
+		return googleCredential;
+	}
+
+	public void setGoogleCredential(Credential googleCredential) {
+		this.googleCredential = googleCredential;
+	}
+
 	public LabelReader getLabelReader() {
 		return labelReader;
 	}
