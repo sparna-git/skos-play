@@ -4,10 +4,19 @@ public class ConvertFormData {
 
 	public static final String KEY = ConvertFormData.class.getCanonicalName();
 
+	// error messages to display in alerts
 	protected String errorMessagefile;
+	// google document ID from the form submission
 	protected String googleId;
+	// base URL of the application for the example files
 	protected String baseUrl;
+	// default language of the user to initialize the language selection
 	protected String defaultLanguage;
+	
+	protected boolean useZip;
+	protected boolean useXl;
+	protected String language;
+	protected String output;
 
 	public String getErrorMessagefile() {
 		return errorMessagefile;
@@ -48,4 +57,36 @@ public class ConvertFormData {
 		this.defaultLanguage = defaultLanguage;
 	}
 
+	public boolean isUseZip() {
+		return useZip;
+	}
+
+	public void setUseZip(boolean useZip) {
+		this.useZip = useZip;
+	}
+
+	public boolean isUseXl() {
+		return useXl;
+	}
+
+	public void setUseXl(boolean useXl) {
+		this.useXl = useXl;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	public String getOutput() {
+		return output;
+	}
+
+	public void setOutput(String output) {
+		this.output = output;
+	}
+	
 }

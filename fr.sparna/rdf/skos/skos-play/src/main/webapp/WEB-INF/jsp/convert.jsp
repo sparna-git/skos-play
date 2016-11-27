@@ -106,7 +106,8 @@
 							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-1.xlsx" selected>Example 1 (simple exemple, in english)</option>
 							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-2.xlsx">Example 2 (prefixes)</option>
 							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-3.xlsx">Example 3 (multilingual columns)</option>
-							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-4.xlsx">Example 4 (vocabulary other than SKOS)</option>  
+							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-4.xlsx">Example 4 (schema.org, datatypes, multiple sheets)</option>
+							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-5.xlsx">Example 5 (skos:Collection, inverse columns)</option>    
 						</select>						
 						<span class="help-block"><i><fmt:message key="convert.form.Example.download" />&nbsp;<a id="lien" href="${data.baseUrl}/excel_test/excel2skos-exemple-1.xlsx">Example 1 (simple exemple, in english)</a></i></span>
 					</div>
@@ -343,10 +344,11 @@
 			<fieldset id="excel-file-structure" style="margin-top:3em;">
 				<legend>Excel File structure</legend>
 				Your excel file <strong>MUST</strong> follow the structure described below to be converted to RDF. Otherwise you will get an exception or an empty RDF file.
-				<h4>Spreadsheet processing</h4>
+				Download and look at <a href="#source-example">the examples above</a>.
+				<h4 id="spreadsheet">Spreadsheet processing</h4>
 				Your file can contain any number of sheets. All the sheets are processed, and the extractor attempts to convert RDF from all of them.
 				If the structure of a sheet doesn't correspond to the expected template, the converter simply moves to the next one.
-				<h4>Sheet header processing</h4>
+				<h4 id="sheet-header">Sheet header processing</h4>
 					<strong>ConceptScheme URI</strong> : To be converted to RDF, a sheet <em>MUST contain a URI in cell B1</em>. This is interpreted as the URI of a <code>skos:ConceptScheme</code>.
 					<p /><strong>ConceptScheme metadata</strong> : The header CAN contain descriptive metadata of the ConceptScheme, by specifying a property URI in column A, either using a declared prefix
 					(e.g. <code>dct:title</code>, see below) or as a full URI (starting with 'http');
@@ -360,8 +362,9 @@
 					<p /><strong>Other lines</strong> : the header CAN contain other lines that will be ignored if column A does not contain a known prefixed property or the "PREFIX" keyword.
 					<p />This is how a typical header can look like :
 					<img src="images/convert-screenshot-header.png" width="100%" />
-				<h4>Sheet body processing</h4>
-					<p /><strong>Title row</strong> : The body MUST start by a row that declares the property corresponding to each column (e.g. <code>skos:prefLabel</code>, <code>skos:definition</code>), except column A.
+				<h4 id="sheet-body">Sheet body processing</h4>
+					<p /><strong>Title row</strong> : The body MUST start by a row that declares the property corresponding to each column (e.g. <code>skos:prefLabel</code>, <code>skos:definition</code>), except column A,
+					that will contain the URI for each resource being generated.
 					<p />This is how a typical title row can look like :
 					<img src="images/convert-screenshot-title-row.png" width="100%" />
 					<p /><strong>Line</strong> : Each line after the title row generates one resource with the URI read from column A. The column A MUST contain the URI of a resource, either as a
@@ -369,36 +372,56 @@
 					<p /><strong>Cell</strong> : Each cell in a line is processed, and the value is converted to a literal or object property :
 					<ul>
 						<li>If the cell value starts with 'http' or with a declared prefix, it will be interpreted as an object property;</li>
+						<li>Multiple URIs can be given in single cell, by separating them with commas <code>, </code>;</li>
+						<li>Otherwise, the value is interpreted as a literal;</li>
 						<li>Known SKOS labels and notes values (<code>skos:prefLabel</code>, <code>altLabel</code>, <code>hiddenLabel</code>, <code>definition</code>, <code>scopeNote</code>, <code>example</code>, <code>historyNote</code>, <code>changeNote</code>, <code>editorialNote</code>)
 						are always converted to literal values,	with the appropriate language (see below);</li>
 						<li>Known SKOS semantic relations (<code>skos:broader</code>, <code>narrower</code>, <code>related</code>, <code>exactMatch</code>, <code>closeMatch</code>, <code>broadMatch</code>, <code>narrowMatch</code>, <code>relatedMatch</code>)
-						are always converted to object properties; the URI can be given either as a full URI ()starting with 'http'), or using a declared prefix. Multiple URIs can be given in single cell, by separating them with commas <code>, </code>;</li>
+						are always converted to object properties; the URI can be given either as a full URI ()starting with 'http'), or using a declared prefix.
 						<li>Other well-known properties are interpreted as xsd:date literals, such as <code>dct:created</code>, <code>dct:modified</code>, <code>euvoc:startDate</code> and <code>euvoc:endDate</code>;</li>
 					</ul>
 					<p />This is how a typical body part can look like :
 					<img src="images/convert-screenshot-body.png" width="100%" />
-				<h4>Post-processings</h4>
-					After each line in the body has been converted, the following post-processings are applied :
-					<p /><strong>skos:inScheme</strong> : a <code>skos:inScheme</code> is added to every skos:Concept, with the value of the ConceptScheme given in column B1;
+				<h4 id="post-processings">Post-processings</h4>
+					<p />After each line in the body has been converted, the following post-processings are applied :
+					<p /><strong>skos:inScheme</strong> : a <code>skos:inScheme</code> is added to every skos:Concept and skos:Collection, with the value of the ConceptScheme given in column B1;
 					<p /><strong>skos:broader and skos narrower inverse</strong> : the inverse of <code>skos:broader</code> and <code>skos:narrower</code> are automatically added;
-					<p /><strong>skos:hasTopConcept and skos:topConceptOf</strong> : every <code>skos:Concept</code> without <code>skos:broader</code> or not referenced by a <code>skos:narrower</code> is given a <code>skos:topConceptOf/skos:hasTopConcept</code>;
+					<p /><strong>skos:hasTopConcept and skos:topConceptOf</strong> : every <code>skos:Concept</code> without <code>skos:broader</code> or not referenced by a <code>skos:narrower</code> is given a <code>skos:topConceptOf</code>
+					and its inverse <code>skos:hasTopConcept</code>;
 					<p /><strong>SKOS-XL generation</strong> : if requested by the corresponding parameter, labels are turned into SKOS-XL;	
-				<h4>Working with multilingual values</h4>
-					It is possible to specify the language to be assigned to the values generated from a given column by appending <code>@en</code> (or other language code) to the property declaration in the title row.
+				<h4 id="multilingual">Generating multilingual values</h4>
+					<p />You can specify the language to be assigned to a column by appending <code>@en</code> (or another language code) to the property declaration in the title row.
 					This also works in the header part for the metadata of the ConceptScheme.
 					<p />This is an example of multilingual columns declaration :
 					<img src="images/convert-screenshot-multilingual.png" width="100%" />
-				<h4>Generating something else than SKOS</h4>
-					The converter can actually generate other RDF vocabularies than SKOS. For this :
+				<h4 id="datatypes">Generating values with datatypes</h4>
+					<p />You can specify the datatype to be assigned to a column by appending <code>^^xsd:date</code> (or another datatype) to the property declaration in the title row.
+					<p />This is an example of columns declaration with a datatype :
+					<img src="images/convert-screenshot-datatype.png" width="100%" />
+				<h4 id="collection">Generating skos:Collection with object-to-subject columns</h4>
+					<p />By default, each line in the body generates an instance of skos:Concept. If you need to generate instances of skos:Collection (or other classes, by the way), do the following :
+					<ol>
+						<li>Add a column with the title <code>rdf:type</code>;</li>
+						<li>Add a column with the title <code>^skos:member</code>; note the '^' character at the beginning of the column name; this tells the converter to generate the corresponding property (here, skos:member)
+						<em>from the value given in the cell to the URI of the resource generated for this row</em>; 
+						</li>
+						<li>On the row corresponding to the collection, specify <code>skos:Collection</code> in the <code>rdf:type</code> column; for rows corresponding to skos:Concept, you can leave this column empty
+						or specify skos:Concept explicitely if you want;</li>
+						<li>On each row of skos:Concept that belongs to the collection, enter the collection URI in the <code>^skos:member</code> column;</li>						
+					</ol>
+					<p />This is an example of expressing collections using object-to-subject column :
+					<img src="images/convert-screenshot-collection.png" width="100%" />
+				<h4 id="vocabularies">Generating something else than SKOS</h4>
+					<p />The converter can actually generate other RDF vocabularies than SKOS. For this :
 					<ul>
 						<li>Add an <code>rdf:type</code> column to your data, and specify an explicit rdf:type for each row. Each row not having an explicit rdf:type will be considered a skos:Concept;</li>
-						<li>Make sure you still declare a URI in cell B1 (the URI of the generated class), but it will not be used in the data;</li>
+						<li>Make sure you still declare a URI in cell B1 (the URI of the generated class), this will be the URI of the named graph or file in which the data will be generated;</li>
 						<li>Don't declare metadata in the header;</li>
 					</ul>
 					<p />This is how this kind of file could look like :
 					<img src="images/convert-screenshot-other-skos.png" width="100%" />
-				<h4>Default prefixes</h4>
-					The list of known prefixes is :
+				<h4 id="default prefixes">Default prefixes</h4>
+					<p />The list of known prefixes is :
 					<ul>
 						<li><code>rdf</code></li>
 						<li><code>rdfs</code></li>
@@ -446,7 +469,7 @@
 		   		
 			    <c:if test="${data.googleId != null}">
 			    	enabledInput('google');
-			    	window.open('downloadGoogleResult', '_blank');
+			    	window.open('googleDriveConversion', '_blank');
 			    </c:if>
 			    
 				$(function(){	 

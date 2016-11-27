@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.DC;
@@ -94,38 +93,6 @@ public class PrefixManager {
 		} else {
 			return null;
 		}
-	}
-	
-	public static String property(String valueWithPotentialLanguageAndDatatype) {
-		String property = valueWithPotentialLanguageAndDatatype;
-		if(valueWithPotentialLanguageAndDatatype.contains("@")) {
-			property = valueWithPotentialLanguageAndDatatype.substring(0, valueWithPotentialLanguageAndDatatype.lastIndexOf('@'));
-		}
-		if(valueWithPotentialLanguageAndDatatype.contains("^^")) {
-			property = valueWithPotentialLanguageAndDatatype.substring(0, valueWithPotentialLanguageAndDatatype.lastIndexOf("^^"));
-		}
-		return property;
-	}
-	
-	public static Optional<String> language(String valueWithPotentialLanguageAndDatatype) {
-		if(valueWithPotentialLanguageAndDatatype.contains("@")) {
-			return Optional.of(valueWithPotentialLanguageAndDatatype.substring(valueWithPotentialLanguageAndDatatype.lastIndexOf('@')+1));
-		}
-		return Optional.empty();
-	}
-	
-	public Optional<IRI> datatype(String valueWithPotentialLanguageAndDatatype) {
-		if(valueWithPotentialLanguageAndDatatype.contains("^^")) {
-			String dt = valueWithPotentialLanguageAndDatatype.substring(valueWithPotentialLanguageAndDatatype.lastIndexOf("^^")+2);
-			if(usesKnownPrefix(dt)) {
-				return Optional.of(SimpleValueFactory.getInstance().createIRI(this.uri(dt, false)));
-			} else if (dt.startsWith("<http")){
-				return Optional.of(SimpleValueFactory.getInstance().createIRI(dt.substring(1, dt.length()-2)));
-			} else {
-				return Optional.of(SimpleValueFactory.getInstance().createIRI(dt));
-			}
-		}
-		return Optional.empty();
 	}
 	
 }

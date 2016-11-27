@@ -1,7 +1,9 @@
 package fr.sparna.rdf.skos.xls2skos;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
@@ -11,6 +13,7 @@ import javax.xml.datatype.DatatypeFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 
@@ -31,7 +34,7 @@ public final class ValueGeneratorFactory {
 		};
 	}
 	
-	public static ValueGeneratorIfc resourcesOrLiteral(IRI property, char separator, String lang, PrefixManager prefixManager) {	
+	public static ValueGeneratorIfc resourcesOrLiteral(IRI property, char separator, String lang, PrefixManager prefixManager, boolean inverse) {	
 		return (model, subject, value, language, datatype) -> {
 			if (StringUtils.isBlank(value)) {
 				return null;
@@ -39,16 +42,41 @@ public final class ValueGeneratorFactory {
 
 			// if the value starts with http://, or uses a known namespace, then try to parse it as a resource
 			if(value.startsWith("http://") || prefixManager.usesKnownPrefix(value.trim())) {
-				Arrays.stream(
-						StringUtils.split(value, separator)
-						).forEach(
-								uri -> model.add(subject, property, SimpleValueFactory.getInstance().createIRI(prefixManager.uri(uri.trim(), false)))
-								// uri -> model.add(subject, property, SimpleValueFactory.getInstance().createIRI(ConceptSchemeFromExcel.fixUri(uri.trim())))
-				);
+				if(!inverse) {
+					Arrays.stream(
+							StringUtils.split(value, separator)
+							).forEach(
+									uri -> model.add(subject, property, SimpleValueFactory.getInstance().createIRI(prefixManager.uri(uri.trim(), false)))
+					);
+				} else {
+					Arrays.stream(
+							StringUtils.split(value, separator)
+							).forEach(
+									uri -> model.add(SimpleValueFactory.getInstance().createIRI(prefixManager.uri(uri.trim(), false)), property,subject)
+					);
+				}
 			} else {
 				// consider it like a literal
 				if(datatype != null) {
-					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value, datatype));
+					Literal l = null;
+					if(datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#date")) {
+						Date d = ExcelHelper.asCalendar(value).getTime();
+						l = SimpleValueFactory.getInstance().createLiteral(
+								new SimpleDateFormat("yyyy-MM-dd").format(d),
+								SimpleValueFactory.getInstance().createIRI("http://www.w3.org/2001/XMLSchema#date")
+						);
+					} else if(datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#dateTime")) {
+						try {
+							l = SimpleValueFactory.getInstance().createLiteral(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)ExcelHelper.asCalendar(value)));
+						} catch (DatatypeConfigurationException e) {
+							e.printStackTrace();
+						}
+						
+					} else {
+						l = SimpleValueFactory.getInstance().createLiteral(value, datatype);
+					}
+					
+					model.add(subject, property, l);
 				} else if(language != null) {
 					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value, language));
 				} else {

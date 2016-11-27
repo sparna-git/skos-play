@@ -40,13 +40,15 @@ public class SessionData {
 	
 	protected GoogleAuthHelper googleAuthHelper;
 
-	protected ByteArrayOutputStream googleConversionResult;
-	
+	// to download the google conversion result
+	protected ByteArrayOutputStream googleConversionResult;	
 	protected String googleConversionResultContentType;
 	
 	protected Credential googleCredential;
 	
 	protected Drive service;
+	
+	protected ConvertFormData convertFormData;
 	
 	/**
 	 * Stores this data into session
@@ -136,6 +138,14 @@ public class SessionData {
 
 	public void setGoogleConversionResultContentType(String googleConversionResultContentType) {
 		this.googleConversionResultContentType = googleConversionResultContentType;
+	}
+
+	public ConvertFormData getConvertFormData() {
+		return convertFormData;
+	}
+
+	public void setConvertFormData(ConvertFormData convertFormData) {
+		this.convertFormData = convertFormData;
 	}
 
 	public static void main(String...strings) throws Exception {

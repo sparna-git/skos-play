@@ -1,7 +1,6 @@
 package fr.sparna.rdf.skos.xls2skos;
 
 import static fr.sparna.rdf.skos.xls2skos.ExcelHelper.getCellValue;
-import static fr.sparna.rdf.skos.xls2skos.ExcelHelper.getColumnNames;
 
 import java.io.File;
 import java.io.InputStream;
@@ -14,8 +13,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Level;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -39,11 +40,9 @@ import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.commons.io.InputStreamUtil;
 
 
-
-public class ConceptSchemeFromExcel {
+public class Xls2Skos {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
@@ -84,7 +83,7 @@ public class ConceptSchemeFromExcel {
 	
 	private PrefixManager prefixManager = new PrefixManager();
 	
-	public ConceptSchemeFromExcel(ModelWriterIfc modelWriter, String lang) {
+	public Xls2Skos(ModelWriterIfc modelWriter, String lang) {
 		
 		this.modelWriter = modelWriter;;
 		this.lang = lang;
@@ -126,7 +125,7 @@ public class ConceptSchemeFromExcel {
 		valueGenerators.put("dct:created", 			ValueGeneratorFactory.dateLiteral(DCTERMS.CREATED));
 		valueGenerators.put("dct:modified", 		ValueGeneratorFactory.dateLiteral(DCTERMS.MODIFIED));
 		// a source can be a literal or a URI
-		valueGenerators.put("dct:source", 			ValueGeneratorFactory.resourcesOrLiteral(DCTERMS.SOURCE, ',', this.lang, prefixManager));
+		valueGenerators.put("dct:source", 			ValueGeneratorFactory.resourcesOrLiteral(DCTERMS.SOURCE, ',', this.lang, prefixManager, false));
 		// dct metadata for the ConceptScheme
 		valueGenerators.put("dct:title", 			ValueGeneratorFactory.langLiteral(DCTERMS.TITLE, this.lang));
 		valueGenerators.put("dct:description", 		ValueGeneratorFactory.langLiteral(DCTERMS.DESCRIPTION, this.lang));
@@ -244,10 +243,14 @@ public class ConceptSchemeFromExcel {
 			log.debug(sheet.getSheetName()+" : B1 is empty, ignoring sheet.");
 			return null;
 		} else {
+			String fixedUri = prefixManager.uri(uri, true);
 			try {
-				new URI(prefixManager.uri(uri, true));
+				new URI(fixedUri);
 			} catch (URISyntaxException e) {
 				log.debug(sheet.getSheetName()+" : B1 is not a valid URI ('"+uri+"'), ignoring sheet");
+				return null;
+			} catch (NullPointerException e) {
+				log.debug("Cannot build a valid URI from '"+uri+"', ignoring sheet");
 				return null;
 			}
 		}		
@@ -304,26 +307,27 @@ public class ConceptSchemeFromExcel {
 				String key = getCellValue(sheet.getRow(rowIndex).getCell(0));
 				String value = getCellValue(sheet.getRow(rowIndex).getCell(1));
 				
+				ColumnHeader header = ColumnHeader.parse(key, prefixManager);
 				if(
+						header != null
+						&&
 						StringUtils.isNotBlank(value)
 						&&
-						StringUtils.isNoneBlank(key)
-						&&
-						valueGenerators.containsKey(PrefixManager.property(key))
+						valueGenerators.containsKey(header.getProperty())
 				) {
-					valueGenerators.get(PrefixManager.property(key)).addValue(
+					valueGenerators.get(header.getProperty()).addValue(
 							model,
 							csResource,
 							value,
-							PrefixManager.language(key).orElse(lang),
-							prefixManager.datatype(key).orElse(null)
+							header.getLanguage().orElse(lang),
+							header.getDatatype().orElse(null)
 					);
 				}
 			}
 		}		
 
 		// read the column names from the header row
-		List<String> columnNames = getColumnNames(sheet, headerRowIndex);
+		List<ColumnHeader> columnNames = parseColumnNames(sheet, headerRowIndex);
 		
 		// read the rows after the header and process each row
 		for (int rowIndex = (headerRowIndex + 1); rowIndex <= sheet.getLastRowNum(); rowIndex++) {
@@ -333,11 +337,12 @@ public class ConceptSchemeFromExcel {
 			}
 		}
 		
-		// add a skos:inScheme to every skos:Concept that was created
+		// add a skos:inScheme to every skos:Concept or skos:Collection that was created
 		model.filter(null, RDF.TYPE, SKOS.CONCEPT).forEach(
-				s -> {
-					model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource);
-				}
+				s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
+		);
+		model.filter(null, RDF.TYPE, SKOS.COLLECTION).forEach(
+				s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
 		);
 		
 		// if at least one skos:inScheme was added, declare the URI in B1 as a ConceptScheme
@@ -398,7 +403,7 @@ public class ConceptSchemeFromExcel {
 				for (String aString : SKOS2SKOSXL_URI_RULESET) {
 					// Load SPARQL query definition
 			        InputStream src = this.getClass().getResourceAsStream(aString);		        
-					String sparql = InputStreamUtil.readToString(src);
+			        String sparql =  IOUtils.toString(src);
 					
 					Update u = c.prepareUpdate(sparql);
 					u.execute();
@@ -412,8 +417,8 @@ public class ConceptSchemeFromExcel {
 				
 				for (String aString : SKOS2SKOSXL_NOTES_URI_RULESET) {
 					// Load SPARQL query definition
-			        InputStream src = this.getClass().getResourceAsStream(aString);		        
-					String sparql = InputStreamUtil.readToString(src);
+			        InputStream src = this.getClass().getResourceAsStream(aString);	
+			        String sparql =  IOUtils.toString(src);
 					Update u = c.prepareUpdate(sparql);
 					u.execute();
 				}
@@ -436,7 +441,7 @@ public class ConceptSchemeFromExcel {
 		
 	}
 
-	private Resource handleRow(Model model, List<String> columnNames, PrefixManager prefixManager, Row row) {
+	private Resource handleRow(Model model, List<ColumnHeader> columnNames, PrefixManager prefixManager, Row row) {
 		RowBuilder rowBuilder = null;
 		for (int colIndex = 0; colIndex < columnNames.size(); colIndex++) {
 			String value = getCellValue(row.getCell(colIndex));
@@ -451,16 +456,16 @@ public class ConceptSchemeFromExcel {
 			
 			// process the cell for each subsequent columns after the first one
 			if (StringUtils.isNotBlank(value)) {	
-				String propertyUri = PrefixManager.property(columnNames.get(colIndex));
-				ValueGeneratorIfc valueAdder = valueGenerators.get(propertyUri);
+				ValueGeneratorIfc valueAdder = valueGenerators.get(columnNames.get(colIndex).getProperty());
 				
 				// if this is not one of the known processor, but the prefix is known, then defaults to a generic processor
-				if(valueAdder == null && prefixManager.expand(columnNames.get(colIndex)) != null) {
+				if(valueAdder == null && prefixManager.expand(columnNames.get(colIndex).getProperty()) != null) {
 					valueAdder = ValueGeneratorFactory.resourcesOrLiteral(
-							SimpleValueFactory.getInstance().createIRI(prefixManager.expand(propertyUri)),
+							SimpleValueFactory.getInstance().createIRI(prefixManager.expand(columnNames.get(colIndex).getProperty())),
 							',',
-							PrefixManager.language(columnNames.get(colIndex)).orElse(lang),
-							prefixManager
+							columnNames.get(colIndex).getLanguage().orElse(lang),
+							prefixManager,
+							columnNames.get(colIndex).isInverse()
 					);
 				}
 				
@@ -468,8 +473,8 @@ public class ConceptSchemeFromExcel {
 					rowBuilder.addCell(
 							valueAdder,
 							value,
-							PrefixManager.language(columnNames.get(colIndex)).orElse(lang),
-							prefixManager.datatype(columnNames.get(colIndex)).orElse(null)
+							columnNames.get(colIndex).getLanguage().orElse(lang),
+							columnNames.get(colIndex).getDatatype().orElse(null)
 					);
 				}
 			}
@@ -508,6 +513,23 @@ public class ConceptSchemeFromExcel {
 				}
 			}
 		}
+	}
+	
+	public List<ColumnHeader> parseColumnNames(Sheet worksheet, int rowNumber) {
+		List<ColumnHeader> columnNames = new ArrayList<>();
+		Row row = worksheet.getRow(rowNumber);
+		if(row != null) {
+			for (int i = 0; true; i++) {
+				Cell cell = row.getCell(i);
+				if (null == cell) break;
+				String columnName = cell.getStringCellValue();
+				if (StringUtils.isBlank(columnName)) {
+					break;
+				}
+				columnNames.add(ColumnHeader.parse(columnName, prefixManager));
+			}
+		}
+		return columnNames;
 	}
 
 	public List<String> getSheetsToIgnore() {
@@ -562,7 +584,7 @@ public class ConceptSchemeFromExcel {
 		writer.setSaveGraphFile(true);
 		writer.setGraphSuffix("/graph");
 		
-		ConceptSchemeFromExcel me = new ConceptSchemeFromExcel(writer, "fr");
+		Xls2Skos me = new Xls2Skos(writer, "fr");
 		me.setGenerateXl(false);
 		me.setGenerateXlDefinitions(false);
 		// me.loadAllToFile(new File("/home/thomas/sparna/00-Clients/Sparna/20-Repositories/sparna/fr.sparna/rdf/skos/xls2skos/src/test/resources/test-excel-saved-from-libreoffice.xlsx"));
@@ -578,7 +600,7 @@ public class ConceptSchemeFromExcel {
 			String lang
 	) throws Exception {
 		OutputStreamModelWriter modelWriter = new OutputStreamModelWriter(output);
-		ConceptSchemeFromExcel converter = new ConceptSchemeFromExcel(modelWriter, lang);
+		Xls2Skos converter = new Xls2Skos(modelWriter, lang);
 		converter.setGenerateXl(false);
 		converter.setGenerateXlDefinitions(false);
 		converter.processInputStream(input);
