@@ -410,9 +410,9 @@
 			    	$('#loading').hide();
 				    $('#submit-button').attr('disabled', false);
 			    });
+			    
 	      	});
-	      	
-
+			    
 		</script>
 	</body>
 </html>
