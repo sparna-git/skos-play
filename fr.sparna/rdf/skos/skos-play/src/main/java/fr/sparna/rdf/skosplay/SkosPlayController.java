@@ -254,10 +254,11 @@ public class SkosPlayController {
 			return convert(service,id_fichier,sessionData,useXl,useZip,language,theFormat, request);
 		}
 		// si pas de code en paramètre, on renvoie vers la page de formulaire
-		ConvertFromData data = new ConvertFromData();
+		ConvertFormData data = new ConvertFormData();
 		URL baseURL = new URL("http://"+request.getServerName()+((request.getServerPort() != 80)?":"+request.getServerPort():"")+request.getContextPath());
 		data.setBaseUrl(baseURL.toString());
-		return new ModelAndView("convert", ConvertFromData.KEY, data);
+		data.setDefaultLanguage(SessionData.get(request.getSession()).getUserLocale().getLanguage());
+		return new ModelAndView("convert", ConvertFormData.KEY, data);
 	}
 
 
@@ -284,7 +285,7 @@ public class SkosPlayController {
 		RDFFormat theFormat = RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format).orElse(RDFFormat.RDFXML);		
 		URL baseURL = new URL("http://"+request.getServerName()+((request.getServerPort() != 80)?":"+request.getServerPort():"")+request.getContextPath());
 		log.debug("Base URL is "+baseURL.toString());
-		ConvertFromData data = new ConvertFromData();
+		ConvertFormData data = new ConvertFormData();
 		data.setBaseUrl(baseURL.toString());
 		/**************************CONVERSION RDF**************************/
 		InputStream in = null;
@@ -427,10 +428,10 @@ public class SkosPlayController {
 			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
 			sessionData.setGoogleConversionResultContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());
 
-			ConvertFromData data = new ConvertFromData();
+			ConvertFormData data = new ConvertFormData();
 			data.setGoogleId(id_fichier);
 
-			return new ModelAndView("convert", ConvertFromData.KEY, data);
+			return new ModelAndView("convert", ConvertFormData.KEY, data);
 		} catch(Exception e) {
 			e.printStackTrace();
 			return doErrorConvert(request,e.getMessage());
@@ -777,9 +778,9 @@ public class SkosPlayController {
 			HttpServletRequest request,
 			String message
 			) {
-		ConvertFromData data = new ConvertFromData();
+		ConvertFormData data = new ConvertFormData();
 		data.setErrorMessagefile(message);
-		request.setAttribute(ConvertFromData.KEY, data);
+		request.setAttribute(ConvertFormData.KEY, data);
 		return new ModelAndView("/convert");
 	}
 

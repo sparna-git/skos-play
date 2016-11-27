@@ -20,13 +20,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.impl.LinkedHashModelFactory;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
-import org.eclipse.rdf4j.model.vocabulary.OWL;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
 import org.eclipse.rdf4j.query.Update;
@@ -82,13 +82,15 @@ public class ConceptSchemeFromExcel {
 	 */
 	private final Map<String, ValueGeneratorIfc> valueGenerators = new HashMap<>();
 	
+	private PrefixManager prefixManager = new PrefixManager();
+	
 	public ConceptSchemeFromExcel(ModelWriterIfc modelWriter, String lang) {
 		
 		this.modelWriter = modelWriter;;
 		this.lang = lang;
 		
 		// inScheme for additionnal inScheme information, if needed
-		valueGenerators.put("skos:inScheme", 		ValueGeneratorFactory.resources(SKOS.IN_SCHEME, ','));
+		valueGenerators.put("skos:inScheme", 		ValueGeneratorFactory.resources(SKOS.IN_SCHEME, ',', prefixManager));
 		// labels
 		valueGenerators.put("skos:prefLabel", 		ValueGeneratorFactory.langLiteral(SKOS.PREF_LABEL, this.lang));
 		valueGenerators.put("skos:altLabel", 		ValueGeneratorFactory.langLiteral(SKOS.ALT_LABEL, this.lang));
@@ -103,28 +105,28 @@ public class ConceptSchemeFromExcel {
 		// notation
 		valueGenerators.put("skos:notation", 		ValueGeneratorFactory.plainLiteral(SKOS.NOTATION));
 		// semantic relations
-		valueGenerators.put("skos:broader", 		ValueGeneratorFactory.resources(SKOS.BROADER, ','));
-		valueGenerators.put("skos:narrower", 		ValueGeneratorFactory.resources(SKOS.NARROWER, ','));
-		valueGenerators.put("skos:related", 		ValueGeneratorFactory.resources(SKOS.RELATED, ','));
+		valueGenerators.put("skos:broader", 		ValueGeneratorFactory.resources(SKOS.BROADER, ',', prefixManager));
+		valueGenerators.put("skos:narrower", 		ValueGeneratorFactory.resources(SKOS.NARROWER, ',', prefixManager));
+		valueGenerators.put("skos:related", 		ValueGeneratorFactory.resources(SKOS.RELATED, ',', prefixManager));
 		// mapping relations		
-		valueGenerators.put("skos:exactMatch", 		ValueGeneratorFactory.resources(SKOS.EXACT_MATCH, ','));
-		valueGenerators.put("skos:closeMatch", 		ValueGeneratorFactory.resources(SKOS.CLOSE_MATCH, ','));
-		valueGenerators.put("skos:relatedMatch", 	ValueGeneratorFactory.resources(SKOS.RELATED_MATCH, ','));
-		valueGenerators.put("skos:broadMatch", 		ValueGeneratorFactory.resources(SKOS.BROAD_MATCH, ','));
-		valueGenerators.put("skos:narrowMatch", 	ValueGeneratorFactory.resources(SKOS.RELATED_MATCH, ','));
+		valueGenerators.put("skos:exactMatch", 		ValueGeneratorFactory.resources(SKOS.EXACT_MATCH, ',', prefixManager));
+		valueGenerators.put("skos:closeMatch", 		ValueGeneratorFactory.resources(SKOS.CLOSE_MATCH, ',', prefixManager));
+		valueGenerators.put("skos:relatedMatch", 	ValueGeneratorFactory.resources(SKOS.RELATED_MATCH, ',', prefixManager));
+		valueGenerators.put("skos:broadMatch", 		ValueGeneratorFactory.resources(SKOS.BROAD_MATCH, ',', prefixManager));
+		valueGenerators.put("skos:narrowMatch", 	ValueGeneratorFactory.resources(SKOS.RELATED_MATCH, ',', prefixManager));
 		// XL labels
-		valueGenerators.put("skosxl:prefLabel", 	ValueGeneratorFactory.skosXlLabel(SKOSXL.PREF_LABEL));
-		valueGenerators.put("skosxl:altLabel", 		ValueGeneratorFactory.skosXlLabel(SKOSXL.ALT_LABEL));
-		valueGenerators.put("skosxl:hiddenLabel",	ValueGeneratorFactory.skosXlLabel(SKOSXL.HIDDEN_LABEL));
+		valueGenerators.put("skosxl:prefLabel", 	ValueGeneratorFactory.skosXlLabel(SKOSXL.PREF_LABEL, prefixManager));
+		valueGenerators.put("skosxl:altLabel", 		ValueGeneratorFactory.skosXlLabel(SKOSXL.ALT_LABEL, prefixManager));
+		valueGenerators.put("skosxl:hiddenLabel",	ValueGeneratorFactory.skosXlLabel(SKOSXL.HIDDEN_LABEL, prefixManager));
 		valueGenerators.put("skosxl:literalForm", 	ValueGeneratorFactory.langLiteral(SKOSXL.LITERAL_FORM, this.lang));
 		// other concepts metadata
-		valueGenerators.put("euvoc:status", 		ValueGeneratorFactory.resources(SimpleValueFactory.getInstance().createURI("http://publications.europa.eu/ontology/euvoc#status"), ','));		
-		valueGenerators.put("euvoc:startDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createURI("http://eurovoc.europa.eu/schema#startDate")));
-		valueGenerators.put("euvoc:endDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createURI("http://eurovoc.europa.eu/schema#endDate")));
+		valueGenerators.put("euvoc:status", 		ValueGeneratorFactory.resources(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#status"), ',', prefixManager));		
+		valueGenerators.put("euvoc:startDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createIRI("http://eurovoc.europa.eu/schema#startDate")));
+		valueGenerators.put("euvoc:endDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createIRI("http://eurovoc.europa.eu/schema#endDate")));
 		valueGenerators.put("dct:created", 			ValueGeneratorFactory.dateLiteral(DCTERMS.CREATED));
 		valueGenerators.put("dct:modified", 		ValueGeneratorFactory.dateLiteral(DCTERMS.MODIFIED));
 		// a source can be a literal or a URI
-		valueGenerators.put("dct:source", 			ValueGeneratorFactory.resourcesOrLiteral(DCTERMS.SOURCE, ',', this.lang));
+		valueGenerators.put("dct:source", 			ValueGeneratorFactory.resourcesOrLiteral(DCTERMS.SOURCE, ',', this.lang, prefixManager));
 		// dct metadata for the ConceptScheme
 		valueGenerators.put("dct:title", 			ValueGeneratorFactory.langLiteral(DCTERMS.TITLE, this.lang));
 		valueGenerators.put("dct:description", 		ValueGeneratorFactory.langLiteral(DCTERMS.DESCRIPTION, this.lang));
@@ -214,41 +216,7 @@ public class ConceptSchemeFromExcel {
 			return null;
 		}
 		
-		String uri = getCellValue(sheet.getRow(0).getCell(1));
-		
-		if(StringUtils.isBlank(uri)) {
-			log.debug(sheet.getSheetName()+" : B1 is empty, ignoring sheet.");
-			return null;
-		} else {
-			try {
-				new URI(fixUri(uri));
-			} catch (URISyntaxException e) {
-				log.debug(sheet.getSheetName()+" : B1 is not a valid URI ('"+uri+"'), ignoring sheet");
-				return null;
-			}
-		}		
-		
-		log.debug("Processing sheet: " + sheet.getSheetName());
-		
-		Model model = new LinkedHashModelFactory().createEmptyModel();
-		SimpleValueFactory svf = SimpleValueFactory.getInstance();
-
-		String csUri = fixUri(uri);
-		
-		// if the URI was already processed, this is an exception
-		if(this.csModels.containsKey(csUri)) {
-			throw new Xls2SkosException("Duplicate ConceptScheme found : "+csUri+" - make sure it is declared only once in the file.");
-		}
-		
-		Resource csResource = svf.createIRI(csUri);
-		model.add(csResource, RDF.TYPE, SKOS.CONCEPT_SCHEME);
-		
-		// read the prefixes in the top 20 rows
-		Map<String, String> prefixes = new HashMap<>();
-		// always add some known namespaces
-		prefixes.put("rdf", RDF.NAMESPACE);
-		prefixes.put("owl", OWL.NAMESPACE);
-		
+		// read the prefixes in the top 20 rows		
 		for (int rowIndex = 1; rowIndex <= 20; rowIndex++) {
 			if(sheet.getRow(rowIndex) != null) {
 				String prefixKeyword = getCellValue(sheet.getRow(rowIndex).getCell(0));
@@ -263,14 +231,40 @@ public class ConceptSchemeFromExcel {
 						}
 						String namespace = getCellValue(sheet.getRow(rowIndex).getCell(2));
 						if(StringUtils.isNotBlank(namespace)) {
-							prefixes.put(prefix, namespace);
+							prefixManager.register(prefix, namespace);
 						}
 					}
 				}
 			}
 		}
-
 		
+		String uri = getCellValue(sheet.getRow(0).getCell(1));
+		
+		if(StringUtils.isBlank(uri)) {
+			log.debug(sheet.getSheetName()+" : B1 is empty, ignoring sheet.");
+			return null;
+		} else {
+			try {
+				new URI(prefixManager.uri(uri, true));
+			} catch (URISyntaxException e) {
+				log.debug(sheet.getSheetName()+" : B1 is not a valid URI ('"+uri+"'), ignoring sheet");
+				return null;
+			}
+		}		
+		
+		log.debug("Processing sheet: " + sheet.getSheetName());
+		
+		Model model = new LinkedHashModelFactory().createEmptyModel();
+		SimpleValueFactory svf = SimpleValueFactory.getInstance();
+
+		String csUri = prefixManager.uri(uri, true);
+		
+		// if the URI was already processed, this is an exception
+		if(this.csModels.containsKey(csUri)) {
+			throw new Xls2SkosException("Duplicate ConceptScheme found : "+csUri+" - make sure it is declared only once in the file.");
+		}
+		
+		Resource csResource = svf.createIRI(csUri);	
 		
 		int headerRowIndex = 1;
 		for (int rowIndex = headerRowIndex; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
@@ -282,13 +276,13 @@ public class ConceptSchemeFromExcel {
 							(
 									valueGenerators.containsKey(valueColumnB)
 									||
-									expandUri(valueColumnB, prefixes) != null
+									prefixManager.expand(valueColumnB) != null
 							)
 						&&
 							(
 									valueGenerators.containsKey(valueColumnC)
 									||
-									expandUri(valueColumnC, prefixes) != null
+									prefixManager.expand(valueColumnC) != null
 							)
 				) {
 					headerRowIndex = rowIndex;
@@ -309,8 +303,21 @@ public class ConceptSchemeFromExcel {
 			if(sheet.getRow(rowIndex) != null) {
 				String key = getCellValue(sheet.getRow(rowIndex).getCell(0));
 				String value = getCellValue(sheet.getRow(rowIndex).getCell(1));
-				if(valueGenerators.containsKey(key) && StringUtils.isNotBlank(value)) {
-					valueGenerators.get(key).addValue(model, csResource, value);
+				
+				if(
+						StringUtils.isNotBlank(value)
+						&&
+						StringUtils.isNoneBlank(key)
+						&&
+						valueGenerators.containsKey(PrefixManager.property(key))
+				) {
+					valueGenerators.get(PrefixManager.property(key)).addValue(
+							model,
+							csResource,
+							value,
+							PrefixManager.language(key).orElse(lang),
+							prefixManager.datatype(key).orElse(null)
+					);
 				}
 			}
 		}		
@@ -322,7 +329,7 @@ public class ConceptSchemeFromExcel {
 		for (int rowIndex = (headerRowIndex + 1); rowIndex <= sheet.getLastRowNum(); rowIndex++) {
 			Row r = sheet.getRow(rowIndex);
 			if(r != null) {
-				handleRow(model, columnNames, prefixes, r);
+				handleRow(model, columnNames, prefixManager, r);
 			}
 		}
 		
@@ -332,6 +339,11 @@ public class ConceptSchemeFromExcel {
 					model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource);
 				}
 		);
+		
+		// if at least one skos:inScheme was added, declare the URI in B1 as a ConceptScheme
+		if(!model.filter(null, RDF.TYPE, SKOS.CONCEPT).isEmpty()) {
+			model.add(csResource, RDF.TYPE, SKOS.CONCEPT_SCHEME);
+		}			
 		
 		// add the inverse broaders and narrowers
 		model.filter(null, SKOS.BROADER, null).forEach(
@@ -345,7 +357,7 @@ public class ConceptSchemeFromExcel {
 				}
 		);
 		
-		// add skos:topConceptOf and skos:hasTopConcept for each skos:Concept
+		// add skos:topConceptOf and skos:hasTopConcept for each skos:Concept without broader/narrower
 		model.filter(null, RDF.TYPE, SKOS.CONCEPT).subjects().forEach(
 				concept -> {
 					if(
@@ -424,7 +436,7 @@ public class ConceptSchemeFromExcel {
 		
 	}
 
-	private Resource handleRow(Model model, List<String> columnNames, Map<String, String> prefixes, Row row) {
+	private Resource handleRow(Model model, List<String> columnNames, PrefixManager prefixManager, Row row) {
 		RowBuilder rowBuilder = null;
 		for (int colIndex = 0; colIndex < columnNames.size(); colIndex++) {
 			String value = getCellValue(row.getCell(colIndex));
@@ -433,24 +445,32 @@ public class ConceptSchemeFromExcel {
 					return null;
 				}
 				// create the RowBuilder with the URI in the first column
-				rowBuilder = new RowBuilder(model, fixUri(value));
+				rowBuilder = new RowBuilder(model, prefixManager.uri(value, true));
 				continue;
 			}
 			
 			// process the cell for each subsequent columns after the first one
-			if (StringUtils.isNotBlank(value)) {
+			if (StringUtils.isNotBlank(value)) {	
+				String propertyUri = PrefixManager.property(columnNames.get(colIndex));
+				ValueGeneratorIfc valueAdder = valueGenerators.get(propertyUri);
 				
-				ValueGeneratorIfc valueAdder = valueGenerators.get(columnNames.get(colIndex));
-				if(valueAdder == null && expandUri(columnNames.get(colIndex), prefixes) != null) {
+				// if this is not one of the known processor, but the prefix is known, then defaults to a generic processor
+				if(valueAdder == null && prefixManager.expand(columnNames.get(colIndex)) != null) {
 					valueAdder = ValueGeneratorFactory.resourcesOrLiteral(
-							SimpleValueFactory.getInstance().createURI(expandUri(columnNames.get(colIndex), prefixes)),
+							SimpleValueFactory.getInstance().createIRI(prefixManager.expand(propertyUri)),
 							',',
-							lang
+							PrefixManager.language(columnNames.get(colIndex)).orElse(lang),
+							prefixManager
 					);
 				}
 				
 				if(valueAdder != null) {
-					rowBuilder.addCell(valueAdder, value);
+					rowBuilder.addCell(
+							valueAdder,
+							value,
+							PrefixManager.language(columnNames.get(colIndex)).orElse(lang),
+							prefixManager.datatype(columnNames.get(colIndex)).orElse(null)
+					);
 				}
 			}
 		}
@@ -471,16 +491,16 @@ public class ConceptSchemeFromExcel {
 
 		public RowBuilder(Model model, String uri) {
 			this.model = model;
-			conceptResource = SimpleValueFactory.getInstance().createURI(uri);
+			conceptResource = SimpleValueFactory.getInstance().createIRI(uri);
 			// model.add(SimpleValueFactory.getInstance().createURI(uri), RDF.TYPE, SKOS.CONCEPT);
 			// set the current subject to the conceptResource by default
 			subject = conceptResource;
 		}
 
-		public void addCell(ValueGeneratorIfc valueAdder, String value) {
+		public void addCell(ValueGeneratorIfc valueAdder, String value, String language, IRI datatype) {
 			// if the column is unknown, ignore it
 			if(valueAdder != null) {
-				Resource newResource = valueAdder.addValue(model, subject, value);
+				Resource newResource = valueAdder.addValue(model, subject, value, language, datatype);
 				if (null != newResource) {
 					// change the focus to the new resource in the case of xl labels
 					// so that subsequent columns are added on that resource
@@ -520,25 +540,6 @@ public class ConceptSchemeFromExcel {
 
 	public void setGenerateXlDefinitions(boolean generateXlDefinitions) {
 		this.generateXlDefinitions = generateXlDefinitions;
-	}
-	
-	public static String fixUri(String uri) {
-		Xls2SkosException.when(StringUtils.isBlank(uri), "Empty URI");
-		return uri.startsWith("http://") ? uri : "http://" + uri;
-	}
-	
-	public static String expandUri(String value, Map<String, String> prefixes) {
-		if(value == null) {
-			return null;
-		}
-		if(!value.contains(":")) {
-			return null;
-		}
-		String namespace = prefixes.get(value.substring(0, value.indexOf(':')));
-		if(namespace == null) {
-			return null;
-		}
-		return namespace+value.substring(value.indexOf(':')+1);
 	}
 	
 	public static void main(String[] args) throws Exception {

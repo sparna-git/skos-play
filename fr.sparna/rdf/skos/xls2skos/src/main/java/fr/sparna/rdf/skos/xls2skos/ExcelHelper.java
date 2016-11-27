@@ -1,21 +1,33 @@
 package fr.sparna.rdf.skos.xls2skos;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.TimeZone;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ExcelHelper {
+
 	private ExcelHelper() {
 	}
 
 	public static String getCellValue(Cell cell) {
-		if (null == cell) return null;
+		if (null == cell) return null;		
+		
 		if (cell.getCellType() == Cell.CELL_TYPE_BLANK) return "";
+		
 		if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+			
+//			if (DateUtil.isCellDateFormatted(cell)) {			
+//				return DateFormat.getDateTimeInstance().format(cell.getDateCellValue());
+//			}
+			
 			double d = cell.getNumericCellValue();
 			if((d % 1) == 0) {
 				return "" + new Double(d).intValue();
@@ -30,6 +42,12 @@ public class ExcelHelper {
 		//    if(cell.getCellType() == Cell.CELL_TYPE_BOOLEAN) return "" + cell.getBooleanCellValue();
 		//    if(cell.getCellType() == Cell.CELL_TYPE_ERROR) return "";
 		//    if(cell.getCellType() == Cell.CELL_TYPE_FORMULA) return "";
+	}
+	
+	public static Calendar asCalendar(String value) {
+		Calendar calendar = DateUtil.getJavaCalendar(Double.valueOf(value));
+		calendar.setTimeZone(TimeZone.getTimeZone("CEST"));
+		return calendar;
 	}
 
 	public static List<String> getColumnNames(Sheet worksheet, int rowNumber) {

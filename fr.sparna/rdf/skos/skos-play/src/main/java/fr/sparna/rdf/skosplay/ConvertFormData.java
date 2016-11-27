@@ -1,12 +1,13 @@
 package fr.sparna.rdf.skosplay;
 
-public class ConvertFromData {
+public class ConvertFormData {
 
-	public static final String KEY = ConvertFromData.class.getCanonicalName();
+	public static final String KEY = ConvertFormData.class.getCanonicalName();
 
 	protected String errorMessagefile;
 	protected String googleId;
 	protected String baseUrl;
+	protected String defaultLanguage;
 
 	public String getErrorMessagefile() {
 		return errorMessagefile;
@@ -37,6 +38,14 @@ public class ConvertFromData {
 	 */
 	public SkosPlayConfig getSkosPlayConfig() {
 		return SkosPlayConfig.getInstance();
+	}
+
+	public String getDefaultLanguage() {
+		return defaultLanguage;
+	}
+
+	public void setDefaultLanguage(String defaultLanguage) {
+		this.defaultLanguage = defaultLanguage;
 	}
 
 }

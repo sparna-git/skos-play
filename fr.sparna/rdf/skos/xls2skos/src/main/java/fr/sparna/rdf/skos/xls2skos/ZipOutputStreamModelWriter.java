@@ -31,7 +31,7 @@ public class ZipOutputStreamModelWriter implements ModelWriterIfc {
 	private ZipOutputStream out;
 	private RDFFormat format = RDFFormat.RDFXML;
 	private String graphSuffix = null;
-	private boolean saveGraphFile = true;
+	private boolean saveGraphFile = false;
 	
 	public ZipOutputStreamModelWriter(ZipOutputStream out) {
 		super();

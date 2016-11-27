@@ -10,14 +10,14 @@ import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.DateUtil;
-import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 
 public final class ValueGeneratorFactory {
 
-	public static ValueGeneratorIfc resources(URI property, char separator) {
-		return (model, subject, value) -> {
+	public static ValueGeneratorIfc resources(IRI property, char separator, PrefixManager prefixManager) {
+		return (model, subject, value, language, datatype) -> {
 			if (StringUtils.isBlank(value)) {
 				return null;
 			}
@@ -25,43 +25,51 @@ public final class ValueGeneratorFactory {
 			Arrays.stream(
 					StringUtils.split(value, separator)
 					).forEach(
-							uri -> model.add(subject, property, SimpleValueFactory.getInstance().createURI(ConceptSchemeFromExcel.fixUri(uri.trim())))
+							uri -> model.add(subject, property, SimpleValueFactory.getInstance().createIRI(prefixManager.uri(uri.trim(), true)))
 			);
 			return null;
 		};
 	}
 	
-	public static ValueGeneratorIfc resourcesOrLiteral(URI property, char separator, String lang) {	
-		return (model, subject, value) -> {
+	public static ValueGeneratorIfc resourcesOrLiteral(IRI property, char separator, String lang, PrefixManager prefixManager) {	
+		return (model, subject, value, language, datatype) -> {
 			if (StringUtils.isBlank(value)) {
 				return null;
 			}
 
-			// if the value starts with http://, then try to parse it as resources
-			if(value.startsWith("http://")) {
+			// if the value starts with http://, or uses a known namespace, then try to parse it as a resource
+			if(value.startsWith("http://") || prefixManager.usesKnownPrefix(value.trim())) {
 				Arrays.stream(
 						StringUtils.split(value, separator)
 						).forEach(
-								uri -> model.add(subject, property, SimpleValueFactory.getInstance().createURI(ConceptSchemeFromExcel.fixUri(uri.trim())))
+								uri -> model.add(subject, property, SimpleValueFactory.getInstance().createIRI(prefixManager.uri(uri.trim(), false)))
+								// uri -> model.add(subject, property, SimpleValueFactory.getInstance().createIRI(ConceptSchemeFromExcel.fixUri(uri.trim())))
 				);
 			} else {
 				// consider it like a literal
-				model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value, lang));
+				if(datatype != null) {
+					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value, datatype));
+				} else if(language != null) {
+					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value, language));
+				} else {
+					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value));
+				}
 			}
 			
 			return null;
 		};
 	}
 
-	public static ValueGeneratorIfc dateLiteral(URI property) {
-		return (model, subject, value) -> {
+	public static ValueGeneratorIfc dateLiteral(IRI property) {
+		return (model, subject, value, language, datatype) -> {
 
 			if (StringUtils.isBlank(value)) return null;
 
 			try {
-				Calendar calendar = DateUtil.getJavaCalendar(Double.valueOf(value));
-				calendar.setTimeZone(TimeZone.getTimeZone("CEST"));
-				model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)calendar)));
+				model.add(
+						subject,
+						property,
+						SimpleValueFactory.getInstance().createLiteral(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)ExcelHelper.asCalendar(value))));
 			}
 			catch (NumberFormatException ignore) {
 			}
@@ -72,24 +80,25 @@ public final class ValueGeneratorFactory {
 		};
 	}
 
-	public static ValueGeneratorIfc langLiteral(URI property, String lang) {
-		return (model, subject, value) -> {
-			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value, lang));
+	public static ValueGeneratorIfc langLiteral(IRI property, String lang) {
+		return (model, subject, value, language, datatype) -> {
+			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value, language));
 			return null;
 		};
 	}
 
-	public static ValueGeneratorIfc plainLiteral(URI property) {
-		return (model, subject, value) -> {
+	public static ValueGeneratorIfc plainLiteral(IRI property) {
+		return (model, subject, value, language, datatype) -> {
 			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value));
 			return null;
 		};
 	}
 
-	public static ValueGeneratorIfc skosXlLabel(URI xlLabelProperty) {
-		return (model, subject, value) -> {
-			String labelUri = ConceptSchemeFromExcel.fixUri(value);
-			URI labelResource = SimpleValueFactory.getInstance().createURI(labelUri);
+	public static ValueGeneratorIfc skosXlLabel(IRI xlLabelProperty, PrefixManager prefixManager) {
+		return (model, subject, value, language, datatype) -> {
+			// String labelUri = ConceptSchemeFromExcel.fixUri(value);
+			String labelUri = prefixManager.uri(value, true);
+			IRI labelResource = SimpleValueFactory.getInstance().createIRI(labelUri);
 			model.add(labelResource, RDF.TYPE, SKOSXL.LABEL);
 			model.add(subject, xlLabelProperty, labelResource);
 			return labelResource;
@@ -97,7 +106,7 @@ public final class ValueGeneratorFactory {
 	}
 
 	public ValueGeneratorIfc failIfFilledIn(String property) {
-		return (model, subject, value) -> {
+		return (model, subject, value, language, datatype) -> {
 			if (StringUtils.isBlank(value)) return null;
 			throw new Xls2SkosException("Property not supported {} if filled in- {} - {}", property, subject, value);
 		};

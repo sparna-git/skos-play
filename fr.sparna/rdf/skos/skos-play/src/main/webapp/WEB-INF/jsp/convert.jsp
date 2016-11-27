@@ -8,7 +8,7 @@
 <fmt:setLocale value="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language}"/>
 <fmt:setBundle basename="fr.sparna.rdf.skosplay.i18n.Bundle"/>
 
-<c:set var="data" value="${requestScope['fr.sparna.rdf.skosplay.ConvertFromData']}" />
+<c:set var="data" value="${requestScope['fr.sparna.rdf.skosplay.ConvertFormData']}" />
 <c:set var="applicationData" value="${applicationScope.applicationData}" />
 
 <html>
@@ -20,7 +20,7 @@
 		<link href="css/skos-play.css" rel="stylesheet" />
 		<link href="style/custom.css" rel="stylesheet" />
 		
-		<link rel="stylesheet" href="css/editable-select.css">
+		<link rel="stylesheet" href="css/jquery-editable-select.min.css">
 		<script src="js/jquery.min.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
 		<script src="bootstrap-fileupload/jasny-bootstrap.min.js"></script>
@@ -48,26 +48,21 @@
 			
 			function verifID(){
       			var currlength = $('#google').val().length;
-	      		 if((currlength!=44))
-	      			 {
-		      			document.formulaire.google.style.borderColor = "#f5500c";
-	      				$('#length').show();
-	      				
-	      			 }else{
-	      				 
-	      				document.formulaire.google.style.borderColor = "#80ff00";
-	      				$('#length').hide();
-	      			 }
-	      		 
-      		 }
+	      		 if((currlength!=44)) {
+	      			document.formulaire.google.style.borderColor = "#f5500c";
+      				$('#length').show();	      				
+	      		 }else{	      				 
+      				document.formulaire.google.style.borderColor = "#80ff00";
+      				$('#length').hide();
+	      		 }	      		 
+      		}
+			
 			function dowloadExample(){
 				var urlExample= $('#example option:selected').val();
 		    	var exampleText= $('#example option:selected').text();
-			    $('#lien').removeAttr('href');
 			    $('#lien').attr('href', urlExample);
-			    $('a#lien').text('Télécharger le fichier d\'exemple fourni '+exampleText);
-			}
-			
+			    $('a#lien').text(exampleText);
+			}			
 	    </script>
 
 
@@ -107,14 +102,14 @@
 							<fmt:message key="convert.form.providedExample" />
 					</label>
 					<div class="col-sm-9" >
-						<select style=" width:80%;" class="ui-select" name="example" id="example" onchange="dowloadExample()">
-							<option value="${data.baseUrl}/excel_test/testExcelNative.xlsx" >Simple example 1</option>
-							<option value="${data.baseUrl}/excel_test/test2.xlsx">Simple example 2</option>	 
-						</select>
+						<select style=" width:40%;" name="example" id="example" onchange="dowloadExample()">
+							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-1.xlsx" selected>Example 1 (simple exemple, in english)</option>
+							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-2.xlsx">Example 2 (prefixes)</option>
+							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-3.xlsx">Example 3 (multilingual columns)</option>
+							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-4.xlsx">Example 4 (vocabulary other than SKOS)</option>  
+						</select>						
+						<span class="help-block"><i><fmt:message key="convert.form.Example.download" />&nbsp;<a id="lien" href="${data.baseUrl}/excel_test/excel2skos-exemple-1.xlsx">Example 1 (simple exemple, in english)</a></i></span>
 					</div>
-					
-						<a id="lien" href="${data.baseUrl}/excel_test/testExcelNative.xlsx" style="margin-left:15px;"><fmt:message key="convert.form.Example.download" /></a>
-					
 			    </div>	
 			
 				
@@ -213,11 +208,14 @@
 					<label class="col-sm-2 control-label">
 							<fmt:message key="convert.form.language.legend" />
 					</label>
-					<div class="col-sm-10" style=" width:80%;">
-						<select id="choice_Language" class="ui-select " required name="language" id="lg">				
-							<option value="en">en</option>									 
-							<option value="fr">fr</option>									 
-							<option value="de">de</option>						 
+					<div class="col-sm-10">
+						<select id="choice_Language" class="ui-select" required name="language" id="lg" style="width:4em;">								 
+							<option value="de" <c:if test="${data.defaultLanguage == 'de'}">selected</c:if>>de</option>
+							<option value="en" <c:if test="${data.defaultLanguage == 'en'}">selected</c:if>>en</option>
+							<option value="es" <c:if test="${data.defaultLanguage == 'es'}">selected</c:if>>es</option>	
+							<option value="fr" <c:if test="${data.defaultLanguage == 'fr'}">selected</c:if>>fr</option>
+							<option value="it" <c:if test="${data.defaultLanguage == 'it'}">selected</c:if>>it</option>
+							<option value="ru" <c:if test="${data.defaultLanguage == 'ru'}">selected</c:if>>ru</option>					 
 						</select>
 					</div>
 				</div>	
@@ -241,12 +239,12 @@
 							</div>
 							<div class="col-sm-1">
 								<select  required name="output" >						
-									<option value="application/rdf+xml" selected="selected">RDF/XML</option>
-									<option value="text/turtle">Turtle</option>		 
-									<option value="application/x-trig">TriG</option>
+									<option value="text/turtle" selected="selected">Turtle</option>
+									<option value="application/rdf+xml">RDF/XML</option>	 
 									<option value="text/plain">N-Triples</option>
 									<option value="text/x-nquads">N-Quads</option>
-									<option value="text/n3">N3</option>								 
+									<option value="text/n3">N3</option>
+									<option value="application/x-trig">TriG</option>							 
 								</select>
 							</div>						
 						</div>	
@@ -298,20 +296,136 @@
    			</div>		
 			
 			<div class="form-actions">
-				<div class="col-sm-offset-2 col-sm-10">
+				<div class="col-sm-offset-2 col-sm-4">
 					<button type="submit"  id="submit-button" class="btn btn-info btn-lg "><fmt:message key="convert" /></button>
 					<img src="images/ajax-loader.gif" id="loading" hidden="hidden" />
-					<span class="help-block" style="margin-left:120px; margin-top:-40px;"> <i><fmt:message key="convert.form.luxembourg" /></i><img src="images/logo-luxembourg.png" /></span>
 				</div>
-				
+				<div class="col-sm-offset-2 col-sm-4">
+					<img src="images/logo-luxembourg.png"/>
+					<br />
+					<span class="help-block" style="font-size:85%;">&nbsp;<i><fmt:message key="convert.form.luxembourg" /></i></span>
+				</div>
 			</div>
 			
 			</form>
+			
+			<!-- Documentation -->		
+			<fieldset id="documentation" style="margin-top:10em;">
+				<legend>General Documentation</legend>
+				<h4>What is this tool ?</h4>
+				<p>
+					This is an Excel-to-SKOS converter. It can generate SKOS RDF files from Excel spreadsheets structured in a specific way.
+					<br />Using the same Excel spreadsheet structure, it is also possible to produce other RDF data than SKOS (lists of foaf:Person, of schema:Event, etc.)
+					<br />This converter does not require any configuration file to work, only the Excel document to convert.
+				</p>
+				<h4>Can I convert <i>any</i> Excel file in RDF ?</h4>
+				<p>
+					No. The spreadsheet has to follow <a href="#excel-file-structure">the specific structure described below</a>.
+				</p>
+				<h4>What should the Excel file look like ?</h4>
+				<p>
+					Start by downloading and looking at <a href="#source-example">one of the provided examples above</a>. You can start from one of these files and adapt it. Look at the <a href="#excel-file-structure">documentation below</a>
+					for an explanation on the expected spreadsheet format.
+				</p>
+				<h4>Do you know of any similar tools ?</h4>
+				<p>
+					There are other converters from Excel to SKOS or RDF out there :
+					<ul>
+						<li><a href="http://xlwrap.sourceforge.net/">XLWrap</a> (I used it quite a bit, it is good but uses complex configuration files)</li>
+						<li><a href="http://art.uniroma2.it/sheet2rdf/">Sheet2RDF</a>, from the team that makes <a href="http://vocbench.uniroma2.it/">VocBench</a></li>
+						<li><a href="http://www.openanzo.org/">Open Anzo</a> (never tested it)</li>
+						<li>You can check for other tools on the <a href="https://www.w3.org/wiki/ConverterToRdf#Excel">W3C RDF converter wiki page</a>.</li>
+					</ul>
+				</p>
+			</fieldset>
+			
+			<!-- Excel File structure -->		
+			<fieldset id="excel-file-structure" style="margin-top:3em;">
+				<legend>Excel File structure</legend>
+				Your excel file <strong>MUST</strong> follow the structure described below to be converted to RDF. Otherwise you will get an exception or an empty RDF file.
+				<h4>Spreadsheet processing</h4>
+				Your file can contain any number of sheets. All the sheets are processed, and the extractor attempts to convert RDF from all of them.
+				If the structure of a sheet doesn't correspond to the expected template, the converter simply moves to the next one.
+				<h4>Sheet header processing</h4>
+					<strong>ConceptScheme URI</strong> : To be converted to RDF, a sheet <em>MUST contain a URI in cell B1</em>. This is interpreted as the URI of a <code>skos:ConceptScheme</code>.
+					<p /><strong>ConceptScheme metadata</strong> : The header CAN contain descriptive metadata of the ConceptScheme, by specifying a property URI in column A, either using a declared prefix
+					(e.g. <code>dct:title</code>, see below) or as a full URI (starting with 'http');
+					<p /><strong>Prefix declaration</strong> : Prefixes can be declared in the header :
+					<ul>
+						<li>column A contains the special keyword "PREFIX" (case-insensitive)</li>
+						<li>column B contains the prefix</li>
+						<li>column C contains the URI to be prefixed</li>
+					</ul>
+					Default prefixes are already known and don't have to be declared (see below).
+					<p /><strong>Other lines</strong> : the header CAN contain other lines that will be ignored if column A does not contain a known prefixed property or the "PREFIX" keyword.
+					<p />This is how a typical header can look like :
+					<img src="images/convert-screenshot-header.png" width="100%" />
+				<h4>Sheet body processing</h4>
+					<p /><strong>Title row</strong> : The body MUST start by a row that declares the property corresponding to each column (e.g. <code>skos:prefLabel</code>, <code>skos:definition</code>), except column A.
+					<p />This is how a typical title row can look like :
+					<img src="images/convert-screenshot-title-row.png" width="100%" />
+					<p /><strong>Line</strong> : Each line after the title row generates one resource with the URI read from column A. The column A MUST contain the URI of a resource, either as a
+					full URI (starting with 'http'), or using a declared prefix.
+					<p /><strong>Cell</strong> : Each cell in a line is processed, and the value is converted to a literal or object property :
+					<ul>
+						<li>If the cell value starts with 'http' or with a declared prefix, it will be interpreted as an object property;</li>
+						<li>Known SKOS labels and notes values (<code>skos:prefLabel</code>, <code>altLabel</code>, <code>hiddenLabel</code>, <code>definition</code>, <code>scopeNote</code>, <code>example</code>, <code>historyNote</code>, <code>changeNote</code>, <code>editorialNote</code>)
+						are always converted to literal values,	with the appropriate language (see below);</li>
+						<li>Known SKOS semantic relations (<code>skos:broader</code>, <code>narrower</code>, <code>related</code>, <code>exactMatch</code>, <code>closeMatch</code>, <code>broadMatch</code>, <code>narrowMatch</code>, <code>relatedMatch</code>)
+						are always converted to object properties; the URI can be given either as a full URI ()starting with 'http'), or using a declared prefix. Multiple URIs can be given in single cell, by separating them with commas <code>, </code>;</li>
+						<li>Other well-known properties are interpreted as xsd:date literals, such as <code>dct:created</code>, <code>dct:modified</code>, <code>euvoc:startDate</code> and <code>euvoc:endDate</code>;</li>
+					</ul>
+					<p />This is how a typical body part can look like :
+					<img src="images/convert-screenshot-body.png" width="100%" />
+				<h4>Post-processings</h4>
+					After each line in the body has been converted, the following post-processings are applied :
+					<p /><strong>skos:inScheme</strong> : a <code>skos:inScheme</code> is added to every skos:Concept, with the value of the ConceptScheme given in column B1;
+					<p /><strong>skos:broader and skos narrower inverse</strong> : the inverse of <code>skos:broader</code> and <code>skos:narrower</code> are automatically added;
+					<p /><strong>skos:hasTopConcept and skos:topConceptOf</strong> : every <code>skos:Concept</code> without <code>skos:broader</code> or not referenced by a <code>skos:narrower</code> is given a <code>skos:topConceptOf/skos:hasTopConcept</code>;
+					<p /><strong>SKOS-XL generation</strong> : if requested by the corresponding parameter, labels are turned into SKOS-XL;	
+				<h4>Working with multilingual values</h4>
+					It is possible to specify the language to be assigned to the values generated from a given column by appending <code>@en</code> (or other language code) to the property declaration in the title row.
+					This also works in the header part for the metadata of the ConceptScheme.
+					<p />This is an example of multilingual columns declaration :
+					<img src="images/convert-screenshot-multilingual.png" width="100%" />
+				<h4>Generating something else than SKOS</h4>
+					The converter can actually generate other RDF vocabularies than SKOS. For this :
+					<ul>
+						<li>Add an <code>rdf:type</code> column to your data, and specify an explicit rdf:type for each row. Each row not having an explicit rdf:type will be considered a skos:Concept;</li>
+						<li>Make sure you still declare a URI in cell B1 (the URI of the generated class), but it will not be used in the data;</li>
+						<li>Don't declare metadata in the header;</li>
+					</ul>
+					<p />This is how this kind of file could look like :
+					<img src="images/convert-screenshot-other-skos.png" width="100%" />
+				<h4>Default prefixes</h4>
+					The list of known prefixes is :
+					<ul>
+						<li><code>rdf</code></li>
+						<li><code>rdfs</code></li>
+						<li><code>owl</code></li>
+						<li><code>skos</code></li>
+						<li><code>skosxl</code></li>
+						<li><code>foaf</code></li>
+						<li><code>org</code></li>
+						<li><code>prov</code></li>
+						<li><code>schema</code></li>
+						<li><code>dc</code></li>
+						<li><code>dct</code> or <code>dcterms</code></li>
+						<li><code>xsd</code></li>
+					</ul>
+			</fieldset>
+			
+			
       	</div>
+      	
       	<jsp:include page="footer.jsp" />
+      	
+      	
+      	
+      	<script src="js/jquery.min.js"></script>
+		<script src="js/jquery-editable-select.min.js"></script>
       	<script>
-	      	$(document).ready(function() {
-	      		
+	      	$(document).ready(function() {	      		
 	      		 
 	      		// activate example choice
 	      		$('.exampleEntry').click(function() {
@@ -335,24 +449,11 @@
 			    	window.open('downloadGoogleResult', '_blank');
 			    </c:if>
 			    
-			    	
-			    	
-			   
-			   
+				$(function(){	 
+					$('#choice_Language').editableSelect();
+				});
 	      	});
-	      	
-
 		</script>
 	</body>
-	<script src="js/jquery.min.js"></script>
-	<script src="js/jquery-editable-select.js"></script>
-	<script>
-	 
-	$(function(){
-	 
-	$('#choice_Language').editableSelect();
-	 
-	});
-	 
-	</script>
+
 </html>
