@@ -4,6 +4,7 @@ package fr.sparna.rdf.skos.xls2skos;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URLEncoder;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.rdf4j.model.Model;
@@ -40,7 +41,7 @@ public class DirectoryModelWriter implements ModelWriterIfc {
 	 * @see fr.sparna.rdf.skos.xls2skos.ModelSaverIfc#saveGraphModel(java.lang.String, org.eclipse.rdf4j.model.Model)
 	 */
 	@Override
-	public void saveGraphModel(String graph, Model model) {
+	public void saveGraphModel(String graph, Model model, Map<String, String> prefixes) {
 		graph = graph + ((this.graphSuffix != null)?graphSuffix:"");
 		
 		try {
@@ -48,7 +49,7 @@ public class DirectoryModelWriter implements ModelWriterIfc {
 			File file = new File(outputFolder, filename + "." + format.getDefaultFileExtension());
 			try (FileOutputStream fos = new FileOutputStream(file)) {
 				RDFWriter w = RDFWriterRegistry.getInstance().get(format).get().getWriter(fos);
-				exportModel(model, w);
+				exportModel(model, w, prefixes);
 				fos.flush();
 			}
 			catch (Exception e) {
@@ -64,16 +65,15 @@ public class DirectoryModelWriter implements ModelWriterIfc {
 		}
 	}
 	
-	public void exportModel(Model model, RDFHandler handler) {
+	public void exportModel(Model model, RDFHandler handler, Map<String, String> prefixes) {
 		Repository r = new SailRepository(new MemoryStore());
 		r.initialize();
-		RepositoryConnection c = r.getConnection();
-		c.setNamespace("skos", SKOS.NAMESPACE);
-		c.setNamespace("skosxl", SKOSXL.NAMESPACE);
-		c.setNamespace("euvoc", "http://publications.europa.eu/ontology/euvoc#");
-		c.setNamespace("dcterms", DCTERMS.NAMESPACE);
-		c.add(model);
-		c.export(handler);
+		try(RepositoryConnection c = r.getConnection()) {
+			// register the prefixes
+			prefixes.entrySet().forEach(e -> c.setNamespace(e.getKey(), e.getValue()));
+			c.add(model);
+			c.export(handler);			
+		}
 	} 
 
 	public String getGraphSuffix() {

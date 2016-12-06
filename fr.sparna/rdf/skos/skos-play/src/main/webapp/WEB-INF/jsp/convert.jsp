@@ -312,7 +312,7 @@
 			
 			<!-- Documentation -->		
 			<fieldset id="documentation" style="margin-top:10em;">
-				<legend>General Documentation</legend>
+				<legend><a href="#documentation" id="documentation"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;General Documentation</legend>
 				<h4>What is this tool ?</h4>
 				<p>
 					This is an Excel-to-SKOS converter. It can generate SKOS RDF files from Excel spreadsheets structured in a specific way.
@@ -341,14 +341,14 @@
 			</fieldset>
 			
 			<!-- Excel File structure -->		
-			<fieldset id="excel-file-structure" style="margin-top:3em;">
-				<legend>Excel File structure</legend>
+			<fieldset style="margin-top:3em;">
+				<legend><a href="#excel-file-structure" id="excel-file-structure"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Excel File structure</legend>
 				Your excel file <strong>MUST</strong> follow the structure described below to be converted to RDF. Otherwise you will get an exception or an empty RDF file.
 				Download and look at <a href="#source-example">the examples above</a>.
-				<h4 id="spreadsheet">Spreadsheet processing</h4>
+				<h4><a href="#spreadsheet" id="spreadsheet"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Spreadsheet processing</h4>
 				Your file can contain any number of sheets. All the sheets are processed, and the extractor attempts to convert RDF from all of them.
 				If the structure of a sheet doesn't correspond to the expected template, the converter simply moves to the next one.
-				<h4 id="sheet-header">Sheet header processing</h4>
+				<h4><a href="#sheet-header" id="sheet-header"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Sheet header processing</h4>
 					<strong>ConceptScheme URI</strong> : To be converted to RDF, a sheet <em>MUST contain a URI in cell B1</em>. This is interpreted as the URI of a <code>skos:ConceptScheme</code>.
 					<p /><strong>ConceptScheme metadata</strong> : The header CAN contain descriptive metadata of the ConceptScheme, by specifying a property URI in column A, either using a declared prefix
 					(e.g. <code>dct:title</code>, see below) or as a full URI (starting with 'http');
@@ -362,7 +362,7 @@
 					<p /><strong>Other lines</strong> : the header CAN contain other lines that will be ignored if column A does not contain a known prefixed property or the "PREFIX" keyword.
 					<p />This is how a typical header can look like :
 					<img src="images/convert-screenshot-header.png" width="100%" />
-				<h4 id="sheet-body">Sheet body processing</h4>
+				<h4><a href="#sheet-body" id="sheet-body"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Sheet body processing</h4>
 					<p /><strong>Title row</strong> : The body MUST start by a row that declares the property corresponding to each column (e.g. <code>skos:prefLabel</code>, <code>skos:definition</code>), except column A,
 					that will contain the URI for each resource being generated.
 					<p />This is how a typical title row can look like :
@@ -382,23 +382,16 @@
 					</ul>
 					<p />This is how a typical body part can look like :
 					<img src="images/convert-screenshot-body.png" width="100%" />
-				<h4 id="post-processings">Post-processings</h4>
-					<p />After each line in the body has been converted, the following post-processings are applied :
-					<p /><strong>skos:inScheme</strong> : a <code>skos:inScheme</code> is added to every skos:Concept and skos:Collection, with the value of the ConceptScheme given in column B1;
-					<p /><strong>skos:broader and skos narrower inverse</strong> : the inverse of <code>skos:broader</code> and <code>skos:narrower</code> are automatically added;
-					<p /><strong>skos:hasTopConcept and skos:topConceptOf</strong> : every <code>skos:Concept</code> without <code>skos:broader</code> or not referenced by a <code>skos:narrower</code> is given a <code>skos:topConceptOf</code>
-					and its inverse <code>skos:hasTopConcept</code>;
-					<p /><strong>SKOS-XL generation</strong> : if requested by the corresponding parameter, labels are turned into SKOS-XL;	
-				<h4 id="multilingual">Generating multilingual values</h4>
+				<h4><a href="#languages" id="languages"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Generating multilingual values</h4>
 					<p />You can specify the language to be assigned to a column by appending <code>@en</code> (or another language code) to the property declaration in the title row.
 					This also works in the header part for the metadata of the ConceptScheme.
 					<p />This is an example of multilingual columns declaration :
 					<img src="images/convert-screenshot-multilingual.png" width="100%" />
-				<h4 id="datatypes">Generating values with datatypes</h4>
+				<h4><a href="#datatypes" id="datatypes"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Generating values with datatypes</h4>
 					<p />You can specify the datatype to be assigned to a column by appending <code>^^xsd:date</code> (or another datatype) to the property declaration in the title row.
 					<p />This is an example of columns declaration with a datatype :
 					<img src="images/convert-screenshot-datatype.png" width="100%" />
-				<h4 id="collection">Generating skos:Collection with object-to-subject columns</h4>
+				<h4><a href="#collections" id="collections"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Generating skos:Collection with object-to-subject columns</h4>
 					<p />By default, each line in the body generates an instance of skos:Concept. If you need to generate instances of skos:Collection (or other classes, by the way), do the following :
 					<ol>
 						<li>Add a column with the title <code>rdf:type</code>;</li>
@@ -411,33 +404,51 @@
 					</ol>
 					<p />This is an example of expressing collections using object-to-subject column :
 					<img src="images/convert-screenshot-collection.png" width="100%" />
-				<h4 id="vocabularies">Generating something else than SKOS</h4>
-					<p />The converter can actually generate other RDF vocabularies than SKOS. For this :
-					<ul>
-						<li>Add an <code>rdf:type</code> column to your data, and specify an explicit rdf:type for each row. Each row not having an explicit rdf:type will be considered a skos:Concept;</li>
-						<li>Make sure you still declare a URI in cell B1 (the URI of the generated class), this will be the URI of the named graph or file in which the data will be generated;</li>
-						<li>Don't declare metadata in the header;</li>
-					</ul>
-					<p />This is how this kind of file could look like :
-					<img src="images/convert-screenshot-other-skos.png" width="100%" />
-				<h4 id="default prefixes">Default prefixes</h4>
-					<p />The list of known prefixes is :
-					<ul>
-						<li><code>rdf</code></li>
-						<li><code>rdfs</code></li>
-						<li><code>owl</code></li>
-						<li><code>skos</code></li>
-						<li><code>skosxl</code></li>
-						<li><code>foaf</code></li>
-						<li><code>org</code></li>
-						<li><code>prov</code></li>
-						<li><code>schema</code></li>
-						<li><code>dc</code></li>
-						<li><code>dct</code> or <code>dcterms</code></li>
-						<li><code>xsd</code></li>
-					</ul>
 			</fieldset>
 			
+			<!-- Default SKOS processings -->		
+			<fieldset style="margin-top:3em;">
+				<legend><a href="#post-processings" id="post-processings"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Default SKOS post-processings</legend>
+				<p />After each line in the body has been converted, the following SKOS post-processings are applied :
+				<p /><strong>skos:inScheme</strong> : a <code>skos:inScheme</code> is added to every instance of skos:Concept and skos:Collection, with the value of the ConceptScheme given in cell B1;
+				<p /><strong>skos:broader and skos narrower inverse</strong> : the inverse of <code>skos:broader</code> and <code>skos:narrower</code> are automatically added;
+				<p /><strong>skos:hasTopConcept and skos:topConceptOf</strong> : every <code>skos:Concept</code> without <code>skos:broader</code> or not referenced by a <code>skos:narrower</code> is given a <code>skos:topConceptOf</code>
+				and its inverse <code>skos:hasTopConcept</code>;
+				<p /><strong>SKOS-XL generation</strong> : if requested by the corresponding parameter, labels are turned into SKOS-XL;	
+			</fieldset>
+			
+			<!-- Generating plain RDF-->		
+			<fieldset style="margin-top:3em;">
+				<legend><a href="#generic-rdf" id="generic-rdf"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Generating plain RDF (not SKOS)</legend>
+				<p />The converter can actually generate other RDF vocabularies than SKOS. For this :
+				<ul>
+					<li>Add an <code>rdf:type</code> column to your data, and specify an explicit rdf:type for each row. Each row not having an explicit rdf:type will be considered a skos:Concept;</li>
+					<li>Make sure you still declare a URI in cell B1 (the URI of the generated class), this will be the URI of the named graph or file in which the data will be generated;</li>
+					<li>Don't declare metadata in the header;</li>
+				</ul>
+				<p />This is how this kind of file could look like :
+				<img src="images/convert-screenshot-other-skos.png" width="100%" />
+			</fieldset>
+			
+			<!-- Generating plain RDF-->		
+			<fieldset style="margin-top:3em;">
+				<legend><a href="#prefixes" id="prefixes"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Default prefixes known in the converter</legend>
+				<p />This is the list of known prefixes in the converter. You don't have to declare them in the header.
+				<ul>
+					<li><a href="http://prefix.cc/rdf"><code>rdf</code></a></li>
+					<li><a href="http://prefix.cc/rdf"><code>rdfs</code></a></li>
+					<li><a href="http://prefix.cc/rdf"><code>owl</code></a></li>
+					<li><a href="http://prefix.cc/rdf"><code>skos</code></a></li>
+					<li><a href="http://prefix.cc/rdf"><code>skosxl</code></a></li>
+					<li><a href="http://prefix.cc/rdf"><code>foaf</code></a></li>
+					<li><a href="http://prefix.cc/rdf"><code>org</code></a></li>
+					<li><a href="http://prefix.cc/rdf"><code>prov</code></a></li>
+					<li><a href="http://prefix.cc/rdf"><code>schema</code></a></li>
+					<li><a href="http://prefix.cc/rdf"><code>dc</code></a></li>
+					<li><a href="http://prefix.cc/rdf"><code>dct</code></a> or <a href="http://prefix.cc/rdf"><code>dcterms</code></a></li>
+					<li><a href="http://prefix.cc/rdf"><code>xsd</code></a></li>
+				</ul>
+			</fieldset>
 			
       	</div>
       	

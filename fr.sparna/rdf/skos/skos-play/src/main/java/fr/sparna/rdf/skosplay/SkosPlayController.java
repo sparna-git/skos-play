@@ -103,7 +103,7 @@ import fr.sparna.rdf.skos.toolkit.SKOSRules;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeBuilder;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
-import fr.sparna.rdf.skos.xls2skos.Xls2Skos;
+import fr.sparna.rdf.skos.xls2skos.Xls2SkosConverter;
 import fr.sparna.rdf.skos.xls2skos.ModelWriterFactory;
 import fr.sparna.rdf.skos.xls2skos.ModelWriterIfc;
 
@@ -277,7 +277,6 @@ public class SkosPlayController {
 		}
 	}
 
-
 	@RequestMapping(value = "/convert",method = RequestMethod.POST)
 	public ModelAndView convertRDF(			
 			@RequestParam(value="source", required=true) String sourceString,
@@ -411,7 +410,7 @@ public class SkosPlayController {
 	}
 
 	private void generateType(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl) {
-		Xls2Skos converter = new Xls2Skos(Writer, lang);
+		Xls2SkosConverter converter = new Xls2SkosConverter(Writer, lang);
 		converter.setGenerateXl(generatexl);
 		converter.setGenerateXlDefinitions(generatexl);
 		converter.processInputStream(filefrom);

@@ -35,10 +35,15 @@ public class PrefixManager {
 		prefixes.put("dcterms", DCTERMS.NAMESPACE);
 		prefixes.put("dct", DCTERMS.NAMESPACE);
 		prefixes.put("xsd", "http://www.w3.org/2001/XMLSchema#");
+		prefixes.put("euvoc", "http://publications.europa.eu/ontology/euvoc#");
 	}
 	
 	public void register(String prefix, String uri) {
 		this.prefixes.put(prefix, uri);
+	}
+	
+	public void register(Map<String, String> map) {
+		this.prefixes.putAll(map);
 	}
 	
 	public String expand(String shortForm) {
@@ -93,6 +98,10 @@ public class PrefixManager {
 		} else {
 			return null;
 		}
+	}
+
+	public Map<String, String> getPrefixes() {
+		return prefixes;
 	}
 	
 }

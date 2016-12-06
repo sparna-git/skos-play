@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
@@ -50,9 +51,11 @@ public class OutputStreamModelWriter implements ModelWriterIfc {
 	 * @see fr.sparna.rdf.skos.xls2skos.ModelSaverIfc#saveGraphModel(java.lang.String, org.eclipse.rdf4j.model.Model)
 	 */
 	@Override
-	public void saveGraphModel(String graph, Model model) {
+	public void saveGraphModel(String graph, Model model, Map<String, String> prefixes) {
 		try {
 			try(RepositoryConnection c = this.outputRepository.getConnection()) {
+				// register the prefixes
+				prefixes.entrySet().forEach(e -> c.setNamespace(e.getKey(), e.getValue()));
 				c.add(model, SimpleValueFactory.getInstance().createIRI(graph));
 			}
 		} catch(Exception e) {

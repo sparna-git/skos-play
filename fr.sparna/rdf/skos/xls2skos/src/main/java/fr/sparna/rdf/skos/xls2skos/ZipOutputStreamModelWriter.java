@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.net.URLEncoder;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -67,7 +68,7 @@ public class ZipOutputStreamModelWriter implements ModelWriterIfc {
 	 * @see fr.sparna.rdf.skos.xls2skos.ModelSaverIfc#saveGraphModel(java.lang.String, org.eclipse.rdf4j.model.Model)
 	 */
 	@Override
-	public void saveGraphModel(String graph, Model model) {
+	public void saveGraphModel(String graph, Model model, Map<String, String> prefixes) {
 		try {
 			// declare a new ZipEntry in the Zip file
 			graph = graph + ((this.graphSuffix != null)?graphSuffix:"");
@@ -79,7 +80,7 @@ public class ZipOutputStreamModelWriter implements ModelWriterIfc {
 			
 			// writes in the entry
 			RDFWriter w = RDFWriterRegistry.getInstance().get(format).get().getWriter(out);
-			exportModel(model, w);
+			exportModel(model, w, prefixes);
 			
 			// close the entry
 			out.closeEntry();
@@ -95,16 +96,15 @@ public class ZipOutputStreamModelWriter implements ModelWriterIfc {
 		}
 	}
 	
-	public void exportModel(Model model, RDFHandler handler) {
+	public void exportModel(Model model, RDFHandler handler, Map<String, String> prefixes) {
 		Repository r = new SailRepository(new MemoryStore());
 		r.initialize();
-		RepositoryConnection c = r.getConnection();
-		c.setNamespace("skos", SKOS.NAMESPACE);
-		c.setNamespace("skosxl", SKOSXL.NAMESPACE);
-		c.setNamespace("euvoc", "http://publications.europa.eu/ontology/euvoc#");
-		c.setNamespace("dcterms", DCTERMS.NAMESPACE);
-		c.add(model);
-		c.export(handler);
+		try(RepositoryConnection c = r.getConnection()) {
+			// register the prefixes
+			prefixes.entrySet().forEach(e -> c.setNamespace(e.getKey(), e.getValue()));
+			c.add(model);
+			c.export(handler);
+		}
 	}	
 	
 	public String getGraphSuffix() {

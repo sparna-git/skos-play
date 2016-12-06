@@ -5,8 +5,6 @@ import static fr.sparna.rdf.skos.xls2skos.ExcelHelper.getCellValue;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,7 +14,6 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Level;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -42,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 
 
-public class Xls2Skos {
+public class Xls2SkosConverter {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
@@ -79,13 +76,13 @@ public class Xls2Skos {
 	/**
 	 * Internal list of value generators
 	 */
-	private final Map<String, ValueGeneratorIfc> valueGenerators = new HashMap<>();
+	protected final Map<String, ValueGeneratorIfc> valueGenerators = new HashMap<>();
 	
-	private PrefixManager prefixManager = new PrefixManager();
+	protected PrefixManager prefixManager = new PrefixManager();
 	
-	public Xls2Skos(ModelWriterIfc modelWriter, String lang) {
+	public Xls2SkosConverter(ModelWriterIfc modelWriter, String lang) {
 		
-		this.modelWriter = modelWriter;;
+		this.modelWriter = modelWriter;
 		this.lang = lang;
 		
 		// inScheme for additionnal inScheme information, if needed
@@ -120,8 +117,8 @@ public class Xls2Skos {
 		valueGenerators.put("skosxl:literalForm", 	ValueGeneratorFactory.langLiteral(SKOSXL.LITERAL_FORM, this.lang));
 		// other concepts metadata
 		valueGenerators.put("euvoc:status", 		ValueGeneratorFactory.resources(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#status"), ',', prefixManager));		
-		valueGenerators.put("euvoc:startDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createIRI("http://eurovoc.europa.eu/schema#startDate")));
-		valueGenerators.put("euvoc:endDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createIRI("http://eurovoc.europa.eu/schema#endDate")));
+		valueGenerators.put("euvoc:startDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#startDate")));
+		valueGenerators.put("euvoc:endDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#endDate")));
 		valueGenerators.put("dct:created", 			ValueGeneratorFactory.dateLiteral(DCTERMS.CREATED));
 		valueGenerators.put("dct:modified", 		ValueGeneratorFactory.dateLiteral(DCTERMS.MODIFIED));
 		// a source can be a literal or a URI
@@ -210,57 +207,24 @@ public class Xls2Skos {
 	 */
 	private Model processSheet(Sheet sheet) {
 		
-		if(sheet.getRow(0) == null) {
-			log.debug(sheet.getSheetName()+" : First row is empty, ignoring sheet.");
-			return null;
-		}
+		RdfizableSheet rdfizableSheet = new RdfizableSheet(sheet, this);
 		
-		// read the prefixes in the top 20 rows		
-		for (int rowIndex = 1; rowIndex <= 20; rowIndex++) {
-			if(sheet.getRow(rowIndex) != null) {
-				String prefixKeyword = getCellValue(sheet.getRow(rowIndex).getCell(0));
-				// if we have the "prefix" keyword...
-				// note : we add a null check here because there are problems with some sheets
-				if(prefixKeyword != null && prefixKeyword.toUpperCase().startsWith("PREFIX")) {
-					// and we have the prefix and namespaces defined...
-					String prefix = getCellValue(sheet.getRow(rowIndex).getCell(1));
-					if(StringUtils.isNotBlank(prefix)) {
-						if(prefix.charAt(prefix.length()-1) == ':') {
-							prefix = prefix.substring(0, prefix.length()-1);
-						}
-						String namespace = getCellValue(sheet.getRow(rowIndex).getCell(2));
-						if(StringUtils.isNotBlank(namespace)) {
-							prefixManager.register(prefix, namespace);
-						}
-					}
-				}
-			}
-		}
-		
-		String uri = getCellValue(sheet.getRow(0).getCell(1));
-		
-		if(StringUtils.isBlank(uri)) {
-			log.debug(sheet.getSheetName()+" : B1 is empty, ignoring sheet.");
+		if(!rdfizableSheet.canRDFize()) {
+			log.debug(sheet.getSheetName()+" : Ignoring sheet.");
 			return null;
 		} else {
-			String fixedUri = prefixManager.uri(uri, true);
-			try {
-				new URI(fixedUri);
-			} catch (URISyntaxException e) {
-				log.debug(sheet.getSheetName()+" : B1 is not a valid URI ('"+uri+"'), ignoring sheet");
-				return null;
-			} catch (NullPointerException e) {
-				log.debug("Cannot build a valid URI from '"+uri+"', ignoring sheet");
-				return null;
-			}
-		}		
+			log.debug("Processing sheet: " + sheet.getSheetName());
+		}
 		
-		log.debug("Processing sheet: " + sheet.getSheetName());
+		// read the prefixes
+		this.prefixManager.register(rdfizableSheet.readPrefixes());
 		
+		// initialize target Model
 		Model model = new LinkedHashModelFactory().createEmptyModel();
 		SimpleValueFactory svf = SimpleValueFactory.getInstance();
 
-		String csUri = prefixManager.uri(uri, true);
+		// read the concept scheme or graph URI
+		String csUri = prefixManager.uri(rdfizableSheet.getSchemeOrGraph(), true);
 		
 		// if the URI was already processed, this is an exception
 		if(this.csModels.containsKey(csUri)) {
@@ -269,31 +233,8 @@ public class Xls2Skos {
 		
 		Resource csResource = svf.createIRI(csUri);	
 		
-		int headerRowIndex = 1;
-		for (int rowIndex = headerRowIndex; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
-			// test if we find a header in columns 2 and 3, this indicates the header line
-			if(sheet.getRow(rowIndex) != null) {
-				String valueColumnB = getCellValue(sheet.getRow(rowIndex).getCell(1));
-				String valueColumnC = getCellValue(sheet.getRow(rowIndex).getCell(2));
-				if(
-							(
-									valueGenerators.containsKey(valueColumnB)
-									||
-									prefixManager.expand(valueColumnB) != null
-							)
-						&&
-							(
-									valueGenerators.containsKey(valueColumnC)
-									||
-									prefixManager.expand(valueColumnC) != null
-							)
-				) {
-					headerRowIndex = rowIndex;
-					break;
-				}
-			}
-		}
-		
+		// read the title row index
+		int headerRowIndex = rdfizableSheet.getTitleRowIndex();		
 		// si la ligne d'entete n'a pas été trouvée, on ne génère que le ConceptScheme
 		if(headerRowIndex == 1) {
 			log.info("Could not find header row index in sheet "+sheet.getSheetName());
@@ -312,22 +253,35 @@ public class Xls2Skos {
 						header != null
 						&&
 						StringUtils.isNotBlank(value)
-						&&
-						valueGenerators.containsKey(header.getProperty())
 				) {
-					valueGenerators.get(header.getProperty()).addValue(
-							model,
-							csResource,
-							value,
-							header.getLanguage().orElse(lang),
-							header.getDatatype().orElse(null)
-					);
+					ValueGeneratorIfc valueGenerator = null;
+					if(valueGenerators.containsKey(header.getProperty())) {
+						valueGenerator = valueGenerators.get(header.getProperty());
+					} else if(prefixManager.expand(header.getProperty()) != null) {
+						valueGenerator = ValueGeneratorFactory.resourcesOrLiteral(
+								SimpleValueFactory.getInstance().createIRI(prefixManager.expand(header.getProperty())),
+								',',
+								header.getLanguage().orElse(lang),
+								prefixManager,
+								header.isInverse()
+						);
+					}
+					
+					if(valueGenerator != null) {
+						valueGenerator.addValue(
+								model,
+								csResource,
+								value,
+								header.getLanguage().orElse(lang),
+								header.getDatatype().orElse(null)
+						);
+					}
 				}
 			}
 		}		
 
 		// read the column names from the header row
-		List<ColumnHeader> columnNames = parseColumnNames(sheet, headerRowIndex);
+		List<ColumnHeader> columnNames = rdfizableSheet.getColumnHeaders(headerRowIndex);
 		
 		// read the rows after the header and process each row
 		for (int rowIndex = (headerRowIndex + 1); rowIndex <= sheet.getLastRowNum(); rowIndex++) {
@@ -337,6 +291,22 @@ public class Xls2Skos {
 			}
 		}
 		
+		// post-process the model to add inverses, hasTopConcepts, etc.
+		postProcess(model, csResource);		
+		
+		// Turn the model to SKOS-XL
+		if(this.generateXl || this.generateXlDefinitions) {
+			xlify(model);
+		}
+		
+		// writes the resulting Model
+		modelWriter.saveGraphModel(csUri, model, prefixManager.getPrefixes());
+		// stores the Model
+		csModels.put(csUri, model);
+		return model;
+	}
+	
+	private void postProcess(Model model, Resource csResource) {
 		// add a skos:inScheme to every skos:Concept or skos:Collection that was created
 		model.filter(null, RDF.TYPE, SKOS.CONCEPT).forEach(
 				s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
@@ -375,16 +345,6 @@ public class Xls2Skos {
 					}
 				}
 		);
-		
-		if(this.generateXl || this.generateXlDefinitions) {
-			xlify(model);
-		}
-		
-		// writes the resulting Model
-		modelWriter.saveGraphModel(csUri, model);
-		// stores the Model
-		csModels.put(csUri, model);
-		return model;
 	}
 	
 	private Model xlify(Model m) {
@@ -456,11 +416,11 @@ public class Xls2Skos {
 			
 			// process the cell for each subsequent columns after the first one
 			if (StringUtils.isNotBlank(value)) {	
-				ValueGeneratorIfc valueAdder = valueGenerators.get(columnNames.get(colIndex).getProperty());
+				ValueGeneratorIfc valueGenerator = valueGenerators.get(columnNames.get(colIndex).getProperty());
 				
 				// if this is not one of the known processor, but the prefix is known, then defaults to a generic processor
-				if(valueAdder == null && prefixManager.expand(columnNames.get(colIndex).getProperty()) != null) {
-					valueAdder = ValueGeneratorFactory.resourcesOrLiteral(
+				if(valueGenerator == null && prefixManager.expand(columnNames.get(colIndex).getProperty()) != null) {
+					valueGenerator = ValueGeneratorFactory.resourcesOrLiteral(
 							SimpleValueFactory.getInstance().createIRI(prefixManager.expand(columnNames.get(colIndex).getProperty())),
 							',',
 							columnNames.get(colIndex).getLanguage().orElse(lang),
@@ -469,9 +429,9 @@ public class Xls2Skos {
 					);
 				}
 				
-				if(valueAdder != null) {
+				if(valueGenerator != null) {
 					rowBuilder.addCell(
-							valueAdder,
+							valueGenerator,
 							value,
 							columnNames.get(colIndex).getLanguage().orElse(lang),
 							columnNames.get(colIndex).getDatatype().orElse(null)
@@ -497,15 +457,14 @@ public class Xls2Skos {
 		public RowBuilder(Model model, String uri) {
 			this.model = model;
 			conceptResource = SimpleValueFactory.getInstance().createIRI(uri);
-			// model.add(SimpleValueFactory.getInstance().createURI(uri), RDF.TYPE, SKOS.CONCEPT);
 			// set the current subject to the conceptResource by default
 			subject = conceptResource;
 		}
 
-		public void addCell(ValueGeneratorIfc valueAdder, String value, String language, IRI datatype) {
+		public void addCell(ValueGeneratorIfc valueGenerator, String value, String language, IRI datatype) {
 			// if the column is unknown, ignore it
-			if(valueAdder != null) {
-				Resource newResource = valueAdder.addValue(model, subject, value, language, datatype);
+			if(valueGenerator != null) {
+				Resource newResource = valueGenerator.addValue(model, subject, value, language, datatype);
 				if (null != newResource) {
 					// change the focus to the new resource in the case of xl labels
 					// so that subsequent columns are added on that resource
@@ -513,23 +472,6 @@ public class Xls2Skos {
 				}
 			}
 		}
-	}
-	
-	public List<ColumnHeader> parseColumnNames(Sheet worksheet, int rowNumber) {
-		List<ColumnHeader> columnNames = new ArrayList<>();
-		Row row = worksheet.getRow(rowNumber);
-		if(row != null) {
-			for (int i = 0; true; i++) {
-				Cell cell = row.getCell(i);
-				if (null == cell) break;
-				String columnName = cell.getStringCellValue();
-				if (StringUtils.isBlank(columnName)) {
-					break;
-				}
-				columnNames.add(ColumnHeader.parse(columnName, prefixManager));
-			}
-		}
-		return columnNames;
 	}
 
 	public List<String> getSheetsToIgnore() {
@@ -584,7 +526,7 @@ public class Xls2Skos {
 		writer.setSaveGraphFile(true);
 		writer.setGraphSuffix("/graph");
 		
-		Xls2Skos me = new Xls2Skos(writer, "fr");
+		Xls2SkosConverter me = new Xls2SkosConverter(writer, "fr");
 		me.setGenerateXl(false);
 		me.setGenerateXlDefinitions(false);
 		// me.loadAllToFile(new File("/home/thomas/sparna/00-Clients/Sparna/20-Repositories/sparna/fr.sparna/rdf/skos/xls2skos/src/test/resources/test-excel-saved-from-libreoffice.xlsx"));
@@ -600,7 +542,7 @@ public class Xls2Skos {
 			String lang
 	) throws Exception {
 		OutputStreamModelWriter modelWriter = new OutputStreamModelWriter(output);
-		Xls2Skos converter = new Xls2Skos(modelWriter, lang);
+		Xls2SkosConverter converter = new Xls2SkosConverter(modelWriter, lang);
 		converter.setGenerateXl(false);
 		converter.setGenerateXlDefinitions(false);
 		converter.processInputStream(input);

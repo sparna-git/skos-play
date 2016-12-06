@@ -35,18 +35,19 @@
 				<p>
 					SKOS Play is an application to render and visualise thesaurus, taxonomies or controlled vocabularies expressed in 
 					<a href="http://www.w3.org/TR/2009/REC-skos-reference-20090818/" target="_blank">SKOS</a>.
-					With SKOS Play you can print Knowledge Organization Systems that use the SKOS data model in HTML or PDF documents, and
-					visualize them in graphical representations.
-					SKOS Play is intended to demonstrate some of the possibilities of enterprise vocabularies usage and web of data
+					<p>With SKOS Play you can print Knowledge Organization Systems that use the SKOS data model in HTML or PDF documents, and
+					visualize them in graphical representations. SKOS Play is intended to demonstrate some of the possibilities of enterprise vocabularies usage and web of data
 					technologies.
+					<p>With SKOS Play you can also <a href="convert">generate SKOS files from Excel spreadsheets</a>.
 				</p>
 				<h4>What is it for ?</h4>
 				<p>
 					<ul>
 						<li>Generating printable versions of thesaurus or knowledge organization systems;</li>
+						<li>Review a vocabulary when building it or validating it with domain experts;</li>
+						<li>Publishing SKOS vocabularies files on the web.</li>
 						<li>Bridge the gap between SKOS data and datviz provided by <a href="http://d3js.org" target="_blank">d3js</a>;</li>
 						<li>Demonstrate and illustrate how some of the technologies of the web of data work;</li>
-						<li>Verify a vocabulary when working on it, validating it with domain experts, publising it on the web.</li>
 					</ul>
 				</p>
 				<h4>Is it free ?</h4>
@@ -66,15 +67,14 @@
 						being to contribute directly in <a href="http://bitbucket.org/tfrancart/sparna" target="_blank">the sources</a>;
 						</li>
 					</ul>					
-					Anyway, <a href="m&#x61;ilto:t&#x68;om&#x61;s.fr&#x61;nc&#x61;&#x72;t@sp&#x61;&#x72;na&#46;fr">contact me</a> if in doubt
-					(it is not very for me neither anyway).
+					Anyway, <a href="m&#x61;ilto:t&#x68;om&#x61;s.fr&#x61;nc&#x61;&#x72;t@sp&#x61;&#x72;na&#46;fr">contact me</a> if in doubt.
 					<br />These licensing terms may evolve in the future.
 				</p>
 				<h4>Does SKOS Play keep a copy of the submitted data ? </h4>
 				<p>No.</p>
 				<h4>Who build it ?</h4>
 				<p>
-					<a href="http://francart.fr" target="_blank">Thomas Francart</a> for <a href="http://sparna.fr" target="_blank">Sparna</a>.
+					<a href="http://blog.sparna.fr" target="_blank">Thomas Francart</a> for <a href="http://sparna.fr" target="_blank">Sparna</a>.
 				</p>
 				<h4>What are the licences of included examples ?</h4>
 				<p>
@@ -92,7 +92,7 @@
 					Nice !
 					<ul>
 						<li><a href="https://groups.google.com/d/forum/skos-play-discuss" target="_blank">give feedbacks on the forum</a>;</li>
-						<li>or <a href="http://francart.fr/skos-play-generer-html-pdf-dataviz-thesaurus-skos">leave a word on the blog</a>;</li>
+						<li>or <a href="http://blog.sparna.fr/skos-play-generer-html-pdf-dataviz-thesaurus-skos">leave a word on the blog</a>;</li>
 						<li>or <a href="m&#x61;ilto:t&#x68;om&#x61;s.fr&#x61;nc&#x61;&#x72;t@sp&#x61;&#x72;na&#46;fr">send me an email</a>;</li>
 						<li>or look at <a href="http://bitbucket.org/tfrancart/sparna" target="_blank">the code</a>;</li>
 					</ul>
@@ -113,9 +113,9 @@
 				<p><a href="http://www.w3.org/2001/sw/wiki/SKOS/Datasets" target="_blank">Here</a></p>
 				<h4>How can I write or generate a SKOS file ?</h4>
 				<p>
-					Try <a href="http://sourceforge.net/projects/tematres/" target="_blank">Tematres</a> (open-source), the <a href="http://code.google.com/p/skoseditor/" target="_blank">Protégé SKOS plugin</a> (open-source),
-					<a href="http://thmanager.sourceforge.net/" target="_blank">ThManager</a> (open-source), <a href="https://github.com/culturecommunication/ginco" target="_blank">Ginco</a> (open-source). There are also
-					commercial solutions of course.
+					Use the <a href="convert">SKOS generator included in SKOS Play</a>.
+					<p>Try <a href="http://sourceforge.net/projects/tematres/" target="_blank">Tematres</a> (open-source), <a href="https://github.com/culturecommunication/ginco" target="_blank">Ginco</a> (open-source).
+					There are also commercial solutions of course.</p>
 					<br />
 					You can also simply write or generate a file with this structure, save it with *.ttl extension, and make sure it is encoded in UTF-8 :
 					<pre>
@@ -163,14 +163,14 @@ me:123456 skos:broader me:Vehicle .
 				<legend>SKOS Play : how does it work ?</legend>
 				<h4>How does it look like under the hood ?</h4>
 				<p>
-					SKOS Play is based on <a href="http://openrdf.org">OpenRDF Sesame</a>, the only sensible choice for enterprise semantic technologies
+					SKOS Play is based on <a href="http://rdf4j.org">Eclipse RDF4J</a>, the only sensible choice for enterprise semantic technologies
 					applications, and also uses the <a href="http://tfrancart.bitbucket.org/sesame-toolkit/apidocs/fr/sparna/rdf/sesame/toolkit/Documentation.html" target="_blank">sesame-toolkit</a> component.
 					Data visualisation are created with <a href="http://d3js.org" target="_blank">d3js</a>, PDF with <a href="http://xmlgraphics.apache.org/fop/" target="_blank">Apache FOP</a>.
 					All of that uses SPARQL to query the data
 					<br />
 					Schematically, there are 4 layers in the application :
 					<ol>
-						<li>Loading/processing RDF with Sesame and <a href="http://tfrancart.bitbucket.org/sesame-toolkit/apidocs/fr/sparna/rdf/sesame/toolkit/Documentation.html" target="_blank">sesame-toolkit</a>;</li>
+						<li>Loading/processing RDF with RDF4J and <a href="http://tfrancart.bitbucket.org/sesame-toolkit/apidocs/fr/sparna/rdf/sesame/toolkit/Documentation.html" target="_blank">sesame-toolkit</a>;</li>
 						<li>SKOS-specific queries to navigate the data (see algorithm below);</li>
 						<li>Transformation of SKOS data into "printable" structure using JAXB, then from this structure to HTML or PDF using XSLT;</li>
 						<li>The screens of the application itself, using servlets, JSP & JSPL, Jquery, Bootstrap.</li>
@@ -232,28 +232,24 @@ me:123456 skos:broader me:Vehicle .
 				</p>
 				<h4>What are the supported RDF syntaxes ?</h4>
 				<p>
-					All of the syntaxes supported by Sesame : RDF/XML, Turtle, N3, N-triples, TriG, TriX...
+					All of the syntaxes supported by RDF4J : RDF/XML, Turtle, N3, N-triples, TriG, TriX...
 				</p>
 				<h4>How many concepts can SKOS Play handle ?</h4>
 				<p>
-					For the time being, <b>SKOS Play is limited to 5000 concepts</b>, to avoid overloading the mini-server
-					in my living room that host the application.
+					For the time being, <b>SKOS Play is limited to 5000 concepts</b>, to avoid overloading the server.
 					<br />
 					Theoretically, there is no limit, but in practice, for alphabetical or hierarchical rendering, I would avoid
-					more than 5000 concepts to limit the output file size. For dataviv, I would say that above 2000 concepts you
+					more than 5000 concepts to limit the output file size. For dataviz, I would say that above 2000 concepts you
 					can't see anything and you have big latencies when zooming.
 				</p>
-				<h4>Is there a web service, an API ? is SKOS-XL supported ? is feature foo-bar supported ?
+				<h4>Is SKOS-XL supported ?
+				</h4>
+				<p>Yes ! there is a dedicated option to read <a href="https://www.w3.org/TR/2009/REC-skos-reference-20090818/#xl">SKOS-XL labels</a>. You can uncheck it to save some time.</p>
+				<h4>Is there a web service, an API ? is feature foo-bar supported ?
 				</h4>
 				<p>
-					No. No. No. But <a href="https://groups.google.com/d/forum/skos-play-discuss" target="_blank">ask a question on the forum</a>
+					There is no API. But <a href="https://groups.google.com/d/forum/skos-play-discuss" target="_blank">ask a question on the forum</a>
 					and express your interest, and this may be added one day in the future.
-				</p>
-				<h4>It's slow !</h4>
-				<p>
-					Yes. the application is hosted by a mini server. I am looking for organizations willing to host 
-					freely the application to remove the 5000 concepts limit. If you are interested,
-					<a href="m&#x61;ilto:t&#x68;om&#x61;s.fr&#x61;nc&#x61;&#x72;t@sp&#x61;&#x72;na&#46;fr">contact-me</a>.
 				</p>
 			</fieldset>
 

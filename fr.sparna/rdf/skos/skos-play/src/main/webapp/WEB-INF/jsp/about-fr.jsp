@@ -34,17 +34,19 @@
 				<h4>Qu'est-ce que "SKOS Play" ?</h4>
 				<p>
 					SKOS Play est un service de visualisation de thesaurus, taxonomies ou vocabulaires au format 
-					<a href="http://www.w3.org/TR/2009/REC-skos-reference-20090818/" target="_blank">SKOS</a>.
-					Plus généralement il permet de visualiser ou imprimer un système d'organisation de connaissances exprimé en SKOS.
+					<a href="http://www.sparna.fr/skos/SKOS-traduction-francais.html" target="_blank">SKOS</a>.
+					<p />Plus généralement il permet de visualiser ou imprimer un système d'organisation de connaissances exprimé en SKOS, et de démontrer
+					certains principes du web de données</p>
+					<p/>SKOS Play permet également de <a href="convert">générer des fichiers SKOS à partir de tableaux Excel</a>.
 				</p>
 				<h4>A quoi ça sert ?</h4>
 				<p>
 					<ul>
 						<li>A générer des versions imprimables ou enregistrables localement de thesaurus ou de systèmes d'organisation de connaissances;</li>
+						<li>A tester un vocabulaire quand on est en train de le mettre au point, à le valider avec des experts du domaine;</li>
+						<li>A publier des versions imprimables des thesaurus sur le web;</li>
 						<li>A faire le pont entre des données SKOS et des visualisation de données de <a href="http://d3js.org" target="_blank">d3js</a>;</li>
-						<li>A démontrer et illustrer le fonctionnement de certaines technologies sémantiques;</li>
-						<li>A tester un vocabulaire quand on est en train de le mettre au point, à le valider avec des experts du domaine, et à le publier
-						sur le web;</li>
+						<li>A démontrer et illustrer le fonctionnement de certaines technologies du web de données;</li>
 					</ul>
 				</p>
 				<h4>L'utilisation est gratuite ?</h4>
@@ -73,7 +75,7 @@
 				<p>Non.</p>
 				<h4>Qui a développé SKOS Play ?</h4>
 				<p>
-					<a href="http://francart.fr" target="_blank">Thomas Francart</a> pour <a href="http://sparna.fr" target="_blank">Sparna</a>.
+					<a href="http://blog.sparna.fr" target="_blank">Thomas Francart</a> pour <a href="http://sparna.fr" target="_blank">Sparna</a>.
 				</p>
 				<h4>Quelles sont les licences des données d'exemple incluses ?</h4>
 				<p>
@@ -106,15 +108,15 @@
 				<h4>Qu'est-ce que SKOS ?</h4>
 				<p>
 					SKOS est un modèle de données partagé pour échanger et relier des systèmes d'organisation de connaissances sur le Web.
-					Ce modèle est défini par le W3C <a href="http://www.w3.org/TR/2009/REC-skos-reference-20090818/" target="_blank">ici</a>.
+					Ce modèle est défini par le W3C <a href="http://www.sparna.fr/skos/SKOS-traduction-francais.html" target="_blank">ici</a>.
 				</p>
 				<h4>Où trouver des données SKOS ?</h4>
 				<p><a href="http://www.w3.org/2001/sw/wiki/SKOS/Datasets" target="_blank">Ici</a></p>
 				<h4>Comment écrire un fichier SKOS ?</h4>
+				<p>Le plus direct est d'utiliser le <a href="convert">générateur de fichiers SKOS à partir de Excel fourni par SKOS Play</a>.</p>
 				<p>
-					Essayez <a href="http://sourceforge.net/projects/tematres/" target="_blank">Tematres</a> (open-source), le <a href="http://code.google.com/p/skoseditor/" target="_blank">plugin SKOS de Protégé</a> (open-source),
-					<a href="http://thmanager.sourceforge.net/" target="_blank">ThManager</a> (open-source), <a href="https://github.com/culturecommunication/ginco" target="_blank">Ginco</a> (open-source). Il existe également des
-					outils commerciaux.
+					Essayez <a href="http://sourceforge.net/projects/tematres/" target="_blank">Tematres</a> (open-source),  <a href="https://github.com/culturecommunication/ginco" target="_blank">Ginco</a> (open-source).
+					Il existe également des	outils commerciaux (mais c'est plus char !).
 					<br />
 					Sinon vous pouvez simplement écrire à la main ou générer un fichier de cette forme, l'enregistrer avec l'extension *.ttl, en faisant attention
 					que l'encodage du fichier soit UTF-8, et voilà :
@@ -163,13 +165,13 @@ chezmoi:123456 skos:broader chezmoi:Vehicule .
 				<legend>SKOS Play : fonctionnement</legend>
 				<h4>Comment fonctionne SKOS Play ?</h4>
 				<p>
-					SKOS Play est basé sur <a href="http://openrdf.org">OpenRDF Sesame</a> et utilise notamment le composant <a href="http://tfrancart.bitbucket.org/sesame-toolkit/apidocs/fr/sparna/rdf/sesame/toolkit/Documentation.html" target="_blank">sesame-toolkit</a>.
+					SKOS Play est basé sur <a href="http://rdf4j.org">Eclipse RDF4J</a> et utilise notamment le composant <a href="http://tfrancart.bitbucket.org/sesame-toolkit/apidocs/fr/sparna/rdf/sesame/toolkit/Documentation.html" target="_blank">sesame-toolkit</a>.
 					Les visualisations de données sont faites avec <a href="http://d3js.org" target="_blank">d3js</a>, les PDF avec <a href="http://xmlgraphics.apache.org/fop/" target="_blank">Apache FOP</a>.
 					La génération des rendus est faite avec des requêtes SPARQL.
 					<br />
 					Schématiquement, il y a 4 niveaux logiques dans l'application :
 					<ol>
-						<li>Le chargement/traitement du RDF avec Sesame et <a href="http://tfrancart.bitbucket.org/sesame-toolkit/apidocs/fr/sparna/rdf/sesame/toolkit/Documentation.html" target="_blank">sesame-toolkit</a>;</li>
+						<li>Le chargement/traitement du RDF avec RDF4J et <a href="http://tfrancart.bitbucket.org/sesame-toolkit/apidocs/fr/sparna/rdf/sesame/toolkit/Documentation.html" target="_blank">sesame-toolkit</a>;</li>
 						<li>Les requêtes spécifiques au modèle de données SKOS (voir l'algo de parcours d'arbre plus bas);</li>
 						<li>La transformation des données SKOS en structure "imprimable" en utilisant JAXB, puis de cette structure en HTML ou PDF avec des XSLT;</li>
 						<li>Le code des écrans de l'application, servlets, JSP & JSPL, Jquery, Bootstrap.</li>
@@ -232,27 +234,22 @@ chezmoi:123456 skos:broader chezmoi:Vehicule .
 				</p>
 				<h4>Quels sont les syntaxes RDF supportées ?</h4>
 				<p>
-					Toutes celles supportées par Sesame, donc RDF/XML, Turtle, N3, N-triples, TriG, TriX...
+					Toutes celles supportées par RDF4J, donc RDF/XML, Turtle, N3, N-triples, TriG, TriX...
 				</p>
 				<h4>Combien de concepts SKOS Play peut-il traiter ?</h4>
 				<p>
-					Pour le moment, <b>SKOS Play accepte un maximum de 5000 concepts</b>, pour ne pas surcharger
-					le mini-serveur qui héberge l'application.
+					Pour le moment, <b>SKOS Play accepte un maximum de 5000 concepts</b>.
 					<br />
 					En théorie, il n'y a pas de limite, mais de façon pratique, pour les rendus liste de concepts, alphabétique et hiérarchique,
 					j'éviterais d'envoyer plus de 5000 concepts pour ne pas avoir des fichiers de sortie énormes.
-					Pour les visualisations, je dirai pas plus de 2000 concepts, sinon on ne voit plus rien.
+					Pour les visualisations, je dirais pas plus de 2000 concepts, sinon on ne voit plus rien.
 				</p>
-				<h4>Est-ce qu'il y a un service web, une API ? est-ce que SKOS-XL est supporté ? est-ce ça fait le café ?
+				<h4>Est-ce que SKOS-XL est supporté ?</h4>
+				<p>Oui ! il y a une option lors de la génération pour lire les <a href="http://www.sparna.fr/skos/SKOS-traduction-francais.html#xl" target="_blank">libellés en SKOS-XL</a>. Décochez l'option si vous voulez gagner un peu de temps.</p>
+				<h4>Est-ce qu'il y a un service web, une API ? est-ce ça fait le café ?
 				</h4>
 				<p>
-					Non. Non. Non. Mais <a href="https://groups.google.com/d/forum/skos-play-discuss" target="_blank">parlez-en sur le forum</a> pour exprimer votre intérêt et cela existera peut-être un jour.
-				</p>
-				<h4>C'est lent !</h4>
-				<p>
-					Oui. L'application est hébergée sur un mini-serveur. Je recherche des personnes susceptibles
-					de founir gracieusement un hébergement pour l'application pour enlever la limite des 5000 concepts.
-					Si vous êtes intéressés, <a href="m&#x61;ilto:t&#x68;om&#x61;s.fr&#x61;nc&#x61;&#x72;t@sp&#x61;&#x72;na&#46;fr">contactez-moi</a>.
+					Non. Non. Mais <a href="https://groups.google.com/d/forum/skos-play-discuss" target="_blank">parlez-en sur le forum</a> pour exprimer votre intérêt et cela existera peut-être un jour.
 				</p>
 			</fieldset>
 

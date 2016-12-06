@@ -1,5 +1,6 @@
 package fr.sparna.rdf.skos.xls2skos;
 
+import java.io.File;
 import java.io.OutputStream;
 
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -22,10 +23,19 @@ public class ModelWriterFactory {
 			modelWriter = new ZipOutputStreamModelWriter(out);
 			((ZipOutputStreamModelWriter)modelWriter).setFormat(format);
 		} else {
-			modelWriter=new OutputStreamModelWriter(out);
+			modelWriter = new OutputStreamModelWriter(out);
 			((OutputStreamModelWriter)modelWriter).setFormat(format);				
 		}
 		
+		return modelWriter;
+	}
+	
+	public ModelWriterIfc buildNewModelWriter(File directory) {
+		if(!directory.exists()) {
+			directory.mkdirs();
+		}
+		ModelWriterIfc modelWriter = new DirectoryModelWriter(directory);
+		((DirectoryModelWriter)modelWriter).setFormat(format);		
 		return modelWriter;
 	}
 
