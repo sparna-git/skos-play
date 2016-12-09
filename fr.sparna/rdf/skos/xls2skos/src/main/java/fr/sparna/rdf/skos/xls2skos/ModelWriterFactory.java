@@ -8,6 +8,7 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 public class ModelWriterFactory {
 
 	protected boolean useZip = false;
+	protected boolean useGraph = false;
 	protected RDFFormat format;
 	
 	public ModelWriterFactory(boolean useZip, RDFFormat format) {
@@ -15,27 +16,35 @@ public class ModelWriterFactory {
 		this.useZip = useZip;
 		this.format = format;
 	}
+	
+	public ModelWriterFactory(boolean useZip, RDFFormat format, boolean useGraph) {
+		super();
+		this.useZip = useZip;
+		this.format = format;
+		this.useGraph = useGraph;
+	}
 
 	public ModelWriterIfc buildNewModelWriter(OutputStream out) {
-		// initialisation du modelWriter
-		ModelWriterIfc modelWriter;
-		if(useZip) {
-			modelWriter = new ZipOutputStreamModelWriter(out);
-			((ZipOutputStreamModelWriter)modelWriter).setFormat(format);
+		// if useGraph, force a ZIP output
+		if(useGraph || useZip) {
+			ZipOutputStreamModelWriter modelWriter = new ZipOutputStreamModelWriter(out);
+			modelWriter.setFormat(format);
+			modelWriter.setSaveGraphFile(useGraph);
+			return modelWriter;
 		} else {
-			modelWriter = new OutputStreamModelWriter(out);
-			((OutputStreamModelWriter)modelWriter).setFormat(format);				
+			OutputStreamModelWriter modelWriter = new OutputStreamModelWriter(out);
+			modelWriter.setFormat(format);
+			return modelWriter;
 		}
-		
-		return modelWriter;
 	}
 	
 	public ModelWriterIfc buildNewModelWriter(File directory) {
 		if(!directory.exists()) {
 			directory.mkdirs();
 		}
-		ModelWriterIfc modelWriter = new DirectoryModelWriter(directory);
-		((DirectoryModelWriter)modelWriter).setFormat(format);		
+		DirectoryModelWriter modelWriter = new DirectoryModelWriter(directory);
+		modelWriter.setFormat(format);
+		modelWriter.setSaveGraphFile(this.useGraph);
 		return modelWriter;
 	}
 
@@ -53,6 +62,14 @@ public class ModelWriterFactory {
 
 	public void setFormat(RDFFormat format) {
 		this.format = format;
+	}
+
+	public boolean isUseGraph() {
+		return useGraph;
+	}
+
+	public void setUseGraph(boolean useGraph) {
+		this.useGraph = useGraph;
 	}
 	
 }

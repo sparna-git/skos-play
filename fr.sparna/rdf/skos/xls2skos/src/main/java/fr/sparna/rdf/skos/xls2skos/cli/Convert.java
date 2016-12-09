@@ -29,8 +29,8 @@ public class Convert implements CliCommandIfc {
 		}
 		
 		// if user asked for graph files, but without outputting in a directory or in a zip, this is an error
-		if(a.isGenerateGraphFiles() && (!a.getOutput().getName().endsWith("zip") || a.isOutputAsDirectory())) {
-			log.error("If you need to generate graph files please use the option to output in a directory, or in a zip file.");
+		if(a.isGenerateGraphFiles() && !(a.getOutput().getName().endsWith("zip") || a.isOutputAsDirectory())) {
+			log.error("If you need to generate graph files please use the option to output in a directory, or provide an output file with .zip extension.");
 			return;
 		}
 		
@@ -53,7 +53,7 @@ public class Convert implements CliCommandIfc {
 		
 		// determine output mode
 		boolean useZip = a.getOutput().getName().endsWith("zip");
-		ModelWriterFactory factory = new ModelWriterFactory(useZip, theFormat);
+		ModelWriterFactory factory = new ModelWriterFactory(useZip, theFormat, a.isGenerateGraphFiles());
 		
 		ModelWriterIfc modelWriter = null;
 		FileOutputStream fileStream = null;

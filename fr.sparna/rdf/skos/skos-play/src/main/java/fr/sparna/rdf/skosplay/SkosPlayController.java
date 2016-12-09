@@ -278,21 +278,34 @@ public class SkosPlayController {
 	}
 
 	@RequestMapping(value = "/convert",method = RequestMethod.POST)
-	public ModelAndView convertRDF(			
+	public ModelAndView convertRDF(
+			// type of source ("file", "url", "example", "google")
 			@RequestParam(value="source", required=true) String sourceString,
-			@RequestParam(value="file", required=false) MultipartFile file,			
+			// uploaded file if source=file
+			@RequestParam(value="file", required=false) MultipartFile file,		
+			// language of the labels to generate
 			@RequestParam(value="language", required=false) String language,
-			@RequestParam(value="google", required=false) String googleId,//ID for google drive file
+			// ID of the google drive file if source=google
+			@RequestParam(value="google", required=false) String googleId,
+			// URL of the file if source=url
 			@RequestParam(value="url", required=false) String url,
+			// output format of the generated files
 			@RequestParam(value="output", required=false) String format,
-			@RequestParam(value="example", required=false) String Example,
+			// reference of the example if source=example
+			@RequestParam(value="example", required=false) String example,
+			// flag to generate SKOS-XL or not
 			@RequestParam(value="usexl", required=false) boolean usexl,
+			// flag to output result in a ZIP file or not
 			@RequestParam(value="usezip", required=false) boolean useZip,
+			// flag to indicate if graph files should be generated or not
+			@RequestParam(value="usegraph", required=false) boolean useGraph,
+			// the request
 			HttpServletRequest request,
+			// the response
 			HttpServletResponse response			
-			) throws Exception {
+	) throws Exception {
 
-		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+usexl+",useZip="+useZip+"language="+language+",url="+url+",ex="+Example+")");
+		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+usexl+",useZip="+useZip+"language="+language+",url="+url+",ex="+example+")");
 		final SessionData sessionData = SessionData.get(request.getSession());
 		//source, it can be: file, example, url or google
 		SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());
@@ -352,8 +365,8 @@ public class SkosPlayController {
 		}					
 
 		case EXAMPLE : {
-			log.debug("*Conversion à partir d'un fichier d'exemple : "+Example);
-			URL urls = new URL(Example);
+			log.debug("*Conversion à partir d'un fichier d'exemple : "+example);
+			URL urls = new URL(example);
 			InputStream urlInputStream = urls.openStream(); // throws an IOException
 			in = new DataInputStream(new BufferedInputStream(urlInputStream));
 
@@ -397,7 +410,7 @@ public class SkosPlayController {
 			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+usexl);
 			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
 			response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());	
-			generateType(new ModelWriterFactory(useZip, theFormat).buildNewModelWriter(response.getOutputStream()),in,language,usexl);
+			generateType(new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),in,language,usexl);
 		} finally {
 			try {
 				if(in != null) {

@@ -278,19 +278,18 @@
 						</div>
 						<!-- ****GENERATE GRAPH****** -->
 						
-						<!-- <div class="form-group">
-							<div class="col-sm-1">
+						<div class="form-group">
+							<label class="col-sm-4">
+								<fmt:message key="convert.form.usegraph" />
+							</label>
+							<div class="col-sm-8">
 								<input
 									type="checkbox"
 									id="usegraph"
 									name="usegraph" />
 								<span class="help-block"><i></i></span>
-							</div>
-							<label class="col-sm-4">
-								<fmt:message key="upload.form.usegraph" />
-							</label> 
-							</div>
-							-->
+							</div>	
+						</div>
 						
 	   				</div></div>
 	   			</div><!-- end accordion-group : Advanced options -->
@@ -423,7 +422,7 @@
 				<p />The converter can actually generate other RDF vocabularies than SKOS. For this :
 				<ul>
 					<li>Add an <code>rdf:type</code> column to your data, and specify an explicit rdf:type for each row. Each row not having an explicit rdf:type will be considered a skos:Concept;</li>
-					<li>Make sure you still declare a URI in cell B1 (the URI of the generated class), this will be the URI of the named graph or file in which the data will be generated;</li>
+					<li>Make sure you still declare a URI in cell B1, this will be the URI of the <em>named graph</em> 	in which the data will be generated;</li>
 					<li>Don't declare metadata in the header;</li>
 				</ul>
 				<p />This is how this kind of file could look like :
@@ -436,17 +435,17 @@
 				<p />This is the list of known prefixes in the converter. You don't have to declare them in the header.
 				<ul>
 					<li><a href="http://prefix.cc/rdf"><code>rdf</code></a></li>
-					<li><a href="http://prefix.cc/rdf"><code>rdfs</code></a></li>
-					<li><a href="http://prefix.cc/rdf"><code>owl</code></a></li>
-					<li><a href="http://prefix.cc/rdf"><code>skos</code></a></li>
-					<li><a href="http://prefix.cc/rdf"><code>skosxl</code></a></li>
-					<li><a href="http://prefix.cc/rdf"><code>foaf</code></a></li>
-					<li><a href="http://prefix.cc/rdf"><code>org</code></a></li>
-					<li><a href="http://prefix.cc/rdf"><code>prov</code></a></li>
-					<li><a href="http://prefix.cc/rdf"><code>schema</code></a></li>
-					<li><a href="http://prefix.cc/rdf"><code>dc</code></a></li>
-					<li><a href="http://prefix.cc/rdf"><code>dct</code></a> or <a href="http://prefix.cc/rdf"><code>dcterms</code></a></li>
-					<li><a href="http://prefix.cc/rdf"><code>xsd</code></a></li>
+					<li><a href="http://prefix.cc/rdfs"><code>rdfs</code></a></li>
+					<li><a href="http://prefix.cc/owl"><code>owl</code></a></li>
+					<li><a href="http://prefix.cc/skos"><code>skos</code></a></li>
+					<li><a href="http://prefix.cc/skosxl"><code>skosxl</code></a></li>
+					<li><a href="http://prefix.cc/foaf"><code>foaf</code></a></li>
+					<li><a href="http://prefix.cc/org"><code>org</code></a></li>
+					<li><a href="http://prefix.cc/prov"><code>prov</code></a></li>
+					<li><a href="http://prefix.cc/schema"><code>schema</code></a></li>
+					<li><a href="http://prefix.cc/dc"><code>dc</code></a></li>
+					<li><a href="http://prefix.cc/dct"><code>dct</code></a> or <a href="http://prefix.cc/dcterms"><code>dcterms</code></a></li>
+					<li><a href="http://prefix.cc/xsd"><code>xsd</code></a></li>
 				</ul>
 			</fieldset>
 			
@@ -465,6 +464,12 @@
 	      		$('.exampleEntry').click(function() {
 	      			$('#example').val($(this).attr('data-value'));
 	      			$('#exampleLabel').html($(this).html());
+	      		});
+	      		
+	      		$('#usegraph').click(function() {
+	      			if($(this).is(':checked')) {
+		      			$('#usezip').attr('checked', true);
+	      			}
 	      		});
 	      		
 				// disable submit button on click
