@@ -294,7 +294,7 @@ public class SkosPlayController {
 			// reference of the example if source=example
 			@RequestParam(value="example", required=false) String example,
 			// flag to generate SKOS-XL or not
-			@RequestParam(value="usexl", required=false) boolean usexl,
+			@RequestParam(value="useskosxl", required=false) boolean useskosxl,
 			// flag to output result in a ZIP file or not
 			@RequestParam(value="usezip", required=false) boolean useZip,
 			// flag to indicate if graph files should be generated or not
@@ -305,7 +305,7 @@ public class SkosPlayController {
 			HttpServletResponse response			
 	) throws Exception {
 
-		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+usexl+",useZip="+useZip+"language="+language+",url="+url+",ex="+example+")");
+		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+useskosxl+",useZip="+useZip+"language="+language+",url="+url+",ex="+example+")");
 		final SessionData sessionData = SessionData.get(request.getSession());
 		//source, it can be: file, example, url or google
 		SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());
@@ -339,7 +339,7 @@ public class SkosPlayController {
 				
 				GoogleAuthHelper auth=sessionData.getGoogleAuthHelper();
 				Drive service=auth.getDriveService(credential);
-				return convert(service,googleId,sessionData,usexl,useZip,language,theFormat,request);
+				return convert(service,googleId,sessionData,useskosxl,useZip,language,theFormat,request);
 			} else {
 				log.debug("credential not found->authorization process");
 				GoogleAuthHelper me = new GoogleAuthHelper(url_Redirect);
@@ -353,7 +353,7 @@ public class SkosPlayController {
 				cfd.setGoogleId(googleId);
 				cfd.setLanguage(language);
 				cfd.setOutput(format);
-				cfd.setUseXl(usexl);
+				cfd.setUseXl(useskosxl);
 				cfd.setUseZip(useZip);
 				SessionData.get(request.getSession()).setConvertFormData(cfd);
 				
@@ -407,10 +407,10 @@ public class SkosPlayController {
 		}
 
 		try {
-			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+usexl);
+			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+useskosxl);
 			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
 			response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());	
-			generateType(new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),in,language,usexl);
+			generateType(new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),in,language,useskosxl);
 		} finally {
 			try {
 				if(in != null) {
@@ -428,6 +428,7 @@ public class SkosPlayController {
 		converter.setGenerateXlDefinitions(generatexl);
 		converter.processInputStream(filefrom);
 	}
+	
 	private ModelAndView convert(
 			Drive service, 
 			String id_fichier, 
