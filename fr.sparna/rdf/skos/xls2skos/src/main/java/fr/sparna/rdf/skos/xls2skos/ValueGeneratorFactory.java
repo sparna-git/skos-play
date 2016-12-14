@@ -57,27 +57,27 @@ public final class ValueGeneratorFactory {
 				if(datatype != null) {
 					Literal l = null;
 					if(datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#date")) {
-						Date d = ExcelHelper.asCalendar(value).getTime();
+						Date d = ExcelHelper.asCalendar(value.trim()).getTime();
 						l = SimpleValueFactory.getInstance().createLiteral(
 								new SimpleDateFormat("yyyy-MM-dd").format(d),
 								SimpleValueFactory.getInstance().createIRI("http://www.w3.org/2001/XMLSchema#date")
 						);
 					} else if(datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#dateTime")) {
 						try {
-							l = SimpleValueFactory.getInstance().createLiteral(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)ExcelHelper.asCalendar(value)));
+							l = SimpleValueFactory.getInstance().createLiteral(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)ExcelHelper.asCalendar(value.trim())));
 						} catch (DatatypeConfigurationException e) {
 							e.printStackTrace();
 						}
 						
 					} else {
-						l = SimpleValueFactory.getInstance().createLiteral(value, datatype);
+						l = SimpleValueFactory.getInstance().createLiteral(value.trim(), datatype);
 					}
 					
 					model.add(subject, property, l);
 				} else if(language != null) {
-					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value, language));
+					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim(), language));
 				} else {
-					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value));
+					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim()));
 				}
 			}
 			
@@ -107,14 +107,14 @@ public final class ValueGeneratorFactory {
 
 	public static ValueGeneratorIfc langLiteral(IRI property, String lang) {
 		return (model, subject, value, language, datatype) -> {
-			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value, language));
+			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim(), language));
 			return null;
 		};
 	}
 
 	public static ValueGeneratorIfc plainLiteral(IRI property) {
 		return (model, subject, value, language, datatype) -> {
-			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value));
+			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim()));
 			return null;
 		};
 	}
