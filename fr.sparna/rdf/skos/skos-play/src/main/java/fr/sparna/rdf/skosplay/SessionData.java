@@ -1,6 +1,7 @@
 package fr.sparna.rdf.skosplay;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -10,6 +11,8 @@ import org.eclipse.rdf4j.repository.Repository;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
 
 import fr.sparna.google.GoogleAuthHelper;
 import fr.sparna.rdf.sesame.toolkit.handler.DebugHandler;
@@ -50,6 +53,19 @@ public class SessionData {
 	
 	protected ConvertFormData convertFormData;
 	
+	protected GooglePojo user;
+	
+	protected List<File> googleFile;
+	
+
+	public List<File> getGoogleFile() {
+		return googleFile;
+	}
+
+	public void setGoogleFile(List<File> list) {
+		this.googleFile = list;
+	}
+
 	/**
 	 * Stores this data into session
 	 * @param session
@@ -64,10 +80,20 @@ public class SessionData {
 	 * @param session
 	 * @return
 	 */
+	
+	
 	public static SessionData get(HttpSession session) {
 		return (SessionData)session.getAttribute(KEY);
 	}
 	
+	public GooglePojo getUser() {
+		return user;
+	}
+
+	public void setUser(GooglePojo user) {
+		this.user = user;
+	}
+
 	public Repository getRepository() {
 		return repository;
 	}

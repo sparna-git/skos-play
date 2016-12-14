@@ -17,6 +17,15 @@ public class ConvertFormData {
 	protected boolean useXl;
 	protected String language;
 	protected String output;
+	protected String graph;
+
+	public String getGraph() {
+		return graph;
+	}
+
+	public void setGraph(String graph) {
+		this.graph = graph;
+	}
 
 	public String getErrorMessagefile() {
 		return errorMessagefile;

@@ -1,17 +1,23 @@
 package fr.sparna.rdf.skosplay;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.InvalidParameterException;
+import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,8 +53,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.DriveScopes;
+import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.FileList;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.h2.examples.H2MemoryDatabaseExample;
 
 import fr.sparna.commons.io.ReadWriteTextFile;
 import fr.sparna.commons.tree.GenericTree;
@@ -103,9 +115,9 @@ import fr.sparna.rdf.skos.toolkit.SKOSRules;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeBuilder;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
-import fr.sparna.rdf.skos.xls2skos.Xls2SkosConverter;
 import fr.sparna.rdf.skos.xls2skos.ModelWriterFactory;
 import fr.sparna.rdf.skos.xls2skos.ModelWriterIfc;
+import fr.sparna.rdf.skos.xls2skos.Xls2SkosConverter;
 
 
 
@@ -222,23 +234,133 @@ public class SkosPlayController {
 		return null;
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+@RequestMapping(value = "/test",method = RequestMethod.GET)
+	public ModelAndView connexion(
+			HttpServletRequest request,
+			HttpServletResponse response
+			) throws Exception  {
+		
+		UploadFormData data = new UploadFormData();
+		
+
+		return new ModelAndView("test", UploadFormData.KEY, data);
+		
+	}	
+			
+@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login(
 			@RequestParam(value="code", required=true) String code,
 			HttpServletRequest request,
 			HttpServletResponse response
 	) throws IOException  {
-		final SessionData sessionData = SessionData.get(request.getSession());
 		
-		// create the credentials and store it in session
-		GoogleAuthHelper auth = sessionData.getGoogleAuthHelper();
-		auth.setAuthorizationCode(code);
-		Credential credential = auth.exchangeCode();
-		sessionData.setGoogleCredential(credential);
+	
 		
-		log.debug("L'utilisateur s'est connecté le code retour est="+code);
-		response.sendRedirect("convert");
-		return null;
+		
+		try{
+			final SessionData sessionData = SessionData.get(request.getSession());
+			// create the credentials and store it in session
+			
+			
+			
+			
+			
+		String urlParameters = "code="
+                + code
+                + "&client_id=611030822832-ea9cimuarqabdaof7e1munk90hr67mlo.apps.googleusercontent.com"
+                + "&client_secret=vN-Q9H2dI7Oc4-I4KVaRJ2RI"
+                + "&redirect_uri=http://localhost:8080/skos-play/login"
+                + "&grant_type=authorization_code";
+        
+        //post parameters
+        URL url = new URL("https://accounts.google.com/o/oauth2/token");
+        URLConnection urlConn = url.openConnection();
+        urlConn.setDoOutput(true);
+        OutputStreamWriter writer = new OutputStreamWriter(
+                urlConn.getOutputStream());
+        writer.write(urlParameters);
+        writer.flush();
+        
+        //get output in outputString 
+        String line, outputString = "";
+        BufferedReader reader = new BufferedReader(new InputStreamReader(
+                urlConn.getInputStream()));
+        while ((line = reader.readLine()) != null) {
+            outputString += line;
+        }
+        System.out.println(outputString);
+        
+        //get Access Token 
+        JsonObject json = (JsonObject)new JsonParser().parse(outputString);
+        String access_token = json.get("access_token").getAsString();
+        System.out.println(access_token);
+
+        //get User Info 
+        url = new URL(
+                "https://www.googleapis.com/oauth2/v1/userinfo?access_token="
+                        + access_token);
+        urlConn = url.openConnection();
+        outputString = "";
+        reader = new BufferedReader(new InputStreamReader(
+                urlConn.getInputStream()));
+        while ((line = reader.readLine()) != null) {
+            outputString += line;
+        }
+        System.out.println(outputString);
+        
+        
+        GooglePojo data = new Gson().fromJson(outputString, GooglePojo.class);
+        sessionData.setUser(data);
+        
+        GoogleCredential credential = new GoogleCredential().setAccessToken(access_token);
+        sessionData.setGoogleCredential(credential);
+        Drive service = null;
+		try {
+			GoogleAuthHelper helper = new GoogleAuthHelper(null);
+			sessionData.setGoogleAuthHelper(helper);
+			helper.setApplicationName("SKOS Play !");
+			service = helper.getDriveService(credential);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        
+		String pageToken = null;
+		
+		do {
+		    FileList result = service.files().list()
+		            .setQ("mimeType='application/vnd.google-apps.spreadsheet'")
+		            .setSpaces("drive")
+		            .setFields("nextPageToken, files(id, name)")
+		            .setPageToken(pageToken)
+		            .execute();
+		    
+		   sessionData.setGoogleFile(result.getFiles());
+		    for(File file: result.getFiles()) {
+		    	
+		        System.out.printf("Found file: %s (%s)\n",
+		                file.getName(), file.getId());
+		    }
+		    pageToken = result.getNextPageToken();
+		} while (pageToken != null);
+
+
+        writer.close();
+        reader.close();
+        
+		 
+        
+    } catch (MalformedURLException e) {
+        System.out.println( e);
+    } catch (ProtocolException e) {
+        System.out.println( e);
+    } catch (IOException e) {
+        System.out.println( e);
+    }
+    System.out.println("leaving doGet");
+    response.sendRedirect("convert");
+    return null;
 	}
 	
 	
@@ -304,7 +426,14 @@ public class SkosPlayController {
 			// the response
 			HttpServletResponse response			
 	) throws Exception {
+		
+		/*H2MemoryDatabaseExample bases= new H2MemoryDatabaseExample();
+		try {
+           bases.insertWithStatement(nom, xl, zip, output, Graph);
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }*/
 		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+usexl+",useZip="+useZip+"language="+language+",url="+url+",ex="+example+")");
 		final SessionData sessionData = SessionData.get(request.getSession());
 		//source, it can be: file, example, url or google
@@ -329,19 +458,19 @@ public class SkosPlayController {
 			}
 
 			// String url_Redirect=baseURL.toString()+"/convert?id="+googleId+"&usezip="+useZip+"&usexl="+usexl+"&language="+language+"&output="+URLEncoder.encode(format, "UTF-8");
-			String url_Redirect=baseURL.toString()+"/login";
-			log.debug("URL de redirection : "+url_Redirect);
+			//String url_Redirect=baseURL.toString()+"/login";
+			//log.debug("URL de redirection : "+url_Redirect);
 			// test if we already have the credentials in session
 			Credential credential=sessionData.getGoogleCredential();
 			if(credential!=null) {	
 				log.debug("credential found->authorization already granted");
 				log.debug("conversion en cours...");
-				
 				GoogleAuthHelper auth=sessionData.getGoogleAuthHelper();
 				Drive service=auth.getDriveService(credential);
+				
 				return convert(service,googleId,sessionData,usexl,useZip,language,theFormat,request);
 			} else {
-				log.debug("credential not found->authorization process");
+				/*log.debug("credential not found->authorization process");
 				GoogleAuthHelper me = new GoogleAuthHelper(url_Redirect);
 				me.setScopes(Arrays.asList(DriveScopes.DRIVE));
 				me.setApplicationName("SKOS Play !");
@@ -360,7 +489,7 @@ public class SkosPlayController {
 				//redirection vers google pour l'autorisation
 				response.sendRedirect(me.getAuthorizationUrl());
 				// on sort tout de suite de la méthode après avoir fait un redirect
-				return null;
+				return null;*/
 			}
 		}					
 

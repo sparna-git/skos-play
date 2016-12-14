@@ -1,41 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="skos-printer" version="2.5">
-  
-  <display-name>KOS Play</display-name>
-  
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="skos-printer" version="2.5">
+  <display-name>SKOS Play</display-name>
   <context-param>
     <param-name>javax.servlet.jsp.jstl.fmt.fallbackLocale</param-name>
     <param-value>en</param-value>
   </context-param>
-  
   <filter>
     <description></description>
     <filter-name>sessionFilter</filter-name>
     <filter-class>fr.sparna.rdf.skosplay.SessionFilter</filter-class>
   </filter>
-  
   <filter-mapping>
     <filter-name>sessionFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-  
-	<!-- Main Spring dispatcher servlet -->
-	<servlet>
-		<servlet-name>spring-dispatcher</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	
-	<servlet-mapping>
-		<!-- Spring va chercher un fichier de conf dans WEB-INF/[servlet-name]-servlet.xml -->
-		<servlet-name>spring-dispatcher</servlet-name>
-		<!-- ne _pas_ mettre /*, voir http://stackoverflow.com/questions/1266303/no-mapping-found-for-http-request-with-uri-web-inf-pages-apiform-jsp -->
-		<url-pattern>/</url-pattern> 
-	</servlet-mapping>
-	
-	<welcome-file-list>
-		<!-- JSP welcome file that will redirect to a Spring call -->
-		<welcome-file>welcomefile.jsp</welcome-file>
-	</welcome-file-list>
-
+  <servlet>
+    <servlet-name>spring-dispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>spring-dispatcher</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  <welcome-file-list>
+    <welcome-file>welcomefile.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>session</display-name>
+    <servlet-name>session</servlet-name>
+    <servlet-class>session</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>session</servlet-name>
+    <url-pattern>/session</url-pattern>
+  </servlet-mapping>
 </web-app>
