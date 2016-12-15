@@ -16,6 +16,11 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A Sheet in a Workbook that can be turned into RDF.
+ * @author Thomas Francart
+ *
+ */
 public class RdfizableSheet {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
@@ -29,6 +34,15 @@ public class RdfizableSheet {
 		this.converter = converter;
 	}
 	
+	/**
+	 * A Sheet can be converted to RDF if :
+	 * <ol>
+	 *   <li>The first row is not empty</li>
+	 *   <li>Cell B1 contains a value</li>
+	 *   <li>The value is a URI starting with http:// or using one of the declared prefixes in the file</li>
+	 * </ol>
+	 * @return true if this sheet can be converted in RDF by the converter, false otherwise.
+	 */
 	public boolean canRDFize() {
 		if(sheet.getRow(0) == null) {
 			log.debug(sheet.getSheetName()+" : First row is empty.");
@@ -60,6 +74,11 @@ public class RdfizableSheet {
 		return getCellValue(sheet.getRow(0).getCell(1));
 	}
 	
+	/**
+	 * Determines the index of the row containing the column headers. This is determined by checking if column B and C both contain a URI (full, starting with http://, or abbreviated
+	 * using one of the declared prefix).
+	 * @return
+	 */
 	public int getTitleRowIndex() {
 		int headerRowIndex = 1;
 		for (int rowIndex = headerRowIndex; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
@@ -90,6 +109,11 @@ public class RdfizableSheet {
 		return headerRowIndex;
 	}
 	
+	/**
+	 * Parses the ColumnHeader from the title row index.
+	 * @param rowNumber the index of the row containing the column headers
+	 * @return
+	 */
 	public List<ColumnHeader> getColumnHeaders(int rowNumber) {
 		List<ColumnHeader> columnNames = new ArrayList<>();
 		Row row = this.sheet.getRow(rowNumber);
@@ -107,6 +131,10 @@ public class RdfizableSheet {
 		return columnNames;
 	}
 	
+	/**
+	 * Reads the prefixes declared in the sheet. The prefixes are read in the top 20 rows, when column A contains "PREFIX" or "@prefix" (ignoring case).
+	 * @return the map of prefices
+	 */
 	public Map<String, String> readPrefixes() {
 		Map<String, String> prefixes = new HashMap<String, String>();
 		
@@ -116,7 +144,7 @@ public class RdfizableSheet {
 				String prefixKeyword = getCellValue(sheet.getRow(rowIndex).getCell(0));
 				// if we have the "prefix" keyword...
 				// note : we add a null check here because there are problems with some sheets
-				if(prefixKeyword != null && prefixKeyword.toUpperCase().startsWith("PREFIX")) {
+				if(prefixKeyword != null && (prefixKeyword.equalsIgnoreCase("PREFIX") || prefixKeyword.equalsIgnoreCase("@prefix"))) {
 					// and we have the prefix and namespaces defined...
 					String prefix = getCellValue(sheet.getRow(rowIndex).getCell(1));
 					if(StringUtils.isNotBlank(prefix)) {
