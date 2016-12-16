@@ -174,29 +174,44 @@
 						<span class="help-block"><i><fmt:message key="convert.form.remoteUrl.help" /></i></span>
 					</div>
 					</div>
-							<div class="form-group">
-						<input
-								class="col-sm-1"
-								type="radio"
-								name="source"
-								id="source-google"
-								value="google"
-								onchange="enabledInput('google')" />
-						<label class="col-sm-2 control-label">							
-							<fmt:message key="convert.form.remoteUrl.Google" />
-						</label>
+				<div class="form-group">
+								<input
+										class="col-sm-1"
+										type="radio"
+										name="source"
+										id="source-google"
+										value="google"
+										
+										onchange="enabledInput('google')" />	
+								<label class="col-sm-2 control-label">							
+									<fmt:message key="convert.form.remoteUrl.Google" />
+								</label>
 						<div class="col-sm-9" >
-						<span id="length" hidden="hidden" ><fmt:message   key="convert.form.length.googleID.error" /></span>
-							<input								
-								type="text"
-								id="google"
-								name="google"
-								value="${data.googleId}"
-								placeholder="1aNS3e1tpW1CCaDFpN97zEz3g9aULjStCXagTdDVgu"
-								class="form-control"
-								onchange="verifID()"
-								onkeypress="enabledInput('google');" style="width:80%;"/>
-							<span class="help-block"><i><fmt:message key="convert.form.remoteUrl.Google.help" /></i></span>
+							<span id="length" hidden="hidden" ><fmt:message   key="convert.form.length.googleID.error" /></span>
+								<!--<input								
+									type="text"
+									id="google"
+									name="google"
+									value="${data.googleId}"
+									placeholder="1aNS3e1tpW1CCaDFpN97zEz3g9aULjStCXagTdDVgu"
+									class="form-control"
+									onchange="verifID()"
+									onkeypress="enabledInput('google');" style="width:80%;"/>-->
+									<c:if test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user!= null}">
+												<div class="col-sm-10" style="margin-left:-15px;">
+													<select id="google"  class="form-control" onkeypress="enabledInput('google');" onchange="verifID()" name="google" style="width:100%;">	
+														<c:forEach var="name"  items="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].googleFile}" >
+														   <option value="<c:out value='${name.id}'/>"><c:out value="${name.name}"/></option>
+														</c:forEach>							 					 
+													</select>
+							  					</div><br/><br/>
+							  					<span class="help-block"><i><fmt:message key="convert.form.remoteUrl.Google.help" /></i></span>	
+									</c:if>
+									<c:if test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user==null}">
+											<div class="alert alert-info" style="width:80%;">
+												Veuillez vous connecter à votre compte google en cliquant sur l'onglet login
+											</div>
+									</c:if>
 						</div>
 					</div>
 				
@@ -487,6 +502,13 @@
 			    	enabledInput('google');
 			    	window.open('googleDriveConversion', '_blank');
 			    </c:if>
+			    <c:if test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user== null}">
+			    	$('#source-google').attr('disabled',true);
+		    	</c:if>
+		    	<c:if test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user!= null}">
+		    		$('#source-google').attr('disabled',false);
+		    		
+	    		</c:if>
 			    
 				$(function(){	 
 					$('#choice_Language').editableSelect();

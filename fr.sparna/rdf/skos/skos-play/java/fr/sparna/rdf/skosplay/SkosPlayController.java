@@ -61,6 +61,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import com.h2.examples.H2MemoryDatabaseExample2;
+
 import fr.sparna.commons.io.ReadWriteTextFile;
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
@@ -416,7 +418,7 @@ public class SkosPlayController {
 			// reference of the example if source=example
 			@RequestParam(value="example", required=false) String example,
 			// flag to generate SKOS-XL or not
-			@RequestParam(value="useskosxl", required=false) boolean useskosxl,
+			@RequestParam(value="usexl", required=false) boolean usexl,
 			// flag to output result in a ZIP file or not
 			@RequestParam(value="usezip", required=false) boolean useZip,
 			// flag to indicate if graph files should be generated or not
@@ -426,8 +428,16 @@ public class SkosPlayController {
 			// the response
 			HttpServletResponse response			
 	) throws Exception {
-		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+useskosxl+",useZip="+useZip+"language="+language+",url="+url+",ex="+example+")");
+		
+		
+		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+usexl+",useZip="+useZip+"language="+language+",url="+url+",ex="+example+")");
 		final SessionData sessionData = SessionData.get(request.getSession());
+		
+		/**********Insertion des données dans la base de données***********/
+		
+		
+		
+		
 		//source, it can be: file, example, url or google
 		SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());
 		// format
@@ -436,7 +446,8 @@ public class SkosPlayController {
 		log.debug("Base URL is "+baseURL.toString());
 		ConvertFormData data = new ConvertFormData();
 		data.setBaseUrl(baseURL.toString());
-		//SQLLogDao SQL= new SQLLogDao();
+		
+		
 		/**************************CONVERSION RDF**************************/
 		InputStream in = null;
 		switch(source) {
@@ -459,7 +470,8 @@ public class SkosPlayController {
 				log.debug("conversion en cours...");
 				GoogleAuthHelper auth=sessionData.getGoogleAuthHelper();
 				Drive service=auth.getDriveService(credential);
-				return convert(service,googleId,sessionData,useskosxl,useZip,language,theFormat,request);
+				
+				return convert(service,googleId,sessionData,usexl,useZip,language,theFormat,request);
 			} else {
 				/*log.debug("credential not found->authorization process");
 				GoogleAuthHelper me = new GoogleAuthHelper(url_Redirect);
@@ -473,7 +485,7 @@ public class SkosPlayController {
 				cfd.setGoogleId(googleId);
 				cfd.setLanguage(language);
 				cfd.setOutput(format);
-				cfd.setUseXl(useskosxl);
+				cfd.setUseXl(usexl);
 				cfd.setUseZip(useZip);
 				SessionData.get(request.getSession()).setConvertFormData(cfd);
 				
@@ -527,10 +539,10 @@ public class SkosPlayController {
 		}
 
 		try {
-			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+useskosxl);
+			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+usexl);
 			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
 			response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());	
-			generateType(new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),in,language,useskosxl);
+			generateType(new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),in,language,usexl);
 		} finally {
 			try {
 				if(in != null) {
@@ -538,6 +550,15 @@ public class SkosPlayController {
 				}
 			} catch (IOException ioe) { }
 		}
+		try {
+			H2MemoryDatabaseExample2 bases= new H2MemoryDatabaseExample2();
+			log.debug("---insertion dans la base----");
+           bases.insertWithStatement(sessionData.getUser().name,usexl,useZip, format,useGraph);
+           log.debug("---insertion dans la base terminée---");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 		return null;
 	}
@@ -548,7 +569,6 @@ public class SkosPlayController {
 		converter.setGenerateXlDefinitions(generatexl);
 		converter.processInputStream(filefrom);
 	}
-	
 	private ModelAndView convert(
 			Drive service, 
 			String id_fichier, 
