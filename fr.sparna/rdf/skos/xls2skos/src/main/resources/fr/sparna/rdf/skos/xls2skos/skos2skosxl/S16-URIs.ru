@@ -19,9 +19,9 @@ INSERT {
 		WHERE {
 			?x ?noteProperty ?note .
 			FILTER(isLiteral(?note))
-			FILTER(?noteProperty IN (skos:note, skos:changeNote, skos:definition, skos:editorialNote, skos:example, skos:historyNote, skos:scopeNote))
+			FILTER(?noteProperty IN (skos:definition))
 			OPTIONAL {
-				?x skos:note|skos:changeNote|skos:definition|skos:editorialNote|skos:example|skos:historyNote|skos:scopeNote ?anotherNoteBefore .
+				?x skos:definition ?anotherNoteBefore .
 				FILTER(STR(?anotherNoteBefore) < STR(?note))
 			}
 		} GROUP BY ?x ?noteProperty ?note
@@ -30,7 +30,7 @@ INSERT {
 	BIND(IRI(
 		CONCAT(
 			STR(?x),
-			'-note-',
+			'-def-',
 			STR(?index)
 		)
 	) AS ?noteUri)

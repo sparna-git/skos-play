@@ -348,13 +348,12 @@ public class Xls2SkosConverter {
 	}
 	
 	private Model xlify(Model m) {
+		log.debug("Xlifying Model...");
 		Repository r = new SailRepository(new MemoryStore());
 		r.initialize();
-		RepositoryConnection c = r.getConnection();
 		
-		c.add(m);
-		
-		try {
+		try(RepositoryConnection c = r.getConnection()) {
+			c.add(m);
 			if(this.generateXl) {
 				final List<String> SKOS2SKOSXL_URI_RULESET = Arrays.asList(new String[] { 
 						"skos2skosxl/S55-S56-S57-URIs.ru"
@@ -363,8 +362,7 @@ public class Xls2SkosConverter {
 				for (String aString : SKOS2SKOSXL_URI_RULESET) {
 					// Load SPARQL query definition
 			        InputStream src = this.getClass().getResourceAsStream(aString);		        
-			        String sparql =  IOUtils.toString(src);
-					
+			        String sparql =  IOUtils.toString(src);					
 					Update u = c.prepareUpdate(sparql);
 					u.execute();
 				}
@@ -383,19 +381,17 @@ public class Xls2SkosConverter {
 					u.execute();
 				}
 			}
+			
+			// re-export to a new Model
+			m.clear();
+			c.export(new AbstractRDFHandler() {
+				public void handleStatement(Statement st) throws RDFHandlerException {
+					m.add(st);
+				}			
+			});
 		} catch (Exception e) {
 			throw Xls2SkosException.rethrow(e);
 		}
-		
-		// re-export to a new Model
-		m.clear();
-		c.export(new AbstractRDFHandler() {
-			public void handleStatement(Statement st) throws RDFHandlerException {
-				m.add(st);
-			}			
-		});
-		
-		c.close();
 		
 		return m;
 		
