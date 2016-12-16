@@ -61,6 +61,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import com.h2.examples.H2MemoryDatabaseExample2;
+
 import fr.sparna.commons.io.ReadWriteTextFile;
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
@@ -427,8 +429,15 @@ public class SkosPlayController {
 			HttpServletResponse response			
 	) throws Exception {
 		
+		
 		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+usexl+",useZip="+useZip+"language="+language+",url="+url+",ex="+example+")");
 		final SessionData sessionData = SessionData.get(request.getSession());
+		
+		/**********Insertion des données dans la base de données***********/
+		
+		
+		
+		
 		//source, it can be: file, example, url or google
 		SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());
 		// format
@@ -437,7 +446,8 @@ public class SkosPlayController {
 		log.debug("Base URL is "+baseURL.toString());
 		ConvertFormData data = new ConvertFormData();
 		data.setBaseUrl(baseURL.toString());
-		//SQLLogDao SQL= new SQLLogDao();
+		
+		
 		/**************************CONVERSION RDF**************************/
 		InputStream in = null;
 		switch(source) {
@@ -540,6 +550,15 @@ public class SkosPlayController {
 				}
 			} catch (IOException ioe) { }
 		}
+		try {
+			H2MemoryDatabaseExample2 bases= new H2MemoryDatabaseExample2();
+			log.debug("---insertion dans la base----");
+           bases.insertWithStatement(sessionData.getUser().name,usexl,useZip, format,useGraph);
+           log.debug("---insertion dans la base terminée---");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 		return null;
 	}
