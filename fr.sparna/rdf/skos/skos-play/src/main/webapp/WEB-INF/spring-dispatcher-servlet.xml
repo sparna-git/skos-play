@@ -55,11 +55,22 @@
         class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
     </bean>
     
+<!--     <mvc:interceptors> -->
+<!-- 		<bean class="org.springframework.web.servlet.mvc.WebContentInterceptor" p:cacheSeconds="86400" p:alwaysUseFullPath="true" > -->
+<!-- 		    <property name="cacheMappings"> -->
+<!-- 		        <props> -->
+<!-- 		            cache for one month -->
+<!-- 		            <prop key="/cache/me/**">2592000</prop> -->
+<!-- 		        </props> -->
+<!-- 		    </property> -->
+<!-- 		</bean> -->
+<!-- 	</mvc:interceptors> -->
+
     <mvc:interceptors>
-		<bean class="org.springframework.web.servlet.mvc.WebContentInterceptor" p:cacheSeconds="86400" p:alwaysUseFullPath="true" >
+		<bean class="org.springframework.web.servlet.mvc.WebContentInterceptor" p:alwaysUseFullPath="true" >
 		    <property name="cacheMappings">
 		        <props>
-		            <!-- cache for one month -->
+					<!-- cache for one month -->
 		            <prop key="/cache/me/**">2592000</prop>
 		        </props>
 		    </property>

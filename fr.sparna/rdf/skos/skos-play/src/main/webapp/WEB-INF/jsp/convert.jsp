@@ -9,6 +9,7 @@
 <fmt:setBundle basename="fr.sparna.rdf.skosplay.i18n.Bundle"/>
 
 <c:set var="data" value="${requestScope['fr.sparna.rdf.skosplay.ConvertFormData']}" />
+<c:set var="sessionData" value="${sessionScope['fr.sparna.rdf.skosplay.SessionData']}" />
 <c:set var="applicationData" value="${applicationScope.applicationData}" />
 
 <html>
@@ -33,17 +34,14 @@
 				document.getElementById('example').disabled = selected != 'example';
 				document.getElementById('file').disabled = selected != 'file';
 				document.getElementById('google').disabled = selected != 'google';
-				if((selected!='google')||(selected!='url'))
-					{
+				if((selected != 'google')||(selected!='url')) {
 					 document.formulaire.google.style.borderColor = "gray";
 					 document.formulaire.url.style.borderColor = "gray";
 					 $('#length').hide();
-					}
+				}
 				
 			   if(selected==='google')
-				verifID();
-				
-				
+				verifID();			
 			}	
 			
 			function verifID(){
@@ -103,13 +101,13 @@
 					</label>
 					<div class="col-sm-9" >
 						<select style=" width:40%;" name="example" id="example" onchange="dowloadExample()">
-							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-1.xlsx" selected>Example 1 (simple exemple, in english)</option>
-							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-2.xlsx">Example 2 (prefixes)</option>
-							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-3.xlsx">Example 3 (multilingual columns)</option>
-							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-4.xlsx">Example 4 (schema.org, datatypes, multiple sheets)</option>
-							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-5.xlsx">Example 5 (skos:Collection, inverse columns)</option>    
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-1.xlsx" selected>Example 1 (simple exemple, in english)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-2.xlsx">Example 2 (prefixes)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-3.xlsx">Example 3 (multilingual columns)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-4.xlsx">Example 4 (schema.org, datatypes, multiple sheets)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-5.xlsx">Example 5 (skos:Collection, inverse columns)</option>    
 						</select>						
-						<span class="help-block"><i><fmt:message key="convert.form.Example.download" />&nbsp;<a id="lien" href="${data.baseUrl}/excel_test/excel2skos-exemple-1.xlsx">Example 1 (simple exemple, in english)</a></i></span>
+						<span class="help-block"><i><fmt:message key="convert.form.Example.download" />&nbsp;<a id="lien" href="${sessionData.baseUrl}/excel_test/excel2skos-exemple-1.xlsx">Example 1 (simple exemple, in english)</a></i></span>
 					</div>
 			    </div>	
 			
@@ -157,13 +155,11 @@
 							id="source-url"
 							value="url"
 							onchange="enabledInput('url')" />
-					<label class="col-sm-2 control-label">
-						
+					<label class="col-sm-2 control-label">						
 						<fmt:message key="convert.form.remoteUrl" />
 					</label>
 					<div class="col-sm-9" >
-						<input
-							
+						<input							
 							type="text"
 							id="url"
 							name="url"
@@ -187,31 +183,28 @@
 									<fmt:message key="convert.form.remoteUrl.Google" />
 								</label>
 						<div class="col-sm-9" >
-							<span id="length" hidden="hidden" ><fmt:message   key="convert.form.length.googleID.error" /></span>
-								<!--<input								
-									type="text"
-									id="google"
-									name="google"
-									value="${data.googleId}"
-									placeholder="1aNS3e1tpW1CCaDFpN97zEz3g9aULjStCXagTdDVgu"
-									class="form-control"
-									onchange="verifID()"
-									onkeypress="enabledInput('google');" style="width:80%;"/>-->
-									<c:if test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user!= null}">
-												<div class="col-sm-10" style="margin-left:-15px;">
-													<select id="google"  class="form-control" onkeypress="enabledInput('google');" onchange="verifID()" name="google" style="width:100%;">	
-														<c:forEach var="name"  items="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].googleFile}" >
-														   <option value="<c:out value='${name.id}'/>"><c:out value="${name.name}"/></option>
-														</c:forEach>							 					 
-													</select>
-							  					</div><br/><br/>
-							  					<span class="help-block"><i><fmt:message key="convert.form.remoteUrl.Google.help" /></i></span>	
-									</c:if>
-									<c:if test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user==null}">
-											<div class="alert alert-info" style="width:80%;">
-												Veuillez vous connecter à votre compte google en cliquant sur l'onglet login
-											</div>
-									</c:if>
+							<div class="col-sm-10" style="margin-left:-15px;">
+							<c:choose>
+								<c:when test="${sessionData.user != null}">					
+									<select 
+										id="google"
+										class="form-control"
+										onchange="enabledInput('google');verifID();"
+										name="google"
+										style="width:100%;">	
+										<c:forEach var="currentFile" items="${data.googleFiles}" >
+										   <option value="${currentFile.id}">${currentFile.name} (${currentFile.modifiedTime})</option>
+										</c:forEach>							 					 
+									</select>				  					
+				  					<span class="help-block"><i><fmt:message key="convert.form.remoteUrl.Google.help" /></i></span>
+								</c:when>
+								<c:otherwise>
+									<div class="alert alert-info">
+										<fmt:message key="convert.form.googleID.notLogged" />
+									</div>
+								</c:otherwise>
+							</c:choose>	
+							</div><br/><br/>
 						</div>
 					</div>
 				
@@ -498,16 +491,11 @@
 				    $('#submit-button').attr('disabled', false);
 			    });
 		   		
-			    <c:if test="${data.googleId != null}">
-			    	enabledInput('google');
-			    	window.open('googleDriveConversion', '_blank');
-			    </c:if>
-			    <c:if test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user== null}">
+			    <c:if test="${sessionData.user == null}">
 			    	$('#source-google').attr('disabled',true);
 		    	</c:if>
-		    	<c:if test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user!= null}">
+		    	<c:if test="${sessionData.user != null}">
 		    		$('#source-google').attr('disabled',false);
-		    		
 	    		</c:if>
 			    
 				$(function(){	 

@@ -1,6 +1,6 @@
-package fr.sparna.rdf.skosplay;
+package fr.sparna.google;
 
-public class GooglePojo {
+public class GoogleUser {
 	String id;
     String email;
     boolean verified_email;
