@@ -80,7 +80,9 @@ public class GoogleConnector {
 					+ "&redirect_uri="+redirectUrl
 					+ "&response_type=code"
 					+ "&client_id="+this.clientId+""
-					+ "&approval_prompt=force");			
+					// 'force' ou 'auto'. Si 'force', la demande d'autorisation est refaite à chaque fois
+					// avec 'auto', si l'utilisateur a déjà donné son accord, les autorisations ne sont pas redemandées
+					+ "&approval_prompt=auto");			
 		} catch (MalformedURLException ignore) {
 			ignore.printStackTrace();
 		} catch (UnsupportedEncodingException ignore) {
@@ -158,6 +160,35 @@ public class GoogleConnector {
 
 		GoogleUser user = new Gson().fromJson(outputString, GoogleUser.class);
 		return user;
+	}
+	
+	/**
+	 * Revoke the access token
+	 * see http://stackoverflow.com/questions/21405274/this-app-would-like-to-have-offline-access-when-access-type-online
+	 * @throws IOException
+	 */
+	public void revokeToken() throws IOException {
+		if(this.credential != null) {
+			log.debug("Revoke token : "+this.credential.getAccessToken());
+			final String BASE_REVOKE_URL = "https://accounts.google.com/o/oauth2/revoke";
+			
+			String urlParameters = "token="+this.credential.getAccessToken();
+
+			//post parameters
+			URL url = new URL(BASE_REVOKE_URL+"?"+urlParameters);
+			URLConnection urlConn = url.openConnection();
+			urlConn.setDoOutput(true);
+
+			String line, outputString = "";
+			try(BufferedReader reader = new BufferedReader(new InputStreamReader(urlConn.getInputStream()))) {
+				while ((line = reader.readLine()) != null) {
+					outputString += line;
+				}
+			}
+			
+			// returns empty JSON {}
+			log.debug("Retour de l'appel Google 'revoke' : "+outputString);
+		}
 	}
 	
 	public GoogleCredential createAndRegisterCredential(String access_token) {
