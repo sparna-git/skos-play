@@ -4,14 +4,19 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.rdf4j.model.BNode;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.model.util.RDFCollections;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 
 public final class ValueGeneratorFactory {
@@ -52,6 +57,36 @@ public final class ValueGeneratorFactory {
 									uri -> model.add(SimpleValueFactory.getInstance().createIRI(prefixManager.uri(uri.trim(), false)), property,subject)
 					);
 				}
+			// handling of rdf:list
+			} else if(value.startsWith("(") && value.endsWith(")")) {
+				// create the head
+				BNode head = SimpleValueFactory.getInstance().createBNode();
+				// split and convert to a java List then convert to an RDF list
+				RDFCollections.asRDF(
+						// split the string on " ", then map each substring to a URI
+						Arrays.asList(value.substring(1, value.length()-1).split(" ")).stream().map(new Function<String, Value>() {
+							@Override
+							public Value apply(String s) {
+								if(s.startsWith("http://") || prefixManager.usesKnownPrefix(s.trim())) {
+									return SimpleValueFactory.getInstance().createIRI(prefixManager.uri(s.trim(), false));
+								} else {
+									// consider it like a literal
+									if(language != null) {
+										return SimpleValueFactory.getInstance().createLiteral(value.trim(), language);
+									} else {
+										return SimpleValueFactory.getInstance().createLiteral(value.trim());
+									} 
+								}
+							}	
+						// then collect the result in a list
+						}).collect(Collectors.toList()),
+						// provide the head of the list
+						head,
+						// add the resulting list to the given model
+						model
+				);
+				// add the property pointing to the list
+				model.add(subject, property, head);
 			} else {
 				// consider it like a literal
 				if(datatype != null) {

@@ -105,7 +105,8 @@
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-2.xlsx">Example 2 (prefixes)</option>
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-3.xlsx">Example 3 (multilingual columns)</option>
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-4.xlsx">Example 4 (schema.org, datatypes, multiple sheets)</option>
-							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-5.xlsx">Example 5 (skos:Collection, inverse columns)</option>    
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-5.xlsx">Example 5 (skos:Collection, inverse columns)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-6.xlsx">Example 6 (skos:OrderedCollection, dealing with rdf:Lists)</option>   
 						</select>						
 						<span class="help-block"><i><fmt:message key="convert.form.Example.download" />&nbsp;<a id="lien" href="${sessionData.baseUrl}/excel_test/excel2skos-exemple-1.xlsx">Example 1 (simple exemple, in english)</a></i></span>
 					</div>
@@ -279,8 +280,7 @@
 								<input
 									type="checkbox"
 									id="usezip"
-									name="usezip"
-									checked="checked" />
+									name="usezip" />
 								<span class="help-block"><i></i></span>
 							</div>														
 						</div>
@@ -411,6 +411,23 @@
 					</ol>
 					<p />This is an example of expressing collections using object-to-subject column :
 					<img src="images/convert-screenshot-collection.png" width="100%" />
+				<h4><a href="#lists" id="lists"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Dealing with skos:OrderedCollection and rdf:Lists</h4>
+					<p />If you need to deal with skos:OrderedCollection, do the following :
+					<ol>
+						<li>Add a column with the title <code>rdf:type</code>;</li>
+						<li>Add a column with the title <code>skos:memberList</code>;</li>
+						<li>On the row corresponding to the ordered collection, specify <code>skos:OrderedCollection</code> in the <code>rdf:type</code> column; for rows corresponding to skos:Concept, you can leave this column empty
+						or specify skos:Concept explicitely if you want;</li>
+						<li>On the row corresponding to the ordered collection, in the <code>skos:memberList</code> column, write the list of values like you would do in the Turtle, that is :
+							<ul>
+								<li>Put the whole list between parenthesis;</li>
+								<li>Separate each value with a whitespace character;</li>
+							</ul>
+						</li>
+					</ol>
+					<p />The same technique can be used to declare any rdf:List (see below to generate plain RDF).
+					<p />This is an example of expressing ordered collections using rdf:list syntax :
+					<img src="images/convert-screenshot-ordered-collection.png" width="100%" />
 			</fieldset>
 			
 			<!-- Default SKOS processings -->		

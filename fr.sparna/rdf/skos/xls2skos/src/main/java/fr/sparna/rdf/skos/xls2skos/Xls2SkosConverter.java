@@ -307,11 +307,14 @@ public class Xls2SkosConverter {
 	}
 	
 	private void postProcess(Model model, Resource csResource) {
-		// add a skos:inScheme to every skos:Concept or skos:Collection that was created
+		// add a skos:inScheme to every skos:Concept or skos:Collection or skos:OrderedCollection that was created
 		model.filter(null, RDF.TYPE, SKOS.CONCEPT).forEach(
 				s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
 		);
 		model.filter(null, RDF.TYPE, SKOS.COLLECTION).forEach(
+				s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
+		);
+		model.filter(null, RDF.TYPE, SKOS.ORDERED_COLLECTION).forEach(
 				s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
 		);
 		

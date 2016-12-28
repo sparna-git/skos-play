@@ -1025,15 +1025,10 @@ public class SkosPlayController {
 
 		switch(outputType) {
 		case HTML : {
-			if(displayType==DisplayType.HIERARCHICAL)
-			{
-				printer.printToHtml(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
-
-			}
-			if(displayType==DisplayType.HIERARCHICAL_TREE)
-			{
+			if(displayType==DisplayType.HIERARCHICAL_TREE) {
 				printer.printToHtmlTree(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
-
+			} else {
+				printer.printToHtml(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
 			}
 			break;
 		}
