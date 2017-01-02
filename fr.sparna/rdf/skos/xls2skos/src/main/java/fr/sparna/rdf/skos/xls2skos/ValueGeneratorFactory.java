@@ -56,7 +56,7 @@ public final class ValueGeneratorFactory {
 							).forEach(
 									uri -> model.add(SimpleValueFactory.getInstance().createIRI(prefixManager.uri(uri.trim(), false)), property,subject)
 					);
-				}
+				}				
 			// handling of rdf:list
 			} else if(value.startsWith("(") && value.endsWith(")")) {
 				// create the head
@@ -88,31 +88,34 @@ public final class ValueGeneratorFactory {
 				// add the property pointing to the list
 				model.add(subject, property, head);
 			} else {
+				// if the value is surrounded with quotes, remove them, they were here to escape a URI to be considered as a literal
+				String unescapedValue = (value.startsWith("\"") && value.endsWith("\""))?value.substring(1, value.length()-1):value;
+				
 				// consider it like a literal
 				if(datatype != null) {
 					Literal l = null;
 					if(datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#date")) {
-						Date d = ExcelHelper.asCalendar(value.trim()).getTime();
+						Date d = ExcelHelper.asCalendar(unescapedValue.trim()).getTime();
 						l = SimpleValueFactory.getInstance().createLiteral(
 								new SimpleDateFormat("yyyy-MM-dd").format(d),
 								SimpleValueFactory.getInstance().createIRI("http://www.w3.org/2001/XMLSchema#date")
 						);
 					} else if(datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#dateTime")) {
 						try {
-							l = SimpleValueFactory.getInstance().createLiteral(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)ExcelHelper.asCalendar(value.trim())));
+							l = SimpleValueFactory.getInstance().createLiteral(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)ExcelHelper.asCalendar(unescapedValue.trim())));
 						} catch (DatatypeConfigurationException e) {
 							e.printStackTrace();
 						}
 						
 					} else {
-						l = SimpleValueFactory.getInstance().createLiteral(value.trim(), datatype);
+						l = SimpleValueFactory.getInstance().createLiteral(unescapedValue.trim(), datatype);
 					}
 					
 					model.add(subject, property, l);
 				} else if(language != null) {
-					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim(), language));
+					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(unescapedValue.trim(), language));
 				} else {
-					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim()));
+					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(unescapedValue.trim()));
 				}
 			}
 			
