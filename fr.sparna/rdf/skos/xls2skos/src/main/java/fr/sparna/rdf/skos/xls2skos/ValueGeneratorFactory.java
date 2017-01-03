@@ -64,7 +64,7 @@ public final class ValueGeneratorFactory {
 				// split and convert to a java List then convert to an RDF list
 				RDFCollections.asRDF(
 						// split the string on " ", then map each substring to a URI
-						Arrays.asList(value.substring(1, value.length()-1).split(" ")).stream().map(new Function<String, Value>() {
+						Arrays.asList(value.substring(1, value.length()-1).trim().split(" ")).stream().map(new Function<String, Value>() {
 							@Override
 							public Value apply(String s) {
 								if(s.startsWith("http://") || prefixManager.usesKnownPrefix(s.trim())) {
