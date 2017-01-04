@@ -43,7 +43,12 @@ public final class ValueGeneratorFactory {
 			}
 
 			// if the value starts with http://, or uses a known namespace, then try to parse it as a resource
-			if(value.startsWith("http://") || prefixManager.usesKnownPrefix(value.trim())) {
+			// only if no language or datatype have been specified, in which case this will default to a literal
+			if(
+					datatype == null
+					&&
+					(value.startsWith("http://") || prefixManager.usesKnownPrefix(value.trim()))
+			) {
 				if(!inverse) {
 					Arrays.stream(
 							StringUtils.split(value, separator)

@@ -228,7 +228,7 @@ public class Xls2SkosConverter {
 		
 		// if the URI was already processed, this is an exception
 		if(this.csModels.containsKey(csUri)) {
-			throw new Xls2SkosException("Duplicate ConceptScheme found : "+csUri+" - make sure it is declared only once in the file.");
+			log.debug("Duplicate graph declaration found: " + csUri + " (declared in more than one sheet)");
 		}
 		
 		Resource csResource = svf.createIRI(csUri);	
