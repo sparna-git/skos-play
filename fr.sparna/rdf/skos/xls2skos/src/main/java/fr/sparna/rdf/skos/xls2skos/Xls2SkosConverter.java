@@ -14,6 +14,7 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Level;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -78,7 +79,15 @@ public class Xls2SkosConverter {
 	 */
 	protected final Map<String, ValueGeneratorIfc> valueGenerators = new HashMap<>();
 	
+	/**
+	 * The prefixes declared in the file along with utility classes and default prefixes
+	 */
 	protected PrefixManager prefixManager = new PrefixManager();
+	
+	/**
+	 * The workbook currently being processed, to ge references to fonts
+	 */
+	private transient Workbook workbook;
 	
 	public Xls2SkosConverter(ModelWriterIfc modelWriter, String lang) {
 		
@@ -168,6 +177,9 @@ public class Xls2SkosConverter {
 
 		try {
 			
+			// store the workbook reference
+			this.workbook = workbook;
+			
 			// notify begin
 			modelWriter.beginWorkbook();
 			
@@ -195,7 +207,7 @@ public class Xls2SkosConverter {
 		} catch (Exception e) {
 			throw Xls2SkosException.rethrow(e);
 		}
-
+		
 		return models;
 	}
 
@@ -403,7 +415,8 @@ public class Xls2SkosConverter {
 	private Resource handleRow(Model model, List<ColumnHeader> columnNames, PrefixManager prefixManager, Row row) {
 		RowBuilder rowBuilder = null;
 		for (int colIndex = 0; colIndex < columnNames.size(); colIndex++) {
-			String value = getCellValue(row.getCell(colIndex));
+			Cell c = row.getCell(colIndex);			
+			String value = getCellValue(c);
 			if (null == rowBuilder) {
 				if (StringUtils.isBlank(value)) {
 					return null;
@@ -414,7 +427,14 @@ public class Xls2SkosConverter {
 			}
 			
 			// process the cell for each subsequent columns after the first one
-			if (StringUtils.isNotBlank(value)) {	
+			if (StringUtils.isNotBlank(value)) {
+				
+				System.out.println(c.getCellStyle().getFontIndex()+" / "+this.workbook.getFontAt(c.getCellStyle().getFontIndex()));
+				if(this.workbook.getFontAt(c.getCellStyle().getFontIndex()).getStrikeout()) {
+					// skip the cell if it is striked out
+					return null;
+				}
+				
 				ValueGeneratorIfc valueGenerator = valueGenerators.get(columnNames.get(colIndex).getProperty());
 				
 				// if this is not one of the known processor, but the prefix is known, then defaults to a generic processor
