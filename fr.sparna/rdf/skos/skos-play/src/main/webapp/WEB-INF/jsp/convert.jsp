@@ -454,7 +454,22 @@
 				<img src="images/convert-screenshot-other-skos.png" width="100%" />
 			</fieldset>
 			
-			<!-- Generating plain RDF-->		
+			<!-- Advanced features -->		
+			<fieldset style="margin-top:3em;">
+				<legend><a href="#advanced-features" id="advanced-features"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Advanced features</legend>
+				<h4><a href="#blank-nodes" id="blank-nodes"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Creating blank nodes with [...]</h4>
+					<p />The converter understands the blank node syntax with "[...]" : simply put a cell value between square brackets and write the blank node data inside like you would do in a Turtle file.
+					This can be useful to generate references to reified SKOS definitions or SKOS-XL Labels. For example, if a cell with title <code>skos:definition</code> contains the following value :<br />
+					<code>[ rdf:value "Definition blah blah"; dcterms:created "2017-02-21"^^xsd:date ]</code>, then a reference to a blank node will be created. You need to use the prefixes defined in the file in your
+					blank node content. The blank node is parsed exactly as a piece of Turtle, so it can contain any piece of valid Turtle syntax. If anything goes wrong during the parsing, the converter
+					will generate a Literal with the cell content instead.
+				<h4><a href="#striketrough" id="striketrough"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Disabling cell conversion with a <strike>strikethrough</strike></h4>
+					<p />When working on a file, if you are unsure about the conversion of a certain cell but you don't want to delete the value, use a <strike>strikethrough font</strike> : the converter will ignore any
+					cell with such a font style. You can keep uncertain values in the files and simply change the font back to normal once the value is validated.
+					<p />
+			</fieldset>
+			
+			<!-- Prefixes -->		
 			<fieldset style="margin-top:3em;">
 				<legend><a href="#prefixes" id="prefixes"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Default prefixes known in the converter</legend>
 				<p />This is the list of known prefixes in the converter. You don't have to declare them in the header.

@@ -99,6 +99,14 @@ public class PrefixManager {
 			return null;
 		}
 	}
+	
+	public String getPrefixesTurtleHeader() {
+		StringBuffer buffer = new StringBuffer();
+		this.prefixes.entrySet().stream().forEach(e -> { 
+			buffer.append("@prefix "+e.getKey()+":\t"+"<"+e.getValue()+"> ."+"\n");
+		});
+		return buffer.toString();
+	}
 
 	public Map<String, String> getPrefixes() {
 		return prefixes;

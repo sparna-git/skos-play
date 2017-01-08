@@ -1,23 +1,23 @@
 package fr.sparna.rdf.skos.xls2skos;
 
+import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.rdf4j.model.BNode;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
-import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
-import org.eclipse.rdf4j.model.util.RDFCollections;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFParser;
+import org.eclipse.rdf4j.rio.RDFParserRegistry;
+import org.eclipse.rdf4j.rio.helpers.StatementCollector;
 
 public final class ValueGeneratorFactory {
 
@@ -64,34 +64,9 @@ public final class ValueGeneratorFactory {
 				}				
 			// handling of rdf:list
 			} else if(value.startsWith("(") && value.endsWith(")")) {
-				// create the head
-				BNode head = SimpleValueFactory.getInstance().createBNode();
-				// split and convert to a java List then convert to an RDF list
-				RDFCollections.asRDF(
-						// split the string on " ", then map each substring to a URI
-						Arrays.asList(value.substring(1, value.length()-1).trim().split(" ")).stream().map(new Function<String, Value>() {
-							@Override
-							public Value apply(String s) {
-								if(s.startsWith("http://") || prefixManager.usesKnownPrefix(s.trim())) {
-									return SimpleValueFactory.getInstance().createIRI(prefixManager.uri(s.trim(), false));
-								} else {
-									// consider it like a literal
-									if(language != null) {
-										return SimpleValueFactory.getInstance().createLiteral(value.trim(), language);
-									} else {
-										return SimpleValueFactory.getInstance().createLiteral(value.trim());
-									} 
-								}
-							}	
-						// then collect the result in a list
-						}).collect(Collectors.toList()),
-						// provide the head of the list
-						head,
-						// add the resulting list to the given model
-						model
-				);
-				// add the property pointing to the list
-				model.add(subject, property, head);
+				turtleParsing(property, separator, prefixManager).addValue(model, subject, value, language, datatype);		
+			} else if(datatype == null && value.startsWith("[") && value.endsWith("]")) {
+				turtleParsing(property, separator, prefixManager).addValue(model, subject, value, language, datatype);
 			} else {
 				// if the value is surrounded with quotes, remove them, they were here to escape a URI to be considered as a literal
 				String unescapedValue = (value.startsWith("\"") && value.endsWith("\""))?value.substring(1, value.length()-1):value;
@@ -117,10 +92,8 @@ public final class ValueGeneratorFactory {
 					}
 					
 					model.add(subject, property, l);
-				} else if(language != null) {
-					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(unescapedValue.trim(), language));
 				} else {
-					model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(unescapedValue.trim()));
+					langOrPlainLiteral(property).addValue(model, subject, value, language, datatype);
 				}
 			}
 			
@@ -128,6 +101,38 @@ public final class ValueGeneratorFactory {
 		};
 	}
 
+	public static ValueGeneratorIfc turtleParsing(IRI property, char separator, PrefixManager prefixManager) {
+		return (model, subject, value, language, datatype) -> {
+			// create a small piece of Tutle by concatenating...
+			StringBuffer turtle = new StringBuffer();
+			// ... the prefixes				
+			turtle.append(prefixManager.getPrefixesTurtleHeader());
+			// ... the subject and the predicate
+			turtle.append("<"+subject.stringValue()+">"+" "+"<"+property.stringValue()+"> ");
+			// ... the blank node value
+			turtle.append(value);
+			// ... and a final dot if there is not one alreay at the end
+			if(!value.trim().endsWith(".")) {
+				turtle.append(".");
+			}
+			// now parse the Turtle String and collect the statements in a StatementCollector
+			StatementCollector collector = new StatementCollector();
+			RDFParser parser = RDFParserRegistry.getInstance().get(RDFFormat.TURTLE).get().getParser();
+			parser.setRDFHandler(collector);
+			try {
+				parser.parse(new StringReader(turtle.toString()), RDF.NS.toString());
+				// then add all the resulting statements to the final Model
+				model.addAll(collector.getStatements());
+			} catch (Exception e) {
+				// if anything goes wrong, default to creating a literal
+				e.printStackTrace();
+				langOrPlainLiteral(property).addValue(model, subject, value, language, datatype);
+			}
+			
+			return null;
+		};
+	}
+	
 	public static ValueGeneratorIfc dateLiteral(IRI property) {
 		return (model, subject, value, language, datatype) -> {
 
@@ -148,7 +153,7 @@ public final class ValueGeneratorFactory {
 		};
 	}
 
-	public static ValueGeneratorIfc langLiteral(IRI property, String lang) {
+	public static ValueGeneratorIfc langLiteral(IRI property) {
 		return (model, subject, value, language, datatype) -> {
 			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim(), language));
 			return null;
@@ -158,6 +163,17 @@ public final class ValueGeneratorFactory {
 	public static ValueGeneratorIfc plainLiteral(IRI property) {
 		return (model, subject, value, language, datatype) -> {
 			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim()));
+			return null;
+		};
+	}
+	
+	public static ValueGeneratorIfc langOrPlainLiteral(IRI property) {
+		return (model, subject, value, language, datatype) -> {
+			if(language != null) {
+				model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim(), language));
+			} else {
+				model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim()));
+			}
 			return null;
 		};
 	}
