@@ -20,7 +20,7 @@ INSERT {
 			FILTER(?labelProperty IN (skos:prefLabel, skos:altLabel, skos:hiddenLabel))
 			OPTIONAL {
 				?x skos:prefLabel|skos:altLabel|skos:hiddenLabel ?anotherLabelBefore .
-				FILTER(STR(?anotherLabelBefore) < STR(?label))
+				FILTER( CONCAT(LANG(?anotherLabelBefore), STR(?anotherLabelBefore)) < CONCAT(LANG(?label), STR(?label)) )
 			}
 		} GROUP BY ?x ?labelProperty ?label
 	}
