@@ -91,9 +91,9 @@
 				
 					<!-- if more than one section, and at least have a title, generate navbar at the document level -->
 					<xsl:if test="count(disp:body/disp:kosDisplay/disp:section[@title]) > 1">
-						<div class="navbar navbar-fixed-bottom">
-					    	<div class="navbar-inner">
-					        	<ul class="nav">
+						<div class="navbar navbar-default navbar-fixed-bottom">
+					    	<div class="container">
+					        	<ul class="nav navbar-nav">
 					        		<xsl:for-each select="disp:body/disp:kosDisplay/disp:section">
 										<li><a href="#{@title}"><xsl:value-of select="@title" /></a></li>
 									</xsl:for-each>

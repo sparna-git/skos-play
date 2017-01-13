@@ -46,7 +46,7 @@
 			
 			<div class="messages">
 				<c:if test="${data.errorMessage != null}">
-					<div class="alert alert-error fade in">
+					<div class="alert alert-danger fade in">
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 						<h4><fmt:message key="error" /></h4>
 						${data.errorMessage}
