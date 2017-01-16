@@ -131,7 +131,7 @@ public class Xls2SkosConverter {
 		valueGenerators.put("dct:created", 			ValueGeneratorFactory.dateLiteral(DCTERMS.CREATED));
 		valueGenerators.put("dct:modified", 		ValueGeneratorFactory.dateLiteral(DCTERMS.MODIFIED));
 		// a source can be a literal or a URI
-		valueGenerators.put("dct:source", 			ValueGeneratorFactory.resourcesOrLiteral(DCTERMS.SOURCE, ',', this.lang, prefixManager, false));
+		valueGenerators.put("dct:source", 			ValueGeneratorFactory.resourcesOrLiteral(ColumnHeader.parse("dct:source", prefixManager), ',', prefixManager));
 		// dct metadata for the ConceptScheme
 		valueGenerators.put("dct:title", 			ValueGeneratorFactory.langLiteral(DCTERMS.TITLE));
 		valueGenerators.put("dct:description", 		ValueGeneratorFactory.langLiteral(DCTERMS.DESCRIPTION));
@@ -267,15 +267,13 @@ public class Xls2SkosConverter {
 						StringUtils.isNotBlank(value)
 				) {
 					ValueGeneratorIfc valueGenerator = null;
-					if(valueGenerators.containsKey(header.getProperty())) {
+					if(valueGenerators.containsKey(header.getDeclaredProperty())) {
 						valueGenerator = valueGenerators.get(header.getProperty());
-					} else if(prefixManager.expand(header.getProperty()) != null) {
+					} else if(header.getProperty() != null) {
 						valueGenerator = ValueGeneratorFactory.resourcesOrLiteral(
-								SimpleValueFactory.getInstance().createIRI(prefixManager.expand(header.getProperty())),
+								header,
 								',',
-								header.getLanguage().orElse(lang),
-								prefixManager,
-								header.isInverse()
+								prefixManager
 						);
 					}
 					
@@ -415,6 +413,8 @@ public class Xls2SkosConverter {
 	private Resource handleRow(Model model, List<ColumnHeader> columnNames, PrefixManager prefixManager, Row row) {
 		RowBuilder rowBuilder = null;
 		for (int colIndex = 0; colIndex < columnNames.size(); colIndex++) {
+			ColumnHeader header = columnNames.get(colIndex);
+			
 			Cell c = row.getCell(colIndex);			
 			String value = getCellValue(c);
 			if (null == rowBuilder) {
@@ -433,16 +433,14 @@ public class Xls2SkosConverter {
 					return null;
 				}
 				
-				ValueGeneratorIfc valueGenerator = valueGenerators.get(columnNames.get(colIndex).getProperty());
+				ValueGeneratorIfc valueGenerator = valueGenerators.get(columnNames.get(colIndex).getDeclaredProperty());
 				
 				// if this is not one of the known processor, but the prefix is known, then defaults to a generic processor
-				if(valueGenerator == null && prefixManager.expand(columnNames.get(colIndex).getProperty()) != null) {
+				if(valueGenerator == null && header.getProperty() != null) {
 					valueGenerator = ValueGeneratorFactory.resourcesOrLiteral(
-							SimpleValueFactory.getInstance().createIRI(prefixManager.expand(columnNames.get(colIndex).getProperty())),
+							header,
 							',',
-							columnNames.get(colIndex).getLanguage().orElse(lang),
-							prefixManager,
-							columnNames.get(colIndex).isInverse()
+							prefixManager
 					);
 				}
 				

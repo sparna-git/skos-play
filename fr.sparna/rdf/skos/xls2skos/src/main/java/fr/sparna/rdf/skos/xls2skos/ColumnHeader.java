@@ -10,7 +10,8 @@ public class ColumnHeader {
 	private String originalValue;
 	private Optional<String> language;
 	private Optional<IRI> datatype;
-	private String property;
+	private IRI property;
+	private String declaredProperty;
 	private boolean inverse = false;
 	
 	private ColumnHeader(String originalValue) {
@@ -22,7 +23,8 @@ public class ColumnHeader {
 			return null;
 		}
 		ColumnHeader h = new ColumnHeader(value);
-		h.property = parseProperty(value);
+		h.declaredProperty = parseDeclaredProperty(value);
+		h.property = parseProperty(value, pm);
 		h.language = parseLanguage(value);
 		h.datatype = parseDatatype(value, pm);
 		h.inverse = parseInverse(value);
@@ -30,7 +32,19 @@ public class ColumnHeader {
 		return h;
 	}
 	
-	private static String parseProperty(String value) {
+	private static IRI parseProperty(String declaredProperty, PrefixManager pm) {
+		try {
+			if(pm.usesKnownPrefix(declaredProperty)) {
+				return SimpleValueFactory.getInstance().createIRI(pm.uri(declaredProperty, false));
+			} else {
+				return SimpleValueFactory.getInstance().createIRI(declaredProperty);
+			}
+		} catch (Exception e) {
+			return null;
+		}		
+	}
+	
+	private static String parseDeclaredProperty(String value) {
 		String property = value;
 		
 		// remove inverse mark
@@ -44,7 +58,8 @@ public class ColumnHeader {
 		if(property.contains("^^")) {
 			property = property.substring(0, property.lastIndexOf("^^"));
 		}
-		return property;
+		
+		return property;		
 	}
 	
 	private static Optional<String> parseLanguage(String value) {
@@ -84,12 +99,16 @@ public class ColumnHeader {
 		return datatype;
 	}
 
-	public String getProperty() {
+	public IRI getProperty() {
 		return property;
 	}
 
 	public boolean isInverse() {
 		return inverse;
+	}
+
+	public String getDeclaredProperty() {
+		return declaredProperty;
 	}
 	
 }

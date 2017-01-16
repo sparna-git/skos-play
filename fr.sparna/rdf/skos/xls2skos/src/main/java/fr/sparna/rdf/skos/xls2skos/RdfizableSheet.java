@@ -89,15 +89,15 @@ public class RdfizableSheet {
 				if(headerB != null && headerC != null) {
 					if(
 								(
-										converter.valueGenerators.containsKey(headerB.getProperty())
+										converter.valueGenerators.containsKey(headerB.getDeclaredProperty())
 										||
-										converter.prefixManager.expand(headerB.getProperty()) != null
+										headerB.getProperty() != null
 								)
 							&&
 								(
-										converter.valueGenerators.containsKey(headerC.getProperty())
+										converter.valueGenerators.containsKey(headerC.getDeclaredProperty())
 										||
-										converter.prefixManager.expand(headerC.getProperty()) != null
+										headerC.getProperty() != null
 								)
 					) {
 						headerRowIndex = rowIndex;

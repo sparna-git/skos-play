@@ -36,37 +36,39 @@ public final class ValueGeneratorFactory {
 		};
 	}
 	
-	public static ValueGeneratorIfc resourcesOrLiteral(IRI property, char separator, String lang, PrefixManager prefixManager, boolean inverse) {	
+	public static ValueGeneratorIfc resourcesOrLiteral(ColumnHeader header, char separator, PrefixManager prefixManager) {	
 		return (model, subject, value, language, datatype) -> {
 			if (StringUtils.isBlank(value)) {
 				return null;
 			}
 
 			// if the value starts with http://, or uses a known namespace, then try to parse it as a resource
-			// only if no language or datatype have been specified, in which case this will default to a literal
+			// only if no datatype or language have been explicitely specified, in which case this will default to a literal
 			if(
 					datatype == null
 					&&
+					!header.getLanguage().isPresent()
+					&&
 					(value.startsWith("http://") || prefixManager.usesKnownPrefix(value.trim()))
 			) {
-				if(!inverse) {
+				if(!header.isInverse()) {
 					Arrays.stream(
 							StringUtils.split(value, separator)
 							).forEach(
-									uri -> model.add(subject, property, SimpleValueFactory.getInstance().createIRI(prefixManager.uri(uri.trim(), false)))
+									uri -> model.add(subject, header.getProperty(), SimpleValueFactory.getInstance().createIRI(prefixManager.uri(uri.trim(), false)))
 					);
 				} else {
 					Arrays.stream(
 							StringUtils.split(value, separator)
 							).forEach(
-									uri -> model.add(SimpleValueFactory.getInstance().createIRI(prefixManager.uri(uri.trim(), false)), property,subject)
+									uri -> model.add(SimpleValueFactory.getInstance().createIRI(prefixManager.uri(uri.trim(), false)), header.getProperty(),subject)
 					);
 				}				
 			// handling of rdf:list
 			} else if(value.startsWith("(") && value.endsWith(")")) {
-				turtleParsing(property, separator, prefixManager).addValue(model, subject, value, language, datatype);		
+				turtleParsing(header.getProperty(), separator, prefixManager).addValue(model, subject, value, language, datatype);		
 			} else if(datatype == null && value.startsWith("[") && value.endsWith("]")) {
-				turtleParsing(property, separator, prefixManager).addValue(model, subject, value, language, datatype);
+				turtleParsing(header.getProperty(), separator, prefixManager).addValue(model, subject, value, language, datatype);
 			} else {
 				// if the value is surrounded with quotes, remove them, they were here to escape a URI to be considered as a literal
 				String unescapedValue = (value.startsWith("\"") && value.endsWith("\""))?value.substring(1, value.length()-1):value;
@@ -91,9 +93,9 @@ public final class ValueGeneratorFactory {
 						l = SimpleValueFactory.getInstance().createLiteral(unescapedValue.trim(), datatype);
 					}
 					
-					model.add(subject, property, l);
+					model.add(subject, header.getProperty(), l);
 				} else {
-					langOrPlainLiteral(property).addValue(model, subject, value, language, datatype);
+					langOrPlainLiteral(header.getProperty()).addValue(model, subject, value, language, datatype);
 				}
 			}
 			
