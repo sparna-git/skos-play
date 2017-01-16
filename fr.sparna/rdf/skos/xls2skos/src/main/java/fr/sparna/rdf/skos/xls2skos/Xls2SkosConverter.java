@@ -417,7 +417,9 @@ public class Xls2SkosConverter {
 			
 			Cell c = row.getCell(colIndex);			
 			String value = getCellValue(c);
+			// if it is the first column...
 			if (null == rowBuilder) {
+				// if the value of the first column is empty, skip the whole row
 				if (StringUtils.isBlank(value)) {
 					return null;
 				}
@@ -430,7 +432,7 @@ public class Xls2SkosConverter {
 			if (StringUtils.isNotBlank(value)) {
 				if(this.workbook.getFontAt(c.getCellStyle().getFontIndex()).getStrikeout()) {
 					// skip the cell if it is striked out
-					return null;
+					continue;
 				}
 				
 				ValueGeneratorIfc valueGenerator = valueGenerators.get(columnNames.get(colIndex).getDeclaredProperty());
