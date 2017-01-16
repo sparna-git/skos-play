@@ -24,7 +24,7 @@ public class ColumnHeader {
 		}
 		ColumnHeader h = new ColumnHeader(value);
 		h.declaredProperty = parseDeclaredProperty(value);
-		h.property = parseProperty(value, pm);
+		h.property = parseProperty(h.declaredProperty, pm);
 		h.language = parseLanguage(value);
 		h.datatype = parseDatatype(value, pm);
 		h.inverse = parseInverse(value);
