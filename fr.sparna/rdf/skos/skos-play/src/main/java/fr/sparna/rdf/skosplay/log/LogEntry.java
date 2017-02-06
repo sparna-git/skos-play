@@ -3,72 +3,76 @@ package fr.sparna.rdf.skosplay.log;
 public class LogEntry {
   public String name;
   public String output;
-  public boolean zip;
-  public boolean xls;
-  public boolean graph;
-  public String  actiontype;
   public String  actiondate;
-  public int comptconvert;
-  public int comptprint;
+  public String displayType;
+  public String langue;
+  public String email;
+  public String rendu;
+  public String url;
   
-  public String getName() {
+
+public String getUrl() {
+	return url;
+}
+
+public void setUrl(String url) {
+	this.url = url;
+}
+
+public String getRendu() {
+	return rendu;
+}
+
+public void setRendu(String rendu) {
+	this.rendu = rendu;
+}
+
+public String getName() {
 	  return name;
   }
+  
   public void setName(String name) {
 	  this.name = name;
   }
+  
+  public String getEmail() {
+	  return email;
+  }
+  
+  public void setEmail(String mail) {
+	  this.email = mail;
+  }
+  
   public String getOutput() {
 	  return output;
   }
+  
   public void setOutput(String output) {
 	  this.output = output;
   }
-  public boolean isZip() {
-	  return zip;
-  }
-  public void setZip(boolean ziP) {
-	  zip = ziP;
-  }
-  public boolean isGraph() {
-	  return graph;
-  }
-  public void setGraph(boolean graphe) {
-	  graph = graphe;
-  }
-  public boolean isXls() {
-	  return xls;
-  }
-  public void setXls(boolean xls) {
-	  this.xls = xls;
-  }
-  public String getActiontype() {
-	  return actiontype;
-  }
-  public void setActiontype(String actiontype) {
-	  this.actiontype = actiontype;
-  }
+  
   public String getActiondate() {
 	  return actiondate;
   }
   public void setActiondate(String actiondate) {
 	  this.actiondate = actiondate;
   }
-  @Override
-  public String toString() {
-	  return "LogEntry [name=" + name + ", output=" + output + ", zip=" + zip + ", xls=" + xls + ", graph=" + graph
-			  + ", actiontype=" + actiontype + ", actiondate=" + actiondate + "]\n";
+  
+  public String getType() {
+	  return displayType;
   }
-  public int getComptconvert() {
-	  return comptconvert;
+  
+  public void setType(String display) {
+	  this.displayType = display;
   }
-  public void setComptconvert(int comptconvert) {
-	  this.comptconvert = comptconvert;
+  
+  public String getLangue() {
+	  return langue;
   }
-  public int getComptprint() {
-	  return comptprint;
+  public void setLangue(String lang) {
+	  this.langue = lang;
   }
-  public void setComptprint(int comptprint) {
-	  this.comptprint = comptprint;
-  }
+
+
 
 }

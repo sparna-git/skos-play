@@ -60,7 +60,6 @@ import com.google.api.services.drive.model.FileList;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.h2.examples.H2MemoryDatabaseExample;
 
 import fr.sparna.commons.io.ReadWriteTextFile;
 import fr.sparna.commons.tree.GenericTree;
@@ -118,6 +117,8 @@ import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
 import fr.sparna.rdf.skos.xls2skos.ModelWriterFactory;
 import fr.sparna.rdf.skos.xls2skos.ModelWriterIfc;
 import fr.sparna.rdf.skos.xls2skos.Xls2SkosConverter;
+import fr.sparna.rdf.skosplay.log.LogController;
+import fr.sparna.rdf.skosplay.log.SQLLogDao;
 
 
 
@@ -136,7 +137,8 @@ public class SkosPlayController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 	private static final String MIME_TYPE_EXCEL = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"; 
-
+	private boolean fichier;
+	
 	@Autowired
 	protected ServletContext servletContext;
 
@@ -445,6 +447,11 @@ public class SkosPlayController {
 		ConvertFormData data = new ConvertFormData();
 		data.setBaseUrl(baseURL.toString());
 		
+		
+		if(sourceString=="example")
+			sessionData.setFichierexample(true);
+		else sessionData.setFichierexample(true);
+		
 		/**************************CONVERSION RDF**************************/
 		InputStream in = null;
 		switch(source) {
@@ -498,7 +505,6 @@ public class SkosPlayController {
 			URL urls = new URL(example);
 			InputStream urlInputStream = urls.openStream(); // throws an IOException
 			in = new DataInputStream(new BufferedInputStream(urlInputStream));
-
 			break;
 		}
 		case FILE : {
@@ -540,6 +546,7 @@ public class SkosPlayController {
 			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
 			response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());	
 			generateType(new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),in,language,usexl);
+			
 		} finally {
 			try {
 				if(in != null) {
@@ -633,7 +640,7 @@ public class SkosPlayController {
 			@RequestParam(value="skosxl2skos", required=false) boolean skosxl2skos,
 			HttpServletRequest request
 			) throws IOException {
-
+		
 		log.debug("upload(source="+sourceString+",example="+example+",url="+url+",rdfsInference="+rdfsInference+", owl2skos="+owl2skos+")");
 
 		// get the source
@@ -641,10 +648,14 @@ public class SkosPlayController {
 
 		// retrieve session
 		final SessionData sessionData = SessionData.get(request.getSession());
-
+		
 		// prepare data structure
 		final PrintFormData printFormData = new PrintFormData();
 		sessionData.setPrintFormData(printFormData);
+		
+		if(sourceString=="example")
+			 sessionData.setFichierexample(true);
+		else sessionData.setFichierexample(false);
 
 		// retrieve resource bundle for error messages
 		ResourceBundle b = ResourceBundle.getBundle(
@@ -652,7 +663,7 @@ public class SkosPlayController {
 				sessionData.getUserLocale(),
 				new StrictResourceBundleControl()
 				);
-
+		
 		RepositoryBuilder localRepositoryBuilder;
 
 		if(rdfsInference) {
@@ -698,6 +709,7 @@ public class SkosPlayController {
 			case EXAMPLE : {
 				// get resource param
 				String resourceParam = example;
+				
 				if(resourceParam == null || resourceParam.equals("")) {
 					return doError(request, "Select an example from the list.");
 				}
@@ -747,6 +759,7 @@ public class SkosPlayController {
 					} catch (RepositoryOperationException e1) {
 						return doError(request, e1.getMessage());
 					}
+					sessionData.setListurl(url);
 				} else {
 					// this is a endpoint
 					repository = RepositoryBuilder.fromString(url, rdfsInference);
@@ -980,7 +993,7 @@ public class SkosPlayController {
 		// make a log to trace usage
 		String aRandomConcept = Perform.on(r).read(new SparqlQuery(new SparqlQueryBuilder(this, "ReadRandomConcept.rq"))).stringValue();
 		log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+"HTML");
-
+		
 		switch(displayType) {
 		case PARTITION : {		
 			request.setAttribute("dataset", generateJSON(r, language, scheme));
@@ -1010,10 +1023,13 @@ public class SkosPlayController {
 			// forward to the JSP
 			return new ModelAndView("viz-autocomplete");
 		}
+		
 		default : {
 			throw new InvalidParameterException("Unknown display type "+displayType);
 		}
+		
 		}
+		
 	}
 
 	@RequestMapping(
@@ -1089,6 +1105,8 @@ public class SkosPlayController {
 
 		// pass on Repository to skos-printer level
 		BodyReader bodyReader;
+		
+		
 		switch(displayType) {
 		case ALPHABETICAL : {			
 			ConceptBlockReader cbr = new ConceptBlockReader(r);
@@ -1242,7 +1260,6 @@ public class SkosPlayController {
 		default :
 			throw new InvalidParameterException("Unknown display type "+displayType);
 		}	
-
 		// read the body
 		document.setBody(bodyReader.readBody(language, scheme));
 
@@ -1250,7 +1267,8 @@ public class SkosPlayController {
 		// TODO : use Spring for configuration for easier debugging config
 		// for the moment we desactivate debugging completely
 		printer.setDebug(false);
-
+		
+		
 		switch(outputType) {
 		case HTML : {
 			if(displayType==DisplayType.HIERARCHICAL)
@@ -1281,7 +1299,8 @@ public class SkosPlayController {
 			break;
 		}
 		}
-
+		SQLLogDao log=new SQLLogDao();
+		log.writelog(language, outputParam, displayParam, SessionData.get(request.getSession()).getListurl(),"print");
 		response.flushBuffer();		
 	}
 

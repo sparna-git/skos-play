@@ -57,6 +57,26 @@ public class SessionData {
 	
 	protected List<File> googleFile;
 	
+	protected String listurl;
+	
+	protected boolean fichierexample;
+	
+
+	public boolean isFichierexample() {
+		return fichierexample;
+	}
+
+	public void setFichierexample(boolean fichierexample) {
+		this.fichierexample = fichierexample;
+	}
+
+	public String getListurl() {
+		return listurl;
+	}
+
+	public void setListurl(String listurl) {
+		this.listurl = listurl;
+	}
 
 	public List<File> getGoogleFile() {
 		return googleFile;
