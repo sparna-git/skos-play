@@ -81,11 +81,13 @@ public class RdfizableSheet {
 	 */
 	public int getTitleRowIndex() {
 		int headerRowIndex = 1;
+		
+		ColumnHeaderParser headerParser = new ColumnHeaderParser(converter.prefixManager);
 		for (int rowIndex = headerRowIndex; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
 			// test if we find a header in columns 2 and 3, this indicates the header line
 			if(sheet.getRow(rowIndex) != null) {
-				ColumnHeader headerB = ColumnHeader.parse(getCellValue(sheet.getRow(rowIndex).getCell(1)), converter.prefixManager);
-				ColumnHeader headerC = ColumnHeader.parse(getCellValue(sheet.getRow(rowIndex).getCell(2)), converter.prefixManager);
+				ColumnHeader headerB = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(1)));
+				ColumnHeader headerC = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(2)));
 				if(headerB != null && headerC != null) {
 					if(
 								(
@@ -117,6 +119,8 @@ public class RdfizableSheet {
 	public List<ColumnHeader> getColumnHeaders(int rowNumber) {
 		List<ColumnHeader> columnNames = new ArrayList<>();
 		Row row = this.sheet.getRow(rowNumber);
+		
+		ColumnHeaderParser headerParser = new ColumnHeaderParser(converter.prefixManager);
 		if(row != null) {
 			for (int i = 0; true; i++) {
 				Cell cell = row.getCell(i);
@@ -125,7 +129,7 @@ public class RdfizableSheet {
 				if (StringUtils.isBlank(columnName)) {
 					break;
 				}
-				columnNames.add(ColumnHeader.parse(columnName, converter.prefixManager));
+				columnNames.add(headerParser.parse(columnName));
 			}
 		}
 		return columnNames;

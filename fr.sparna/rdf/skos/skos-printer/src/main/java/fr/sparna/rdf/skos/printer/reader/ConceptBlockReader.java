@@ -16,6 +16,7 @@ import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.reader.KeyValueReader;
 import fr.sparna.rdf.sesame.toolkit.reader.UriLang;
 import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
+import fr.sparna.rdf.sesame.toolkit.util.Namespaces;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
 import fr.sparna.rdf.skos.toolkit.SKOS;
@@ -180,6 +181,7 @@ public class ConceptBlockReader {
 			label = ((notations.size() > 0)?notations.get(0).stringValue()+" ":"")+label;
 		}
 		
+		// defaults to displaying the URI if the generated label is empty, and display the short URI
 		label = (label.trim().equals(""))?uri:label;
 		return this.readConceptBlock(uri, label, styleLabel);
 	}

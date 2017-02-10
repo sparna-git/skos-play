@@ -20,27 +20,38 @@ import org.eclipse.rdf4j.rio.RDFParserRegistry;
 import org.eclipse.rdf4j.rio.helpers.StatementCollector;
 
 public final class ValueGeneratorFactory {
-
-	public static ValueGeneratorIfc resources(IRI property, char separator, PrefixManager prefixManager) {
-		return (model, subject, value, language, datatype) -> {
+	
+	public static ValueGeneratorIfc split(ValueGeneratorIfc delegate, String separator) {
+		return (model, subject, value, language) -> {
 			if (StringUtils.isBlank(value)) {
 				return null;
 			}
 
-			Arrays.stream(
-					StringUtils.split(value, separator)
-					).forEach(
-							uri -> model.add(subject, property, SimpleValueFactory.getInstance().createIRI(prefixManager.uri(uri.trim(), true)))
+			Arrays.stream(StringUtils.split(value, separator)).forEach(
+				aValue -> delegate.addValue(model, subject, aValue.trim(), language)
 			);
 			return null;
 		};
 	}
 	
-	public static ValueGeneratorIfc resourcesOrLiteral(ColumnHeader header, char separator, PrefixManager prefixManager) {	
-		return (model, subject, value, language, datatype) -> {
+	public static ValueGeneratorIfc resource(IRI property, PrefixManager prefixManager) {
+		return (model, subject, value, language) -> {
 			if (StringUtils.isBlank(value)) {
 				return null;
 			}
+			
+			model.add(subject, property, SimpleValueFactory.getInstance().createIRI(prefixManager.uri(value.trim(), true)));
+			return null;
+		};
+	}
+	
+	public static ValueGeneratorIfc resourceOrLiteral(ColumnHeader header, PrefixManager prefixManager) {	
+		return (model, subject, value, language) -> {
+			if (StringUtils.isBlank(value)) {
+				return null;
+			}
+			
+			IRI datatype = header.getDatatype().orElse(null);
 
 			// if the value starts with http://, or uses a known namespace, then try to parse it as a resource
 			// only if no datatype or language have been explicitely specified, in which case this will default to a literal
@@ -52,23 +63,15 @@ public final class ValueGeneratorFactory {
 					(value.startsWith("http://") || prefixManager.usesKnownPrefix(value.trim()))
 			) {
 				if(!header.isInverse()) {
-					Arrays.stream(
-							StringUtils.split(value, separator)
-							).forEach(
-									uri -> model.add(subject, header.getProperty(), SimpleValueFactory.getInstance().createIRI(prefixManager.uri(uri.trim(), false)))
-					);
+					model.add(subject, header.getProperty(), SimpleValueFactory.getInstance().createIRI(prefixManager.uri(value.trim(), false)));
 				} else {
-					Arrays.stream(
-							StringUtils.split(value, separator)
-							).forEach(
-									uri -> model.add(SimpleValueFactory.getInstance().createIRI(prefixManager.uri(uri.trim(), false)), header.getProperty(),subject)
-					);
+					model.add(SimpleValueFactory.getInstance().createIRI(prefixManager.uri(value.trim(), false)), header.getProperty(),subject);
 				}				
 			// handling of rdf:list
 			} else if(value.startsWith("(") && value.endsWith(")")) {
-				turtleParsing(header.getProperty(), separator, prefixManager).addValue(model, subject, value, language, datatype);		
+				turtleParsing(header.getProperty(), prefixManager).addValue(model, subject, value, language);		
 			} else if(datatype == null && value.startsWith("[") && value.endsWith("]")) {
-				turtleParsing(header.getProperty(), separator, prefixManager).addValue(model, subject, value, language, datatype);
+				turtleParsing(header.getProperty(), prefixManager).addValue(model, subject, value, language);
 			} else {
 				// if the value is surrounded with quotes, remove them, they were here to escape a URI to be considered as a literal
 				String unescapedValue = (value.startsWith("\"") && value.endsWith("\""))?value.substring(1, value.length()-1):value;
@@ -95,7 +98,7 @@ public final class ValueGeneratorFactory {
 					
 					model.add(subject, header.getProperty(), l);
 				} else {
-					langOrPlainLiteral(header.getProperty()).addValue(model, subject, value, language, datatype);
+					langOrPlainLiteral(header.getProperty()).addValue(model, subject, value, language);
 				}
 			}
 			
@@ -103,8 +106,8 @@ public final class ValueGeneratorFactory {
 		};
 	}
 
-	public static ValueGeneratorIfc turtleParsing(IRI property, char separator, PrefixManager prefixManager) {
-		return (model, subject, value, language, datatype) -> {
+	public static ValueGeneratorIfc turtleParsing(IRI property, PrefixManager prefixManager) {
+		return (model, subject, value, language) -> {
 			// create a small piece of Tutle by concatenating...
 			StringBuffer turtle = new StringBuffer();
 			// ... the prefixes				
@@ -128,7 +131,7 @@ public final class ValueGeneratorFactory {
 			} catch (Exception e) {
 				// if anything goes wrong, default to creating a literal
 				e.printStackTrace();
-				langOrPlainLiteral(property).addValue(model, subject, value, language, datatype);
+				langOrPlainLiteral(property).addValue(model, subject, value, language);
 			}
 			
 			return null;
@@ -136,7 +139,7 @@ public final class ValueGeneratorFactory {
 	}
 	
 	public static ValueGeneratorIfc dateLiteral(IRI property) {
-		return (model, subject, value, language, datatype) -> {
+		return (model, subject, value, language) -> {
 
 			if (StringUtils.isBlank(value)) return null;
 
@@ -156,32 +159,32 @@ public final class ValueGeneratorFactory {
 	}
 
 	public static ValueGeneratorIfc langLiteral(IRI property) {
-		return (model, subject, value, language, datatype) -> {
+		return (model, subject, value, language) -> {
 			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim(), language));
 			return null;
 		};
 	}
 
 	public static ValueGeneratorIfc plainLiteral(IRI property) {
-		return (model, subject, value, language, datatype) -> {
+		return (model, subject, value, language) -> {
 			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim()));
 			return null;
 		};
 	}
 	
 	public static ValueGeneratorIfc langOrPlainLiteral(IRI property) {
-		return (model, subject, value, language, datatype) -> {
+		return (model, subject, value, language) -> {
 			if(language != null) {
 				model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim(), language));
 			} else {
 				model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim()));
-			}
+			}			
 			return null;
 		};
 	}
 
 	public static ValueGeneratorIfc skosXlLabel(IRI xlLabelProperty, PrefixManager prefixManager) {
-		return (model, subject, value, language, datatype) -> {
+		return (model, subject, value, language) -> {
 			// String labelUri = ConceptSchemeFromExcel.fixUri(value);
 			String labelUri = prefixManager.uri(value, true);
 			IRI labelResource = SimpleValueFactory.getInstance().createIRI(labelUri);
@@ -191,8 +194,8 @@ public final class ValueGeneratorFactory {
 		};
 	}
 
-	public ValueGeneratorIfc failIfFilledIn(String property) {
-		return (model, subject, value, language, datatype) -> {
+	public static ValueGeneratorIfc failIfFilledIn(String property) {
+		return (model, subject, value, language) -> {
 			if (StringUtils.isBlank(value)) return null;
 			throw new Xls2SkosException("Property not supported {} if filled in- {} - {}", property, subject, value);
 		};

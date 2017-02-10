@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.rdf4j.common.iteration.Iterations;
 import org.eclipse.rdf4j.model.Namespace;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
@@ -75,22 +76,14 @@ public class Namespaces {
 	
 	public Namespaces withRepository(Repository r) {
 		log.debug("Registering repository namespaces...");
-		RepositoryConnection c = null;
-		try {
+		try(RepositoryConnection c = r.getConnection()) {
 			// registers RepositoryConnection namespaces
-			c = r.getConnection();
-			List<Namespace> repoNamespaces = c.getNamespaces().asList();
-			for (Namespace namespace : repoNamespaces) {
+			Iterations.asList(c.getNamespaces()).forEach(namespace -> {
 				if(!this.namespaceMap.containsKey(namespace.getPrefix())) {
 					log.debug("Reading unknown namespace from repository '"+namespace.getPrefix()+"' : <"+namespace.getName()+">");
 					this.namespaceMap.put(namespace.getName(), namespace.getPrefix());
 				}
-			}
-		} catch (RepositoryException e) {
-			// don't do anything
-			e.printStackTrace();
-		} finally {
-			RepositoryConnectionDoorman.closeQuietly(c);
+			});
 		}
 		
 		return this;
@@ -144,8 +137,6 @@ public class Namespaces {
 	
 	private void initNamespaceMap(boolean live) {
 		try {
-			
-
 			RepositoryBuilder builder = new RepositoryBuilder(new LocalMemoryRepositoryFactory());
 			// DO NOT REGISTERS NAMESPACES AUTOMATICALLY OTHERWISE : INFINITE LOOP
 			builder.setAutoRegisterNamespaces(false);

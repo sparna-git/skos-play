@@ -19,7 +19,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
@@ -94,8 +93,10 @@ public class Xls2SkosConverter {
 		this.modelWriter = modelWriter;
 		this.lang = lang;
 		
+		// TODO : handle language declared on a per-colum basis
+		
 		// inScheme for additionnal inScheme information, if needed
-		valueGenerators.put("skos:inScheme", 		ValueGeneratorFactory.resources(SKOS.IN_SCHEME, ',', prefixManager));
+		valueGenerators.put("skos:inScheme", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.IN_SCHEME, prefixManager), ","));
 		// labels
 		valueGenerators.put("skos:prefLabel", 		ValueGeneratorFactory.langLiteral(SKOS.PREF_LABEL));
 		valueGenerators.put("skos:altLabel", 		ValueGeneratorFactory.langLiteral(SKOS.ALT_LABEL));
@@ -110,28 +111,28 @@ public class Xls2SkosConverter {
 		// notation
 		valueGenerators.put("skos:notation", 		ValueGeneratorFactory.plainLiteral(SKOS.NOTATION));
 		// semantic relations
-		valueGenerators.put("skos:broader", 		ValueGeneratorFactory.resources(SKOS.BROADER, ',', prefixManager));
-		valueGenerators.put("skos:narrower", 		ValueGeneratorFactory.resources(SKOS.NARROWER, ',', prefixManager));
-		valueGenerators.put("skos:related", 		ValueGeneratorFactory.resources(SKOS.RELATED, ',', prefixManager));
+		valueGenerators.put("skos:broader", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.BROADER, prefixManager), ","));
+		valueGenerators.put("skos:narrower", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.NARROWER, prefixManager), ","));
+		valueGenerators.put("skos:related", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.RELATED, prefixManager), ","));
 		// mapping relations		
-		valueGenerators.put("skos:exactMatch", 		ValueGeneratorFactory.resources(SKOS.EXACT_MATCH, ',', prefixManager));
-		valueGenerators.put("skos:closeMatch", 		ValueGeneratorFactory.resources(SKOS.CLOSE_MATCH, ',', prefixManager));
-		valueGenerators.put("skos:relatedMatch", 	ValueGeneratorFactory.resources(SKOS.RELATED_MATCH, ',', prefixManager));
-		valueGenerators.put("skos:broadMatch", 		ValueGeneratorFactory.resources(SKOS.BROAD_MATCH, ',', prefixManager));
-		valueGenerators.put("skos:narrowMatch", 	ValueGeneratorFactory.resources(SKOS.RELATED_MATCH, ',', prefixManager));
+		valueGenerators.put("skos:exactMatch", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.EXACT_MATCH, prefixManager), ","));
+		valueGenerators.put("skos:closeMatch", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.CLOSE_MATCH, prefixManager), ","));
+		valueGenerators.put("skos:relatedMatch", 	ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.RELATED_MATCH, prefixManager), ","));
+		valueGenerators.put("skos:broadMatch", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.BROAD_MATCH, prefixManager), ","));
+		valueGenerators.put("skos:narrowMatch", 	ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.RELATED_MATCH, prefixManager), ","));
 		// XL labels
 		valueGenerators.put("skosxl:prefLabel", 	ValueGeneratorFactory.skosXlLabel(SKOSXL.PREF_LABEL, prefixManager));
 		valueGenerators.put("skosxl:altLabel", 		ValueGeneratorFactory.skosXlLabel(SKOSXL.ALT_LABEL, prefixManager));
 		valueGenerators.put("skosxl:hiddenLabel",	ValueGeneratorFactory.skosXlLabel(SKOSXL.HIDDEN_LABEL, prefixManager));
 		valueGenerators.put("skosxl:literalForm", 	ValueGeneratorFactory.langLiteral(SKOSXL.LITERAL_FORM));
 		// other concepts metadata
-		valueGenerators.put("euvoc:status", 		ValueGeneratorFactory.resources(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#status"), ',', prefixManager));		
+		valueGenerators.put("euvoc:status", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#status"), prefixManager), ","));		
 		valueGenerators.put("euvoc:startDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#startDate")));
 		valueGenerators.put("euvoc:endDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#endDate")));
 		valueGenerators.put("dct:created", 			ValueGeneratorFactory.dateLiteral(DCTERMS.CREATED));
 		valueGenerators.put("dct:modified", 		ValueGeneratorFactory.dateLiteral(DCTERMS.MODIFIED));
 		// a source can be a literal or a URI
-		valueGenerators.put("dct:source", 			ValueGeneratorFactory.resourcesOrLiteral(ColumnHeader.parse("dct:source", prefixManager), ',', prefixManager));
+		valueGenerators.put("dct:source", 			ValueGeneratorFactory.split(ValueGeneratorFactory.resourceOrLiteral(new ColumnHeaderParser(prefixManager).parse("dct:source"), prefixManager), ","));
 		// dct metadata for the ConceptScheme
 		valueGenerators.put("dct:title", 			ValueGeneratorFactory.langLiteral(DCTERMS.TITLE));
 		valueGenerators.put("dct:description", 		ValueGeneratorFactory.langLiteral(DCTERMS.DESCRIPTION));
@@ -255,12 +256,13 @@ public class Xls2SkosConverter {
 		}
 		
 		// read the properties on the concept scheme by reading the top rows
+		ColumnHeaderParser headerParser = new ColumnHeaderParser(prefixManager);
 		for (int rowIndex = 1; rowIndex <= headerRowIndex; rowIndex++) {
 			if(sheet.getRow(rowIndex) != null) {
 				String key = getCellValue(sheet.getRow(rowIndex).getCell(0));
 				String value = getCellValue(sheet.getRow(rowIndex).getCell(1));
 				
-				ColumnHeader header = ColumnHeader.parse(key, prefixManager);
+				ColumnHeader header = headerParser.parse(key);
 				if(
 						header != null
 						&&
@@ -268,22 +270,21 @@ public class Xls2SkosConverter {
 				) {
 					ValueGeneratorIfc valueGenerator = null;
 					if(valueGenerators.containsKey(header.getDeclaredProperty())) {
-						valueGenerator = valueGenerators.get(header.getProperty());
+						valueGenerator = valueGenerators.get(header.getDeclaredProperty());
 					} else if(header.getProperty() != null) {
-						valueGenerator = ValueGeneratorFactory.resourcesOrLiteral(
+						valueGenerator = ValueGeneratorFactory.resourceOrLiteral(
 								header,
-								',',
 								prefixManager
 						);
 					}
 					
 					if(valueGenerator != null) {
+						System.out.println("Adding value on "+csResource);
 						valueGenerator.addValue(
 								model,
 								csResource,
 								value,
-								header.getLanguage().orElse(lang),
-								header.getDatatype().orElse(null)
+								header.getLanguage().orElse(this.lang)
 						);
 					}
 				}
@@ -410,10 +411,10 @@ public class Xls2SkosConverter {
 		
 	}
 
-	private Resource handleRow(Model model, List<ColumnHeader> columnNames, PrefixManager prefixManager, Row row) {
+	private Resource handleRow(Model model, List<ColumnHeader> columnHeaders, PrefixManager prefixManager, Row row) {
 		RowBuilder rowBuilder = null;
-		for (int colIndex = 0; colIndex < columnNames.size(); colIndex++) {
-			ColumnHeader header = columnNames.get(colIndex);
+		for (int colIndex = 0; colIndex < columnHeaders.size(); colIndex++) {
+			ColumnHeader header = columnHeaders.get(colIndex);
 			
 			Cell c = row.getCell(colIndex);			
 			String value = getCellValue(c);
@@ -435,23 +436,25 @@ public class Xls2SkosConverter {
 					continue;
 				}
 				
-				ValueGeneratorIfc valueGenerator = valueGenerators.get(columnNames.get(colIndex).getDeclaredProperty());
+				ValueGeneratorIfc valueGenerator = valueGenerators.get(columnHeaders.get(colIndex).getDeclaredProperty());
 				
-				// if this is not one of the known processor, but the prefix is known, then defaults to a generic processor
+				// if this is not one of the known processor, but the property is known, then defaults to a generic processor
 				if(valueGenerator == null && header.getProperty() != null) {
-					valueGenerator = ValueGeneratorFactory.resourcesOrLiteral(
+					valueGenerator = ValueGeneratorFactory.resourceOrLiteral(
 							header,
-							',',
 							prefixManager
 					);
+					if(header.getParameters().get(ColumnHeader.PARAMETER_SEPARATOR) != null) {
+						valueGenerator = ValueGeneratorFactory.split(valueGenerator, header.getParameters().get(ColumnHeader.PARAMETER_SEPARATOR));
+					}
 				}
 				
+				// if a value generator was successfully generated, then process the value
 				if(valueGenerator != null) {
-					rowBuilder.addCell(
+					rowBuilder.processCell(
 							valueGenerator,
 							value,
-							columnNames.get(colIndex).getLanguage().orElse(lang),
-							columnNames.get(colIndex).getDatatype().orElse(null)
+							header.getLanguage().orElse(this.lang)
 					);
 				}
 			}
@@ -478,10 +481,10 @@ public class Xls2SkosConverter {
 			subject = conceptResource;
 		}
 
-		public void addCell(ValueGeneratorIfc valueGenerator, String value, String language, IRI datatype) {
+		public void processCell(ValueGeneratorIfc valueGenerator, String value, String language) {
 			// if the column is unknown, ignore it
-			if(valueGenerator != null) {
-				Resource newResource = valueGenerator.addValue(model, subject, value, language, datatype);
+			if(valueGenerator != null) {				
+				Resource newResource = valueGenerator.addValue(model, subject, value, language);
 				if (null != newResource) {
 					// change the focus to the new resource in the case of xl labels
 					// so that subsequent columns are added on that resource

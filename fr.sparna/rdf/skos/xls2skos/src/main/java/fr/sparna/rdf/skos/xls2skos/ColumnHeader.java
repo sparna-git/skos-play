@@ -1,90 +1,46 @@
 package fr.sparna.rdf.skos.xls2skos;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 public class ColumnHeader {
+	
+	public static final String PARAMETER_SEPARATOR = "separator";
 
+	/**
+	 * the full orignal value of the header, as a raw string
+	 */
 	private String originalValue;
+	/**
+	 * The language parameter of the header, e.g. "skos:prefLabel@en"
+	 */
 	private Optional<String> language;
+	/**
+	 * The datatype parameter of the header, e.g. "dct:created^^xsd:date"
+	 */
 	private Optional<IRI> datatype;
+	/**
+	 * The IRI of the property of that column, e.g. for "skos:prefLabel@en", the property is "http://www.w3.org/2004/02/skos/core#prefLabel"
+	 */
 	private IRI property;
+	/**
+	 * The property part of the header, as declared, e.g. for "dct:created^^xsd:date", the declared property is "dct:created"
+	 */
 	private String declaredProperty;
+	/**
+	 * Whether the column declares an inverse flag, e.g. "^skos:member"
+	 */
 	private boolean inverse = false;
+	/**
+	 * Additionnal parameters on the header, e.g. "skos:altLabel(separator=",")"
+	 */
+	private Map<String, String> parameters = new HashMap<String, String>();
 	
-	private ColumnHeader(String originalValue) {
+	public ColumnHeader(String originalValue) {
 		this.originalValue = originalValue;
-	}
-	
-	public static ColumnHeader parse(String value, PrefixManager pm) {
-		if(value == null) {
-			return null;
-		}
-		ColumnHeader h = new ColumnHeader(value);
-		h.declaredProperty = parseDeclaredProperty(value);
-		h.property = parseProperty(h.declaredProperty, pm);
-		h.language = parseLanguage(value);
-		h.datatype = parseDatatype(value, pm);
-		h.inverse = parseInverse(value);
-		
-		return h;
-	}
-	
-	private static IRI parseProperty(String declaredProperty, PrefixManager pm) {
-		try {
-			if(pm.usesKnownPrefix(declaredProperty)) {
-				return SimpleValueFactory.getInstance().createIRI(pm.uri(declaredProperty, false));
-			} else {
-				return SimpleValueFactory.getInstance().createIRI(declaredProperty);
-			}
-		} catch (Exception e) {
-			return null;
-		}		
-	}
-	
-	private static String parseDeclaredProperty(String value) {
-		String property = value;
-		
-		// remove inverse mark
-		if(parseInverse(value)) {
-			property = value.substring(1);
-		}
-		
-		if(property.contains("@")) {
-			property = property.substring(0, property.lastIndexOf('@'));
-		}
-		if(property.contains("^^")) {
-			property = property.substring(0, property.lastIndexOf("^^"));
-		}
-		
-		return property;		
-	}
-	
-	private static Optional<String> parseLanguage(String value) {
-		if(value.contains("@")) {
-			return Optional.of(value.substring(value.lastIndexOf('@')+1));
-		}
-		return Optional.empty();
-	}
-	
-	private static Optional<IRI> parseDatatype(String value, PrefixManager pm) {
-		if(value.contains("^^")) {
-			String dt = value.substring(value.lastIndexOf("^^")+2);
-			if(pm.usesKnownPrefix(dt)) {
-				return Optional.of(SimpleValueFactory.getInstance().createIRI(pm.uri(dt, false)));
-			} else if (dt.startsWith("<http")){
-				return Optional.of(SimpleValueFactory.getInstance().createIRI(dt.substring(1, dt.length()-2)));
-			} else {
-				return Optional.of(SimpleValueFactory.getInstance().createIRI(dt));
-			}
-		}
-		return Optional.empty();
-	}
-	
-	private static boolean parseInverse(String value) {
-		return value.startsWith("^");
 	}
 
 	public String getOriginalValue() {
@@ -110,5 +66,43 @@ public class ColumnHeader {
 	public String getDeclaredProperty() {
 		return declaredProperty;
 	}
+
+
+	public void setLanguage(Optional<String> language) {
+		this.language = language;
+	}
+
+	public void setDatatype(Optional<IRI> datatype) {
+		this.datatype = datatype;
+	}
+
+	public void setProperty(IRI property) {
+		this.property = property;
+	}
+
+	public void setDeclaredProperty(String declaredProperty) {
+		this.declaredProperty = declaredProperty;
+	}
+
+	public void setInverse(boolean inverse) {
+		this.inverse = inverse;
+	}
+
+	public Map<String, String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(Map<String, String> parameters) {
+		this.parameters = parameters;
+	}
+
+	@Override
+	public String toString() {
+		return "ColumnHeader [originalValue=" + originalValue + ", language=" + language + ", datatype=" + datatype
+				+ ", property=" + property + ", declaredProperty=" + declaredProperty + ", inverse=" + inverse
+				+ ", parameters=" + parameters + "]";
+	}
+	
+	
 	
 }
