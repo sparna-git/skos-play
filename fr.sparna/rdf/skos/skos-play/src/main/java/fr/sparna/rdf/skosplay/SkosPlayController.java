@@ -117,7 +117,7 @@ import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
 import fr.sparna.rdf.skos.xls2skos.ModelWriterFactory;
 import fr.sparna.rdf.skos.xls2skos.ModelWriterIfc;
 import fr.sparna.rdf.skos.xls2skos.Xls2SkosConverter;
-import fr.sparna.rdf.skosplay.log.LogController;
+import fr.sparna.rdf.skosplay.log.LogEntry;
 import fr.sparna.rdf.skosplay.log.SQLLogDao;
 
 
@@ -540,6 +540,8 @@ public class SkosPlayController {
 		default:
 			break;
 		}
+		
+		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, null, null, SessionData.get(request.getSession()).getListurl(),"convert"));
 
 		try {
 			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+usexl);
@@ -993,6 +995,7 @@ public class SkosPlayController {
 		// make a log to trace usage
 		String aRandomConcept = Perform.on(r).read(new SparqlQuery(new SparqlQueryBuilder(this, "ReadRandomConcept.rq"))).stringValue();
 		log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+"HTML");
+		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, "dataviz", displayParam, SessionData.get(request.getSession()).getListurl(),"print"));
 		
 		switch(displayType) {
 		case PARTITION : {		
@@ -1028,7 +1031,7 @@ public class SkosPlayController {
 			throw new InvalidParameterException("Unknown display type "+displayType);
 		}
 		
-		}
+		}		
 		
 	}
 
@@ -1299,8 +1302,8 @@ public class SkosPlayController {
 			break;
 		}
 		}
-		SQLLogDao log=new SQLLogDao();
-		log.writelog(language, outputParam, displayParam, SessionData.get(request.getSession()).getListurl(),"print");
+
+		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, outputParam, displayParam, SessionData.get(request.getSession()).getListurl(),"print"));
 		response.flushBuffer();		
 	}
 
