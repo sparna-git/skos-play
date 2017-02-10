@@ -1,5 +1,6 @@
 package fr.sparna.rdf.skosplay;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.eclipse.rdf4j.repository.Repository;
 
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
 
 import fr.sparna.google.GoogleConnector;
 import fr.sparna.google.GoogleUser;
@@ -46,6 +48,27 @@ public class SessionData {
 	protected String baseUrl;
 	
 	protected GoogleConnector googleConnector;
+
+	protected String listurl;
+	
+	protected boolean fichierexample;
+	
+
+	public boolean isFichierexample() {
+		return fichierexample;
+	}
+
+	public void setFichierexample(boolean fichierexample) {
+		this.fichierexample = fichierexample;
+	}
+
+	public String getListurl() {
+		return listurl;
+	}
+
+	public void setListurl(String listurl) {
+		this.listurl = listurl;
+	}
 
 	/**
 	 * Stores this data into session

@@ -14,6 +14,8 @@ public class ConvertFormData {
 	protected String defaultLanguage;
 	// liste de fichiers issus du google drive
 	protected List<File> googleFiles;
+	// base URL of the application for the example files
+	protected String baseUrl;
 	
 	protected boolean useZip;
 	protected boolean useXl;
@@ -82,6 +84,14 @@ public class ConvertFormData {
 
 	public void setOutput(String output) {
 		this.output = output;
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
 	}
 
 	public List<File> getGoogleFiles() {
