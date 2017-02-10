@@ -384,7 +384,7 @@
 						<li>Known SKOS labels and notes values (<code>skos:prefLabel</code>, <code>altLabel</code>, <code>hiddenLabel</code>, <code>definition</code>, <code>scopeNote</code>, <code>example</code>, <code>historyNote</code>, <code>changeNote</code>, <code>editorialNote</code>)
 						are always converted to literal values,	with the appropriate language (see below);</li>
 						<li>Known SKOS semantic relations (<code>skos:broader</code>, <code>narrower</code>, <code>related</code>, <code>exactMatch</code>, <code>closeMatch</code>, <code>broadMatch</code>, <code>narrowMatch</code>, <code>relatedMatch</code>)
-						are always converted to object properties; the URI can be given either as a full URI ()starting with 'http'), or using a declared prefix.
+						are always converted to object properties; the URI can be given either as a full URI (starting with 'http'), or using a declared prefix.
 						<li>Other well-known properties are interpreted as xsd:date literals, such as <code>dct:created</code>, <code>dct:modified</code>, <code>euvoc:startDate</code> and <code>euvoc:endDate</code>;</li>
 					</ul>
 					<p />This is how a typical body part can look like :
@@ -398,6 +398,11 @@
 					<p />You can specify the datatype to be assigned to a column by appending <code>^^xsd:date</code> (or another datatype) to the property declaration in the title row.
 					<p />This is an example of columns declaration with a datatype :
 					<img src="images/convert-screenshot-datatype.png" width="100%" />
+				<h4><a href="#split" id="split"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Generating multiple values</h4>
+					<p />You can specify a separator on a colum by appending <code>(separator=",")</code> (or another separator) to the property declaration in the title row.
+					This indicates that the values in the cells of that columns will be splitted on that separator, and multiple values will be generated.
+					You can combine this with a language or datatype declaration, for example <code>schema:name@en(separator=",")</code>.
+					<br />The alternative is to create multiple columns with the same property, which is allowed.
 				<h4><a href="#collections" id="collections"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Generating skos:Collection with object-to-subject columns</h4>
 					<p />By default, each line in the body generates an instance of skos:Concept. If you need to generate instances of skos:Collection (or other classes, by the way), do the following :
 					<ol>
