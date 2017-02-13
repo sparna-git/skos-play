@@ -567,5 +567,7 @@ public class Xls2SkosConverter {
 		converter.setGenerateXlDefinitions(false);
 		converter.processInputStream(input);
 	}
+	
+	
 
 }
