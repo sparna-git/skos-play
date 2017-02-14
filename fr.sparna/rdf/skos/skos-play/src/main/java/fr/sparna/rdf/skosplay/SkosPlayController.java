@@ -529,20 +529,13 @@ public class SkosPlayController {
 				ioeErrors.printStackTrace();
 				return doErrorConvert(request, ioeErrors.getMessage()); 
 			}
-			
 
 			break;
 		}
 		default:
 			break;
 		}
-<<<<<<< HEAD
-		SQLLogDao logs=new SQLLogDao();
-		
-=======
-		
-		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, null, null, SessionData.get(request.getSession()).getListurl(),"convert"));
->>>>>>> c7562b4edb5fd08c38f3ed4b3b2e85be4bf0f890
+
 
 		try {
 			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+usexl);
@@ -553,10 +546,8 @@ public class SkosPlayController {
 			array=identifiant.toArray(array);
 			List uri=new ArrayList<String>(Arrays.asList(array));
 			Collections.sort(uri);
-			
-			logs.writelog(language, null, null, SessionData.get(request.getSession()).getListurl(),"convert",uri.toString());
-			
-			System.out.println("vocabulaireid : "+uri);
+			SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, null, null, SessionData.get(request.getSession()).getListurl(),"convert",uri.toString()));
+		
 			
 		} finally {
 			try {
@@ -1006,12 +997,9 @@ public class SkosPlayController {
 		// make a log to trace usage
 		String aRandomConcept = Perform.on(r).read(new SparqlQuery(new SparqlQueryBuilder(this, "ReadRandomConcept.rq"))).stringValue();
 		log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+"HTML");
-<<<<<<< HEAD
-		SQLLogDao log=new SQLLogDao();
-		log.writelog(language, "datavize", displayParam, SessionData.get(request.getSession()).getListurl(),"print",schemeParam);
-=======
-		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, "dataviz", displayParam, SessionData.get(request.getSession()).getListurl(),"print"));
->>>>>>> c7562b4edb5fd08c38f3ed4b3b2e85be4bf0f890
+
+		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, "datavize", displayParam, SessionData.get(request.getSession()).getListurl(),"print", schemeParam));
+
 		
 		switch(displayType) {
 		case PARTITION : {		
@@ -1318,13 +1306,9 @@ public class SkosPlayController {
 			break;
 		}
 		}
-<<<<<<< HEAD
-		SQLLogDao log=new SQLLogDao();
-		log.writelog(language, outputParam, displayParam, SessionData.get(request.getSession()).getListurl(),"print",schemeParam);
-=======
 
-		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, outputParam, displayParam, SessionData.get(request.getSession()).getListurl(),"print"));
->>>>>>> c7562b4edb5fd08c38f3ed4b3b2e85be4bf0f890
+		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, outputParam, displayParam, SessionData.get(request.getSession()).getListurl(),"print",schemeParam));
+
 		response.flushBuffer();		
 	}
 

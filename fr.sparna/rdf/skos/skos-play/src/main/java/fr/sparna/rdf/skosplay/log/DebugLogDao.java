@@ -23,10 +23,7 @@ public class DebugLogDao implements LogDaoIfc {
 		lesLogs.add(entry);
 	}
 
-	@Override
-	public Map<String, Integer> ListAllLog() {
-		return null;
-	}
+	
 	
 	
 }

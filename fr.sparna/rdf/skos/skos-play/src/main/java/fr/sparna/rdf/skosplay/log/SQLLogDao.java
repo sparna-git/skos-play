@@ -63,28 +63,12 @@ public class SQLLogDao implements LogDaoIfc {
 
 	}
 
-<<<<<<< HEAD
-    }
     
-    public void writelog(String language, String format, String rendu, String url, String type, String uri)
-   	{
-   		CreateTableLog table=new CreateTableLog();
-   		table.create("statistique", "id INT AUTO_INCREMENT, type VARCHAR(255), output VARCHAR(255), rendu VARCHAR(255), langue VARCHAR(20), url VARCHAR(255), jour DATE, uri VARCHAR(255)");
-   		LogEntry entry=new LogEntry();
-   		entry.setLangue(language);
-   		entry.setOutput(format);
-   		entry.setRendu(rendu);
-   		entry.setType(type);
-   		entry.setUrl(url);
-   		entry.setUri(uri);
-   		insertLog(entry);
-   		
-   	}	
-=======
+    
+
 	public boolean isDoLog() {
 		return doLog;
 	}
->>>>>>> c7562b4edb5fd08c38f3ed4b3b2e85be4bf0f890
 
 	public void setDoLog(boolean doLog) {
 		this.doLog = doLog;

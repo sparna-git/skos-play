@@ -9,24 +9,25 @@ public class LogEntry {
 	public String email;
 	public String rendu;
 	public String url;
-<<<<<<< HEAD
+
 	public String uri;
 	public Integer iduser;
 
-=======
 
-	public LogEntry(String language, String format, String rendu, String url, String type) {
+
+	public LogEntry(String language, String format, String rendu, String url, String type, String uri) {
 		this.langue = language;
 		this.output = format;
 		this.rendu = rendu;
 		this.url = url;
 		this.displayType = type;
+		this.uri=uri;
 	}
 	
 	public LogEntry() {
 		
 	}
->>>>>>> c7562b4edb5fd08c38f3ed4b3b2e85be4bf0f890
+
 
 	public String getUrl() {
 		return url;
@@ -75,7 +76,7 @@ public class LogEntry {
 		this.actiondate = actiondate;
 	}
 
-<<<<<<< HEAD
+
 	public String getType() {
 		return displayType;
 	}
@@ -84,12 +85,6 @@ public class LogEntry {
 		this.displayType = display;
 	}
 
-	public String getLangue() {
-		return langue;
-	}
-	public void setLangue(String lang) {
-		this.langue = lang;
-	}
 
 	public String getUri() {
 		return uri;
@@ -108,8 +103,6 @@ public class LogEntry {
 	}
 	
 	
-
-=======
 	public String getDisplayType() {
 		return displayType;
 	}
@@ -124,7 +117,7 @@ public class LogEntry {
 	public void setLangue(String lang) {
 		this.langue = lang;
 	}
->>>>>>> c7562b4edb5fd08c38f3ed4b3b2e85be4bf0f890
+
 
 
 

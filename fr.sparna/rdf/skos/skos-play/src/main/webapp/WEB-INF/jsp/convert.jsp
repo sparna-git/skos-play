@@ -19,7 +19,6 @@
 		<link href="bootstrap-fileupload/jasny-bootstrap.min.css" rel="stylesheet" />
 		<link href="css/skos-play.css" rel="stylesheet" />
 		<link href="style/custom.css" rel="stylesheet" />
-		
 		<link rel="stylesheet" href="css/jquery-editable-select.min.css">
 		<script src="js/jquery.min.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
@@ -84,7 +83,7 @@
 				</c:if>
 			</div>	
 					
-			<form id="upload_form" action="convert" method="post"name="formulaire" enctype="multipart/form-data" class="form-horizontal">	
+			<form id="upload_form" action="convert" method="post" name="formulaire" enctype="multipart/form-data" class="form-horizontal">	
 			
 			<fieldset>
 				<legend><fmt:message key="convert.form.legend" /></legend>

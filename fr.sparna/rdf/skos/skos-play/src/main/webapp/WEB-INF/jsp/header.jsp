@@ -29,6 +29,7 @@
 							    	</a>
 								</c:if>
 					    	</li>
+					    	<li><a href="log">log</a></li>
 							<li id="header-pill-lang" >
 								
 						  		<a class="dropdown-toggle" data-toggle="dropdown" href="#">
