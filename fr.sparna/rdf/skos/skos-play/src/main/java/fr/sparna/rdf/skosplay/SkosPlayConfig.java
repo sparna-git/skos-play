@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import fr.sparna.rdf.skosplay.log.SQLQueryRegistry;
+
 
 public class SkosPlayConfig {
 
@@ -36,6 +38,8 @@ public class SkosPlayConfig {
 	
 	// application title to be inserted in HTML pages
 	protected String applicationTitle;
+	
+	protected SQLQueryRegistry sqlQueryRegistry;
 	
 	/**
 	 * Singleton private constructor
@@ -142,6 +146,15 @@ public class SkosPlayConfig {
 	@Value("${skosplay.application.title:SKOS Play! - Thesaurus & Taxonomies}")
 	public void setApplicationTitle(String applicationTitle) {
 		this.applicationTitle = applicationTitle;
+	}
+
+	public SQLQueryRegistry getSqlQueryRegistry() {
+		return sqlQueryRegistry;
+	}
+
+	@Autowired
+	public void setSqlQueryRegistry(SQLQueryRegistry sqlQueryRegistry) {
+		this.sqlQueryRegistry = sqlQueryRegistry;
 	}
 	
 }

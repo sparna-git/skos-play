@@ -134,10 +134,46 @@
 		                	 select distinct url, count(id) as nombre from statistique where type='convert' and url  _diff_ ;  
 		                </value>
                 </entry>
+                <entry key="IdConvertis">
+		                <value>
+		                	 select distinct uri, count(id) as nombre from statistique where type='convert' and uri  _diff_ ;  
+		                </value>
+                </entry>
+                <entry key="UrlsConvertisTotaux">
+		                <value>
+		                	 select count(url) as nombre from
+								(select count (*) as nombre, url from statistique where type='convert' and url  _diff_ ;  
+		                </value>
+                </entry>
+                <entry key="IdConvertisTotaux">
+		                <value>
+		                	 select count(uri) as nombre from
+
+								(select count (*) as nombre, uri  from statistique where type='convert' and uri  _diff_ ;  
+		                </value>
+                </entry>
+                <entry key="UrlsPrintTotaux">
+		                <value>
+		                	 select count(url) as nombre from
+								(select count (*) as nombre, url from statistique where type='print' and url  _diff_ ;  
+		                </value>
+                </entry>
+                <entry key="IdPrintTotaux">
+		                <value>
+		                	 select count(uri) as nombre from
+
+								(select count (*) as nombre, uri  from statistique where type='print' and uri  _diff_ ;  
+		                </value>
+                </entry>
              
                 <entry key="UrlsPrint">
 		                <value>
 		                	select distinct url, count(id) as nombre from statistique where type='print' and  url  _diff_ ; 
+		                </value>
+                </entry>
+                <entry key="IdPrint">
+		                <value>
+		                	select distinct uri, count(id) as nombre from statistique where type='print' and  uri  _diff_ ; 
 		                </value>
                 </entry>
             </map>

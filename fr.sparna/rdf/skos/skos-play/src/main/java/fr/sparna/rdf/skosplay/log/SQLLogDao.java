@@ -19,13 +19,14 @@ public class SQLLogDao implements LogDaoIfc {
 		Statement stmt = null;
 		String requete=null;
 		entry.setActiondate("NOW()");
-		requete="INSERT INTO statistique(output, type, rendu, langue, url, jour) VALUES('"
+		requete="INSERT INTO statistique(output, type, rendu, langue, url, jour, uri) VALUES('"
 				+entry.getOutput()+"','"
 				+entry.getType()+"','"
 				+entry.getRendu()+"','"
 				+entry.getLangue()+"','"
 				+entry.getUrl()+"',"
-				+entry.getActiondate()+")";
+				+entry.getActiondate()+",'"
+				+entry.getUri()+"')";
 		try {
     		connection.setAutoCommit(false);
     		stmt = connection.createStatement();
@@ -53,16 +54,17 @@ public class SQLLogDao implements LogDaoIfc {
 
     }
     
-    public void writelog(String language, String format, String rendu, String url, String type)
+    public void writelog(String language, String format, String rendu, String url, String type, String uri)
    	{
    		CreateTableLog table=new CreateTableLog();
-   		table.create("statistique", "id INT AUTO_INCREMENT, type VARCHAR(255), output VARCHAR(255), rendu VARCHAR(255), langue VARCHAR(20), url VARCHAR(255), jour DATE");
+   		table.create("statistique", "id INT AUTO_INCREMENT, type VARCHAR(255), output VARCHAR(255), rendu VARCHAR(255), langue VARCHAR(20), url VARCHAR(255), jour DATE, uri VARCHAR(255)");
    		LogEntry entry=new LogEntry();
    		entry.setLangue(language);
    		entry.setOutput(format);
    		entry.setRendu(rendu);
    		entry.setType(type);
    		entry.setUrl(url);
+   		entry.setUri(uri);
    		insertLog(entry);
    		
    	}	

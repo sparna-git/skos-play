@@ -22,9 +22,12 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -119,6 +122,7 @@ import fr.sparna.rdf.skos.xls2skos.ModelWriterIfc;
 import fr.sparna.rdf.skos.xls2skos.Xls2SkosConverter;
 import fr.sparna.rdf.skosplay.log.LogController;
 import fr.sparna.rdf.skosplay.log.SQLLogDao;
+import fr.sparna.rdf.skosplay.log.UserDataDAO;
 
 
 
@@ -533,14 +537,21 @@ public class SkosPlayController {
 			break;
 		}
 		SQLLogDao logs=new SQLLogDao();
-		logs.writelog(language, null, null, SessionData.get(request.getSession()).getListurl(),"convert");
 		
 
 		try {
 			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+usexl);
 			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
 			response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());	
-			generateType(new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),in,language,usexl);
+			Set<String> identifiant=generateType(new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),in,language,usexl);
+			String [] array=new String[identifiant.size()];
+			array=identifiant.toArray(array);
+			List uri=new ArrayList<String>(Arrays.asList(array));
+			Collections.sort(uri);
+			
+			logs.writelog(language, null, null, SessionData.get(request.getSession()).getListurl(),"convert",uri.toString());
+			
+			System.out.println("vocabulaireid : "+uri);
 			
 		} finally {
 			try {
@@ -553,11 +564,13 @@ public class SkosPlayController {
 		return null;
 	}
 
-	private void generateType(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl) {
+	private Set<String> generateType(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl) {
 		Xls2SkosConverter converter = new Xls2SkosConverter(Writer, lang);
 		converter.setGenerateXl(generatexl);
 		converter.setGenerateXlDefinitions(generatexl);
 		converter.processInputStream(filefrom);
+		Set<String> identifiant=converter.getCsModels().keySet();
+		return identifiant;
 	}
 	private ModelAndView convert(
 			Drive service, 
@@ -591,7 +604,7 @@ public class SkosPlayController {
 			log.debug("Exécution de la conversion");
 			// lancer la conversion et récupérer le résultat en mémoire
 			ByteArrayOutputStream conversionResult = new ByteArrayOutputStream();
-			generateType(new ModelWriterFactory(useZip, theFormat).buildNewModelWriter(conversionResult),content,language,useXl);
+			Set<String> identifiant=generateType(new ModelWriterFactory(useZip, theFormat).buildNewModelWriter(conversionResult),content,language,useXl);
 			log.debug("Conversion terminée");
 			sessionData.setGoogleConversionResult(conversionResult);
 			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
@@ -988,6 +1001,8 @@ public class SkosPlayController {
 		// make a log to trace usage
 		String aRandomConcept = Perform.on(r).read(new SparqlQuery(new SparqlQueryBuilder(this, "ReadRandomConcept.rq"))).stringValue();
 		log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+"HTML");
+		SQLLogDao log=new SQLLogDao();
+		log.writelog(language, "datavize", displayParam, SessionData.get(request.getSession()).getListurl(),"print",schemeParam);
 		
 		switch(displayType) {
 		case PARTITION : {		
@@ -1295,7 +1310,7 @@ public class SkosPlayController {
 		}
 		}
 		SQLLogDao log=new SQLLogDao();
-		log.writelog(language, outputParam, displayParam, SessionData.get(request.getSession()).getListurl(),"print");
+		log.writelog(language, outputParam, displayParam, SessionData.get(request.getSession()).getListurl(),"print",schemeParam);
 		response.flushBuffer();		
 	}
 
