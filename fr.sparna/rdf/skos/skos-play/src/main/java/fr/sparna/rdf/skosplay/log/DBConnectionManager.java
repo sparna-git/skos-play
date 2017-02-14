@@ -9,31 +9,30 @@ public class DBConnectionManager {
    
    private static final String DB_DRIVER = "org.h2.Driver";
    
-   private String jdbcConnectionUrl = "jdbc:h2:~/skos-play";
+   private String dataPath;
    private String jdbcUser = "";
    private String jdbcPassword = "";
 
-   public DBConnectionManager() {
-	   
+   public DBConnectionManager(String dataPath) {
+	   this.dataPath = dataPath;
    }
    
-   public Connection getDBConnection( ) {
-	   Connection dbConnection = null;
-
+   public Connection getDBConnection() {
 	   try {
 		   Class.forName(DB_DRIVER);
 	   } catch (ClassNotFoundException e) {
-		   System.out.println(e.getMessage());
+		   e.printStackTrace();
 	   }
 	   try {
 		   String INIT_SQL = "CREATE TABLE IF NOT EXISTS statistique (id INT AUTO_INCREMENT, type VARCHAR(255), output VARCHAR(255), rendu VARCHAR(255), langue VARCHAR(20), url VARCHAR(255), jour DATE)";   
-		   String fullJdbcUrl = jdbcConnectionUrl+";INIT="+INIT_SQL;
-		   dbConnection = DriverManager.getConnection(fullJdbcUrl, jdbcUser, jdbcPassword);
+		   String fullJdbcUrl = "jdbc:h2:"+dataPath+";INIT="+INIT_SQL;
+		   Connection dbConnection = DriverManager.getConnection(fullJdbcUrl, jdbcUser, jdbcPassword);
 		   return dbConnection;
 	   } catch (SQLException e) {
-		   System.out.println(e.getMessage());
+		  e.printStackTrace();
 	   }
-	   return dbConnection;
+	   
+	   return null;
    }
 
 }

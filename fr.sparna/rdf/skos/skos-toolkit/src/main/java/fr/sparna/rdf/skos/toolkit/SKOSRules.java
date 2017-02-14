@@ -28,6 +28,7 @@ public class SKOSRules {
 			"owl2skos/04-skos-inScheme.ru",
 			"owl2skos/05-skos-ConceptScheme.ru",
 			"owl2skos/06-skos-definition.ru",
+			"owl2skos/07-skos-prefLabel-default.ru",
 	});
 	
 	public static List<String> SKOSXL2SKOS_RULESET = Arrays.asList(new String[] { 

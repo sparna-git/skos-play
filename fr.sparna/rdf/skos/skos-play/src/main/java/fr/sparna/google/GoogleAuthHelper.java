@@ -232,24 +232,6 @@ public class GoogleAuthHelper {
 
 	public void setApplicationName(String applicationName) {
 		this.applicationName = applicationName;
-	}
-
-	/*public static void main(String...args) throws Exception {
-		GoogleAuthHelper me = new GoogleAuthHelper("http://localhost:8080/skos-play/convert");
-    	me.setScopes(Arrays.asList(DriveScopes.DRIVE));
-    	me.setApplicationName("SKOS Play");
-    	GoogleAuthorizationCodeFlow flow = me.getFlow();
-    	// flow....
-    	System.out.println(me.getAuthorizationUrl());
-    	 try {
-       	  Desktop desktop = java.awt.Desktop.getDesktop();
-       	  URI oURL = new URI(me.getAuthorizationUrl());
-       	  desktop.browse(oURL);
-       	} catch (Exception e) {
-       	  e.printStackTrace();
-       	}
-		
-    }*/
-   
+	}   
    
 }

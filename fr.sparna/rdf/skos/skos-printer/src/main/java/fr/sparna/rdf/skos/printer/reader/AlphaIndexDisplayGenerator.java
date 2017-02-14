@@ -14,6 +14,7 @@ import java.util.Locale;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
+import org.eclipse.rdf4j.common.iteration.Iterations;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
@@ -30,6 +31,7 @@ import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.FactoryConfiguration;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.ApplyUpdates;
 import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
+import fr.sparna.rdf.sesame.toolkit.util.Namespaces;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.DisplayPrinter.Style;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
@@ -151,11 +153,12 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 		
 		boolean addSections = queryResultRows.size() > 200;
 		log.debug("Processing "+queryResultRows.size()+" entries.");
+		Namespaces namespaces = Namespaces.getInstance().withRepository(this.repository);
 		if(addSections) {
 			log.debug("Will add sections to the output");
 			Section currentSection = null;
 			for (QueryResultRow anEntry : queryResultRows) {
-				ConceptBlock cb = buildConceptBlock(anEntry);
+				ConceptBlock cb = buildConceptBlock(anEntry, namespaces);
 
 				String entrySectionTitle = StringUtil.withoutAccents(anEntry.label).toUpperCase().substring(0, Math.min(1, anEntry.label.length()));
 				if(currentSection == null || !entrySectionTitle.equals(currentSection.getTitle())) {
@@ -180,7 +183,7 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 			fr.sparna.rdf.skos.printer.schema.List list = new fr.sparna.rdf.skos.printer.schema.List();
 			s.setList(list);
 			for (QueryResultRow aRow : queryResultRows) {
-				ConceptBlock cb = buildConceptBlock(aRow);
+				ConceptBlock cb = buildConceptBlock(aRow, namespaces);
 				list.getListItem().add(SchemaFactory.createListItem(cb));
 			}
 			d.getSection().add(s);
@@ -192,15 +195,22 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 		return d;
 	}
 
-	private ConceptBlock buildConceptBlock(QueryResultRow aRow)
+	private ConceptBlock buildConceptBlock(QueryResultRow aRow, Namespaces namespaces)
 	throws SparqlPerformException {
 		ConceptBlock cb;
 		// s'il y a un prefLabel, c'est que la valeur de "sourceConceptLabel" est un altLabel
 		if(aRow.prefLabel != null) {
 			cb = this.cbReader.readConceptBlockForSynonym(aRow.conceptURI, aRow.label, aRow.prefLabel);
-		// sinon, la valeur de "sourceConceptLabel" est un prefLabel
+		// sinon, la valeur de "sourceConceptLabel" est un prefLabel ou l'URI du concept
 		} else {
-			cb = this.cbReader.readConceptBlock(aRow.conceptURI, aRow.label, true);
+			if(aRow.label.equals(aRow.conceptURI)) {
+				// shorten the URI
+				// String shortURI = namespaces.shorten(aRow.label);
+				cb = this.cbReader.readConceptBlock(aRow.conceptURI, aRow.label, true);
+			} else {
+				cb = this.cbReader.readConceptBlock(aRow.conceptURI, aRow.label, true);
+			}
+			
 		}
 		
 		return cb;

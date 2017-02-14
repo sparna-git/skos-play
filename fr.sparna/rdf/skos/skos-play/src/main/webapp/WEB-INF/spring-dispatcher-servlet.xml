@@ -55,11 +55,22 @@
         class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
     </bean>
     
+<!--     <mvc:interceptors> -->
+<!-- 		<bean class="org.springframework.web.servlet.mvc.WebContentInterceptor" p:cacheSeconds="86400" p:alwaysUseFullPath="true" > -->
+<!-- 		    <property name="cacheMappings"> -->
+<!-- 		        <props> -->
+<!-- 		            cache for one month -->
+<!-- 		            <prop key="/cache/me/**">2592000</prop> -->
+<!-- 		        </props> -->
+<!-- 		    </property> -->
+<!-- 		</bean> -->
+<!-- 	</mvc:interceptors> -->
+
     <mvc:interceptors>
-		<bean class="org.springframework.web.servlet.mvc.WebContentInterceptor" p:cacheSeconds="86400" p:alwaysUseFullPath="true" >
+		<bean class="org.springframework.web.servlet.mvc.WebContentInterceptor" p:alwaysUseFullPath="true" >
 		    <property name="cacheMappings">
 		        <props>
-		            <!-- cache for one month -->
+					<!-- cache for one month -->
 		            <prop key="/cache/me/**">2592000</prop>
 		        </props>
 		    </property>
@@ -71,7 +82,12 @@
 	<bean id="skosPlayConfig" class="fr.sparna.rdf.skosplay.SkosPlayConfig" factory-method="getInstance" />
 	
 	<bean id="sqlLogDao" class="fr.sparna.rdf.skosplay.log.SQLLogDao">
-		<constructor-arg name="doLog" value="${skosplay.log:false}" />	
+		<constructor-arg name="doLog" value="${skosplay.log:false}" />
+		<constructor-arg name="connectionManager">
+			<bean id="dbConnectionManager" class="fr.sparna.rdf.skosplay.log.DBConnectionManager">
+				<constructor-arg name="dataPath" value="#{systemProperties['skosplay.home']}/db/skos-play-db" />
+			</bean>
+		</constructor-arg>	
 	</bean>
 	
 	<bean id="applicationData" class="fr.sparna.rdf.skosplay.ApplicationData">

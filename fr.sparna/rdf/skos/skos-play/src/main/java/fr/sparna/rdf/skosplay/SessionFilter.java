@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.sparna.google.GoogleConnector;
+
 public class SessionFilter implements Filter {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
@@ -70,6 +72,21 @@ public class SessionFilter implements Filter {
 			
 			// initialize pre-loaded labels
 			initPreLoadedLabels(session);
+			
+			try {
+				// init base URL
+				URL baseURL = new URL("http://"+request.getServerName()+((request.getServerPort() != 80)?":"+request.getServerPort():"")+request.getContextPath());
+				log.debug("Setting the base URL to "+baseURL.toString());
+				session.setBaseUrl(baseURL.toString());		
+			
+				// init GoogleConnector
+				String redirectUrl = baseURL.toString()+"/login";
+				session.setGoogleConnector(new GoogleConnector("SKOS Play!", redirectUrl));
+			} catch (MalformedURLException e) {
+				throw new RuntimeException(e);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		}
 		
 		if(request.getParameter("lang") != null) {

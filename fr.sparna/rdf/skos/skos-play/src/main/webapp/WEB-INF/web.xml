@@ -19,6 +19,13 @@
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
+  <listener>
+  	<display-name>Google Session Revoke Listener</display-name>
+  	<listener-class>fr.sparna.google.GoogleSessionRevokeListener</listener-class>
+  </listener>
+  <session-config>
+  	<session-timeout>1</session-timeout>
+  </session-config>
   <servlet-mapping>
     <servlet-name>spring-dispatcher</servlet-name>
     <url-pattern>/</url-pattern>
@@ -26,14 +33,4 @@
   <welcome-file-list>
     <welcome-file>welcomefile.jsp</welcome-file>
   </welcome-file-list>
-  <servlet>
-    <description></description>
-    <display-name>session</display-name>
-    <servlet-name>session</servlet-name>
-    <servlet-class>session</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>session</servlet-name>
-    <url-pattern>/session</url-pattern>
-  </servlet-mapping>
 </web-app>

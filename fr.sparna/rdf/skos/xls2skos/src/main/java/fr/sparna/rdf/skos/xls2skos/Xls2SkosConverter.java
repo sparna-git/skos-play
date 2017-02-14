@@ -14,11 +14,11 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Level;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
@@ -78,54 +78,64 @@ public class Xls2SkosConverter {
 	 */
 	protected final Map<String, ValueGeneratorIfc> valueGenerators = new HashMap<>();
 	
+	/**
+	 * The prefixes declared in the file along with utility classes and default prefixes
+	 */
 	protected PrefixManager prefixManager = new PrefixManager();
+	
+	/**
+	 * The workbook currently being processed, to ge references to fonts
+	 */
+	private transient Workbook workbook;
 	
 	public Xls2SkosConverter(ModelWriterIfc modelWriter, String lang) {
 		
 		this.modelWriter = modelWriter;
 		this.lang = lang;
 		
+		// TODO : handle language declared on a per-colum basis
+		
 		// inScheme for additionnal inScheme information, if needed
-		valueGenerators.put("skos:inScheme", 		ValueGeneratorFactory.resources(SKOS.IN_SCHEME, ',', prefixManager));
+		valueGenerators.put("skos:inScheme", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.IN_SCHEME, prefixManager), ","));
 		// labels
-		valueGenerators.put("skos:prefLabel", 		ValueGeneratorFactory.langLiteral(SKOS.PREF_LABEL, this.lang));
-		valueGenerators.put("skos:altLabel", 		ValueGeneratorFactory.langLiteral(SKOS.ALT_LABEL, this.lang));
-		valueGenerators.put("skos:hiddenLabel", 	ValueGeneratorFactory.langLiteral(SKOS.HIDDEN_LABEL, this.lang));
+		valueGenerators.put("skos:prefLabel", 		ValueGeneratorFactory.langLiteral(SKOS.PREF_LABEL));
+		valueGenerators.put("skos:altLabel", 		ValueGeneratorFactory.langLiteral(SKOS.ALT_LABEL));
+		valueGenerators.put("skos:hiddenLabel", 	ValueGeneratorFactory.langLiteral(SKOS.HIDDEN_LABEL));
 		// notes
-		valueGenerators.put("skos:definition", 		ValueGeneratorFactory.langLiteral(SKOS.DEFINITION, this.lang));		
-		valueGenerators.put("skos:editorialNote", 	ValueGeneratorFactory.langLiteral(SKOS.EDITORIAL_NOTE, this.lang));
-		valueGenerators.put("skos:historyNote", 	ValueGeneratorFactory.langLiteral(SKOS.HISTORY_NOTE, this.lang));
-		valueGenerators.put("skos:scopeNote", 		ValueGeneratorFactory.langLiteral(SKOS.SCOPE_NOTE, this.lang));
-		valueGenerators.put("skos:changeNote", 		ValueGeneratorFactory.langLiteral(SKOS.CHANGE_NOTE, this.lang));
-		valueGenerators.put("skos:example", 		ValueGeneratorFactory.langLiteral(SKOS.EXAMPLE, this.lang));
+		valueGenerators.put("skos:definition", 		ValueGeneratorFactory.langLiteral(SKOS.DEFINITION));		
+		valueGenerators.put("skos:editorialNote", 	ValueGeneratorFactory.langLiteral(SKOS.EDITORIAL_NOTE));
+		valueGenerators.put("skos:historyNote", 	ValueGeneratorFactory.langLiteral(SKOS.HISTORY_NOTE));
+		valueGenerators.put("skos:scopeNote", 		ValueGeneratorFactory.langLiteral(SKOS.SCOPE_NOTE));
+		valueGenerators.put("skos:changeNote", 		ValueGeneratorFactory.langLiteral(SKOS.CHANGE_NOTE));
+		valueGenerators.put("skos:example", 		ValueGeneratorFactory.langLiteral(SKOS.EXAMPLE));
 		// notation
 		valueGenerators.put("skos:notation", 		ValueGeneratorFactory.plainLiteral(SKOS.NOTATION));
 		// semantic relations
-		valueGenerators.put("skos:broader", 		ValueGeneratorFactory.resources(SKOS.BROADER, ',', prefixManager));
-		valueGenerators.put("skos:narrower", 		ValueGeneratorFactory.resources(SKOS.NARROWER, ',', prefixManager));
-		valueGenerators.put("skos:related", 		ValueGeneratorFactory.resources(SKOS.RELATED, ',', prefixManager));
+		valueGenerators.put("skos:broader", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.BROADER, prefixManager), ","));
+		valueGenerators.put("skos:narrower", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.NARROWER, prefixManager), ","));
+		valueGenerators.put("skos:related", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.RELATED, prefixManager), ","));
 		// mapping relations		
-		valueGenerators.put("skos:exactMatch", 		ValueGeneratorFactory.resources(SKOS.EXACT_MATCH, ',', prefixManager));
-		valueGenerators.put("skos:closeMatch", 		ValueGeneratorFactory.resources(SKOS.CLOSE_MATCH, ',', prefixManager));
-		valueGenerators.put("skos:relatedMatch", 	ValueGeneratorFactory.resources(SKOS.RELATED_MATCH, ',', prefixManager));
-		valueGenerators.put("skos:broadMatch", 		ValueGeneratorFactory.resources(SKOS.BROAD_MATCH, ',', prefixManager));
-		valueGenerators.put("skos:narrowMatch", 	ValueGeneratorFactory.resources(SKOS.RELATED_MATCH, ',', prefixManager));
+		valueGenerators.put("skos:exactMatch", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.EXACT_MATCH, prefixManager), ","));
+		valueGenerators.put("skos:closeMatch", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.CLOSE_MATCH, prefixManager), ","));
+		valueGenerators.put("skos:relatedMatch", 	ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.RELATED_MATCH, prefixManager), ","));
+		valueGenerators.put("skos:broadMatch", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.BROAD_MATCH, prefixManager), ","));
+		valueGenerators.put("skos:narrowMatch", 	ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.RELATED_MATCH, prefixManager), ","));
 		// XL labels
 		valueGenerators.put("skosxl:prefLabel", 	ValueGeneratorFactory.skosXlLabel(SKOSXL.PREF_LABEL, prefixManager));
 		valueGenerators.put("skosxl:altLabel", 		ValueGeneratorFactory.skosXlLabel(SKOSXL.ALT_LABEL, prefixManager));
 		valueGenerators.put("skosxl:hiddenLabel",	ValueGeneratorFactory.skosXlLabel(SKOSXL.HIDDEN_LABEL, prefixManager));
-		valueGenerators.put("skosxl:literalForm", 	ValueGeneratorFactory.langLiteral(SKOSXL.LITERAL_FORM, this.lang));
+		valueGenerators.put("skosxl:literalForm", 	ValueGeneratorFactory.langLiteral(SKOSXL.LITERAL_FORM));
 		// other concepts metadata
-		valueGenerators.put("euvoc:status", 		ValueGeneratorFactory.resources(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#status"), ',', prefixManager));		
+		valueGenerators.put("euvoc:status", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#status"), prefixManager), ","));		
 		valueGenerators.put("euvoc:startDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#startDate")));
 		valueGenerators.put("euvoc:endDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#endDate")));
 		valueGenerators.put("dct:created", 			ValueGeneratorFactory.dateLiteral(DCTERMS.CREATED));
 		valueGenerators.put("dct:modified", 		ValueGeneratorFactory.dateLiteral(DCTERMS.MODIFIED));
 		// a source can be a literal or a URI
-		valueGenerators.put("dct:source", 			ValueGeneratorFactory.resourcesOrLiteral(DCTERMS.SOURCE, ',', this.lang, prefixManager, false));
+		valueGenerators.put("dct:source", 			ValueGeneratorFactory.split(ValueGeneratorFactory.resourceOrLiteral(new ColumnHeaderParser(prefixManager).parse("dct:source"), prefixManager), ","));
 		// dct metadata for the ConceptScheme
-		valueGenerators.put("dct:title", 			ValueGeneratorFactory.langLiteral(DCTERMS.TITLE, this.lang));
-		valueGenerators.put("dct:description", 		ValueGeneratorFactory.langLiteral(DCTERMS.DESCRIPTION, this.lang));
+		valueGenerators.put("dct:title", 			ValueGeneratorFactory.langLiteral(DCTERMS.TITLE));
+		valueGenerators.put("dct:description", 		ValueGeneratorFactory.langLiteral(DCTERMS.DESCRIPTION));
 	}
 
 	/**
@@ -168,6 +178,9 @@ public class Xls2SkosConverter {
 
 		try {
 			
+			// store the workbook reference
+			this.workbook = workbook;
+			
 			// notify begin
 			modelWriter.beginWorkbook();
 			
@@ -195,7 +208,7 @@ public class Xls2SkosConverter {
 		} catch (Exception e) {
 			throw Xls2SkosException.rethrow(e);
 		}
-
+		
 		return models;
 	}
 
@@ -228,7 +241,7 @@ public class Xls2SkosConverter {
 		
 		// if the URI was already processed, this is an exception
 		if(this.csModels.containsKey(csUri)) {
-			throw new Xls2SkosException("Duplicate ConceptScheme found : "+csUri+" - make sure it is declared only once in the file.");
+			log.debug("Duplicate graph declaration found: " + csUri + " (declared in more than one sheet)");
 		}
 		
 		Resource csResource = svf.createIRI(csUri);	
@@ -243,37 +256,35 @@ public class Xls2SkosConverter {
 		}
 		
 		// read the properties on the concept scheme by reading the top rows
+		ColumnHeaderParser headerParser = new ColumnHeaderParser(prefixManager);
 		for (int rowIndex = 1; rowIndex <= headerRowIndex; rowIndex++) {
 			if(sheet.getRow(rowIndex) != null) {
 				String key = getCellValue(sheet.getRow(rowIndex).getCell(0));
 				String value = getCellValue(sheet.getRow(rowIndex).getCell(1));
 				
-				ColumnHeader header = ColumnHeader.parse(key, prefixManager);
+				ColumnHeader header = headerParser.parse(key);
 				if(
 						header != null
 						&&
 						StringUtils.isNotBlank(value)
 				) {
 					ValueGeneratorIfc valueGenerator = null;
-					if(valueGenerators.containsKey(header.getProperty())) {
-						valueGenerator = valueGenerators.get(header.getProperty());
-					} else if(prefixManager.expand(header.getProperty()) != null) {
-						valueGenerator = ValueGeneratorFactory.resourcesOrLiteral(
-								SimpleValueFactory.getInstance().createIRI(prefixManager.expand(header.getProperty())),
-								',',
-								header.getLanguage().orElse(lang),
-								prefixManager,
-								header.isInverse()
+					if(valueGenerators.containsKey(header.getDeclaredProperty())) {
+						valueGenerator = valueGenerators.get(header.getDeclaredProperty());
+					} else if(header.getProperty() != null) {
+						valueGenerator = ValueGeneratorFactory.resourceOrLiteral(
+								header,
+								prefixManager
 						);
 					}
 					
 					if(valueGenerator != null) {
+						System.out.println("Adding value on "+csResource);
 						valueGenerator.addValue(
 								model,
 								csResource,
 								value,
-								header.getLanguage().orElse(lang),
-								header.getDatatype().orElse(null)
+								header.getLanguage().orElse(this.lang)
 						);
 					}
 				}
@@ -307,11 +318,14 @@ public class Xls2SkosConverter {
 	}
 	
 	private void postProcess(Model model, Resource csResource) {
-		// add a skos:inScheme to every skos:Concept or skos:Collection that was created
+		// add a skos:inScheme to every skos:Concept or skos:Collection or skos:OrderedCollection that was created
 		model.filter(null, RDF.TYPE, SKOS.CONCEPT).forEach(
 				s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
 		);
 		model.filter(null, RDF.TYPE, SKOS.COLLECTION).forEach(
+				s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
+		);
+		model.filter(null, RDF.TYPE, SKOS.ORDERED_COLLECTION).forEach(
 				s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
 		);
 		
@@ -348,13 +362,12 @@ public class Xls2SkosConverter {
 	}
 	
 	private Model xlify(Model m) {
+		log.debug("Xlifying Model...");
 		Repository r = new SailRepository(new MemoryStore());
 		r.initialize();
-		RepositoryConnection c = r.getConnection();
 		
-		c.add(m);
-		
-		try {
+		try(RepositoryConnection c = r.getConnection()) {
+			c.add(m);
 			if(this.generateXl) {
 				final List<String> SKOS2SKOSXL_URI_RULESET = Arrays.asList(new String[] { 
 						"skos2skosxl/S55-S56-S57-URIs.ru"
@@ -363,8 +376,7 @@ public class Xls2SkosConverter {
 				for (String aString : SKOS2SKOSXL_URI_RULESET) {
 					// Load SPARQL query definition
 			        InputStream src = this.getClass().getResourceAsStream(aString);		        
-			        String sparql =  IOUtils.toString(src);
-					
+			        String sparql =  IOUtils.toString(src);					
 					Update u = c.prepareUpdate(sparql);
 					u.execute();
 				}
@@ -383,29 +395,32 @@ public class Xls2SkosConverter {
 					u.execute();
 				}
 			}
+			
+			// re-export to a new Model
+			m.clear();
+			c.export(new AbstractRDFHandler() {
+				public void handleStatement(Statement st) throws RDFHandlerException {
+					m.add(st);
+				}			
+			});
 		} catch (Exception e) {
 			throw Xls2SkosException.rethrow(e);
 		}
-		
-		// re-export to a new Model
-		m.clear();
-		c.export(new AbstractRDFHandler() {
-			public void handleStatement(Statement st) throws RDFHandlerException {
-				m.add(st);
-			}			
-		});
-		
-		c.close();
 		
 		return m;
 		
 	}
 
-	private Resource handleRow(Model model, List<ColumnHeader> columnNames, PrefixManager prefixManager, Row row) {
+	private Resource handleRow(Model model, List<ColumnHeader> columnHeaders, PrefixManager prefixManager, Row row) {
 		RowBuilder rowBuilder = null;
-		for (int colIndex = 0; colIndex < columnNames.size(); colIndex++) {
-			String value = getCellValue(row.getCell(colIndex));
+		for (int colIndex = 0; colIndex < columnHeaders.size(); colIndex++) {
+			ColumnHeader header = columnHeaders.get(colIndex);
+			
+			Cell c = row.getCell(colIndex);			
+			String value = getCellValue(c);
+			// if it is the first column...
 			if (null == rowBuilder) {
+				// if the value of the first column is empty, skip the whole row
 				if (StringUtils.isBlank(value)) {
 					return null;
 				}
@@ -415,26 +430,31 @@ public class Xls2SkosConverter {
 			}
 			
 			// process the cell for each subsequent columns after the first one
-			if (StringUtils.isNotBlank(value)) {	
-				ValueGeneratorIfc valueGenerator = valueGenerators.get(columnNames.get(colIndex).getProperty());
-				
-				// if this is not one of the known processor, but the prefix is known, then defaults to a generic processor
-				if(valueGenerator == null && prefixManager.expand(columnNames.get(colIndex).getProperty()) != null) {
-					valueGenerator = ValueGeneratorFactory.resourcesOrLiteral(
-							SimpleValueFactory.getInstance().createIRI(prefixManager.expand(columnNames.get(colIndex).getProperty())),
-							',',
-							columnNames.get(colIndex).getLanguage().orElse(lang),
-							prefixManager,
-							columnNames.get(colIndex).isInverse()
-					);
+			if (StringUtils.isNotBlank(value)) {
+				if(this.workbook.getFontAt(c.getCellStyle().getFontIndex()).getStrikeout()) {
+					// skip the cell if it is striked out
+					continue;
 				}
 				
+				ValueGeneratorIfc valueGenerator = valueGenerators.get(columnHeaders.get(colIndex).getDeclaredProperty());
+				
+				// if this is not one of the known processor, but the property is known, then defaults to a generic processor
+				if(valueGenerator == null && header.getProperty() != null) {
+					valueGenerator = ValueGeneratorFactory.resourceOrLiteral(
+							header,
+							prefixManager
+					);
+					if(header.getParameters().get(ColumnHeader.PARAMETER_SEPARATOR) != null) {
+						valueGenerator = ValueGeneratorFactory.split(valueGenerator, header.getParameters().get(ColumnHeader.PARAMETER_SEPARATOR));
+					}
+				}
+				
+				// if a value generator was successfully generated, then process the value
 				if(valueGenerator != null) {
-					rowBuilder.addCell(
+					rowBuilder.processCell(
 							valueGenerator,
 							value,
-							columnNames.get(colIndex).getLanguage().orElse(lang),
-							columnNames.get(colIndex).getDatatype().orElse(null)
+							header.getLanguage().orElse(this.lang)
 					);
 				}
 			}
@@ -461,10 +481,10 @@ public class Xls2SkosConverter {
 			subject = conceptResource;
 		}
 
-		public void addCell(ValueGeneratorIfc valueGenerator, String value, String language, IRI datatype) {
+		public void processCell(ValueGeneratorIfc valueGenerator, String value, String language) {
 			// if the column is unknown, ignore it
-			if(valueGenerator != null) {
-				Resource newResource = valueGenerator.addValue(model, subject, value, language, datatype);
+			if(valueGenerator != null) {				
+				Resource newResource = valueGenerator.addValue(model, subject, value, language);
 				if (null != newResource) {
 					// change the focus to the new resource in the case of xl labels
 					// so that subsequent columns are added on that resource
@@ -551,5 +571,7 @@ public class Xls2SkosConverter {
 		converter.setGenerateXlDefinitions(false);
 		converter.processInputStream(input);
 	}
+	
+	
 
 }

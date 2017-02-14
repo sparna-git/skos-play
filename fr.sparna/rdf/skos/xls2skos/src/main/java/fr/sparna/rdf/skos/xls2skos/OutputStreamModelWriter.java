@@ -14,8 +14,10 @@ import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFHandler;
 import org.eclipse.rdf4j.rio.RDFWriter;
 import org.eclipse.rdf4j.rio.RDFWriterRegistry;
+import org.eclipse.rdf4j.rio.helpers.BufferedGroupingRDFHandler;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 
 /**
@@ -72,7 +74,7 @@ public class OutputStreamModelWriter implements ModelWriterIfc {
 
 	@Override
 	public void endWorkbook() {
-		RDFWriter handler = RDFWriterRegistry.getInstance().get(format).get().getWriter(out);
+		RDFHandler handler = new BufferedGroupingRDFHandler(20000, RDFWriterRegistry.getInstance().get(format).get().getWriter(out));
 		try(RepositoryConnection c = this.outputRepository.getConnection()) {
 			c.setNamespace("skos", SKOS.NAMESPACE);
 			c.setNamespace("skosxl", SKOSXL.NAMESPACE);

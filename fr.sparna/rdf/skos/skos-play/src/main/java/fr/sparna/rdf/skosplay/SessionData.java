@@ -1,6 +1,5 @@
 package fr.sparna.rdf.skosplay;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -9,12 +8,11 @@ import javax.servlet.http.HttpSession;
 
 import org.eclipse.rdf4j.repository.Repository;
 
-import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
-import com.google.api.services.drive.model.FileList;
 
-import fr.sparna.google.GoogleAuthHelper;
+import fr.sparna.google.GoogleConnector;
+import fr.sparna.google.GoogleUser;
 import fr.sparna.rdf.sesame.toolkit.handler.DebugHandler;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
@@ -41,22 +39,16 @@ public class SessionData {
 	// the pre-loaded data resource bundle
 	protected ResourceBundle preLoadedDataLabels;
 	
-	protected GoogleAuthHelper googleAuthHelper;
-
-	// to download the google conversion result
-	protected ByteArrayOutputStream googleConversionResult;	
-	protected String googleConversionResultContentType;
-	
-	protected Credential googleCredential;
-	
 	protected Drive service;
 	
 	protected ConvertFormData convertFormData;
 	
-	protected GooglePojo user;
+	protected GoogleUser user;
 	
-	protected List<File> googleFile;
+	protected String baseUrl;
 	
+	protected GoogleConnector googleConnector;
+
 	protected String listurl;
 	
 	protected boolean fichierexample;
@@ -82,14 +74,6 @@ public class SessionData {
 		this.listurl = listurl;
 	}
 
-	public List<File> getGoogleFile() {
-		return googleFile;
-	}
-
-	public void setGoogleFile(List<File> list) {
-		this.googleFile = list;
-	}
-
 	/**
 	 * Stores this data into session
 	 * @param session
@@ -104,17 +88,15 @@ public class SessionData {
 	 * @param session
 	 * @return
 	 */
-	
-	
 	public static SessionData get(HttpSession session) {
 		return (SessionData)session.getAttribute(KEY);
 	}
 	
-	public GooglePojo getUser() {
+	public GoogleUser getUser() {
 		return user;
 	}
 
-	public void setUser(GooglePojo user) {
+	public void setUser(GoogleUser user) {
 		this.user = user;
 	}
 
@@ -124,14 +106,6 @@ public class SessionData {
 	
 	public void setRepository(Repository repository) {
 		this.repository = repository;
-	}
-	
-	public Credential getGoogleCredential() {
-		return googleCredential;
-	}
-
-	public void setGoogleCredential(Credential googleCredential) {
-		this.googleCredential = googleCredential;
 	}
 
 	public LabelReader getLabelReader() {
@@ -166,36 +140,28 @@ public class SessionData {
 		this.preLoadedDataLabels = preLoadedDataLabels;
 	}
 
-	public GoogleAuthHelper getGoogleAuthHelper() {
-		return googleAuthHelper;
-	}
-
-	public void setGoogleAuthHelper(GoogleAuthHelper googleAuthHelper) {
-		this.googleAuthHelper = googleAuthHelper;
-	}
-
-	public ByteArrayOutputStream getGoogleConversionResult() {
-		return googleConversionResult;
-	}
-
-	public void setGoogleConversionResult(ByteArrayOutputStream googleConversionResult) {
-		this.googleConversionResult = googleConversionResult;
-	}
-
-	public String getGoogleConversionResultContentType() {
-		return googleConversionResultContentType;
-	}
-
-	public void setGoogleConversionResultContentType(String googleConversionResultContentType) {
-		this.googleConversionResultContentType = googleConversionResultContentType;
-	}
-
 	public ConvertFormData getConvertFormData() {
 		return convertFormData;
 	}
 
 	public void setConvertFormData(ConvertFormData convertFormData) {
 		this.convertFormData = convertFormData;
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	public GoogleConnector getGoogleConnector() {
+		return googleConnector;
+	}
+
+	public void setGoogleConnector(GoogleConnector googleConnector) {
+		this.googleConnector = googleConnector;
 	}
 	
 
@@ -218,5 +184,7 @@ public class SessionData {
 		));
 		
 	}
+	
+	
 	
 }

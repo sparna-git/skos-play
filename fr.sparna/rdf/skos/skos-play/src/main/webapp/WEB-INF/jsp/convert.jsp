@@ -9,6 +9,7 @@
 <fmt:setBundle basename="fr.sparna.rdf.skosplay.i18n.Bundle"/>
 
 <c:set var="data" value="${requestScope['fr.sparna.rdf.skosplay.ConvertFormData']}" />
+<c:set var="sessionData" value="${sessionScope['fr.sparna.rdf.skosplay.SessionData']}" />
 <c:set var="applicationData" value="${applicationScope.applicationData}" />
 
 <html>
@@ -32,17 +33,14 @@
 				document.getElementById('example').disabled = selected != 'example';
 				document.getElementById('file').disabled = selected != 'file';
 				document.getElementById('google').disabled = selected != 'google';
-				if((selected!='google')||(selected!='url'))
-					{
+				if((selected != 'google')||(selected!='url')) {
 					 document.formulaire.google.style.borderColor = "gray";
 					 document.formulaire.url.style.borderColor = "gray";
 					 $('#length').hide();
-					}
+				}
 				
 			   if(selected==='google')
-				verifID();
-				
-				
+				verifID();			
 			}	
 			
 			function verifID(){
@@ -102,13 +100,14 @@
 					</label>
 					<div class="col-sm-9" >
 						<select style=" width:40%;" name="example" id="example" onchange="dowloadExample()">
-							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-1.xlsx" selected>Example 1 (simple exemple, in english)</option>
-							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-2.xlsx">Example 2 (prefixes)</option>
-							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-3.xlsx">Example 3 (multilingual columns)</option>
-							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-4.xlsx">Example 4 (schema.org, datatypes, multiple sheets)</option>
-							<option value="${data.baseUrl}/excel_test/excel2skos-exemple-5.xlsx">Example 5 (skos:Collection, inverse columns)</option>    
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-1.xlsx" selected>Example 1 (simple exemple, in english)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-2.xlsx">Example 2 (prefixes)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-3.xlsx">Example 3 (multilingual columns)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-4.xlsx">Example 4 (schema.org, datatypes, multiple sheets)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-5.xlsx">Example 5 (skos:Collection, inverse columns)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-6.xlsx">Example 6 (skos:OrderedCollection, dealing with rdf:Lists)</option>   
 						</select>						
-						<span class="help-block"><i><fmt:message key="convert.form.Example.download" />&nbsp;<a id="lien" href="${data.baseUrl}/excel_test/excel2skos-exemple-1.xlsx">Example 1 (simple exemple, in english)</a></i></span>
+						<span class="help-block"><i><fmt:message key="convert.form.Example.download" />&nbsp;<a id="lien" href="${sessionData.baseUrl}/excel_test/excel2skos-exemple-1.xlsx">Example 1 (simple exemple, in english)</a></i></span>
 					</div>
 			    </div>	
 			
@@ -156,13 +155,11 @@
 							id="source-url"
 							value="url"
 							onchange="enabledInput('url')" />
-					<label class="col-sm-2 control-label">
-						
+					<label class="col-sm-2 control-label">						
 						<fmt:message key="convert.form.remoteUrl" />
 					</label>
 					<div class="col-sm-9" >
-						<input
-							
+						<input							
 							type="text"
 							id="url"
 							name="url"
@@ -186,31 +183,28 @@
 									<fmt:message key="convert.form.remoteUrl.Google" />
 								</label>
 						<div class="col-sm-9" >
-							<span id="length" hidden="hidden" ><fmt:message   key="convert.form.length.googleID.error" /></span>
-								<!--<input								
-									type="text"
-									id="google"
-									name="google"
-									value="${data.googleId}"
-									placeholder="1aNS3e1tpW1CCaDFpN97zEz3g9aULjStCXagTdDVgu"
-									class="form-control"
-									onchange="verifID()"
-									onkeypress="enabledInput('google');" style="width:80%;"/>-->
-									<c:if test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user!= null}">
-												<div class="col-sm-10" style="margin-left:-15px;">
-													<select id="google"  class="form-control" onkeypress="enabledInput('google');" onchange="verifID()" name="google" style="width:100%;">	
-														<c:forEach var="name"  items="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].googleFile}" >
-														   <option value="<c:out value='${name.id}'/>"><c:out value="${name.name}"/></option>
-														</c:forEach>							 					 
-													</select>
-							  					</div><br/><br/>
-							  					<span class="help-block"><i><fmt:message key="convert.form.remoteUrl.Google.help" /></i></span>	
-									</c:if>
-									<c:if test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user==null}">
-											<div class="alert alert-info" style="width:80%;">
-												Veuillez vous connecter à votre compte google en cliquant sur l'onglet login
-											</div>
-									</c:if>
+							<div class="col-sm-10" style="margin-left:-15px;">
+							<c:choose>
+								<c:when test="${sessionData.user != null}">					
+									<select 
+										id="google"
+										class="form-control"
+										onchange="enabledInput('google');verifID();"
+										name="google"
+										style="width:100%;">	
+										<c:forEach var="currentFile" items="${data.googleFiles}" >
+										   <option value="${currentFile.id}">${currentFile.name} (${currentFile.modifiedTime})</option>
+										</c:forEach>							 					 
+									</select>				  					
+				  					<span class="help-block"><i><fmt:message key="convert.form.remoteUrl.Google.help" /></i></span>
+								</c:when>
+								<c:otherwise>
+									<div class="alert alert-info">
+										<fmt:message key="convert.form.googleID.notLogged" />
+									</div>
+								</c:otherwise>
+							</c:choose>	
+							</div><br/><br/>
 						</div>
 					</div>
 				
@@ -285,8 +279,7 @@
 								<input
 									type="checkbox"
 									id="usezip"
-									name="usezip"
-									checked="checked" />
+									name="usezip" />
 								<span class="help-block"><i></i></span>
 							</div>														
 						</div>
@@ -390,7 +383,7 @@
 						<li>Known SKOS labels and notes values (<code>skos:prefLabel</code>, <code>altLabel</code>, <code>hiddenLabel</code>, <code>definition</code>, <code>scopeNote</code>, <code>example</code>, <code>historyNote</code>, <code>changeNote</code>, <code>editorialNote</code>)
 						are always converted to literal values,	with the appropriate language (see below);</li>
 						<li>Known SKOS semantic relations (<code>skos:broader</code>, <code>narrower</code>, <code>related</code>, <code>exactMatch</code>, <code>closeMatch</code>, <code>broadMatch</code>, <code>narrowMatch</code>, <code>relatedMatch</code>)
-						are always converted to object properties; the URI can be given either as a full URI ()starting with 'http'), or using a declared prefix.
+						are always converted to object properties; the URI can be given either as a full URI (starting with 'http'), or using a declared prefix.
 						<li>Other well-known properties are interpreted as xsd:date literals, such as <code>dct:created</code>, <code>dct:modified</code>, <code>euvoc:startDate</code> and <code>euvoc:endDate</code>;</li>
 					</ul>
 					<p />This is how a typical body part can look like :
@@ -404,6 +397,11 @@
 					<p />You can specify the datatype to be assigned to a column by appending <code>^^xsd:date</code> (or another datatype) to the property declaration in the title row.
 					<p />This is an example of columns declaration with a datatype :
 					<img src="images/convert-screenshot-datatype.png" width="100%" />
+				<h4><a href="#split" id="split"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Generating multiple values</h4>
+					<p />You can specify a separator on a colum by appending <code>(separator=",")</code> (or another separator) to the property declaration in the title row.
+					This indicates that the values in the cells of that columns will be splitted on that separator, and multiple values will be generated.
+					You can combine this with a language or datatype declaration, for example <code>schema:name@en(separator=",")</code>.
+					<br />The alternative is to create multiple columns with the same property, which is allowed.
 				<h4><a href="#collections" id="collections"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Generating skos:Collection with object-to-subject columns</h4>
 					<p />By default, each line in the body generates an instance of skos:Concept. If you need to generate instances of skos:Collection (or other classes, by the way), do the following :
 					<ol>
@@ -417,6 +415,23 @@
 					</ol>
 					<p />This is an example of expressing collections using object-to-subject column :
 					<img src="images/convert-screenshot-collection.png" width="100%" />
+				<h4><a href="#lists" id="lists"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Dealing with skos:OrderedCollection and rdf:Lists</h4>
+					<p />If you need to deal with skos:OrderedCollection, do the following :
+					<ol>
+						<li>Add a column with the title <code>rdf:type</code>;</li>
+						<li>Add a column with the title <code>skos:memberList</code>;</li>
+						<li>On the row corresponding to the ordered collection, specify <code>skos:OrderedCollection</code> in the <code>rdf:type</code> column; for rows corresponding to skos:Concept, you can leave this column empty
+						or specify skos:Concept explicitely if you want;</li>
+						<li>On the row corresponding to the ordered collection, in the <code>skos:memberList</code> column, write the list of values like you would do in the Turtle, that is :
+							<ul>
+								<li>Put the whole list between parenthesis;</li>
+								<li>Separate each value with a whitespace character;</li>
+							</ul>
+						</li>
+					</ol>
+					<p />The same technique can be used to declare any rdf:List (see below to generate plain RDF).
+					<p />This is an example of expressing ordered collections using rdf:list syntax :
+					<img src="images/convert-screenshot-ordered-collection.png" width="100%" />
 			</fieldset>
 			
 			<!-- Default SKOS processings -->		
@@ -443,7 +458,22 @@
 				<img src="images/convert-screenshot-other-skos.png" width="100%" />
 			</fieldset>
 			
-			<!-- Generating plain RDF-->		
+			<!-- Advanced features -->		
+			<fieldset style="margin-top:3em;">
+				<legend><a href="#advanced-features" id="advanced-features"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Advanced features</legend>
+				<h4><a href="#blank-nodes" id="blank-nodes"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Creating blank nodes with [...]</h4>
+					<p />The converter understands the blank node syntax with "[...]" : simply put a cell value between square brackets and write the blank node data inside like you would do in a Turtle file.
+					This can be useful to generate references to reified SKOS definitions or SKOS-XL Labels. For example, if a cell with title <code>skos:definition</code> contains the following value :<br />
+					<code>[ rdf:value "Definition blah blah"; dcterms:created "2017-02-21"^^xsd:date ]</code>, then a reference to a blank node will be created. You need to use the prefixes defined in the file in your
+					blank node content. The blank node is parsed exactly as a piece of Turtle, so it can contain any piece of valid Turtle syntax. If anything goes wrong during the parsing, the converter
+					will generate a Literal with the cell content instead.
+				<h4><a href="#striketrough" id="striketrough"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Disabling cell conversion with a <strike>strikethrough</strike></h4>
+					<p />When working on a file, if you are unsure about the conversion of a certain cell but you don't want to delete the value, use a <strike>strikethrough font</strike> : the converter will ignore any
+					cell with such a font style. You can keep uncertain values in the files and simply change the font back to normal once the value is validated.
+					<p />
+			</fieldset>
+			
+			<!-- Prefixes -->		
 			<fieldset style="margin-top:3em;">
 				<legend><a href="#prefixes" id="prefixes"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Default prefixes known in the converter</legend>
 				<p />This is the list of known prefixes in the converter. You don't have to declare them in the header.
@@ -497,16 +527,11 @@
 				    $('#submit-button').attr('disabled', false);
 			    });
 		   		
-			    <c:if test="${data.googleId != null}">
-			    	enabledInput('google');
-			    	window.open('googleDriveConversion', '_blank');
-			    </c:if>
-			    <c:if test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user== null}">
+			    <c:if test="${sessionData.user == null}">
 			    	$('#source-google').attr('disabled',true);
 		    	</c:if>
-		    	<c:if test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user!= null}">
+		    	<c:if test="${sessionData.user != null}">
 		    		$('#source-google').attr('disabled',false);
-		    		
 	    		</c:if>
 			    
 				$(function(){	 

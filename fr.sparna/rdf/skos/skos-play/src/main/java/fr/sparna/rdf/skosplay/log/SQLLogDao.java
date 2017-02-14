@@ -6,12 +6,13 @@ import java.sql.Statement;
 
 public class SQLLogDao implements LogDaoIfc {
 
-	DBConnectionManager connections= new DBConnectionManager();
+	protected DBConnectionManager connectionManager;
 	protected boolean doLog = false;    
 
-	public SQLLogDao(boolean doLog) {
+	public SQLLogDao(boolean doLog, DBConnectionManager connectionManager) {
 		super();
 		this.doLog = doLog;
+		this.connectionManager = connectionManager;
 	}
 
 	/**
@@ -24,11 +25,9 @@ public class SQLLogDao implements LogDaoIfc {
 			return;
 		}
 		
-		Connection connection = connections.getDBConnection(); 
-		Statement stmt = null;
-		String requete=null;
 		entry.setActiondate("NOW()");
-		requete="INSERT INTO statistique(output, type, rendu, langue, url, jour, uri) VALUES('"
+		String requete="INSERT INTO statistique(output, type, rendu, langue, url, jour, uri) VALUES('"
+
 				+entry.getOutput()+"','"
 				+entry.getDisplayType()+"','"
 				+entry.getRendu()+"','"
@@ -36,31 +35,15 @@ public class SQLLogDao implements LogDaoIfc {
 				+entry.getUrl()+"',"
 				+entry.getActiondate()+",'"
 				+entry.getUri()+"')";
-		try {
+		try (Connection connection = connectionManager.getDBConnection()) {
 			connection.setAutoCommit(false);
-			stmt = connection.createStatement();
-			stmt.execute(requete);
-			connection.commit();
+			try(Statement stmt = connection.createStatement()) {
+				stmt.execute(requete);
+				connection.commit();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("Exception Message " + e.getLocalizedMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
-
 	}
 
     

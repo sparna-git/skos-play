@@ -4,6 +4,8 @@
 
 <!-- setup the locale for the messages based on the language in the session -->
 <fmt:setLocale value="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language}"/>
+<c:set var="data" value="${sessionScope['fr.sparna.rdf.skosplay.SessionData']}" />
+
 <fmt:setBundle basename="fr.sparna.rdf.skosplay.i18n.Bundle"/>
 
 			<div class="page-header">
@@ -15,16 +17,16 @@
 			    			<li id="header-pill-upload" ${param.active == 'upload' ? 'class="active"' : ''}><a href="upload"><i class="glyphicon glyphicon-play"></i>&nbsp;<fmt:message key="menu.start" /></a></li>
 			    			<li id="header-pill-convert" ${param.active == 'convert' ? 'class="active"' : ''}><a href="convert"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;<fmt:message key="menu.convert" /></a></li>
 					    	<li id="header-pill-about" ${param.active == 'about' ? 'class="active"' : ''}><a href="about"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;<fmt:message key="menu.about" /></a></li>
-					    	<li id="header-pill-forum"><a href="https://groups.google.com/d/forum/skos-play-discuss" target="_blank"><i class="glyphicon glyphicon-th"></i>&nbsp;<fmt:message key="menu.feedback" /></a></li>
+					    	<li id="header-pill-forum"><a href="https://groups.google.com/d/forum/skos-play-discuss" target="_blank"><i class="glyphicon glyphicon-comment"></i>&nbsp;<fmt:message key="menu.feedback" /></a></li>
 					    	<li id="header-pill-connexion">
 						    	
-						    	<c:if test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user!= null}">
-										<a><i class="glyphicon glyphicon-user"></i>&nbsp; ${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user.name}</a>	
+						    	<c:if test="${data.user!= null}">
+										<a><i class="glyphicon glyphicon-user"></i>&nbsp; ${data.user.name}</a>	
 								</c:if>
-								<c:if test="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].user== null}">
+								<c:if test="${data.user== null}">
 								<!-- https://www.googleapis.com/auth/spreadsheets.readonly -->
 									<a 
-							    	href="https://accounts.google.com/o/oauth2/auth?scope=profile%20https://www.googleapis.com/auth/drive&redirect_uri=http://localhost:8080/skos-play/login&response_type=code&client_id=611030822832-ea9cimuarqabdaof7e1munk90hr67mlo.apps.googleusercontent.com&approval_prompt=force">
+							    	href="${data.googleConnector.generateLoginUrl()}">
 							    	<i class="glyphicon glyphicon-user"></i>&nbsp;login
 							    	</a>
 								</c:if>

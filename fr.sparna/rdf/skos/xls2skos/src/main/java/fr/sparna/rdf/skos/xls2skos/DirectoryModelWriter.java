@@ -17,6 +17,7 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFHandler;
 import org.eclipse.rdf4j.rio.RDFWriter;
 import org.eclipse.rdf4j.rio.RDFWriterRegistry;
+import org.eclipse.rdf4j.rio.helpers.BufferedGroupingRDFHandler;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 
 /**
@@ -48,7 +49,7 @@ public class DirectoryModelWriter implements ModelWriterIfc {
 			String filename = URLEncoder.encode(graph, "UTF-8");
 			File file = new File(outputFolder, filename + "." + format.getDefaultFileExtension());
 			try (FileOutputStream fos = new FileOutputStream(file)) {
-				RDFWriter w = RDFWriterRegistry.getInstance().get(format).get().getWriter(fos);
+				RDFHandler w = new BufferedGroupingRDFHandler(20000, RDFWriterRegistry.getInstance().get(format).get().getWriter(fos));
 				exportModel(model, w, prefixes);
 				fos.flush();
 			}

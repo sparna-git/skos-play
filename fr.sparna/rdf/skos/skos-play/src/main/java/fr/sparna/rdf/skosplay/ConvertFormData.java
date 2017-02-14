@@ -1,17 +1,21 @@
 package fr.sparna.rdf.skosplay;
 
+import java.util.List;
+
+import com.google.api.services.drive.model.File;
+
 public class ConvertFormData {
 
 	public static final String KEY = ConvertFormData.class.getCanonicalName();
 
 	// error messages to display in alerts
 	protected String errorMessagefile;
-	// google document ID from the form submission
-	protected String googleId;
-	// base URL of the application for the example files
-	protected String baseUrl;
 	// default language of the user to initialize the language selection
 	protected String defaultLanguage;
+	// liste de fichiers issus du google drive
+	protected List<File> googleFiles;
+	// base URL of the application for the example files
+	protected String baseUrl;
 	
 	protected boolean useZip;
 	protected boolean useXl;
@@ -34,22 +38,6 @@ public class ConvertFormData {
 
 	public void setErrorMessagefile(String errorMessage) {
 		this.errorMessagefile = errorMessage;
-	}
-
-	public String getGoogleId() {
-		return googleId;
-	}
-
-	public void setGoogleId(String googleId) {
-		this.googleId = googleId;
-	}
-
-	public String getBaseUrl() {
-		return baseUrl;
-	}
-
-	public void setBaseUrl(String baseUrl) {
-		this.baseUrl = baseUrl;
 	}
 
 	/**
@@ -97,6 +85,22 @@ public class ConvertFormData {
 
 	public void setOutput(String output) {
 		this.output = output;
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	public List<File> getGoogleFiles() {
+		return googleFiles;
+	}
+
+	public void setGoogleFiles(List<File> googleFiles) {
+		this.googleFiles = googleFiles;
 	}
 	
 }

@@ -1,16 +1,11 @@
 package fr.sparna.rdf.skos.xls2skos;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.TimeZone;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 
 public class ExcelHelper {
 
@@ -18,31 +13,33 @@ public class ExcelHelper {
 	}
 
 	public static String getCellValue(Cell cell) {
-		if (null == cell) return null;		
-		
-		if (cell.getCellType() == Cell.CELL_TYPE_BLANK) return "";
-		
-		if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-			
-//			if (DateUtil.isCellDateFormatted(cell)) {			
-//				return DateFormat.getDateTimeInstance().format(cell.getDateCellValue());
-//			}
-			
-			double d = cell.getNumericCellValue();
+		if(cell == null) return null;
+		return getCellValue(cell.getCellTypeEnum(), cell);
+	}
+	
+	private static String getCellValue(CellType type, Cell cell) {
+		if (type == CellType.BLANK) {
+			return "";
+		} else if (type == CellType.STRING) {
+			return cell.getStringCellValue();
+        } else if (type == CellType.NUMERIC) {
+        	double d = cell.getNumericCellValue();
 			if((d % 1) == 0) {
+				// return it as an int without the dot to avoid values like "1.0"
 				return "" + new Double(d).intValue();
 			} else {
 				return "" + d;
-			}    	
-		}
-		if (cell.getCellType() == Cell.CELL_TYPE_STRING) return cell.getStringCellValue();
-		if (cell.getCellType() == Cell.CELL_TYPE_FORMULA) return cell.getStringCellValue();
-		throw new Xls2SkosException("Cell type unknown or unsupported: {} - {} - {}", cell.getSheet().getSheetName(), cell.getRowIndex(), cell.getColumnIndex());
-
-		//    if(cell.getCellType() == Cell.CELL_TYPE_BOOLEAN) return "" + cell.getBooleanCellValue();
-		//    if(cell.getCellType() == Cell.CELL_TYPE_ERROR) return "";
-		//    if(cell.getCellType() == Cell.CELL_TYPE_FORMULA) return "";
+			} 
+        } else if (type == CellType.BOOLEAN) {
+        	return Boolean.toString(cell.getBooleanCellValue());
+        } else if (type == CellType.FORMULA) {
+            // Re-run based on the formula type
+            return getCellValue(cell.getCachedFormulaResultTypeEnum(), cell);
+        } else {
+        	throw new Xls2SkosException("Cell type unknown or unsupported: {} - {} - {}", cell.getSheet().getSheetName(), cell.getRowIndex(), cell.getColumnIndex());
+        }
 	}
+	
 	
 	public static Calendar asCalendar(String value) {
 		Calendar calendar = DateUtil.getJavaCalendar(Double.valueOf(value));
