@@ -120,7 +120,7 @@ import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
 import fr.sparna.rdf.skos.xls2skos.ModelWriterFactory;
 import fr.sparna.rdf.skos.xls2skos.ModelWriterIfc;
 import fr.sparna.rdf.skos.xls2skos.Xls2SkosConverter;
-import fr.sparna.rdf.skosplay.log.LogController;
+import fr.sparna.rdf.skosplay.log.LogEntry;
 import fr.sparna.rdf.skosplay.log.SQLLogDao;
 import fr.sparna.rdf.skosplay.log.UserDataDAO;
 
@@ -536,8 +536,13 @@ public class SkosPlayController {
 		default:
 			break;
 		}
+<<<<<<< HEAD
 		SQLLogDao logs=new SQLLogDao();
 		
+=======
+		
+		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, null, null, SessionData.get(request.getSession()).getListurl(),"convert"));
+>>>>>>> c7562b4edb5fd08c38f3ed4b3b2e85be4bf0f890
 
 		try {
 			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+usexl);
@@ -1001,8 +1006,12 @@ public class SkosPlayController {
 		// make a log to trace usage
 		String aRandomConcept = Perform.on(r).read(new SparqlQuery(new SparqlQueryBuilder(this, "ReadRandomConcept.rq"))).stringValue();
 		log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+"HTML");
+<<<<<<< HEAD
 		SQLLogDao log=new SQLLogDao();
 		log.writelog(language, "datavize", displayParam, SessionData.get(request.getSession()).getListurl(),"print",schemeParam);
+=======
+		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, "dataviz", displayParam, SessionData.get(request.getSession()).getListurl(),"print"));
+>>>>>>> c7562b4edb5fd08c38f3ed4b3b2e85be4bf0f890
 		
 		switch(displayType) {
 		case PARTITION : {		
@@ -1038,7 +1047,7 @@ public class SkosPlayController {
 			throw new InvalidParameterException("Unknown display type "+displayType);
 		}
 		
-		}
+		}		
 		
 	}
 
@@ -1309,8 +1318,13 @@ public class SkosPlayController {
 			break;
 		}
 		}
+<<<<<<< HEAD
 		SQLLogDao log=new SQLLogDao();
 		log.writelog(language, outputParam, displayParam, SessionData.get(request.getSession()).getListurl(),"print",schemeParam);
+=======
+
+		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, outputParam, displayParam, SessionData.get(request.getSession()).getListurl(),"print"));
+>>>>>>> c7562b4edb5fd08c38f3ed4b3b2e85be4bf0f890
 		response.flushBuffer();		
 	}
 

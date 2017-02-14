@@ -70,6 +70,10 @@
 	<!-- The bean is autowired and configured with @Value annotations -->
 	<bean id="skosPlayConfig" class="fr.sparna.rdf.skosplay.SkosPlayConfig" factory-method="getInstance" />
 	
+	<bean id="sqlLogDao" class="fr.sparna.rdf.skosplay.log.SQLLogDao">
+		<constructor-arg name="doLog" value="${skosplay.log:false}" />	
+	</bean>
+	
 	<bean id="applicationData" class="fr.sparna.rdf.skosplay.ApplicationData">
 		<constructor-arg name="thesaurusDirectory" value="${skosplay.thesaurus.directory:@null}" />		
 		<property name="buildVersion" value="${build.version:unknown}" />

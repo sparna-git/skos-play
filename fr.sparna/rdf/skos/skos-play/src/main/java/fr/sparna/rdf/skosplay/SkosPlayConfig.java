@@ -10,7 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+<<<<<<< HEAD
 import fr.sparna.rdf.skosplay.log.SQLQueryRegistry;
+=======
+import fr.sparna.rdf.skosplay.log.SQLLogDao;
+>>>>>>> c7562b4edb5fd08c38f3ed4b3b2e85be4bf0f890
 
 
 public class SkosPlayConfig {
@@ -39,7 +43,12 @@ public class SkosPlayConfig {
 	// application title to be inserted in HTML pages
 	protected String applicationTitle;
 	
+<<<<<<< HEAD
 	protected SQLQueryRegistry sqlQueryRegistry;
+=======
+	@Autowired
+	protected SQLLogDao sqlLogDao;
+>>>>>>> c7562b4edb5fd08c38f3ed4b3b2e85be4bf0f890
 	
 	/**
 	 * Singleton private constructor
@@ -148,6 +157,7 @@ public class SkosPlayConfig {
 		this.applicationTitle = applicationTitle;
 	}
 
+<<<<<<< HEAD
 	public SQLQueryRegistry getSqlQueryRegistry() {
 		return sqlQueryRegistry;
 	}
@@ -155,6 +165,14 @@ public class SkosPlayConfig {
 	@Autowired
 	public void setSqlQueryRegistry(SQLQueryRegistry sqlQueryRegistry) {
 		this.sqlQueryRegistry = sqlQueryRegistry;
+=======
+	public SQLLogDao getSqlLogDao() {
+		return sqlLogDao;
+	}
+
+	public void setSqlLogDao(SQLLogDao sqlLogDao) {
+		this.sqlLogDao = sqlLogDao;
+>>>>>>> c7562b4edb5fd08c38f3ed4b3b2e85be4bf0f890
 	}
 	
 }
