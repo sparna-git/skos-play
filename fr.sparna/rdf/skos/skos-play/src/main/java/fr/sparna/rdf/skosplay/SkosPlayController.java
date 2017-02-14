@@ -137,7 +137,7 @@ public class SkosPlayController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 	private static final String MIME_TYPE_EXCEL = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"; 
-	private boolean fichier;
+	
 	
 	@Autowired
 	protected ServletContext servletContext;
@@ -429,13 +429,7 @@ public class SkosPlayController {
 			HttpServletResponse response			
 	) throws Exception {
 		
-		/*H2MemoryDatabaseExample bases= new H2MemoryDatabaseExample();
-		try {
-           bases.insertWithStatement(nom, xl, zip, output, Graph);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }*/
+		
 		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+usexl+",useZip="+useZip+"language="+language+",url="+url+",ex="+example+")");
 		final SessionData sessionData = SessionData.get(request.getSession());
 		//source, it can be: file, example, url or google
@@ -464,10 +458,6 @@ public class SkosPlayController {
 				return doErrorConvert(request, "Google ID is empty");
 			}
 
-			// String url_Redirect=baseURL.toString()+"/convert?id="+googleId+"&usezip="+useZip+"&usexl="+usexl+"&language="+language+"&output="+URLEncoder.encode(format, "UTF-8");
-			//String url_Redirect=baseURL.toString()+"/login";
-			//log.debug("URL de redirection : "+url_Redirect);
-			// test if we already have the credentials in session
 			Credential credential=sessionData.getGoogleCredential();
 			if(credential!=null) {	
 				log.debug("credential found->authorization already granted");
@@ -519,6 +509,7 @@ public class SkosPlayController {
 		}
 		case URL: {
 			log.debug("*Conversion à partir d'une URL : "+url);
+			sessionData.setListurl(url);
 			if(url.isEmpty()) {
 				return doErrorConvert(request, "Uploaded link file is empty");
 			}
@@ -534,12 +525,16 @@ public class SkosPlayController {
 				ioeErrors.printStackTrace();
 				return doErrorConvert(request, ioeErrors.getMessage()); 
 			}
+			
 
 			break;
 		}
 		default:
 			break;
 		}
+		SQLLogDao logs=new SQLLogDao();
+		logs.writelog(language, null, null, SessionData.get(request.getSession()).getListurl(),"convert");
+		
 
 		try {
 			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+usexl);

@@ -84,5 +84,64 @@
             </map>
         </property>
     </bean>
+    
+    <bean id="sqlQueryRegistry" class="fr.sparna.rdf.skosplay.log.SQLQueryRegistry">
+		<constructor-arg name="queriesById">
+			<map>
+                <entry key="NumberConvertOrPrintPerDayMonthYear">
+		                <value>
+		                	select jours.periode, nbreconvert, nbreprint 
+		                	from( select distinct _METH_(jour) as periode from statistique ) as jours 
+		                		left outer join( 
+		                			select count(id) as nbreconvert, _METH_(jour) as laperiode from statistique where type='convert' group by laperiode 
+		                		)as convert 
+		                		on jours.periode = convert.laperiode  
+		                		left outer join( 
+		                			select count(id) as nbreprint, _METH_(jour) as laperiode from statistique where type='print' group by laperiode 
+		                		) as print 
+		                		on jours.periode=print.laperiode 
+		                		order by jours.periode ;
+		                </value>
+                </entry>
+                <entry key="NumberOfFormat">
+		                <value>
+		                	select distinct output, count(id) as nombre from statistique where output _diff_ 'null' group by output;
+		                </value>
+                </entry>
+                <entry key="NumberOfLanguage">
+		                <value>
+		                	select distinct langue, count(id) as nombre from statistique group by langue;
+		                </value>
+                </entry>
+                <entry key="NumberOfRendu">
+		                <value>
+		                	select distinct rendu, count(id) as nombre from statistique where rendu _diff_ 'null' group by rendu;
+		                </value>
+                </entry>
+                <entry key="Allprintconvert">
+		                <value>
+		                	select type, count(id) as nombre from statistique group by type;
+		                </value>
+                </entry>
+                <entry key="printConvertLast365Days">
+		                <value>
+		                	select type, count(id) as nbre, year(JOUR) as periode  from statistique where year(JOUR)=(SELECT (year(jour)-1) as year from statistique order by year(jour) desc limit 0, 1) group by type, year(JOUR);
+		                </value>
+                </entry>
+                
+                <entry key="UrlsConvertis">
+		                <value>
+		                	 select distinct url, count(id) as nombre from statistique where type='convert' and url  _diff_ ;  
+		                </value>
+                </entry>
+             
+                <entry key="UrlsPrint">
+		                <value>
+		                	select distinct url, count(id) as nombre from statistique where type='print' and  url  _diff_ ; 
+		                </value>
+                </entry>
+            </map>
+		</constructor-arg>		
+	</bean>
 
 </beans>
