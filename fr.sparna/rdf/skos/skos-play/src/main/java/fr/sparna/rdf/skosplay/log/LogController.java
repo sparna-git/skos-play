@@ -34,7 +34,7 @@ public class LogController {
 		) throws Exception {
 		
 		LogData data = new LogData();
-		SQLLogComptageDao dao = new SQLLogComptageDao(SkosPlayConfig.getInstance().getSqlQueryRegistry());
+		SQLLogComptageDao dao = new SQLLogComptageDao(SkosPlayConfig.getInstance().getSqlDb(),SkosPlayConfig.getInstance().getSqlQueryRegistry());
 		data.setFormat(dao.getNumberOfFormat());
 		data.setLangue(dao.getNumberOflanguage());
 		data.setRendu(dao.getNumberOfRendu());
@@ -44,17 +44,17 @@ public class LogController {
 		switch(choixPeriode)
 		{
 			case "jour":
-							data.setHistogrammeData(dao.getNumberConvertOrPrintPerDayMonthYear(" "));
+							data.setHistogrammeData(dao.getNumberConvertOrPrintPerDayMonthYear(SQLLogComptageDao.Range.ALLTIME));
 							data.setHistogrammeRange(LogData.Range.DAY);
 							data.setChoixperiode("jour");
 							break;
 			case "mois":
-							data.setHistogrammeData(dao.getNumberConvertOrPrintPerDayMonthYear("MONTH"));
+							data.setHistogrammeData(dao.getNumberConvertOrPrintPerDayMonthYear(SQLLogComptageDao.Range.MONTH));
 							data.setHistogrammeRange(LogData.Range.MONTH);
 							data.setChoixperiode("mois");
 							break;
 			case "annee":
-							data.setHistogrammeData(dao.getNumberConvertOrPrintPerDayMonthYear("YEAR"));
+							data.setHistogrammeData(dao.getNumberConvertOrPrintPerDayMonthYear(SQLLogComptageDao.Range.YEAR));
 							data.setHistogrammeRange(LogData.Range.YEAR);
 							data.setChoixperiode("annee");
 							break;		
@@ -76,31 +76,31 @@ public class LogController {
 		LogData data = new LogData();
 		ListingData listing;
 		data.setChoixperiodelisting(periode);
+		SQLLogComptageDao url=new SQLLogComptageDao(SkosPlayConfig.getInstance().getSqlDb(),SkosPlayConfig.getInstance().getSqlQueryRegistry());
 		
 		switch(periode){
 		
 		case "alltime":
-						SQLUrlAlltime url=new SQLUrlAlltime(SkosPlayConfig.getInstance().getSqlQueryRegistry());
-						listing=url.getUrlConvertedAllTime(indexDebut);
+						
+						listing=url.getUrlConverted(indexDebut,SQLLogComptageDao.Range.ALLTIME);
 						data.setListe(listing);
-						listing=url.getIdConvertedAllTime(indexDebut);
+						listing=url.getIdConverted(SQLLogComptageDao.Range.ALLTIME);
 						data.setIdliste(listing);
 						
 						break;
 		case "lastmonth":
-						 SQLUrlLastMonth mois=new SQLUrlLastMonth(SkosPlayConfig.getInstance().getSqlQueryRegistry());
-						 listing=mois.getUrlConvertedLastMonth(indexDebut);
+						 
+						 listing=url.getUrlConverted(indexDebut,SQLLogComptageDao.Range.MONTH);
 						 data.setListe(listing);
-						 listing=mois.getIdConvertedLastMonth(indexDebut);
+						 listing=url.getIdConverted(SQLLogComptageDao.Range.MONTH);
 						 data.setIdliste(listing);
 						
 						 break;
 						 
 		case "lastyear":
-						 SQLUrlLastYear annee=new SQLUrlLastYear(SkosPlayConfig.getInstance().getSqlQueryRegistry());
-						 listing=annee.getUrlConvertedLastYear(indexDebut);
+						 listing=url.getUrlConverted(indexDebut,SQLLogComptageDao.Range.YEAR);
 						 data.setListe(listing);
-						 listing=annee.getIdConvertedLastYear(indexDebut);
+						 listing=url.getIdConverted(SQLLogComptageDao.Range.YEAR);
 						 data.setIdliste(listing);
 						 break;
 		
@@ -125,30 +125,28 @@ public class LogController {
 		LogData data = new LogData();
 		ListingData listing;
 		data.setChoixperiodelisting(periode);
+		SQLLogComptageDao url=new SQLLogComptageDao(SkosPlayConfig.getInstance().getSqlDb(),SkosPlayConfig.getInstance().getSqlQueryRegistry());
 		
 		switch(periode){
 		
 		case "alltime":
-						SQLUrlAlltime url=new SQLUrlAlltime(SkosPlayConfig.getInstance().getSqlQueryRegistry());
-						listing=url.getUrlPrintAllTime(indexDebut);
-						data.setListe(listing);
-						listing=url.getIdPrintAllTime(indexDebut);
-						data.setIdliste(listing);
-						
-						break;
-		case "lastmonth":
-						 SQLUrlLastMonth mois=new SQLUrlLastMonth(SkosPlayConfig.getInstance().getSqlQueryRegistry());
-						 listing=mois.getUrlPrintLastMonth(indexDebut);
+						 listing=url.getUrlPrint(indexDebut,SQLLogComptageDao.Range.ALLTIME);
 						 data.setListe(listing);
-						 listing=mois.getIdPrintLastMonth(indexDebut);
+						 listing=url.getIdPrint(SQLLogComptageDao.Range.ALLTIME);
+						 data.setIdliste(listing);
+						
+						 break;
+		case "lastmonth":
+						 listing=url.getUrlPrint(indexDebut,SQLLogComptageDao.Range.MONTH);
+						 data.setListe(listing);
+						 listing=url.getIdPrint(SQLLogComptageDao.Range.MONTH);
 						 data.setIdliste(listing);
 						 break;
 						 
 		case "lastyear":
-						 SQLUrlLastYear annee=new SQLUrlLastYear(SkosPlayConfig.getInstance().getSqlQueryRegistry());
-						 listing=annee.getUrlPrintLastYear(indexDebut);
+						 listing=url.getUrlPrint(indexDebut,SQLLogComptageDao.Range.YEAR);
 						 data.setListe(listing);
-						 listing=annee.getIdPrintLastYear(indexDebut);
+						 listing=url.getIdPrint(SQLLogComptageDao.Range.YEAR);
 						 data.setIdliste(listing);
 						 break;
 		

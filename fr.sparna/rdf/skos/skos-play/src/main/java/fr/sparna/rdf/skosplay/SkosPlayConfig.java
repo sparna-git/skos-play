@@ -12,7 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 
 import fr.sparna.rdf.skosplay.log.SQLQueryRegistry;
-
+import fr.sparna.rdf.skosplay.log.DBConnectionManager;
+import fr.sparna.rdf.skosplay.log.SQLLogComptageDao;
 import fr.sparna.rdf.skosplay.log.SQLLogDao;
 
 
@@ -48,6 +49,9 @@ public class SkosPlayConfig {
 
 	@Autowired
 	protected SQLLogDao sqlLogDao;
+	
+	@Autowired
+	protected DBConnectionManager sqlDb;
 
 	
 	/**
@@ -173,5 +177,20 @@ public class SkosPlayConfig {
 	public void setSqlLogDao(SQLLogDao sqlLogDao) {
 		this.sqlLogDao = sqlLogDao;
 	}
+
+	public DBConnectionManager getSqlDb() {
+		return sqlDb;
+	}
+
+	public void setSqlDb(DBConnectionManager sqlDb) {
+		this.sqlDb = sqlDb;
+	}
+
+	
+	
+
+	
+	
+	
 	
 }

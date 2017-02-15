@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class UserDataDAO {
-	DBConnectionManager connections= new DBConnectionManager();
+	/*DBConnectionManager connections= new DBConnectionManager();
 	
 	public void insertUserData(LogEntry entry){
 		
@@ -117,5 +117,5 @@ public class UserDataDAO {
     	}
     	return ListeRetour;
 	}
-
+*/
 }

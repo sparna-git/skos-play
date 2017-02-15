@@ -90,6 +90,9 @@
 		</constructor-arg>	
 	</bean>
 	
+	<bean id="dbConnectionManager" class="fr.sparna.rdf.skosplay.log.DBConnectionManager">
+				<constructor-arg name="dataPath" value="#{systemProperties['skosplay.home']}/db/skos-play-db" />
+	</bean>
 	<bean id="applicationData" class="fr.sparna.rdf.skosplay.ApplicationData">
 		<constructor-arg name="thesaurusDirectory" value="${skosplay.thesaurus.directory:@null}" />		
 		<property name="buildVersion" value="${build.version:unknown}" />
