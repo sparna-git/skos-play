@@ -1,5 +1,12 @@
 package fr.sparna.rdf.skosplay.log;
 
+/**
+ * Cette classe permet de définir les entrées  à insérer dans la base
+ * 
+ * @author clarvie
+ *
+ */
+
 public class LogEntry {
 	public String name;
 	public String output;

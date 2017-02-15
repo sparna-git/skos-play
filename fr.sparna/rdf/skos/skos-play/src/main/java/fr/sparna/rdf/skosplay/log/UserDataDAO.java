@@ -9,6 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Cette classe permet d'insérer et sélectionner un utilisateur
+ * @author clarvie
+ *
+ */
+
 public class UserDataDAO {
 	/*DBConnectionManager connections= new DBConnectionManager();
 	

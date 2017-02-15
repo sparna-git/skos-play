@@ -8,14 +8,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import fr.sparna.rdf.skosplay.SessionData;
 import fr.sparna.rdf.skosplay.SkosPlayConfig;
 
-
+/**
+ *  Controller 
+ * @author clarvie
+ *
+ */
 @Controller
 public class LogController {
 
@@ -26,7 +27,7 @@ public class LogController {
 	@RequestMapping(value = "/log")
 	public ModelAndView Postlog(
 			
-			@RequestParam(value="statistique", required=false, defaultValue="jour") String choixPeriode,
+			@RequestParam(value="statistique", required=false, defaultValue="alltime") String choixPeriode,
 			// the request
 			HttpServletRequest request,
 			// the response
@@ -40,23 +41,24 @@ public class LogController {
 		data.setRendu(dao.getNumberOfRendu());
 		data.setAllprintAndConvert(dao.ListAllLog());
 		data.setPrintConvertLast365Days(dao.getprintConvertLast365Days());
+		SQLLogComptageDao.Range periode=SQLLogComptageDao.Range.valueOf(choixPeriode.toUpperCase());
 		
-		switch(choixPeriode)
+		switch(periode)
 		{
-			case "jour":
+			case ALLTIME:
 							data.setHistogrammeData(dao.getNumberConvertOrPrintPerDayMonthYear(SQLLogComptageDao.Range.ALLTIME));
 							data.setHistogrammeRange(LogData.Range.DAY);
-							data.setChoixperiode("jour");
+							data.setChoixperiode("alltime");
 							break;
-			case "mois":
+			case MONTH:
 							data.setHistogrammeData(dao.getNumberConvertOrPrintPerDayMonthYear(SQLLogComptageDao.Range.MONTH));
 							data.setHistogrammeRange(LogData.Range.MONTH);
-							data.setChoixperiode("mois");
+							data.setChoixperiode("month");
 							break;
-			case "annee":
+			case YEAR:
 							data.setHistogrammeData(dao.getNumberConvertOrPrintPerDayMonthYear(SQLLogComptageDao.Range.YEAR));
 							data.setHistogrammeRange(LogData.Range.YEAR);
-							data.setChoixperiode("annee");
+							data.setChoixperiode("year");
 							break;		
 		}
 		
@@ -77,10 +79,11 @@ public class LogController {
 		ListingData listing;
 		data.setChoixperiodelisting(periode);
 		SQLLogComptageDao url=new SQLLogComptageDao(SkosPlayConfig.getInstance().getSqlDb(),SkosPlayConfig.getInstance().getSqlQueryRegistry());
+		SQLLogComptageDao.Range periodes=SQLLogComptageDao.Range.valueOf(periode.toUpperCase());
 		
-		switch(periode){
+		switch(periodes){
 		
-		case "alltime":
+		case ALLTIME:
 						
 						listing=url.getUrlConverted(indexDebut,SQLLogComptageDao.Range.ALLTIME);
 						data.setListe(listing);
@@ -88,7 +91,7 @@ public class LogController {
 						data.setIdliste(listing);
 						
 						break;
-		case "lastmonth":
+		case MONTH:
 						 
 						 listing=url.getUrlConverted(indexDebut,SQLLogComptageDao.Range.MONTH);
 						 data.setListe(listing);
@@ -97,7 +100,7 @@ public class LogController {
 						
 						 break;
 						 
-		case "lastyear":
+		case YEAR:
 						 listing=url.getUrlConverted(indexDebut,SQLLogComptageDao.Range.YEAR);
 						 data.setListe(listing);
 						 listing=url.getIdConverted(SQLLogComptageDao.Range.YEAR);
@@ -126,24 +129,25 @@ public class LogController {
 		ListingData listing;
 		data.setChoixperiodelisting(periode);
 		SQLLogComptageDao url=new SQLLogComptageDao(SkosPlayConfig.getInstance().getSqlDb(),SkosPlayConfig.getInstance().getSqlQueryRegistry());
+		SQLLogComptageDao.Range periodes=SQLLogComptageDao.Range.valueOf(periode.toUpperCase());
 		
-		switch(periode){
+		switch(periodes){
 		
-		case "alltime":
+		case ALLTIME:
 						 listing=url.getUrlPrint(indexDebut,SQLLogComptageDao.Range.ALLTIME);
 						 data.setListe(listing);
 						 listing=url.getIdPrint(SQLLogComptageDao.Range.ALLTIME);
 						 data.setIdliste(listing);
 						
 						 break;
-		case "lastmonth":
+		case MONTH:
 						 listing=url.getUrlPrint(indexDebut,SQLLogComptageDao.Range.MONTH);
 						 data.setListe(listing);
 						 listing=url.getIdPrint(SQLLogComptageDao.Range.MONTH);
 						 data.setIdliste(listing);
 						 break;
 						 
-		case "lastyear":
+		case YEAR:
 						 listing=url.getUrlPrint(indexDebut,SQLLogComptageDao.Range.YEAR);
 						 data.setListe(listing);
 						 listing=url.getIdPrint(SQLLogComptageDao.Range.YEAR);

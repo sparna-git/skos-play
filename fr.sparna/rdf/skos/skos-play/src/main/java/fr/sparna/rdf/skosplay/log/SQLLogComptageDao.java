@@ -9,6 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Cette classe regroupe tous les comptages pour les conversions et les prints.
+ * Elle est utilisée dans le LogController.java
+ * 
+ * * @author clarvie
+ *
+ */
 
 public class SQLLogComptageDao implements LogDaoIfc {
 	
