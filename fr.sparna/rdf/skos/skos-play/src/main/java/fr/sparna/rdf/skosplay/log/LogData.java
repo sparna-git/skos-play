@@ -58,8 +58,9 @@ public class LogData {
 				break;
 			case MONTH:
 				// TODO : convertir le numéro du mois en libellé
-				MonthLabel label=new MonthLabel();
-				label.Month(aData.getDayOrMonthOrYear(),buffer);
+				buffer.append(Month.fromNumber(aData.getDayOrMonthOrYear()).getLabel());
+				// MonthLabel label=new MonthLabel();
+				// label.Month(aData.getDayOrMonthOrYear(),buffer);
 				break;
 			case YEAR:
 				buffer.append(aData.getDayOrMonthOrYear());
