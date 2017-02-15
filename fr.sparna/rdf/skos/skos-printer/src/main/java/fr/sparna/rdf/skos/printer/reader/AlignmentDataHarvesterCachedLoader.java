@@ -45,6 +45,8 @@ public class AlignmentDataHarvesterCachedLoader implements AlignmentDataHarveste
 				"	?concept a <"+SKOS.CONCEPT+"> ."+"\n" +
 				((conceptScheme != null)?"?concept <"+SKOS.IN_SCHEME+"> <"+conceptScheme+"> . ":"")+"\n" +
 				" ?concept ?align ?otherConcept . "+"\n" +
+				// load only the concepts for which we don't know the prefLabel
+				// " FILTER NOT EXISTS { ?otherConcept <"+SKOS.PREF_LABEL+"> ?otherConceptPref } . "+"\n" +
 				" VALUES ?align { <"+SKOS.EXACT_MATCH+"> <"+SKOS.CLOSE_MATCH+"> <"+SKOS.RELATED_MATCH+"> <"+SKOS.BROAD_MATCH+"> <"+SKOS.NARROW_MATCH+"> }"+"\n" +
 				" } ORDER BY ?otherConcept"
 				;

@@ -50,7 +50,8 @@ public class LoadURIHandler extends ReadValueListHandler implements TupleQueryRe
 					java.net.URI javaURI = java.net.URI.create(aValue.stringValue());
 					urlsToLoad.add(javaURI.toURL());
 				} catch (MalformedURLException e) {
-					throw new TupleQueryResultHandlerException(e);
+					log.warn("Cannot build a valid URL from '"+aValue.stringValue()+"'");
+					// throw new TupleQueryResultHandlerException(e);
 				}
 			}
 		}
