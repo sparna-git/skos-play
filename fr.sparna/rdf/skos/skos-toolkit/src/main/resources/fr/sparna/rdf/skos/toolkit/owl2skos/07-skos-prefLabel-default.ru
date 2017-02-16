@@ -24,6 +24,10 @@ INSERT {
 		?x skos:prefLabel ?nothing .
 	}
 	BIND(
-		IF(CONTAINS(STR(?x), "#"), sparna:splitCamelCase(STRAFTER(STR(?x), "#")), STR(?x)) AS ?pref
+		IF(CONTAINS(STR(?x), "#"),
+			sparna:splitCamelCase(STRAFTER(STR(?x), "#")),
+			STR(?x)
+		)
+		AS ?pref
 	)
 }
