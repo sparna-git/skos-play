@@ -2,6 +2,12 @@ package fr.sparna.rdf.skosplay.log;
 
 import java.util.Map;
 
+/**
+ * Cette classe donne la liste des listings convert et print à passer à la jsp
+ * @author clarvie
+ *
+ */
+
 public class ListingData {
 
 	protected Map<String, Integer> data;

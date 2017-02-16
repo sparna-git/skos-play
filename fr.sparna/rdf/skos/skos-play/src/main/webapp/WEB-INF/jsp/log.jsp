@@ -113,9 +113,9 @@
 					<form method="post" action="log" name="formulaire">
 						 <label for="satistique">Choix de la période</label>	
 						 <select style=" width:20%;" name="statistique" class="fixed-left" id="statistique">
-								<option value="jour" <c:if test="${data.choixperiode == 'jour'}">selected</c:if>>Jour</option>
-								<option value="mois" <c:if test="${data.choixperiode == 'mois'}">selected</c:if>>Mois</option>
-								<option value="annee"<c:if test="${data.choixperiode == 'annee'}">selected</c:if>>Année</option>   
+								<option value="alltime" <c:if test="${data.choixperiode == 'alltime'}">selected</c:if>>Jour</option>
+								<option value="month" <c:if test="${data.choixperiode == 'month'}">selected</c:if>>Mois</option>
+								<option value="year"<c:if test="${data.choixperiode == 'year'}">selected</c:if>>Année</option>   
 						 </select>
 						 <button class="btn btn-default " type="submit">Valider</button>
 						 

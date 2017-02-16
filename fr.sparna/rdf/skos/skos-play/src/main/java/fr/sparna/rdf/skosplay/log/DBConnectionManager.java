@@ -3,7 +3,11 @@ package fr.sparna.rdf.skosplay.log;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
+/**
+ * Classe permettant d'établir la connexion avec la base
+ * @author clarvie
+ *
+ */
 
 public class DBConnectionManager {
    

@@ -3,7 +3,12 @@ package fr.sparna.rdf.skosplay.log;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Cette classe représente les données à passer à la jsp
+ * 
+ * @author clarvie
+ *
+ */
 
 public class LogData {
 
@@ -59,8 +64,6 @@ public class LogData {
 			case MONTH:
 				// TODO : convertir le numéro du mois en libellé
 				buffer.append(Month.fromNumber(aData.getDayOrMonthOrYear()).getLabel());
-				// MonthLabel label=new MonthLabel();
-				// label.Month(aData.getDayOrMonthOrYear(),buffer);
 				break;
 			case YEAR:
 				buffer.append(aData.getDayOrMonthOrYear());

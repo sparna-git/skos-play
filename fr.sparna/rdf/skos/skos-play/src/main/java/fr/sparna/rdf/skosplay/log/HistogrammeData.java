@@ -1,5 +1,11 @@
 package fr.sparna.rdf.skosplay.log;
 
+/**
+ * Cette classe permet de définir les données convert et print à passer à la JSP pour créer les histogrammes
+ * @author clarvie
+ *
+ */
+
 public class HistogrammeData {
 
 	/**

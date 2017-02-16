@@ -4,6 +4,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Cette classe permet d'insérer les logs dans la base. Elle est utilisée dans SkosPlayController
+ * 
+ * @author clarvie
+ *
+ */
+
 public class SQLLogDao implements LogDaoIfc {
 
 	protected DBConnectionManager connectionManager;
