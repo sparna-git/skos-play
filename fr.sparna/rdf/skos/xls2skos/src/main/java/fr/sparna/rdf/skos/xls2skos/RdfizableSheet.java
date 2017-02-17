@@ -86,8 +86,17 @@ public class RdfizableSheet {
 		for (int rowIndex = headerRowIndex; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
 			// test if we find a header in columns 2 and 3, this indicates the header line
 			if(sheet.getRow(rowIndex) != null) {
-				ColumnHeader headerB = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(1)));
-				ColumnHeader headerC = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(2)));
+				ColumnHeader headerB = null;
+				ColumnHeader headerC = null;
+				try {
+					headerB = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(1)));
+					headerC = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(2)));
+				} catch (Exception e) {
+					// we prevent anything to go wrong in the parsing at this stage, since the parsing
+					// tests cells for which we are unsure of the format.
+					log.debug("Unable to parse a cell content while auto-detecting title row : "+e.getMessage());
+				}
+				
 				if(headerB != null && headerC != null) {
 					if(
 								(
@@ -106,6 +115,7 @@ public class RdfizableSheet {
 						break;
 					}
 				}
+
 			}
 		}
 		return headerRowIndex;

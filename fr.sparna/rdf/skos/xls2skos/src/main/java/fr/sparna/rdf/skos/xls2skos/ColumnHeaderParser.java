@@ -99,33 +99,37 @@ public class ColumnHeaderParser {
 	private Map<String, String> parseParameters(String value) {
 		Map<String, String> parameters = new HashMap<>();
 		
-		if(value.contains("(") && value.trim().charAt(value.length()-1) == ')') {
-			
-			
-			String parametersString = value.substring(value.indexOf("(")+1, value.length()-1);
-			// ISSUE : cannot split on "," since this prevents to declare "," as a separator
-			// TODO : have a full grammar to be able to really split values.
-			String[] splittedParameters = parametersString.split(" ");
-			Arrays.stream(splittedParameters).forEach(p -> {
-				String[] keyValue = p.split("=");
-				String rawKey = keyValue[0];
-				String rawValue = keyValue[1];
+		try {
+			if(value.contains("(") && value.trim().charAt(value.length()-1) == ')') {
 				
-				// parse the key
-				String paramKey = rawKey.trim();
-				if(paramKey.startsWith("\"") && paramKey.endsWith("\"")) {
-					paramKey = paramKey.substring(1, paramKey.length()-1);
-				}
 				
-				// parse the value
-				String paramValue = rawValue.trim();
-				if(paramValue.startsWith("\"") && paramValue.endsWith("\"")) {
-					paramValue = paramValue.substring(1, paramValue.length()-1);
-				}
-				
-				// register the parameter
-				parameters.put(paramKey, paramValue);
-			});
+				String parametersString = value.substring(value.indexOf("(")+1, value.length()-1);
+				// ISSUE : cannot split on "," since this prevents to declare "," as a separator
+				// TODO : have a full grammar to be able to really split values.
+				String[] splittedParameters = parametersString.split(" ");
+				Arrays.stream(splittedParameters).forEach(p -> {
+					String[] keyValue = p.split("=");
+					String rawKey = keyValue[0];
+					String rawValue = keyValue[1];
+					
+					// parse the key
+					String paramKey = rawKey.trim();
+					if(paramKey.startsWith("\"") && paramKey.endsWith("\"")) {
+						paramKey = paramKey.substring(1, paramKey.length()-1);
+					}
+					
+					// parse the value
+					String paramValue = rawValue.trim();
+					if(paramValue.startsWith("\"") && paramValue.endsWith("\"")) {
+						paramValue = paramValue.substring(1, paramValue.length()-1);
+					}
+					
+					// register the parameter
+					parameters.put(paramKey, paramValue);
+				});
+			}
+		} catch (Exception e) {
+			return null;
 		} 
 		
 		return parameters;
