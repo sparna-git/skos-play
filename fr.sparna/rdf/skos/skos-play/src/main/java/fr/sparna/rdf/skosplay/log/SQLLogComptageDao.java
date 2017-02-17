@@ -51,10 +51,8 @@ public class SQLLogComptageDao implements LogDaoIfc {
 				final String QUERY_ID = "Allprintconvert";
 				ResultSet rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID));
 
-				while (rs.next()) {			
-
+				while (rs.next()) {
 					resultat.put(rs.getString("type"), rs.getInt("nombre"));
-
 				}
 			}
 		}
@@ -72,7 +70,7 @@ public class SQLLogComptageDao implements LogDaoIfc {
 			try(Statement stmt = connection.createStatement()) {
 				final String QUERY_ID = "NumberConvertOrPrintPerDayMonthYear";
 				ResultSet rs=null;
-				if(periodeRange.toString().equals("ALLTIME")){
+				if(periodeRange == Range.ALLTIME){
 					rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_", " "));
 				}else{
 					rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_", periodeRange.toString()));
@@ -113,15 +111,13 @@ public class SQLLogComptageDao implements LogDaoIfc {
 
 		Map<String, Integer> resultat=new HashMap<String, Integer>();
 
+		String sql = this.queryRegistry.getSQLQuery("NumberOfFormat").replaceAll("_diff_", "<>");
+		
 		try(Connection connection = connections.getDBConnection()){
 			try(Statement stmt = connection.createStatement()) {
-				final String QUERY_ID = "NumberOfFormat";
-				ResultSet rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_diff_", "<>"));
-
-				while (rs.next()) {			
-
+				ResultSet rs = stmt.executeQuery(sql);
+				while (rs.next()) {
 					resultat.put(rs.getString("output"), rs.getInt("nombre"));
-
 				}
 			}
 		}
@@ -135,15 +131,14 @@ public class SQLLogComptageDao implements LogDaoIfc {
 
 		Map<String, Integer> resultat=new HashMap<String, Integer>();
 
+		String sql = this.queryRegistry.getSQLQuery("NumberOfLanguage");
+		
 		try(Connection connection = connections.getDBConnection()){
 			try(Statement stmt = connection.createStatement()) {
-				final String QUERY_ID = "NumberOfLanguage";
-				ResultSet rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID));
+				ResultSet rs = stmt.executeQuery(sql);				
 
-				while (rs.next()) {			
-
+				while (rs.next()) {	
 					resultat.put(rs.getString("langue"), rs.getInt("nombre"));
-
 				}
 			}
 		}
@@ -162,8 +157,7 @@ public class SQLLogComptageDao implements LogDaoIfc {
 				final String QUERY_ID = "NumberOfRendu";
 				ResultSet rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_diff_", "<>"));
 
-				while (rs.next()) {			
-
+				while (rs.next()) {	
 					resultat.put(rs.getString("rendu"), rs.getInt("nombre"));
 				}
 
@@ -184,8 +178,7 @@ public class SQLLogComptageDao implements LogDaoIfc {
 				final String QUERY_ID = "printConvertLast365Days";
 				ResultSet rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID));
 
-				while (rs.next()) {			
-
+				while (rs.next()) {
 					resultat.put(rs.getString("type"), rs.getInt("nbre"));
 				}
 
@@ -230,10 +223,8 @@ public class SQLLogComptageDao implements LogDaoIfc {
 					break;				
 				}
 				
-				while (rs.next()) {			
-
+				while (rs.next()) {
 					resultat.put(rs.getString("url"), rs.getInt("nombre"));
-
 				}
 				listing.setIndexDebut(indexDebut);
 				listing.setData(resultat);
@@ -281,10 +272,8 @@ public class SQLLogComptageDao implements LogDaoIfc {
 					break;				
 				}
 							
-				while (rs.next()) {			
-
+				while (rs.next()) {
 					resultat.put(rs.getString("url"), rs.getInt("nombre"));
-
 				}
 				listing.setIndexDebut(indexDebut);
 				listing.setData(resultat);
@@ -328,10 +317,8 @@ public class SQLLogComptageDao implements LogDaoIfc {
 				default:
 					break;				
 				}
-				while (rs.next()) {			
-
+				while (rs.next()) {
 					resultat= rs.getInt("nombre");
-
 				}
 
 			}
@@ -471,10 +458,8 @@ public class SQLLogComptageDao implements LogDaoIfc {
 					break;				
 				}			
 
-				while (rs.next()) {			
-
+				while (rs.next()) {
 					resultat.put(rs.getString("uri"), rs.getInt("nombre"));
-
 				}
 				
 				listing.setIdlist(resultat);
@@ -519,10 +504,8 @@ public class SQLLogComptageDao implements LogDaoIfc {
 					break;				
 				}
 				
-				while (rs.next()) {			
-
+				while (rs.next()) {	
 					resultat= rs.getInt("nombre");
-
 				}
 
 			}
@@ -565,10 +548,8 @@ public class SQLLogComptageDao implements LogDaoIfc {
 					break;				
 				}
 				
-				while (rs.next()) {			
-
+				while (rs.next()) {
 					resultat= rs.getInt("nombre");
-
 				}
 
 			}
@@ -580,7 +561,9 @@ public class SQLLogComptageDao implements LogDaoIfc {
 		return resultat;
 	}
 	
-
+	interface SQLHelper {
+		
+	}
 	
 	
 }
