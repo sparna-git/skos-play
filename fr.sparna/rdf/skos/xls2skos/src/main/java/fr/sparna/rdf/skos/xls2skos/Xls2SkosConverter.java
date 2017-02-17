@@ -420,8 +420,8 @@ public class Xls2SkosConverter {
 			String value = getCellValue(c);
 			// if it is the first column...
 			if (null == rowBuilder) {
-				// if the value of the first column is empty, skip the whole row
-				if (StringUtils.isBlank(value)) {
+				// if the value of the first column is empty, or is striked through, skip the whole row
+				if (StringUtils.isBlank(value) || this.workbook.getFontAt(c.getCellStyle().getFontIndex()).getStrikeout()) {
 					return null;
 				}
 				// create the RowBuilder with the URI in the first column
