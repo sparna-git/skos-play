@@ -444,8 +444,18 @@ public class Xls2SkosConverter {
 							header,
 							prefixManager
 					);
+					
 					if(header.getParameters().get(ColumnHeader.PARAMETER_SEPARATOR) != null) {
 						valueGenerator = ValueGeneratorFactory.split(valueGenerator, header.getParameters().get(ColumnHeader.PARAMETER_SEPARATOR));
+					// use a default comma separator for cells that contain URI references
+					} else if(
+						!header.getDatatype().isPresent()
+						&&
+						!header.getLanguage().isPresent()
+						&&
+						(value.startsWith("http://") || prefixManager.usesKnownPrefix(value.trim()))
+					) {
+						valueGenerator = ValueGeneratorFactory.split(valueGenerator, ",");
 					}
 				}
 				
