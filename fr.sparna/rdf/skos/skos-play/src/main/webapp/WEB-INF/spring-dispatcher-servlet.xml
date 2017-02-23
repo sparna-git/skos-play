@@ -147,8 +147,13 @@
 		                </value>
                 </entry>
                 <entry key="printConvertLast365Days">
+		                <!-- select type, count(id) as nbre, year(JOUR) as periode  from statistique where year(JOUR)=(SELECT (year(jour)-1) as year from statistique order by year(jour) desc limit 0, 1) group by type, year(JOUR); -->
+		                <!-- 
+		                		On veut les statistiques sur les derniers 365 jours - et pas sur la derniere année. Les calculs sur les dates semblent marcher avec
+		                		les jours, voir http://h2-database.66688.n3.nabble.com/Using-arithmetic-with-sysdate-td2088872.html
+		                 -->
 		                <value>
-		                	select type, count(id) as nbre, year(JOUR) as periode  from statistique where year(JOUR)=(SELECT (year(jour)-1) as year from statistique order by year(jour) desc limit 0, 1) group by type, year(JOUR);
+		                	select type, count(id) as nbre from statistique where JOUR > (NOW() - 365) group by type;
 		                </value>
                 </entry>
                 
