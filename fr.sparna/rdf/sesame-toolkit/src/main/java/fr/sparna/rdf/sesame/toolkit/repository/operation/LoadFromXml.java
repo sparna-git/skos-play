@@ -201,7 +201,7 @@ public class LoadFromXml extends AbstractLoadOperation implements RepositoryOper
 						new ByteArrayInputStream(baos.toByteArray()),
 						this.defaultNamespace,
 						RDFFormat.RDFXML,
-						(this.targetGraph != null)?connection.getValueFactory().createURI(this.targetGraph.toString()):null
+						(this.targetGraph != null)?connection.getValueFactory().createIRI(this.targetGraph.toString()):null
 						);
 
 				// increment counter

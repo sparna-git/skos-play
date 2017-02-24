@@ -42,13 +42,13 @@ public class SPARQLQueryBuilderTest {
 		Date yesterday = new Date();
 		yesterday.setDate(new Date().getDate()-1);
 		r.getConnection().add(r.getValueFactory().createStatement(
-				r.getValueFactory().createURI("http://www.ex.fr/1"),
-				r.getValueFactory().createURI("http://purl.org/dc/terms/modified"),
+				r.getValueFactory().createIRI("http://www.ex.fr/1"),
+				r.getValueFactory().createIRI("http://purl.org/dc/terms/modified"),
 				r.getValueFactory().createLiteral(tomorrow)
 		));
 		r.getConnection().add(r.getValueFactory().createStatement(
-				r.getValueFactory().createURI("http://www.ex.fr/2"),
-				r.getValueFactory().createURI("http://purl.org/dc/terms/modified"),
+				r.getValueFactory().createIRI("http://www.ex.fr/2"),
+				r.getValueFactory().createIRI("http://purl.org/dc/terms/modified"),
 				r.getValueFactory().createLiteral(yesterday)
 		));
 		

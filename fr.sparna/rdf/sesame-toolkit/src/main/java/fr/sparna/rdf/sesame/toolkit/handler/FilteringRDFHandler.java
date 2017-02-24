@@ -9,14 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Sorts statements before sending them to a delegate RDFHandler. Groups the statements by
- * subject, then predicate, with RDF.TYPE first.
- * You can use a RDFXMLPrettyWriter as a delegate to produce a clean RDF/XML output.
- * Usage :
- * <code>
- * RDFHandler writer = new SortingRDFHandler(new RDFXMLPrettyWriter(new FileOutputStream(myFile)));
- * repository.export(writer);
- * </code>
  * 
  * @author Thomas Francart
  *

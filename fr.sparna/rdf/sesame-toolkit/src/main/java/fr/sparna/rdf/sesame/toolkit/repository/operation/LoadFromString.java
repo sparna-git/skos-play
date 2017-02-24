@@ -79,7 +79,7 @@ public class LoadFromString extends AbstractLoadOperation implements RepositoryO
 								new ByteArrayInputStream(this.data.getBytes()),
 								(this.defaultNamespace != null)?this.defaultNamespace:RDF.NAMESPACE,
 								aFormat,
-								repository.getValueFactory().createURI(this.targetGraph.toString())
+								repository.getValueFactory().createIRI(this.targetGraph.toString())
 						);
 					}
 					log.debug("Parsing with format "+aFormat+" suceeded.");

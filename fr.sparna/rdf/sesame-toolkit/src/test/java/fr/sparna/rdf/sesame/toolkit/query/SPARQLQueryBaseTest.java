@@ -43,7 +43,7 @@ public class SPARQLQueryBaseTest {
 		SparqlQuery q3 = new SparqlQuery(
 				"SELECT ?uri WHERE { ?uri a $type }",
 				new HashMap<String, Object>() {{
-					put("type", r.getValueFactory().createURI("http://www.test.com"));
+					put("type", r.getValueFactory().createIRI("http://www.test.com"));
 				}}	
 		);
 		System.out.println(q3.toString());
@@ -63,7 +63,7 @@ public class SPARQLQueryBaseTest {
 		SparqlQuery q5 = new SparqlQuery(
 				"SELECT ?uri WHERE { ?uri a $type }",
 				new HashMap<String, Object>() {{
-					put("type", r.getValueFactory().createLiteral("toto", r.getValueFactory().createURI("http://www.mydatatype.com")));
+					put("type", r.getValueFactory().createLiteral("toto", r.getValueFactory().createIRI("http://www.mydatatype.com")));
 				}}	
 		);
 		System.out.println(q5.toString());

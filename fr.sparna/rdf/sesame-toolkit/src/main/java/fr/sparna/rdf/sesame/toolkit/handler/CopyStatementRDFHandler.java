@@ -21,6 +21,7 @@ import fr.sparna.rdf.sesame.toolkit.util.UriUtil;
  * this means the resulting triples of a CONSTRUCT query will be inserted into the same repository.
  * This can form the base of a SPARQL-based inference engine or transformation engine.
  * 
+ * @deprecated use org.eclipse.rdf4j.repository.util.RDFInserter instead
  * @author Thomas Francart
  *
  */

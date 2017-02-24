@@ -464,9 +464,9 @@ public class Perform {
 					if(anEntry.getValue() instanceof org.eclipse.rdf4j.model.Value) {
 						o.setBinding(anEntry.getKey(), (org.eclipse.rdf4j.model.Value)anEntry.getValue());
 					} else 	if(anEntry.getValue() instanceof java.net.URI) {
-						o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createURI(((java.net.URI)anEntry.getValue()).toString()));
+						o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createIRI(((java.net.URI)anEntry.getValue()).toString()));
 					} else 	if(anEntry.getValue() instanceof java.net.URL) {
-						o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createURI(((java.net.URL)anEntry.getValue()).toString()));
+						o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createIRI(((java.net.URL)anEntry.getValue()).toString()));
 					} else {
 						o.setBinding(anEntry.getKey(), this.repository.getValueFactory().createLiteral(anEntry.getValue().toString()));
 					}
@@ -511,26 +511,26 @@ public class Perform {
 					namedGraphs != null
 			) {
 				for (URI uri : namedGraphs) {
-					dataset.addNamedGraph((IRI) vf.createURI(uri.toString()));
+					dataset.addNamedGraph(vf.createIRI(uri.toString()));
 				}
 			}
 			if(
 					defaultGraphs != null
 			) {
 				for (URI uri : defaultGraphs) {
-					dataset.addDefaultGraph((IRI) vf.createURI(uri.toString()));
+					dataset.addDefaultGraph((IRI) vf.createIRI(uri.toString()));
 				}
 			}
 			if(
 				defaultInsertGraph != null	
 			) {
-				dataset.setDefaultInsertGraph((IRI) vf.createURI(defaultInsertGraph.toString()));
+				dataset.setDefaultInsertGraph((IRI) vf.createIRI(defaultInsertGraph.toString()));
 			}
 			if(
 					defaultRemoveGraphs != null	
 			) {
 				for (URI uri : defaultRemoveGraphs) {
-					dataset.addDefaultRemoveGraph((IRI) vf.createURI(uri.toString()));
+					dataset.addDefaultRemoveGraph((IRI) vf.createIRI(uri.toString()));
 				}
 			}
 			o.setDataset(dataset);

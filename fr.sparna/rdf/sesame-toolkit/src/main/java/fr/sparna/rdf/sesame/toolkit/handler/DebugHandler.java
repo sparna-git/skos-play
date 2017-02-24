@@ -4,9 +4,9 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.rdf4j.query.AbstractTupleQueryResultHandler;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQueryResultHandler;
-import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 
 /**
@@ -16,7 +16,7 @@ import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
  * @author Thomas Francart
  *
  */
-public class DebugHandler extends TupleQueryResultHandlerBase implements TupleQueryResultHandler {
+public class DebugHandler extends AbstractTupleQueryResultHandler implements TupleQueryResultHandler {
 
 	protected PrintWriter writer;
 	

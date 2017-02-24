@@ -27,7 +27,7 @@ public class ValuesSPARQLQueryBuilderTest {
 		ValuesSparqlQueryBuilder builder = new ValuesSparqlQueryBuilder(
 				new SparqlQueryBuilder(sparql),
 				"x",
-				Arrays.asList(new Value[] { r.getValueFactory().createURI("http://www.exemple.fr")})
+				Arrays.asList(new Value[] { r.getValueFactory().createIRI("http://www.exemple.fr")})
 		);
 		System.out.println(builder.getSPARQL());
 		Perform.on(r).select(new SelectSparqlHelper(builder, new DebugHandler()));

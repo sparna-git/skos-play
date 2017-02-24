@@ -3,9 +3,9 @@ package fr.sparna.rdf.sesame.toolkit.handler;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.rdf4j.query.AbstractTupleQueryResultHandler;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQueryResultHandler;
-import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 
 /**
@@ -13,7 +13,7 @@ import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
  * 
  * @author Thomas Francart
  */
-public class CsvHandler extends TupleQueryResultHandlerBase implements TupleQueryResultHandler {
+public class CsvHandler extends AbstractTupleQueryResultHandler implements TupleQueryResultHandler {
 
 	protected PrintWriter writer;
 	protected List<String> bindingNames;

@@ -126,9 +126,9 @@ public class ContextCachingRepositoryConnection extends RepositoryConnectionWrap
 		Repository r = new LocalMemoryRepositoryFactory().createNewRepository();
 		ContextCachingRepositoryConnection cc = new ContextCachingRepositoryConnection(r, r.getConnection());
 		cc.setAutoCommit(false);
-		cc.add(new URL(TEST_URL), RDF.NAMESPACE, Rio.getParserFormatForFileName(TEST_URL).orElse(RDFFormat.RDFXML), r.getValueFactory().createURI(TEST_URL));
+		cc.add(new URL(TEST_URL), RDF.NAMESPACE, Rio.getParserFormatForFileName(TEST_URL).orElse(RDFFormat.RDFXML), r.getValueFactory().createIRI(TEST_URL));
 		cc.commit();
-		cc.add(new URL(TEST_URL), RDF.NAMESPACE, Rio.getParserFormatForFileName(TEST_URL).orElse(RDFFormat.RDFXML), r.getValueFactory().createURI(TEST_URL));
+		cc.add(new URL(TEST_URL), RDF.NAMESPACE, Rio.getParserFormatForFileName(TEST_URL).orElse(RDFFormat.RDFXML), r.getValueFactory().createIRI(TEST_URL));
 	}
 		
 }

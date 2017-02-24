@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.eclipse.rdf4j.model.Literal;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.rio.RDFHandler;
@@ -24,6 +22,7 @@ import org.slf4j.LoggerFactory;
  * repository.export(writer);
  * </code>
  * 
+ * @deprecated Use RDF4J BufferedGroupingRDFHandler with a large buffer size to achieve the same result.
  * @author Thomas Francart
  *
  */

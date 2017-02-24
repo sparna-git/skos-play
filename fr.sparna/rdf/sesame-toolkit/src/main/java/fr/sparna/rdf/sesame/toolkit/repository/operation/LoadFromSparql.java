@@ -6,13 +6,13 @@ import java.util.List;
 
 import org.eclipse.rdf4j.repository.Repository;
 
-import fr.sparna.rdf.sesame.toolkit.handler.CopyStatementRDFHandler;
 import fr.sparna.rdf.sesame.toolkit.query.ConstructSparqlHelper;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlQueryIfc;
 import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderList;
+import fr.sparna.rdf.sesame.toolkit.util.RDFInserterFactory;
 
 /**
  * Loads data from a repository provider (possibly the same one as the initial repository), by doing some SPARQL queries onto it.
@@ -76,12 +76,10 @@ public class LoadFromSparql extends AbstractLoadOperation implements RepositoryO
 		if(this.sparqlQueries != null) {
 			for (final SparqlQueryIfc aBuilder : this.sparqlQueries) {
 				try {
-					new Perform(this.sourceRepository).construct(
-							new ConstructSparqlHelper(
-									aBuilder,
-									new CopyStatementRDFHandler(repository, this.targetGraph)
-							)
-					);
+					Perform.on(this.sourceRepository).construct(new ConstructSparqlHelper(
+							aBuilder,
+							RDFInserterFactory.newRDFContextInserter(repository.getConnection(), this.targetGraph)
+					));
 				} catch (SparqlPerformException e) {
 					throw new RepositoryOperationException(e);
 				}

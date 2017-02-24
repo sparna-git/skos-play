@@ -1,7 +1,7 @@
 package fr.sparna.rdf.sesame.toolkit.reader;
 
 import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.impl.ValueFactoryImpl;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 public class UriLang {
 
@@ -15,7 +15,7 @@ public class UriLang {
 	}
 	
 	public UriLang(String uri, String lang) {
-		this(ValueFactoryImpl.getInstance().createURI(uri), lang);
+		this(SimpleValueFactory.getInstance().createIRI(uri), lang);
 	}
 
 	public org.eclipse.rdf4j.model.URI getUri() {

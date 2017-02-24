@@ -13,8 +13,8 @@ import org.eclipse.rdf4j.repository.RepositoryException;
 import org.eclipse.rdf4j.rio.RDFHandlerException;
 
 import fr.sparna.rdf.sesame.toolkit.query.ConstructSparqlHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.sesame.toolkit.util.GraphExport;
 
 
@@ -71,7 +71,7 @@ public class ConciseBoundedDescriptionGenerator implements BoundedDescriptionGen
 	throws BoundedDescriptionGenerationException {
 		try {
 			// notify handler of resource
-			handler.handleResource(this.repository.getValueFactory().createURI(aNode.toString()));
+			handler.handleResource(this.repository.getValueFactory().createIRI(aNode.toString()));
 			
 			// notify it of the result
 			GraphExport.export(result, handler);

@@ -607,7 +607,7 @@ public class Documentation {
 		SparqlQuery q2 = new SparqlQuery(
 				theQuery,
 				new HashMap<String, Object>(){{
-					put("type", r.getValueFactory().createURI("http://xmlns.com/foaf/0.1/Document"));
+					put("type", r.getValueFactory().createIRI("http://xmlns.com/foaf/0.1/Document"));
 				}}
 		);
 		// -- sparqlQuery2
@@ -860,13 +860,13 @@ public class Documentation {
 	private static void testBoundedDescription(Repository repository) throws Exception {
 		BoundedDescriptionGeneratorIfc generator = new ConciseBoundedDescriptionGenerator(repository);
 		generator.exportBoundedDescription(
-				repository.getValueFactory().createURI("http://thes.world-tourism.org#CIRCUIT_TOURISTIQUE"),
+				repository.getValueFactory().createIRI("http://thes.world-tourism.org#CIRCUIT_TOURISTIQUE"),
 				new BoundedDescriptionHandlerAdapter(RDFWriterRegistry.getInstance().get(RDFFormat.N3).get().getWriter(System.out))
 		);
 		System.out.println();
 		generator = new LabeledConciseBoundedDescriptionGenerator(repository, java.net.URI.create("http://www.w3.org/2004/02/skos/core#prefLabel"));
 		generator.exportBoundedDescription(
-				repository.getValueFactory().createURI("http://thes.world-tourism.org#CIRCUIT_TOURISTIQUE"),
+				repository.getValueFactory().createIRI("http://thes.world-tourism.org#CIRCUIT_TOURISTIQUE"),
 				new BoundedDescriptionHandlerAdapter(RDFWriterRegistry.getInstance().get(RDFFormat.N3).get().getWriter(System.out))
 		);
 	}

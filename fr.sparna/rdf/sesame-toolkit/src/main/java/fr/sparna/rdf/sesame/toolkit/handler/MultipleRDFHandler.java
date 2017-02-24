@@ -12,6 +12,7 @@ import org.eclipse.rdf4j.rio.RDFHandlerException;
  * to all of them.
  * <p/>This is useful to process the result of a single query in multiple ways, without executing the query multiple times.
  * 
+ * @deprecated use org.eclipse.rdf4j.rio.helpers.RDFHandlerWrapper instead
  * @author Thomas Francart
  *
  */

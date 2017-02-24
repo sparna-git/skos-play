@@ -42,9 +42,9 @@ public class VoidStatisticsRenderer implements StatisticsRenderer {
 			
 			// declare Dataset
 			connection.add(vf.createStatement(
-					vf.createURI(this.datasetURI.toString()),
+					vf.createIRI(this.datasetURI.toString()),
 					RDF.TYPE,
-					vf.createURI(VOID.DATASET))
+					vf.createIRI(VOID.DATASET))
 			);
 			
 			// predicates by type
@@ -54,22 +54,22 @@ public class VoidStatisticsRenderer implements StatisticsRenderer {
 				
 				// attach partition to dataset
 				connection.add(vf.createStatement(
-						vf.createURI(this.datasetURI.toString()),
-						vf.createURI(VOID.PROPERTY_PARTITION),
+						vf.createIRI(this.datasetURI.toString()),
+						vf.createIRI(VOID.PROPERTY_PARTITION),
 						propertyPartitionBNode)
 				);
 				
 				// say this partition is about this property
 				connection.add(vf.createStatement(
 						propertyPartitionBNode,
-						vf.createURI(VOID.PROPERTY),
-						vf.createURI(anEntry.getKey().toString()))
+						vf.createIRI(VOID.PROPERTY),
+						vf.createIRI(anEntry.getKey().toString()))
 				);
 				
 				// tell the number of triples
 				connection.add(vf.createStatement(
 						propertyPartitionBNode,
-						vf.createURI(VOID.TRIPLES),
+						vf.createIRI(VOID.TRIPLES),
 						vf.createLiteral(anEntry.getValue()))
 				);
 			}

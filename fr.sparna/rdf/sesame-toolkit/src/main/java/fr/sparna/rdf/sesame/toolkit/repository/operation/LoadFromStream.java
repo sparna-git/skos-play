@@ -75,7 +75,7 @@ public class LoadFromStream extends AbstractLoadOperation implements RepositoryO
 						this.stream,
 						this.defaultNamespace,
 						this.format,
-						(this.targetGraph != null)?repository.getValueFactory().createURI(this.targetGraph.toString()):null
+						(this.targetGraph != null)?repository.getValueFactory().createIRI(this.targetGraph.toString()):null
 				);
 			} finally {
 				RepositoryConnectionDoorman.closeQuietly(connection);

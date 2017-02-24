@@ -72,7 +72,7 @@ public class LoadFromFileOrDirectory extends AbstractLoadOperation implements Re
 										// not default to RDF/XML
 										// on suppose que c'est du RDF/XML par defaut
 										Rio.getParserFormatForFileName(anRdf).orElse(RDFFormat.RDFXML),
-										(autoNamedGraphs)?repository.getValueFactory().createURI(anRdfFile.toURI().toString()):((this.targetGraph != null)?repository.getValueFactory().createURI(this.targetGraph.toString()):null)
+										(autoNamedGraphs)?repository.getValueFactory().createIRI(anRdfFile.toURI().toString()):((this.targetGraph != null)?repository.getValueFactory().createIRI(this.targetGraph.toString()):null)
 								);
 							} catch (RepositoryException e) {
 								e.printStackTrace();
@@ -148,8 +148,8 @@ public class LoadFromFileOrDirectory extends AbstractLoadOperation implements Re
 						RDF.NAMESPACE,
 						Rio.getParserFormatForFileName(aFileOrDirectory.getName()).orElse(RDFFormat.RDFXML),
 						(autoNamedGraphs)?
-								connection.getRepository().getValueFactory().createURI(context.toString())
-								:((this.targetGraph != null)?connection.getRepository().getValueFactory().createURI(this.targetGraph.toString()):null)
+								connection.getRepository().getValueFactory().createIRI(context.toString())
+								:((this.targetGraph != null)?connection.getRepository().getValueFactory().createIRI(this.targetGraph.toString()):null)
 				);
 				numberOfProcessedFiles++;
 			} catch (Exception e) {

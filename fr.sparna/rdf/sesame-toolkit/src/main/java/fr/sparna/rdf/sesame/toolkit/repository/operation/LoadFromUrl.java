@@ -138,7 +138,7 @@ public class LoadFromUrl extends AbstractLoadOperation implements RepositoryOper
 							// Rio.getParserFormatForFileName(aUrlEntry.getKey().toString(), RDFFormat.RDFXML),
 							// null,
 							this.acceptContentType,
-							(this.targetGraph != null)?repository.getValueFactory().createURI(this.targetGraph.toString()):null
+							(this.targetGraph != null)?repository.getValueFactory().createIRI(this.targetGraph.toString()):null
 					);
 					
 					if(cacheDir != null) {

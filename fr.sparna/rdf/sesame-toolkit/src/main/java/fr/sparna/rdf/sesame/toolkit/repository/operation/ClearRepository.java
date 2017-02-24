@@ -62,7 +62,7 @@ public class ClearRepository implements RepositoryOperationIfc {
 		List<Resource> result = new ArrayList<Resource>();
 		if(uris != null) {
 			for (String aString : uris) {
-				result.add(factory.createURI(aString));
+				result.add(factory.createIRI(aString));
 			}
 		}
 		return result.toArray(new Resource[] {});

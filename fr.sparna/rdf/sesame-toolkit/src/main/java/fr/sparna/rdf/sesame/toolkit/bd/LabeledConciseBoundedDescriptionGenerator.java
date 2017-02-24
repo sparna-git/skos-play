@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.rdf4j.model.Graph;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.URI;
@@ -88,8 +89,8 @@ public class LabeledConciseBoundedDescriptionGenerator extends ConciseBoundedDes
 		this(repository, withInverse, Arrays.asList(new java.net.URI[] { labelPredicate }));
 	}
 	
-	private static URI toSesameURI(java.net.URI aURI) {
-		return new ValueFactoryImpl().createURI(aURI.toString());
+	private static IRI toSesameURI(java.net.URI aURI) {
+		return SimpleValueFactory.getInstance().createIRI(aURI.toString());
 	}
 
 	@Override

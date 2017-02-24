@@ -31,7 +31,7 @@ public class UriUtil {
 
 		List<Resource> result = new ArrayList<Resource>();
 		for (URI uri : uris) {
-			result.add(factory.createURI(uri.toString()));
+			result.add(factory.createIRI(uri.toString()));
 		}
 		return result.toArray(new Resource[]{});
 	}

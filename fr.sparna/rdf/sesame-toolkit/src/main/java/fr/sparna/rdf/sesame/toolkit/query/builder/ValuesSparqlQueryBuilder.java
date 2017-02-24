@@ -57,7 +57,7 @@ public class ValuesSparqlQueryBuilder implements SparqlQueryBuilderIfc {
 		Repository r = new SailRepository(new MemoryStore());
 		r.initialize();
 		System.out.println(r.getValueFactory().createLiteral("toto", "fr").toString());
-		System.out.println(r.getValueFactory().createURI("abc:def"));
+		System.out.println(r.getValueFactory().createIRI("abc:def"));
 	}
 	
 }

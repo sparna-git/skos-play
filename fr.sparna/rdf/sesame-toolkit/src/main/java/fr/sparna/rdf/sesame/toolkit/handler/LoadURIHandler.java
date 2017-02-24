@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
 import org.eclipse.rdf4j.query.TupleQueryResultHandler;
@@ -45,7 +45,7 @@ public class LoadURIHandler extends ReadValueListHandler implements TupleQueryRe
 		// convert List<Value> to List<URL>
 		List<URL> urlsToLoad = new ArrayList<URL>();
 		for (Value aValue : this.result) {
-			if(aValue instanceof URI) {
+			if(aValue instanceof IRI) {
 				try {
 					java.net.URI javaURI = java.net.URI.create(aValue.stringValue());
 					urlsToLoad.add(javaURI.toURL());
