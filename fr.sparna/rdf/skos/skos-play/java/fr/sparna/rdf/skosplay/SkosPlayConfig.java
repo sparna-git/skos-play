@@ -11,13 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 
-import fr.sparna.rdf.skosplay.log.SQLQueryRegistry;
-import fr.sparna.rdf.skosplay.log.DBConnectionManager;
-import fr.sparna.rdf.skosplay.log.SQLLogComptageDao;
-import fr.sparna.rdf.skosplay.log.SQLLogDao;
-
-
-
 public class SkosPlayConfig {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
@@ -43,16 +36,6 @@ public class SkosPlayConfig {
 	
 	// application title to be inserted in HTML pages
 	protected String applicationTitle;
-	
-
-	protected SQLQueryRegistry sqlQueryRegistry;
-
-	@Autowired
-	protected SQLLogDao sqlLogDao;
-	
-	@Autowired
-	protected DBConnectionManager sqlDb;
-
 	
 	/**
 	 * Singleton private constructor
@@ -160,37 +143,5 @@ public class SkosPlayConfig {
 	public void setApplicationTitle(String applicationTitle) {
 		this.applicationTitle = applicationTitle;
 	}
-
-
-	public SQLQueryRegistry getSqlQueryRegistry() {
-		return sqlQueryRegistry;
-	}
-
-	@Autowired
-	public void setSqlQueryRegistry(SQLQueryRegistry sqlQueryRegistry) {
-		this.sqlQueryRegistry = sqlQueryRegistry;
-	}
-	public SQLLogDao getSqlLogDao() {
-		return sqlLogDao;
-	}
-
-	public void setSqlLogDao(SQLLogDao sqlLogDao) {
-		this.sqlLogDao = sqlLogDao;
-	}
-
-	public DBConnectionManager getSqlDb() {
-		return sqlDb;
-	}
-
-	public void setSqlDb(DBConnectionManager sqlDb) {
-		this.sqlDb = sqlDb;
-	}
-
-	
-	
-
-	
-	
-	
 	
 }

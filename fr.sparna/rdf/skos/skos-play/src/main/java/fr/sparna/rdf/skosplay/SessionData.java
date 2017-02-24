@@ -53,6 +53,10 @@ public class SessionData {
 	
 	protected boolean fichierexample;
 	
+	protected String periodeView;
+	
+	
+	
 
 	public boolean isFichierexample() {
 		return fichierexample;
@@ -159,6 +163,17 @@ public class SessionData {
 	public void setGoogleConnector(GoogleConnector googleConnector) {
 		this.googleConnector = googleConnector;
 	}
+	
+
+	public String getPeriodeView() {
+		
+		return periodeView;
+	}
+
+	public void setPeriodeView(String periodeView) {
+		this.periodeView = periodeView;
+	}
+	
 
 	public static void main(String...strings) throws Exception {
 		RepositoryBuilder builder = new RepositoryBuilder(new EndpointRepositoryFactory("http://poolparty.reegle.info/PoolParty/sparql/glossary", false));

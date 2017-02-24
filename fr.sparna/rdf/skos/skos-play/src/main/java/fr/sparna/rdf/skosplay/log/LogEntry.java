@@ -1,5 +1,12 @@
 package fr.sparna.rdf.skosplay.log;
 
+/**
+ * Cette classe permet de définir les entrées  à insérer dans la base
+ * 
+ * @author clarvie
+ *
+ */
+
 public class LogEntry {
 	public String name;
 	public String output;
@@ -10,17 +17,24 @@ public class LogEntry {
 	public String rendu;
 	public String url;
 
-	public LogEntry(String language, String format, String rendu, String url, String type) {
+	public String uri;
+	public Integer iduser;
+
+
+
+	public LogEntry(String language, String format, String rendu, String url, String type, String uri) {
 		this.langue = language;
 		this.output = format;
 		this.rendu = rendu;
 		this.url = url;
 		this.displayType = type;
+		this.uri=uri;
 	}
 	
 	public LogEntry() {
 		
 	}
+
 
 	public String getUrl() {
 		return url;
@@ -69,6 +83,33 @@ public class LogEntry {
 		this.actiondate = actiondate;
 	}
 
+
+	public String getType() {
+		return displayType;
+	}
+
+	public void setType(String display) {
+		this.displayType = display;
+	}
+
+
+	public String getUri() {
+		return uri;
+	}
+
+	public void setUri(String uri) {
+		this.uri = uri;
+	}
+
+	public Integer getIduser() {
+		return iduser;
+	}
+
+	public void setIduser(Integer idconvert) {
+		this.iduser = idconvert;
+	}
+	
+	
 	public String getDisplayType() {
 		return displayType;
 	}
@@ -83,6 +124,7 @@ public class LogEntry {
 	public void setLangue(String lang) {
 		this.langue = lang;
 	}
+
 
 
 

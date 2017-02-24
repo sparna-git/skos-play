@@ -69,7 +69,7 @@ public class Xls2SkosConverter {
 	protected ModelWriterIfc modelWriter;
 
 	/**
-	 * Internal storage of Models for each sheet name
+	 * Internal storage of Models for each ConceptScheme URI
 	 */
 	private final Map<String, Model> csModels = new HashMap<>();
 	
@@ -536,6 +536,10 @@ public class Xls2SkosConverter {
 		this.generateXlDefinitions = generateXlDefinitions;
 	}
 	
+	public Map<String, Model> getCsModels() {
+		return csModels;
+	}
+
 	public static void main(String[] args) throws Exception {
 		
 		// quick and dirty Log4J config

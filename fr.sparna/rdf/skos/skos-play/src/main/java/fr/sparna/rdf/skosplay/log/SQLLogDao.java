@@ -4,6 +4,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Cette classe permet d'insérer les logs dans la base. Elle est utilisée dans SkosPlayController
+ * 
+ * @author clarvie
+ *
+ */
+
 public class SQLLogDao implements LogDaoIfc {
 
 	protected DBConnectionManager connectionManager;
@@ -26,14 +33,16 @@ public class SQLLogDao implements LogDaoIfc {
 		}
 		
 		entry.setActiondate("NOW()");
-		String requete="INSERT INTO statistique(output, type, rendu, langue, url, jour) VALUES('"
+		String requete="INSERT INTO statistique(output, type, rendu, langue, url, jour, uri) VALUES('"
+
 				+entry.getOutput()+"','"
 				+entry.getDisplayType()+"','"
 				+entry.getRendu()+"','"
 				+entry.getLangue()+"','"
 				+entry.getUrl()+"',"
-				+entry.getActiondate()+")";
-		try(Connection connection = connectionManager.getDBConnection()) {
+				+entry.getActiondate()+",'"
+				+entry.getUri()+"')";
+		try (Connection connection = connectionManager.getDBConnection()) {
 			connection.setAutoCommit(false);
 			try(Statement stmt = connection.createStatement()) {
 				stmt.execute(requete);
@@ -43,6 +52,9 @@ public class SQLLogDao implements LogDaoIfc {
 			e.printStackTrace();
 		}
 	}
+
+    
+    
 
 	public boolean isDoLog() {
 		return doLog;

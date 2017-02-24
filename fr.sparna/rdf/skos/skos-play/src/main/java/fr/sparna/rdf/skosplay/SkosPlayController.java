@@ -16,9 +16,12 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -108,7 +111,8 @@ import fr.sparna.rdf.skos.xls2skos.ModelWriterFactory;
 import fr.sparna.rdf.skos.xls2skos.ModelWriterIfc;
 import fr.sparna.rdf.skos.xls2skos.Xls2SkosConverter;
 import fr.sparna.rdf.skosplay.log.LogEntry;
-
+import fr.sparna.rdf.skosplay.log.SQLLogDao;
+import fr.sparna.rdf.skosplay.log.UserDataDAO;
 
 
 
@@ -289,7 +293,9 @@ public class SkosPlayController {
 			HttpServletRequest request,
 			// the response
 			HttpServletResponse response			
-			) throws Exception {
+	) throws Exception {
+		
+		
 		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+useskosxl+",useZip="+useZip+"language="+language+",url="+url+",ex="+example+")");
 		final SessionData sessionData = SessionData.get(request.getSession());
 		//source, it can be: file, example, url or google
@@ -351,6 +357,7 @@ public class SkosPlayController {
 		}
 		case URL: {
 			log.debug("*Conversion à partir d'une URL : "+url);
+			sessionData.setListurl(url);
 			if(url.isEmpty()) {
 				return doErrorConvert(request, "Uploaded link file is empty");
 			}
@@ -372,14 +379,19 @@ public class SkosPlayController {
 		default:
 			break;
 		}
-		
-		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, null, null, SessionData.get(request.getSession()).getListurl(),"convert"));
+
 
 		try {
 			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+useskosxl);
 			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
 			response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());	
-			generateType(new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),in,language,useskosxl);
+			Set<String> identifiant= generateType(new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),in,language,useskosxl);
+			String [] array=new String[identifiant.size()];
+			array=identifiant.toArray(array);
+			List uri=new ArrayList<String>(Arrays.asList(array));
+			Collections.sort(uri);
+			SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, null, null, SessionData.get(request.getSession()).getListurl(),"convert",uri.toString()));
+
 		} finally {
 			try {
 				if(in != null) {
@@ -391,11 +403,13 @@ public class SkosPlayController {
 		return null;
 	}
 
-	private void generateType(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl) {
+	private Set<String> generateType(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl) {
 		Xls2SkosConverter converter = new Xls2SkosConverter(Writer, lang);
 		converter.setGenerateXl(generatexl);
 		converter.setGenerateXlDefinitions(generatexl);
 		converter.processInputStream(filefrom);
+		Set<String> identifiant=converter.getCsModels().keySet();
+		return identifiant;
 	}
 
 
@@ -770,7 +784,9 @@ public class SkosPlayController {
 		// make a log to trace usage
 		String aRandomConcept = Perform.on(r).read(new SparqlQuery(new SparqlQueryBuilder(this, "ReadRandomConcept.rq"))).stringValue();
 		log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+"HTML");
-		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, "dataviz", displayParam, SessionData.get(request.getSession()).getListurl(),"print"));
+
+		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, "datavize", displayParam, SessionData.get(request.getSession()).getListurl(),"print", schemeParam));
+
 		
 		switch(displayType) {
 		case PARTITION : {		
@@ -1073,7 +1089,8 @@ public class SkosPlayController {
 		}
 		}
 
-		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, outputParam, displayParam, SessionData.get(request.getSession()).getListurl(),"print"));
+		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, outputParam, displayParam, SessionData.get(request.getSession()).getListurl(),"print",schemeParam));
+
 		response.flushBuffer();		
 	}
 
