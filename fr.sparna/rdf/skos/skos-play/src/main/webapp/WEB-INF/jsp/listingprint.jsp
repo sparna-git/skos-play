@@ -40,8 +40,10 @@
 					</thead>
 			 </table>
 			 
-			 |<a href="listingconvert"> Listing des conversions </a>|                               
+			 |<a href="listingconvert"> Listing des conversions </a>|<a href="listingprint"> Listing des prints </a>|                             
 			 <br/>
+			 <h1><a>Listing des prints</a></h1>
+			 
 		    <label for="tableconversion"><h4>URLs source des vocabulaires visualisés :</h4></label>
 			<table class="table table-bordered" id="tableconversion">
 			    <thead>
@@ -61,21 +63,7 @@
 			      	
 			    </tbody>
 		    </table>
-		    <table style="margin:auto;">
-			 <tr> 
-			 	<td>
-			 		<a  id="previouslien"  href="?periode=${data.choixperiodelisting}&indexDebut=${data.liste.indexDebut-10}" >
-			 		<button class="btn btn-primary" id="previous"  <c:if test="${data.liste.indexDebut == 0}">disabled="disabled"</c:if>>Précédent</button>
-			 		</a>
-			 	</td>
-			 	
-			  	<td>
-			  		<a id="nextlien" style="margin-left:10px;" href="?periode=${data.choixperiodelisting}&indexDebut=${data.liste.indexDebut+10}">
-			  			<button class="btn btn-primary" id="next" <c:if test="${data.liste.totalLignes <= 10}">disabled="disabled"</c:if>>Suivant</button>
-			  		</a>
-			  	</td>
-			 </tr>
-		    </table> 
+		   
 		    <label for="tableconversion"><h4>Vocabulaires visualisés :</h4></label>
 			<table class="table table-bordered" id="tableconversion">
 			    <thead>
@@ -94,7 +82,23 @@
 			          </c:forEach>
 			      	
 			    </tbody>
-		    </table>     
+		    </table>  
+		    
+		     <table style="margin:auto;">
+			 <tr> 
+			 	<td>
+			 		<a  id="previouslien"  href="?periode=${data.choixperiodelisting}&indexDebut=${data.liste.indexDebut-10}" >
+			 		<button class="btn btn-primary" id="previous"  <c:if test="${data.idliste.indexDebut == 0}">disabled="disabled"</c:if>>Précédent</button>
+			 		</a>
+			 	</td>
+			 	
+			  	<td>
+			  		<a id="nextlien" style="margin-left:10px;" href="?periode=${data.choixperiodelisting}&indexDebut=${data.liste.indexDebut+10}">
+			  			<button class="btn btn-primary" id="next" <c:if test="${data.idliste.totalLignes <= 10}">disabled="disabled"</c:if>>Suivant</button>
+			  		</a>
+			  	</td>
+			 </tr>
+		    </table>    
 		    
 		    
 		</div>

@@ -42,7 +42,9 @@ public class LogData {
 	
 	protected String choixperiodelisting;
 	
-	protected Map<String, Integer> langue;
+	protected Map<String, Integer> convertLangue;
+	
+	protected Map<String, Integer> printLangue;
 	
 	protected ListingData liste;
 	
@@ -81,12 +83,24 @@ public class LogData {
 		return buffer.toString();
 	}
 	
-	public Map<String, Integer> getLangue() {
-		return langue;
+	
+	
+	public Map<String, Integer> getPrintLangue() {
+		return printLangue;
 	}
 
-	public void setLangue(Map<String, Integer> langue) {
-		this.langue =langue;
+	public void setPrintLangue(Map<String, Integer> printLangue) {
+		this.printLangue = printLangue;
+	}
+
+
+
+	public Map<String, Integer> getConvertLangue() {
+		return convertLangue;
+	}
+
+	public void setConvertLangue(Map<String, Integer> langue) {
+		this.convertLangue =langue;
 	}
 
 	public List<HistogrammeData> getHistogrammeData() {

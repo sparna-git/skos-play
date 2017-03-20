@@ -114,9 +114,9 @@
                 <entry key="NumberConvertOrPrintPerDayMonthYear">
 		                <value>
 		                	select jours.periode, nbreconvert, nbreprint 
-		                	from( select distinct _METH_(jour) as periode from statistique ) as jours 
+		                	from( select distinct _METH_ (jour) as periode from statistique  ) as jours 
 		                		left outer join( 
-		                			select count(id) as nbreconvert, _METH_(jour) as laperiode from statistique where type='convert' group by laperiode 
+		                			select count(id) as nbreconvert, _METH_ (jour) as laperiode from statistique where type='convert' group by laperiode 
 		                		)as convert 
 		                		on jours.periode = convert.laperiode  
 		                		left outer join( 
@@ -131,9 +131,14 @@
 		                	select distinct output, count(id) as nombre from statistique where output _diff_ 'null' group by output;
 		                </value>
                 </entry>
-                <entry key="NumberOfLanguage">
+                <entry key="NumberOfConvertLanguage">
 		                <value>
-		                	select distinct langue, count(id) as nombre from statistique group by langue;
+		                	select distinct langue, count(id) as nombre from statistique where type='convert' group by langue;
+		                </value>
+                </entry>
+                <entry key="NumberOfPrintLanguage">
+		                <value>
+		                	select distinct langue, count(id) as nombre from statistique where type='print'  group by langue;
 		                </value>
                 </entry>
                 <entry key="NumberOfRendu">
@@ -175,22 +180,21 @@
                 </entry>
                 <entry key="IdConvertisTotaux">
 		                <value>
-		                	 select count(uri) as nombre from
-
-								(select count (*) as nombre, uri  from statistique where type='convert' and uri  _diff_ ;  
+		        
+							 select count(uri) as nombre from
+		                	 (select distinct uri, count(id) as nombre from statistique where type='convert' and  uri _diff_  ;   
 		                </value>
                 </entry>
                 <entry key="UrlsPrintTotaux">
 		                <value>
-		                	 select count(url) as nombre from
-								(select count (*) as nombre, url from statistique where type='print' and url  _diff_ ;  
+		          
+								select count (url) as nombre,  from statistique where type='print' and url  _diff_ ;  
 		                </value>
                 </entry>
                 <entry key="IdPrintTotaux">
 		                <value>
-		                	 select count(uri) as nombre from
-
-								(select count (*) as nombre, uri  from statistique where type='print' and uri  _diff_ ;  
+		                select count(uri) as nombre from
+		                	 (select distinct uri, count(id) as nombre from statistique where type='print' and  uri _diff_  ;  
 		                </value>
                 </entry>
              

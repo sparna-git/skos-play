@@ -45,7 +45,7 @@
  	            colors: ['#FF7F50','#008B8B'],
  	            is3D: true,
  	            isStacked : true,
- 	            legend : 'top',
+ 	            legend : 'bottom',
 
  	          };
        var chart = new google.visualization.ColumnChart(
@@ -83,14 +83,29 @@
      function drawCamembert3() {
     	 var data = google.visualization.arrayToDataTable(
 			    			 [['TYPE', 'NOMBRE'],
-			    	    		 <c:forEach items="${data.langue}" var="langue">        				
+			    	    		 <c:forEach items="${data.printLangue}" var="langue">        				
 			    	    					["${langue.key}",${langue.value}],
 			    	    		</c:forEach>
 							]);
 			var options = {
                      is3D: true,
+                     title: 'Repartition des langues par print',
         };
-    	var chart = new google.visualization.PieChart(document.getElementById('langue'));
+    	var chart = new google.visualization.PieChart(document.getElementById('langueprint'));
+    	chart.draw(data, options); 
+     }
+     function drawCamembert4() {
+    	 var data = google.visualization.arrayToDataTable(
+			    			 [['TYPE', 'NOMBRE'],
+			    	    		 <c:forEach items="${data.convertLangue}" var="langue">        				
+			    	    					["${langue.key}",${langue.value}],
+			    	    		</c:forEach>
+							]);
+			var options = {
+                     is3D: true,
+                     title: 'Repartition des langues par conversion',
+        };
+    	var chart = new google.visualization.PieChart(document.getElementById('langueconvert'));
     	chart.draw(data, options); 
      }
      
@@ -98,6 +113,7 @@
     	      drawCamembert1();
     	      drawCamembert2();
     	      drawCamembert3();
+    	      drawCamembert4();
 		    }      
 </script>
 </head>
@@ -141,7 +157,12 @@
 				
 					<div id="rendu"   style="align: center; display:inline-block; height: 200px;"></div>	
 				</div>
-				<div id="langue"  style="align: center; width:100%; height: 300px;"></div>
+				<div id="global">
+					<div id="langueprint"  style="align: center; width:100%; height: 300px;"></div>	
+					<div id="langueconvert"  style="align: center; width:100%; height: 300px;"></div>
+				</div>
+				
+				
 				
 		    
  		</div>		
