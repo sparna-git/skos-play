@@ -107,6 +107,21 @@ public class LogController {
 						 listing=dao.getUriConverted(indexDebut,SQLLogComptageDao.Range.YEAR);
 						 data.setIdliste(listing);
 						 break;
+		case TODAY:
+			 
+						 listing=dao.getUrlConverted(SQLLogComptageDao.Range.TODAY);
+						 data.setListe(listing);
+						 listing=dao.getUriConverted(indexDebut,SQLLogComptageDao.Range.TODAY);
+						 data.setIdliste(listing);
+						
+						 break;
+						 
+		case LASTWEEK:
+						 listing=dao.getUrlConverted(SQLLogComptageDao.Range.LASTWEEK);
+						 data.setListe(listing);
+						 listing=dao.getUriConverted(indexDebut,SQLLogComptageDao.Range.LASTWEEK);
+						 data.setIdliste(listing);
+						 break;
 		
 						 
 		}
@@ -152,6 +167,19 @@ public class LogController {
 						 listing=dao.getUrlPrint(SQLLogComptageDao.Range.YEAR);
 						 data.setListe(listing);
 						 listing=dao.getUriPrint(indexDebut,SQLLogComptageDao.Range.YEAR);
+						 data.setIdliste(listing);
+						 break;
+		case TODAY:
+						 listing=dao.getUrlPrint(SQLLogComptageDao.Range.TODAY);
+						 data.setListe(listing);
+						 listing=dao.getUriPrint(indexDebut,SQLLogComptageDao.Range.TODAY);
+						 data.setIdliste(listing);
+						 break;
+						 
+		case LASTWEEK:
+						 listing=dao.getUrlPrint(SQLLogComptageDao.Range.LASTWEEK);
+						 data.setListe(listing);
+						 listing=dao.getUriPrint(indexDebut,SQLLogComptageDao.Range.LASTWEEK);
 						 data.setIdliste(listing);
 						 break;
 		

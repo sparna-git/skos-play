@@ -114,7 +114,7 @@
                 <entry key="NumberConvertOrPrintPerDayMonthYear">
 		                <value>
 		                	select jours.periode, nbreconvert, nbreprint 
-		                	from( select distinct _METH_ (jour) as periode from statistique  ) as jours 
+		                	from( select distinct _METH_ (jour) as periode from statistique  _LIM_ ) as jours 
 		                		left outer join( 
 		                			select count(id) as nbreconvert, _METH_ (jour) as laperiode from statistique where type='convert' group by laperiode 
 		                		)as convert 
@@ -128,22 +128,22 @@
                 </entry>
                 <entry key="NumberOfFormat">
 		                <value>
-		                	select distinct output, count(id) as nombre from statistique where output _diff_ 'null' group by output;
+		                	select distinct output, count(id) as nombre from statistique where output _diff_ 'null' group by output order by nombre desc;
 		                </value>
                 </entry>
                 <entry key="NumberOfConvertLanguage">
 		                <value>
-		                	select distinct langue, count(id) as nombre from statistique where type='convert' group by langue;
+		                	select distinct langue, count(id) as nombre from statistique where type='convert' group by langue order by nombre desc;
 		                </value>
                 </entry>
                 <entry key="NumberOfPrintLanguage">
 		                <value>
-		                	select distinct langue, count(id) as nombre from statistique where type='print'  group by langue;
+		                	select distinct langue, count(id) as nombre from statistique where type='print'  group by langue order by nombre desc;
 		                </value>
                 </entry>
                 <entry key="NumberOfRendu">
 		                <value>
-		                	select distinct rendu, count(id) as nombre from statistique where rendu _diff_ 'null' group by rendu;
+		                	select distinct rendu, count(id) as nombre from statistique where rendu _diff_ 'null' group by rendu order by nombre desc;
 		                </value>
                 </entry>
                 <entry key="Allprintconvert">
@@ -158,7 +158,7 @@
 		                		les jours, voir http://h2-database.66688.n3.nabble.com/Using-arithmetic-with-sysdate-td2088872.html
 		                 -->
 		                <value>
-		                	select type, count(id) as nbre from statistique where JOUR > (NOW() - 365) group by type;
+		                	select type, count(id) as nbre from statistique where JOUR > (NOW() - 365) group by type order by nbre desc;
 		                </value>
                 </entry>
                 

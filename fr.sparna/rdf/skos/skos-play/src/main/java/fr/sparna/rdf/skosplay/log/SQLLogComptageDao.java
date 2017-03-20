@@ -6,8 +6,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import fr.sparna.rdf.skosplay.SkosPlayConfig;
 
 /**
  * Cette classe regroupe tous les comptages pour les conversions et les prints.
@@ -19,6 +25,8 @@ import java.util.Map;
 
 public class SQLLogComptageDao implements LogDaoIfc {
 	
+	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
+	
 	protected DBConnectionManager connections;
 	
 	protected SQLQueryRegistry queryRegistry;
@@ -26,7 +34,9 @@ public class SQLLogComptageDao implements LogDaoIfc {
 	enum Range {
 		ALLTIME,
 		MONTH,
-		YEAR
+		YEAR,
+		TODAY,
+		LASTWEEK
 	}
 	 
 	
@@ -49,7 +59,9 @@ public class SQLLogComptageDao implements LogDaoIfc {
 		try(Connection connection = connections.getDBConnection()){
 			try(Statement stmt = connection.createStatement()) {
 				final String QUERY_ID = "Allprintconvert";
-				ResultSet rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID));
+				String sql = this.queryRegistry.getSQLQuery(QUERY_ID);
+				log.trace(sql);
+				ResultSet rs = stmt.executeQuery(sql);
 
 				while (rs.next()) {
 					resultat.put(rs.getString("type"), rs.getInt("nombre"));
@@ -74,17 +86,24 @@ public class SQLLogComptageDao implements LogDaoIfc {
 			try(Statement stmt = connection.createStatement()) {
 				final String QUERY_ID = "NumberConvertOrPrintPerDayMonthYear";
 				ResultSet rs=null;
+				String sql =null;
+			
 				switch(periodeRange){
 				
 						case ALLTIME:
-									rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_", ""));
+									sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_", "").replaceAll("_LIM_", "where jour <= NOW() LIMIT 30");
+									log.trace(sql);
+									rs = stmt.executeQuery(sql);
 									break;
 						case MONTH:
-									rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_","MONTH"));
+									sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_","MONTH").replaceAll("_LIM_","");
+									log.trace(sql);
+									rs = stmt.executeQuery(sql);
 							
 									break;
 						case YEAR:
-									rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_","YEAR"));
+									sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_","YEAR").replaceAll("_LIM_","");
+									rs = stmt.executeQuery(sql);
 									break;
 							default:
 								break;				
@@ -126,10 +145,10 @@ public class SQLLogComptageDao implements LogDaoIfc {
 	 */
 	public Map<String, Integer> getNumberOfFormat() {
 
-		Map<String, Integer> resultat=new HashMap<String, Integer>();
+		Map<String, Integer> resultat=new LinkedHashMap<String, Integer>();
 
 		String sql = this.queryRegistry.getSQLQuery("NumberOfFormat").replaceAll("_diff_", "<>");
-		
+		log.trace(sql);
 		try(Connection connection = connections.getDBConnection()){
 			try(Statement stmt = connection.createStatement()) {
 				ResultSet rs = stmt.executeQuery(sql);
@@ -150,15 +169,18 @@ public class SQLLogComptageDao implements LogDaoIfc {
 	 */
 	public Map<String, Integer> getNumberOfPrintlanguage() {
 
-		Map<String, Integer> resultat=new HashMap<String, Integer>();
+		Map<String, Integer> resultat=new LinkedHashMap<String, Integer>();
 
 		String sql = this.queryRegistry.getSQLQuery("NumberOfPrintLanguage");
-		
+		log.trace(sql);
 		try(Connection connection = connections.getDBConnection()){
 			try(Statement stmt = connection.createStatement()) {
 				ResultSet rs = stmt.executeQuery(sql);				
 
 				while (rs.next()) {	
+					if(rs.getString("langue").equals("null")){
+						resultat.put("pas de langue", rs.getInt("nombre"));
+					}
 					resultat.put(rs.getString("langue"), rs.getInt("nombre"));
 				}
 			}
@@ -170,15 +192,19 @@ public class SQLLogComptageDao implements LogDaoIfc {
 	}
 	public Map<String, Integer> getNumberOfConvertlanguage() {
 
-		Map<String, Integer> resultat=new HashMap<String, Integer>();
+		Map<String, Integer> resultat=new LinkedHashMap<String, Integer>();
 
 		String sql = this.queryRegistry.getSQLQuery("NumberOfConvertLanguage");
-		
+		log.trace(sql);
 		try(Connection connection = connections.getDBConnection()){
 			try(Statement stmt = connection.createStatement()) {
 				ResultSet rs = stmt.executeQuery(sql);				
 
 				while (rs.next()) {	
+					
+					if(rs.getString("langue").equals("null")){
+						resultat.put("pas de langue", rs.getInt("nombre"));
+					}
 					resultat.put(rs.getString("langue"), rs.getInt("nombre"));
 				}
 			}
@@ -194,12 +220,14 @@ public class SQLLogComptageDao implements LogDaoIfc {
 	 */
 	public Map<String, Integer> getNumberOfRendu() {
 
-		Map<String, Integer> resultat=new HashMap<String, Integer>();
+		Map<String, Integer> resultat=new LinkedHashMap<String, Integer>();
 
 		try(Connection connection = connections.getDBConnection()){
 			try(Statement stmt = connection.createStatement()) {
 				final String QUERY_ID = "NumberOfRendu";
-				ResultSet rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_diff_", "<>"));
+				String sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_diff_", "<>");
+				log.trace(sql);
+				ResultSet rs = stmt.executeQuery(sql);
 
 				while (rs.next()) {	
 					resultat.put(rs.getString("rendu"), rs.getInt("nombre"));
@@ -218,12 +246,14 @@ public class SQLLogComptageDao implements LogDaoIfc {
 	 */
 	public Map<String, Integer> getprintConvertLast365Days() {
 
-		Map<String, Integer> resultat=new HashMap<String, Integer>();
+		Map<String, Integer> resultat=new LinkedHashMap<String, Integer>();
 		
 		try(Connection connection = connections.getDBConnection()){
 			try(Statement stmt = connection.createStatement()) {
 				final String QUERY_ID = "printConvertLast365Days";
-				ResultSet rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID));
+				String sql=this.queryRegistry.getSQLQuery(QUERY_ID);
+				log.trace(sql);
+				ResultSet rs = stmt.executeQuery(sql);
 
 				while (rs.next()) {
 					resultat.put(rs.getString("type"), rs.getInt("nbre"));
@@ -245,7 +275,7 @@ public class SQLLogComptageDao implements LogDaoIfc {
 	
 	public ListingData getUrlConverted( Range periodeRange) {
 
-		Map<String, Integer> resultat=new HashMap<String, Integer>();
+		Map<String, Integer> resultat=new LinkedHashMap<String, Integer>();
 
 		ListingData listing=new ListingData();
 
@@ -253,18 +283,38 @@ public class SQLLogComptageDao implements LogDaoIfc {
 			try(Statement stmt = connection.createStatement()) {
 				final String QUERY_ID = "UrlsConvertis";
 				ResultSet  rs=null;
+				String sql=null;
 				switch(periodeRange) {
 				case ALLTIME:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null'  group by url "));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null'  group by url order by nombre desc");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 							break;
 				case MONTH:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-30)"
-																									+ " group by url "));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-30)"
+									+ " group by url order by nombre desc");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 					
 							break;
 				case YEAR:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-365)"
-																									+ " group by url "));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-365)"
+									+ " group by url order by nombre desc");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
+							break;
+				case TODAY:
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour=(now())"
+									+ " group by url order by nombre desc");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
+					
+							break;
+				case LASTWEEK:
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-7)"
+									+ " group by url order by nombre desc");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 							break;
 				default:
 					break;				
@@ -292,7 +342,7 @@ public class SQLLogComptageDao implements LogDaoIfc {
 	
 	public ListingData getUrlPrint( Range periodeRange) {
 
-		Map<String, Integer> resultat=new HashMap<String, Integer>();
+		Map<String, Integer> resultat=new LinkedHashMap<String, Integer>();
 
 		ListingData listing=new ListingData();
 
@@ -300,19 +350,38 @@ public class SQLLogComptageDao implements LogDaoIfc {
 			try(Statement stmt = connection.createStatement()) {
 				final String QUERY_ID = "UrlsPrint";
 				ResultSet  rs=null;
+				String sql=null;
 				
 				switch(periodeRange) {
 				case ALLTIME:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null'  group by url "));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null'  group by url order by nombre desc");
+							rs = stmt.executeQuery(sql);
 							break;
 				case MONTH:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-30)"
-																									+ " group by url "));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-30)"
+									+ " group by url order by nombre desc");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 					
 							break;
 				case YEAR:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-365)"
-																									+ " group by url "));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-365)"
+									+ " group by url order by nombre desc");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
+							break;
+				case TODAY:
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour=(now())"
+									+ " group by url order by nombre desc");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
+					
+							break;
+				case LASTWEEK:
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-7)"
+									+ " group by url order by nombre desc");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 							break;
 				default:
 					break;				
@@ -431,7 +500,7 @@ public class SQLLogComptageDao implements LogDaoIfc {
 	
 	public ListingData getUriPrint(int indexDebut,Range periodeRange) {
 
-		Map<String, Integer> resultat=new HashMap<String, Integer>();
+		Map<String, Integer> resultat=new LinkedHashMap<String, Integer>();
 
 		ListingData listing=new ListingData();
 
@@ -439,20 +508,41 @@ public class SQLLogComptageDao implements LogDaoIfc {
 			try(Statement stmt = connection.createStatement()) {
 				final String QUERY_ID = "IdPrint";
 				ResultSet  rs=null;
+				String sql=null;
 				switch(periodeRange) {
 				
 				case ALLTIME:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null'  "
-								 + "group by uri LIMIT 10 offset " +(indexDebut)));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null'  "
+									 + "group by uri order by nombre desc LIMIT 10 offset " +(indexDebut));
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 							break;
 				case MONTH:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-30)"
-																									+ " group by uri LIMIT 10 offset " +(indexDebut)));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-30)"
+									+ " group by uri order by nombre desc LIMIT 10 offset " +(indexDebut));
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 					
 							break;
 				case YEAR:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-365)"
-																									+ " group by uri  LIMIT 10 offset " +(indexDebut)));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-365)"
+									+ " group by uri order by nombre desc LIMIT 10 offset " +(indexDebut));
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
+							break;
+							
+				case TODAY:
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour=(now())"
+									+ " group by uri order by nombre desc LIMIT 10 offset " +(indexDebut));
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
+					
+							break;
+				case LASTWEEK:
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-7)"
+									+ " group by uri order by nombre desc LIMIT 10 offset " +(indexDebut));
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 							break;
 				default:
 					break;				
@@ -483,7 +573,7 @@ public class SQLLogComptageDao implements LogDaoIfc {
 	
 	public ListingData getUriConverted(int indexDebut, Range periodeRange) {
 
-		Map<String, Integer> resultat=new HashMap<String, Integer>();
+		Map<String, Integer> resultat=new LinkedHashMap<String, Integer>();
 
 		ListingData listing=new ListingData();
 
@@ -491,20 +581,40 @@ public class SQLLogComptageDao implements LogDaoIfc {
 			try(Statement stmt = connection.createStatement()) {
 				final String QUERY_ID = "IdConvertis";
 				ResultSet  rs=null;
+				String sql=null;
 				switch(periodeRange) {
 				
 				case ALLTIME:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null'  "
-								 + "group by uri LIMIT 10 offset " +(indexDebut)));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null'  "
+									 + "group by uri  order by nombre desc LIMIT 10 offset " +(indexDebut));
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 							break;
 				case MONTH:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-30)"
-																									+ " group by uri LIMIT 10 offset " +(indexDebut)));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-30)"
+									+ " group by uri order by nombre desc LIMIT 10 offset " +(indexDebut));
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 					
 							break;
 				case YEAR:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-365)"
-																									+ " group by uri  LIMIT 10 offset " +(indexDebut)));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-365)"
+									+ " group by uri  order by nombre desc LIMIT 10 offset " +(indexDebut));
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
+							break;
+				case TODAY:
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour=(now())"
+									+ " group by uri order by nombre desc LIMIT 10 offset " +(indexDebut));
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
+					
+							break;
+				case LASTWEEK:
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-7)"
+									+ " group by uri order by nombre desc LIMIT 10 offset " +(indexDebut));
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 							break;
 				default:
 					break;				
@@ -539,18 +649,38 @@ public class SQLLogComptageDao implements LogDaoIfc {
 			try(Statement stmt = connection.createStatement()) {
 				final String QUERY_ID = "IdPrintTotaux";
 				ResultSet  rs=null;
+				String sql=null;
 				switch(periodeRange) {
 				case ALLTIME:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' group by uri)"));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' group by uri)");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 							break;
 				case MONTH:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-30)"
-																									+ " group by uri )"));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-30)"
+									+ " group by uri )");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 					
 							break;
 				case YEAR:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-365)"
-																									+ " group by uri )"));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-365)"
+									+ " group by uri )");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
+							break;
+				case TODAY:
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour=(now())"
+									+ " group by uri )");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
+					
+							break;
+				case LASTWEEK:
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-7)"
+									+ " group by uri )");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 							break;
 				default:
 					break;				
@@ -583,18 +713,38 @@ public class SQLLogComptageDao implements LogDaoIfc {
 			try(Statement stmt = connection.createStatement()) {
 				final String QUERY_ID = "IdConvertisTotaux";
 				ResultSet  rs=null;
+				String sql=null;
 				switch(periodeRange) {
 				case ALLTIME:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' group by uri)"));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' group by uri)");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 							break;
 				case MONTH:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-30)"
-																									+ " group by uri )"));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-30)"
+									+ " group by uri )");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 					
 							break;
 				case YEAR:
-							rs = stmt.executeQuery(this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-365)"
-																									+ " group by uri )"));
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-365)"
+									+ " group by uri )");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
+							break;
+				case TODAY:
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour=(now())"
+									+ " group by uri )");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
+					
+							break;
+				case LASTWEEK:
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_diff_", "<>'null' and jour>(now()-7)"
+									+ " group by uri )");
+							log.trace(sql);
+							rs = stmt.executeQuery(sql);
 							break;
 				default:
 					break;				

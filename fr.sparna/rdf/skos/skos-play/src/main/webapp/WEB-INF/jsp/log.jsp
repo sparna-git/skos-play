@@ -45,7 +45,7 @@
  	            colors: ['#FF7F50','#008B8B'],
  	            is3D: true,
  	            isStacked : true,
- 	            legend : 'bottom',
+ 	            legend : 'top',
 
  	          };
        var chart = new google.visualization.ColumnChart(
@@ -89,7 +89,7 @@
 							]);
 			var options = {
                      is3D: true,
-                     title: 'Repartition des langues par print',
+                     title: 'Repartition des langues pour les print/visualize',
         };
     	var chart = new google.visualization.PieChart(document.getElementById('langueprint'));
     	chart.draw(data, options); 
@@ -103,7 +103,7 @@
 							]);
 			var options = {
                      is3D: true,
-                     title: 'Repartition des langues par conversion',
+                     title: 'Repartition des langues pour les conversions',
         };
     	var chart = new google.visualization.PieChart(document.getElementById('langueconvert'));
     	chart.draw(data, options); 
@@ -150,7 +150,7 @@
 				<c:forEach items="${data.printConvertLast365Days}" var="liste">        				
 			    	 ${liste.value}  ${liste.key} |
 			    </c:forEach>
-		    </p>
+		    </p><br/>
 		   	<h4><a style="text-decoration: underline;"><em>Statistiques globales sur les rendus</em></a></h4>
 				<div id="global">
 					<div id="format"  style="align:center; display:inline-block; height: 200px;"></div>

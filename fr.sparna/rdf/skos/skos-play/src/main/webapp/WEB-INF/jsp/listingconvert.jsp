@@ -37,8 +37,10 @@
 					<thead>
 						  <tr>
 						     <th><a href="?periode=alltime&indexdebut=0"  <c:if test="${data.choixperiodelisting == 'alltime'}">Style="color:green;"</c:if>>tout le temps</a></th>
+						     <th><a href="?periode=lastweek&indexdebut=0"  <c:if test="${data.choixperiodelisting == 'lastweek'}">Style="color:green;"</c:if>>dernière semaine</a></th>
 						     <th><a href="?periode=month&indexdebut=0"<c:if test="${data.choixperiodelisting == 'month'}">Style="color:green;"</c:if>>dernier mois</a></th>
 						     <th><a href="?periode=year&indexdebut=0" <c:if test="${data.choixperiodelisting == 'year'}">Style="color:green;"</c:if>>dernière année</a></th>
+						     <th><a href="?periode=today&indexdebut=0" <c:if test="${data.choixperiodelisting == 'today'}">Style="color:green;"</c:if>>aujourd'hui</a></th>
 						     </tr>
 					</thead>
 			 </table>
