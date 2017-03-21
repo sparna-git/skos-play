@@ -26,10 +26,11 @@
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	
     <script type="text/javascript">
-     
-	 google.charts.load('current', {'packages': ['table','corechart']});	 
+    
+	 google.charts.load('current', {'packages': ['table','corechart']});
 	 google.charts.setOnLoadCallback(drawHistogramme);
 	 google.charts.setOnLoadCallback(drawCamembert);
+	
 	 
      function drawHistogramme() {
    	  var data = new google.visualization.DataTable();
@@ -48,12 +49,28 @@
  	            legend : 'top',
 
  	          };
-       var chart = new google.visualization.ColumnChart(
-           document.getElementById('histogramme'));
+   	   var chart = new google.visualization.ColumnChart(document.getElementById('histogramme'));
        chart.draw(view, options);
-      
-     }     
-
+       
+       google.visualization.events.addListener(chart, 'select', function() {
+    	   var selection = chart.getSelection();
+    	   
+    	   for (var i = 0; i < selection.length; i++) {
+    		    var item = selection[i];
+    		    if (item.row != null && item.column != null) {
+    		    	 var jour = data.getValue(item.row,0);
+    		    	 if(item.column===1){
+    		    		 location.href = 'http://localhost:8080/skos-play/listingprint?periode=alltime&indexDebut=0&jour='+jour; 
+    		    	 }else if(item.column===2){
+    		    		 location.href = 'http://localhost:8080/skos-play/listingconvert?periode=alltime&indexDebut=0&jour='+jour; 
+    		    	 }
+    		    
+    		    }
+    		  }
+    		  
+       });  
+    }     
+     
      function drawCamembert1() {
     	 var data = google.visualization.arrayToDataTable(
 			    			 [['TYPE', 'NOMBRE'],
@@ -122,10 +139,9 @@
 		<div class="container">
 			<%-- see http://stackoverflow.com/questions/19150683/passing-parameters-to-another-jsp-file-in-jspinclude --%>
 			<jsp:include page="header.jsp"/>
-					 	<a href="listingconvert">Listing des conversions </a>| 
-						<a href="listingprint"> Listing des prints</a>
-						 
+					 
 				<div class="col-sm-7 navbar-fixed-left" style="margin-top:10px;" >
+					<a href="log"> Résumé des logs</a>|<a href="listingconvert">Listing des conversions </a>|<a href="listingprint"> Listing des prints</a><br/><br/>
 					<form method="post" action="log" name="formulaire">
 						 <label for="satistique">Choix de la période</label>	
 						 <select style=" width:20%;" name="statistique" class="fixed-left" id="statistique">
@@ -136,7 +152,7 @@
 						 <button class="btn btn-default " type="submit">Valider</button>
 						 
 					</form>			
-				</div>
+				</div><br/>
 			    
 				
 			<div id="histogramme"  style="align: center;  margin-top:70px; width:100%; height: 300px;"></div><br/>

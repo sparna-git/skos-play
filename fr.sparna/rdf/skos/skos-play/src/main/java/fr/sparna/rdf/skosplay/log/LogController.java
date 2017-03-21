@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import fr.sparna.rdf.skosplay.SkosPlayConfig;
+import fr.sparna.rdf.skosplay.log.SQLLogComptageDao.Range;
 
 /**
  *  Controller 
@@ -37,8 +38,8 @@ public class LogController {
 		LogData data = new LogData();
 		SQLLogComptageDao dao = new SQLLogComptageDao(SkosPlayConfig.getInstance().getSqlDb(),SkosPlayConfig.getInstance().getSqlQueryRegistry());
 		data.setFormat(dao.getNumberOfFormat());
-		data.setPrintLangue(dao.getNumberOfPrintlanguage());
-		data.setConvertLangue(dao.getNumberOfConvertlanguage());
+		data.setPrintLangue(dao.getNumberOfPrintOrConvertLanguage("print"));
+		data.setConvertLangue(dao.getNumberOfPrintOrConvertLanguage("convert"));
 		data.setRendu(dao.getNumberOfRendu());
 		data.setAllprintAndConvert(dao.ListAllLog());
 		data.setPrintConvertLast365Days(dao.getprintConvertLast365Days());
@@ -47,28 +48,24 @@ public class LogController {
 		switch(periode)
 		{
 			case ALLTIME:
-							data.setHistogrammeData(dao.getNumberConvertOrPrintPerDayMonthYear(SQLLogComptageDao.Range.ALLTIME));
-							data.setHistogrammeRange(LogData.Range.DAY);
-							data.setChoixperiode("alltime");
+							log(data,LogData.Range.DAY, dao,SQLLogComptageDao.Range.ALLTIME,choixPeriode);
 							break;
 			case MONTH:
-							data.setHistogrammeData(dao.getNumberConvertOrPrintPerDayMonthYear(SQLLogComptageDao.Range.MONTH));
-							data.setHistogrammeRange(LogData.Range.MONTH);
-							data.setChoixperiode("month");
+							log(data,LogData.Range.MONTH, dao,SQLLogComptageDao.Range.MONTH,choixPeriode);
 							break;
 			case YEAR:
-							data.setHistogrammeData(dao.getNumberConvertOrPrintPerDayMonthYear(SQLLogComptageDao.Range.YEAR));
-							data.setHistogrammeRange(LogData.Range.YEAR);
-							data.setChoixperiode("year");
+							log(data,LogData.Range.YEAR, dao,SQLLogComptageDao.Range.YEAR,choixPeriode);
 							break;		
 		}
 		
 		return new ModelAndView("log", LogData.KEY, data);
 	}	
+	
 	@RequestMapping(value = "/listingconvert")
 	public ModelAndView listing(
-			@RequestParam(value="indexdebut", required=false, defaultValue="0") int indexDebut,
+			@RequestParam(value="indexDebut", required=false, defaultValue="0") int indexDebut,
 			@RequestParam(value="periode", required=false, defaultValue="alltime") String periode,
+			@RequestParam(value="jour", required=false, defaultValue="default") String jour,
 			// the request
 			HttpServletRequest request,
 			// the response
@@ -77,7 +74,9 @@ public class LogController {
 
 
 		LogData data = new LogData();
-		ListingData listing;
+		ListingData listing=null;
+		data.setIndex(indexDebut);
+		data.setJour(jour);
 		data.setChoixperiodelisting(periode);
 		SQLLogComptageDao dao=new SQLLogComptageDao(SkosPlayConfig.getInstance().getSqlDb(),SkosPlayConfig.getInstance().getSqlQueryRegistry());
 		SQLLogComptageDao.Range periodes=SQLLogComptageDao.Range.valueOf(periode.toUpperCase());
@@ -85,44 +84,21 @@ public class LogController {
 		switch(periodes){
 		
 		case ALLTIME:
-						
-						listing=dao.getUrlConverted(SQLLogComptageDao.Range.ALLTIME);
-						data.setListe(listing);
-						listing=dao.getUriConverted(indexDebut,SQLLogComptageDao.Range.ALLTIME);
-						data.setIdliste(listing);
-						
+						listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.ALLTIME, indexDebut,jour,"convert");
 						break;
 		case MONTH:
-						 
-						 listing=dao.getUrlConverted(SQLLogComptageDao.Range.MONTH);
-						 data.setListe(listing);
-						 listing=dao.getUriConverted(indexDebut,SQLLogComptageDao.Range.MONTH);
-						 data.setIdliste(listing);
-						
-						 break;
+						listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.ALLTIME, indexDebut,jour,"convert");;						
+						break;
 						 
 		case YEAR:
-						 listing=dao.getUrlConverted(SQLLogComptageDao.Range.YEAR);
-						 data.setListe(listing);
-						 listing=dao.getUriConverted(indexDebut,SQLLogComptageDao.Range.YEAR);
-						 data.setIdliste(listing);
-						 break;
+						listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.ALLTIME, indexDebut,jour,"convert");
+						break;
 		case TODAY:
-			 
-						 listing=dao.getUrlConverted(SQLLogComptageDao.Range.TODAY);
-						 data.setListe(listing);
-						 listing=dao.getUriConverted(indexDebut,SQLLogComptageDao.Range.TODAY);
-						 data.setIdliste(listing);
-						
-						 break;
-						 
+						listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.ALLTIME, indexDebut,jour,"convert");
+						break;
 		case LASTWEEK:
-						 listing=dao.getUrlConverted(SQLLogComptageDao.Range.LASTWEEK);
-						 data.setListe(listing);
-						 listing=dao.getUriConverted(indexDebut,SQLLogComptageDao.Range.LASTWEEK);
-						 data.setIdliste(listing);
-						 break;
-		
+						listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.ALLTIME, indexDebut,jour,"convert");
+						break;
 						 
 		}
 	
@@ -132,8 +108,9 @@ public class LogController {
 
 	@RequestMapping(value = "/listingprint")
 	public ModelAndView listingprint(
-			@RequestParam(value="indexdebut", required=false, defaultValue="0") int indexDebut,
+			@RequestParam(value="indexDebut", required=false, defaultValue="0") Integer indexDebut,
 			@RequestParam(value="periode", required=false, defaultValue="alltime") String periode,
+			@RequestParam(value="jour", required=false, defaultValue="default") String jour,
 			// the request
 			HttpServletRequest request,
 			// the response
@@ -142,7 +119,9 @@ public class LogController {
 
 
 		LogData data = new LogData();
-		ListingData listing;
+		ListingData listing=null;
+		data.setJour(jour);
+		data.setIndex(indexDebut);
 		data.setChoixperiodelisting(periode);
 		SQLLogComptageDao dao=new SQLLogComptageDao(SkosPlayConfig.getInstance().getSqlDb(),SkosPlayConfig.getInstance().getSqlQueryRegistry());
 		SQLLogComptageDao.Range periodes=SQLLogComptageDao.Range.valueOf(periode.toUpperCase());
@@ -150,45 +129,60 @@ public class LogController {
 		switch(periodes){
 		
 		case ALLTIME:
-						 listing=dao.getUrlPrint(SQLLogComptageDao.Range.ALLTIME);
-						 data.setListe(listing);
-						 listing=dao.getUriPrint(indexDebut,SQLLogComptageDao.Range.ALLTIME);
-						 data.setIdliste(listing);
-						
+						 listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.ALLTIME, indexDebut,jour,"print");
 						 break;
 		case MONTH:
-						 listing=dao.getUrlPrint(SQLLogComptageDao.Range.MONTH);
-						 data.setListe(listing);
-						 listing=dao.getUriPrint(indexDebut,SQLLogComptageDao.Range.MONTH);
-						 data.setIdliste(listing);
+						 listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.MONTH,indexDebut,jour,"print");
 						 break;
 						 
 		case YEAR:
-						 listing=dao.getUrlPrint(SQLLogComptageDao.Range.YEAR);
-						 data.setListe(listing);
-						 listing=dao.getUriPrint(indexDebut,SQLLogComptageDao.Range.YEAR);
-						 data.setIdliste(listing);
+						 listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.YEAR,indexDebut,jour,"print");
 						 break;
 		case TODAY:
-						 listing=dao.getUrlPrint(SQLLogComptageDao.Range.TODAY);
-						 data.setListe(listing);
-						 listing=dao.getUriPrint(indexDebut,SQLLogComptageDao.Range.TODAY);
-						 data.setIdliste(listing);
+						 listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.TODAY,indexDebut,jour,"print");
 						 break;
 						 
 		case LASTWEEK:
-						 listing=dao.getUrlPrint(SQLLogComptageDao.Range.LASTWEEK);
-						 data.setListe(listing);
-						 listing=dao.getUriPrint(indexDebut,SQLLogComptageDao.Range.LASTWEEK);
-						 data.setIdliste(listing);
+						 listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.LASTWEEK,indexDebut,jour,"print");
 						 break;
-		
 						 
 		}
-		
-
 		return new ModelAndView("listingprint", LogData.KEY, data);
 	}
-
-
+	
+	/**
+	 * retourne le listing des conversion ou print pour une periode donnée
+	 * @param listing
+	 * @param data
+	 * @param dao
+	 * @param periode
+	 * @param indexDebut
+	 */
+	public void listingConvertPrint(ListingData listing, LogData data, SQLLogComptageDao dao, Range periode, int indexDebut, String jour, String type){
+		
+		if(type.equals("convert")){
+			listing=dao.getConvertedOrPrintUrl(periode, jour,"convert");
+			data.setListe(listing);
+			listing=dao.getConvertOrPrintUri(indexDebut,periode,jour,"convert");
+			data.setIdliste(listing);
+		}else if(type.equals("print")){
+			listing=dao.getConvertedOrPrintUrl(periode, jour,"print");
+			data.setListe(listing);
+			listing=dao.getConvertOrPrintUri(indexDebut,periode,jour,"print");
+			data.setIdliste(listing);
+		}
+	}
+	/**
+	 * retourne les logs d'une periode donnée
+	 * @param data
+	 * @param dao
+	 * @param periode
+	 */
+	public void log(LogData data, LogData.Range periodeRange, SQLLogComptageDao dao, Range periodeHisto, String choix){
+		
+		data.setHistogrammeData(dao.getNumberConvertOrPrintPerDayMonthYear(periodeHisto));
+		data.setHistogrammeRange(periodeRange);
+		data.setChoixperiode(choix); 
+		
+	}
 }

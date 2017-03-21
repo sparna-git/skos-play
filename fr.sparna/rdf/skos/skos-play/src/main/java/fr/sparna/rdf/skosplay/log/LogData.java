@@ -40,6 +40,8 @@ public class LogData {
 	
 	protected String choixperiode;
 	
+	protected Integer index;
+	
 	protected String choixperiodelisting;
 	
 	protected Map<String, Integer> convertLangue;
@@ -49,6 +51,8 @@ public class LogData {
 	protected ListingData liste;
 	
 	protected ListingData idliste;
+	
+	protected String jour;
 	
 
 	
@@ -167,6 +171,16 @@ public class LogData {
 		this.choixperiode = choixperiode;
 	}
 
+	public Integer getIndex() {
+		return index;
+	}
+
+
+
+	public void setIndex(Integer index) {
+		this.index = index;
+	}
+	
 	public Map<String, Integer> getUrlsConverted() {
 		return urlsConverted;
 	}
@@ -206,6 +220,15 @@ public class LogData {
 	public void setIdliste(ListingData idliste) {
 		this.idliste = idliste;
 	}
+
+	public String getJour() {
+		return jour;
+	}
+
+	public void setJour(String jour) {
+		this.jour = jour;
+	}
+	
 	
 	
 	
