@@ -53,7 +53,6 @@ public class LogData {
 	protected ListingData idliste;
 	
 	protected String jour;
-	
 
 	
 	public String getJsonHistogrammeData() {

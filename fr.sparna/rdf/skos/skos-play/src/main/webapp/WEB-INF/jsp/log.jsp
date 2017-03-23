@@ -54,16 +54,21 @@
        
        google.visualization.events.addListener(chart, 'select', function() {
     	   var selection = chart.getSelection();
-    	   
     	   for (var i = 0; i < selection.length; i++) {
     		    var item = selection[i];
     		    if (item.row != null && item.column != null) {
     		    	 var jour = data.getValue(item.row,0);
-    		    	 if(item.column===1){
-    		    		 location.href = 'http://localhost:8080/skos-play/listingprint?periode=alltime&indexDebut=0&jour='+jour; 
-    		    	 }else if(item.column===2){
-    		    		 location.href = 'http://localhost:8080/skos-play/listingconvert?periode=alltime&indexDebut=0&jour='+jour; 
+    		    	 
+    		    	 if(jour.includes('-')){
+    		    		
+    		    		 if(item.column===1){
+        		    		 location.href = "listingprint?periode=alltime&indexDebut=0&jour="+jour; 
+        		    	 }else if(item.column===2){
+        		    		 location.href = "listingconvert?periode=alltime&indexDebut=0&jour="+jour; 
+        		    	 }
+    		    		 
     		    	 }
+    		    	 
     		    
     		    }
     		  }
