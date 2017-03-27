@@ -26,10 +26,11 @@
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	
     <script type="text/javascript">
-     
-	 google.charts.load('current', {'packages': ['table','corechart']});	 
+    
+	 google.charts.load('current', {'packages': ['table','corechart']});
 	 google.charts.setOnLoadCallback(drawHistogramme);
 	 google.charts.setOnLoadCallback(drawCamembert);
+	
 	 
      function drawHistogramme() {
    	  var data = new google.visualization.DataTable();
@@ -48,12 +49,33 @@
  	            legend : 'top',
 
  	          };
-       var chart = new google.visualization.ColumnChart(
-           document.getElementById('histogramme'));
+   	   var chart = new google.visualization.ColumnChart(document.getElementById('histogramme'));
        chart.draw(view, options);
-      
-     }     
-
+       
+       google.visualization.events.addListener(chart, 'select', function() {
+    	   var selection = chart.getSelection();
+    	   for (var i = 0; i < selection.length; i++) {
+    		    var item = selection[i];
+    		    if (item.row != null && item.column != null) {
+    		    	 var jour = data.getValue(item.row,0);
+    		    	 
+    		    	 if(jour.includes('-')){
+    		    		
+    		    		 if(item.column===1){
+        		    		 location.href = "listingprint?periode=alltime&indexDebut=0&jour="+jour; 
+        		    	 }else if(item.column===2){
+        		    		 location.href = "listingconvert?periode=alltime&indexDebut=0&jour="+jour; 
+        		    	 }
+    		    		 
+    		    	 }
+    		    	 
+    		    
+    		    }
+    		  }
+    		  
+       });  
+    }     
+     
      function drawCamembert1() {
     	 var data = google.visualization.arrayToDataTable(
 			    			 [['TYPE', 'NOMBRE'],
@@ -83,14 +105,29 @@
      function drawCamembert3() {
     	 var data = google.visualization.arrayToDataTable(
 			    			 [['TYPE', 'NOMBRE'],
-			    	    		 <c:forEach items="${data.langue}" var="langue">        				
+			    	    		 <c:forEach items="${data.printLangue}" var="langue">        				
 			    	    					["${langue.key}",${langue.value}],
 			    	    		</c:forEach>
 							]);
 			var options = {
                      is3D: true,
+                     title: 'Repartition des langues pour les print/visualize',
         };
-    	var chart = new google.visualization.PieChart(document.getElementById('langue'));
+    	var chart = new google.visualization.PieChart(document.getElementById('langueprint'));
+    	chart.draw(data, options); 
+     }
+     function drawCamembert4() {
+    	 var data = google.visualization.arrayToDataTable(
+			    			 [['TYPE', 'NOMBRE'],
+			    	    		 <c:forEach items="${data.convertLangue}" var="langue">        				
+			    	    					["${langue.key}",${langue.value}],
+			    	    		</c:forEach>
+							]);
+			var options = {
+                     is3D: true,
+                     title: 'Repartition des langues pour les conversions',
+        };
+    	var chart = new google.visualization.PieChart(document.getElementById('langueconvert'));
     	chart.draw(data, options); 
      }
      
@@ -98,6 +135,7 @@
     	      drawCamembert1();
     	      drawCamembert2();
     	      drawCamembert3();
+    	      drawCamembert4();
 		    }      
 </script>
 </head>
@@ -106,10 +144,9 @@
 		<div class="container">
 			<%-- see http://stackoverflow.com/questions/19150683/passing-parameters-to-another-jsp-file-in-jspinclude --%>
 			<jsp:include page="header.jsp"/>
-					 	<a href="listingconvert">Listing des conversions </a>| 
-						<a href="listingprint"> Listing des prints</a>
-						 
+					 
 				<div class="col-sm-7 navbar-fixed-left" style="margin-top:10px;" >
+					<a href="log"> Résumé des logs</a>|<a href="listingconvert">Listing des conversions </a>|<a href="listingprint"> Listing des prints</a><br/><br/>
 					<form method="post" action="log" name="formulaire">
 						 <label for="satistique">Choix de la période</label>	
 						 <select style=" width:20%;" name="statistique" class="fixed-left" id="statistique">
@@ -120,7 +157,7 @@
 						 <button class="btn btn-default " type="submit">Valider</button>
 						 
 					</form>			
-				</div>
+				</div><br/>
 			    
 				
 			<div id="histogramme"  style="align: center;  margin-top:70px; width:100%; height: 300px;"></div><br/>
@@ -134,14 +171,19 @@
 				<c:forEach items="${data.printConvertLast365Days}" var="liste">        				
 			    	 ${liste.value}  ${liste.key} |
 			    </c:forEach>
-		    </p>
+		    </p><br/>
 		   	<h4><a style="text-decoration: underline;"><em>Statistiques globales sur les rendus</em></a></h4>
 				<div id="global">
 					<div id="format"  style="align:center; display:inline-block; height: 200px;"></div>
 				
 					<div id="rendu"   style="align: center; display:inline-block; height: 200px;"></div>	
 				</div>
-				<div id="langue"  style="align: center; width:100%; height: 300px;"></div>
+				<div id="global">
+					<div id="langueprint"  style="align: center; width:100%; height: 300px;"></div>	
+					<div id="langueconvert"  style="align: center; width:100%; height: 300px;"></div>
+				</div>
+				
+				
 				
 		    
  		</div>		

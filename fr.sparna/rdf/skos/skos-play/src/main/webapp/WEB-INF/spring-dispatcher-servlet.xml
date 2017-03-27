@@ -114,9 +114,9 @@
                 <entry key="NumberConvertOrPrintPerDayMonthYear">
 		                <value>
 		                	select jours.periode, nbreconvert, nbreprint 
-		                	from( select distinct _METH_(jour) as periode from statistique ) as jours 
+		                	from( select distinct _METH_ (jour) as periode from statistique  _LIM_ ) as jours 
 		                		left outer join( 
-		                			select count(id) as nbreconvert, _METH_(jour) as laperiode from statistique where type='convert' group by laperiode 
+		                			select count(id) as nbreconvert, _METH_ (jour) as laperiode from statistique where type='convert' group by laperiode 
 		                		)as convert 
 		                		on jours.periode = convert.laperiode  
 		                		left outer join( 
@@ -128,17 +128,22 @@
                 </entry>
                 <entry key="NumberOfFormat">
 		                <value>
-		                	select distinct output, count(id) as nombre from statistique where output _diff_ 'null' group by output;
+		                	select distinct output, count(id) as nombre from statistique where output _diff_ 'null' group by output order by nombre desc;
 		                </value>
                 </entry>
-                <entry key="NumberOfLanguage">
+                <entry key="NumberOfConvertLanguage">
 		                <value>
-		                	select distinct langue, count(id) as nombre from statistique group by langue;
+		                	select distinct langue, count(id) as nombre from statistique where type='convert' group by langue order by nombre desc;
+		                </value>
+                </entry>
+                <entry key="NumberOfPrintLanguage">
+		                <value>
+		                	select distinct langue, count(id) as nombre from statistique where type='print'  group by langue order by nombre desc;
 		                </value>
                 </entry>
                 <entry key="NumberOfRendu">
 		                <value>
-		                	select distinct rendu, count(id) as nombre from statistique where rendu _diff_ 'null' group by rendu;
+		                	select distinct rendu, count(id) as nombre from statistique where rendu _diff_ 'null' group by rendu order by nombre desc;
 		                </value>
                 </entry>
                 <entry key="Allprintconvert">
@@ -153,55 +158,44 @@
 		                		les jours, voir http://h2-database.66688.n3.nabble.com/Using-arithmetic-with-sysdate-td2088872.html
 		                 -->
 		                <value>
-		                	select type, count(id) as nbre from statistique where JOUR > (NOW() - 365) group by type;
+		                	select type, count(id) as nbre from statistique where JOUR > (NOW() - 365) group by type order by nbre desc;
 		                </value>
                 </entry>
                 
                 <entry key="UrlsConvertis">
 		                <value>
-		                	 select distinct url, count(id) as nombre from statistique where type='convert' and url  _diff_ ;  
+		                	 select distinct url, count(id) as nombre from statistique where type='convert' and  url &lt;&gt;'null'  _DAY_  group by url order by nombre desc;   
+		                </value>
+                </entry>
+                <entry key="UrlsPrint">
+		                <value>
+		                	select distinct url, count(id) as nombre from statistique where type='print' and  url &lt;&gt;'null'  _DAY_  group by url order by nombre desc; 
 		                </value>
                 </entry>
                 <entry key="IdConvertis">
 		                <value>
-		                	 select distinct uri, count(id) as nombre from statistique where type='convert' and uri  _diff_ ;  
+		                	 select distinct uri, count(id) as nombre from statistique where type='convert' and  uri  &lt;&gt;'null'  _DAY_  group by uri order by nombre desc LIMIT 10 offset _OFFSET_;  
 		                </value>
                 </entry>
-                <entry key="UrlsConvertisTotaux">
-		                <value>
-		                	 select count(url) as nombre from
-								(select count (*) as nombre, url from statistique where type='convert' and url  _diff_ ;  
-		                </value>
-                </entry>
+                
                 <entry key="IdConvertisTotaux">
 		                <value>
-		                	 select count(uri) as nombre from
-
-								(select count (*) as nombre, uri  from statistique where type='convert' and uri  _diff_ ;  
+		        
+							 select count(uri) as nombre from
+		                	 (select distinct uri, count(id) as nombre from statistique where type='convert' and   uri  &lt;&gt;'null' _DAY_  group by uri);   
 		                </value>
                 </entry>
-                <entry key="UrlsPrintTotaux">
-		                <value>
-		                	 select count(url) as nombre from
-								(select count (*) as nombre, url from statistique where type='print' and url  _diff_ ;  
-		                </value>
-                </entry>
+               
                 <entry key="IdPrintTotaux">
 		                <value>
-		                	 select count(uri) as nombre from
-
-								(select count (*) as nombre, uri  from statistique where type='print' and uri  _diff_ ;  
+		                select count(uri) as nombre from
+		                	 (select distinct uri, count(id) as nombre from statistique where type='print' and  uri &lt;&gt;'null' _DAY_  group by uri) ;  
 		                </value>
                 </entry>
              
-                <entry key="UrlsPrint">
-		                <value>
-		                	select distinct url, count(id) as nombre from statistique where type='print' and  url  _diff_ ; 
-		                </value>
-                </entry>
                 <entry key="IdPrint">
 		                <value>
-		                	select distinct uri, count(id) as nombre from statistique where type='print' and  uri  _diff_ ; 
+		                	select distinct uri, count(id) as nombre from statistique where type='print' and  uri  &lt;&gt;'null'  _DAY_  group by uri order by nombre desc LIMIT 10 offset _OFFSET_; 
 		                </value>
                 </entry>
             </map>

@@ -30,21 +30,72 @@
          
 		 <div class="container">
 		 	<jsp:include page="header.jsp"/>
-		 	<h2>Listing globale</h2><br/>
-		 	
+		 	<a href="log"> Résumé des logs</a>|
+					 	<a href="listingconvert">Listing des conversions </a>| 
+						<a href="listingprint"> Listing des prints</a>
 			        
 			 <table  style="margin:auto;" class="table table-condensed">
 					<thead>
 						  <tr>
-						     <th><a href="?periode=alltime&indexdebut=0"  <c:if test="${data.choixperiodelisting == 'alltime'}">Style="color:green;"</c:if>>tout le temps</a></th>
-						     <th><a href="?periode=month&indexdebut=0"<c:if test="${data.choixperiodelisting == 'month'}">Style="color:green;"</c:if>>dernier mois</a></th>
-						     <th><a href="?periode=year&indexdebut=0" <c:if test="${data.choixperiodelisting == 'year'}">Style="color:green;"</c:if>>dernière année</a></th>
-						     </tr>
+						     <th>
+						     	<a href="?periode=alltime&indexDebut=0"  <c:if test="${data.choixperiodelisting == 'alltime'}">Style="color:green;"</c:if>>tout le temps</a>
+						     </th>
+						     <th>
+						     	<a href="?periode=year&indexDebut=0" <c:if test="${data.choixperiodelisting == 'year'}">Style="color:green;"</c:if>>dernière année</a>
+						     </th>
+						     <th>
+						     	<a href="?periode=month&indexDebut=0"<c:if test="${data.choixperiodelisting == 'month'}">Style="color:green;"</c:if>>dernier mois</a>
+						     </th>
+						     <th>
+						     	<a href="?periode=lastweek&indexDebut=0"  <c:if test="${data.choixperiodelisting == 'lastweek'}">Style="color:green;"</c:if>>dernière semaine</a>
+						     </th>
+						     <th>
+						     	<a href="?periode=today&indexDebut=0" <c:if test="${data.choixperiodelisting == 'today'}">Style="color:green;"</c:if>>aujourd'hui</a>
+						     </th>
+						 </tr>
 					</thead>
 			 </table>
 			 
-			 |<a href="listingprint"> Listing des prints </a>|                                
-			 <br/>
+			 <h1>
+				 <a>
+				 	<c:if test="${data.jour == 'default'}">Listing des conversions</c:if>
+				 	<c:if test="${data.jour != 'default'}">Listing des conversions pour le ${data.jour}</c:if>
+				 </a>
+			 </h1>
+			 <label for="tableconversion"><h4>Vocabulaires convertis :</h4></label>
+			<table class="table table-bordered" id="tableconversion">
+			    <thead>
+			      <tr>
+			        <th>Identifiant du vocabulaire</th>
+			        <th>Conversions</th>
+			      </tr>
+			    </thead>
+			    <tbody>
+			    					    		
+			    	  <c:forEach items="${data.idliste.idlist}" var="liste">        				
+			    	 		<tr>
+					      		<td>${liste.key} </td>
+					      		<td>${liste.value}</td>
+					      	</tr>
+			          </c:forEach>
+			      	
+			    </tbody>
+		    </table> 
+		     <table style="margin:auto;">
+			 <tr> 
+			 	<td>
+				 	<a id="previouslien" href="?periode=${data.choixperiodelisting}&indexDebut=${data.index -10}&jour=${data.jour}" >
+				 	<button class="btn btn-primary" id="previous"  <c:if test="${data.index==0}"> disabled="disabled"</c:if>>Précédent</button>
+			 		</a>
+			 	</td>
+			 	
+			  	<td>
+			  		<a id="nextlien" style="margin-left:10px;" href="?periode=${data.choixperiodelisting}&indexDebut=${data.index + 10}&jour=${data.jour}">
+			  			<button class="btn btn-primary" id="next" <c:if test="${data.idliste.totalLignes <= 10}">disabled="disabled"</c:if>>Suivant</button>
+			  		</a>
+			  	</td>
+			 </tr>
+		    </table>   
 			<label for="tableconversion"><h4>URLs des fichiers convertis :</h4></label>
 			<table class="table table-bordered" id="tableconversion">
 			    <thead>
@@ -64,41 +115,6 @@
 			      	
 			    </tbody>
 		    </table>
-		    <table style="margin:auto;">
-			 <tr> 
-			 	<td>
-				 	<a id="previouslien" href="?periode=${data.choixperiodelisting}&indexDebut=${data.liste.indexDebut-10}" >
-				 		<button class="btn btn-primary" id="previous"<c:if test="${data.liste.indexDebut == 0}">disabled="disabled"</c:if>>Précédent</button>
-				 	</a>
-			 	</td>
-			 	
-			  	<td>
-			  		<a id="nextlien" style="margin-left:10px;" href="?periode=${data.choixperiodelisting}&indexDebut=${data.liste.indexDebut+10}">
-			  			<button class="btn btn-primary" id="next" <c:if test="${data.liste.totalLignes <= 10}">disabled="disabled"</c:if>>Suivant</button>
-			  		</a>
-			  	</td>
-			 </tr>
-		    </table>
-		    <label for="tableconversion"><h4>Vocabulaires convertis :</h4></label>
-			<table class="table table-bordered" id="tableconversion">
-			    <thead>
-			      <tr>
-			        <th>Identifiant du vocabulaire</th>
-			        <th>Conversions</th>
-			      </tr>
-			    </thead>
-			    <tbody>
-			    					    		
-			    	  <c:forEach items="${data.idliste.idlist}" var="liste">        				
-			    	 		<tr>
-					      		<td>${liste.key} </td>
-					      		<td>${liste.value}</td>
-					      	</tr>
-			          </c:forEach>
-			      	
-			    </tbody>
-		    </table>     
-		    
 		</div>
 </body>
 </html>

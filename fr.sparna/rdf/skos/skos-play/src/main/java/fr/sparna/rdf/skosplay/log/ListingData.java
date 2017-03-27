@@ -15,8 +15,6 @@ public class ListingData {
 	
 	protected Map<String, Integer> idlist;
 	
-	protected Integer indexDebut;
-	
 	protected String periode;
 	
 	protected Integer totalLignes;
@@ -31,14 +29,6 @@ public class ListingData {
 
 	public void setData(Map<String, Integer> data) {
 		this.data = data;
-	}
-
-	public Integer getIndexDebut() {
-		return indexDebut;
-	}
-
-	public void setIndexDebut(Integer indexDebut) {
-		this.indexDebut = indexDebut;
 	}
 
 	public String getPeriode() {

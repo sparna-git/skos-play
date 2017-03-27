@@ -40,14 +40,19 @@ public class LogData {
 	
 	protected String choixperiode;
 	
+	protected Integer index;
+	
 	protected String choixperiodelisting;
 	
-	protected Map<String, Integer> langue;
+	protected Map<String, Integer> convertLangue;
+	
+	protected Map<String, Integer> printLangue;
 	
 	protected ListingData liste;
 	
 	protected ListingData idliste;
 	
+	protected String jour;
 
 	
 	public String getJsonHistogrammeData() {
@@ -81,12 +86,24 @@ public class LogData {
 		return buffer.toString();
 	}
 	
-	public Map<String, Integer> getLangue() {
-		return langue;
+	
+	
+	public Map<String, Integer> getPrintLangue() {
+		return printLangue;
 	}
 
-	public void setLangue(Map<String, Integer> langue) {
-		this.langue =langue;
+	public void setPrintLangue(Map<String, Integer> printLangue) {
+		this.printLangue = printLangue;
+	}
+
+
+
+	public Map<String, Integer> getConvertLangue() {
+		return convertLangue;
+	}
+
+	public void setConvertLangue(Map<String, Integer> langue) {
+		this.convertLangue =langue;
 	}
 
 	public List<HistogrammeData> getHistogrammeData() {
@@ -153,6 +170,16 @@ public class LogData {
 		this.choixperiode = choixperiode;
 	}
 
+	public Integer getIndex() {
+		return index;
+	}
+
+
+
+	public void setIndex(Integer index) {
+		this.index = index;
+	}
+	
 	public Map<String, Integer> getUrlsConverted() {
 		return urlsConverted;
 	}
@@ -192,6 +219,15 @@ public class LogData {
 	public void setIdliste(ListingData idliste) {
 		this.idliste = idliste;
 	}
+
+	public String getJour() {
+		return jour;
+	}
+
+	public void setJour(String jour) {
+		this.jour = jour;
+	}
+	
 	
 	
 	
