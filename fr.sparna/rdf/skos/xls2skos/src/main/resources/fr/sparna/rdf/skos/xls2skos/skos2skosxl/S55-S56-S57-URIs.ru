@@ -10,7 +10,8 @@ INSERT {
 	?labelUri skosxl:literalForm ?label .
 	?labelUri a skosxl:Label .
 } WHERE {
-	?x a skos:Concept .
+	# XL-ify Concepts, Collections, ConceptSchemes
+	{ { ?x a skos:Concept . } UNION { ?x a skos:Collection . } UNION { ?x a skos:ConceptScheme . } }
 	
 	# compute how many labels on the same concepts are before this one
 	{

@@ -294,6 +294,11 @@ public class Xls2SkosConverter {
 		// read the column names from the header row
 		List<ColumnHeader> columnNames = rdfizableSheet.getColumnHeaders(headerRowIndex);
 		
+		log.debug("Processing column headers: ");
+		for (ColumnHeader columnHeader : columnNames) {
+			log.debug(columnHeader.toString());
+		}
+		
 		// read the rows after the header and process each row
 		for (int rowIndex = (headerRowIndex + 1); rowIndex <= sheet.getLastRowNum(); rowIndex++) {
 			Row r = sheet.getRow(rowIndex);
@@ -444,19 +449,19 @@ public class Xls2SkosConverter {
 							header,
 							prefixManager
 					);
-					
-					if(header.getParameters().get(ColumnHeader.PARAMETER_SEPARATOR) != null) {
-						valueGenerator = ValueGeneratorFactory.split(valueGenerator, header.getParameters().get(ColumnHeader.PARAMETER_SEPARATOR));
+				}
+				
+				if(header.getParameters().get(ColumnHeader.PARAMETER_SEPARATOR) != null) {
+					valueGenerator = ValueGeneratorFactory.split(valueGenerator, header.getParameters().get(ColumnHeader.PARAMETER_SEPARATOR));
 					// use a default comma separator for cells that contain URI references
-					} else if(
-						!header.getDatatype().isPresent()
-						&&
-						!header.getLanguage().isPresent()
-						&&
-						(value.startsWith("http://") || prefixManager.usesKnownPrefix(value.trim()))
-					) {
-						valueGenerator = ValueGeneratorFactory.split(valueGenerator, ",");
-					}
+				} else if(
+					!header.getDatatype().isPresent()
+					&&
+					!header.getLanguage().isPresent()
+					&&
+					(value.startsWith("http://") || prefixManager.usesKnownPrefix(value.trim()))
+				) {
+					valueGenerator = ValueGeneratorFactory.split(valueGenerator, ",");
 				}
 				
 				// if a value generator was successfully generated, then process the value
