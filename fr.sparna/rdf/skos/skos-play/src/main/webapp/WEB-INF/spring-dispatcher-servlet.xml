@@ -164,17 +164,17 @@
                 
                 <entry key="UrlsConvertis">
 		                <value>
-		                	 select distinct url, count(id) as nombre from statistique where type='convert' and  url &lt;&gt;'null'  _DAY_  group by url order by nombre desc;   
+		                	 select distinct url, count(id) as nombre from statistique where type='convert' and  url &lt;&gt;'null'  _METH_  group by url order by nombre desc;   
 		                </value>
                 </entry>
                 <entry key="UrlsPrint">
 		                <value>
-		                	select distinct url, count(id) as nombre from statistique where type='print' and  url &lt;&gt;'null'  _DAY_  group by url order by nombre desc; 
+		                	select distinct url, count(id) as nombre from statistique where type='print' and  url &lt;&gt;'null'  _METH_  group by url order by nombre desc; 
 		                </value>
                 </entry>
                 <entry key="IdConvertis">
 		                <value>
-		                	 select distinct uri, count(id) as nombre from statistique where type='convert' and  uri  &lt;&gt;'null'  _DAY_  group by uri order by nombre desc LIMIT 10 offset _OFFSET_;  
+		                	 select distinct uri, count(id) as nombre from statistique where type='convert' and  uri  &lt;&gt;'null'  _METH_  group by uri order by nombre desc LIMIT 10 offset _OFFSET_;  
 		                </value>
                 </entry>
                 
@@ -195,7 +195,7 @@
              
                 <entry key="IdPrint">
 		                <value>
-		                	select distinct uri, count(id) as nombre from statistique where type='print' and  uri  &lt;&gt;'null'  _DAY_  group by uri order by nombre desc LIMIT 10 offset _OFFSET_; 
+		                	select distinct uri, count(id) as nombre from statistique where type='print' and  uri  &lt;&gt;'null'  _METH_  group by uri order by nombre desc LIMIT 10 offset _OFFSET_; 
 		                </value>
                 </entry>
             </map>

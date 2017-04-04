@@ -91,7 +91,7 @@ public class SQLLogComptageDao implements LogDaoIfc {
 				switch(periodeRange){
 				
 						case ALLTIME:
-									sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_", "").replaceAll("_LIM_", "where jour <= NOW() LIMIT 30");
+									sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_", "").replaceAll("_LIM_", "where jour > (NOW()-30)");
 									break;
 						case MONTH:
 									sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_","MONTH").replaceAll("_LIM_","");
@@ -267,28 +267,30 @@ public class SQLLogComptageDao implements LogDaoIfc {
 				switch(periodeRange) {
 				case ALLTIME:
 							if(jour.equals("default")){
-								sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", " ");
+								sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_METH_", " ");
 								
 								}else{
-								sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour='"+jour+"'");
+								sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_METH_", "and jour='"+jour+"'");
 								
 								}
 							break;
 				case MONTH:
-							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour>(now()-30)");
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_METH_", "and jour>(CURDATE()-30)");
 							break;
 				case YEAR:
-							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour>(now()-365)");
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_METH_", "and jour>(CURDATE()-365)");
 							break;
-				case TODAY:
-							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour=(now())");
+				case TODAY: 
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_METH_", "and jour=CURDATE() ");
+							
 							break;
 				case LASTWEEK:
-							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour>(now()-7)");
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_METH_", "and jour>(CURDATE()-7)");
 							break;
 				default:
 					break;				
 				}
+				log.debug(sql);
 				log.trace(sql);
 				rs = stmt.executeQuery(sql);
 				while (rs.next()) {
@@ -332,30 +334,31 @@ public class SQLLogComptageDao implements LogDaoIfc {
 				
 				case ALLTIME:
 							if(jour.equals("default")){
-								sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", " ").replace("_OFFSET_",indexDebut.toString());
+								sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_", " ").replaceAll("_OFFSET_",indexDebut.toString());
 								
 								}else{
-								sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour='"+jour+"'").replace("_OFFSET_",indexDebut.toString());
+								sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_", "and jour='"+jour+"'").replaceAll("_OFFSET_",indexDebut.toString());
 								
 								}
 
 							break;
 				case MONTH:
-							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour(now()-30)").replace("_OFFSET_",indexDebut.toString());			
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_", "and jour>(CURDATE() -30)").replaceAll("_OFFSET_",indexDebut.toString());			
 							break;
 				case YEAR:
-							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour>(now()-365)").replace("_OFFSET_",indexDebut.toString());
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_", "and jour>(CURDATE() -365)").replaceAll("_OFFSET_",indexDebut.toString());
 							break;
 							
 				case TODAY:
-							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour=(now())").replace("_OFFSET_",indexDebut.toString());
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_", "and jour=CURDATE()").replaceAll("_OFFSET_",indexDebut.toString());
 							break;
 				case LASTWEEK:
-							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour>(now()-7)").replace("_OFFSET_",indexDebut.toString());
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_", "and jour>(CURDATE()-7)").replaceAll("_OFFSET_",indexDebut.toString());
 							break;
 				default:
 					break;				
-				}		
+				}
+				log.debug(sql);
 				log.trace(sql);
 				rs = stmt.executeQuery(sql);
 		

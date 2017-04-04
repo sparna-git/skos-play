@@ -87,17 +87,17 @@ public class LogController {
 						listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.ALLTIME, indexDebut,jour,"convert");
 						break;
 		case MONTH:
-						listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.ALLTIME, indexDebut,jour,"convert");;						
+						listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.MONTH, indexDebut,jour,"convert");;						
 						break;
 						 
 		case YEAR:
-						listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.ALLTIME, indexDebut,jour,"convert");
+						listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.YEAR, indexDebut,jour,"convert");
 						break;
 		case TODAY:
-						listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.ALLTIME, indexDebut,jour,"convert");
+						listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.TODAY, indexDebut,jour,"convert");
 						break;
 		case LASTWEEK:
-						listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.ALLTIME, indexDebut,jour,"convert");
+						listingConvertPrint(listing, data,dao, SQLLogComptageDao.Range.LASTWEEK, indexDebut,jour,"convert");
 						break;
 						 
 		}
