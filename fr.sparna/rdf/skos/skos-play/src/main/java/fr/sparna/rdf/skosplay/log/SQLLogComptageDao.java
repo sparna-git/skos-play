@@ -91,7 +91,7 @@ public class SQLLogComptageDao implements LogDaoIfc {
 				switch(periodeRange){
 				
 						case ALLTIME:
-									sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_", "").replaceAll("_LIM_", "where jour > (NOW()-30)");
+									sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_", "").replaceAll("_LIM_", "where jour > (CURDATE()-30)");
 									break;
 						case MONTH:
 									sql=this.queryRegistry.getSQLQuery(QUERY_ID).replaceAll("_METH_","MONTH").replaceAll("_LIM_","");
@@ -412,16 +412,16 @@ public class SQLLogComptageDao implements LogDaoIfc {
 					}
 					break;
 				case MONTH:
-							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour>(now()-30) ");
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour>(CURDATE()-30) ");
 							break;
 				case YEAR:
-							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour>(now()-365) ");
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour>(CURDATE()-365) ");
 							break;
 				case TODAY:
-							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour>(now()) ");
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour>(CURDATE()) ");
 							break;
 				case LASTWEEK:
-							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour>(now()-7) ");
+							sql=this.queryRegistry.getSQLQuery(QUERY_ID).replace("_DAY_", "and jour>(CURDATE()-7) ");
 							break;
 				default:
 					break;				
