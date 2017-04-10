@@ -53,13 +53,13 @@ public class ColumnHeaderParser {
 		}
 		
 		if(property.contains("@")) {
-			property = property.substring(0, property.lastIndexOf('@'));
+			property = property.substring(0, property.lastIndexOf('@')).trim();
 		}
 		if(property.contains("^^")) {
-			property = property.substring(0, property.lastIndexOf("^^"));
+			property = property.substring(0, property.lastIndexOf("^^")).trim();
 		}
 		if(property.contains("(")) {
-			property = property.substring(0, property.lastIndexOf("("));
+			property = property.substring(0, property.lastIndexOf("(")).trim();
 		}
 		
 		return property;		
@@ -72,7 +72,7 @@ public class ColumnHeaderParser {
 			if(language.contains("(")) {
 				language = language.substring(0, language.lastIndexOf("("));
 			}
-			return Optional.of(language);
+			return Optional.of(language.trim());
 		}
 		return Optional.empty();
 	}
@@ -82,7 +82,7 @@ public class ColumnHeaderParser {
 			String dt = value.substring(value.lastIndexOf("^^")+2);
 			// remove the parameters part
 			if(dt.contains("(")) {
-				dt = dt.substring(0, dt.lastIndexOf("("));
+				dt = dt.substring(0, dt.lastIndexOf("(")).trim();
 			}
 			
 			if(this.prefixManager.usesKnownPrefix(dt)) {
