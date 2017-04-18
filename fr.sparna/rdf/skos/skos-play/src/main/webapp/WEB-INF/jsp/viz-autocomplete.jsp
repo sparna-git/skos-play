@@ -8,7 +8,7 @@
 <fmt:setLocale value="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].userLocale.language}"/>
 <fmt:setBundle basename="fr.sparna.rdf.skosplay.i18n.Bundle"/>
 
-<html>
+<html style="height:100%">
 <head>
 
 	<!-- JQuery and bootstrap stuff -->
@@ -24,7 +24,7 @@
 
 	<style>
 		#global-wrapper {
-			margin-top:15%;
+			margin-top:5%;
 		}
 	
 		#autocomplete-wrapper {
@@ -95,10 +95,24 @@
 					$( "#thesaurus-autocomplete" ).val( ui.item.label );
 					// set selected uri in hidden field
 					$( "#concept-uri" ).val( ui.item.uri );
+					
+					var labelToSearch = ui.item.label;
+			        if(ui.item.pref) {
+			          var labelToSearch = ui.item.pref;
+			        }
+
 					// build a display for the selected concept
-					var html = "<h3>"+ ui.item.label + " (<a href=\""+ui.item.uri+"\" target=\"_blank\">"+ui.item.uri+"</a>)"+"</h3>";
+					var html = ""+ labelToSearch + " (<a href=\""+ui.item.uri+"\" target=\"_blank\">"+ui.item.uri+"</a>)"+"";
 					// set concept display
 					$( "#concept-display" ).html( html );
+			        
+			        // search in iframe
+			        var escapedLabel  = escape(labelToSearch);
+			        var resultsUrl = "http://duckduckgo.com?q=" + labelToSearch + "";
+			        console.log(resultsUrl);
+			        // set iframe content
+			        $('#results').attr('src', resultsUrl);
+					
 					return false;
 				}
 			})
@@ -112,7 +126,6 @@
 				
 				var html = "<li>";
 				
-				// html += "<span class=\""+item.type+"\">"+item.label+"</span>";
 				html += "<span class=\""+item.type+"\">"+strNewLabel+"</span>";
 				
 				html +="<div class=\"att\">";
@@ -145,15 +158,17 @@
 
 </head>
 
-<body>
+<body style="height:100%">
 
 	<div class="container">
-		<div id="global-wrapper" class="offset1">
-			<div id="autocomplete-wrapper">
-				<input id="thesaurus-autocomplete" class="span10" />
-				<input type="hidden" id="concept-uri">
+		<div id="global-wrapper" class="col-sm-offset-1">
+			<div id="autocomplete-wrapper" class="col-sm-12">
+				<input id="thesaurus-autocomplete" class="col-sm-10" />
+				<input type="hidden" id="concept-uri" />
 			</div>
-			<p id="concept-display"></p>
+			<div class="col-sm-12">
+				<p id="concept-display"></p>
+			</div>
 		</div>
 	</div>
 	
@@ -172,6 +187,9 @@
 	    $('#thesaurus-autocomplete').focus();
   	});	
 	</script>
+
+	<iframe id="results" width="100%" height="100%" style="border:0px;margin-top:20px;">
+	</iframe>
 
 </body>
 
