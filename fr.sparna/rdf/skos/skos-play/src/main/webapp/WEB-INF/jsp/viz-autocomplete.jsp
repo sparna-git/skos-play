@@ -31,10 +31,16 @@
 
 		}
 
+		#thesaurus-autocomplete-target-url {
+			font-size:0.8em;
+			padding: 0.3em 0.3em;
+		}
+
 		#thesaurus-autocomplete {
 			font-size:1.5em;
 			padding: 0.3em 0.3em;
 			line-height:1.5em;
+			margin-bottom:1em;
 		}
 		
 		#concept-display {
@@ -100,18 +106,23 @@
 			        if(ui.item.pref) {
 			          var labelToSearch = ui.item.pref;
 			        }
-
-					// build a display for the selected concept
-					var html = ""+ labelToSearch + " (<a href=\""+ui.item.uri+"\" target=\"_blank\">"+ui.item.uri+"</a>)"+"";
-					// set concept display
-					$( "#concept-display" ).html( html );
 			        
-			        // search in iframe
+			     	// build target link
 			        var escapedLabel  = escape(labelToSearch);
-			        var resultsUrl = "http://duckduckgo.com?q=" + labelToSearch + "";
+			     	var baseUrl = $( "#thesaurus-autocomplete-target-url" ).val();
+			        // var resultsUrl = "http://duckduckgo.com?q=" + labelToSearch + "";
+			        var resultsUrl = baseUrl.replace("{label}", labelToSearch);
 			        console.log(resultsUrl);
+			        
 			        // set iframe content
 			        $('#results').attr('src', resultsUrl);
+
+					// build a display for the selected concept
+					var html = "Search for \""+"<a href=\""+ui.item.uri+"\" target=\"_blank\">"+labelToSearch+"</a>"+"\" : "+"<a href=\""+resultsUrl+"\" target=\"_blank\">"+resultsUrl+"</a>";
+					// set concept display
+					$( "#concept-display" ).html( html );			        
+			        
+
 					
 					return false;
 				}
@@ -163,8 +174,19 @@
 	<div class="container">
 		<div id="global-wrapper" class="col-sm-offset-1">
 			<div id="autocomplete-wrapper" class="col-sm-12">
-				<input id="thesaurus-autocomplete" class="col-sm-10" />
+				<input id="thesaurus-autocomplete" class="col-sm-12" />
 				<input type="hidden" id="concept-uri" />
+			</div>
+			<div class="col-sm-12">
+				<em>Service URL to search ("{label}" will be replaced by the search value)</em> :
+				<br />
+				<input id="thesaurus-autocomplete-target-url" class="col-sm-12" value="http://duckduckgo.com?q={label}" />
+				<p>
+				<span><i>Try with 
+					<a href="#" onclick="$('#thesaurus-autocomplete-target-url').val('http://duckduckgo.com?q={label}');" title="duckduckgo">duckduckgo</a>,
+					<a href="#" onclick="$('#thesaurus-autocomplete-target-url').val('https://fr.wikipedia.org/w/index.php?search={label}');" title="french wikipedia">french wikipedia</a>
+				</i></span>
+				</p>
 			</div>
 			<div class="col-sm-12">
 				<p id="concept-display"></p>
