@@ -53,14 +53,14 @@ public final class ValueGeneratorFactory {
 			
 			IRI datatype = header.getDatatype().orElse(null);
 
-			// if the value starts with http://, or uses a known namespace, then try to parse it as a resource
+			// if the value starts with http, or uses a known namespace, then try to parse it as a resource
 			// only if no datatype or language have been explicitely specified, in which case this will default to a literal
 			if(
 					datatype == null
 					&&
 					!header.getLanguage().isPresent()
 					&&
-					(value.startsWith("http://") || prefixManager.usesKnownPrefix(value.trim()))
+					(value.startsWith("http") || prefixManager.usesKnownPrefix(value.trim()))
 			) {
 				if(!header.isInverse()) {
 					model.add(subject, header.getProperty(), SimpleValueFactory.getInstance().createIRI(prefixManager.uri(value.trim(), false)));

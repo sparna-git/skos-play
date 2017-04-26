@@ -459,7 +459,7 @@ public class Xls2SkosConverter {
 					&&
 					!header.getLanguage().isPresent()
 					&&
-					(value.startsWith("http://") || prefixManager.usesKnownPrefix(value.trim()))
+					(value.startsWith("http") || prefixManager.usesKnownPrefix(value.trim()))
 				) {
 					valueGenerator = ValueGeneratorFactory.split(valueGenerator, ",");
 				}
