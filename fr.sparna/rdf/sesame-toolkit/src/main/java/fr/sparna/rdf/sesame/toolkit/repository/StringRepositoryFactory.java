@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.rio.RDFParserRegistry;
 import org.eclipse.rdf4j.rio.Rio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +74,7 @@ public class StringRepositoryFactory extends RepositoryBuilder {
 			
 			
 			if(url != null) {
-				if(Rio.getParserFormatForFileName(url.toString()) != null) {
+				if(Rio.getParserFormatForFileName(url.toString()).isPresent()) {
 					// looks like a file we can parse, let's parse it
 					log.debug(value+" can be parsed using an available parser");
 					this.setRepositoryFactory(this.localRepositoryFactory);
@@ -122,7 +123,8 @@ public class StringRepositoryFactory extends RepositoryBuilder {
 	 */
 	public static boolean isEndpointURL(String url) {
 		// 1. test if a parser is available for that file extension.
-		if(Rio.getParserFormatForFileName(url.toString()) != null) {
+		if(Rio.getParserFormatForFileName(url.toString()).isPresent()) {
+			LoggerFactory.getLogger(StringRepositoryFactory.class.getName()).debug("Found RDF parser for url "+url);
 			return false;
 		} 
 		

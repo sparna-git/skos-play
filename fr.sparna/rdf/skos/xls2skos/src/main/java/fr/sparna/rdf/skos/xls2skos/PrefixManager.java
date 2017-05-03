@@ -15,9 +15,13 @@ import org.eclipse.rdf4j.model.vocabulary.OWL;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.model.vocabulary.RDFS;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PrefixManager {
 
+	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
+	
 	private Map<String, String> prefixes = new HashMap<>();
 	
 	public PrefixManager() {
@@ -80,19 +84,23 @@ public class PrefixManager {
 	public String uri(String value, boolean fixHttp) {
 		// if the value starts with http, return it directly
 		if(value.startsWith("http")) {
-			return value;
+			// trim the value to remove trailing whitespaces
+			return value.trim();
 		}
 		// if the value uses a known prefix, expand it
 		if(usesKnownPrefix(value)) {
-			return expand(value);
+			// always trim, trim, trim
+			return expand(value).trim();
 		}
 		
 		if(fixHttp) {
 			// otherwise try to fix the URI by adding "http://" in front of the value (may happen when excel formats the value)
 			try {
-				new URI("http://"+value);
-				return "http://"+value;
+				String trimmedValue = value.trim();
+				new URI("http://"+trimmedValue);
+				return "http://"+trimmedValue;
 			} catch (URISyntaxException e) {
+				log.warn("Cannot fix URI by adding http://, problem is "+e.getMessage());
 				return null;
 			}
 		} else {
