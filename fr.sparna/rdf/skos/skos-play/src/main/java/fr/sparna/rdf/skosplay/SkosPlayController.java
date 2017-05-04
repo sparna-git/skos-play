@@ -308,13 +308,10 @@ public class SkosPlayController {
 		ConvertFormData data = new ConvertFormData();
 		data.setBaseUrl(baseURL.toString());
 		
-		
-		if(sourceString=="example")
-			sessionData.setFichierexample(true);
-		else sessionData.setFichierexample(true);
-		
 		/**************************CONVERSION RDF**************************/
 		InputStream in = null;
+		String resultFileName = "skos-play-convert";
+		
 		switch(source) {
 
 		case GOOGLE:   {
@@ -341,18 +338,24 @@ public class SkosPlayController {
 
 		case EXAMPLE : {
 			log.debug("*Conversion à partir d'un fichier d'exemple : "+example);
-			URL urls = new URL(example);
-			InputStream urlInputStream = urls.openStream(); // throws an IOException
+			URL exampleUrl = new URL(example);
+			InputStream urlInputStream = exampleUrl.openStream(); // throws an IOException
 			in = new DataInputStream(new BufferedInputStream(urlInputStream));
+			// set the output file name to the name of the example
+			resultFileName = (!exampleUrl.getPath().equals(""))?exampleUrl.getPath():resultFileName;
+			// keep only latest file, after final /
+			resultFileName = (resultFileName.contains("/"))?resultFileName.substring(resultFileName.lastIndexOf("/")+1):resultFileName;
 			break;
 		}
 		case FILE : {
-			log.debug("*Conversion à partir d'un fichier uploadé : "+file.getName());
+			log.debug("*Conversion à partir d'un fichier uploadé : "+file.getOriginalFilename());
 			if(file.isEmpty()) {
 				return doErrorConvert(request, "Uploaded file is empty");
 			}		
 
 			in = file.getInputStream();
+			// set the output file name to the name of the input file
+			resultFileName = (file.getOriginalFilename().contains("."))?file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf('.')):file.getOriginalFilename();
 			break;
 		}
 		case URL: {
@@ -366,6 +369,11 @@ public class SkosPlayController {
 				URL urls = new URL(url);
 				InputStream urlInputStream = urls.openStream(); // throws an IOException
 				in = new DataInputStream(new BufferedInputStream(urlInputStream));
+				
+				// set the output file name to the final part of the URL
+				resultFileName = (!urls.getPath().equals(""))?urls.getPath():resultFileName;
+				// keep only latest file, after final /
+				resultFileName = (resultFileName.contains("/"))?resultFileName.substring(0, resultFileName.lastIndexOf("/")):resultFileName;
 			} catch(MalformedURLException errors) {
 				errors.printStackTrace();
 				return doErrorConvert(request, errors.getMessage()); 
@@ -385,11 +393,23 @@ public class SkosPlayController {
 			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+useskosxl);
 			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
 			response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());	
-			Set<String> identifiant= generateType(new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),in,language,useskosxl);
-			String [] array=new String[identifiant.size()];
-			array=identifiant.toArray(array);
-			List uri=new ArrayList<String>(Arrays.asList(array));
+			// le nom du fichier de retour
+			// strip extension, if any
+			resultFileName = (resultFileName.contains("."))?resultFileName.substring(0, resultFileName.lastIndexOf('.')):resultFileName;
+			String extension = (useZip)?"zip":theFormat.getDefaultFileExtension();
+			response.setHeader("Content-Disposition", "inline; filename=\""+resultFileName+"."+extension+"\"");
+			
+			Set<String> identifiant = runConversion(
+					new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),
+					in,
+					language,
+					useskosxl
+			);
+			
+			// sort to garantee order
+			List<String> uri=new ArrayList<String>(identifiant);
 			Collections.sort(uri);
+			// insert a log
 			SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, null, null, SessionData.get(request.getSession()).getListurl(),"convert",uri.toString()));
 
 		} finally {
@@ -403,7 +423,7 @@ public class SkosPlayController {
 		return null;
 	}
 
-	private Set<String> generateType(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl) {
+	private Set<String> runConversion(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl) {
 		Xls2SkosConverter converter = new Xls2SkosConverter(Writer, lang);
 		converter.setGenerateXl(generatexl);
 		converter.setGenerateXlDefinitions(generatexl);
@@ -443,10 +463,6 @@ public class SkosPlayController {
 		// prepare data structure
 		final PrintFormData printFormData = new PrintFormData();
 		sessionData.setPrintFormData(printFormData);
-		
-		if(sourceString=="example")
-			 sessionData.setFichierexample(true);
-		else sessionData.setFichierexample(false);
 
 		// retrieve resource bundle for error messages
 		ResourceBundle b = ResourceBundle.getBundle(

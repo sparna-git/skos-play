@@ -51,20 +51,8 @@ public class SessionData {
 
 	protected String listurl;
 	
-	protected boolean fichierexample;
-	
 	protected String periodeView;
-	
-	
-	
 
-	public boolean isFichierexample() {
-		return fichierexample;
-	}
-
-	public void setFichierexample(boolean fichierexample) {
-		this.fichierexample = fichierexample;
-	}
 
 	public String getListurl() {
 		return listurl;
