@@ -201,19 +201,6 @@ public class SkosPlayController {
 		return new ModelAndView("upload", UploadFormData.KEY, data);
 	}
 
-	@RequestMapping(value = "/test",method = RequestMethod.GET)
-	public ModelAndView connexion(
-			HttpServletRequest request,
-			HttpServletResponse response
-			) throws Exception  {
-
-		UploadFormData data = new UploadFormData();
-
-
-		return new ModelAndView("test", UploadFormData.KEY, data);
-
-	}	
-
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login(
 			@RequestParam(value="code", required=true) String code,
@@ -397,7 +384,11 @@ public class SkosPlayController {
 			// strip extension, if any
 			resultFileName = (resultFileName.contains("."))?resultFileName.substring(0, resultFileName.lastIndexOf('.')):resultFileName;
 			String extension = (useZip)?"zip":theFormat.getDefaultFileExtension();
-			response.setHeader("Content-Disposition", "inline; filename=\""+resultFileName+"."+extension+"\"");
+			
+			// add the date in the filename
+			String dateString = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+			
+			response.setHeader("Content-Disposition", "inline; filename=\""+resultFileName+"-"+dateString+"."+extension+"\"");
 			
 			Set<String> identifiant = runConversion(
 					new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),
