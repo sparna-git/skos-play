@@ -60,6 +60,8 @@ public class Convert implements CliCommandIfc {
 		if(a.isOutputAsDirectory()) {
 			modelWriter = factory.buildNewModelWriter(a.getOutput());
 		} else {
+			// create the file if it does not exists
+			a.getOutput().createNewFile();
 			fileStream = new FileOutputStream(a.getOutput());
 			modelWriter = factory.buildNewModelWriter(fileStream);
 		}

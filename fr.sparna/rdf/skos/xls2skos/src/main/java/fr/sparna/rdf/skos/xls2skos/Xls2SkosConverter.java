@@ -466,11 +466,15 @@ public class Xls2SkosConverter {
 				
 				// if a value generator was successfully generated, then process the value
 				if(valueGenerator != null) {
-					rowBuilder.processCell(
-							valueGenerator,
-							value,
-							header.getLanguage().orElse(this.lang)
-					);
+					try {
+						rowBuilder.processCell(
+								valueGenerator,
+								value,
+								header.getLanguage().orElse(this.lang)
+						);
+					} catch (Exception e) {
+						throw new Xls2SkosException(e, "Convert exception while processing value '"+value+"', row "+(row.getRowNum()+1)+" in sheet "+row.getSheet().getSheetName());
+					}
 				}
 			}
 		}
