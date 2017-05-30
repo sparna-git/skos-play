@@ -110,6 +110,7 @@ import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
 import fr.sparna.rdf.skos.xls2skos.ModelWriterFactory;
 import fr.sparna.rdf.skos.xls2skos.ModelWriterIfc;
 import fr.sparna.rdf.skos.xls2skos.Xls2SkosConverter;
+import fr.sparna.rdf.skos.xls2skos.Xls2SkosException;
 import fr.sparna.rdf.skosplay.log.LogEntry;
 import fr.sparna.rdf.skosplay.log.SQLLogDao;
 import fr.sparna.rdf.skosplay.log.UserDataDAO;
@@ -361,12 +362,9 @@ public class SkosPlayController {
 				resultFileName = (!urls.getPath().equals(""))?urls.getPath():resultFileName;
 				// keep only latest file, after final /
 				resultFileName = (resultFileName.contains("/"))?resultFileName.substring(0, resultFileName.lastIndexOf("/")):resultFileName;
-			} catch(MalformedURLException errors) {
-				errors.printStackTrace();
-				return doErrorConvert(request, errors.getMessage()); 
-			} catch (IOException ioeErrors) {
-				ioeErrors.printStackTrace();
-				return doErrorConvert(request, ioeErrors.getMessage()); 
+			} catch(IOException e) {
+				e.printStackTrace();
+				return doErrorConvert(request, e.getMessage()); 
 			}
 
 			break;
@@ -403,6 +401,10 @@ public class SkosPlayController {
 			// insert a log
 			SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, null, null, SessionData.get(request.getSession()).getListurl(),"convert",uri.toString()));
 
+		} catch (Xls2SkosException e) {
+			response.reset();
+			e.printStackTrace();
+			return doErrorConvert(request, e.getMessage()); 
 		} finally {
 			try {
 				if(in != null) {
