@@ -40,7 +40,14 @@ public final class ValueGeneratorFactory {
 				return null;
 			}
 			
-			model.add(subject, property, SimpleValueFactory.getInstance().createIRI(prefixManager.uri(value.trim(), true)));
+			IRI iri = SimpleValueFactory.getInstance().createIRI(prefixManager.uri(value.trim(), true));
+			
+			// can be null if we expected an IRI but we had a literal
+			if(iri == null) {
+				throw new Xls2SkosException("Expected a URI but got '"+value.trim()+"'");
+			}
+			
+			model.add(subject, property, iri);
 			return null;
 		};
 	}

@@ -473,7 +473,7 @@ public class Xls2SkosConverter {
 								header.getLanguage().orElse(this.lang)
 						);
 					} catch (Exception e) {
-						throw new Xls2SkosException(e, "Convert exception while processing value '"+value+"', row "+(row.getRowNum()+1)+" in sheet "+row.getSheet().getSheetName());
+						throw new Xls2SkosException(e, "Convert exception while processing value '"+value+"', row "+(row.getRowNum()+1)+" in sheet "+row.getSheet().getSheetName()+". Message is : "+e.getMessage());
 					}
 				}
 			}
