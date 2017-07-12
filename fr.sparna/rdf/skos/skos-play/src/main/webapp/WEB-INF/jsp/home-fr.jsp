@@ -29,7 +29,7 @@
 				<jsp:param name="active" value="home"/>
 			</jsp:include>
 			
-			<div style="font-size:1.6em; line-height: 1.3em; text-align:justify;" class="span10 offset1">
+			<div style="font-size:1.6em; line-height: 1.3em; text-align:justify;">
 				<p>
 				SKOS Play est un service gratuit de visualisation de thesaurus, taxonomies ou vocabulaires contrôlés au format 
 				<a href="http://www.w3.org/TR/2009/REC-skos-reference-20090818/" target="_blank">SKOS</a>.
@@ -60,6 +60,13 @@
 				<br />
               	<div style="text-align:center">
 					<a href="convert"><button class="btn btn-info btn-lg ">Convertir un Excel en SKOS</button></a>         
+              	</div>
+              	<hr />
+              	<p><span style="color: #38b44a;"><span class="glyphicon glyphicon glyphicon-certificate" aria-hidden="true"></span></span>&nbsp;Vous pouvez valider vos données SKOS en utilisant l'<strong><a href="http://labs.sparna.fr/skos-testing-tool" target="_blank">outil de test de vocabulaires SKOS</a></strong>.</p>
+              	<p>L'outil de test de vocabulaires SKOS est une interface pour le validateur <a href="https://github.com/cmader/qSKOS" target="_blank">qSKOS</a> de Christian Mader.</p>
+				<br />
+              	<div style="text-align:center">
+					<a href="convert"><button class="btn btn-success btn-lg ">SKOS Testing Tool</button></a>         
               	</div>
               	<br />
               	<br />

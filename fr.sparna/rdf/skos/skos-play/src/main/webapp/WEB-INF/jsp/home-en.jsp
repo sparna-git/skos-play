@@ -29,7 +29,7 @@
 				<jsp:param name="active" value="home"/>
 			</jsp:include>
 			
-			<div style="font-size:1.6em; line-height: 1.3em; text-align:justify;" class="span10 offset1">
+			<div style="font-size:1.6em; line-height: 1.3em; text-align:justify;">
 				<p>
 				SKOS Play is a free application to render and visualise thesaurus, taxonomies or controlled vocabularies expressed in 
 				<a href="http://www.w3.org/TR/2009/REC-skos-reference-20090818/" target="_blank">SKOS</a>.
@@ -52,12 +52,19 @@
                   	<a href="about"><button class="btn btn-default btn-lg" type="button">Learn More</button></a>                
               	</div>
               	<hr />
-              	<p><span style="color: #772953;"><span class="glyphicon glyphicon glyphicon-certificate" aria-hidden="true"></span></span>&nbsp;SKOS Play also provides a way to convert Excel spreadsheets to <a href="http://www.w3.org/TR/2009/REC-skos-reference-20090818/" target="_blank">SKOS</a> files.</p>
+              	<p>SKOS Play also provides a way to convert Excel spreadsheets to <a href="http://www.w3.org/TR/2009/REC-skos-reference-20090818/" target="_blank">SKOS</a> files.</p>
               	<p>This makes it easy to produce SKOS files for taxonomies and authorities list.</p>
               	<p>The converter can even generate data in other RDF vocabularies.</p>
 				<br />
               	<div style="text-align:center">
 					<a href="convert"><button class="btn btn-info btn-lg ">Convert Excel to SKOS</button></a>         
+              	</div>
+              	<hr />
+              	<p><span style="color: #38b44a;"><span class="glyphicon glyphicon glyphicon-certificate" aria-hidden="true"></span></span>&nbsp;Now you can also validate your SKOS data using the <strong><a href="http://labs.sparna.fr/skos-testing-tool" target="_blank">SKOS Testing Tool</a></strong>.</p>
+              	<p>The SKOS Testing Tool is a frontend for <a href="https://github.com/cmader/qSKOS" target="_blank">qSKOS</a> by Christian Mader.</p>
+				<br />
+              	<div style="text-align:center">
+					<a href="convert"><button class="btn btn-success btn-lg ">SKOS Testing Tool</button></a>         
               	</div>
               	<br />
               	<br />
