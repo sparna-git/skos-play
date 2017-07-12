@@ -64,7 +64,7 @@ public class SKOSNodeTypeReader {
 					// or no parent at all... which can mean 2 things...
 					if(broaders.size() == 0) {
 						// if no broaders were found, test if the collection actually has only concepts as members
-						// and not colletions, like Domains in the UNESCO thesaurus
+						// and not collections, like Domains in the UNESCO thesaurus
 						if(Perform.on(repository).ask(new SparqlQuery(new HasOnlyConceptMembersQuery(node.toString()).getSPARQL()))) {
 							// then we consider it a top-level ThesaurusArray
 							return NodeType.COLLECTION_AS_ARRAY;

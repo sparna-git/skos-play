@@ -1,0 +1,184 @@
+body {
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, legend {
+	font-family: Georgia, Times, "Times New Roman", serif;
+}
+
+.btn-info {
+	background-color: #087FAA;
+}
+
+.btn-info:hover, .btn-info:active:hover {
+	background-color: #096A8D;
+}
+
+.navbar-default {
+	background-color: #087FAA;
+}
+
+.navbar-default .navbar-nav > li > a {
+	color: #212121;
+}
+
+.navbar-default .navbar-header > a {
+	color: #212121;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover {
+	background-color: #BBB;
+}
+
+/**
+ * Adjust the line above the tabs
+ **/
+.nav-tabs {
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 15px;
+}
+
+/**
+ * Style the HTML CodeMirror input
+ **/
+.CodeMirror {
+  font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
+  border: 1px solid #ddd;
+  height: 12em;
+  width: 600px;
+}
+
+/**
+ * the additionnal list-group with a grey background
+ **/
+.list-group-item-unchecked {
+	background-color: #ddd;
+}
+.panel-unchecked .panel-heading {
+	background-color: #ddd;
+}
+
+/**
+ * restrict the margin in shape panels
+ **/
+.constraint > .panel-heading {
+	padding-top:3px;
+	padding-bottom:3px;
+}
+.constraint > .panel-body {
+	padding-top:3px;
+	padding-bottom:3px;
+}
+
+/**
+ * Align text in footer and set it smaller;
+ **/
+.footer {
+	text-align: center;
+	font-size: 0.8em;
+	margin-top: 4em;
+	padding-top: 1em;
+	border-top: 1px solid #ddd;
+	font-style: italic;
+}
+
+/**
+ * Control the font in the textarea when not using CodeMirror
+ **/
+textarea#text {
+   font-family: inherit;
+   font-size: inherit;
+   height: 7em;
+}
+
+/**
+ * Waiting page
+ **/
+#tail {
+    border: 1px solid #ddd;
+    height: 500px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+/**
+ * Table of content active section.
+ **/
+#toc .toc-active a {
+	color: #9c27b0;
+}	
+
+.form-actions {
+	margin-top:2em;
+}
+
+.footer {
+	margin-bottom:7em;
+}
+
+.shape-container {
+	margin-top: 3em;
+}
+
+#toggle-success, #toggle-info, #toggle-warning, #toggle-danger {
+	cursor: pointer;
+}
+
+h2 > img {
+	height: 1.5em;
+}
+
+.report-page {
+	margin-left: 1em;
+	margin-right: 1em;
+}
+
+.report-body-menu {
+	margin-left: 1em;
+}
+
+.shape-container {
+	border-left-color: #dddddd;
+	border-left-style: dotted;
+	padding-left: 1em;
+}
+
+.shape-body {
+	margin-left:2em;
+}
+
+.constraint-unchecked {
+	border-left-color: #dddddd;
+	border-left-style: solid;
+	border-left-width: thick;
+	display: none;
+}
+
+.constraint-success {
+	border-left-color: #dff0d8;
+	border-left-style: solid;
+	border-left-width: thick;
+	display: none;
+}
+
+.constraint-info {
+	border-left-color: #e1bee7;
+	border-left-style: solid;
+	border-left-width: thick;
+}
+
+.constraint-warning {
+	border-left-color: #ffe0b2;
+	border-left-style: solid;
+	border-left-width: thick;
+}
+
+.constraint-violation {
+	border-left-color: #f9bdbb;
+	border-left-style: solid;
+	border-left-width: thick;
+}
+
+.affix {
+	top: 50px;
+}

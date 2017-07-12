@@ -1,0 +1,40 @@
+@prefix isothes: <http://purl.org/iso25964/skos-thes#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<http://1> a skos:ConceptScheme .
+
+# OK
+<http://2> a skos:Collection ;
+	skos:member <http://3> .
+	skos:member <http://4> .
+	
+<http://3> a skos:Concept ;
+	skos:broader <http://broader1> .
+
+<http://4> a skos:Concept ;
+	skos:broader <http://broader1> .
+
+<http://broader1> a skos:Concept .
+
+# KO : multiple parents
+<http://22> a skos:Collection ;
+	skos:member <http://33> ;
+	skos:member <http://44> .
+	
+<http://33> a skos:Concept ;
+	skos:broader <http://broader11> .
+
+<http://44> a skos:Concept ;
+	skos:broader <http://broader22> .
+
+<http://broader11> a skos:Concept .
+<http://broader22> a skos:Concept .
+
+# KO : contains collections
+<http://222> a skos:Collection ;
+	skos:member <http://333> ;
+	skos:member <http://444> .
+	
+<http://333> a skos:Collection .
+
+<http://444> a skos:Collection .

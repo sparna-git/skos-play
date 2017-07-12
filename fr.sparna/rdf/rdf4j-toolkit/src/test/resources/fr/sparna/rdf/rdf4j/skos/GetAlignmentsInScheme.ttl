@@ -1,0 +1,10 @@
+@prefix isothes: <http://purl.org/iso25964/skos-thes#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix : <http://sparna.fr/> .
+
+:1 a skos:ConceptScheme .
+
+:33 a skos:Concept ;
+	skos:inScheme :1 ;
+	skos:exactMatch :AA ;
+	skos:closeMatch :BB .
