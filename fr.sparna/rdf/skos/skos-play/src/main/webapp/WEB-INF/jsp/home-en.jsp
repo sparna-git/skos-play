@@ -60,11 +60,11 @@
 					<a href="convert"><button class="btn btn-info btn-lg ">Convert Excel to SKOS</button></a>         
               	</div>
               	<hr />
-              	<p><span style="color: #38b44a;"><span class="glyphicon glyphicon glyphicon-certificate" aria-hidden="true"></span></span>&nbsp;Now you can also validate your SKOS data using the <strong><a href="http://labs.sparna.fr/skos-testing-tool" target="_blank">SKOS Testing Tool</a></strong>.</p>
+              	<p><span style="color: #38b44a;"><span class="glyphicon glyphicon glyphicon-certificate" aria-hidden="true"></span></span>&nbsp;Now you can also validate your SKOS data using the <strong><a href="http://labs.sparna.fr/skos-testing-tool">SKOS Testing Tool</a></strong>.</p>
               	<p>The SKOS Testing Tool is a frontend for <a href="https://github.com/cmader/qSKOS" target="_blank">qSKOS</a> by Christian Mader.</p>
 				<br />
               	<div style="text-align:center">
-					<a href="convert"><button class="btn btn-success btn-lg ">SKOS Testing Tool</button></a>         
+					<a href="http://labs.sparna.fr/skos-testing-tool"><button class="btn btn-success btn-lg ">SKOS Testing Tool</button></a>         
               	</div>
               	<br />
               	<br />
