@@ -16,16 +16,16 @@ public class InferIsoThesThesaurusArrayTest {
 
 	@Test
 	public void test() {
-		System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE");
+		System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
 		Logger log = org.slf4j.LoggerFactory.getLogger(this.getClass().getName());
 		RepositoryBuilder rb = new RepositoryBuilderFactory("/fr/sparna/rdf/rdf4j/skos/InferIsoThesThesaurusArray.ttl").get();
 		Repository r = rb.get();
 		try(RepositoryConnection c = r.getConnection()) {
-			Model m = Queries.examineUpdateResult(c, "/fr/sparna/rdf/skos/helper/InferIsoThesThesaurusArray.rq");
+			Model m = Queries.examineUpdateResult(c, "/fr/sparna/rdf/skos/helper/InferIsoThesThesaurusArray.ru");
 			m.stream().forEach(s -> {
 				log.debug(s.toString());
 			});
-			Assert.assertEquals(1, m.subjects().size());
+			Assert.assertEquals(3, m.size());
 		}
 	}
 	
