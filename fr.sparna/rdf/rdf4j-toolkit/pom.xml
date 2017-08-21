@@ -21,6 +21,15 @@
         <url>http://www.sparna.fr/</url>
     </organization>
 
+	<repositories>
+	    <!-- points to the local repository containing the Virtuoso dependencies -->
+	    <repository>
+	        <id>project.local</id>
+	        <name>project</name>
+	        <url>file:${project.basedir}/repo</url>
+	    </repository>
+	</repositories>
+
     <!-- javadoc and sources are generated and attached only when 'release' profile is active -->
     <!-- mvn -P release clean install -->
     <profiles>
@@ -81,31 +90,13 @@
               <version>2.2</version>
         </dependency>
 
-		<dependency>
-			<groupId>fr.sparna.commons</groupId>
-			<artifactId>sparna-commons-lang</artifactId>
+        <dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.5</version>
 		</dependency>
 
-		<dependency>
-			<groupId>fr.sparna.commons</groupId>
-			<artifactId>sparna-commons-io</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>fr.sparna.commons</groupId>
-			<artifactId>sparna-commons-xml</artifactId>
-		</dependency>
-
-		<!-- OWLIM for runtime only -->
-		<!--
-	    <dependency>
-			<groupId>com.ontotext</groupId>
-			<artifactId>owlim-lite</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		-->
-
-		<!-- necessaire seulement lorsqu'on utilise un Endpoint HTTP -->
+		<!-- Necessary only when using an HTTP endpoint/repository -->
 		<dependency>
 			<groupId>commons-http</groupId>
 			<artifactId>commons-http</artifactId>
@@ -113,33 +104,27 @@
 			<scope>runtime</scope>
 		</dependency>  
 		
-		<!-- necessaire seulement lorsqu'on utilise un Endpoint HTTP -->
+		<!-- Necessary only when using an HTTP endpoint/repository -->
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>1.1.1</version>
 			<scope>runtime</scope>
-		</dependency>
+		</dependency> 
 
-		<!--
-		<dependency>
-            <groupId>virtuoso.jdbc</groupId>
+    	<dependency>
+            <groupId>com.openlink.virtuoso</groupId>
             <artifactId>virtjdbc4</artifactId>
-            <version>4-3.69</version>
-            <scope>system</scope>
-  			<systemPath>${basedir}/lib/virtuoso/jdbc/4-3.69/virtjdbc4.jar</systemPath>
-  			<optional>true</optional>
+            <version>4.0</version>
         </dependency>
         <dependency>
-            <groupId>virtuoso.sesame2</groupId>
-            <artifactId>virt_sesame2</artifactId>
-            <version>2.7.3</version>
-            <scope>system</scope>
-  			<systemPath>${basedir}/lib/virtuoso/sesame2/2.7/virt_sesame2.jar</systemPath>
-  			<optional>true</optional>
+            <groupId>com.openlink.virtuoso</groupId>
+            <artifactId>virt_rdf4j</artifactId>
+            <version>2.1.4</version>
         </dependency>
-    	-->
  
     </dependencies>
+
+
 
 </project>

@@ -7,19 +7,19 @@ import org.eclipse.rdf4j.repository.http.HTTPRepository;
 import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 
 /**
- * Creates a Sesame Repository that connects to a SPARQL endpoint.
+ * Supplies an RDF4J Repository that connects to a SPARQL endpoint.
  * 
  * @author Thomas Francart
  */
 public class EndpointRepositorySupplier implements Supplier<Repository> {
 
-	private boolean isSesame = false;
+	private boolean isRdf4j = false;
 	private String endpoint;
 
-	public EndpointRepositorySupplier(String endpoint, boolean isSesame) {
+	public EndpointRepositorySupplier(String endpoint, boolean isRdf4j) {
 		super();
 		this.endpoint = endpoint;
-		this.isSesame = isSesame;
+		this.isRdf4j = isRdf4j;
 	}
 	
 	public EndpointRepositorySupplier(String endpoint) {
@@ -28,7 +28,7 @@ public class EndpointRepositorySupplier implements Supplier<Repository> {
 
 	@Override
 	public Repository get() {		
-		Repository repository = (this.isSesame)?new HTTPRepository(this.endpoint):new SPARQLRepository(this.endpoint);
+		Repository repository = (this.isRdf4j)?new HTTPRepository(this.endpoint):new SPARQLRepository(this.endpoint);
 		repository.initialize();		
 		return repository;
 	}

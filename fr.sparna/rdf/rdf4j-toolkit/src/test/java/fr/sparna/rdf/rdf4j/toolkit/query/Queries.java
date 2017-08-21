@@ -10,6 +10,12 @@ import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.helpers.StatementCollector;
 
+/**
+ * Utility class for manipulating queries
+ * 
+ * @author Thomas Francart
+ *
+ */
 public class Queries {
 
 	public static Model examineUpdateResult(RepositoryConnection connection, String resource) {

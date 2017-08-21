@@ -1,15 +1,13 @@
 package fr.sparna.rdf.rdf4j.toolkit.query;
 
-import java.net.URI;
 import java.util.Collection;
-import java.util.Set;
 
 import org.eclipse.rdf4j.query.Binding;
 import org.eclipse.rdf4j.query.Dataset;
 
 /**
- * Defines a SPARQL query (as a String), along with its bindings, default graphs, named graphs,
- * and includeInferred parameters (everything needed to execute the query).
+ * Encapsulates a SPARQL operation (query or update) as a String, along with its bindings, the include inferred flag,
+ * and the dataset definition on which to execute the query.
  *  
  * @author Thomas Francart
  *
@@ -39,7 +37,7 @@ public interface SparqlOperationIfc {
 	public Boolean isIncludeInferred();
 	
 	/**
-	 * 
+	 * The Dataset on which to execute the query (defines the default graph, default insert graph, and named graphs)
 	 */
 	public Dataset getDataset();
 

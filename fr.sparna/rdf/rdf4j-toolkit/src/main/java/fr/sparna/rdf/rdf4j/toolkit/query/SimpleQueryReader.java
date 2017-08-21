@@ -5,17 +5,30 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.function.Supplier;
 
-import fr.sparna.commons.io.InputStreamUtil;
-import fr.sparna.commons.io.ReadWriteTextFile;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
-public class SimpleQueryReader implements SparqlQueryBuilderIfc {
+/**
+ * Supplies a SPARQL query from a variety of sources :
+ * <ul>
+ * 	<li>A String</li>
+ *  <li>An InputStream</li>
+ *  <li>A File</li>
+ *  <li>A resource in the classpath</li>
+ * </ul>
+ * 
+ * @author Thomas Francart
+ *
+ */
+public class SimpleQueryReader implements Supplier<String> {
 
 	protected String sparql;
 	
 	public static String fromResource(String resource) {
 		return PrefixPrepender.prependPrefixes(
-				new SimpleQueryReader(SimpleQueryReader.class.getResourceAsStream(resource)).getSPARQL()
+				new SimpleQueryReader(SimpleQueryReader.class.getResourceAsStream(resource)).get()
 		);
 	}
 	
@@ -46,7 +59,12 @@ public class SimpleQueryReader implements SparqlQueryBuilderIfc {
 	public SimpleQueryReader(InputStream stream, String charset) {
 		super();
 		// read from the stream
-		this.sparql = InputStreamUtil.readToString(stream, charset);
+		try {
+			// read from the stream
+			this.sparql = IOUtils.toString(stream, charset);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**
@@ -59,7 +77,7 @@ public class SimpleQueryReader implements SparqlQueryBuilderIfc {
 		super();
 		
 		try {
-			this.sparql = ReadWriteTextFile.getContents(file, charset);
+			this.sparql = FileUtils.readFileToString(file, charset);
 		} catch (FileNotFoundException e) {
 			throw new IllegalArgumentException("SPARQL file not found : "+file.getAbsolutePath(), e);
 		} catch (IOException e) {
@@ -93,9 +111,12 @@ public class SimpleQueryReader implements SparqlQueryBuilderIfc {
             throw new RuntimeException(new FileNotFoundException(resource));
         }
         
-		// read from the stream
-		// TODO : specify encoding ?
-		this.sparql = InputStreamUtil.readToString(src);
+		try {
+			// read from the stream
+			this.sparql = IOUtils.toString(src, Charset.defaultCharset());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
     }
 	
     /**
@@ -117,7 +138,7 @@ public class SimpleQueryReader implements SparqlQueryBuilderIfc {
     }
 	
 	@Override
-	public String getSPARQL() {
+	public String get() {
 		return sparql;
 	}
 

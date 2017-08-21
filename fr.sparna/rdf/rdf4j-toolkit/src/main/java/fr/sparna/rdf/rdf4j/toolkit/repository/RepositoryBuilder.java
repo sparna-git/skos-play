@@ -16,6 +16,8 @@ import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromUrl;
 import fr.sparna.rdf.rdf4j.toolkit.util.Namespaces;
 
 /**
+ * Supplies a Repository from a source Supplier<Repository>, and a list of Consumer<RepositoryConnection>
+ * that will be called to e.g. load data in the repository.
  * 
  * @author Thomas Francart
  */
@@ -30,6 +32,11 @@ public class RepositoryBuilder implements Supplier<Repository> {
 	private Supplier<Repository> repositorySupplier;
 	private List<Consumer<RepositoryConnection>> operations;
 	
+	/**
+	 * Creates a RepositoryBuilder from another Supplier<Repository> and the list of operations that will act on it.
+	 * @param repositorySupplier
+	 * @param initOperations
+	 */
 	public RepositoryBuilder(Supplier<Repository> repositorySupplier, List<Consumer<RepositoryConnection>> initOperations) {
 		super();
 		this.repositorySupplier = repositorySupplier;
@@ -46,12 +53,16 @@ public class RepositoryBuilder implements Supplier<Repository> {
 		this(repositoryFactory, new ArrayList<Consumer<RepositoryConnection>>(Collections.singletonList(anOperation)));
 	}	
 	
+	/**
+	 * Creates a RepositoryBuilder with a Supplier<Repository> and no init operations.
+	 * @param repositoryFactory
+	 */
 	public RepositoryBuilder(Supplier<Repository> repositoryFactory) {
 		this(repositoryFactory, (List<Consumer<RepositoryConnection>>)null);
 	}
 	
 	/**
-	 * Creates a RepositoryBuilder with a default LocalMemoryRepositoryFactory
+	 * Creates a RepositoryBuilder with a default LocalMemoryRepositoryFactory and no init operations.
 	 */
 	public RepositoryBuilder() {
 		this(new LocalMemoryRepositorySupplier());

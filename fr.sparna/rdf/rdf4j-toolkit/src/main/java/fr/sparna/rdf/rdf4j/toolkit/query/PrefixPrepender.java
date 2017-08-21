@@ -7,6 +7,13 @@ import java.util.regex.Pattern;
 
 import fr.sparna.rdf.rdf4j.toolkit.util.Namespaces;
 
+/**
+ * Parses a SPARQL query to prepend automatically the SPARQL prefixes to the query String, using {@link fr.sparna.rdf.rdf4j.toolkit.util.Namespaces}.
+ * This allows to write SPARQL queries in resource files without the prefixes, simply using the most common prefixes when writing the query.
+ * 
+ * @author Thomas Francart
+ *
+ */
 public class PrefixPrepender {
 
 	public static String prependPrefixes(String sparql) {
@@ -21,8 +28,6 @@ public class PrefixPrepender {
 				prefixes.add(prefix);
 			}
 		}
-		
-		// System.out.println(prefixes);
 		
 		StringBuffer queryBuf = new StringBuffer();
 		prefixes.stream().forEach(aPrefix -> {

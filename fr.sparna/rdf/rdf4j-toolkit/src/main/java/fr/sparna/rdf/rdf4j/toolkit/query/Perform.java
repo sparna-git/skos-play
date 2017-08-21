@@ -26,7 +26,17 @@ import fr.sparna.rdf.rdf4j.toolkit.handler.ReadSingleValueHandler;
 import fr.sparna.rdf.rdf4j.toolkit.handler.ReadStringListHandler;
 import fr.sparna.rdf.rdf4j.toolkit.handler.ReadValueListHandler;
 
-
+/**
+ * Performs queries on a RepositoryConnection, with 3 variants
+ * <ul>
+ * 		<li>the query string and a TupleQueryResultHandler</li>
+ * 		<li>a SparqlOperationIfc and a TupleQueryResultHandler</li>
+ * 		<li>a TupleQueryHelperIfc</li>
+ * </ul>
+ * 
+ * @author Thomas Francart
+ *
+ */
 public class Perform {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());

@@ -3,12 +3,13 @@ package fr.sparna.rdf.rdf4j.toolkit.query;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.eclipse.rdf4j.query.Binding;
 import org.eclipse.rdf4j.query.Dataset;
 
 /**
- * Concrete implementation of {@link SparqlOperationIfc} that uses a {@link fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc}
+ * Concrete implementation of {@link SparqlOperationIfc} that relies on a Supplier<String> to return the SPARQL query.
  * to return the SPARQL query.
  * 
  * @author Thomas Francart
@@ -22,7 +23,7 @@ public class SimpleSparqlOperation implements SparqlOperationIfc {
 	
 	protected Dataset dataset;
 	
-	protected SparqlQueryBuilderIfc builder;
+	protected Supplier<String> querySupplier;
 
 	/**
 	 * Constructs a SparqlQuery with a SparqlQueryBuilderIfc and the given bindings
@@ -30,9 +31,9 @@ public class SimpleSparqlOperation implements SparqlOperationIfc {
 	 * @param builder The builder that will return the SPARQL query in <code>getSPARQL</code>
 	 * @param bindings The bindings to inject in the SPARQL query
 	 */
-	public SimpleSparqlOperation(SparqlQueryBuilderIfc builder, Collection<Binding> bindings) {
+	public SimpleSparqlOperation(Supplier<String> querySupplier, Collection<Binding> bindings) {
 		super();
-		this.builder = builder;
+		this.querySupplier = querySupplier;
 		this.bindings = bindings;
 	}
 	
@@ -41,7 +42,7 @@ public class SimpleSparqlOperation implements SparqlOperationIfc {
 	 * 
 	 * @param builder The builder that will return the SPARQL query in <code>getSPARQL</code>
 	 */
-	public SimpleSparqlOperation(SparqlQueryBuilderIfc builder) {
+	public SimpleSparqlOperation(Supplier<String> builder) {
 		this(builder, null);
 	}
 	
@@ -69,11 +70,11 @@ public class SimpleSparqlOperation implements SparqlOperationIfc {
 	}
 	
 	/**
-	 * Gets the SPARQL String from the underlying SparqlQueryBuilderIfc
+	 * Gets the SPARQL String from the underlying Supplier<String>
 	 */
 	@Override
 	public String getSPARQL() {
-		return this.builder.getSPARQL();
+		return this.querySupplier.get();
 	}
 	
 	/**
@@ -139,13 +140,19 @@ public class SimpleSparqlOperation implements SparqlOperationIfc {
 		return sparqlString;
 	}
 	
-	public static List<SimpleSparqlOperation> fromQueryList(List<? extends SparqlQueryBuilderIfc> builders) {
-		if(builders == null) {
+	/**
+	 * Wraps a list of Supplier<String> into a List<SimpleSparqlOperation>.
+	 * 
+	 * @param suppliers
+	 * @return
+	 */
+	public static List<SimpleSparqlOperation> fromQueryList(List<? extends Supplier<String>> suppliers) {
+		if(suppliers == null) {
 			return null;
 		}
 		
 		ArrayList<SimpleSparqlOperation> result = new ArrayList<SimpleSparqlOperation>();
-		for (SparqlQueryBuilderIfc aBuilder : builders) {
+		for (Supplier<String> aBuilder : suppliers) {
 			result.add(new SimpleSparqlOperation(aBuilder));
 		}
 		return result;

@@ -7,7 +7,6 @@ import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.AbstractTupleQueryResultHandler;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQueryResultHandler;
-import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 
 /**

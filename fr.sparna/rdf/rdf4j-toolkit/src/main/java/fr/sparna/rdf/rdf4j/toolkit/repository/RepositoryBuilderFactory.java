@@ -19,6 +19,7 @@ import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromFileOrDirectory;
 import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromUrl;
 
 /**
+ * A Supplier for RepositoryBuilder, from a simple String or a list of files/directory to load.
  * 
  * @author Thomas Francart
  *
@@ -37,24 +38,61 @@ public class RepositoryBuilderFactory implements Supplier<RepositoryBuilder> {
 		return new RepositoryBuilderFactory(DEFAULT_REPOSITORY_SYSTEM_PROPERTY);
 	}
 	
+	/**
+	 * Creates a RepositoryBuilderFactory with a list of Strings that can be file path, directory paths, or URLs, and the
+	 * original Supplier<Repository>.
+	 * 
+	 * @param fileOrDirectoryOrURLs
+	 * @param localRepositoryFactory
+	 */
 	public RepositoryBuilderFactory(List<String> fileOrDirectoryOrURLs, Supplier<Repository> localRepositoryFactory) {
 		super();
 		this.fileOrDirectoryOrURLs = fileOrDirectoryOrURLs;
 		this.localRepositorySupplier = localRepositoryFactory;
 	}
 	
-	public RepositoryBuilderFactory(List<String> fileOrDirectoryOrURLs) {
-		this(fileOrDirectoryOrURLs, new LocalMemoryRepositorySupplier());
-	}
-	
+	/**
+	 * Creates a RepositoryBuilderFactory with a single String that can be file path, directory paths, or URLs, and the
+	 * original Supplier<Repository>.
+	 * 
+	 * @param fileOrDirectoryOrURL
+	 * @param localRepositoryFactory
+	 */
 	public RepositoryBuilderFactory(String fileOrDirectoryOrURL, Supplier<Repository> localRepositoryFactory) {
 		this(Collections.singletonList(fileOrDirectoryOrURL), localRepositoryFactory);
 	}
 	
+	/**
+	 * Creates a RepositoryBuilderFactory with a list of Strings that can be file path, directory paths, or URLs,
+	 * and a default LocalMemoryRepositorySupplier.
+	 * 
+	 * @param fileOrDirectoryOrURLs
+	 */
+	public RepositoryBuilderFactory(List<String> fileOrDirectoryOrURLs) {
+		this(fileOrDirectoryOrURLs, new LocalMemoryRepositorySupplier());
+	}
+	
+	/**
+	 * Creates a RepositoryBuilderFactory with a single String that can be file path, directory paths, or URLs, 
+	 * and a default LocalMemoryRepositorySupplier.
+	 * 
+	 * @param fileOrDirectoryOrURL
+	 */
 	public RepositoryBuilderFactory(String fileOrDirectoryOrURL) {
 		this(Collections.singletonList(fileOrDirectoryOrURL), new LocalMemoryRepositorySupplier());
 	}
 	
+	/**
+	 * Creates the RepositoryBuilder. Each String can be :
+	 * <ul>
+	 *   <li>The name of a System property from which the actual value will be read if it exists</li>
+	 *   <li>A URL if it starts with 'http'. In this case if it ends with a known RDF extension it will first be attempted to be loaded as an RDF file, 
+	 *   otherwise it will be interpreted as the URL of a SPARQL endpoint;
+	 *   </li>
+	 *   <li>A URL if it starts with 'jdbc:virtuoso', in this case a VirtuosoReflectionRepositoryFactory will be used as the source Supplier<Repository></li>
+	 *   <li>The path to a file or directory or classpath resource</li>
+	 * </ul>
+	 */
 	public RepositoryBuilder get() {
 		List<Consumer<RepositoryConnection>> operations = new ArrayList<Consumer<RepositoryConnection>>();
 		Supplier<Repository> repositorySupplier = localRepositorySupplier;

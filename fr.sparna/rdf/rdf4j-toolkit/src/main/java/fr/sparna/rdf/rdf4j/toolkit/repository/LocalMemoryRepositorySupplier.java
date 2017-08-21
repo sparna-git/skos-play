@@ -10,7 +10,7 @@ import org.eclipse.rdf4j.sail.inferencer.fc.ForwardChainingRDFSInferencer;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 
 /**
- * Creates a simple in-memory Repository. Use FactoryConfiguration to activate RDFS inference
+ * Supplies a simple in-memory Repository. Use FactoryConfiguration to activate RDFS inference
  * if needed.
  * 
  * @author Thomas Francart
@@ -27,14 +27,14 @@ public class LocalMemoryRepositorySupplier implements Supplier<Repository> {
 	private FactoryConfiguration configuration;
 
 	/**
-	 * Constructs a Factory with the default NO_INFERENCE configuration flag
+	 * Constructs a Supplier with the default NO_INFERENCE configuration flag
 	 */
 	public LocalMemoryRepositorySupplier() {
 		this(FactoryConfiguration.NO_INFERENCE);
 	}
 	
 	/**
-	 * Constructs a Factory with the given configuration flag; flags are defined as an
+	 * Constructs a Supplier with the given configuration flag; flags are defined as an
 	 * enum in this class.
 	 * 
 	 * @param configuration	The <code>FactoryConfiguration</code> to use

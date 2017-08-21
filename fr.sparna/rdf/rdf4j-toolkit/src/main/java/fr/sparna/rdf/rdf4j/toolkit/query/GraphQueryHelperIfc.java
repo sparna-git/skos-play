@@ -4,7 +4,7 @@ import org.eclipse.rdf4j.rio.RDFHandler;
 
 /**
  * An object that associates a SPARQL query (an instance of a {@link SparqlOperationIfc}) and a
- * <code>RDFHandler</code> capable of handling the results of the query. The {@link fr.sparna.rdf.sesame.toolkit.query.Perform}</code>
+ * <code>RDFHandler</code> capable of handling the results of the query. The {@link fr.sparna.rdf.rdf4j.toolkit.query.Perform}</code>
  * takes this interface as a parameter of its <code>construct</code> method.
  * 
  * @author Thomas Francart

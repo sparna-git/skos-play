@@ -1,13 +1,17 @@
 package fr.sparna.rdf.rdf4j.toolkit.repository;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
 import java.util.function.Supplier;
 
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryException;
 
+/**
+ * Supplies a Virtuoso Repository from the Virtuoso driver.
+ * @author Thomas Francart
+ *
+ */
 public class VirtuosoReflectionRepositoryFactory implements Supplier<Repository> {
 
 	protected String jdbcURL;
@@ -58,7 +62,7 @@ public class VirtuosoReflectionRepositoryFactory implements Supplier<Repository>
 	@Override
 	public Repository get() {
 		try {
-			Class virtuosoRepositoryClass = Class.forName("virtuoso.sesame2.driver.VirtuosoRepository");
+			Class virtuosoRepositoryClass = Class.forName("virtuoso.rdf4j.driver.VirtuosoRepository");
 			Constructor virtuosoRepositoryClassConstructor = virtuosoRepositoryClass.getConstructor(String.class, String.class, String.class);
 			Repository repository = (Repository)virtuosoRepositoryClassConstructor.newInstance(this.jdbcURL, this.login, this.password);
 			repository.initialize();
