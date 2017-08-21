@@ -11,7 +11,7 @@
 
     <groupId>fr.sparna.rdf</groupId>
     <artifactId>rdf4j-toolkit</artifactId>
-    <version>0.33-SNAPSHOT</version>
+    <version>0.1</version>
 
     <name>Sparna RDF : RDF4J-toolkit</name>
     <description>Extensions for the RDF4J framework.</description>

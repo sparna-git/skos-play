@@ -92,6 +92,20 @@ public class Perform {
 		this.select(query, handler);
 		return handler.getResultIntValue();
 	}
+	
+	/**
+	 * Same As count(new SimpleSparqlOperation(query))
+	 * 
+	 * @param query
+	 * @return
+	 * @throws TupleQueryResultHandlerException
+	 * @throws QueryEvaluationException
+	 * @throws RepositoryException
+	 */
+	public int count(String query) 
+	throws TupleQueryResultHandlerException, QueryEvaluationException, RepositoryException {
+		return count(new SimpleSparqlOperation(query));
+	}	
 
 	/**
 	 * Convenience method that directly execute a query with a single line of result and a single binding,
@@ -106,6 +120,19 @@ public class Perform {
 		ReadSingleValueHandler handler = new ReadSingleValueHandler();
 		this.select(query, handler);
 		return handler.getResult();
+	}
+	
+	/**
+	 * Same as read(new SimpleSparqlOperation(query))
+	 * @param query
+	 * @return
+	 * @throws TupleQueryResultHandlerException
+	 * @throws QueryEvaluationException
+	 * @throws RepositoryException
+	 */
+	public Value read(String query) 
+	throws TupleQueryResultHandlerException, QueryEvaluationException, RepositoryException {
+		return read(new SimpleSparqlOperation(query));
 	}
 	
 	/**
@@ -124,6 +151,19 @@ public class Perform {
 	}
 	
 	/**
+	 * Same as readList(new SimpleSparqlOperation(query))
+	 * @param query
+	 * @return
+	 * @throws TupleQueryResultHandlerException
+	 * @throws QueryEvaluationException
+	 * @throws RepositoryException
+	 */
+	public List<Value> readList(String query) 
+	throws TupleQueryResultHandlerException, QueryEvaluationException, RepositoryException {
+		return readList(new SimpleSparqlOperation(query));
+	}
+	
+	/**
 	 * Convenience method that directly execute a query with a single binding and possibly multiple lines of result,
 	 * and directly returns the results as a String List, allowing it to be called in <code>List<String> v = Perform.on(repository).readStringList(...)</code>
 	 * 
@@ -136,6 +176,20 @@ public class Perform {
 		ReadStringListHandler handler = new ReadStringListHandler();
 		this.select(query, handler);
 		return handler.getResult();
+	}
+	
+	/**
+	 * Same as readStringList(new SimpleSparqlOperation(query))
+	 * 
+	 * @param query
+	 * @return
+	 * @throws TupleQueryResultHandlerException
+	 * @throws QueryEvaluationException
+	 * @throws RepositoryException
+	 */
+	public List<String> readStringList(String query) 
+	throws TupleQueryResultHandlerException, QueryEvaluationException, RepositoryException {
+		return readStringList(new SimpleSparqlOperation(query));
 	}
 	
 	/**

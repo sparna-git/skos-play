@@ -25,5 +25,7 @@ public class ReadSingleIntegerHandler extends ReadSingleValueHandler {
 	public Integer getResultIntValue() {
 		return (getResult() != null)?((Literal)getResult()).intValue():null;
 	}
+	
+	
 
 }
