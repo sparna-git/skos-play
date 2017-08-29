@@ -39,7 +39,10 @@ public class ReadStringListHandler extends AbstractTupleQueryResultHandler imple
 	public void handleSolution(BindingSet bs)
 	throws TupleQueryResultHandlerException {
 		Value v = bs.getValue(this.bindingName);
-		this.result.add(v.stringValue());
+		// avoid weird behavior with GraphDB returning a single empty row for queries with GROUP BY
+		if(v != null) {
+			this.result.add(v.stringValue());
+		}
 	}
 
 	/**
