@@ -130,7 +130,7 @@ public class RepositoryBuilderFactory implements Supplier<RepositoryBuilder> {
 					try(RepositoryConnection connection = r.getConnection()) {
 						if(Perform.on(connection).ping()) {
 							log.debug("Ping was successfull, will consider it like a SPARQL endpoint");
-							repositorySupplier = new EndpointRepositorySupplier(value, url.toString().contains("r"));
+							repositorySupplier = new EndpointRepositorySupplier(value, (url.toString().contains("repositories")||url.toString().contains(":7200")||url.toString().contains("rdf4j")));
 						} else {
 							log.debug("Ping was NOT successfull, will stick to loading a URL");
 							operations.add(new LoadFromUrl(url));
