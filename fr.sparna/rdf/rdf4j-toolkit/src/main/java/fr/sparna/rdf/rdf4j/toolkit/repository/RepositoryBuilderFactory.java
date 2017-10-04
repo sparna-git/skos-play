@@ -119,7 +119,7 @@ public class RepositoryBuilderFactory implements Supplier<RepositoryBuilder> {
 			
 			
 			if(url != null) {
-				if(Rio.getParserFormatForFileName(url.toString()) != null) {
+				if(Rio.getParserFormatForFileName(url.toString()).isPresent()) {
 					// looks like a file we can parse, let's parse it
 					log.debug(value+" can be parsed using an available parser");
 					operations.add(new LoadFromUrl(url));
@@ -130,7 +130,7 @@ public class RepositoryBuilderFactory implements Supplier<RepositoryBuilder> {
 					try(RepositoryConnection connection = r.getConnection()) {
 						if(Perform.on(connection).ping()) {
 							log.debug("Ping was successfull, will consider it like a SPARQL endpoint");
-							repositorySupplier = new EndpointRepositorySupplier(value, url.toString().contains("rdf4j"));
+							repositorySupplier = new EndpointRepositorySupplier(value, url.toString().contains("r"));
 						} else {
 							log.debug("Ping was NOT successfull, will stick to loading a URL");
 							operations.add(new LoadFromUrl(url));
