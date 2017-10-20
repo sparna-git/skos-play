@@ -43,6 +43,8 @@ public class LoadFromUrl extends AbstractLoadOperation implements Consumer<Repos
 	// typically some data are expecting precise content-type and fails if content-type is not one they know, like http://vocab.getty.edu/aat/300001280
 	protected RDFFormat acceptContentType = null;
 	
+	protected boolean failIfNotFound = false;
+	
 	protected String cacheDir;
 
 	public LoadFromUrl(Map<URL, String> urls, boolean autoNamedGraph) {
@@ -71,7 +73,7 @@ public class LoadFromUrl extends AbstractLoadOperation implements Consumer<Repos
 	}	
 	
 	public LoadFromUrl(URL url) {
-		this(url, false);
+		this(url, true);
 	}
 	
 	@Override
@@ -133,7 +135,7 @@ public class LoadFromUrl extends AbstractLoadOperation implements Consumer<Repos
 							urlToLoad,
 							this.defaultNamespace,
 							// NEVER EVER explicitly set the RDFFormat when loading from a URL.
-							// Sesame can determine the appropriate parser based on the content type of the response if this parameter
+							// RDF4J can determine the appropriate parser based on the content type of the response if this parameter
 							// is left to null
 							// Rio.getParserFormatForFileName(aUrlEntry.getKey().toString(), RDFFormat.RDFXML),
 							// null,
@@ -166,6 +168,11 @@ public class LoadFromUrl extends AbstractLoadOperation implements Consumer<Repos
 						);
 						lfs.setTargetGraph(this.targetGraph);
 						lfs.accept(connection);
+					} else {
+						// nothing from URl, nothing in cache, fail
+						if(this.failIfNotFound) {
+							throw new RuntimeException("Cannot open stream of URL '"+aUrlEntry.getKey()+"', cause : "+e.getMessage(), e);
+						}
 					}
 				}
 			}
