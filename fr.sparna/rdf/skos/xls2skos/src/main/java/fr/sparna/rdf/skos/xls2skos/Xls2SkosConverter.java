@@ -323,22 +323,6 @@ public class Xls2SkosConverter {
 	}
 	
 	private void postProcess(Model model, Resource csResource) {
-		// add a skos:inScheme to every skos:Concept or skos:Collection or skos:OrderedCollection that was created
-		model.filter(null, RDF.TYPE, SKOS.CONCEPT).forEach(
-				s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
-		);
-		model.filter(null, RDF.TYPE, SKOS.COLLECTION).forEach(
-				s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
-		);
-		model.filter(null, RDF.TYPE, SKOS.ORDERED_COLLECTION).forEach(
-				s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
-		);
-		
-		// if at least one skos:inScheme was added, declare the URI in B1 as a ConceptScheme
-		if(!model.filter(null, RDF.TYPE, SKOS.CONCEPT).isEmpty()) {
-			model.add(csResource, RDF.TYPE, SKOS.CONCEPT_SCHEME);
-		}			
-		
 		// add the inverse broaders and narrowers
 		model.filter(null, SKOS.BROADER, null).forEach(
 				s -> {
@@ -351,19 +335,51 @@ public class Xls2SkosConverter {
 				}
 		);
 		
-		// add skos:topConceptOf and skos:hasTopConcept for each skos:Concept without broader/narrower
-		model.filter(null, RDF.TYPE, SKOS.CONCEPT).subjects().forEach(
-				concept -> {
-					if(
-							model.filter(concept, SKOS.BROADER, null).isEmpty()
-							&&
-							model.filter(null, SKOS.NARROWER, concept).isEmpty()
-					) {
-						model.add(csResource, SKOS.HAS_TOP_CONCEPT, concept);
-						model.add(concept, SKOS.TOP_CONCEPT_OF, csResource);
+		if(!model.filter(csResource, RDF.TYPE, SKOS.COLLECTION).isEmpty()) {
+			// if the header object was explicitely typed as skos:Collectio, then add skos:members to every included skos:Concept
+			model.filter(null, RDF.TYPE, SKOS.CONCEPT).forEach(
+					s -> { model.add(csResource, SKOS.MEMBER, ((Resource)s.getSubject())); }
+			);
+		} else {
+			// no explicit type given in header : either this is a ConceptScheme (default)
+			// or a class, in which case no post-processing is done 
+			
+			// add a skos:inScheme to every skos:Concept or skos:Collection or skos:OrderedCollection that was created
+			model.filter(null, RDF.TYPE, SKOS.CONCEPT).forEach(
+					s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
+			);
+			model.filter(null, RDF.TYPE, SKOS.COLLECTION).forEach(
+					s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
+			);
+			model.filter(null, RDF.TYPE, SKOS.ORDERED_COLLECTION).forEach(
+					s -> { model.add(((Resource)s.getSubject()), SKOS.IN_SCHEME, csResource); }
+			);	
+			
+			// if at least one skos:Concept was generated, 
+			// or if no entry was generated at all, declare the URI in B1 as a ConceptScheme
+			if(
+					!model.filter(null, RDF.TYPE, SKOS.CONCEPT).isEmpty()
+					||
+					model.filter(null, RDF.TYPE, null).isEmpty()
+			) {
+				model.add(csResource, RDF.TYPE, SKOS.CONCEPT_SCHEME);
+			}
+			
+			// add skos:topConceptOf and skos:hasTopConcept for each skos:Concept without broader/narrower
+			model.filter(null, RDF.TYPE, SKOS.CONCEPT).subjects().forEach(
+					concept -> {
+						if(
+								model.filter(concept, SKOS.BROADER, null).isEmpty()
+								&&
+								model.filter(null, SKOS.NARROWER, concept).isEmpty()
+						) {
+							model.add(csResource, SKOS.HAS_TOP_CONCEPT, concept);
+							model.add(concept, SKOS.TOP_CONCEPT_OF, csResource);
+						}
 					}
-				}
-		);
+			);
+		}
+		
 	}
 	
 	private Model xlify(Model m) {
@@ -441,10 +457,19 @@ public class Xls2SkosConverter {
 					continue;
 				}
 				
-				ValueGeneratorIfc valueGenerator = valueGenerators.get(columnHeaders.get(colIndex).getDeclaredProperty());
+				ValueGeneratorIfc valueGenerator = valueGenerators.get(header.getDeclaredProperty());
 				
 				// if this is not one of the known processor, but the property is known, then defaults to a generic processor
-				if(valueGenerator == null && header.getProperty() != null) {
+				// also defaults to a generic processor if a custom datatype is declared on the property
+				if(
+						(
+								valueGenerator == null
+								||
+								header.getDatatype().isPresent()
+						)
+						&&
+						header.getProperty() != null
+				) {
 					valueGenerator = ValueGeneratorFactory.resourceOrLiteral(
 							header,
 							prefixManager
