@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.rdf4j.repository.Repository;
@@ -86,7 +87,13 @@ public class StringRepositoryFactory extends RepositoryBuilder {
 						Repository r = new EndpointRepositoryFactory(value).createNewRepository();
 						if(Perform.on(r).ping()) {
 							log.debug("Ping was successfull, will consider it like a SPARQL endpoint");
-							this.setRepositoryFactory(new EndpointRepositoryFactory(value, url.toString().contains("openrdf-sesame")));
+							EndpointRepositoryFactory erf = new EndpointRepositoryFactory(value, url.toString().contains("openrdf-sesame"));
+							// This is to work with Virtuoso repositories and ASK queries
+							// see https://github.com/openlink/virtuoso-opensource/issues/464
+							erf.setAdditionalHttpHeaders(new HashMap<String, String>() {{ 
+								put("Accept", "application/json");
+							}} );
+							this.setRepositoryFactory(erf);
 						} else {
 							log.debug("Ping was NOT successfull, will stick to loading a URL");
 							this.setRepositoryFactory(this.localRepositoryFactory);
