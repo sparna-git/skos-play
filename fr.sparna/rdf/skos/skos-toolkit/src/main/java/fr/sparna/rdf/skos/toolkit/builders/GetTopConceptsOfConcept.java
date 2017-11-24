@@ -31,18 +31,30 @@ public class GetTopConceptsOfConcept extends KeyValueSparqlQueryBuilder<URI, URI
 
 	@Override
 	public String getSPARQL() {
+//		String sparql = "" +
+//				"SELECT DISTINCT ?"+KEY_VAR_NAME+" ?"+VALUE_VAR_NAME+""+"\n" +
+//				"WHERE {"+"\n" +
+//				"	?"+KEY_VAR_NAME+" (<"+SKOS.BROADER+">|^<"+SKOS.NARROWER+">)+ ?"+VALUE_VAR_NAME+"\n" +
+//				"	FILTER NOT EXISTS { ?"+VALUE_VAR_NAME+" <"+SKOS.BROADER+">|^<"+SKOS.NARROWER+"> ?parent }"+"\n" +
+//				((this.orderByLang != null)?
+//				"	OPTIONAL { ?"+VALUE_VAR_NAME+" <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(lang(?prefLabel) = '"+this.orderByLang+"')}"+"\n" +
+//				"}" +
+//				" ORDER BY ?prefLabel"
+//				:
+//				"}");
+
 		String sparql = "" +
 				"SELECT DISTINCT ?"+KEY_VAR_NAME+" ?"+VALUE_VAR_NAME+""+"\n" +
 				"WHERE {"+"\n" +
+				"   { SELECT DISTINCT ?"+VALUE_VAR_NAME+" WHERE { ?"+KEY_VAR_NAME+" <"+SKOS.BROADER+">|^<"+SKOS.NARROWER+"> ?"+VALUE_VAR_NAME+".  FILTER NOT EXISTS { ?"+VALUE_VAR_NAME+" <"+SKOS.BROADER+">|^<"+SKOS.NARROWER+"> ?parent } } }"+"\n" +
 				"	?"+KEY_VAR_NAME+" (<"+SKOS.BROADER+">|^<"+SKOS.NARROWER+">)+ ?"+VALUE_VAR_NAME+"\n" +
-				"	FILTER NOT EXISTS { ?"+VALUE_VAR_NAME+" <"+SKOS.BROADER+">|^<"+SKOS.NARROWER+"> ?parent }"+"\n" +
 				((this.orderByLang != null)?
 				"	OPTIONAL { ?"+VALUE_VAR_NAME+" <"+SKOS.PREF_LABEL+"> ?prefLabel . FILTER(lang(?prefLabel) = '"+this.orderByLang+"')}"+"\n" +
 				"}" +
 				" ORDER BY ?prefLabel"
 				:
-				"}");
-				
+				"}");		
+		
 		return sparql;
 	}
 
