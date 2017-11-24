@@ -6,20 +6,33 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.eclipse.rdf4j.http.client.util.HttpClientBuilders;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.URI;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.query.AbstractTupleQueryResultHandler;
+import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.sparql.SPARQLRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
 import fr.sparna.rdf.sesame.toolkit.query.Perform;
+import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
 import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperIfc;
 import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
+import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
+import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
+import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
 
@@ -42,6 +55,14 @@ public class SKOSTreeBuilder {
 	private boolean useConceptSchemesAsFirstLevelNodes = true;
 	private boolean handleThesaurusArrays = true;
 	
+	/**
+	 * Current iteration count
+	 */
+	private long iterationCount = 0;
+	/**
+	 * If we want to avoid sending too much query to a remote SPARQL endpont, set this to a value > 0 to wait every 10 iterations
+	 */
+	private long delaySleepTimeMillis = -1;
 	
 	/**
 	 * Builds a SKOSTreeBuilder that will use the given PropertyReader to read the property on which
@@ -89,9 +110,9 @@ public class SKOSTreeBuilder {
 	public List<GenericTree<SKOSTreeNode>> buildTrees() 
 	throws SparqlPerformException {
 
-		final List<GenericTree<SKOSTreeNode>> result = new ArrayList<GenericTree<SKOSTreeNode>>();
-		
+		final List<GenericTree<SKOSTreeNode>> result = new ArrayList<GenericTree<SKOSTreeNode>>();		
 		final List<Resource> conceptSchemeList = new ArrayList<Resource>();
+		this.iterationCount = 0;
 		
 		if(this.useConceptSchemesAsFirstLevelNodes) {
 			Perform.on(repository).select(new GetConceptSchemesHelper(null) {		
@@ -109,7 +130,7 @@ public class SKOSTreeBuilder {
 			
 			// set all the concept schemes as roots
 			for (Resource aConceptScheme : conceptSchemeList) {
-				result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)aConceptScheme)));
+				result.add(new GenericTree<SKOSTreeNode>(buildTreeRecDelayed((URI)aConceptScheme)));
 			}	
 		} else {
 			
@@ -135,7 +156,7 @@ public class SKOSTreeBuilder {
 				
 				// set all the collections as root
 				for (Resource aCollection : topCollectionsList) {
-					result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)aCollection)));
+					result.add(new GenericTree<SKOSTreeNode>(buildTreeRecDelayed((URI)aCollection)));
 				}
 			} else {
 				log.debug("No concept schemes and no top-level collections exists, will look for all explicit top-levels concepts.");
@@ -147,7 +168,7 @@ public class SKOSTreeBuilder {
 					protected void handleTopConcept(Resource noBroader)
 					throws TupleQueryResultHandlerException {
 						try {
-							result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)noBroader)));
+							result.add(new GenericTree<SKOSTreeNode>(buildTreeRecDelayed((URI)noBroader)));
 						} catch (SparqlPerformException e) {
 							throw new TupleQueryResultHandlerException(e);
 						}
@@ -163,7 +184,7 @@ public class SKOSTreeBuilder {
 						protected void handleConceptWithNoBroader(Resource noBroader)
 						throws TupleQueryResultHandlerException {
 							try {
-								result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)noBroader)));
+								result.add(new GenericTree<SKOSTreeNode>(buildTreeRecDelayed((URI)noBroader)));
 							} catch (SparqlPerformException e) {
 								throw new TupleQueryResultHandlerException(e);
 							}
@@ -180,7 +201,7 @@ public class SKOSTreeBuilder {
 						try {
 							// exclude the ones we consider as thesaurus arrays
 							if(nodeTypeReader.readNodeType(java.net.URI.create(top.stringValue())) == NodeType.COLLECTION_AS_ARRAY) {
-								result.add(new GenericTree<SKOSTreeNode>(buildTreeRec((URI)top)));
+								result.add(new GenericTree<SKOSTreeNode>(buildTreeRecDelayed((URI)top)));
 							}
 						} catch (SparqlPerformException e) {
 							throw new TupleQueryResultHandlerException(e);
@@ -191,6 +212,7 @@ public class SKOSTreeBuilder {
 			}			
 		}
 		
+		log.info("Performed "+this.iterationCount+" iterations to build trees");
 		// sort trees before returning them
 		for (GenericTree<SKOSTreeNode> aTree : result) {
 			sortTreeRec(aTree.getRoot());
@@ -217,6 +239,7 @@ public class SKOSTreeBuilder {
 	public List<GenericTree<SKOSTreeNode>> buildTrees(final java.net.URI root) 
 	throws SparqlPerformException {
 		log.debug("Building SKOS Tree from root "+root);
+		this.iterationCount = 0;
 		
 		final List<GenericTree<SKOSTreeNode>> result = new ArrayList<GenericTree<SKOSTreeNode>>();
 		
@@ -248,7 +271,7 @@ public class SKOSTreeBuilder {
 		
 		// compute tree from root
 		GenericTree<SKOSTreeNode> originalTree = new GenericTree<SKOSTreeNode>(
-				buildTreeRec(this.repository.getValueFactory().createURI(root.toString()))
+				buildTreeRecDelayed(this.repository.getValueFactory().createURI(root.toString()))
 		);
 		
 		if(useGivenRootAsRoot) {
@@ -276,6 +299,7 @@ public class SKOSTreeBuilder {
 			}
 		}
 
+		log.info("Performed "+this.iterationCount+" iterations to build trees");
 		// sort trees before returning them
 		for (GenericTree<SKOSTreeNode> aTree : result) {
 			sortTreeRec(aTree.getRoot());
@@ -301,6 +325,22 @@ public class SKOSTreeBuilder {
 				sortTreeRec(aChild);
 			}
 		}		
+	}
+	
+	private GenericTreeNode<SKOSTreeNode> buildTreeRecDelayed(URI conceptOrConceptSchemeOrCollection)
+	throws SparqlPerformException {
+		// increment iteration count
+		this.iterationCount++;
+		if((this.delaySleepTimeMillis > 0) && (iterationCount % 10) == 0) {
+			try {
+				log.info("Sleeping "+this.delaySleepTimeMillis+"ms after "+this.iterationCount+" iterations...");
+				Thread.sleep(this.delaySleepTimeMillis);
+				log.debug("Woke up");
+			} catch (InterruptedException ignore) {
+				ignore.printStackTrace();
+			}
+		}
+		return buildTreeRec(conceptOrConceptSchemeOrCollection);
 	}
 	
 	private GenericTreeNode<SKOSTreeNode> buildTreeRec(URI conceptOrConceptSchemeOrCollection)
@@ -333,7 +373,7 @@ public class SKOSTreeBuilder {
 					try {
 						// exclude the ones we consider as thesaurus arrays
 						if(nodeTypeReader.readNodeType(java.net.URI.create(top.stringValue())) != NodeType.COLLECTION_AS_ARRAY) {
-							node.addChild(buildTreeRec((URI)top));
+							node.addChild(buildTreeRecDelayed((URI)top));
 						}
 					} catch (SparqlPerformException e) {
 						throw new TupleQueryResultHandlerException(e);
@@ -351,7 +391,7 @@ public class SKOSTreeBuilder {
 						protected void handleTopConcept(Resource top)
 								throws TupleQueryResultHandlerException {
 							try {
-								node.addChild(buildTreeRec((URI)top));
+								node.addChild(buildTreeRecDelayed((URI)top));
 							} catch (SparqlPerformException e) {
 								throw new TupleQueryResultHandlerException(e);
 							}
@@ -367,7 +407,7 @@ public class SKOSTreeBuilder {
 						protected void handleConceptWithNoBroader(Resource noBroader)
 								throws TupleQueryResultHandlerException {
 							try {
-								node.addChild(buildTreeRec((URI)noBroader));
+								node.addChild(buildTreeRecDelayed((URI)noBroader));
 							} catch (SparqlPerformException e) {
 								throw new TupleQueryResultHandlerException(e);
 							}
@@ -384,7 +424,7 @@ public class SKOSTreeBuilder {
 						try {
 							// exclude the ones we consider as thesaurus arrays
 							if(nodeTypeReader.readNodeType(java.net.URI.create(top.stringValue())) == NodeType.COLLECTION_AS_ARRAY) {
-								node.addChild(buildTreeRec((URI)top));
+								node.addChild(buildTreeRecDelayed((URI)top));
 							}
 						} catch (SparqlPerformException e) {
 							throw new TupleQueryResultHandlerException(e);
@@ -404,7 +444,7 @@ public class SKOSTreeBuilder {
 				protected void handleMember(Resource collection, Resource member)
 				throws TupleQueryResultHandlerException {
 					try {
-						node.addChild(buildTreeRec((URI)member));
+						node.addChild(buildTreeRecDelayed((URI)member));
 					} catch (SparqlPerformException e) {
 						throw new TupleQueryResultHandlerException(e);
 					}
@@ -421,7 +461,7 @@ public class SKOSTreeBuilder {
 				protected void handleMember(Resource collection, Resource member)
 				throws TupleQueryResultHandlerException {
 					try {
-						node.addChild(buildTreeRec((URI)member));
+						node.addChild(buildTreeRecDelayed((URI)member));
 					} catch (SparqlPerformException e) {
 						throw new TupleQueryResultHandlerException(e);
 					}
@@ -436,7 +476,7 @@ public class SKOSTreeBuilder {
 			log.warn("Unable to determine node type of : "+conceptOrConceptSchemeOrCollection);
 		}
 		case CONCEPT : {
-			
+			log.debug("Found concept URI : "+conceptOrConceptSchemeOrCollection);
 			SelectSparqlHelperIfc narrowerHelper = null;
 			if(this.handleThesaurusArrays) {
 				// tries to handle ThesaurusArrays
@@ -446,7 +486,7 @@ public class SKOSTreeBuilder {
 					protected void handleNarrower(Resource parent, Resource narrower)
 					throws TupleQueryResultHandlerException {
 						try {
-							node.addChild(buildTreeRec((URI)narrower));
+							node.addChild(buildTreeRecDelayed((URI)narrower));
 						} catch (SparqlPerformException e) {
 							throw new TupleQueryResultHandlerException(e);
 						}
@@ -461,7 +501,7 @@ public class SKOSTreeBuilder {
 					protected void handleNarrowerConcept(Resource parent, Resource narrower)
 					throws TupleQueryResultHandlerException {
 						try {
-							node.addChild(buildTreeRec((URI)narrower));
+							node.addChild(buildTreeRecDelayed((URI)narrower));
 						} catch (SparqlPerformException e) {
 							throw new TupleQueryResultHandlerException(e);
 						}
