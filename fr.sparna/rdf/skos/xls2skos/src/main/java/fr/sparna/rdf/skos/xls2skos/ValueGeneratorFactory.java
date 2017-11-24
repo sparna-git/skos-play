@@ -123,10 +123,14 @@ public final class ValueGeneratorFactory {
 			turtle.append("<"+subject.stringValue()+">"+" "+"<"+property.stringValue()+"> ");
 			// ... the blank node value
 			turtle.append(value);
-			// ... and a final dot if there is not one alreay at the end
+			// ... and a final dot if there is not one already at the end
 			if(!value.trim().endsWith(".")) {
 				turtle.append(".");
 			}
+			
+			// to debug created turtle
+			// System.out.println(turtle);
+			
 			// now parse the Turtle String and collect the statements in a StatementCollector
 			StatementCollector collector = new StatementCollector();
 			RDFParser parser = RDFParserRegistry.getInstance().get(RDFFormat.TURTLE).get().getParser();
