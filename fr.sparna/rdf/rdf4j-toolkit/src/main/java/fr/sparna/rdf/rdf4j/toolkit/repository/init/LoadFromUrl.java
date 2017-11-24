@@ -68,12 +68,17 @@ public class LoadFromUrl extends AbstractLoadOperation implements Consumer<Repos
 		this(url, autoNamedGraph, null);
 	}
 	
+	public LoadFromUrl(URL url, boolean autoNamedGraph, boolean failIfNotFound) {
+		this(url, autoNamedGraph, null);
+		this.failIfNotFound = failIfNotFound;
+	}
+	
 	public LoadFromUrl(URL url, boolean autoNamedGraph, String localFallback) {
 		this(new HashMap<URL, String>(Collections.singletonMap(url, localFallback)), autoNamedGraph);
 	}	
 	
 	public LoadFromUrl(URL url) {
-		this(url, true);
+		this(url, true, true);
 	}
 	
 	@Override
@@ -225,6 +230,14 @@ public class LoadFromUrl extends AbstractLoadOperation implements Consumer<Repos
 
 	public void setCacheDir(String cacheDir) {
 		this.cacheDir = cacheDir;
+	}
+
+	public boolean isFailIfNotFound() {
+		return failIfNotFound;
+	}
+
+	public void setFailIfNotFound(boolean failIfNotFound) {
+		this.failIfNotFound = failIfNotFound;
 	}
 
 	public static void main(String[] args) throws Exception {
