@@ -409,7 +409,6 @@
 			
 			// re-enable buttons for click on browser back
 			$(window).on('beforeunload', function(){
-	      		$('#loading-print, #loading-hide').hide();
 			    $('#submit-button-print, #submit-button-viz').attr('disabled', false);
 			    $('#previous-button-print, #previous-button-viz').attr('disabled', false);
 			    $('#targetLanguage').attr('disabled', false);
