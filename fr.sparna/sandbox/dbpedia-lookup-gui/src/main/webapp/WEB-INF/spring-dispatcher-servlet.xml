@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+	
+	<!-- Load cfg.properties from the classpath -->
+	<context:property-placeholder location="classpath:dbpedia-lookup.properties"/>
+
+    <!-- scan les annotations pour trouver notamment @Controller et @Autowired -->
+    <context:component-scan base-package="fr.sparna.dbpedia.lookup.client.gui"/>
+
+	<!-- 	Resolves the view names to JSP in the /WEB-INF/jsp/ folder 
+			(eg. if Controller returns view name "edit", the jsp /WEB-INF/jsp/edit.jsp will ba called)
+	-->
+	<bean	id="viewResolver"
+			class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+    	<property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+</beans>
