@@ -1,7 +1,0 @@
-PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-SELECT DISTINCT ?concept
-WHERE {
-	?concept a skos:Concept .
-	?concept skos:inScheme ?scheme .
-	FILTER NOT EXISTS { ?concept skos:broader|^skos:narrower ?parent }
-}

@@ -1,7 +1,0 @@
-PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-SELECT ?label
-WHERE {
-	?concept a skos:Concept .
-	?concept skos:prefLabel ?label .
-	FILTER(lang(?label) = 'fr') .
-}
