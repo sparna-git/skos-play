@@ -1,1 +1,0 @@
-update=LOAD <file:///home/thomas/workspace/01-Projets/MAE/reprise/output/7-bibliographie.xml> INTO GRAPH <http://vitro.mannlib.cornell.edu/default/vitro-kb-2>
