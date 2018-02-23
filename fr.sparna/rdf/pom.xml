@@ -27,8 +27,6 @@
         <module>sesame-toolkit</module>
         <module>skos</module>
         <module>rdf-toolkit</module>
-        <module>jena-repository</module>
-        <module>dbpedia-lookup-client</module>
     </modules>
 
     <properties>
