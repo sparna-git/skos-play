@@ -81,7 +81,7 @@
 				</c:if>
 			</div>	
 					
-			<form id="upload_form" action="convert" method="post" name="formulaire" enctype="multipart/form-data" class="form-horizontal">	
+			<form id="upload_form" action="convert"  onsubmit="false" method="post" name="formulaire" enctype="multipart/form-data" class="form-horizontal">	
 			
 			<fieldset>
 				<legend><fmt:message key="convert.form.legend" /></legend>
@@ -301,10 +301,30 @@
 	   				</div></div>
 	   			</div><!-- end accordion-group : Advanced options -->
    			</div>		
+			<div id="myModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog modal-lg">
 			
+			    <!-- Modal content-->
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        <h4 class="modal-title"></h4>
+			      </div>
+			      <div class="modal-body">
+			        <p></p>
+			      </div>
+			      <div class="modal-footer">
+					<button id="submit-button-viz" type="button" onclick="submit()" class="btn btn-lg btn-primary"><fmt:message key="viz.btn.result" /></button>
+					<img src="images/ajax-loader.gif" id="loading-viz" hidden="hidden" />
+			      </div>
+			    </div>
+			
+			  </div>
+			</div>
+			<input type="hidden" id="showmodal"  class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
 			<div class="form-actions">
 				<div class="col-sm-offset-2 col-sm-4">
-					<button type="submit"  id="submit-button" class="btn btn-info btn-lg "><fmt:message key="convert" /></button>
+					<button type="button" onclick="count()"  id="submit-button" class="btn btn-info btn-lg "><fmt:message key="convert" /></button>
 					<img src="images/ajax-loader.gif" id="loading" hidden="hidden" />
 				</div>
 				<div class="col-sm-offset-2 col-sm-4">
@@ -538,6 +558,27 @@
 					$('#choice_Language').editableSelect();
 				});
 	      	});
+	      	
+	      	function count(){
+				$.ajax({
+		       url : 'countAction',
+		       type : 'POST', 
+		       dataType : 'JSON',
+		       success: function(response) {
+		    	   console.log(response.count);
+		    	   if(response.count===2){
+		    		   $( "#showmodal" ).click();
+		    	   }else{
+		    		   $( "#upload_form" ).submit();
+		    	   }
+		    	   
+	      		}
+	    	});
+			}
+	      	
+	      	function submit(){
+	      		$( "#upload_form" ).submit();
+			}
 		</script>
 	</body>
 

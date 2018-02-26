@@ -7,19 +7,22 @@ import java.io.DataInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.InvalidParameterException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -36,7 +39,9 @@ import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFWriter;
 import org.eclipse.rdf4j.rio.RDFWriterRegistry;
 import org.eclipse.rdf4j.rio.Rio;
 import org.slf4j.Logger;
@@ -49,6 +54,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.FileList;
 
@@ -112,8 +119,6 @@ import fr.sparna.rdf.skos.xls2skos.ModelWriterIfc;
 import fr.sparna.rdf.skos.xls2skos.Xls2SkosConverter;
 import fr.sparna.rdf.skos.xls2skos.Xls2SkosException;
 import fr.sparna.rdf.skosplay.log.LogEntry;
-import fr.sparna.rdf.skosplay.log.SQLLogDao;
-import fr.sparna.rdf.skosplay.log.UserDataDAO;
 
 
 
@@ -131,6 +136,8 @@ import fr.sparna.rdf.skosplay.log.UserDataDAO;
 public class SkosPlayController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
+	
+	private int nbAction=0;
 
 	@Autowired
 	protected ServletContext servletContext;
@@ -296,6 +303,7 @@ public class SkosPlayController {
 		ConvertFormData data = new ConvertFormData();
 		data.setBaseUrl(baseURL.toString());
 		
+		
 		/**************************CONVERSION RDF**************************/
 		InputStream in = null;
 		String resultFileName = "skos-play-convert";
@@ -443,7 +451,7 @@ public class SkosPlayController {
 			// flag indicating to transform SKOS-XL to SKOS
 			@RequestParam(value="skosxl2skos", required=false) boolean skosxl2skos,
 			HttpServletRequest request
-			) throws IOException {
+			) throws IOException, SparqlPerformException, URISyntaxException {
 		
 		log.debug("upload(source="+sourceString+",example="+example+",url="+url+",rdfsInference="+rdfsInference+", owl2skos="+owl2skos+")");
 
@@ -452,11 +460,11 @@ public class SkosPlayController {
 
 		// retrieve session
 		final SessionData sessionData = SessionData.get(request.getSession());
-		
 		// prepare data structure
 		final PrintFormData printFormData = new PrintFormData();
 		sessionData.setPrintFormData(printFormData);
-
+		int count = -1;
+		int initialCount=-1;;
 		// retrieve resource bundle for error messages
 		ResourceBundle b = ResourceBundle.getBundle(
 				"fr.sparna.rdf.skosplay.i18n.Bundle",
@@ -486,10 +494,13 @@ public class SkosPlayController {
 				log.debug("Uploaded file name is "+file.getOriginalFilename());
 				localRepositoryBuilder.addOperation(new LoadFromStream(file.getInputStream(), Rio.getParserFormatForFileName(file.getOriginalFilename()).orElse(RDFFormat.RDFXML)));
 				repository = localRepositoryBuilder.createNewRepository();
-
+				
 				// apply rules if needed
 				try {
 					if(owl2skos) {
+						printFormData.setOwl2skos(true);
+						// check that data does not contain more than X concepts before convert
+						initialCount = Perform.on(repository).count(new SparqlQuery(new SparqlQueryBuilder(this, "CountConcepts.rq")));
 						// apply inference
 						ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getOWL2SKOSRuleset()));
 						au.execute(repository);
@@ -518,6 +529,8 @@ public class SkosPlayController {
 				// apply rules if needed
 				try {
 					if(owl2skos) {
+						initialCount = Perform.on(repository).count(new SparqlQuery(new SparqlQueryBuilder(this, "CountConcepts.rq")));
+						printFormData.setOwl2skos(true);
 						// apply inference
 						ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getOWL2SKOSRuleset()));
 						au.execute(repository);
@@ -552,6 +565,8 @@ public class SkosPlayController {
 					// apply OWL2SKOS rules if needed
 					try {
 						if(owl2skos && !StringRepositoryFactory.isEndpointURL(url)) {
+							printFormData.setOwl2skos(true);
+							initialCount = Perform.on(repository).count(new SparqlQuery(new SparqlQueryBuilder(this, "CountConcepts.rq")));
 							// apply inference
 							ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getOWL2SKOSRuleset()));
 							au.execute(repository);
@@ -576,11 +591,14 @@ public class SkosPlayController {
 			return doError(request, e);
 		}
 
-		int count = -1;
+		
 		try {			
+			
 			// check that data does not contain more than X concepts
 			count = Perform.on(repository).count(new SparqlQuery(new SparqlQueryBuilder(this, "CountConcepts.rq")));
-
+			if(count>initialCount){
+				printFormData.setNbConcept(count);
+			}
 			// check that data contains at least one SKOS Concept
 			if(count <= 0) {
 				return doError(request, b.getString("upload.error.noConceptsFound"));
@@ -743,6 +761,25 @@ public class SkosPlayController {
 		}
 		return doError(request, message.toString());
 	}
+	
+	@RequestMapping(value = "/owl2skos", method = RequestMethod.POST)
+	protected void getOwl2skos(
+			HttpServletRequest request,
+			HttpServletResponse response
+			) throws IOException {
+		response.addHeader("Content-Encoding", "UTF-8");
+		response.addHeader("Content-Disposition", "attachment;filename=\"owl2skos.ttl\"");
+		response.setContentType("text/turtle");
+		// write the content of the temporary repository into an in-memory Turtle representation
+		RDFWriter writer = RDFWriterRegistry.getInstance().get(RDFFormat.TURTLE).get().getWriter(response.getOutputStream());
+		// retrieve data from session
+		Repository r = SessionData.get(request.getSession()).getRepository();
+		try(RepositoryConnection connectionTemporaire = r.getConnection()) {
+			connectionTemporaire.export(writer);
+		}
+		
+		
+	}
 
 	protected ModelAndView doError(
 			HttpServletRequest request,
@@ -786,9 +823,10 @@ public class SkosPlayController {
 
 		// update source language param - only for translations
 		language = (language.equals("no-language"))?null:language;
-
+		SessionData sessionData=SessionData.get(request.getSession());
+		
 		// retrieve data from session
-		Repository r = SessionData.get(request.getSession()).getRepository();
+		Repository r = sessionData.getRepository();
 
 		// make a log to trace usage
 		String aRandomConcept = Perform.on(r).read(new SparqlQuery(new SparqlQueryBuilder(this, "ReadRandomConcept.rq"))).stringValue();
@@ -854,6 +892,30 @@ public class SkosPlayController {
 		// flush
 		response.flushBuffer();
 	}
+	
+	@RequestMapping(
+			value = "/countAction",
+			method = RequestMethod.POST
+			)
+	public void countAction(
+			HttpServletRequest request,
+			HttpServletResponse response
+			) throws Exception {
+
+		// retrieve data from session
+		SessionData sessionData = SessionData.get(request.getSession());
+		sessionData.setCountAction(sessionData.getCountAction()+1);
+		Map <String,Integer> map=new HashMap<String,Integer>();
+		map.put("count", sessionData.getCountAction());
+		response.addHeader("Content-Encoding", "UTF-8");	
+		response.setContentType("application/json");
+		PrintWriter out = response.getWriter();
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		mapper.writeValue(out,map);
+		
+	
+	}
 
 
 
@@ -870,6 +932,7 @@ public class SkosPlayController {
 			HttpServletResponse response
 			) throws Exception {
 
+		
 		// get output type param
 		OutputType outputType = (outputParam != null)?OutputType.valueOf(outputParam.toUpperCase()):null;
 
@@ -884,10 +947,10 @@ public class SkosPlayController {
 
 		// get target language param - only for translations
 		String targetLanguage = (targetLanguageParam != null)?(targetLanguageParam.equals("no-language")?null:targetLanguageParam):null;
-
+		SessionData sessionData=SessionData.get(request.getSession());
 		// retrieve data from session
-		Repository r = SessionData.get(request.getSession()).getRepository();
-
+		Repository r = sessionData.getRepository();
+		
 		// make a log to trace usage
 		String aRandomConcept = Perform.on(r).read(new SparqlQuery(new SparqlQueryBuilder(this, "ReadRandomConcept.rq"))).stringValue();
 		log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+outputType);

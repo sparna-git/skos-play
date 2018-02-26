@@ -52,7 +52,19 @@ public class SessionData {
 	protected String listurl;
 	
 	protected String periodeView;
+	
+	protected int countAction;
+	
+	
+	
+	
+	public int getCountAction() {
+		return countAction;
+	}
 
+	public void setCountAction(int countAction) {
+		this.countAction = countAction;
+	}
 
 	public String getListurl() {
 		return listurl;

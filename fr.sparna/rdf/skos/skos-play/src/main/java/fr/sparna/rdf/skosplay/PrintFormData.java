@@ -17,7 +17,31 @@ public class PrintFormData {
 	protected boolean enableMappings = true;
 	protected String loadedDataName;
 	protected String loadedDataLicense;
+	protected boolean owl2skos;
+	protected int nbConcept;
 	
+
+	
+
+	public int getNbConcept() {
+		return nbConcept;
+	}
+
+	public void setNbConcept(int nbConcept) {
+		this.nbConcept = nbConcept;
+	}
+
+	
+	
+	
+	public boolean isOwl2skos() {
+		return owl2skos;
+	}
+
+	public void setOwl2skos(boolean owl2skos) {
+		this.owl2skos = owl2skos;
+	}
+
 	/**
 	 * Access a display type based on its name, because we can't access constant from JSTL / EL
 	 */

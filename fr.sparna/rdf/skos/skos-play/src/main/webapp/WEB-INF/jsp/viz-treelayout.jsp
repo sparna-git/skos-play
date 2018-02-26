@@ -11,7 +11,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <script src="js/d3.v3.min.js" charset="utf-8"></script>
-    <script src="js/jquery-1.9.1.min.js" charset="utf-8"></script>
+    <script src="js/jquery.min.js"></script>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <script src="bootstrap/js/bootstrap.min.js"></script>
     
@@ -67,10 +67,11 @@ var vis = d3.select("#body").append("svg:svg")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
 
-  var dataset = '${dataset}';
-  var json = JSON.parse( dataset );
+  var dataset =${dataset};
+  console.log(dataset.uri);
+  //var json = JSON.parse(dataset);
 // d3.json("json?language=${language}&root=${root}", function(json) {
-  root = json;
+  root = dataset;
   root.x0 = h / 2;
   root.y0 = 0;
 
