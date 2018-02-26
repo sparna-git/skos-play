@@ -7,6 +7,7 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.Binding;
 import org.eclipse.rdf4j.query.Dataset;
+import org.eclipse.rdf4j.query.GraphQuery;
 import org.eclipse.rdf4j.query.Operation;
 import org.eclipse.rdf4j.query.QueryEvaluationException;
 import org.eclipse.rdf4j.query.QueryLanguage;
@@ -18,6 +19,7 @@ import org.eclipse.rdf4j.query.UpdateExecutionException;
 import org.eclipse.rdf4j.query.impl.SimpleDataset;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.rio.RDFHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -215,7 +217,7 @@ public class Perform {
 	}
 	
 	/**
-	 * Executes the SPARQL SELECT query returned by the helper, and pass the helper to the <code>evaluate</code> method
+	 * Executes the SPARQL SELECT query given as a String, and pass the helper to the <code>evaluate</code> method
 	 */
 	public void select(String query, TupleQueryResultHandler handler) 
 	throws TupleQueryResultHandlerException, QueryEvaluationException, RepositoryException {			
@@ -226,6 +228,42 @@ public class Perform {
 		
 		// on execute la query
 		tupleQuery.evaluate(handler);
+	}
+	
+	/**
+	 * Executes the SPARQL CONSTRUCT/GRAPH query returned by the helper, and pass the helper to the <code>evaluate</code> method
+	 */
+	public void graph(GraphQueryHelperIfc helper) 
+	throws QueryEvaluationException, RepositoryException {
+		graph(helper.getQuery(), helper.getHandler());
+	}
+	
+	/**
+	 * Executes the SPARQL CONSTRUCT/DESCRIBE query returned by the helper, and pass the helper to the <code>evaluate</code> method
+	 */
+	public void graph(SparqlOperationIfc query, RDFHandler handler) 
+	throws QueryEvaluationException, RepositoryException {
+		log.trace("Executing SPARQL GRAPH :\n"+query);
+		GraphQuery graphQuery = this.connection.prepareGraphQuery(QueryLanguage.SPARQL, query.getSPARQL());
+		// sets bindings, inferred statement flags and datasets
+		graphQuery = (GraphQuery)preprocessOperation(graphQuery, query.getBindings(), (query.isIncludeInferred() != null)?query.isIncludeInferred():this.includeInferred, query.getDataset());
+		
+		// on execute la query
+		graphQuery.evaluate(handler);
+	}
+	
+	/**
+	 * Executes the SPARQL CONSTRUCT/DESCRIBE given as a String, and pass the helper to the <code>evaluate</code> method
+	 */
+	public void graph(String query, RDFHandler handler) 
+	throws QueryEvaluationException, RepositoryException {			
+		log.trace("Executing SPARQL GRAPH :\n"+query);
+		GraphQuery graphQuery = this.connection.prepareGraphQuery(QueryLanguage.SPARQL, query);
+		// sets bindings, inferred statement flags and datasets
+		graphQuery = (GraphQuery)preprocessOperation(graphQuery, null, this.includeInferred, this.getDataset());
+		
+		// on execute la query
+		graphQuery.evaluate(handler);
 	}
 	
 	/**

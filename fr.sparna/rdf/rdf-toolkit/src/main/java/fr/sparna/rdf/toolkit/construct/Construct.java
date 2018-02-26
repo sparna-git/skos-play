@@ -1,20 +1,25 @@
 package fr.sparna.rdf.toolkit.construct;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
+import org.apache.commons.io.FileUtils;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
+import org.eclipse.rdf4j.repository.util.RDFInserter;
+import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.commons.io.FileUtil;
-import fr.sparna.rdf.sesame.toolkit.handler.CopyStatementRDFHandler;
-import fr.sparna.rdf.sesame.toolkit.query.ConstructSparqlHelper;
-import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
-import fr.sparna.rdf.sesame.toolkit.repository.AutoDetectRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
+import fr.sparna.rdf.rdf4j.repository.AutoDetectRepositoryFactory;
+import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
+import fr.sparna.rdf.rdf4j.toolkit.repository.LocalMemoryRepositorySupplier;
+import fr.sparna.rdf.rdf4j.toolkit.util.RepositoryWriter;
+import fr.sparna.rdf.toolkit.ListFilesRecursive;
 import fr.sparna.rdf.toolkit.ToolkitCommandIfc;
 
 public class Construct implements ToolkitCommandIfc {
@@ -29,26 +34,31 @@ public class Construct implements ToolkitCommandIfc {
 		// TODO configure logging
 		
 		// lire le RDF d'input
-		Repository inputRepository = new AutoDetectRepositoryFactory(args.getInput()).createNewRepository();
+		Repository inputRepository = new AutoDetectRepositoryFactory(args.getInput()).get();
 		
 		// preparer le RDF d'output
-		Repository outputRepository = new LocalMemoryRepositoryFactory().createNewRepository();
+		Repository outputRepository = new LocalMemoryRepositorySupplier().get();
 		
 		// executer les SPARQL
-		List<File> sparqls = FileUtil.listFilesRecursive(args.getQueryDirectoryOrFile());
-		for (File file : sparqls) {
-			log.debug("Applying rule "+file.getAbsolutePath()+"...");
-			Perform.on(inputRepository).construct(
-					new ConstructSparqlHelper(
-							new SparqlQueryBuilder(file),
-							new CopyStatementRDFHandler(outputRepository)
-					)
-			);
+		List<File> sparqls = ListFilesRecursive.listFilesRecursive(args.getQueryDirectoryOrFile());
+		
+		// open output connection
+		try(RepositoryConnection outputConnection = inputRepository.getConnection()) {
+			// open input connection
+			try(RepositoryConnection inputConnection = inputRepository.getConnection()) {
+				for (File file : sparqls) {
+					log.debug("Applying rule "+file.getAbsolutePath()+"...");
+					Perform.on(inputConnection).graph(
+							FileUtils.readFileToString(file, Charset.defaultCharset()),
+							new RDFInserter(outputConnection)
+					);
+				}
+			}
+			
+			// write output
+			RepositoryWriter.writeToFile(args.getOutput(), outputConnection);
 		}
-		
-		// write output
-		RepositoryWriter.writeToFile(args.getOutput(), outputRepository);
-		
+
 		// shutdown repos
 		inputRepository.shutDown();
 		outputRepository.shutDown();

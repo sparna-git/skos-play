@@ -6,6 +6,9 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.converters.FileConverter;
@@ -31,7 +34,7 @@ public class ArgumentsUpdate {
 	
 	@Parameter(
 			names = { "-og", "--outputGraphs" },
-			description = "Named graphs URI to output",
+			description = "Named graphs IRI to output",
 			variableArity = true
 	)
 	private List<String> outputGraphs;
@@ -44,14 +47,14 @@ public class ArgumentsUpdate {
 	)
 	private File updateDirectory;
 
-	public List<URI> getOutputGraphsURIs() throws URISyntaxException {
+	public List<IRI> getOutputGraphsIRIs() throws URISyntaxException {
 		if(outputGraphs == null) {
 			return null;
 		}
 		
-		List<URI> uris = new ArrayList<URI>();
+		List<IRI> uris = new ArrayList<IRI>();
 		for (String aString : this.outputGraphs) {
-			uris.add(new URI(aString));
+			uris.add(SimpleValueFactory.getInstance().createIRI(aString));
 		}
 		return uris;
 	}

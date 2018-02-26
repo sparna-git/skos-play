@@ -131,11 +131,6 @@
             <artifactId>skos-printer</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>fr.sparna.commons</groupId>
-            <artifactId>sparna-commons-lang</artifactId>
-        </dependency>
-
 		<!-- for command-line parsing -->
 		<dependency>
 			<groupId>com.beust</groupId>
