@@ -34,7 +34,7 @@ public class LocalMemoryRepositorySupplier implements Supplier<Repository> {
 	}
 	
 	/**
-	 * Constructs a Supplier with the given configuration flag; flags are defined as an
+	 * Constructs a Supplierc with the given configuration flag; flags are defined as an
 	 * enum in this class.
 	 * 
 	 * @param configuration	The <code>FactoryConfiguration</code> to use

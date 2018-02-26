@@ -48,11 +48,6 @@
 
 		<dependency>
 			<groupId>fr.sparna.commons</groupId>
-			<artifactId>sparna-commons-lang</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>fr.sparna.commons</groupId>
 			<artifactId>sparna-commons-fop</artifactId>
 			<!-- conflicts with sesame's commons-io -->
 			<exclusions>

@@ -125,9 +125,4 @@ public class ClasspathUnzip {
 		}
 	}
 
-
-	public static void main(String... args) throws Exception {
-		ClasspathUnzip.unzipDirectoryFromClassPath("com/mondeca/rdfindexer/solr", "/home/mondeca/test", false);
-	}
-
 }

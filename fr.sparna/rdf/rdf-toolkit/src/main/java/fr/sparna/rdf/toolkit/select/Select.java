@@ -5,24 +5,30 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.query.Binding;
+import org.eclipse.rdf4j.query.impl.SimpleBinding;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.io.ClasspathUnzip;
-import fr.sparna.commons.io.FileUtil;
-import fr.sparna.rdf.sesame.toolkit.handler.CsvHandler;
-import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
-import fr.sparna.rdf.sesame.toolkit.repository.AutoDetectRepositoryFactory;
+import fr.sparna.rdf.rdf4j.repository.AutoDetectRepositoryFactory;
+import fr.sparna.rdf.rdf4j.toolkit.handler.CsvHandler;
+import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
+import fr.sparna.rdf.rdf4j.toolkit.query.SimpleQueryReader;
+import fr.sparna.rdf.rdf4j.toolkit.query.SimpleSparqlOperation;
+import fr.sparna.rdf.toolkit.ListFilesRecursive;
 import fr.sparna.rdf.toolkit.ToolkitCommandIfc;
 
 public class Select implements ToolkitCommandIfc {
@@ -37,125 +43,128 @@ public class Select implements ToolkitCommandIfc {
 		// TODO configure logging
 
 		// lire le RDF d'input
-		Repository inputRepository = new AutoDetectRepositoryFactory(args.getInput()).createNewRepository();
+		Repository inputRepository = new AutoDetectRepositoryFactory(args.getInput()).get();
 
 		// init potential bindings
-		HashMap<String, Object> bindings = new HashMap<String, Object>();
+		Collection<Binding> bindings = new ArrayList<Binding>();
 		if(args.getBindings() != null) {
 			for (Map.Entry<String, String> anEntry : args.getBindings().entrySet()) {
-					Object value = null;
+					Value value = null;
 					try {
-						value = new URI(anEntry.getValue());
+						URI uriValue = new URI(anEntry.getValue());
+						if(!uriValue.isAbsolute()) {
+							value = SimpleValueFactory.getInstance().createLiteral(anEntry.getValue());
+						}
+						value = SimpleValueFactory.getInstance().createIRI(anEntry.getValue());
 					} catch (Exception e) {
-						value = anEntry.getValue();
+						value = SimpleValueFactory.getInstance().createLiteral(anEntry.getValue());
 					}
-
-					if(!((URI)value).isAbsolute()) {
-						value = anEntry.getValue();
-					}
-					
-					bindings.put(anEntry.getKey(), value);
+					bindings.add(new SimpleBinding(anEntry.getKey(), value));
 			}
 		}
 
-		switch(args.getMode()) {
-		case HTML : {
-			// init writer
-			PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(args.getOutput())));
-
-			// print header
-			SimpleHTMLReportHandler.printHeader(writer);
-
-			// executer les SPARQL
-			List<File> sparqls = FileUtil.listFilesRecursive(args.getQueryDirectoryOrFile());
-			Collections.sort(sparqls, new Comparator<File>() {
-				@Override
-				public int compare(File o1, File o2) {
-					return o1.getAbsolutePath().compareTo(o2.getAbsolutePath());
-				}
-			});
-			for (final File file : sparqls) {
-				log.debug("Executing query in "+file.getAbsolutePath()+"...");
-				SparqlQueryBuilder builder = new SparqlQueryBuilder(file);
-				log.debug("Query is "+builder.getSPARQL());
-				
-				SparqlQuery query = new SparqlQuery(builder);
-				if(!bindings.isEmpty()) {
-					query.setBindings(bindings);
-				}
 		
-				try {
-					Perform.on(inputRepository).select(
-							new SelectSparqlHelper(
-									query, 
+			switch(args.getMode()) {
+			case HTML : {
+				// init writer
+				PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(args.getOutput())));
+
+				// print header
+				SimpleHTMLReportHandler.printHeader(writer);
+
+				// executer les SPARQL
+				List<File> sparqls = ListFilesRecursive.listFilesRecursive(args.getQueryDirectoryOrFile());
+				Collections.sort(sparqls, new Comparator<File>() {
+					@Override
+					public int compare(File o1, File o2) {
+						return o1.getAbsolutePath().compareTo(o2.getAbsolutePath());
+					}
+				});
+				
+				try(RepositoryConnection connection = inputRepository.getConnection()) {
+					for (final File file : sparqls) {
+						log.debug("Executing query in "+file.getAbsolutePath()+"...");
+						SimpleQueryReader reader = new SimpleQueryReader(file);
+						log.debug("Query is "+reader.get());
+						
+						SimpleSparqlOperation query = new SimpleSparqlOperation(reader);
+						if(!bindings.isEmpty()) {
+							query.setBindings(bindings);
+						}
+				
+						try {
+							Perform.on(connection).select(
+									query,
 									new SimpleHTMLReportHandler(
 											writer,
-											builder.getSPARQL(),
+											reader.get(),
 											file.getName(),
 											file.getName().replaceAll("-", " ").replaceAll("_", " ").replaceAll(".sparql", "")
-											)
-									)
-					);
-				} catch (Exception e) {
-					log.error("Error in query in "+file.getAbsolutePath()+"...");
-					e.printStackTrace();
-					// passer a la suivante
+									)									
+							);
+						} catch (Exception e) {
+							log.error("Error in query in "+file.getAbsolutePath()+"...");
+							e.printStackTrace();
+							// passer a la suivante
+						}
+					}	
 				}
-			}		
 
-			// print footer
-			SimpleHTMLReportHandler.printFooter(writer);
+				// print footer
+				SimpleHTMLReportHandler.printFooter(writer);
 
-			// finalize writer
-			writer.close();
-
-			// extract css
-			ClasspathUnzip.unzipFileFromClassPath("bootstrap.min.css", args.getOutput().getAbsoluteFile().getParent(), false);
-			
-			break;
-		} case CSV : {
-			// create output dir
-			File outputDir = args.getOutput();
-			if(!outputDir.exists()) {
-				outputDir.mkdirs();
-			}
-			
-			// executer les SPARQL
-			List<File> sparqls = FileUtil.listFilesRecursive(args.getQueryDirectoryOrFile());
-			for (final File file : sparqls) {
-				log.debug("Executing query in "+file.getAbsolutePath()+"...");
-				SparqlQueryBuilder builder = new SparqlQueryBuilder(file);
-				log.debug("Query is :\n"+builder.getSPARQL());
-				
-				SparqlQuery query = new SparqlQuery(builder);
-				if(!bindings.isEmpty()) {
-					query.setBindings(bindings);
-				}
-				
-				// init writer
-				PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(outputDir, file.getName()+".csv"))));
-				
-				try {
-					Perform.on(inputRepository).select(
-							new SelectSparqlHelper(
-									query, 
-									// new CSVHandler(writer)
-									new CsvHandler(writer, false, false)
-							)
-					);
-				} catch (Exception e) {
-					log.error("Error in query in "+file.getAbsolutePath()+"...");
-					e.printStackTrace();
-					// passer a la suivante
-				}
-				
 				// finalize writer
 				writer.close();
+
+				// extract css
+				ClasspathUnzip.unzipFileFromClassPath("bootstrap.min.css", args.getOutput().getAbsoluteFile().getParent(), false);
+				
+				break;
+			} case CSV : {
+				// create output dir
+				File outputDir = args.getOutput();
+				if(!outputDir.exists()) {
+					outputDir.mkdirs();
+				}
+				
+				// executer les SPARQL
+				List<File> sparqls = ListFilesRecursive.listFilesRecursive(args.getQueryDirectoryOrFile());
+				
+				try(RepositoryConnection connection = inputRepository.getConnection()) {
+					for (final File file : sparqls) {
+						log.debug("Executing query in "+file.getAbsolutePath()+"...");
+						SimpleQueryReader reader = new SimpleQueryReader(file);
+						log.debug("Query is :\n"+reader.get());
+						
+						SimpleSparqlOperation query = new SimpleSparqlOperation(reader);
+						if(!bindings.isEmpty()) {
+							query.setBindings(bindings);
+						}
+						
+						// init writer
+						PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new File(outputDir, file.getName()+".csv"))));
+						
+						try {
+							Perform.on(connection).select(
+								query,
+								new CsvHandler(writer, false, false)
+							);
+						} catch (Exception e) {
+							log.error("Error in query in "+file.getAbsolutePath()+"...");
+							e.printStackTrace();
+							// passer a la suivante
+						}
+						
+						// finalize writer
+						writer.close();
+					}
+				}
+				
+				break;
 			}
-			
-			break;
-		}
-		}
+			}			
+		
+
 		
 		// shutdown repos
 		inputRepository.shutDown();
