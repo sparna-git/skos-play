@@ -893,32 +893,6 @@ public class SkosPlayController {
 		response.flushBuffer();
 	}
 	
-	@RequestMapping(
-			value = "/countAction",
-			method = RequestMethod.POST
-			)
-	public void countAction(
-			HttpServletRequest request,
-			HttpServletResponse response
-			) throws Exception {
-
-		// retrieve data from session
-		SessionData sessionData = SessionData.get(request.getSession());
-		sessionData.setCountAction(sessionData.getCountAction()+1);
-		Map <String,Integer> map=new HashMap<String,Integer>();
-		map.put("count", sessionData.getCountAction());
-		response.addHeader("Content-Encoding", "UTF-8");	
-		response.setContentType("application/json");
-		PrintWriter out = response.getWriter();
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.enable(SerializationFeature.INDENT_OUTPUT);
-		mapper.writeValue(out,map);
-		
-	
-	}
-
-
-
 
 	@RequestMapping(value = "/print", method = RequestMethod.POST)
 	public void print(

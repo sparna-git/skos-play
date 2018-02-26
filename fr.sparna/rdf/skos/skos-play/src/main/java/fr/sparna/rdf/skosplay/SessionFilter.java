@@ -69,7 +69,6 @@ public class SessionFilter implements Filter {
 			
 			// set up Locale
 			session.setUserLocale(request.getLocale());
-			session.setCountAction(0);
 			// initialize pre-loaded labels
 			initPreLoadedLabels(session);
 			

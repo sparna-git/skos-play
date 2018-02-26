@@ -121,7 +121,7 @@
     				</div>
     				<div id="collapseOne" class="accordion-body collapse in"><div class="panel-body">			
 
-    				<form id="print_form" action="print"  onsubmit="false" method="post" enctype="multipart/form-data" class="form-horizontal">    				
+    				<form id="print_form" action="print" method="post" enctype="multipart/form-data" class="form-horizontal">    				
     					<input type="hidden" name="scheme"></input>
     					<input type="hidden" name="language"></input>
     				
@@ -261,34 +261,13 @@
 								</div>
 							</div>
 						</c:otherwise>
-					</c:choose>
-					<div id="myModalprint" class="modal fade" role="dialog">
-					  <div class="modal-dialog modal-lg">
-					
-					    <!-- Modal content-->
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        <h4 class="modal-title"></h4>
-					      </div>
-					      <div class="modal-body">
-					        <p></p>
-					      </div>
-					      <div class="modal-footer">
-							<button id="submit-button-viz" type="button" onclick="submit('#print_form')" class="btn btn-lg btn-primary"><fmt:message key="viz.btn.result" /></button>
-							<img src="images/ajax-loader.gif" id="loading-viz" hidden="hidden" />
-					      </div>
-					    </div>
-					
-					  </div>
-					</div>
-					<input type="hidden" id="showmodal"  class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModalprint">
+					</c:choose>					
 					<div class="form-actions">
 						<div class="col-sm-offset-2">
 							<c:if test="">
 							</c:if>
 							<script>document.write('<a href="'+document.referrer+'"><button id="previous-button-print" class="btn btn-lg btn-default" type="button"><fmt:message key="previous" /></button></a>');</script>
-							<button id="submit-button-print" type="button" onclick="count('#print_form','#myModalprint')" class="btn btn-lg btn-primary"><fmt:message key="print.form.print" /></button>
+							<button id="submit-button-print" type="submit" class="btn btn-lg btn-primary"><fmt:message key="print.form.print" /></button>
 							<img src="images/ajax-loader.gif" id="loading-print" hidden="hidden" />
 						</div>
 					</div>   				
@@ -310,7 +289,7 @@
    				<div id="collapseTwo" class="accordion-body collapse in"><div class="panel-body">
 			
 			
-					<form id="viz_form" action="visualize" method="post" onsubmit="false" enctype="multipart/form-data" class="form-horizontal">
+					<form id="viz_form" action="visualize" method="post" enctype="multipart/form-data" class="form-horizontal">
 						<input type="hidden" name="scheme"></input>
 		 				<input type="hidden" name="language"></input>
 						<input type="hidden" name="display"></input>
@@ -354,31 +333,10 @@
 								</c:if>
 							</div>
 						</div>
-						<div id="myModalviz" class="modal fade" role="dialog">
-						  <div class="modal-dialog modal-lg">
-						
-						    <!-- Modal content-->
-						    <div class="modal-content">
-						      <div class="modal-header">
-						        <button type="button" class="close" data-dismiss="modal">&times;</button>
-						        <h4 class="modal-title"></h4>
-						      </div>
-						      <div class="modal-body">
-						        <p></p>
-						      </div>
-						      <div class="modal-footer">
-								<button id="submit-button-viz" type="button" onclick="submit('#viz_form')" class="btn btn-lg btn-primary"><fmt:message key="viz.btn.result" /></button>
-								<img src="images/ajax-loader.gif" id="loading-viz" hidden="hidden" />
-						      </div>
-						    </div>
-						
-						  </div>
-						</div>
-						<input type="hidden" id="showmodal"  class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModalviz">
 						<div class="form-actions">
 							<div class="col-sm-offset-2">
 								<script>document.write('<a href="'+document.referrer+'"><button id="previous-button-viz" class="btn btn-lg btn-default" type="button"><fmt:message key="previous" /></button></a>');</script>
-								<button id="submit-button-viz" type="button" onclick="count('#viz_form','#myModalviz')" class="btn btn-lg btn-primary"><fmt:message key="print.form.visualize" /></button>
+								<button id="submit-button-viz" type="submit"  class="btn btn-lg btn-primary"><fmt:message key="print.form.visualize" /></button>
 								<img src="images/ajax-loader.gif" id="loading-viz" hidden="hidden" />
 							</div>
 						</div>
@@ -473,25 +431,6 @@
 			
 		}
 		
-		function count(form, modal){
-			$.ajax({
-	       url : 'countAction',
-	       type : 'POST', 
-	       dataType : 'JSON',
-	       success: function(response) {
-	    	   console.log(response.count);
-	    	   if(response.count===2){
-	    		   $( modal ).click();
-	    	   }else{
-	    		   $( form ).submit();
-	    	   }
-	    	   
-      		}
-    	});
-		}
-		function submit(form){
-      		$( form ).submit();
-		}
 		</script>
 	</body>
 </html>
