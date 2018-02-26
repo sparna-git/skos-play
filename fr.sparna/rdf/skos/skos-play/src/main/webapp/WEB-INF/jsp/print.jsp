@@ -9,7 +9,6 @@
 <fmt:setBundle basename="fr.sparna.rdf.skosplay.i18n.Bundle"/>
 
 <c:set var="data" value="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].printFormData}" />
-<c:set var="countAction" value="${sessionScope['fr.sparna.rdf.skosplay.SessionData'].countAction}" />
 <html>
 	<head>
 		<title><c:out value="${applicationData.skosPlayConfig.applicationTitle}" /></title>
