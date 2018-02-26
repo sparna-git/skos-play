@@ -1,4 +1,4 @@
-package fr.sparna.rdf.toolkit.translate;
+package fr.sparna.rdf.toolkit.serialize;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +10,7 @@ import com.beust.jcommander.Parameters;
 import fr.sparna.cli.SpaceSplitter;
 
 @Parameters(commandDescription = "Pretty prints, merge, or translate (e.g. RDF/XML to N3) RDF")
-public class ArgumentsTranslate {
+public class ArgumentsSerialize {
 
 	@Parameter(
 			names = { "-i", "--input" },

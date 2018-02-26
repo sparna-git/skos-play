@@ -93,10 +93,6 @@
 
         <!-- Sparna other dependecies -->
         <dependency>
-            <groupId>fr.sparna.commons</groupId>
-            <artifactId>sparna-commons-lang</artifactId>
-        </dependency>
-        <dependency>
             <groupId>fr.sparna.rdf</groupId>
             <artifactId>sesame-toolkit</artifactId>
         </dependency>

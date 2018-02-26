@@ -4,9 +4,9 @@ import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 
-import fr.sparna.rdf.rdf4j.toolkit.query.ResourceQueryAndResultHandler;
+import fr.sparna.rdf.rdf4j.toolkit.query.TupleResourceQueryHelper;
 
-public abstract class GetAlignmentInScheme extends ResourceQueryAndResultHandler {
+public abstract class GetAlignmentInScheme extends TupleResourceQueryHelper {
 	
 	@Override
 	public String getResourcePath() {
