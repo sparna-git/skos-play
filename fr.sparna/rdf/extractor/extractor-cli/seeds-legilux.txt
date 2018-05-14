@@ -1,3 +1,0 @@
-http://legilux.public.lu/eli/etat/leg/loi/2006/07/31/n2/jo
-http://legilux.public.lu/search/A/?sort_order=DESC&sort_type=datePublication&only_memorials=true
-http://legilux.public.lu/search/A/?statut=en_vigueur

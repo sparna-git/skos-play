@@ -1,2 +1,0 @@
-echo "http://legilux.public.lu/eli/etat/leg/loi/2006/07/31/n2/jo" > seeds.txt
-java -jar target/extractor-cli-1.0-SNAPSHOT-onejar.jar crawl -s seeds.txt -o output.ttl -M 1000 -D 3 -ej false -d src/test/resources/deciderules-test.xml
