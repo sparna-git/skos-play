@@ -17,7 +17,7 @@ public interface GraphQueryHelperIfc {
 	 * 
 	 * @return a SPARQL query with additionnal parameters
 	 */
-	public abstract SparqlOperationIfc getQuery();
+	public abstract SparqlOperationIfc getOperation();
 
 	/**
 	 * Returns a handler capable of processing the results of the query returned by

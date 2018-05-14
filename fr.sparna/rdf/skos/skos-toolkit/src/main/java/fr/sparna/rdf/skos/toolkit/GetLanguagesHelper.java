@@ -1,21 +1,25 @@
 package fr.sparna.rdf.skos.toolkit;
 
+import java.util.function.Supplier;
+
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 
-import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
+import fr.sparna.rdf.rdf4j.toolkit.query.SelfTupleQueryHelper;
+import fr.sparna.rdf.rdf4j.toolkit.query.SimpleSparqlOperation;
+import fr.sparna.rdf.rdf4j.toolkit.query.TupleQueryHelperIfc;
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
 
 /**
  * Return the list of all languages used on pref, alt and hidden labels in a thesaurus
  * 
  * @author Thomas Francart
  */
-public abstract class GetLanguagesHelper extends SelectSparqlHelperBase {
+public abstract class GetLanguagesHelper extends SelfTupleQueryHelper implements TupleQueryHelperIfc {
 
 	/**
 	 * @param conceptURI URI of the concept for which we want the broaders (optionnaly null to get all pairs [?concept;?broader]
@@ -24,7 +28,7 @@ public abstract class GetLanguagesHelper extends SelectSparqlHelperBase {
 	 */
 	public GetLanguagesHelper() {
 		super(
-				new QueryBuilder()
+				new SimpleSparqlOperation(new QuerySupplier())
 		);
 	}
 
@@ -51,12 +55,12 @@ public abstract class GetLanguagesHelper extends SelectSparqlHelperBase {
 	 * 
 	 * @author Thomas Francart
 	 */
-	public static class QueryBuilder implements SparqlQueryBuilderIfc {
+	public static class QuerySupplier implements Supplier<String> {
 
-		public QueryBuilder() { }
+		public QuerySupplier() { }
 
 		@Override
-		public String getSPARQL() {
+		public String get() {
 			String sparql = "" +
 					"SELECT DISTINCT (lang(?label) AS ?lang)"+"\n" +
 					"WHERE {"+"\n" +
@@ -84,13 +88,15 @@ public abstract class GetLanguagesHelper extends SelectSparqlHelperBase {
 				"test:_3 a skos:Concept ; skos:inScheme test:_anotherScheme ; skos:hiddenLabel \"D-3-pref\"@de ."
 		);
 		
-		Perform.on(r).select(new GetLanguagesHelper() {
-			@Override
-			protected void handleLang(Literal lang)
-			throws TupleQueryResultHandlerException {
-				System.out.println(lang.stringValue());
-			}
-		});
+		try(RepositoryConnection c = r.getConnection()) {
+			Perform.on(c).select(new GetLanguagesHelper() {
+				@Override
+				protected void handleLang(Literal lang)
+				throws TupleQueryResultHandlerException {
+					System.out.println(lang.stringValue());
+				}
+			});
+		}
 	}
 
 }

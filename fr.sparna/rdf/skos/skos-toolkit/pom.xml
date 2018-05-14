@@ -44,8 +44,14 @@
 
 		<dependency>
 			<groupId>fr.sparna.rdf</groupId>
-			<artifactId>sesame-toolkit</artifactId>
+			<artifactId>rdf4j-toolkit</artifactId>
+            <version>0.1</version>
 		</dependency>
+
+        <dependency>
+            <groupId>fr.sparna.commons</groupId>
+            <artifactId>sparna-commons-io</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>fr.sparna.commons</groupId>

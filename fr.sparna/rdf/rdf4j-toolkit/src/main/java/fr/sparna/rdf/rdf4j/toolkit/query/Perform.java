@@ -1,11 +1,12 @@
 package fr.sparna.rdf.rdf4j.toolkit.query;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.Binding;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.BooleanQuery;
 import org.eclipse.rdf4j.query.Dataset;
 import org.eclipse.rdf4j.query.GraphQuery;
 import org.eclipse.rdf4j.query.Operation;
@@ -199,7 +200,7 @@ public class Perform {
 	 */
 	public void select(TupleQueryHelperIfc helper) 
 	throws TupleQueryResultHandlerException, QueryEvaluationException, RepositoryException {
-		select(helper.getQuery(), helper.getHandler());
+		select(helper.getOperation(), helper.getHandler());
 	}
 	
 	/**
@@ -210,7 +211,7 @@ public class Perform {
 		log.trace("Executing SPARQL SELECT :\n"+query);
 		TupleQuery tupleQuery = this.connection.prepareTupleQuery(QueryLanguage.SPARQL, query.getSPARQL());
 		// sets bindings, inferred statement flags and datasets
-		tupleQuery = (TupleQuery)preprocessOperation(tupleQuery, query.getBindings(), (query.isIncludeInferred() != null)?query.isIncludeInferred():this.includeInferred, query.getDataset());
+		tupleQuery = (TupleQuery)preprocessOperation(tupleQuery, query.getBindingSet(), (query.isIncludeInferred() != null)?query.isIncludeInferred():this.includeInferred, query.getDataset());
 		
 		// on execute la query
 		tupleQuery.evaluate(handler);
@@ -235,7 +236,7 @@ public class Perform {
 	 */
 	public void graph(GraphQueryHelperIfc helper) 
 	throws QueryEvaluationException, RepositoryException {
-		graph(helper.getQuery(), helper.getHandler());
+		graph(helper.getOperation(), helper.getHandler());
 	}
 	
 	/**
@@ -246,7 +247,7 @@ public class Perform {
 		log.trace("Executing SPARQL GRAPH :\n"+query);
 		GraphQuery graphQuery = this.connection.prepareGraphQuery(QueryLanguage.SPARQL, query.getSPARQL());
 		// sets bindings, inferred statement flags and datasets
-		graphQuery = (GraphQuery)preprocessOperation(graphQuery, query.getBindings(), (query.isIncludeInferred() != null)?query.isIncludeInferred():this.includeInferred, query.getDataset());
+		graphQuery = (GraphQuery)preprocessOperation(graphQuery, query.getBindingSet(), (query.isIncludeInferred() != null)?query.isIncludeInferred():this.includeInferred, query.getDataset());
 		
 		// on execute la query
 		graphQuery.evaluate(handler);
@@ -267,6 +268,28 @@ public class Perform {
 	}
 	
 	/**
+	 * Executes a SPARQL ASK query 
+	 */
+	public boolean ask(SparqlOperationIfc operation) {
+		log.trace("Executing SPARQL ASK :\n"+operation.getSPARQL());
+
+		String query = operation.getSPARQL();
+		BooleanQuery booleanQuery = this.connection.prepareBooleanQuery(QueryLanguage.SPARQL, query);
+		// sets bindings, inferred statement flags and datasets
+		booleanQuery = (BooleanQuery)preprocessOperation(booleanQuery, operation.getBindingSet(), (operation.isIncludeInferred() != null)?operation.isIncludeInferred():this.includeInferred, operation.getDataset());
+			
+		// on execute la query
+		return booleanQuery.evaluate();
+	}
+	
+	/**
+	 * Executes a SPARQL ASK query 
+	 */
+	public boolean ask(String query) {
+		return ask(new SimpleSparqlOperation(query));
+	}
+	
+	/**
 	 * Executes the update returned by the helper. Nothing is returned from the execution.
 	 * 
 	 * @param helper
@@ -277,7 +300,7 @@ public class Perform {
 		log.trace("Executing SPARQL UPDATE :\n"+updateOperation);
 		Update update = this.connection.prepareUpdate(QueryLanguage.SPARQL, updateOperation.getSPARQL());
 		// sets bindings, inferred statement flags and datasets
-		update = (Update)preprocessOperation(update, updateOperation.getBindings(), (updateOperation.isIncludeInferred() != null)?updateOperation.isIncludeInferred():this.includeInferred, updateOperation.getDataset());
+		update = (Update)preprocessOperation(update, updateOperation.getBindingSet(), (updateOperation.isIncludeInferred() != null)?updateOperation.isIncludeInferred():this.includeInferred, updateOperation.getDataset());
 		
 		// on execute l'update
 		update.execute();
@@ -299,14 +322,16 @@ public class Perform {
 	
 	private static Operation preprocessOperation(
 			final Operation o,
-			Collection<Binding> bindings,
+			BindingSet bindingSet,
 			Boolean includeInferred,
 			Dataset d
 			
 	) {				
 		// on positionne les bindings s'il y en a
-		if(bindings != null) {
-			bindings.stream().forEach(b -> o.setBinding(b.getName(), b.getValue()));
+		if(bindingSet != null) {
+			for (Binding binding : bindingSet) {
+				o.setBinding(binding.getName(), binding.getValue());
+			}
 		}
 
 		// on inclut les inferred statements si demandé

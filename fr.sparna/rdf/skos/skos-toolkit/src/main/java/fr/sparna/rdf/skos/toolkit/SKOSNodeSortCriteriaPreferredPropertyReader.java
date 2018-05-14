@@ -1,13 +1,12 @@
 package fr.sparna.rdf.skos.toolkit;
 
-import java.net.URI;
 import java.util.List;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
-import fr.sparna.rdf.sesame.toolkit.util.PreferredPropertyReader;
-import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
+import fr.sparna.rdf.rdf4j.toolkit.util.PreferredPropertyReader;
+
 
 public class SKOSNodeSortCriteriaPreferredPropertyReader implements SKOSNodeSortCriteriaReader {
 	
@@ -24,7 +23,7 @@ public class SKOSNodeSortCriteriaPreferredPropertyReader implements SKOSNodeSort
 	}
 
 	@Override
-	public String readSortCriteria(URI node) throws SparqlPerformException {
+	public String readSortCriteria(IRI node) {
 		List<Value> sortCriterias = propertyReader.getValues(node);
 		// usually there would be only one
 		String sortCriteria = (sortCriterias != null && sortCriterias.size() > 0)?sortCriterias.get(0).stringValue():null;

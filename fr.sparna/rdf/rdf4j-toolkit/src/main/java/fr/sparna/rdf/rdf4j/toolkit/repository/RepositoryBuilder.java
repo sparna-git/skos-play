@@ -12,6 +12,7 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromString;
 import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromUrl;
 import fr.sparna.rdf.rdf4j.toolkit.util.Namespaces;
 
@@ -88,6 +89,19 @@ public class RepositoryBuilder implements Supplier<Repository> {
 				// true : use default fallback
 				new LoadFromUrl(url, false, url.getFile().substring(1))
 				);
+		return builder.get();
+	}
+	
+	/**
+	 * Builds a repository loaded with the provided RDF data as a String.
+	 * This relies on the LoadFromString operation.
+	 * 
+	 * @param rdf a String containing the rdf data to load
+	 * @return
+	 * @throws RepositoryFactoryException
+	 */
+	public static Repository fromRdf(String rdf) {
+		RepositoryBuilder builder = new RepositoryBuilder(new LocalMemoryRepositorySupplier(), new LoadFromString(rdf));
 		return builder.get();
 	}
 	

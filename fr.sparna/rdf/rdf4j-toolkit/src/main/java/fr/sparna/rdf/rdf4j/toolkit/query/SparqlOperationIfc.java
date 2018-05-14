@@ -1,8 +1,6 @@
 package fr.sparna.rdf.rdf4j.toolkit.query;
 
-import java.util.Collection;
-
-import org.eclipse.rdf4j.query.Binding;
+import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.Dataset;
 
 /**
@@ -24,9 +22,9 @@ public interface SparqlOperationIfc {
 	/**
 	 * Returns the bindings to be set on the returned SPARQL query.
 	 * 
-	 * @return the bindings that will be set on the SPARQL query
+	 * @return the binding set that will be set on the SPARQL query
 	 */
-	public Collection<Binding> getBindings();
+	public BindingSet getBindingSet();
 	
 	/**
 	 * Tells if the sparql query should be executed by including the inferred statements or not.

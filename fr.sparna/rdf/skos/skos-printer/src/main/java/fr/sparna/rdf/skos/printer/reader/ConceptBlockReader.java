@@ -20,9 +20,9 @@ import fr.sparna.rdf.sesame.toolkit.util.Namespaces;
 import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
 import fr.sparna.rdf.skos.toolkit.SKOS;
-import fr.sparna.rdf.skos.toolkit.builders.GetCollectionsOfConcept;
+import fr.sparna.rdf.skos.toolkit.builders.CollectionsOfConceptReader;
 import fr.sparna.rdf.skos.toolkit.builders.GetLabels;
-import fr.sparna.rdf.skos.toolkit.builders.GetTopConceptsOfConcept;
+import fr.sparna.rdf.skos.toolkit.builders.TopConceptsOfConceptReader;
 
 public class ConceptBlockReader {
 
@@ -104,13 +104,13 @@ public class ConceptBlockReader {
 					additionalReaders.put(SKOSPLAY.TOP_TERM,
 						new KeyValueReader<org.eclipse.rdf4j.model.URI, org.eclipse.rdf4j.model.URI>(
 								repository,
-								new GetTopConceptsOfConcept(null)
+								new TopConceptsOfConceptReader(null)
 					));					
 				} else if(aProperty.equals(SKOSPLAY.MEMBER_OF)) {
 					additionalReaders.put(SKOSPLAY.MEMBER_OF,
 						new KeyValueReader<org.eclipse.rdf4j.model.URI, org.eclipse.rdf4j.model.URI>(
 								repository,
-								new GetCollectionsOfConcept(null)
+								new CollectionsOfConceptReader(null)
 					));					
 				} else {
 					

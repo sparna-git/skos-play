@@ -1,15 +1,16 @@
 package fr.sparna.rdf.skos.toolkit;
 
-import java.net.URI;
-import java.util.HashMap;
+import java.util.function.Supplier;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.query.impl.SimpleBinding;
 
-import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperIfc;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
+import fr.sparna.rdf.rdf4j.toolkit.query.SelfTupleQueryHelper;
+import fr.sparna.rdf.rdf4j.toolkit.query.SimpleSparqlOperation;
+import fr.sparna.rdf.rdf4j.toolkit.query.TupleQueryHelperIfc;
 
 
 /**
@@ -19,17 +20,16 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
  * @author Thomas Francart
  */
 @SuppressWarnings("serial")
-public abstract class GetBroadersOfMembersOfCollection extends SelectSparqlHelperBase implements SelectSparqlHelperIfc {
+public abstract class GetBroadersOfMembersOfCollection extends SelfTupleQueryHelper implements TupleQueryHelperIfc {
 
 	/**
 	 * @param collectionUri URI of the collection for which we want to get the broader of the members
 	 */
-	public GetBroadersOfMembersOfCollection(final URI collectionUri) {
+	public GetBroadersOfMembersOfCollection(final IRI collectionIri) {	
 		super(
-				new QueryBuilder(),
-				new HashMap<String, Object>() {{
-					put("collection", collectionUri);
-				}}
+				new SimpleSparqlOperation(
+						new QuerySupplier()						
+				).withBinding(new SimpleBinding("collection", collectionIri))
 		);
 	}
 	
@@ -57,13 +57,13 @@ public abstract class GetBroadersOfMembersOfCollection extends SelectSparqlHelpe
 	 * 
 	 * @author Thomas Francart
 	 */
-	public static class QueryBuilder implements SparqlQueryBuilderIfc {
+	public static class QuerySupplier implements Supplier<String> {
 
-		public QueryBuilder() {
+		public QuerySupplier() {
 		}
 
 		@Override
-		public String getSPARQL() {
+		public String get() {
 			String sparql = "" +
 			"SELECT DISTINCT ?broader"+"\n" +
 			"WHERE {"+"\n" +

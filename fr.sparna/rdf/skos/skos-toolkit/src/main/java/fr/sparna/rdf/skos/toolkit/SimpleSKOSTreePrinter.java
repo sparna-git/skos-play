@@ -1,21 +1,15 @@
 package fr.sparna.rdf.skos.toolkit;
 
-import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.URI;
-import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
-import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
-import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
-import fr.sparna.rdf.sesame.toolkit.util.PreferredPropertyReader;
-import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
+import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
 
 /**
  * Prints a SKOS tree as a String
@@ -25,27 +19,26 @@ import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
  */
 public class SimpleSKOSTreePrinter {
 
-	private Repository repository;
+	private RepositoryConnection connection;
 	private String displayLanguage = null;
 
-	public SimpleSKOSTreePrinter(Repository repository) {
+	public SimpleSKOSTreePrinter(RepositoryConnection connection) {
 		super();
-		this.repository = repository;
+		this.connection = connection;
 	}
 
-	public SimpleSKOSTreePrinter(Repository repository, String displayLanguage) {
+	public SimpleSKOSTreePrinter(RepositoryConnection connection, String displayLanguage) {
 		super();
-		this.repository = repository;
+		this.connection = connection;
 		this.displayLanguage = displayLanguage;
 	}
 
-	public String printTree() 
-	throws SparqlPerformException {
-		SKOSTreeBuilder builder = new SKOSTreeBuilder(this.repository, this.displayLanguage);
+	public String printTree() {
+		SKOSTreeBuilder builder = new SKOSTreeBuilder(this.connection, this.displayLanguage);
 		return printTree(builder);
 	}
 	
-	public String printTree(SKOSTreeBuilder builder) throws SparqlPerformException {
+	public String printTree(SKOSTreeBuilder builder) {
 		List<GenericTree<SKOSTreeNode>> trees = builder.buildTrees();
 		
 		final StringBuffer buffer = new StringBuffer();
@@ -59,8 +52,7 @@ public class SimpleSKOSTreePrinter {
 		return buffer.toString();
 	}
 
-	private String printConceptRec(GenericTreeNode<SKOSTreeNode> aNode, int depth) 
-	throws SparqlPerformException {
+	private String printConceptRec(GenericTreeNode<SKOSTreeNode> aNode, int depth) {
 		final StringBuffer buffer = new StringBuffer();
 		
 		// print tabs
@@ -69,9 +61,9 @@ public class SimpleSKOSTreePrinter {
 		}			
 		buffer.append((depth > 0)?"\\-":"");
 		
-		Perform.on(repository).select(new GetLabelsHelper(aNode.getData().getUri()) {
+		Perform.on(connection).select(new GetLabelsHelper(aNode.getData().getIri()) {
 			@Override
-			protected void handleLabel(Resource concept, URI labelType, String prefLabel, String lang)
+			protected void handleLabel(Resource concept, IRI labelType, String prefLabel, String lang)
 			throws TupleQueryResultHandlerException {
 				// on n'affiche que si le label correspond à la langue d'affichage voulue
 				if(displayLanguage == null || displayLanguage.equals(lang)) {
@@ -85,7 +77,7 @@ public class SimpleSKOSTreePrinter {
 		}
 
 		// add URI
-		buffer.append(" ("+aNode.getData().getUri().toString()+")"+"\n");
+		buffer.append(" ("+aNode.getData().getIri().toString()+")"+"\n");
 
 		if(aNode.getChildren() != null) {
 			for (GenericTreeNode<SKOSTreeNode> aChild : aNode.getChildren()) {
@@ -94,50 +86,6 @@ public class SimpleSKOSTreePrinter {
 		}
 		
 		return buffer.toString();
-	}
-	
-	public static void main(String... args) throws Exception {
-//		Repository r = RepositoryBuilder.fromRdf(
-//				"@prefix skos: <"+SKOS.NAMESPACE+"> ."+"\n" +
-//				"@prefix test: <http://www.test.fr/skos/> ."+"\n" +
-//				"test:_1 a skos:Concept ; skos:inScheme test:_scheme ; skos:prefLabel \"1\"@fr ." +
-//				"test:_2 a skos:Concept ; skos:inScheme test:_scheme ; skos:prefLabel \"a\"@fr; skos:broader test:_1 ." +
-//				"test:_3 a skos:Concept ; skos:inScheme test:_anotherScheme ; skos:prefLabel \"B\"@fr; skos:broader test:_1 ."
-//		);
-		
-//		Repository r = RepositoryBuilder.fromRdf(
-//				"@prefix skos: <"+SKOS.NAMESPACE+"> ."+"\n" +
-//				"@prefix test: <http://www.test.fr/skos/> ."+"\n" +
-//				"test:_col2 a skos:Collection ; skos:prefLabel \"la deuxieme collection\"@fr ; skos:member test:_x, test:_y ." +
-//				"test:_col a skos:Collection ; skos:prefLabel \"la collection\"@fr ; skos:member test:_1, test:_2, test:_3 ." +
-//				"test:_1 a skos:Concept ; skos:prefLabel \"11111\"@fr ." +
-//				"test:_2 a skos:Concept ; skos:prefLabel \"a\"@fr; skos:broader test:_1 ." +
-//				"test:_3 a skos:Concept ; skos:prefLabel \"B\"@fr; skos:broader test:_1 ." +
-//				"test:_x a skos:Concept ; skos:prefLabel \"x\"@fr ." +
-//				"test:_y a skos:Concept ; skos:prefLabel \"y\"@fr ."
-//		);
-		
-		Repository r = RepositoryBuilder.fromString(args[0]);
-		String language = args[1];
-		
-		PreferredPropertyReader ppr = new PreferredPropertyReader(
-				r,
-				Arrays.asList(new java.net.URI[] { java.net.URI.create(SKOS.NOTATION), java.net.URI.create(SKOS.PREF_LABEL) }),
-				language
-		);
-		ppr.setCaching(true);
-		
-		PropertyReader typeReader = new PropertyReader(r, java.net.URI.create(RDF.TYPE.stringValue()));
-		typeReader.setPreLoad(false);
-		SKOSNodeTypeReader nodeTypeReader = new SKOSNodeTypeReader(typeReader, r);
-		
-		SKOSTreeBuilder builder = new SKOSTreeBuilder(r, new SKOSNodeSortCriteriaPreferredPropertyReader(ppr), nodeTypeReader);
-		
-		builder.setUseConceptSchemesAsFirstLevelNodes(false);
-		
-		// print
-		SimpleSKOSTreePrinter printer = new SimpleSKOSTreePrinter(r, language);
-		System.out.println(printer.printTree(builder));
 	}
 
 }

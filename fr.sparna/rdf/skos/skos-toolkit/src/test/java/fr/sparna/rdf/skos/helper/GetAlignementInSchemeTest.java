@@ -11,7 +11,6 @@ import org.slf4j.impl.SimpleLogger;
 import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
 import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
-import fr.sparna.rdf.skos.helper.GetAlignmentInScheme;
 
 public class GetAlignementInSchemeTest {
 
@@ -24,7 +23,7 @@ public class GetAlignementInSchemeTest {
 		Repository r = rb.get();
 		
 		try(RepositoryConnection c = r.getConnection()) {
-			Perform.on(c).select(new GetAlignmentInScheme() {				
+			Perform.on(c).select(new GetAlignmentInSchemeHelper() {				
 				@Override
 				protected void handleAlignment(Resource concept, Resource alignementType, Resource targetConcept)
 				throws TupleQueryResultHandlerException {

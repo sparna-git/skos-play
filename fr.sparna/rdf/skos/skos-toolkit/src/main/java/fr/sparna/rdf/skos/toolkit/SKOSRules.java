@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderList;
+import fr.sparna.rdf.rdf4j.toolkit.query.SimpleQueryReader;
+import fr.sparna.rdf.rdf4j.toolkit.query.SimpleQueryReaderFactory;
 
 public class SKOSRules {
 
@@ -62,41 +62,41 @@ public class SKOSRules {
 			"skos2skosxl/S16-bnodes.ru"
 	});
 
-	public static List<SparqlQueryBuilder> getRulesetLite() {
-		return SparqlQueryBuilderList.fromResources(SKOSRules.class, LITE_RULESET);
+	public static List<SimpleQueryReader> getRulesetLite() {
+		return SimpleQueryReaderFactory.fromResources(SKOSRules.class, LITE_RULESET);
 	}
 	
-	public static List<SparqlQueryBuilder> getOWL2SKOSRuleset() {
-		return SparqlQueryBuilderList.fromResources(SKOSRules.class, OWL2SKOS_RULESET);
+	public static List<SimpleQueryReader> getOWL2SKOSRuleset() {
+		return SimpleQueryReaderFactory.fromResources(SKOSRules.class, OWL2SKOS_RULESET);
 	}
 	
-	public static List<SparqlQueryBuilder> getSkosXl2SkosRuleset() {
+	public static List<SimpleQueryReader> getSkosXl2SkosRuleset() {
 		return getSkosXl2SkosRuleset(false);
 	}
 	
-	public static List<SparqlQueryBuilder> getSkosXl2SkosRuleset(boolean cleanXl) {
+	public static List<SimpleQueryReader> getSkosXl2SkosRuleset(boolean cleanXl) {
 		if(cleanXl) {
 			List<String> rules = new ArrayList<String>(SKOSXL2SKOS_RULESET);
 			rules.addAll(SKOSXL2SKOS_CLEAN_RULESET);
-			return SparqlQueryBuilderList.fromResources(SKOSRules.class, rules);
+			return SimpleQueryReaderFactory.fromResources(SKOSRules.class, rules);
 		} else {
-			return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOSXL2SKOS_RULESET);
+			return SimpleQueryReaderFactory.fromResources(SKOSRules.class, SKOSXL2SKOS_RULESET);
 		}
 	}
 	
-	public static List<SparqlQueryBuilder> getSkos2SkosXlRuleset(boolean useBnodes) {
+	public static List<SimpleQueryReader> getSkos2SkosXlRuleset(boolean useBnodes) {
 		if(useBnodes) {
-			return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOS2SKOSXL_BNODE_RULESET);
+			return SimpleQueryReaderFactory.fromResources(SKOSRules.class, SKOS2SKOSXL_BNODE_RULESET);
 		} else {
-			return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOS2SKOSXL_URI_RULESET);
+			return SimpleQueryReaderFactory.fromResources(SKOSRules.class, SKOS2SKOSXL_URI_RULESET);
 		}
 	}
 	
-	public static List<SparqlQueryBuilder> getSkos2SkosXlNotesRuleset(boolean useBnodes) {
+	public static List<SimpleQueryReader> getSkos2SkosXlNotesRuleset(boolean useBnodes) {
 		if(useBnodes) {
-			return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOS2SKOSXL_NOTES_BNODE_RULESET);
+			return SimpleQueryReaderFactory.fromResources(SKOSRules.class, SKOS2SKOSXL_NOTES_BNODE_RULESET);
 		} else {
-			return SparqlQueryBuilderList.fromResources(SKOSRules.class, SKOS2SKOSXL_NOTES_URI_RULESET);
+			return SimpleQueryReaderFactory.fromResources(SKOSRules.class, SKOS2SKOSXL_NOTES_URI_RULESET);
 		}
 	}
 

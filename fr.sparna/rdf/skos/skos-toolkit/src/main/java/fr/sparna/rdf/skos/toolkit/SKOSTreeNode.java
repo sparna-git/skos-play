@@ -1,6 +1,6 @@
 package fr.sparna.rdf.skos.toolkit;
 
-import java.net.URI;
+import org.eclipse.rdf4j.model.IRI;
 
 public class SKOSTreeNode {
 
@@ -13,7 +13,7 @@ public class SKOSTreeNode {
 	}
 	
 	// Corresponding Concept URI
-	protected java.net.URI uri;
+	protected IRI iri;
 	// Type of node (Concept vs. Collection)
 	protected NodeType nodeType = NodeType.UNKNOWN;
 	// the criteria on which to sort
@@ -21,19 +21,19 @@ public class SKOSTreeNode {
 	protected double weight = 1.0d;
 
 	
-	public SKOSTreeNode(URI uri, String sortCriteria, NodeType nodeType) {
+	public SKOSTreeNode(IRI iri, String sortCriteria, NodeType nodeType) {
 		super();
-		this.uri = uri;
+		this.iri = iri;
 		this.sortCriteria = sortCriteria;
 		this.nodeType = nodeType;
 	}
 
-	public java.net.URI getUri() {
-		return uri;
+	public IRI getIri() {
+		return iri;
 	}
-	
-	public void setUri(java.net.URI uri) {
-		this.uri = uri;
+
+	public void setIri(IRI iri) {
+		this.iri = iri;
 	}
 
 	public String getSortCriteria() {

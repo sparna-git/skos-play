@@ -1,15 +1,16 @@
 package fr.sparna.rdf.skos.toolkit;
 
-import java.net.URI;
-import java.util.HashMap;
+import java.util.function.Supplier;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.query.impl.SimpleBinding;
 
-import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperIfc;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
+import fr.sparna.rdf.rdf4j.toolkit.query.SelfTupleQueryHelper;
+import fr.sparna.rdf.rdf4j.toolkit.query.SimpleSparqlOperation;
+import fr.sparna.rdf.rdf4j.toolkit.query.TupleQueryHelperIfc;
 
 
 /**
@@ -19,19 +20,21 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
  * @author Thomas Francart
  */
 @SuppressWarnings("serial")
-public abstract class GetNarrowersOrNarrowerThesaurusArraysHelper extends SelectSparqlHelperBase implements SelectSparqlHelperIfc {
+public abstract class GetNarrowersOrNarrowerThesaurusArraysHelper extends SelfTupleQueryHelper implements TupleQueryHelperIfc {
 
 	/**
 	 * @param conceptURI URI of the concept for which we want the narrower thesaurus arrays
 	 * @param orderByLang a 2-letters ISO-code of a language to order the list on the labels of this language,
 	 * or null to disable ordering. 
 	 */
-	public GetNarrowersOrNarrowerThesaurusArraysHelper(final URI conceptURI, String orderByLang) {
-		super(
-				new QueryBuilder(orderByLang),
-				new HashMap<String, Object>() {{
-					put("concept", conceptURI);
-				}}
+	public GetNarrowersOrNarrowerThesaurusArraysHelper(final IRI conceptIri, String orderByLang) {
+		super(				
+				new SimpleSparqlOperation(new QuerySupplier(orderByLang))
+				.withBinding(
+						(conceptIri != null)
+						?new SimpleBinding("concept", conceptIri)
+						:null
+				)
 		);
 	}
 	
@@ -64,19 +67,19 @@ public abstract class GetNarrowersOrNarrowerThesaurusArraysHelper extends Select
 	 * 
 	 * @author Thomas Francart
 	 */
-	public static class QueryBuilder implements SparqlQueryBuilderIfc {
+	public static class QuerySupplier implements Supplier<String> {
 
 		private String orderByLang = null;		
 
 		/**
 		 * @param orderByLang an 2-letter ISO-code of a language, or null to build a query without ordering.
 		 */
-		public QueryBuilder(String orderByLang) {
+		public QuerySupplier(String orderByLang) {
 			this.orderByLang = orderByLang;
 		}
 
 		@Override
-		public String getSPARQL() {
+		public String get() {
 			String sparql = "" +
 			"SELECT DISTINCT ?concept ?narrower"+"\n" +
 			"WHERE {"+"\n" +

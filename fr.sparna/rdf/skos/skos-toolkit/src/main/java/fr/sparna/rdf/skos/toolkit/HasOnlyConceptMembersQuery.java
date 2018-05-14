@@ -1,6 +1,6 @@
 package fr.sparna.rdf.skos.toolkit;
 
-import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
+import java.util.function.Supplier;
 
 /**
  * Returns a query that tests if a Collection has any other collection as members
@@ -8,7 +8,7 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
  * @author Thomas Francart
  */
 @SuppressWarnings("serial")
-public class HasOnlyConceptMembersQuery implements SparqlQueryBuilderIfc {
+public class HasOnlyConceptMembersQuery implements Supplier<String> {
 
 	protected String collection;
 
@@ -17,7 +17,7 @@ public class HasOnlyConceptMembersQuery implements SparqlQueryBuilderIfc {
 	}
 
 	@Override
-	public String getSPARQL() {
+	public String get() {
 		String sparql = "" +
 				"ASK"+"\n" +
 				" WHERE {"+"\n" +

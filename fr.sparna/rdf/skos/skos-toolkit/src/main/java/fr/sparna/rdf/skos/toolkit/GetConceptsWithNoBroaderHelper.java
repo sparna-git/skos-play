@@ -1,13 +1,16 @@
 package fr.sparna.rdf.skos.toolkit;
 
-import java.util.HashMap;
+import java.util.function.Supplier;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.query.impl.SimpleBinding;
 
-import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
+import fr.sparna.rdf.rdf4j.toolkit.query.SelfTupleQueryHelper;
+import fr.sparna.rdf.rdf4j.toolkit.query.SimpleSparqlOperation;
+import fr.sparna.rdf.rdf4j.toolkit.query.TupleQueryHelperIfc;
 
 
 /**
@@ -16,25 +19,24 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
  * @author Thomas Francart
  */
 @SuppressWarnings("serial")
-public abstract class GetConceptsWithNoBroaderHelper extends SelectSparqlHelperBase {
+public abstract class GetConceptsWithNoBroaderHelper extends SelfTupleQueryHelper implements TupleQueryHelperIfc {
 	
 	/**
 	 * @param orderByLang a 2-letters ISO-code of a language to order the list on the labels of this language,
 	 * or null to disable ordering. 
 	 */
 	public GetConceptsWithNoBroaderHelper(String orderByLang) {
-		super(new QueryBuilder(orderByLang, false));
+		super(new SimpleSparqlOperation(new QuerySupplier(orderByLang, false)));
 	}
 	
-	public GetConceptsWithNoBroaderHelper(String orderByLang, final java.net.URI conceptScheme) {
+	public GetConceptsWithNoBroaderHelper(String orderByLang, final IRI conceptSchemeIri) {
 		super(
-				new QueryBuilder(orderByLang, ((conceptScheme != null)?true:false)),
-				new HashMap<String, Object>() {{					
-					if(conceptScheme != null) {
-						// put("additionalCriteriaPredicate", (new ValueFactoryImpl()).createLiteral(SKOS.IN_SCHEME));
-						put("additionalCriteriaObject", conceptScheme);
-					}
-				}}
+				new SimpleSparqlOperation(new QuerySupplier(orderByLang, ((conceptSchemeIri != null)?true:false)))
+				.withBinding(
+						(conceptSchemeIri != null)
+						?new SimpleBinding("additionalCriteriaObject", conceptSchemeIri)
+						:null
+				)
 		);
 	}
 
@@ -48,12 +50,12 @@ public abstract class GetConceptsWithNoBroaderHelper extends SelectSparqlHelperB
 	protected abstract void handleConceptWithNoBroader(Resource noBroader)
 	throws TupleQueryResultHandlerException;
 	
-	public static class QueryBuilder implements SparqlQueryBuilderIfc {
+	public static class QuerySupplier implements Supplier<String> {
 
 		private String orderByLang = null;
 		private boolean additionalCriteria = false;
 
-		public QueryBuilder(String orderByLang, boolean additionalCriteria) {
+		public QuerySupplier(String orderByLang, boolean additionalCriteria) {
 			super();
 			this.orderByLang = orderByLang;
 			this.additionalCriteria = additionalCriteria;
@@ -63,7 +65,7 @@ public abstract class GetConceptsWithNoBroaderHelper extends SelectSparqlHelperB
 		 * TODO : test also on narrowers
 		 */
 		@Override
-		public String getSPARQL() {
+		public String get() {
 			String sparql = "" +
 					"SELECT DISTINCT ?concept"+"\n" +
 					"WHERE {"+"\n" +

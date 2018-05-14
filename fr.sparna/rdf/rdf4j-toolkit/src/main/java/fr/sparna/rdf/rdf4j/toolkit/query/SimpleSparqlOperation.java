@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import org.eclipse.rdf4j.query.Binding;
+import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.Dataset;
+import org.eclipse.rdf4j.repository.sparql.query.SPARQLQueryBindingSet;
 
 /**
  * Concrete implementation of {@link SparqlOperationIfc} that relies on a Supplier<String> to return the SPARQL query.
@@ -17,7 +19,7 @@ import org.eclipse.rdf4j.query.Dataset;
  */
 public class SimpleSparqlOperation implements SparqlOperationIfc {
 
-	protected Collection<Binding> bindings = null;
+	protected BindingSet bindingSet = null;
 	
 	protected Boolean includeInferred = null;
 	
@@ -28,22 +30,22 @@ public class SimpleSparqlOperation implements SparqlOperationIfc {
 	/**
 	 * Constructs a SparqlQuery with a SparqlQueryBuilderIfc and the given bindings
 	 * 
-	 * @param builder The builder that will return the SPARQL query in <code>getSPARQL</code>
+	 * @param supplier The supplier that will return the SPARQL query in <code>getSPARQL</code>
 	 * @param bindings The bindings to inject in the SPARQL query
 	 */
-	public SimpleSparqlOperation(Supplier<String> querySupplier, Collection<Binding> bindings) {
+	public SimpleSparqlOperation(Supplier<String> supplier, BindingSet bindingSet) {
 		super();
-		this.querySupplier = querySupplier;
-		this.bindings = bindings;
+		this.querySupplier = supplier;
+		this.bindingSet = bindingSet;
 	}
 	
 	/**
-	 * Constructs a SparqlQuery with a SparqlQueryBuilderIfc
+	 * Constructs a SparqlQuery with a query supplier
 	 * 
-	 * @param builder The builder that will return the SPARQL query in <code>getSPARQL</code>
+	 * @param supplier The supplier that will return the SPARQL query in <code>getSPARQL</code>
 	 */
-	public SimpleSparqlOperation(Supplier<String> builder) {
-		this(builder, null);
+	public SimpleSparqlOperation(Supplier<String> supplier) {
+		this(supplier, null);
 	}
 	
 	/**
@@ -54,8 +56,17 @@ public class SimpleSparqlOperation implements SparqlOperationIfc {
 	 * a {@link fr.sparna.rdf.sesame.toolkit.query.builder.StringSPARQLQueryBuilder StringSPARQLQueryBuilder}
 	 * @param  bindings The bindings associated to the query
 	 */
-	public SimpleSparqlOperation(String sparql, Collection<Binding> bindings) {
+	public SimpleSparqlOperation(String sparql, BindingSet bindings) {
 		this(new SimpleQueryReader(sparql), bindings);
+	}
+	
+	/**
+	 * @deprecated use SimpleSparqlOperation(String, BindingSet) instead.
+	 * @param sparql
+	 * @param bindings
+	 */
+	public SimpleSparqlOperation(String sparql, Collection<Binding> bindings) {
+		this(new SimpleQueryReader(sparql), SimpleSparqlOperation.toBindginSet(bindings));
 	}
 	
 	/**
@@ -70,6 +81,34 @@ public class SimpleSparqlOperation implements SparqlOperationIfc {
 	}
 	
 	/**
+	 * A helper method to set the bindings on this instance that returns this instance, that allows
+	 * to create a new instance and pass it bindings in a single statement, e.g. new SimpleSparqlOperation(myString).withBindings(myBindings);
+	 * 
+	 * @param bindings	The bindings to set
+	 * @return this
+	 */
+	public SimpleSparqlOperation withBindings(BindingSet bindingSet) {
+		this.setBindingSet(bindingSet);
+		return this;
+	}
+	
+	/**
+	 * A helper method to set a single binding on this instance that returns this instance, that allows
+	 * to create a new instance and pass it a binding in a single statement, e.g. new SimpleSparqlOperation(myString).withBinding(myBinding);
+	 * 
+	 * @param binding	The binding to set
+	 * @return this
+	 */
+	public SimpleSparqlOperation withBinding(Binding binding) {
+		if(binding != null) {
+			SPARQLQueryBindingSet bindingSet = new SPARQLQueryBindingSet();
+			bindingSet.addBinding(binding);
+			this.setBindingSet(bindingSet);
+		}
+		return this;
+	}
+	
+	/**
 	 * Gets the SPARQL String from the underlying Supplier<String>
 	 */
 	@Override
@@ -77,12 +116,11 @@ public class SimpleSparqlOperation implements SparqlOperationIfc {
 		return this.querySupplier.get();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
+	
+
 	@Override
-	public Collection<Binding> getBindings() {
-		return bindings;
+	public BindingSet getBindingSet() {
+		return this.bindingSet;
 	}
 
 	/**
@@ -101,8 +139,8 @@ public class SimpleSparqlOperation implements SparqlOperationIfc {
 		return dataset;
 	}
 
-	public void setBindings(Collection<Binding> bindings) {
-		this.bindings = bindings;
+	public void setBindingSet(BindingSet bindingSet) {
+		this.bindingSet = bindingSet;
 	}
 
 	public void setIncludeInferred(Boolean includeInferred) {
@@ -116,12 +154,12 @@ public class SimpleSparqlOperation implements SparqlOperationIfc {
 	 */
 	@Override
 	public String toString() {
-		if(getBindings() == null) {
+		if(getBindingSet() == null) {
 			return getSPARQL();
 		}
 		
 		String sparqlString = getSPARQL();
-		for (Binding b : bindings) {
+		for (Binding b : bindingSet) {
 			if(b.getValue() != null) {
 				String replacement;
 				if(
@@ -158,4 +196,14 @@ public class SimpleSparqlOperation implements SparqlOperationIfc {
 		return result;
 	}
 	
+	public static SPARQLQueryBindingSet toBindginSet(Collection<Binding> bindings) {
+		if(bindings == null) {
+			return null;
+		}
+		SPARQLQueryBindingSet bindingSet = new SPARQLQueryBindingSet();
+		for (Binding binding : bindings) {
+			bindingSet.addBinding(binding);
+		}
+		return bindingSet;
+	}
 }

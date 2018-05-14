@@ -14,7 +14,7 @@ public class PingSparqlHelper extends AbstractTupleQueryResultHandler implements
 	protected boolean pinged = false;
 
 	@Override
-	public SparqlOperationIfc getQuery() {
+	public SparqlOperationIfc getOperation() {
 		return new SimpleSparqlOperation(PING_QUERY);
 	}
 

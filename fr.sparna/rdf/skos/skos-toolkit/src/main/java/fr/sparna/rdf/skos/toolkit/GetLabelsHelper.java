@@ -1,17 +1,19 @@
 package fr.sparna.rdf.skos.toolkit;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.function.Supplier;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.URI;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.query.impl.SimpleBinding;
 
-import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelperBase;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
+import fr.sparna.rdf.rdf4j.toolkit.query.SelfTupleQueryHelper;
+import fr.sparna.rdf.rdf4j.toolkit.query.SimpleSparqlOperation;
+import fr.sparna.rdf.rdf4j.toolkit.query.TupleQueryHelperIfc;
 
 
 /**
@@ -21,36 +23,34 @@ import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderIfc;
  * @author Thomas Francart
  */
 @SuppressWarnings("serial")
-public abstract class GetLabelsHelper extends SelectSparqlHelperBase {
+public abstract class GetLabelsHelper extends SelfTupleQueryHelper implements TupleQueryHelperIfc {
 	
 	public GetLabelsHelper(
-			final java.net.URI concept,
+			final IRI concept,
 			boolean includePrefLabels, 
 			boolean includeAltLabels,
 			boolean includeHiddenLabels,
 			List<String> langs) {
+		
 		super(
-				new QueryBuilder(
+				new SimpleSparqlOperation(new QuerySupplier(
 					includePrefLabels,
 					includeAltLabels,
 					includeHiddenLabels,
 					langs
-				),
-				new HashMap<String, Object>() {{
-					// si concept est null la variable ne sera pas bindee et la query
-					// remontera TOUS les prefLabels de tous les concepts
-					if(concept != null) {
-						put("concept", concept);
-					}
-				}}
-				);
+				)).withBinding(
+						(concept != null)
+						?new SimpleBinding("concept", concept)
+						:null
+				)
+		);
 	}
 	
 	/**
 	 * Use null as the concept URI to return the prefLabels of all concepts.
 	 * @param concept
 	 */
-	public GetLabelsHelper(java.net.URI concept) {
+	public GetLabelsHelper(IRI concept) {
 		this(
 				concept,
 				// fetch pref labels
@@ -69,15 +69,15 @@ public abstract class GetLabelsHelper extends SelectSparqlHelperBase {
 	public void handleSolution(BindingSet binding)
 	throws TupleQueryResultHandlerException {
 		Resource concept = (Resource)binding.getValue("concept");
-		URI labelType = (URI)binding.getValue("labelType");
+		IRI labelType = (IRI)binding.getValue("labelType");
 		Literal label = (Literal)binding.getValue("label");
 		this.handleLabel(concept, labelType, label.stringValue(), label.getLanguage().get());
 	}
 	
-	protected abstract void handleLabel(Resource concept, URI labelType, String label, String lang)
+	protected abstract void handleLabel(Resource concept, IRI labelType, String label, String lang)
 	throws TupleQueryResultHandlerException;
 	
-	public static class QueryBuilder implements SparqlQueryBuilderIfc {
+	public static class QuerySupplier implements Supplier<String> {
 
 		// includes pref labels by default
 		private boolean includePrefLabels = true;
@@ -89,7 +89,7 @@ public abstract class GetLabelsHelper extends SelectSparqlHelperBase {
 		private List<java.net.URI> conceptSchemesToExclude;
 
 		
-		public QueryBuilder(
+		public QuerySupplier(
 				boolean includePrefLabels, 
 				boolean includeAltLabels,
 				boolean includeHiddenLabels,
@@ -102,7 +102,7 @@ public abstract class GetLabelsHelper extends SelectSparqlHelperBase {
 		}
 
 		@Override
-		public String getSPARQL() {
+		public String get() {
 			List<String> labelTypes = new ArrayList<String>();
 			if(this.includePrefLabels) {
 				labelTypes.add(SKOS.PREF_LABEL);

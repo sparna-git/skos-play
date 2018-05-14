@@ -3,14 +3,17 @@ package fr.sparna.rdf.skos.toolkit;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,17 +22,17 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 
+import fr.sparna.commons.io.ResourceList;
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
 import fr.sparna.commons.tree.GenericTreeVisitorException;
 import fr.sparna.commons.tree.GenericTreeVisitorIfc;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlUpdate;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilderList;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.ApplyUpdates;
-import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
-import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
+import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
+import fr.sparna.rdf.rdf4j.toolkit.query.SimpleQueryReader;
+import fr.sparna.rdf.rdf4j.toolkit.query.SimpleQueryReaderFactory;
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.rdf4j.toolkit.util.LabelReader;
+import fr.sparna.rdf.rdf4j.toolkit.util.RepositoryWriter;
 
 public class JsonSKOSTreePrinter {
 
@@ -44,14 +47,14 @@ public class JsonSKOSTreePrinter {
 	}
 	
 	public String printToString(GenericTree<SKOSTreeNode> tree) 
-	throws SparqlPerformException, IOException, JsonGenerationException {
+	throws IOException, JsonGenerationException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		print(tree, baos);
 		return baos.toString("UTF-8");
 	}
 	
 	public void print(GenericTree<SKOSTreeNode> tree, OutputStream out) 
-	throws SparqlPerformException, IOException, JsonGenerationException {
+	throws IOException, JsonGenerationException {
 		JsonFactory jsonF = new JsonFactory();
 		// let's write to the stream, using UTF-8 encoding (only sensible one)
 		JsonGenerator jg = jsonF.createGenerator(out, JsonEncoding.UTF8);
@@ -60,13 +63,13 @@ public class JsonSKOSTreePrinter {
 			jg.useDefaultPrettyPrinter(); 
 		}
 		
-		Map<URI, List<Value>> labels = new HashMap<URI, List<Value>>();
+		Map<IRI, List<Value>> labels = new HashMap<IRI, List<Value>>();
 		
 		try {
-			URIHarvester harvester = new URIHarvester();
+			IRIHarvester harvester = new IRIHarvester();
 			tree.visit(harvester);
-			log.debug("JsonSKOSTreePrinter : getting labels for "+harvester.uris.size()+" nodes");
-			labels = this.labelReader.getValues(harvester.uris);
+			log.debug("JsonSKOSTreePrinter : getting labels for "+harvester.iris.size()+" nodes");
+			labels = this.labelReader.getValues(harvester.iris);
 		} catch (GenericTreeVisitorException e) {
 			e.printStackTrace();
 		}
@@ -75,20 +78,20 @@ public class JsonSKOSTreePrinter {
 		jg.close();
 	}
 	
-	private void printConceptRec(GenericTreeNode<SKOSTreeNode> aNode, final JsonGenerator jg, Map<URI, List<Value>> labels) 
-	throws SparqlPerformException, JsonGenerationException, IOException {
+	private void printConceptRec(GenericTreeNode<SKOSTreeNode> aNode, final JsonGenerator jg, Map<IRI, List<Value>> labels) 
+	throws JsonGenerationException, IOException {
 		
 		jg.writeStartObject();
 		// write URI
-		jg.writeStringField("uri", aNode.getData().uri.toString());
+		jg.writeStringField("uri", aNode.getData().iri.toString());
 		
 		// write name
 		if(labelReader != null) {
-			String label = LabelReader.display(labels.get(aNode.getData().getUri()));
+			String label = LabelReader.display(labels.get(aNode.getData().getIri()));
 			// make sure we have a label
 			if(label == null || label.equals("")) {
 				// default to the URI if no label has been generated
-				label = aNode.getData().uri.toString();
+				label = aNode.getData().iri.toString();
 			}
 			jg.writeStringField("name", label);
 		}
@@ -115,14 +118,14 @@ public class JsonSKOSTreePrinter {
 		jg.writeEndObject();	
 	}
 	
-	class URIHarvester implements GenericTreeVisitorIfc<SKOSTreeNode> {
+	class IRIHarvester implements GenericTreeVisitorIfc<SKOSTreeNode> {
 
-		List<java.net.URI> uris = new ArrayList<java.net.URI>();
+		List<IRI> iris = new ArrayList<IRI>();
 		
 		@Override
 		public boolean visit(GenericTreeNode<SKOSTreeNode> node)
 		throws GenericTreeVisitorException {
-			this.uris.add(node.getData().uri);
+			this.iris.add(node.getData().iri);
 			return true;
 		}
 		
@@ -146,23 +149,22 @@ public class JsonSKOSTreePrinter {
 				"test:_3 a skos:Concept ; skos:prefLabel \"B\"@fr; skos:broader test:_1 ."
 		);
 		
-		ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SparqlQueryBuilderList.fromClasspathDirectory("rules/inference-lite")));
-		au.execute(r);
+		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
+		org.apache.log4j.Logger.getLogger("fr.sparna.rdf").setLevel(org.apache.log4j.Level.TRACE);
 		
-		RepositoryWriter.writeToFile("output.ttl", r);
+		try(RepositoryConnection connection = r.getConnection()) {
+			Collection<URL> resources = ResourceList.listDirectoryResources("rules/inferlite");
+			List<SimpleQueryReader> readers = SimpleQueryReaderFactory.fromUrls(new ArrayList<URL>(resources));
+			for (SimpleQueryReader aQueryReader : readers) {
+				Perform.on(connection).update(aQueryReader.get());
+			}
+			
+			RepositoryWriter.writeToFile("output.ttl", connection);
+			
+			SimpleSKOSTreePrinter printer = new SimpleSKOSTreePrinter(connection, "fr");
+			System.out.println(printer.printTree());			
+		}
 		
-		SimpleSKOSTreePrinter printer = new SimpleSKOSTreePrinter(r, "fr");
-		System.out.println(printer.printTree());
-		
-//		SKOSTreeBuilder builder = new SKOSTreeBuilder(r, "fr");
-//		List<GenericTree<SKOSTreeNode>> trees = builder.buildTrees();
-		
-//		JsonSKOSTreePrinter jsonPrinter = new JsonSKOSTreePrinter(new LabelReader(r, "fr"));
-//		System.out.println(jsonPrinter.printToString(trees.get(0)));
-		
-//		Perform.on(r).select(new SelectSparqlHelper(
-//				"SELECT ?uri ?label WHERE { ?uri <"+SKOS.PREF_LABEL+"> ?label . } VALUES ?uri { <http://www.test.fr/skos/_1> <http://www.test.fr/skos/_2> }",
-//				new DebugHandler()
-//		));
+
 	}
 }

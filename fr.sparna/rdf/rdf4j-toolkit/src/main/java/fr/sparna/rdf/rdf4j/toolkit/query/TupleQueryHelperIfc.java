@@ -17,7 +17,7 @@ public interface TupleQueryHelperIfc {
 	 * 
 	 * @return The SPARQL Operation
 	 */
-	public abstract SparqlOperationIfc getQuery();
+	public abstract SparqlOperationIfc getOperation();
 
 	/**
 	 * Returns a handler capable of processing the results of the query returned by
