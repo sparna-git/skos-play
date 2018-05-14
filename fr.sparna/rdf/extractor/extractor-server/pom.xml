@@ -1,0 +1,126 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>fr.sparna.rdf.extractor</groupId>
+        <artifactId>sparna-extractor</artifactId>
+        <version>0.7.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+	<groupId>fr.sparna.rdf.extractor</groupId>
+	<artifactId>extractor-server</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>war</packaging>
+
+	<name>Data Extraction Server</name>
+	<description>RDFa + JSON-LD + Microdata extractor service from HTML webpage</description>
+
+	<organization>
+		<name>Sparna</name>
+		<url>http://www.sparna.fr/</url>
+	</organization>
+
+
+	<properties>
+		<spring.version>4.2.6.RELEASE</spring.version>
+	</properties>
+
+	<build>
+		<plugins>
+
+			<!-- Ce plugin ajoute les elements suivants dans le fichier META-INF/MANIFEST.MF 
+				du jar final : Implementation-Title: ${project.artifactId} Implementation-Version: 
+				${project.version} Implementation-Vendor-Id: ${project.groupId} Cela permet 
+				de récupérer la version Maven dans le code, via cette ligne : App.class.getPackage().getImplementationVersion(); 
+				L'autre possibilité est d'aller lire le fichier de properties généré automatiquement 
+				par Maven à cet endroit : META-INF/maven/${project.groupId}/${project.artifactId}/pom.properties -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<dependencies>
+
+	  <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+      </dependency>
+
+        <dependency>
+            <groupId>javaee</groupId>
+            <artifactId>javaee-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+		<dependency> 
+		  <groupId>org.slf4j</groupId>
+		  <artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+		
+		<dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3</version>
+        </dependency>
+		
+		<!--  Spring dependency -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+        <dependency>
+            <groupId>fr.sparna.rdf.extractor</groupId>
+            <artifactId>extractor-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+		<dependency>
+		    <groupId>org.eclipse.rdf4j</groupId>
+		    <artifactId>rdf4j-runtime</artifactId>
+		    <version>2.2</version>
+		</dependency>
+
+		<!-- Theoretically we need this, but it is brought by rdf4j JSON-LD parser -->
+		<!-- We remove it because otherwise it conflicts and does not work -->
+		<!--
+		<dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.2.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-codec</groupId>
+                    <artifactId>commons-codec</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    	-->
+
+	</dependencies>
+
+</project>

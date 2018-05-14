@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fr.sparna.rdf.extractor</groupId>
+    <artifactId>sparna-extractor</artifactId>
+    <version>0.7.0</version>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>fr.sparna.rdf</groupId>
+        <artifactId>sparna-rdf</artifactId>
+        <version>3-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <name>Sparna Structured Data Extractor</name>
+    <description>All Extractor-related modules</description>
+    <url>http://www.sparna.fr/</url>
+    
+    <organization>
+        <name>Sparna</name>
+        <url>http://www.sparna.fr/</url>
+    </organization>    
+
+    <modules>
+        <module>microdata-parser</module>
+        <module>extractor-core</module>
+        <module>extractor-server</module>
+        <module>extractor-cli</module>
+    </modules>
+
+</project>

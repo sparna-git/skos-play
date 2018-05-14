@@ -1,0 +1,80 @@
+package fr.sparna.rdf.extractor.cli.crawl;
+
+import java.io.FileOutputStream;
+
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFWriter;
+import org.eclipse.rdf4j.rio.Rio;
+
+import edu.uci.ics.crawler4j.crawler.CrawlConfig;
+import edu.uci.ics.crawler4j.crawler.CrawlController;
+import edu.uci.ics.crawler4j.fetcher.PageFetcher;
+import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
+import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
+import fr.sparna.rdf.extractor.cli.ExtractorCliCommandIfc;
+
+public class CrawlBak implements ExtractorCliCommandIfc {
+
+	@Override
+	public void execute(Object args) throws Exception {
+		ArgumentsCrawl a = (ArgumentsCrawl)args;
+
+
+		/*
+		 * numberOfCrawlers shows the number of concurrent threads that should
+		 * be initiated for crawling.
+		 */
+		int numberOfCrawlers = a.getThreads();
+
+		CrawlConfig config = new CrawlConfig();
+		a.initCrawlConfig(config);
+
+		/*
+		 * Instantiate the controller for this crawl.
+		 */
+		PageFetcher pageFetcher = new PageFetcher(config);
+		RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+		RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+		CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
+
+		/*
+		 * For each crawl, you need to add some seed urls. These are the first
+		 * URLs that are fetched and then the crawler starts following links
+		 * which are found in these pages
+		 */
+		Seeds seeds = Seeds.parse(a.getSeeds());		
+		seeds.register(controller);
+		
+		// creates the output repository
+		RepositoryFactoryFromArg rffa = new RepositoryFactoryFromArg();
+		Repository repository = rffa.buildRepository(a.getOutput());
+		
+		ExtractorCrawlerFactory factory = new ExtractorCrawlerFactory(repository);
+		factory.setExtractContent(a.isExtractContent());
+		factory.setExtractJsonLd(a.isExtractJsonLd());
+		factory.setDecideRules(a.getDecideRules());
+		factory.setSeeds(seeds);
+		
+		/*
+		 * Start the crawl. This is a blocking operation, meaning that your code
+		 * will reach the line after this only when crawling is finished.
+		 */
+		controller.start(factory, numberOfCrawlers);
+		
+		if(rffa.isFileArg(a.getOutput())) {
+			// dump the content of the repo in a file
+			RDFWriter writer = Rio.createWriter(
+					Rio.getParserFormatForFileName(a.getOutput()).orElse(RDFFormat.RDFXML),
+					new FileOutputStream(a.getOutput())
+			);
+			
+			try(RepositoryConnection c = repository.getConnection()) {
+				c.export(writer);
+			}
+		}
+	}
+
+
+}
