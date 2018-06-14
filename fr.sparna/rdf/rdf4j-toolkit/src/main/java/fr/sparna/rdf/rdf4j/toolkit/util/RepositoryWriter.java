@@ -29,6 +29,8 @@ import org.eclipse.rdf4j.rio.helpers.BufferedGroupingRDFHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.sparna.rdf.rdf4j.toolkit.handler.SortingRDFHandler;
+
 /**
  * Writes the content of a repository. By default, the repository will be sorted before being dumped,
  * so that the final file is neatly serialized; set sorting to "false" if you want to bypass sorting.
@@ -270,7 +272,8 @@ public class RepositoryWriter {
 		RDFHandler writer = RDFWriterRegistry.getInstance().get(format).get().getWriter(new OutputStreamWriter(stream,charset));
 		
 		if(sorting) {
-			writer = new BufferedGroupingRDFHandler(Integer.MAX_VALUE/2, writer);
+			// writer = new BufferedGroupingRDFHandler(Integer.MAX_VALUE/2, writer);
+			writer = new SortingRDFHandler(writer);
 		}
 		
 		if(this.namespacesMap != null) {

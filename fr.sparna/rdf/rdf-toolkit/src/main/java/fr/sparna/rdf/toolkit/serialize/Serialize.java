@@ -31,14 +31,13 @@ public class Serialize implements ToolkitCommandIfc {
 				writer.setSorting(false);
 			} else {
 				writer.setSorting(true);
-			}		
+			}
 			
 			// on positionne les namespaces
 			writer.setNamespacesMap(args.getNamespaceMappings());
 
 			// dumper le repository trié
 			writer.writeToFile(args.getOutput());
-			
 		}
 		
 		// mettre un petit message

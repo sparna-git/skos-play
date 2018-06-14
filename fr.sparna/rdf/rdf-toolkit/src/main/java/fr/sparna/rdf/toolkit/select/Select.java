@@ -143,7 +143,7 @@ public class Select implements ToolkitCommandIfc {
 					try {
 						Perform.on(connection).select(
 								query,
-								new CsvHandler(writer, false, false)
+								new CsvHandler(writer, true, true)
 								);
 					} catch (Exception e) {
 						log.error("Error in query in "+file.getAbsolutePath()+"...");

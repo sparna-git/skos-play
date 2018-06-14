@@ -43,7 +43,7 @@ public class Construct implements ToolkitCommandIfc {
 		List<File> sparqls = ListFilesRecursive.listFilesRecursive(args.getQueryDirectoryOrFile());
 		
 		// open output connection
-		try(RepositoryConnection outputConnection = inputRepository.getConnection()) {
+		try(RepositoryConnection outputConnection = outputRepository.getConnection()) {
 			// open input connection
 			try(RepositoryConnection inputConnection = inputRepository.getConnection()) {
 				for (File file : sparqls) {
