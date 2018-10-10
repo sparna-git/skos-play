@@ -20,7 +20,7 @@ public class Serialize implements ToolkitCommandIfc {
 		// TODO : configure logging
 		
 		// lire le RDF d'input
-		Repository r = new RepositoryBuilderFactory(args.getInput()).get().get();
+		Repository r = RepositoryBuilderFactory.fromStringList(args.getInput()).get();
 		
 		try(RepositoryConnection connection = r.getConnection()) {
 			// preparer le dumper

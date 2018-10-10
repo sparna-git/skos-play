@@ -8,290 +8,146 @@
 @prefix fn: <http://www.w3.org/2005/xpath-functions#> .
 @prefix sesame: <http://www.openrdf.org/schema/sesame#> .
 
-iso:ara a iso:language ;
-	iso:code-a2 "ar" ;
-	iso:code-a3t "ara" ;
-	rdfs:label "عربي"@ar , "Арабская"@be , "Арабски"@bg , "Arapski"@bs , "Àrab"@ca , "Arabština"@cs , "Arabisk"@da , "Arabisch"@de , "Αραβικά"@el , "Arabic"@en , "Árabe"@es , "Araabia"@et , "Arabiera"@eu , "Arabian"@fi , "Arabiskt"@fo , "Arabe"@fr , "Araibis"@ga , "Árabe"@gl , "अरबी"@hi , "Arapski"@hr , "Arab"@hu , "Arabíska"@is , "Arabo"@it , "アラビア語"@ja , "არაბული"@ka , "아랍어"@ko , "Arabų"@lt , "Arābu"@lv , "Арапски"@mk , "Arab"@ms , "Gharbi"@mt , "Arabisch"@nl , "Arabisk"@no , "Arabski"@pl , "Árabe"@pt , "Árabe"@pt-BR , "Arab"@rm , "Arabă"@ro , "арабский"@ru , "Arabčina"@sk , "Arabščina"@sl , "Arabisht"@sq , "Арапски"@sr , "Arabiska"@sv , "ภาษาอาหรับ"@th , "Arapça"@tr , "Арабська"@uk , "阿拉伯语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/ar> .
+iso:ara iso:code-a2 "ar" ;
+	iso:code-a3t "ara" .
 
-iso:bel a iso:language ;
-	iso:code-a2 "be" ;
-	iso:code-a3t "bel" ;
-	rdfs:label "البيلوروسية"@ar , "Беларуская"@be , "Белоруски"@bg , "Bjeloruski "@bs , "Bielorús"@ca , "Běloruština"@cs , "Hviderussisk"@da , "Weißrussisch"@de , "Λευκορωσικά"@el , "Belarusian"@en , "Bielorruso"@es , "Valgevene"@et , "Bielorrusiera"@eu , "Valkovenäjä"@fi , "Belarussiskt"@fo , "Biélorusse"@fr , "Bealarúisis"@ga , "Bielorruso"@gl , "बैलोरूशियन्"@hi , "Bjeloruski"@hr , "Belarusz"@hu , "Hvítrússneska"@is , "Bielorusso"@it , "ベラルーシ語"@ja , "ბელორუსული"@ka , "벨라루스어"@ko , "Baltarusių"@lt , "Baltkrievu"@lv , "Белоруски"@mk , "Belarusian"@ms , "Belarussu"@mt , "Wit-Russisch"@nl , "Hviterussisk"@no , "Białoruski"@pl , "Bielo-russo"@pt , "Bielo-russo"@pt-BR , "Bieloruss"@rm , "Bielorusă"@ro , "Белорусский"@ru , "Bieloruština"@sk , "Beloruščina"@sl , "Bjellorusisht"@sq , "Белоруски"@sr , "Vitryska"@sv , "เบลารุส"@th , "Beyaz Rusça"@tr , "Білоруська"@uk , "白俄罗斯语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/be> .
+iso:bel iso:code-a2 "be" ;
+	iso:code-a3t "bel" .
 
-iso:bos a iso:language ;
-	iso:code-a2 "bs" ;
-	iso:code-a3t "bos" ;
-	rdfs:label "البوسنية"@ar , "Баснійская"@be , "Босненски"@bg , "Bosanski"@bs , "Bosnià"@ca , "Bosenština"@cs , "Bosnisk"@da , "Bosnisch"@de , "Βοσνιακά"@el , "Bosnian"@en , "Bosnio"@es , "Bosnia"@et , "Bosniera"@eu , "Bosnian"@fi , "Bosniskt"@fo , "Bosnien"@fr , "Boisnis"@ga , "Bosnio"@gl , "बोस्नियाई"@hi , "Bosanski"@hr , "Bosnyák"@hu , "Bosníska"@is , "Bosniaco"@it , "ボスニア語"@ja , "ბოსნიური"@ka , "보스니아어"@ko , "Bosnių"@lt , "Bosniešu"@lv , "Босански"@mk , "Bosnian"@ms , "Bosnijan"@mt , "Bosnisch"@nl , "Bosnisk"@no , "Bośniacki"@pl , "Bósnio"@pt , "Bósnio"@pt-BR , "Bosniac"@rm , "Bosniacă"@ro , "Боснийский"@ru , "Bosniačtina"@sk , "Bosanščina"@sl , "Boshnjakisht"@sq , "Босански"@sr , "Bosniska"@sv , "บอสเนีย"@th , "Boşnakça"@tr , "Боснійська"@uk , "波斯尼亚语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/bs> .
+iso:bos iso:code-a2 "bs" ;
+	iso:code-a3t "bos" .
 
-iso:bul a iso:language ;
-	iso:code-a2 "bg" ;
-	iso:code-a3t "bul" ;
-	rdfs:label "بلغاري"@ar , "Баўгарская"@be , "Български"@bg , "Bugarski"@bs , "Búlgar"@ca , "Bulharština"@cs , "Bulgarsk"@da , "Bulgarisch"@de , "Βουλγαρικά"@el , "Bulgarian"@en , "Búlgaro"@es , "Bulgaaria"@et , "Bulgariera"@eu , "Bulgarian"@fi , "Bulgarskum"@fo , "Bulgare"@fr , "Bulgáiris"@ga , "Búlgaro"@gl , "बल्गेरियाई"@hi , "Bugarski"@hr , "Bolgár"@hu , "Búlgarska"@is , "Bulgaro"@it , "ブルガリア語"@ja , "ბულგარული"@ka , "불가리아어"@ko , "Bulgarų"@lt , "Bulgāru"@lv , "Бугарски"@mk , "Bulgarian"@ms , "Bulgaru"@mt , "Bulgaars"@nl , "Bulgarsk"@no , "Bułgarski"@pl , "Búlgaro"@pt , "Búlgaro"@pt-BR , "Bulgar"@rm , "Bulgară"@ro , "Болгарский"@ru , "Bulharčina"@sk , "Bolgarščina"@sl , "Bullgarisht"@sq , "Бугарски"@sr , "Bulgariska"@sv , "ภาษาบัลแกเรีย"@th , "Bulgarca"@tr , "Болгарська"@uk , "保加利亚语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/bg> .
+iso:bul iso:code-a2 "bg" ;
+	iso:code-a3t "bul" .
 
-iso:cat a iso:language ;
-	iso:code-a2 "ca" ;
-	iso:code-a3t "cat" ;
-	rdfs:label "الكتالونية"@ar , "каталонская"@be , "каталонски"@bg , "Katalonski"@bs , "Català"@ca , "Katalánština"@cs , "Katalansk"@da , "Katalanisch"@de , "Καταλανικά"@el , "Catalan"@en , "Catalán"@es , "Katalaani"@et , "Katalan"@eu , "Katalaani"@fi , "Katalanskt"@fo , "Catalan"@fr , "Catalóinis"@ga , "Catalán"@gl , "कातालान"@hi , "Katalonski"@hr , "Katalán"@hu , "Katalónska"@is , "Catalano"@it , "カタロニア語"@ja , "კატალანური"@ka , "카탈로니아어"@ko , "Katalonų"@lt , "Katalāņu"@lv , "каталонски"@mk , "Catalan"@ms , "Katalan"@mt , "Catalaans"@nl , "Katalansk"@no , "Kataloński"@pl , "Catalão"@pt , "Catalão"@pt-BR , "Catalan"@rm , "Catalană"@ro , "каталанский"@ru , "Katalánčina"@sk , "Katalonščina"@sl , "Katalonisht"@sq , "Каталонски"@sr , "Katalanska"@sv , "กาตาลัง"@th , "Katalanca"@tr , "каталонська"@uk , "加泰罗尼亚语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/ca> .
+iso:cat iso:code-a2 "ca" ;
+	iso:code-a3t "cat" .
 
-iso:ces a iso:language ;
-	iso:code-a2 "cs" ;
-	iso:code-a3t "ces" ;
-	rdfs:label "تشيكي"@ar , "Чэшская"@be , "Чешки"@bg , "Češki"@bs , "Txec"@ca , "Čeština"@cs , "Tjekkisk"@da , "Tschechisch"@de , "Τσέχικα"@el , "Czech"@en , "Checo"@es , "Tšehhi"@et , "Txekiera"@eu , "Tšekin"@fi , "Kekkiskt"@fo , "Tchèque"@fr , "Seicis"@ga , "Checo"@gl , "कातालान"@hi , "Češki"@hr , "Cseh"@hu , "Tékkneska"@is , "Ceca"@it , "チェコ語"@ja , "ჩეხური"@ka , "체코어"@ko , "Čekų"@lt , "Čehu"@lv , "Чешки"@mk , "Czech"@ms , "Ċek"@mt , "Tsjechisch"@nl , "Tsjekkisk"@no , "Czeski"@pl , "Tcheca"@pt , "Tcheca"@pt-BR , "Tschec"@rm , "Cehă"@ro , "Чешский"@ru , "Čeština"@sk , "Češčina"@sl , "Çekisht"@sq , "Чешки"@sr , "Tjeckiska"@sv , "ภาษาเช็ก"@th , "Çekçe"@tr , "Чеська"@uk , "捷克语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/cs> .
+iso:ces iso:code-a2 "cs" ;
+	iso:code-a3t "ces" .
 
-iso:dan a iso:language ;
-	iso:code-a2 "da" ;
-	iso:code-a3t "dan" ;
-	rdfs:label "دانماركي"@ar , "Дацкая"@be , "Датски"@bg , "Danski"@bs , "Danès"@ca , "Dánština"@cs , "Dansk"@da , "Dänisch"@de , "Δανικά"@el , "Danish"@en , "Danés"@es , "Taani"@et , "Daniera"@eu , "Tanskan"@fi , "Danskt"@fo , "Danois"@fr , "Danmhairgis"@ga , "Dinamarqués"@gl , "डैनीश"@hi , "Danski"@hr , "Dán"@hu , "Danska"@is , "Danese"@it , "デンマーク語"@ja , "დანიური"@ka , "덴마크어"@ko , "Danų"@lt , "Danu"@lv , "Дански"@mk , "Danish"@ms , "Daniż"@mt , "Deens"@nl , "Dansk"@no , "Duński"@pl , "Dinamarquês"@pt , "Dinamarquês"@pt-BR , "Danais"@rm , "Daneză"@ro , "датский"@ru , "Dánčina"@sk , "Danščina"@sl , "Danisht"@sq , "Дански"@sr , "Danska"@sv , "ภาษาเดนมาร์ก"@th , "Danca"@tr , "Данська"@uk , "丹麦语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/da> .
+iso:dan iso:code-a2 "da" ;
+	iso:code-a3t "dan" .
 
-iso:deu a iso:language ;
-	iso:code-a2 "de" ;
-	iso:code-a3t "deu" ;
-	rdfs:label "الماني"@ar , "Нямецкая "@be , "Немски"@bg , "Njemački"@bs , "Alemany"@ca , "Němčina"@cs , "Tysk"@da , "Deutsch"@de , "Γερμανικά"@el , "German"@en , "Alemán"@es , "Saksa"@et , "Aleman"@eu , "Saksan"@fi , "Týskt "@fo , "Allemand"@fr , "Gearmáinis"@ga , "Alemá"@gl , "ज़र्मन"@hi , "Njemački"@hr , "Német"@hu , "Þýska"@is , "Tedesco"@it , "独語"@ja , "გერმანული"@ka , "독일어"@ko , "Vokiečių"@lt , "Vācu"@lv , "Германски"@mk , "German"@ms , "Ġermaniż"@mt , "Duits"@nl , "Tysk"@no , "Niemiecki"@pl , "Alemão"@pt , "Alemão"@pt-BR , "Tudestg"@rm , "Germană"@ro , "немецкий"@ru , "Nemčina"@sk , "Nemščina"@sl , "Gjermanisht"@sq , "Немачки"@sr , "Tyska"@sv , "ภาษาเยอรมัน"@th , "Almanca"@tr , "Німецька"@uk , "德语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/de> .
+iso:deu iso:code-a2 "de" ;
+	iso:code-a3t "deu" .
 
-iso:ell a iso:language ;
-	iso:code-a2 "el" ;
-	iso:code-a3t "ell" ;
-	rdfs:label "يوناني"@ar , "Грэчаская"@be , "Гръцки"@bg , "Grčki"@bs , "Grec"@ca , "Řečtina"@cs , "Græsk"@da , "Griechisch"@de , "Ελληνικά"@el , "Greek"@en , "Griego"@es , "Kreeka"@et , "Greziera"@eu , "Kreikka"@fi , "Grikskt"@fo , "Grec"@fr , "Gréigis"@ga , "Grego"@gl , "ग्रीक"@hi , "Grčki"@hr , "Görög"@hu , "Gríska"@is , "Greco"@it , "ギリシア語"@ja , "ბერძნული"@ka , "그리스어"@ko , "Graikų"@lt , "Grieķu"@lv , "Грчки"@mk , "Greek"@ms , "Grieg"@mt , "Grieks"@nl , "Gresk"@no , "Greka"@pl , "Grego"@pt , "Grego"@pt-BR , "Grec"@rm , "Greacă"@ro , "Греческий"@ru , "Gréčtina"@sk , "Grščina"@sl , "Greqisht"@sq , "Грчки"@sr , "Grekiska"@sv , "ภาษากรีก"@th , "Yunanca"@tr , "Грецька"@uk , "希腊语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/el> .
+iso:ell iso:code-a2 "el" ;
+	iso:code-a3t "ell" .
 
-iso:eng a iso:language ;
-	iso:code-a2 "en" ;
-	iso:code-a3t "eng" ;
-	rdfs:label "إنكليزي"@ar , "Англійская"@be , "Английски"@bg , "Engleski"@bs , "Anglès"@ca , "Angličtina"@cs , "Engelsk"@da , "Englisch"@de , "Αγγλικά"@el , "English"@en , "Inglés"@es , "Inglise"@et , "Ingeles"@eu , "Englannin"@fi , "Enskt"@fo , "Anglais"@fr , "Béarla"@ga , "Inglés"@gl , "अंग्रेजी"@hi , "Engleski"@hr , "Angol"@hu , "Enska"@is , "Inglese"@it , "英語"@ja , "ინგლისური"@ka , "영어"@ko , "Anglų"@lt , "Angļu"@lv , "Англиски"@mk , "English"@ms , "Ingliż"@mt , "Engels"@nl , "Engelsk"@no , "Angielski"@pl , "Inglês"@pt , "Inglês"@pt-BR , "Englais"@rm , "Engleză"@ro , "английский"@ru , "Angličtina"@sk , "Angleščina"@sl , "Anglisht"@sq , "Енглески"@sr , "Engelska"@sv , "ภาษาอังกฤษ"@th , "İngilizce"@tr , "Англійська"@uk , "英语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/en> .
+iso:eng iso:code-a2 "en" ;
+	iso:code-a3t "eng" .
 
-iso:est a iso:language ;
-	iso:code-a2 "et" ;
-	iso:code-a3t "est" ;
-	rdfs:label "استوني"@ar , "эстонская"@be , "Естонски"@bg , "Estonski"@bs , "Estonià"@ca , "Estonština"@cs , "Estisk"@da , "Estnisch"@de , "Εσθονικά"@el , "Estonian"@en , "Estonio"@es , "Eesti"@et , "Estoniera"@eu , "Viro"@fi , "Estlendskt"@fo , "Estonien"@fr , "Eastóinis"@ga , "Estonian"@gl , "ऐस्तोनियन्"@hi , "Estonski"@hr , "Észt"@hu , "Eistneska"@is , "Estone"@it , "エストニア語"@ja , "ესტონური"@ka , "에스토니아어"@ko , "Estų"@lt , "Igauņu"@lv , "Естонски"@mk , "Estonian"@ms , "Estoniż"@mt , "Ests"@nl , "Estisk"@no , "Estoński"@pl , "Estoniano"@pt , "Estoniano"@pt-BR , "Eston"@rm , "Estonă"@ro , "Эстонский"@ru , "Estónčina"@sk , "Estonščina"@sl , "Estonisht"@sq , "Естонски"@sr , "Estniska"@sv , "ภาษาเอสโตเนีย"@th , "Estonca"@tr , "Естонська"@uk , "爱沙尼亚语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/et> .
+iso:est iso:code-a2 "et" ;
+	iso:code-a3t "est" .
 
-iso:eus a iso:language ;
-	iso:code-a2 "eu" ;
-	iso:code-a3t "eus" ;
-	rdfs:label "الباسك"@ar , "Баскская"@be , "Баски"@bg , "Baskijski"@bs , "Basc"@ca , "Baskičtina"@cs , "Baskisk"@da , "Baskisch"@de , "Βασκικά"@el , "Basque"@en , "Euskera"@es , "Baski"@et , "Euskara"@eu , "Baski"@fi , "Baskiskt"@fo , "Basque"@fr , "Bascais"@ga , "Éuscaro"@gl , "बास्क्"@hi , "Baskijski"@hr , "Baszk"@hu , "Baskneska"@is , "Basco"@it , "バスク語"@ja , "ბასკური"@ka , "바스크어"@ko , "Baskų"@lt , "Basku"@lv , "Баскиски"@mk , "Basque"@ms , "Bask"@mt , "Baskisch"@nl , "Baskisk"@no , "Baskijski"@pl , "Basco"@pt , "Basco"@pt-BR , "Basc"@rm , "Bască"@ro , "Баскский"@ru , "Baskičtina"@sk , "Baskovščina"@sl , "Baskisht"@sq , "Баскијски"@sr , "Baskiska"@sv , "ภาษาบาสก์"@th , "Baskça"@tr , "Баскська"@uk , "巴斯克語"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/eu> .
+iso:eus iso:code-a2 "eu" ;
+	iso:code-a3t "eus" .
 
-iso:fao a iso:language ;
-	iso:code-a2 "fo" ;
-	iso:code-a3t "fao" ;
-	rdfs:label "الفارويز"@ar , "Фарэрская"@be , "Ферьорски"@bg , "Farski"@bs , "Feroès"@ca , "Faerština"@cs , "Færøsk"@da , "Färöisch"@de , "Φαρόε"@el , "Faroese"@en , "Feroés"@es , "Fääri"@et , "Faroeera"@eu , "Fääri"@fi , "Føroyskt"@fo , "Féroien"@fr , "Faróis"@ga , "Faroés"@gl , "फिरोज़ी"@hi , "Faroanski"@hr , "Feröeri"@hu , "Færeyska"@is , "Faroese"@it , "フェロー語"@ja , "ფარერული"@ka , "페로어"@ko , "Farerų"@lt , "Fēriešu"@lv , "Фарски"@mk , "Faroese"@ms , "Fawriż"@mt , "Faeröers"@nl , "Færøysk"@no , "Farerski"@pl , "Feroês"@pt , "Feroês"@pt-BR , "Feroais"@rm , "Faroeză"@ro , "Фарерский"@ru , "Faerčina"@sk , "Ferščina"@sl , "Faroisht"@sq , "Фарски"@sr , "Färöiska"@sv , "ภาษาแฟโร"@th , "Faroece"@tr , "Фарерська"@uk , "法罗语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/fo> .
+iso:fao iso:code-a2 "fo" ;
+	iso:code-a3t "fao" .
 
-iso:fin a iso:language ;
-	iso:code-a2 "fi" ;
-	iso:code-a3t "fin" ;
-	rdfs:label "فنلندي"@ar , "фінская"@be , "Фински"@bg , "Finski"@bs , "Finès"@ca , "Finština"@cs , "Finsk"@da , "Finnisch"@de , "Φινλανδικά"@el , "Finnish"@en , "Finés"@es , "Soome"@et , "Suomiera"@eu , "Suomi"@fi , "Finskt"@fo , "Finnois"@fr , "Fionlainnis"@ga , "Finés"@gl , "फिनिश"@hi , "Finski"@hr , "Finn"@hu , "Finnska"@is , "Finlandese"@it , "フィンランド語"@ja , "ფინური"@ka , "핀란드어"@ko , "Suomių"@lt , "Somu"@lv , "Фински"@mk , "Finnish"@ms , "Finlandiż"@mt , "Fins"@nl , "Finsk"@no , "Fiński"@pl , "Finlandês"@pt , "Finlandês"@pt-BR , "Finlandais"@rm , "Finlandeză"@ro , "Финский"@ru , "Fínčina"@sk , "Finščina"@sl , "Finlandisht"@sq , "Фински"@sr , "Finska"@sv , "ภาษาฟินแลนด์"@th , "Fince"@tr , "Фінська"@uk , "芬兰语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/fi> .
+iso:fin iso:code-a2 "fi" ;
+	iso:code-a3t "fin" .
 
-iso:fra a iso:language ;
-	iso:code-a2 "fr" ;
-	iso:code-a3t "fra" ;
-	rdfs:label "فرنسي"@ar , "Французская"@be , "Френски"@bg , "Francuski"@bs , "Francès"@ca , "Francouzština"@cs , "Fransk"@da , "Französisch"@de , "Γαλλικά"@el , "French"@en , "Francés"@es , "Prantsuse"@et , "Frantses"@eu , "Ranskan"@fi , "Franskt"@fo , "Français"@fr , "Fraincis"@ga , "Francés"@gl , "फ्रेंच"@hi , "Francuski"@hr , "Francia"@hu , "Franska"@is , "Francese"@it , "仏語"@ja , "ფრანგული"@ka , "프랑스어"@ko , "Prancūzų"@lt , "Franču"@lv , "Француски"@mk , "French"@ms , "Franċiż"@mt , "Frans"@nl , "Fransk"@no , "Francuski"@pl , "Francês"@pt , "Francês"@pt-BR , "Franzos"@rm , "Franceză"@ro , "французский"@ru , "Francúzština"@sk , "Francoščina"@sl , "Frengjisht"@sq , "Француски"@sr , "Franska"@sv , "ภาษาฝรั่งเศส"@th , "Fransızca"@tr , "Французька"@uk , "法语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/fr> .
+iso:fra iso:code-a2 "fr" ;
+	iso:code-a3t "fra" .
 
-iso:gle a iso:language ;
-	iso:code-a2 "ga" ;
-	iso:code-a3t "gle" ;
-	rdfs:label "إيرلندي"@ar , "Ірляндзкая"@be , "Ирландски"@bg , "Irski"@bs , "Gaèlic irlandès"@ca , "Irština"@cs , "Irsk"@da , "Irisch"@de , "Ιρλανδικά"@el , "Irish"@en , "Irlandés"@es , "Iiri"@et , "Gaelera"@eu , "Iiri"@fi , "Írskt"@fo , "Irlandais"@fr , "Gaeilge"@ga , "Irlandés"@gl , "आयरिश"@hi , "Irski"@hr , "Ír"@hu , "Írska"@is , "Irlandese"@it , "アイルランド語"@ja , "ირლანდიური"@ka , "아일랜드어"@ko , "Airių"@lt , "Īru"@lv , "Ирски"@mk , "Irish"@ms , "Irlandiż"@mt , "Iers"@nl , "Irsk"@no , "Irlandzki"@pl , "Irlandesa"@pt , "Irlandesa"@pt-BR , "Irlandais"@rm , "Irlandeză"@ro , "Ирландский"@ru , "Írčina"@sk , "Irska"@sl , "Irlandisht"@sq , "Ирски"@sr , "Iriska"@sv , "ภาษาไอริช"@th , "İrlandaca"@tr , "Ірландська"@uk , "愛爾蘭語"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/ga> .
+iso:gle iso:code-a2 "ga" ;
+	iso:code-a3t "gle" .
 
-iso:glg a iso:language ;
-	iso:code-a2 "gl" ;
-	iso:code-a3t "glg" ;
-	rdfs:label "الجاليكية"@ar , "Галісійская"@be , "Галисийски"@bg , "Galicijski"@bs , "Gallec"@ca , "Galicijština"@cs , "Galicisk"@da , "Galizisch"@de , "Γαλικιανά"@el , "Galician"@en , "Gallego"@es , "Galeegi"@et , "Galiziera"@eu , "Galego"@fi , "Galliskt"@fo , "Galicien"@fr , "Gailísis"@ga , "Galego"@gl , "गैलिशियन्"@hi , "Galicijski"@hr , "Galiciai"@hu , "Gallegska"@is , "Galiziano"@it , "ガリシア語"@ja , "გალური"@ka , "갈리시아어"@ko , "Galisų"@lt , "Galisiešu"@lv , "Галициски"@mk , "Galician"@ms , "Gallegjan"@mt , "Galicisch"@nl , "Galisisk"@no , "Galisyjski"@pl , "Galego"@pt , "Galego"@pt-BR , "Galizian"@rm , "Galiciană"@ro , "Галисийский"@ru , "Galícijčina"@sk , "Galicijščina"@sl , "Galski"@sq , "Галски"@sr , "Galiciska"@sv , "ภาษากาลิเซีย"@th , "Galiçyaca"@tr , "Галісійська"@uk , "加里西亞語"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/gl> .
+iso:glg iso:code-a2 "gl" ;
+	iso:code-a3t "glg" .
 
-iso:hin a iso:language ;
-	iso:code-a2 "hi" ;
-	iso:code-a3t "hin" ;
-	rdfs:label "الهندية"@ar , "Хіндзі"@be , "Хинди"@bg , "Hindi"@bs , "Hindi"@ca , "Hindština"@cs , "Hindi"@da , "Hindi"@de , "Χίντι"@el , "Hindi"@en , "Hindi"@es , "Hindi"@et , "Hindi"@eu , "Hindi"@fi , "Hindi"@fo , "Hindi"@fr , "Hiondúis"@ga , "Hindi"@gl , "हिन्दी"@hi , "Hindski"@hr , "Hindi"@hu , "Hindí"@is , "Hindi"@it , "ヒンディー語"@ja , "ჰინდი"@ka , "힌디어"@ko , "Hindi"@lt , "Hindi"@lv , "Хинди"@mk , "Hindi"@ms , "Ħindi"@mt , "Hindi"@nl , "Hindi"@no , "Hindi"@pl , "Híndi"@pt , "Híndi"@pt-BR , "Hindi"@rm , "Hindi"@ro , "Хинди"@ru , "Hindčina"@sk , "Hindijščina"@sl , "Hindi"@sq , "Хинди"@sr , "Hindi"@sv , "ภาษาฮินดี"@th , "Hintçe"@tr , "Гінді"@uk , "印地语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/hi> .
+iso:hin iso:code-a2 "hi" ;
+	iso:code-a3t "hin" .
 
-iso:hrv a iso:language ;
-	iso:code-a2 "hr" ;
-	iso:code-a3t "hrv" ;
-	rdfs:label "كرواتي"@ar , "Харвацкая"@be , "Хърватски"@bg , "Hrvatski"@bs , "Croat"@ca , "Chorvatština"@cs , "Kroatisk"@da , "Kroatisch"@de , "Κροατικά"@el , "Croatian"@en , "Croata"@es , "Horvaadi"@et , "Kroaziera"@eu , "Kroatian"@fi , "Kroatiskum"@fo , "Croate"@fr , "Cróitis"@ga , "Croata"@gl , "क्रोएशन्"@hi , "Hrvatski"@hr , "Horvát"@hu , "Króatíska"@is , "Croato"@it , "クロアチア語"@ja , "ხორვატული"@ka , "크로아티아어"@ko , "Kroatų"@lt , "Horvātu"@lv , "Хрватски"@mk , "Croatian"@ms , "Kroaziż"@mt , "Kroatisch"@nl , "Kroatisk"@no , "Chorwacki"@pl , "Croata"@pt , "Croata"@pt-BR , "Croat"@rm , "Croată"@ro , "Хорватский"@ru , "Chorvátčina"@sk , "Hrvaščina"@sl , "Kroatisht"@sq , "Хрватски"@sr , "Kroatiska"@sv , "ภาษาโครเอเชีย"@th , "Hırvatça"@tr , "Хорватська"@uk , "克罗地亚语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/hr> .
+iso:hrv iso:code-a2 "hr" ;
+	iso:code-a3t "hrv" .
 
-iso:hun a iso:language ;
-	iso:code-a2 "hu" ;
-	iso:code-a3t "hun" ;
-	rdfs:label "مجري"@ar , "Вугорская"@be , "Унгарски"@bg , "Mađarski"@bs , "Hongarès"@ca , "Maďarština"@cs , "Ungarsk"@da , "Ungarisch"@de , "Ουγγρικά"@el , "Hungarian"@en , "Húngaro"@es , "Ungari"@et , "Hungariera"@eu , "Unkarin"@fi , "Ungarskt"@fo , "Hongrois"@fr , "Ungáiris"@ga , "Húngaro"@gl , "हंगेरी"@hi , "Mađarski"@hr , "Magyar"@hu , "Ungverska"@is , "Ungherese"@it , "ハンガリー語"@ja , "უნგრული"@ka , "헝가리어"@ko , "Vengrų"@lt , "Ungāru"@lv , "Унгарски"@mk , "Hungarian"@ms , "Ungeriż"@mt , "Hongaars"@nl , "Ungarsk"@no , "Węgierski"@pl , "Húngaro"@pt , "Húngaro"@pt-BR , "Ungarais"@rm , "Maghiară"@ro , "Венгерский"@ru , "Maďarčina"@sk , "Madžarščina"@sl , "Hungarisht"@sq , "Мађарски"@sr , "Ungerska"@sv , "ภาษาฮังการี"@th , "Macarca"@tr , "Угорська"@uk , "匈牙利语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/hu> .
+iso:hun iso:code-a2 "hu" ;
+	iso:code-a3t "hun" .
 
-iso:isl a iso:language ;
-	iso:code-a2 "is" ;
-	iso:code-a3t "isl" ;
-	rdfs:label "إيسلندي"@ar , "Ісландская"@be , "Исландски"@bg , "Islandski"@bs , "Islandès"@ca , "Islandština"@cs , "Islandsk"@da , "Isländisch"@de , "Ισλανδικά"@el , "Icelandic"@en , "Islandés"@es , "Islandi"@et , "Islandiera"@eu , "Islannin"@fi , "Íslendskt"@fo , "Islandais"@fr , "Íoslainnis"@ga , "Islandés"@gl , "आईस्लैंडिक्"@hi , "Islandski"@hr , "Izlandi"@hu , "Íslenska"@is , "Islandese"@it , "アイスランド語"@ja , "ისლანდიური"@ka , "아이슬란드어"@ko , "Islandų"@lt , "īslandiešu"@lv , "Исландски"@mk , "Icelandic"@ms , "Iżlandiż"@mt , "Ijslands"@nl , "Islandsk"@no , "Islandzki"@pl , "Islandesa"@pt , "Islandesa"@pt-BR , "Islandais"@rm , "Islandeză"@ro , "Исландский"@ru , "Islandčina"@sk , "Isländska"@sl , "Islandisht"@sq , "Исландски"@sr , "Isländska"@sv , "ภาษาไอซ์แลนด์"@th , "İzlandaca"@tr , "Ісландська"@uk , "冰岛语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/is> .
+iso:isl iso:code-a2 "is" ;
+	iso:code-a3t "isl" .
 
-iso:ita a iso:language ;
-	iso:code-a2 "it" ;
-	iso:code-a3t "ita" ;
-	rdfs:label "إيطالي"@ar , "Італьянская"@be , "Италиански"@bg , "Italijanski"@bs , "Italià"@ca , "Italština"@cs , "Italiensk"@da , "Italienisch"@de , "Ιταλικά"@el , "Italian"@en , "Italiano"@es , "Itaalia"@et , "Italiera"@eu , "Italian"@fi , "Italskt"@fo , "Italien"@fr , "Iodáilis"@ga , "Italiano"@gl , "इतालवी"@hi , "Talijanski"@hr , "Olasz"@hu , "Ítalska"@is , "Italiano"@it , "伊語"@ja , "იტალიური"@ka , "이탈리아어"@ko , "Italų"@lt , "Itāliešu"@lv , "Италијански"@mk , "Italian"@ms , "Taljan"@mt , "Italians"@nl , "Italiensk"@no , "Włoski"@pl , "Italiano"@pt , "Italiano"@pt-BR , "Talian"@rm , "Italiană"@ro , "итальянский"@ru , "Taliančina"@sk , "Italijanščina"@sl , "Italisht"@sq , "Италијански"@sr , "Italienska"@sv , "ภาษาอิตาลี"@th , "İtalyanca"@tr , "Італійська"@uk , "意大利语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/it> .
+iso:ita iso:code-a2 "it" ;
+	iso:code-a3t "ita" .
 
-iso:jpn a iso:language ;
-	iso:code-a2 "ja" ;
-	iso:code-a3t "jpn" ;
-	rdfs:label "ياباني"@ar , "Японская"@be , "Японски"@bg , "Japanski"@bs , "Japonès"@ca , "Japonština"@cs , "Japansk"@da , "Japanisch"@de , "Ιαπωνικά"@el , "Japanese"@en , "Japonés"@es , "Jaapani"@et , "Japoniera"@eu , "Japanin"@fi , "Japanskt"@fo , "Japonais"@fr , "Seapáinis"@ga , "Xaponés"@gl , "जापानी"@hi , "Japanski"@hr , "Japán"@hu , "Japanska"@is , "Giapponese"@it , "日本語"@ja , "იაპონური"@ka , "일본어"@ko , "Japonų"@lt , "Japāņu"@lv , "Јапонски"@mk , "Japanese"@ms , "Ġappuniż"@mt , "Japans"@nl , "Japansk"@no , "Japoński"@pl , "Japonês"@pt , "Japonês"@pt-BR , "Giapunais"@rm , "Japoneză"@ro , "японский"@ru , "Japončina"@sk , "Japonščina"@sl , "Japanisht"@sq , "Јапански"@sr , "Japanska"@sv , "ภาษาญี่ปุ่น"@th , "Japonca"@tr , "Японська"@uk , "日文"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/ja> .
+iso:jpn iso:code-a2 "ja" ;
+	iso:code-a3t "jpn" .
 
-iso:kat a iso:language ;
-	iso:code-a2 "ka" ;
-	iso:code-a3t "kat" ;
-	rdfs:label "جيورجي"@ar , "Грузінская"@be , "Грузински"@bg , "Gruzijski"@bs , "Georgià"@ca , "Gruzínština"@cs , "Georgisk "@da , "Georgisch"@de , "Γεωργιανά"@el , "Georgian"@en , "Georgiano"@es , "Gruusia"@et , "Georgiera"@eu , "Georgian"@fi , "Georgiskt"@fo , "Géorgien"@fr , "Seoirsis"@ga , "Xeorxiano"@gl , "जॉर्जीयन्"@hi , "Gruzijski"@hr , "Grúz"@hu , "Georgíska"@is , "Georgiano"@it , "グルジア語"@ja , "ქართული"@ka , "그루지야어"@ko , "Gruzinų"@lt , "Gruzīnu"@lv , "Грузиски"@mk , "Georgian"@ms , "Ġeorġjan"@mt , "Georgisch"@nl , "Georgisk"@no , "Gruziński"@pl , "Geórgio"@pt , "Geórgio"@pt-BR , "Georgian"@rm , "Georgiană"@ro , "Грузинский"@ru , "Gruzínčina"@sk , "Gruzinščina"@sl , "Gjeorgjisht"@sq , "Грузијски"@sr , "Georgiska"@sv , "ภาษาจอร์เจี"@th , "Gürcüce"@tr , "Грузинська"@uk , "格鲁吉亚语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/ka> .
+iso:kat iso:code-a2 "ka" ;
+	iso:code-a3t "kat" .
 
-iso:kor a iso:language ;
-	iso:code-a2 "ko" ;
-	iso:code-a3t "kor" ;
-	rdfs:label "كورية "@ar , "Карэйская"@be , "Корейски"@bg , "Koreanski"@bs , "Coreà"@ca , "Korejština"@cs , "Koreansk"@da , "Koreanisch"@de , "Κορεατικά"@el , "Korean"@en , "Coreano"@es , "Korea"@et , "Koreera"@eu , "Korea"@fi , "Koreanskt"@fo , "Coréen"@fr , "Cóiréis"@ga , "Coreano"@gl , "कोरीयन्"@hi , "Korejski"@hr , "Koreai"@hu , "Kóreska"@is , "Coreano"@it , "朝鮮語"@ja , "კორეული"@ka , "한국어"@ko , "Korėjiečių"@lt , "Korejiešu"@lv , "Корејски"@mk , "Korean"@ms , "Korejan"@mt , "Koreaans"@nl , "Koreansk"@no , "Koreański"@pl , "Coreano"@pt , "Coreano"@pt-BR , "Corean"@rm , "Coreeană"@ro , "Корейский"@ru , "Kórejčina"@sk , "Korejščina"@sl , "Koreançe"@sq , "Korejski"@sr , "Koreanska"@sv , "ภาษาเกาหลี"@th , "Korece"@tr , "Корейська"@uk , "朝鮮語"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/ko> .
+iso:kor iso:code-a2 "ko" ;
+	iso:code-a3t "kor" .
 
-iso:lav a iso:language ;
-	iso:code-a2 "lv" ;
-	iso:code-a3t "lav" ;
-	rdfs:label "لتوني"@ar , "Латышская"@be , "Латвийски"@bg , "Latvijski"@bs , "Letó"@ca , "Lotyština"@cs , "Lettisk"@da , "Lettisch"@de , "Λεττονικά"@el , "Latvian"@en , "Letón"@es , "Läti"@et , "Letoniera"@eu , "Latvian"@fi , "Lettiskt"@fo , "Letton"@fr , "Laitvis"@ga , "Letón"@gl , "लातवी"@hi , "Letonski"@hr , "Lett"@hu , "Lettneska"@is , "Lettone"@it , "ラトビア語"@ja , "ლატვიური"@ka , "라트비아어"@ko , "Latvių"@lt , "Latviešu"@lv , "Летонски"@mk , "Latvian"@ms , "Litwan"@mt , "Lets"@nl , "Latvisk"@no , "Łotewski"@pl , "Letão"@pt , "Letão"@pt-BR , "Letton"@rm , "Letonă"@ro , "Латышский"@ru , "Lotyština"@sk , "Latvijščina"@sl , "Letonisht"@sq , "Летонски"@sr , "Lettiska"@sv , "ภาษาลัตเวีย"@th , "Letonyaca"@tr , "Латиська"@uk , "拉脱维亚语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/lv> .
+iso:lav iso:code-a2 "lv" ;
+	iso:code-a3t "lav" .
 
-iso:lit a iso:language ;
-	iso:code-a2 "lt" ;
-	iso:code-a3t "lit" ;
-	rdfs:label "لتواني"@ar , "Літоўская"@be , "Литовски"@bg , "Litvanski"@bs , "Lituà"@ca , "Litevština"@cs , "Litauisk"@da , "Litauisch"@de , "Λιθουανικά"@el , "Lithuanian"@en , "Lituano"@es , "Leedu"@et , "Lituaniera"@eu , "Liettuan"@fi , "Litavskt"@fo , "Lituanien"@fr , "Liotuáinis"@ga , "Lituano"@gl , "लिथुनियन्"@hi , "Litavski"@hr , "Litván"@hu , "Litháíska"@is , "Lituano"@it , "リトアニア語"@ja , "ლიტვური"@ka , "리투아니아어"@ko , "Lietuvių"@lt , "Lietuviešu"@lv , "Литвански"@mk , "Lithuanian"@ms , "Latvjan"@mt , "Litouws"@nl , "Litauisk"@no , "Litewski"@pl , "Lituano"@pt , "Lituano"@pt-BR , "Lituan"@rm , "Lituaniană"@ro , "Литовский"@ru , "Litovčina"@sk , "Litovščina"@sl , "Lituanisht"@sq , "Литвански"@sr , "Litauiska"@sv , "ภาษาลิทัวเนีย"@th , "Litvanyaca"@tr , "Литовська"@uk , "立陶宛语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/lt> .
+iso:lit iso:code-a2 "lt" ;
+	iso:code-a3t "lit" .
 
-iso:mkd a iso:language ;
-	iso:code-a2 "mk" ;
-	iso:code-a3t "mkd" ;
-	rdfs:label "مقدوني"@ar , "Македонская"@be , "Македонски"@bg , "Makedonski"@bs , "Macedònic"@ca , "Makedonština"@cs , "Makedonsk"@da , "Mazedonisch"@de , "Σλαβομακεδονικά"@el , "Macedonian"@en , "Macedonio"@es , "Makedoonia"@et , "Mazedoniera"@eu , "Makedonian"@fi , "Makedonskt"@fo , "Macédonien"@fr , "Macadóinis"@ga , "Macedonio"@gl , "मैसेडोनियन्"@hi , "Makedonski"@hr , "Macedón"@hu , "Makedónska"@is , "Macedone"@it , "マケドニア語"@ja , "მაკედონური"@ka , "마케도니아어"@ko , "Makedonų"@lt , "Maķedoniešu"@lv , "Македонски"@mk , "Macedonian"@ms , "Maċedonjan"@mt , "Macedonisch"@nl , "Makedonsk"@no , "Macedoński"@pl , "Macedônia"@pt , "Macedônia"@pt-BR , "Macedon"@rm , "Macedoneană"@ro , "Македонский"@ru , "Macedónčina"@sk , "Makedonščina"@sl , "Maqedonisht"@sq , "Македонски"@sr , "Makedonska"@sv , "ภาษามาซิโดเนีย"@th , "Makedonca"@tr , "Македонська"@uk , "马其顿语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/mk> .
+iso:mkd iso:code-a2 "mk" ;
+	iso:code-a3t "mkd" .
 
-iso:mlt a iso:language ;
-	iso:code-a2 "mt" ;
-	iso:code-a3t "mlt" ;
-	rdfs:label "ملطي"@ar , "Mальтыйская"@be , "Малтийски"@bg , "Malteški"@bs , "Maltès"@ca , "Maltština"@cs , "Maltesisk"@da , "Maltesisch"@de , "Μαλτεζικά"@el , "Maltese"@en , "Maltés"@es , "Malta"@et , "Maltera"@eu , "Maltan"@fi , "Maltesiskt"@fo , "Maltais"@fr , "Máltais"@ga , "Maltés"@gl , "मालटिस्"@hi , "Malteški"@hr , "Máltai"@hu , "Maltneska"@is , "Maltese"@it , "マルタ語"@ja , "მალტური"@ka , "몰타어"@ko , "Maltiečių"@lt , "Maltiešu"@lv , "Малтешки"@mk , "Maltese"@ms , "Malti"@mt , "Maltees"@nl , "Maltesisk"@no , "Maltański"@pl , "Maltesa"@pt , "Maltesa"@pt-BR , "Maltais"@rm , "Malteză"@ro , "Мальтийский"@ru , "Maltčina"@sk , "Malteščina"@sl , "Maltisht"@sq , "Малтешки"@sr , "Maltesiska"@sv , "ภาษามอลตา"@th , "Maltaca"@tr , "Мальтійська"@uk , "马耳他语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/mt> .
+iso:mlt iso:code-a2 "mt" ;
+	iso:code-a3t "mlt" .
 
-iso:msa a iso:language ;
-	iso:code-a2 "ms" ;
-	iso:code-a3t "msa" ;
-	rdfs:label "ملاوية"@ar , "Малайская"@be , "Малайски"@bg , "Malajski"@bs , "Malai"@ca , "Malajština"@cs , "Malajisk"@da , "Malaiisch"@de , "Μαλαισιανά"@el , "Malay"@en , "Malayo"@es , "Malai"@et , "Malaiera"@eu , "Malaijin"@fi , "Malaisiskt"@fo , "Malais"@fr , "Mhalaeis"@ga , "Malaio"@gl , "मलय"@hi , "Malajski "@hr , "Maláj"@hu , "Malasíska"@is , "Malese"@it , "マレー語"@ja , "მალაიური"@ka , "말레이어"@ko , "Malajų "@lt , "Malajiešu"@lv , "Малајски"@mk , "Malay"@ms , "Malażjan"@mt , "Maleis"@nl , "Malayisk"@no , "Malajski"@pl , "Malaio"@pt , "Malaio"@pt-BR , "Malay"@rm , "Malaieză"@ro , "Мала́йский"@ru , "Malajčina"@sk , "Malajščina"@sl , "Malajzisht"@sq , "Malajski"@sr , "Malajiska"@sv , "ภาษามาเลย์"@th , "Malay"@tr , "Малайська"@uk , "马来语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/ms> .
+iso:msa iso:code-a2 "ms" ;
+	iso:code-a3t "msa" .
 
-iso:nld a iso:language ;
-	iso:code-a2 "nl" ;
-	iso:code-a3t "nld" ;
-	rdfs:label "هولندي"@ar , "Галандская"@be , "Нидерландски"@bg , "Holandski"@bs , "Neerlandès"@ca , "Nizozemština"@cs , "Nederlandsk"@da , "Niederländisch"@de , "Ολλανδικά"@el , "Dutch"@en , "Neerlandés"@es , "Hollandi"@et , "Nederlandera"@eu , "Hollannin"@fi , "Hollendskt"@fo , "Néerlandais"@fr , "Ollainnis"@ga , "Holandés"@gl , "डच्"@hi , "Nizozemski"@hr , "Holland"@hu , "Hollenska"@is , "Olandese"@it , "オランダ語"@ja , "ნიდერლანდული"@ka , "네덜란드어"@ko , "Olandų"@lt , "Nīderlandiešu"@lv , "Холандски"@mk , "Dutch"@ms , "Olandiż"@mt , "Nederlands"@nl , "Nederlandsk"@no , "Holenderski"@pl , "Neerlandês"@pt , "Neerlandês"@pt-BR , "Neerlandais"@rm , "Neerlandeză"@ro , "голландский"@ru , "Holandčina"@sk , "Nizozemščina"@sl , "Holandisht"@sq , "Холандски"@sr , "Nederländska"@sv , "ภาษาดัตช์"@th , "Flemenkçe"@tr , "Нідерландська"@uk , "荷兰语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/nl> .
+iso:nld iso:code-a2 "nl" ;
+	iso:code-a3t "nld" .
 
-iso:nor a iso:language ;
-	iso:code-a2 "no" ;
-	iso:code-a3t "nor" ;
-	rdfs:label "نرويجي"@ar , "нарвежская"@be , "Нинорск"@bg , "Norveški"@bs , "Noruec"@ca , "Norština"@cs , "Norsk"@da , "Norwegisch"@de , "Νορβηγικά"@el , "Norwegian"@en , "Noruego"@es , "Norra"@et , "Norvegiera"@eu , "Norjan"@fi , "Norskt"@fo , "Norvégien"@fr , "Ioruais"@ga , "Noruegués"@gl , "नार्वेजियन"@hi , "Norveški"@hr , "Norvég"@hu , "Norska"@is , "Norvegese"@it , "ノルウェー語"@ja , "ნორვეგიული"@ka , "노르웨이어"@ko , "Norvegų"@lt , "Norvēģu"@lv , "Норвешки"@mk , "Norwegian"@ms , "Norveġiż"@mt , "Noors"@nl , "Norsk"@no , "Norweski"@pl , "Norueguês"@pt , "Norueguês"@pt-BR , "Norvegiais"@rm , "Norvegiană"@ro , "Норвежский"@ru , "Nórčina"@sk , "Norveščina"@sl , "Norvegjisht"@sq , "Норвешки"@sr , "Norska"@sv , "ภาษานอร์เวย์"@th , "Norveççe"@tr , "Норвезька"@uk , "挪威語"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/no> .
+iso:nor iso:code-a2 "no" ;
+	iso:code-a3t "nor" .
 
-iso:pol a iso:language ;
-	iso:code-a2 "pl" ;
-	iso:code-a3t "pol" ;
-	rdfs:label "بولندي"@ar , "Польская"@be , "Полски"@bg , "Poljski"@bs , "Polonès"@ca , "Polština"@cs , "Polsk"@da , "Polnisch"@de , "Πολωνικά"@el , "Polish"@en , "Polonés"@es , "Poola"@et , "Poloniera"@eu , "Puolan"@fi , "Polskt"@fo , "Polonais"@fr , "Polainnis"@ga , "Polaco"@gl , "पॉलिश"@hi , "Poljski"@hr , "Lengyel"@hu , "Pólska"@is , "Polacco"@it , "ポーランド語"@ja , "პოლონური"@ka , "폴란드어"@ko , "Lenkų"@lt , "Poļu"@lv , "Полски"@mk , "Polish"@ms , "Pollak"@mt , "Pools"@nl , "Polsk"@no , "Polski"@pl , "Polonês"@pt , "Polonês"@pt-BR , "Polac"@rm , "Poloneză"@ro , "польский"@ru , "Poľština"@sk , "Poljščina"@sl , "Polonisht"@sq , "Пољски"@sr , "Polska"@sv , "ภาษาโปแลนด์"@th , "Polonca"@tr , "Польська"@uk , "波兰语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/pl> .
+iso:pol iso:code-a2 "pl" ;
+	iso:code-a3t "pol" .
 
-iso:por a iso:language ;
-	iso:code-a2 "pt" ;
-	iso:code-a3t "por" ;
-	rdfs:label "برتغالي"@ar , "Партугальская"@be , "Португалски"@bg , "Portugalski"@bs , "Portuguès"@ca , "Portugalština"@cs , "Portugisisk"@da , "Portugies"@de , "Πορτογαλικά"@el , "Portuguese"@en , "Portugués"@es , "Portugali"@et , "Portugalera"@eu , "Portugalin"@fi , "Portugisiskt"@fo , "Portugais"@fr , "Portaingéilis"@ga , "Portugués"@gl , "पुर्तगाली"@hi , "Portugalski"@hr , "Portugál"@hu , "Portúgalska"@is , "Portoghese"@it , "ポルトガル語"@ja , "პორტუგალიური"@ka , "포르투갈어"@ko , "Portugalų"@lt , "Portugāļu"@lv , "Португалски"@mk , "Portuguese"@ms , "Portugiż"@mt , "Portugees"@nl , "Portugisisk"@no , "Portugalski"@pl , "Português"@pt , "Português"@pt-BR , "Portugais"@rm , "Portugheză"@ro , "португальский"@ru , "Portugalčina"@sk , "Portugalščina"@sl , "Portugeze"@sq , "Португалски"@sr , "Portugisiska"@sv , "ภาษาโปรตุเกส"@th , "Portekizce"@tr , "Португальська"@uk , "葡萄牙语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/pt> .
+iso:por iso:code-a2 "pt" ;
+	iso:code-a3t "por" .
 
-iso:por-BR a iso:language ;
-	iso:code-a2 "pt-BR" ;
-	iso:code-a3t "por-BR" ;
-	rdfs:label "برتغالي (BR)"@ar , "Партугальская (BR)"@be , "Португалски (BR)"@bg , "Portugalski (BR)"@bs , "Portuguès (BR)"@ca , "Portugalština (BR)"@cs , "Portugisisk (BR)"@da , "Portugies (BR)"@de , "Πορτογαλικά (BR)"@el , "Portuguese (BR)"@en , "Portugués (BR)"@es , "Portugali (BR)"@et , "Portugalera (BR)"@eu , "Portugalin (BR)"@fi , "Portugisiskt (BR)"@fo , "Brésilien (BR)"@fr , "Portaingéilis (BR)"@ga , "Portugués (BR)"@gl , "पुर्तगाली (BR)"@hi , "Portugalski (BR)"@hr , "Portugál (BR)"@hu , "Portúgalska (BR)"@is , "Portoghese (BR)"@it , "ポルトガル語 (BR)"@ja , "პორტუგალიური (BR)"@ka , "포르투갈어 (BR)"@ko , "Portugalų (BR)"@lt , "Portugāļu (BR)"@lv , "Португалски (BR)"@mk , "Portuguese (BR)"@ms , "Portugiż (BR)"@mt , "Portugees (BR)"@nl , "Portugisisk (BR)"@no , "Portugalski (BR)"@pl , "Português (BR)"@pt , "Português (BR)"@pt-BR , "Portugais (BR)"@rm , "Portugheză (BR)"@ro , "португальский (BR)"@ru , "Portugalčina (BR)"@sk , "Portugalščina (BR)"@sl , "Portugeze (BR)"@sq , "Португалски (BR)"@sr , "Portugisiska (BR)"@sv , "ภาษาโปรตุเกส (BR)"@th , "Portekizce (BR)"@tr , "Португальська (BR)"@uk , "葡萄牙语 (BR)"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/pt-BR> .
+iso:por-BR iso:code-a2 "pt-BR" ;
+	iso:code-a3t "por-BR" .
 
-iso:roh a iso:language ;
-	iso:code-a2 "rm" ;
-	iso:code-a3t "roh" ;
-	rdfs:label "رومانشية"@ar , "Рэтараманская"@be , "Романш"@bg , "Romanski"@bs , "Romanx"@ca , "Rétorománština"@cs , "Rætoromansk"@da , "Rätoromanisch"@de , "Ρετο-Ρομανικά"@el , "Romansh"@en , "Romanche"@es , "Retoromaani"@et , "Erromantxera"@eu , "Retoromaani"@fi , "Rætoromanskt"@fo , "Romanche"@fr , "Romáinsis"@ga , "Retorrománico"@gl , "रहेय्टो-रोमान्स"@hi , "Romanš"@hr , "Romans"@hu , "Retórómanska"@is , "Rhaeto-romance"@it , "ロマンシュ語"@ja , "რეტორომანული"@ka , "로만슈어"@ko , "Retoromanų"@lt , "Retoromāņu"@lv , "Reto-Romanz"@mk , "Romansh"@ms , "Reto-Romanz"@mt , "Reto-Romaans"@nl , "Retoromansk"@no , "Retoromański"@pl , "Reto-romance"@pt , "Reto-romance"@pt-BR , "Rumantsch"@rm , "Retoromană"@ro , "ретороманский"@ru , "Rétorománčina"@sk , "Retoromanščina"@sl , "Romake"@sq , "Романш"@sr , "Rätoromanska"@sv , "เรโต-โรแมนซ์"@th , "Rhaeto-Roman"@tr , "Ретороманська"@uk , "罗曼什语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/rm> .
+iso:roh iso:code-a2 "rm" ;
+	iso:code-a3t "roh" .
 
-iso:ron a iso:language ;
-	iso:code-a2 "ro" ;
-	iso:code-a3t "ron" ;
-	rdfs:label "روماني"@ar , "румынская"@be , "Румънски"@bg , "Rumunski"@bs , "Romanès"@ca , "Rumunština"@cs , "Romansk"@da , "Rumänisch"@de , "Ρουμανικά"@el , "Romanian"@en , "Rumano"@es , "Rumeenia"@et , "Errumaniera"@eu , "Romanian"@fi , "Romanskt"@fo , "Roumain"@fr , "Rómáinis"@ga , "Romanés"@gl , "रोमानियाई"@hi , "Rumunjski"@hr , "Román"@hu , "Rúmenska"@is , "Rumeno"@it , "ルーマニア語"@ja , "რუმინული"@ka , "루마니아어"@ko , "Rumunų"@lt , "Rumāņu"@lv , "Романски"@mk , "Romanian"@ms , "Rumen"@mt , "Roemeens"@nl , "Rumensk"@no , "Rumunski"@pl , "Romanian"@pt , "Romanian"@pt-BR , "Rumen"@rm , "Română"@ro , "румынский"@ru , "Rumunčina"@sk , "Romunščina"@sl , "Rumanisht"@sq , "Румунски"@sr , "Rumänska"@sv , "ภาษาโรมาเนีย"@th , "Rumence"@tr , "Румунська"@uk , "羅馬尼亞語"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/ro> .
+iso:ron iso:code-a2 "ro" ;
+	iso:code-a3t "ron" .
 
-iso:rus a iso:language ;
-	iso:code-a2 "ru" ;
-	iso:code-a3t "rus" ;
-	rdfs:label "روسي"@ar , "Руская"@be , "Руски"@bg , "Ruski"@bs , "Rus"@ca , "Ruština"@cs , "Russisk"@da , "Russisch"@de , "Ρώσικα"@el , "Russian"@en , "Ruso"@es , "Vene"@et , "Errusiera"@eu , "Venäjän"@fi , "Russiskt"@fo , "Russe"@fr , "Rúisis"@ga , "Ruso"@gl , "रूसी"@hi , "Ruski"@hr , "Orosz"@hu , "Rússneska"@is , "Russo"@it , "ロシア語"@ja , "რუსული"@ka , "러시아어"@ko , "Rusų"@lt , "Krievu"@lv , "Руски"@mk , "Russian"@ms , "Russu"@mt , "Russisch"@nl , "Russisk"@no , "Rosyjski"@pl , "Russo"@pt , "Russo"@pt-BR , "Russ"@rm , "Rusă"@ro , "русский"@ru , "Ruština"@sk , "Ruščina"@sl , "Rusisht"@sq , "Руски"@sr , "Ryska"@sv , "ภาษารัสเซีย"@th , "Rusça"@tr , "Російська"@uk , "俄语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/ru> .
+iso:rus iso:code-a2 "ru" ;
+	iso:code-a3t "rus" .
 
-iso:slk a iso:language ;
-	iso:code-a2 "sk" ;
-	iso:code-a3t "slk" ;
-	rdfs:label "سلوفاكي"@ar , "Славацкая"@be , "Словашки"@bg , "Slovački"@bs , "Eslovac"@ca , "Slovenština"@cs , "Slovakisk"@da , "Slowakisch"@de , "Σλοβάκικα"@el , "Slovak"@en , "Eslovaco"@es , "Slovaki"@et , "Eslovakiera"@eu , "Slovakki"@fi , "Slovakiskum"@fo , "Slovaque"@fr , "Slóvaicis"@ga , "Eslovaco"@gl , "स्लोवाक्"@hi , "Slovački"@hr , "Szlovák"@hu , "Slóvakíska"@is , "Slovacco"@it , "スロバキア語"@ja , "სლოვაკური"@ka , "슬로바키아어"@ko , "Slovakų"@lt , "Slovāku"@lv , "Словачки"@mk , "Slovak"@ms , "Slovakk"@mt , "Slowaaks"@nl , "Slovakisk"@no , "Słowacki"@pl , "Eslovaco"@pt , "Eslovaco"@pt-BR , "Slovac"@rm , "Slovacă"@ro , "Словацкий"@ru , "Slovenčina"@sk , "Slovaščina"@sl , "Sllovakisht"@sq , "Словачки"@sr , "Slovakiska"@sv , "ภาษาสโลวัก"@th , "Slovakça"@tr , "Словацька"@uk , "斯洛伐克语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/sk> .
+iso:slk iso:code-a2 "sk" ;
+	iso:code-a3t "slk" .
 
-iso:slv a iso:language ;
-	iso:code-a2 "sl" ;
-	iso:code-a3t "slv" ;
-	rdfs:label "سلوفيني"@ar , "Славенская"@be , "Словенски"@bg , "Slovenski"@bs , "Eslovè"@ca , "Slovinština"@cs , "Slovensk"@da , "Slowenisch"@de , "Σλοβένικα"@el , "Slovenian"@en , "Esloveno"@es , "Sloveeni"@et , "Esloveniera"@eu , "Sloveeni"@fi , "Slovenskum"@fo , "Slovène"@fr , "Slóivéinis"@ga , "Esloveno"@gl , "स्लोवेनियन्"@hi , "Slovenski"@hr , "Szlovén"@hu , "Slóvenska"@is , "Sloveno"@it , "スロベニア語"@ja , "სლოვენური"@ka , "슬로베니아어"@ko , "Slovėnų"@lt , "Slovēņu"@lv , "Словенечки"@mk , "Slovenian"@ms , "Sloveniż"@mt , "Sloveens"@nl , "Slovensk"@no , "Słoweński"@pl , "Esloveno"@pt , "Esloveno"@pt-BR , "Sloven"@rm , "Slovenă"@ro , "Словенский"@ru , "Slovinčina"@sk , "Slovenščina"@sl , "Sllovenisht"@sq , "Словеначки"@sr , "Slovenska"@sv , "ภาษาสโลวีเนีย"@th , "Slovence"@tr , "Словенська"@uk , "斯洛文尼亚语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/sl> .
+iso:slv iso:code-a2 "sl" ;
+	iso:code-a3t "slv" .
 
-iso:spa a iso:language ;
-	iso:code-a2 "es" ;
-	iso:code-a3t "spa" ;
-	rdfs:label "أسباني"@ar , "Іспанская"@be , "Испански"@bg , "Španski"@bs , "Castellà"@ca , "Španělština"@cs , "Spansk"@da , "Spanisch"@de , "Ισπανικά"@el , "Spanish"@en , "Español"@es , "Hispaania"@et , "Gaztelania"@eu , "Espanjan"@fi , "Spanskt"@fo , "Espagnol"@fr , "Spáinnis"@ga , "Castelá"@gl , "स्पेनिश"@hi , "Španjolski"@hr , "Spanyol"@hu , "Spænska"@is , "Spagnolo"@it , "西語"@ja , "ესპანური"@ka , "스페인어"@ko , "Ispanų"@lt , "Spāņu"@lv , "Шпански"@mk , "Spanish"@ms , "Spanjol"@mt , "Spaans"@nl , "Spansk"@no , "Hiszpański"@pl , "Espanhol"@pt , "Espanhol"@pt-BR , "Spagnol"@rm , "Spaniolă"@ro , "испанский"@ru , "Španielčina"@sk , "Španščina"@sl , "Spanjisht"@sq , "Шпански"@sr , "Spanska"@sv , "ภาษาสเปน"@th , "İspanyolca"@tr , "Іспанська"@uk , "西班牙语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/es> .
+iso:spa iso:code-a2 "es" ;
+	iso:code-a3t "spa" .
 
-iso:sqi a iso:language ;
-	iso:code-a2 "sq" ;
-	iso:code-a3t "sqi" ;
-	rdfs:label "الألبانية"@ar , "Албанская"@be , "Aлбански"@bg , "Albanski"@bs , "Albanès"@ca , "Albánština"@cs , "Albansk"@da , "Albanisch"@de , "Αλβανικά"@el , "Albanian"@en , "Albanés"@es , "Albaania"@et , "Albaniera"@eu , "Albania"@fi , "Albanskt"@fo , "Albanais"@fr , "Albáinis"@ga , "Albanés"@gl , "अल्बेनियन्"@hi , "Albanski"@hr , "Albán"@hu , "Albanska"@is , "Albanese"@it , "アルバニア語"@ja , "ალბანური"@ka , "알바니아어"@ko , "Albanų"@lt , "Albāņu"@lv , "Aлбански"@mk , "Albanian"@ms , "Albaniż"@mt , "Albanees"@nl , "Albansk"@no , "Albański"@pl , "Albanês"@pt , "Albanês"@pt-BR , "Albanais"@rm , "Albaneză"@ro , "Aлбанский"@ru , "Albánčina"@sk , "Albanščina"@sl , "Shqipe"@sq , "Албански"@sr , "Albanska"@sv , "แอลเบเนีย"@th , "Arnavutça"@tr , "Aлбанська"@uk , "阿尔巴尼亚语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/sq> .
+iso:sqi iso:code-a2 "sq" ;
+	iso:code-a3t "sqi" .
 
-iso:srp a iso:language ;
-	iso:code-a2 "sr" ;
-	iso:code-a3t "srp" ;
-	rdfs:label "سربي"@ar , "Сербская"@be , "Сръбски"@bg , "Srpski"@bs , "Serb"@ca , "Srbština"@cs , "Serbisk"@da , "Serbisch"@de , "Σερβικά"@el , "Serbian"@en , "Serbio"@es , "Serbia"@et , "Serbiera"@eu , "Serbia"@fi , "Serbiskum"@fo , "Serbe"@fr , "Seirbis"@ga , "Serbio"@gl , "सर्बियन्"@hi , "Srpski"@hr , "Szerb"@hu , "Serbneska"@is , "Serba"@it , "セルビア語"@ja , "სერბული"@ka , "세르비아어"@ko , "Serbų"@lt , "Serbu"@lv , "Српски"@mk , "Serbian"@ms , "Serb"@mt , "Servisch"@nl , "Serbisk"@no , "Serbski"@pl , "Sérvia"@pt , "Sérvia"@pt-BR , "Serb"@rm , "Sârbă"@ro , "Сербский"@ru , "Srbčina"@sk , "Srbščina"@sl , "Serbisht"@sq , "Српски"@sr , "Serbiska"@sv , "ภาษาเซอร์เบีย"@th , "Sırpça"@tr , "Сербська"@uk , "塞尔维亚语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/sr> .
+iso:srp iso:code-a2 "sr" ;
+	iso:code-a3t "srp" .
 
-iso:swe a iso:language ;
-	iso:code-a2 "sv" ;
-	iso:code-a3t "swe" ;
-	rdfs:label "سويدي"@ar , "Шведская"@be , "Шведски"@bg , "Švedski"@bs , "Suec"@ca , "Švédština"@cs , "Svensk"@da , "Schwedisch"@de , "Σουηδικά"@el , "Swedish"@en , "Sueco"@es , "Rootsi"@et , "Suediera"@eu , "Ruotsin"@fi , "Svenskt"@fo , "Suédois"@fr , "Sualainnis"@ga , "Sueco"@gl , "स्विडिश"@hi , "Švedski"@hr , "Svéd"@hu , "Sænska"@is , "Svedese"@it , "スウェーデン語"@ja , "შვედური"@ka , "스웨덴어"@ko , "Švedų"@lt , "Zviedru"@lv , "Шведски"@mk , "Swedish"@ms , "Svediż"@mt , "Zweeds"@nl , "Svensk"@no , "Szwedzki"@pl , "Sueco"@pt , "Sueco"@pt-BR , "Svedais"@rm , "Suedeză"@ro , "Шведский"@ru , "Švédčina"@sk , "Švedščina"@sl , "Suedisht"@sq , "Шведски"@sr , "Svenska"@sv , "ภาษาสวีเดน"@th , "İsveççe"@tr , "Шведська"@uk , "瑞典語"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/sv> .
+iso:swe iso:code-a2 "sv" ;
+	iso:code-a3t "swe" .
 
-iso:tha a iso:language ;
-	iso:code-a2 "th" ;
-	iso:code-a3t "tha" ;
-	rdfs:label "تايلندي"@ar , "Tайская"@be , "Тайски език"@bg , "Tajlandski"@bs , "Tailandès"@ca , "Thajština"@cs , "Thai"@da , "Thailändisch"@de , "Ταϊλανδικά"@el , "Thai"@en , "Tailandés"@es , "Tai"@et , "Thailandiera"@eu , "Thain"@fi , "Thailendskt"@fo , "Thaï"@fr , "Téalainnis"@ga , "Tailandés"@gl , "थाई"@hi , "Tajlandski"@hr , "Thai"@hu , "Taílenska"@is , "Thailandese"@it , "タイ語"@ja , "ტაი"@ka , "타이어"@ko , "Tajų"@lt , "Taizemiešu"@lv , "Тајски"@mk , "Thai"@ms , "Tajlandiż"@mt , "Thai"@nl , "Thai"@no , "Tajski"@pl , "Tailandesa"@pt , "Tailandesa"@pt-BR , "Tailandais"@rm , "Thailandeza"@ro , "Тайский язык"@ru , "Thajčina"@sk , "Thai"@sl , "Tajlandisht"@sq , "Тајски"@sr , "Thai"@sv , "ภาษาไทย"@th , "Tay"@tr , "Тайська"@uk , "泰语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/th> .
+iso:tha iso:code-a2 "th" ;
+	iso:code-a3t "tha" .
 
-iso:tur a iso:language ;
-	iso:code-a2 "tr" ;
-	iso:code-a3t "tur" ;
-	rdfs:label "تركي"@ar , "Турэцкая"@be , "Турски"@bg , "Turski"@bs , "Turc"@ca , "Turečtina"@cs , "Tyrkisk"@da , "Türkisch"@de , "Τουρκικά"@el , "Turkish"@en , "Turco"@es , "Türgi"@et , "Turkiera"@eu , "Turkin"@fi , "Turkiskt"@fo , "Turc"@fr , "Tuircis"@ga , "Turco"@gl , "तुर्की"@hi , "Turski"@hr , "Török"@hu , "Tyrkneska"@is , "Turco"@it , "トルコ語"@ja , "თურქული"@ka , "터키어"@ko , "Turkų"@lt , "Turku"@lv , "Турски"@mk , "Turkish"@ms , "Tork"@mt , "Turks"@nl , "Tyrkisk"@no , "Turecki"@pl , "Turco"@pt , "Turco"@pt-BR , "Tirc"@rm , "Turcesc"@ro , "турецкий"@ru , "Turečtina"@sk , "Turščina"@sl , "Turqisht"@sq , "Турски"@sr , "Turkiska"@sv , "ภาษาตุรกี"@th , "Türkçe"@tr , "Турецька"@uk , "土耳其语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/tr> .
+iso:tur iso:code-a2 "tr" ;
+	iso:code-a3t "tur" .
 
-iso:ukr a iso:language ;
-	iso:code-a2 "uk" ;
-	iso:code-a3t "ukr" ;
-	rdfs:label "أوكراني"@ar , "Украінская"@be , "Украински"@bg , "Ukrajinski"@bs , "Ucraïnès"@ca , "Ukrajinština"@cs , "Ukrainsk"@da , "Ukrainisch"@de , "Ουκρανικά"@el , "Ukrainian"@en , "Ucraniano"@es , "Ukraina"@et , "Ukrainera"@eu , "Ukraina"@fi , "Ukrainskt"@fo , "Ukrainien"@fr , "Úcráinis"@ga , "Ucraíno"@gl , "यूक्रेनी"@hi , "Ukrajinski"@hr , "Ukrán"@hu , "Úkraínska"@is , "Ucraìna"@it , "ウクライナ語"@ja , "უკრაინული"@ka , "우크라이나어"@ko , "Ukrainiečių"@lt , "Ukraiņu"@lv , "Украински"@mk , "Ukrainian"@ms , "Ukranjan"@mt , "Oekraïens"@nl , "Ukrainsk"@no , "Ukraiński"@pl , "Ucraniana"@pt , "Ucraniana"@pt-BR , "Ucranais"@rm , "Ucraineană"@ro , "Украинский"@ru , "Ukrajinčina"@sk , "Ukrajinščina"@sl , "Ukrainisht"@sq , "Украјински"@sr , "Ukrainska"@sv , "ภาษายูเครน"@th , "Ukrayna"@tr , "Українська"@uk , "乌克兰语"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/uk> .
+iso:ukr iso:code-a2 "uk" ;
+	iso:code-a3t "ukr" .
 
-iso:zho a iso:language ;
-	iso:code-a2 "zh" ;
-	iso:code-a3t "zho" ;
-	rdfs:label "صيني"@ar , "Кітайская"@be , "Китайски"@bg , "Kineski"@bs , "Xinès"@ca , "Čínština"@cs , "Kinesisk"@da , "Chinesisch"@de , "Κινεζικά"@el , "Chinese"@en , "Chino"@es , "Hiina"@et , "Txinera"@eu , "Kiinan"@fi , "Kinesiskt"@fo , "Chinois"@fr , "Sínis"@ga , "Chinés"@gl , "चीनी भाषा"@hi , "Kineski"@hr , "Kínai"@hu , "Kínverska"@is , "Cinese"@it , "中国語"@ja , "ჩინური"@ka , "중국어"@ko , "Kinų"@lt , "Ķīniešu"@lv , "Кинески"@mk , "Chinese"@ms , "Ciniż"@mt , "Chinees"@nl , "Kinesisk"@no , "Chiński"@pl , "Chinês"@pt , "Chinês"@pt-BR , "Chinais"@rm , "Chineză"@ro , "китайский"@ru , "Čínština"@sk , "Čínščina"@sl , "Kineze"@sq , "Кинески"@sr , "Kinesiska"@sv , "ภาษาจีน"@th , "Çince"@tr , "Китайська"@uk , "中文"@zh ;
-	owl:sameAs <http://www.lingvoj.org/lang/zh> .
+iso:zho iso:code-a2 "zh" ;
+	iso:code-a3t "zho" .

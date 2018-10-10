@@ -12,6 +12,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionStoreException;
 
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
 
 public class AutoDetectRepositoryFactory implements Supplier<Repository> {
@@ -49,21 +50,21 @@ public class AutoDetectRepositoryFactory implements Supplier<Repository> {
 					// la lecture avec une config Spring a echoue
 					// 2. on essaie avec un RP qui lit soit depuis une URL, soit depuis un fichier
 					log.debug("Attempt with Spring file failed ("+e1.getMessage()+"), exception indicating that the input param was not a Sping file, try by interpreting a String...");
-					RepositoryBuilderFactory builderFactory = new RepositoryBuilderFactory(this.aParameter.get(0));
-					return builderFactory.get().get();
+					RepositoryBuilder builder = RepositoryBuilderFactory.fromString(this.aParameter.get(0));
+					return builder.get();
 				} else {
 					// erreur pendant l'init de Spring : "vraie" exception Spring
 					// on essaie quand meme, au cas ou, en lisant depuis un fichier ou une URL
 					log.debug("Attempt with Spring file failed ("+e1.getMessage()+"), but param seemed to be a Spring file.");
 					log.debug("Will attempt by interpreting a String anyway...");
-					RepositoryBuilderFactory builderFactory = new RepositoryBuilderFactory(this.aParameter.get(0));
-					return builderFactory.get().get();				
+					RepositoryBuilder builder = RepositoryBuilderFactory.fromString(this.aParameter.get(0));
+					return builder.get();				
 				}
 			}
 		} else {
 			// plus d'un parametre, on considere que ce sont des fichiers ou des repertoires
-			RepositoryBuilderFactory builderFactory = new RepositoryBuilderFactory(aParameter);
-			return builderFactory.get().get();
+			RepositoryBuilder builder = RepositoryBuilderFactory.fromStringList(aParameter);
+			return builder.get();
 		}
 	}
 
