@@ -1,11 +1,10 @@
 package fr.sparna.rdf.skos.printer.reader;
 
-import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.rdf4j.model.IRI;
 
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.skos.printer.schema.KosDisplay;
 import fr.sparna.rdf.skos.printer.schema.KosDocumentBody;
 
@@ -24,8 +23,7 @@ public class BodyReader {
 		this(Collections.singletonList(generator));
 	}
 	
-	public KosDocumentBody readBody(String mainLang, URI conceptScheme) 
-	throws SparqlPerformException {
+	public KosDocumentBody readBody(String mainLang, IRI conceptScheme) {
 		KosDocumentBody body = new KosDocumentBody();
 		
 		for (AbstractKosDisplayGenerator aGenerator : this.generators) {

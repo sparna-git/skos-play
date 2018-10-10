@@ -1,32 +1,30 @@
 package fr.sparna.rdf.skos.printer.reader;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
-import org.eclipse.rdf4j.model.impl.ValueFactoryImpl;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
-import fr.sparna.rdf.sesame.toolkit.reader.KeyValueReader;
-import fr.sparna.rdf.sesame.toolkit.reader.UriLang;
-import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
-import fr.sparna.rdf.sesame.toolkit.util.Namespaces;
-import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
+import fr.sparna.rdf.rdf4j.toolkit.reader.IriLang;
+import fr.sparna.rdf.rdf4j.toolkit.reader.KeyValueReader;
+import fr.sparna.rdf.rdf4j.toolkit.reader.PropertyLangValueReader;
+import fr.sparna.rdf.rdf4j.toolkit.reader.PropertyValueReader;
+import fr.sparna.rdf.rdf4j.toolkit.reader.PropertyValueReader.GenericQuerySupplier;
+import fr.sparna.rdf.rdf4j.toolkit.util.LabelReader;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
 import fr.sparna.rdf.skos.toolkit.SKOS;
 import fr.sparna.rdf.skos.toolkit.builders.CollectionsOfConceptReader;
-import fr.sparna.rdf.skos.toolkit.builders.GetLabels;
 import fr.sparna.rdf.skos.toolkit.builders.TopConceptsOfConceptReader;
 
 public class ConceptBlockReader {
-
-	protected Repository repository;
 	
 	// list of URIs of SKOS properties to read for each concept block
 	protected List<String> skosPropertiesToRead;
@@ -36,15 +34,15 @@ public class ConceptBlockReader {
 	protected Map<String, Object> additionalReaders = new HashMap<String, Object>();
 
 	// prefLabelReader
-	protected PropertyReader prefLabelReader;
+	protected KeyValueReader<IRI, Literal> prefLabelReader;
 	
 	// notationReader
-	protected PropertyReader notationReader;
+	protected KeyValueReader<IRI, Value> notationReader;
 	
 	// should we include linguistic equivalents ?
 	protected List<String> additionalLabelLanguagesToInclude = null;
 	// use a TreeMap to garantee ordering by language code
-	protected Map<String, KeyValueReader<UriLang, Literal>> additionalLabelLanguagesReaders = new TreeMap<String, KeyValueReader<UriLang, Literal>>();
+	protected Map<String, KeyValueReader<IriLang, Literal>> additionalLabelLanguagesReaders = new TreeMap<String, KeyValueReader<IriLang, Literal>>();
 	
 	// concept ID prefixes, to distinguish multiple concept block of the same concept in a document containing multiple displays
 	protected String conceptBlockIdPrefix;
@@ -56,40 +54,28 @@ public class ConceptBlockReader {
 	// already generated IDs, to avoid clashes
 	protected List<String> generatedIds = new ArrayList<String>();
 	
-	public ConceptBlockReader(
-			Repository repository
-	) {
+	public ConceptBlockReader() {
 		super();
-		this.repository = repository;
 	}	
 	
 	// called by a DisplayGenerator
 	protected void initInternal(
 			String lang,
-			final URI conceptScheme,
+			final IRI conceptScheme,
 			String conceptBlockIdPrefix
 	) {
 		this.conceptBlockIdPrefix = conceptBlockIdPrefix;
 		
 		// no concept scheme filtering here - we want to be able to read prefLabel independently from the conceptScheme
-		prefLabelReader = new PropertyReader(
-				this.repository,
-				URI.create(SKOS.PREF_LABEL),
-				// additional path
-				null,
-				// language of property to read
-				lang,
-				// additional criteria predicate
-				null,
-				// additional criteria object
-				null
+		prefLabelReader = new PropertyLangValueReader(
+				SimpleValueFactory.getInstance().createIRI(SKOS.PREF_LABEL),
+				lang
 		);
 		// if we need to disable preload
 		prefLabelReader.setPreLoad(false);
 		
-		notationReader = new PropertyReader(
-				this.repository,
-				URI.create(SKOS.NOTATION)
+		notationReader = new PropertyValueReader(
+				SimpleValueFactory.getInstance().createIRI(SKOS.NOTATION)
 		);
 		notationReader.setPreLoad(false);
 
@@ -101,17 +87,15 @@ public class ConceptBlockReader {
 			for (String aProperty : this.skosPropertiesToRead) {
 				
 				if(aProperty.equals(SKOSPLAY.TOP_TERM)) {
-					additionalReaders.put(SKOSPLAY.TOP_TERM,
-						new KeyValueReader<org.eclipse.rdf4j.model.URI, org.eclipse.rdf4j.model.URI>(
-								repository,
-								new TopConceptsOfConceptReader(null)
-					));					
+					additionalReaders.put(
+						SKOSPLAY.TOP_TERM,
+						new TopConceptsOfConceptReader(null)
+					);					
 				} else if(aProperty.equals(SKOSPLAY.MEMBER_OF)) {
-					additionalReaders.put(SKOSPLAY.MEMBER_OF,
-						new KeyValueReader<org.eclipse.rdf4j.model.URI, org.eclipse.rdf4j.model.URI>(
-								repository,
-								new CollectionsOfConceptReader(null)
-					));					
+					additionalReaders.put(
+						SKOSPLAY.MEMBER_OF,
+						new CollectionsOfConceptReader(null)
+					);					
 				} else {
 					
 					// add a PropertyReader to read the corresponding property
@@ -119,27 +103,20 @@ public class ConceptBlockReader {
 					String inverseProperty = SKOS.getInverseOf(aProperty);
 					additionalReaders.put(aProperty,
 							(conceptScheme != null)
-							?new PropertyReader(
-									this.repository,
-									URI.create(aProperty),
-									(inverseProperty != null)?"^<"+inverseProperty+">":null,
+							?new PropertyValueReader(new GenericQuerySupplier(
+									(inverseProperty != null)?aProperty+"/"+"^<"+inverseProperty+">":aProperty,
 									(SKOS.isDatatypeProperty(aProperty) && !aProperty.equals(SKOS.NOTATION))?lang:null,
-									URI.create(SKOS.IN_SCHEME),
-									URI.create(conceptScheme.toString())
-							)
-							:new PropertyReader(
-									this.repository,
-									URI.create(aProperty),
-									(inverseProperty != null)?"^<"+inverseProperty+">":null,
+									SimpleValueFactory.getInstance().createIRI(SKOS.IN_SCHEME),
+									SimpleValueFactory.getInstance().createIRI(conceptScheme.toString())
+							))
+							:new PropertyValueReader(new GenericQuerySupplier(
+									(inverseProperty != null)?aProperty+"/"+"^<"+inverseProperty+">":aProperty,
 									(SKOS.isDatatypeProperty(aProperty) && !aProperty.equals(SKOS.NOTATION))?lang:null,
 									null,
 									null
-							)
-					);
-					
+							))
+					);					
 				}
-				
-
 			}
 		}
 		
@@ -148,17 +125,13 @@ public class ConceptBlockReader {
 			for (String anAdditionalLang : this.additionalLabelLanguagesToInclude) {
 				additionalLabelLanguagesReaders.put(
 						anAdditionalLang, 
-						new KeyValueReader<UriLang, Literal>(
-								repository,
-								new GetLabels(SKOS.PREF_LABEL, anAdditionalLang, (conceptScheme != null)?conceptScheme.toString():null)
-						)
+						new fr.sparna.rdf.skos.toolkit.builders.LabelReader(SKOS.PREF_LABEL, anAdditionalLang, (conceptScheme != null)?conceptScheme.toString():null)
 				);
 			}
 		}
 	}
 	
-	public ConceptBlock readConceptBlockForSynonym(final String uri, final String altLabel, final String prefLabel)
-	throws SparqlPerformException {
+	public ConceptBlock readConceptBlockForSynonym(final String uri, final String altLabel, final String prefLabel) {
 		ConceptBlock cb = SchemaFactory.createConceptBlock(computeConceptBlockId(uri, altLabel), uri, SchemaFactory.createLabel(altLabel, "alt"));
 		cb.getAtt().add(SchemaFactory.createAttLink(
 				computeRefId(uri, prefLabel, true),
@@ -171,24 +144,22 @@ public class ConceptBlockReader {
 	}
 	
 	
-	public ConceptBlock readConceptBlock(final String uri, boolean styleLabel, boolean prependNotation)
-	throws SparqlPerformException {
+	public ConceptBlock readConceptBlock(RepositoryConnection connection, final String uri, boolean styleLabel, boolean prependNotation) {
 		// set sourceConceptLabel (or URI if no sourceConceptLabel can be found)
-		String label = LabelReader.display(prefLabelReader.read(URI.create(uri)));
+		String label = LabelReader.display(prefLabelReader.read(SimpleValueFactory.getInstance().createIRI(uri), connection));
 		
 		if(prependNotation) {
-			List<Value> notations = notationReader.read(URI.create(uri));
+			List<Value> notations = notationReader.read(SimpleValueFactory.getInstance().createIRI(uri), connection);
 			label = ((notations.size() > 0)?notations.get(0).stringValue()+" ":"")+label;
 		}
 		
 		// defaults to displaying the URI if the generated label is empty, and display the short URI
 		label = (label.trim().equals(""))?uri:label;
-		return this.readConceptBlock(uri, label, styleLabel);
+		return this.readConceptBlock(connection, uri, label, styleLabel);
 	}
 	
-	public ConceptBlock readConceptBlock(final String uri, String prefLabel, boolean styleLabel)
-	throws SparqlPerformException {
-		return readConceptBlock(uri, prefLabel, computeConceptBlockId(uri, prefLabel), styleLabel);
+	public ConceptBlock readConceptBlock(RepositoryConnection connection, final String uri, String prefLabel, boolean styleLabel) {
+		return readConceptBlock(connection, uri, prefLabel, computeConceptBlockId(uri, prefLabel), styleLabel);
 	}
 	
 	/**
@@ -200,8 +171,7 @@ public class ConceptBlockReader {
 	 * @return
 	 * @throws SparqlPerformException
 	 */
-	public ConceptBlock readConceptBlock(final String uri, String prefLabel, String blockId, boolean styleLabel)
-	throws SparqlPerformException {
+	public ConceptBlock readConceptBlock(RepositoryConnection connection, final String uri, String prefLabel, String blockId, boolean styleLabel) {
 		
 		final ConceptBlock cb;
 		
@@ -223,10 +193,10 @@ public class ConceptBlockReader {
 		
 		// add additional languages first
 		if(this.additionalLabelLanguagesToInclude != null) {			
-			for (Map.Entry<String, KeyValueReader<UriLang, Literal>> anEntry : this.additionalLabelLanguagesReaders.entrySet()) {
+			for (Map.Entry<String, KeyValueReader<IriLang, Literal>> anEntry : this.additionalLabelLanguagesReaders.entrySet()) {
 				String lang = anEntry.getKey();
 				
-				String labelInOtherLanguage = LabelReader.display(anEntry.getValue().read(new UriLang(uri, lang)));
+				String labelInOtherLanguage = LabelReader.display(anEntry.getValue().read(new IriLang(uri, lang), connection));
 				// don't display if there is no sourceConceptLabel for this language
 				if(labelInOtherLanguage != null && !labelInOtherLanguage.equals("")) {
 					cb.getAtt().add(
@@ -245,10 +215,10 @@ public class ConceptBlockReader {
 			
 			Object o = entry.getValue();
 			
-			if(o instanceof PropertyReader) {
-				PropertyReader predicateReader = (PropertyReader)o;
+			if(o instanceof PropertyValueReader) {
+				PropertyValueReader predicateReader = (PropertyValueReader)o;
 			
-				List<Value> values = predicateReader.read(URI.create(uri));
+				List<Value> values = predicateReader.read(SimpleValueFactory.getInstance().createIRI(uri), connection);
 				for (Value value : values) {
 	
 					if(value instanceof Literal) {
@@ -256,12 +226,12 @@ public class ConceptBlockReader {
 								SchemaFactory.createAtt(
 										((Literal)value).stringValue(),
 										SKOSTags.getStringForURI(entry.getKey()),
-										(styleAttributes && predicateReader.getPropertyURI().toString().equals(SKOS.ALT_LABEL))?"alt-att":null
+										(styleAttributes && entry.getKey().equals(SKOS.ALT_LABEL))?"alt-att":null
 										)
 								);
 					} else {
-						org.eclipse.rdf4j.model.URI aRef = (org.eclipse.rdf4j.model.URI)value;
-						List<Value> prefs = prefLabelReader.read(URI.create(aRef.stringValue()));
+						IRI aRef = (IRI)value;
+						List<Literal> prefs = prefLabelReader.read(SimpleValueFactory.getInstance().createIRI(aRef.stringValue()), connection);
 						String refPrefLabel = (prefs.size() > 0)?prefs.get(0).stringValue():aRef.stringValue();
 						cb.getAtt().add(
 								SchemaFactory.createAttLink(
@@ -276,18 +246,18 @@ public class ConceptBlockReader {
 				}			
 			} else if(o instanceof KeyValueReader) {
 				// get the result of the reader
-				KeyValueReader<org.eclipse.rdf4j.model.URI, org.eclipse.rdf4j.model.URI> reader = (KeyValueReader<org.eclipse.rdf4j.model.URI, org.eclipse.rdf4j.model.URI>)o;
-				List<org.eclipse.rdf4j.model.URI> values = reader.read(ValueFactoryImpl.getInstance().createURI(uri));
+				KeyValueReader<IRI, IRI> reader = (KeyValueReader<IRI, IRI>)o;
+				List<IRI> values = reader.read(SimpleValueFactory.getInstance().createIRI(uri), connection);
 				
 				// lookup the label of the values
-				for (org.eclipse.rdf4j.model.URI aValue : values) {
-					List<Value> prefs = prefLabelReader.read(URI.create(aValue.stringValue()));
+				for (IRI aValue : values) {
+					List<Literal> prefs = prefLabelReader.read(SimpleValueFactory.getInstance().createIRI(aValue.stringValue()), connection);
 					String refPrefLabel = (prefs.size() > 0)?prefs.get(0).stringValue():aValue.stringValue();
 					
 					String refNotation = null;
 					if(entry.getKey().equals(SKOSPLAY.MEMBER_OF)) {
 						// in case we are referencing a collection / micro-thesaurus, attempt to fetch the notation (UNESCO thesaurus)
-						List<Value> notations = notationReader.read(URI.create(aValue.stringValue()));
+						List<Value> notations = notationReader.read(SimpleValueFactory.getInstance().createIRI(aValue.stringValue()), connection);
 						refNotation = (notations.size() > 0)?notations.get(0).stringValue():null;
 					}
 					
@@ -336,7 +306,7 @@ public class ConceptBlockReader {
 		this.skosPropertiesToRead = skosPropertiesToRead;
 	}
 
-	public PropertyReader getPrefLabelReader() {
+	public KeyValueReader<IRI, Literal> getPrefLabelReader() {
 		return prefLabelReader;
 	}
 

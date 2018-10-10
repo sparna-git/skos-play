@@ -2,7 +2,6 @@ package fr.sparna.rdf.skos.printer.reader;
 
 import java.io.File;
 import java.math.BigInteger;
-import java.net.URI;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,17 +10,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.lang.StringUtil;
-import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
 import fr.sparna.rdf.skos.printer.schema.KosDisplay;
@@ -67,19 +68,18 @@ public class ConceptListDisplayGenerator extends AbstractKosDisplayGenerator {
 	protected ConceptBlockReader cbReader;
 
 	
-	public ConceptListDisplayGenerator(Repository r, ConceptBlockReader cbReader, String displayId) {
-		super(r, displayId);
+	public ConceptListDisplayGenerator(RepositoryConnection connection, ConceptBlockReader cbReader, String displayId) {
+		super(connection, displayId);
 		this.cbReader = cbReader;
 	}
 	
-	public ConceptListDisplayGenerator(Repository r, ConceptBlockReader cbReader) {
-		super(r);
+	public ConceptListDisplayGenerator(RepositoryConnection connection, ConceptBlockReader cbReader) {
+		super(connection);
 		this.cbReader = cbReader;
 	}
 
 	@Override
-	public KosDisplay doGenerate(final String lang, final URI conceptScheme) 
-	throws SparqlPerformException {
+	public KosDisplay doGenerate(final String lang, final IRI conceptScheme) {
 
 		// init ConceptBlockReader
 		this.cbReader.initInternal(lang, conceptScheme, this.displayId);
@@ -105,7 +105,8 @@ public class ConceptListDisplayGenerator extends AbstractKosDisplayGenerator {
 			}
 		};
 		
-		Perform.on(repository).select(helper);		
+
+		Perform.on(connection).select(helper);		
 
 		// setup Collator
 		final Collator collator = Collator.getInstance(new Locale(lang));
@@ -128,7 +129,7 @@ public class ConceptListDisplayGenerator extends AbstractKosDisplayGenerator {
 			log.debug("Will add sections to the output");
 			Section currentSection = null;
 			for (QueryResultRow aRow : queryResultRows) {
-				ConceptBlock cb = this.cbReader.readConceptBlock(aRow.conceptURI, aRow.prefLabel, true);
+				ConceptBlock cb = this.cbReader.readConceptBlock(connection, aRow.conceptURI, aRow.prefLabel, true);
 
 				String entrySectionTitle = StringUtil.withoutAccents(aRow.prefLabel).toUpperCase().substring(0, 1);
 				if(currentSection == null || !entrySectionTitle.equals(currentSection.getTitle())) {
@@ -153,7 +154,7 @@ public class ConceptListDisplayGenerator extends AbstractKosDisplayGenerator {
 			fr.sparna.rdf.skos.printer.schema.List list = new fr.sparna.rdf.skos.printer.schema.List();
 			s.setList(list);
 			for (QueryResultRow aRow : queryResultRows) {
-				ConceptBlock cb = this.cbReader.readConceptBlock(aRow.conceptURI, aRow.prefLabel, true);
+				ConceptBlock cb = this.cbReader.readConceptBlock(connection, aRow.conceptURI, aRow.prefLabel, true);
 				list.getListItem().add(SchemaFactory.createListItem(cb));
 			}
 			d.getSection().add(s);
@@ -184,30 +185,32 @@ public class ConceptListDisplayGenerator extends AbstractKosDisplayGenerator {
 		
 		final String LANG = "fr";
 		
-		Repository r = RepositoryBuilder.fromString(args[0]);
+		Repository r = RepositoryBuilderFactory.fromString(args[0]).get();
 		
-		// build display result
-		KosDocument document = new KosDocument();
-		
-		// build and set header
-		HeaderAndFooterReader headerReader = new HeaderAndFooterReader(r);
-		KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?URI.create(args[1]):null);
-		document.setHeader(header);
-		
-		ConceptBlockReader cbReader = new ConceptBlockReader(r);
-		cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES);
-		ConceptListDisplayGenerator reader = new ConceptListDisplayGenerator(r, cbReader);
-		BodyReader bodyReader = new BodyReader(reader);
-		document.setBody(bodyReader.readBody(LANG, (args.length > 1)?URI.create(args[1]):null));
-
-		DisplayPrinter printer = new DisplayPrinter();
-		printer.setDebug(true);
-		printer.printToHtml(document, new File("display-test.html"), LANG);
-		printer.printToPdf(document, new File("display-test.pdf"), LANG);
-		
-//		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
-//		m.setProperty("jaxb.formatted.output", true);
-//		m.marshal(display, System.out);
+		try(RepositoryConnection connection = r.getConnection()) {
+			// build display result
+			KosDocument document = new KosDocument();
+			
+			// build and set header
+			HeaderAndFooterReader headerReader = new HeaderAndFooterReader(connection);
+			KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?SimpleValueFactory.getInstance().createIRI(args[1]):null);
+			document.setHeader(header);
+			
+			ConceptBlockReader cbReader = new ConceptBlockReader();
+			cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES);
+			ConceptListDisplayGenerator reader = new ConceptListDisplayGenerator(connection, cbReader);
+			BodyReader bodyReader = new BodyReader(reader);
+			document.setBody(bodyReader.readBody(LANG, (args.length > 1)?SimpleValueFactory.getInstance().createIRI(args[1]):null));
+	
+			DisplayPrinter printer = new DisplayPrinter();
+			printer.setDebug(true);
+			printer.printToHtml(document, new File("display-test.html"), LANG);
+			printer.printToPdf(document, new File("display-test.pdf"), LANG);
+			
+	//		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
+	//		m.setProperty("jaxb.formatted.output", true);
+	//		m.marshal(display, System.out);
+		}
 	}
 	
 }

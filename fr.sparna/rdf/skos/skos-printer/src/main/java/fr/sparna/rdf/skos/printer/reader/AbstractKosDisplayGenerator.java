@@ -1,11 +1,11 @@
 package fr.sparna.rdf.skos.printer.reader;
 
-import java.net.URI;
 import java.util.UUID;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
 import fr.sparna.rdf.skos.printer.schema.KosDisplay;
 
 /**
@@ -15,13 +15,13 @@ import fr.sparna.rdf.skos.printer.schema.KosDisplay;
  */
 public abstract class AbstractKosDisplayGenerator {
 	
-	protected Repository repository;
+	protected RepositoryConnection connection;
 	
 	protected String displayId;
 	
-	public AbstractKosDisplayGenerator(Repository repository, String displayId) {
+	public AbstractKosDisplayGenerator(RepositoryConnection connection, String displayId) {
 		super();
-		this.repository = repository;
+		this.connection = connection;
 		this.displayId = displayId;
 	}
 	
@@ -29,12 +29,11 @@ public abstract class AbstractKosDisplayGenerator {
 	 * Creates a generator with a randomly-created displayId
 	 * @param repository
 	 */
-	public AbstractKosDisplayGenerator(Repository repository) {
-		this(repository, UUID.randomUUID().toString());
+	public AbstractKosDisplayGenerator(RepositoryConnection connection) {
+		this(connection, UUID.randomUUID().toString());
 	}
 
-	public KosDisplay generateDisplay(String mainLang, final URI conceptScheme) 
-	throws SparqlPerformException {
+	public KosDisplay generateDisplay(String mainLang, final IRI conceptScheme) {
 		// prevent null language
 		if(mainLang == null) {
 			mainLang = "";
@@ -46,8 +45,7 @@ public abstract class AbstractKosDisplayGenerator {
 		return display;
 	}
 	
-	protected abstract KosDisplay doGenerate(String mainLang, final URI conceptScheme)
-	throws SparqlPerformException ;
+	protected abstract KosDisplay doGenerate(String mainLang, final IRI conceptScheme);
 
 	public String getDisplayId() {
 		return displayId;

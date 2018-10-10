@@ -2,7 +2,6 @@ package fr.sparna.rdf.skos.printer.reader;
 
 import java.io.File;
 import java.math.BigInteger;
-import java.net.URI;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,24 +13,21 @@ import java.util.Locale;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
-import org.eclipse.rdf4j.common.iteration.Iterations;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.lang.StringUtil;
-import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlUpdate;
-import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
-import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.FactoryConfiguration;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.ApplyUpdates;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
-import fr.sparna.rdf.sesame.toolkit.util.Namespaces;
+import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
+import fr.sparna.rdf.rdf4j.toolkit.repository.init.ApplyUpdates;
+import fr.sparna.rdf.rdf4j.toolkit.util.Namespaces;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.DisplayPrinter.Style;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
@@ -94,20 +90,19 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 	protected ConceptBlockReader cbReader;
 	
 	
-	public AlphaIndexDisplayGenerator(Repository r, ConceptBlockReader cbReader, String displayId) {
-		super(r, displayId);
+	public AlphaIndexDisplayGenerator(RepositoryConnection connection, ConceptBlockReader cbReader, String displayId) {
+		super(connection, displayId);
 		this.cbReader = cbReader;
 	}
 	
 	
-	public AlphaIndexDisplayGenerator(Repository r, ConceptBlockReader cbReader) {
-		super(r);
+	public AlphaIndexDisplayGenerator(RepositoryConnection connection, ConceptBlockReader cbReader) {
+		super(connection);
 		this.cbReader = cbReader;
 	}
 
 	@Override
-	public KosDisplay doGenerate(String lang, final URI conceptScheme) 
-	throws SparqlPerformException {
+	public KosDisplay doGenerate(String lang, final IRI conceptScheme) {
 				
 		// init ConceptBlockReader
 		this.cbReader.initInternal(lang, conceptScheme, this.displayId);
@@ -134,7 +129,7 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 			}
 		};
 		
-		Perform.on(repository).select(helper);		
+		Perform.on(connection).select(helper);		
 
 		// setup Collator
 		final Collator collator = Collator.getInstance(new Locale(lang));
@@ -153,12 +148,12 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 		
 		boolean addSections = queryResultRows.size() > 200;
 		log.debug("Processing "+queryResultRows.size()+" entries.");
-		Namespaces namespaces = Namespaces.getInstance().withRepository(this.repository);
+		Namespaces namespaces = Namespaces.getInstance().withRepository(this.connection.getRepository());
 		if(addSections) {
 			log.debug("Will add sections to the output");
 			Section currentSection = null;
 			for (QueryResultRow anEntry : queryResultRows) {
-				ConceptBlock cb = buildConceptBlock(anEntry, namespaces);
+				ConceptBlock cb = buildConceptBlock(connection, anEntry, namespaces);
 
 				String entrySectionTitle = StringUtil.withoutAccents(anEntry.label).toUpperCase().substring(0, Math.min(1, anEntry.label.length()));
 				if(currentSection == null || !entrySectionTitle.equals(currentSection.getTitle())) {
@@ -183,7 +178,7 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 			fr.sparna.rdf.skos.printer.schema.List list = new fr.sparna.rdf.skos.printer.schema.List();
 			s.setList(list);
 			for (QueryResultRow aRow : queryResultRows) {
-				ConceptBlock cb = buildConceptBlock(aRow, namespaces);
+				ConceptBlock cb = buildConceptBlock(connection, aRow, namespaces);
 				list.getListItem().add(SchemaFactory.createListItem(cb));
 			}
 			d.getSection().add(s);
@@ -195,8 +190,7 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 		return d;
 	}
 
-	private ConceptBlock buildConceptBlock(QueryResultRow aRow, Namespaces namespaces)
-	throws SparqlPerformException {
+	private ConceptBlock buildConceptBlock(RepositoryConnection connection, QueryResultRow aRow, Namespaces namespaces) {
 		ConceptBlock cb;
 		// s'il y a un prefLabel, c'est que la valeur de "sourceConceptLabel" est un altLabel
 		if(aRow.prefLabel != null) {
@@ -206,9 +200,9 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 			if(aRow.label.equals(aRow.conceptURI)) {
 				// shorten the URI
 				// String shortURI = namespaces.shorten(aRow.label);
-				cb = this.cbReader.readConceptBlock(aRow.conceptURI, aRow.label, true);
+				cb = this.cbReader.readConceptBlock(connection, aRow.conceptURI, aRow.label, true);
 			} else {
-				cb = this.cbReader.readConceptBlock(aRow.conceptURI, aRow.label, true);
+				cb = this.cbReader.readConceptBlock(connection, aRow.conceptURI, aRow.label, true);
 			}
 			
 		}
@@ -237,46 +231,48 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
 		org.apache.log4j.Logger.getLogger("fr.sparna.rdf").setLevel(org.apache.log4j.Level.TRACE);
 		
-		// Repository r = RepositoryBuilder.fromString(args[0]);
-		RepositoryBuilder localRepositoryBuilder = new RepositoryBuilder(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_AWARE));
-		localRepositoryBuilder.addOperation(new LoadFromFileOrDirectory(args[0]));
-		Repository r = localRepositoryBuilder.createNewRepository();
-		
-		// SKOS-XL
-		ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSkosXl2SkosRuleset()));
-		au.execute(r);
-		
+		Repository r = RepositoryBuilderFactory.fromString(args[0]).get();
+//		RepositoryBuilder localRepositoryBuilder = new RepositoryBuilder(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_AWARE));
+//		localRepositoryBuilder.addOperation(new LoadFromFileOrDirectory(args[0]));
+//		Repository r = localRepositoryBuilder.createNewRepository();
+
 		// build result document
 		KosDocument document = new KosDocument();
 		
-		// build and set header
-		HeaderAndFooterReader headerReader = new HeaderAndFooterReader(r);
-		KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?URI.create(args[1]):null);
-		document.setHeader(header);
+		try(RepositoryConnection connection = r.getConnection()) {
+			// SKOS-XL
+			ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getSkosXl2SkosRuleset());
+			au.accept(connection);
 		
-		// build and set metadata
-		DocumentMetadataReader metaReader = new DocumentMetadataReader(r);
-		document.setKosDocumentMetadata(
-				metaReader.readKosDocumentMetadata(LANG, (args.length > 1)?URI.create(args[1]):null)
-		);
-		
-		ConceptBlockReader cbReader = new ConceptBlockReader(r);
-		cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES_WITH_MT);
-		cbReader.setAdditionalLabelLanguagesToInclude(Arrays.asList(new String[] { "en", "es", "ru" }));
-		
-		AlphaIndexDisplayGenerator reader = new AlphaIndexDisplayGenerator(r, cbReader);
-		BodyReader bodyReader = new BodyReader(reader);		
-		document.setBody(bodyReader.readBody(LANG, (args.length > 1)?URI.create(args[1]):null));
-
-		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
-		m.setProperty("jaxb.formatted.output", true);
-		// m.marshal(display, System.out);
-		m.marshal(document, new File("src/main/resources/alpha-index-output-test.xml"));
-		
-		DisplayPrinter printer = new DisplayPrinter();
-		printer.setStyle(Style.UNESCO);
-		printer.printToHtml(document, new File("display-test.html"), LANG);
-		printer.printToPdf(document, new File("display-test.pdf"), LANG);
+			// build and set header
+			HeaderAndFooterReader headerReader = new HeaderAndFooterReader(connection);
+			KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?SimpleValueFactory.getInstance().createIRI(args[1]):null);
+			document.setHeader(header);
+			
+			// build and set metadata
+			DocumentMetadataReader metaReader = new DocumentMetadataReader(r);
+			document.setKosDocumentMetadata(
+					metaReader.readKosDocumentMetadata(LANG, (args.length > 1)?SimpleValueFactory.getInstance().createIRI(args[1]):null)
+			);
+			
+			ConceptBlockReader cbReader = new ConceptBlockReader();
+			cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES_WITH_MT);
+			cbReader.setAdditionalLabelLanguagesToInclude(Arrays.asList(new String[] { "en", "es", "ru" }));
+			
+			AlphaIndexDisplayGenerator reader = new AlphaIndexDisplayGenerator(connection, cbReader);
+			BodyReader bodyReader = new BodyReader(reader);		
+			document.setBody(bodyReader.readBody(LANG, (args.length > 1)?SimpleValueFactory.getInstance().createIRI(args[1]):null));
+	
+			Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
+			m.setProperty("jaxb.formatted.output", true);
+			// m.marshal(display, System.out);
+			m.marshal(document, new File("src/main/resources/alpha-index-output-test.xml"));
+			
+			DisplayPrinter printer = new DisplayPrinter();
+			printer.setStyle(Style.UNESCO);
+			printer.printToHtml(document, new File("display-test.html"), LANG);
+			printer.printToPdf(document, new File("display-test.pdf"), LANG);
+		}
 
 	}
 	

@@ -13,17 +13,19 @@ import java.util.Locale;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.lang.StringUtil;
-import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.schema.Att;
 import fr.sparna.rdf.skos.printer.schema.Index;
@@ -51,24 +53,23 @@ public class IndexGenerator extends AbstractKosDisplayGenerator {
 	protected IndexTokenizerIfc tokenizer;
 	protected IndexType indexType;
 	
-	public IndexGenerator(Repository r, String displayId, IndexType indexType) {
-		super(r, displayId);
+	public IndexGenerator(RepositoryConnection connection, String displayId, IndexType indexType) {
+		super(connection, displayId);
 		this.indexType = indexType;
 	}
 	
-	public IndexGenerator(Repository r, IndexType indexType) {
-		super(r);
+	public IndexGenerator(RepositoryConnection connection, IndexType indexType) {
+		super(connection);
 		this.indexType = indexType;
 	}
 	
 	@Override
-	protected KosDisplay doGenerate(String mainLang, URI conceptScheme)
-	throws SparqlPerformException {
+	protected KosDisplay doGenerate(String mainLang, IRI conceptScheme) {
 		
 		// init a tokenizer based on language (for stopwords)
 		this.tokenizer = new LuceneTokenizer(mainLang);
 				
-		conceptBlockReader = new ConceptBlockReader(this.repository);
+		conceptBlockReader = new ConceptBlockReader();
 		conceptBlockReader.initInternal(mainLang, conceptScheme, this.displayId);
 		
 		final List<QueryResultRow> queryResultRows = new ArrayList<QueryResultRow>();
@@ -90,7 +91,7 @@ public class IndexGenerator extends AbstractKosDisplayGenerator {
 			}
 		};
 		
-		Perform.on(repository).select(helper);		
+		Perform.on(connection).select(helper);	
 		
 		List<IndexEntry> entries = new ArrayList<IndexEntry>();
 		for (QueryResultRow aRow : queryResultRows) {
@@ -276,30 +277,32 @@ public class IndexGenerator extends AbstractKosDisplayGenerator {
 		
 		final String LANG = "fr";
 		
-		Repository r = RepositoryBuilder.fromString(args[0]);
+		Repository r = RepositoryBuilderFactory.fromString(args[0]).get();
 		
 		// build result document
 		KosDocument document = new KosDocument();
 		
-		// build and set header
-		HeaderAndFooterReader headerReader = new HeaderAndFooterReader(r);
-		KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?URI.create(args[1]):null);
-		document.setHeader(header);
-		
-		// IndexGenerator reader = new IndexGenerator(r, new SimpleTokenizer());
-		IndexGenerator reader = new IndexGenerator(r, IndexType.KWIC);
-		BodyReader bodyReader = new BodyReader(reader);
-		document.setBody(bodyReader.readBody(LANG, (args.length > 1)?URI.create(args[1]):null));
-
-		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
-		m.setProperty("jaxb.formatted.output", true);
-		// m.marshal(display, System.out);
-		m.marshal(document, new File("src/main/resources/kwic-output-test.xml"));
-		
-		DisplayPrinter printer = new DisplayPrinter();
-		printer.setDebug(true);
-		printer.printToHtml(document, new File("display-test.html"), LANG);
-		printer.printToPdf(document, new File("display-test.pdf"), LANG);
+		try(RepositoryConnection connection = r.getConnection()) {
+			// build and set header
+			HeaderAndFooterReader headerReader = new HeaderAndFooterReader(connection);
+			KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?SimpleValueFactory.getInstance().createIRI(args[1]):null);
+			document.setHeader(header);
+			
+			// IndexGenerator reader = new IndexGenerator(r, new SimpleTokenizer());
+			IndexGenerator reader = new IndexGenerator(connection, IndexType.KWIC);
+			BodyReader bodyReader = new BodyReader(reader);
+			document.setBody(bodyReader.readBody(LANG, (args.length > 1)?SimpleValueFactory.getInstance().createIRI(args[1]):null));
+	
+			Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
+			m.setProperty("jaxb.formatted.output", true);
+			// m.marshal(display, System.out);
+			m.marshal(document, new File("src/main/resources/kwic-output-test.xml"));
+			
+			DisplayPrinter printer = new DisplayPrinter();
+			printer.setDebug(true);
+			printer.printToHtml(document, new File("display-test.html"), LANG);
+			printer.printToPdf(document, new File("display-test.pdf"), LANG);
+		}
 
 	}
 

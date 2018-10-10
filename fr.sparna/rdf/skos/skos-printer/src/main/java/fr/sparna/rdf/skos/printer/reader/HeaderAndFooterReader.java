@@ -1,6 +1,5 @@
 package fr.sparna.rdf.skos.printer.reader;
 
-import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,19 +9,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.vocabulary.DC;
 import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
-import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
-import fr.sparna.rdf.sesame.toolkit.util.PreferredPropertyReader;
+import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
+import fr.sparna.rdf.rdf4j.toolkit.util.LabelReader;
+import fr.sparna.rdf.rdf4j.toolkit.util.PreferredPropertyReader;
 import fr.sparna.rdf.skos.printer.schema.KosDocumentFooter;
 import fr.sparna.rdf.skos.printer.schema.KosDocumentHeader;
 import fr.sparna.rdf.skos.toolkit.GetConceptSchemesHelper;
@@ -31,20 +31,18 @@ public class HeaderAndFooterReader {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 	
-	protected Repository repository;
+	protected RepositoryConnection connection;
 	protected String applicationString;
 	
-	public HeaderAndFooterReader(Repository repository) {
+	public HeaderAndFooterReader(RepositoryConnection connection) {
 		super();
-		this.repository = repository;
+		this.connection = connection;
 	}
 	
-	public KosDocumentHeader readHeader(final String lang, final URI conceptScheme)
-	throws SparqlPerformException {
+	public KosDocumentHeader readHeader(final String lang, final IRI conceptScheme) {
 		KosDocumentHeader h = new KosDocumentHeader();
 		
-		
-		URI conceptSchemeToUse = conceptScheme;
+		IRI conceptSchemeToUse = conceptScheme;
 		if (conceptSchemeToUse == null) {
 			// try to find if their is a single concept scheme in the data, then take this one.
 			List<Resource> conceptSchemes = findConceptSchemes();
@@ -53,7 +51,7 @@ public class HeaderAndFooterReader {
 			} else if (conceptSchemes.size() == 0) {
 				log.debug("Found 0 ConceptSchemes, can't generate header.");
 			} else {
-				conceptSchemeToUse = URI.create(conceptSchemes.get(0).stringValue());
+				conceptSchemeToUse = (IRI)conceptSchemes.get(0);
 				log.debug("Determined ConceptScheme automatically : "+conceptSchemeToUse);
 			}
 		}
@@ -61,10 +59,10 @@ public class HeaderAndFooterReader {
 		if (conceptSchemeToUse != null) {
 			// this will try to read in turn all the properties defined in a LabelReader
 			// skos:prefLabel, rdfs:sourceConceptLabel
-			LabelReader labelReader = new LabelReader(this.repository, "", lang);
+			LabelReader labelReader = new LabelReader(connection, "", lang);
 			// add dcterms title and dc title
-			labelReader.getProperties().add(URI.create(DCTERMS.TITLE.toString()));
-			labelReader.getProperties().add(URI.create(DC.TITLE.toString()));
+			labelReader.getProperties().add(DCTERMS.TITLE);
+			labelReader.getProperties().add(DC.TITLE);
 			String label = LabelReader.display(labelReader.getValues(conceptSchemeToUse));
 			if(label != null) {
 				h.setTitle(label);
@@ -72,8 +70,9 @@ public class HeaderAndFooterReader {
 			
 			// read a description in the given language
 			String value = readProperties(
+					connection,
 					conceptSchemeToUse,
-					Arrays.asList(new URI[]{java.net.URI.create(DCTERMS.DESCRIPTION.stringValue()), java.net.URI.create(DC.DESCRIPTION.stringValue())}),
+					Arrays.asList(new IRI[]{DCTERMS.DESCRIPTION, DC.DESCRIPTION}),
 					lang
 			);
 			if(!value.equals("")) {
@@ -82,8 +81,9 @@ public class HeaderAndFooterReader {
 			
 			// read a date
 			value = readProperties(
+					connection,
 					conceptSchemeToUse,
-					Arrays.asList(new URI[]{java.net.URI.create(DCTERMS.CREATED.stringValue()), java.net.URI.create(DC.DATE.stringValue())}),
+					Arrays.asList(new IRI[]{DCTERMS.CREATED, DC.DATE}),
 					lang
 			);
 			if(!value.equals("")) {
@@ -92,8 +92,9 @@ public class HeaderAndFooterReader {
 			
 			// read an author/creator
 			value = readProperties(
+					connection,
 					conceptSchemeToUse,
-					Arrays.asList(new URI[]{java.net.URI.create(DCTERMS.CREATOR.stringValue()), java.net.URI.create(DC.CREATOR.stringValue())}),
+					Arrays.asList(new IRI[]{DCTERMS.CREATOR, DC.CREATOR}),
 					lang
 			);
 			if(!value.equals("")) {
@@ -106,11 +107,10 @@ public class HeaderAndFooterReader {
 		return h;
 	}
 	
-	public KosDocumentFooter readFooter(final String lang, final URI conceptScheme)
-	throws SparqlPerformException {
+	public KosDocumentFooter readFooter(final String lang, final IRI conceptScheme) {
 		KosDocumentFooter f = new KosDocumentFooter();
 		
-		URI conceptSchemeToUse = conceptScheme;
+		IRI conceptSchemeToUse = conceptScheme;
 		if (conceptSchemeToUse == null) {
 			// try to find if their is a single concept scheme in the data, then take this one.
 			List<Resource> conceptSchemes = findConceptSchemes();
@@ -119,7 +119,7 @@ public class HeaderAndFooterReader {
 			} else if (conceptSchemes.size() == 0) {
 				log.debug("Found 0 ConceptSchemes, can't generate header.");
 			} else {
-				conceptSchemeToUse = URI.create(conceptSchemes.get(0).stringValue());
+				conceptSchemeToUse = (IRI)conceptSchemes.get(0);
 				log.debug("Determined ConceptScheme automatically : "+conceptSchemeToUse);
 			}
 		}
@@ -127,16 +127,17 @@ public class HeaderAndFooterReader {
 		if(conceptSchemeToUse != null) {
 			// this will try to read in turn all the properties defined in a LabelReader
 			// skos:prefLabel, rdfs:sourceConceptLabel
-			LabelReader labelReader = new LabelReader(this.repository, "", lang);
+			LabelReader labelReader = new LabelReader(connection, "", lang);
 			// add dcterms title and dc title
-			labelReader.getProperties().add(URI.create(DCTERMS.TITLE.toString()));
-			labelReader.getProperties().add(URI.create(DC.TITLE.toString()));
+			labelReader.getProperties().add(DCTERMS.TITLE);
+			labelReader.getProperties().add(DC.TITLE);
 			String title = LabelReader.display(labelReader.getValues(conceptSchemeToUse));
 			
 			// try to read a dcterms:issued too
 			String issued = readProperties(
+					connection,
 					conceptSchemeToUse,
-					Arrays.asList(new URI[]{java.net.URI.create(DCTERMS.ISSUED.stringValue()), java.net.URI.create(DC.DATE.stringValue()) }),
+					Arrays.asList(new IRI[]{DCTERMS.ISSUED, DC.DATE }),
 					""
 			);
 			
@@ -158,10 +159,10 @@ public class HeaderAndFooterReader {
 		return f;
 	}
 	
-	protected List<Resource> findConceptSchemes() throws SparqlPerformException {
+	protected List<Resource> findConceptSchemes() {
 		final List<Resource> conceptSchemeList = new ArrayList<Resource>();
 		
-		Perform.on(repository).select(new GetConceptSchemesHelper(null) {		
+		Perform.on(connection).select(new GetConceptSchemesHelper(null) {		
 			@Override
 			protected void handleConceptScheme(Resource conceptScheme)
 			throws TupleQueryResultHandlerException {
@@ -172,10 +173,9 @@ public class HeaderAndFooterReader {
 		return conceptSchemeList;
 	}
 	
-	protected String readProperties(URI subject, List<URI> uris, String lang) 
-	throws SparqlPerformException {
+	protected String readProperties(RepositoryConnection connection, IRI subject, List<IRI> uris, String lang) {
 		PreferredPropertyReader reader = new PreferredPropertyReader(
-				this.repository,
+				connection,
 				uris,
 				(List<String>)null,
 				lang

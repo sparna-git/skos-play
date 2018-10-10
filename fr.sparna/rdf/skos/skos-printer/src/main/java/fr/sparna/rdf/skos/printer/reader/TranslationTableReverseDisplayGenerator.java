@@ -12,19 +12,20 @@ import java.util.Locale;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.sparna.commons.lang.StringUtil;
-import fr.sparna.rdf.sesame.toolkit.languages.Languages;
-import fr.sparna.rdf.sesame.toolkit.languages.Languages.Language;
-import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
 import fr.sparna.rdf.skos.printer.schema.KosDisplay;
@@ -43,21 +44,20 @@ public class TranslationTableReverseDisplayGenerator extends AbstractKosDisplayG
 	protected ConceptBlockReader cbReader;
 	
 	
-	public TranslationTableReverseDisplayGenerator(Repository r, ConceptBlockReader cbReader, String targetLanguage, String displayId) {
-		super(r, displayId);
+	public TranslationTableReverseDisplayGenerator(RepositoryConnection connection, ConceptBlockReader cbReader, String targetLanguage, String displayId) {
+		super(connection, displayId);
 		this.targetLanguage = targetLanguage;
 		this.cbReader = cbReader;
 	}
 	
-	public TranslationTableReverseDisplayGenerator(Repository r, ConceptBlockReader cbReader, String targetLanguage) {
-		super(r);
+	public TranslationTableReverseDisplayGenerator(RepositoryConnection connection, ConceptBlockReader cbReader, String targetLanguage) {
+		super(connection);
 		this.targetLanguage = targetLanguage;
 		this.cbReader = cbReader;
 	}
 
 	@Override
-	public KosDisplay doGenerate(final String lang, final URI conceptScheme) 
-	throws SparqlPerformException {
+	public KosDisplay doGenerate(final String lang, final IRI conceptScheme) {
 
 		// init ConceptBlockReader
 		this.cbReader.initInternal(lang, conceptScheme, this.displayId);
@@ -90,7 +90,7 @@ public class TranslationTableReverseDisplayGenerator extends AbstractKosDisplayG
 		};
 		
 		// execute fetch translations
-		Perform.on(repository).select(helper);		
+		Perform.on(connection).select(helper);	
 
 		// setup Collator
 		final Collator collator = Collator.getInstance(new Locale(this.targetLanguage));
@@ -127,8 +127,8 @@ public class TranslationTableReverseDisplayGenerator extends AbstractKosDisplayG
 			// don't display rows that would start with an empty sourceConceptLabel in the first column
 			if(aRow.label2 != null && !aRow.label2.equals("")) {
 				// siouxerie pour éviter les ID dupliquées dans le cas où un libellé serait le même dans les 2 langues
-				ConceptBlock cb1 = cbReader.readConceptBlock(aRow.conceptURI, aRow.label2, cbReader.computeConceptBlockId(aRow.conceptURI, aRow.label2+"-"+this.targetLanguage), false);
-				ConceptBlock cb2 = cbReader.readConceptBlock(aRow.conceptURI, aRow.label1, cbReader.computeConceptBlockId(aRow.conceptURI, aRow.label1+"-"+lang), false);
+				ConceptBlock cb1 = cbReader.readConceptBlock(connection, aRow.conceptURI, aRow.label2, cbReader.computeConceptBlockId(aRow.conceptURI, aRow.label2+"-"+this.targetLanguage), false);
+				ConceptBlock cb2 = cbReader.readConceptBlock(connection, aRow.conceptURI, aRow.label1, cbReader.computeConceptBlockId(aRow.conceptURI, aRow.label1+"-"+lang), false);
 				newTable.getRow().add(SchemaFactory.createRow(cb1, cb2));
 			}
 		}
@@ -150,29 +150,31 @@ public class TranslationTableReverseDisplayGenerator extends AbstractKosDisplayG
 		
 		final String LANG = "fr";
 		
-		Repository r = RepositoryBuilder.fromString(args[0]);
+		Repository r = RepositoryBuilderFactory.fromString(args[0]).get();
 		
 		// build result document
 		KosDocument document = new KosDocument();
 		
-		// build and set header
-		HeaderAndFooterReader headerReader = new HeaderAndFooterReader(r);
-		KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?URI.create(args[1]):null);
-		document.setHeader(header);
-		
-		TranslationTableReverseDisplayGenerator reader = new TranslationTableReverseDisplayGenerator(r, new ConceptBlockReader(r), "en");
-		BodyReader bodyReader = new BodyReader(reader);
-		document.setBody(bodyReader.readBody(LANG, (args.length > 1)?URI.create(args[1]):null));
-
-		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
-		m.setProperty("jaxb.formatted.output", true);
-		// m.marshal(display, System.out);
-		m.marshal(document, new File("src/main/resources/translation-output-test.xml"));
-		
-		DisplayPrinter printer = new DisplayPrinter();
-		printer.setDebug(true);
-		printer.printToHtml(document, new File("display-test.html"), LANG);
-		printer.printToPdf(document, new File("display-test.pdf"), LANG);
+		try(RepositoryConnection connection = r.getConnection()) {
+			// build and set header
+			HeaderAndFooterReader headerReader = new HeaderAndFooterReader(connection);
+			KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?SimpleValueFactory.getInstance().createIRI(args[1]):null);
+			document.setHeader(header);
+			
+			TranslationTableReverseDisplayGenerator reader = new TranslationTableReverseDisplayGenerator(connection, new ConceptBlockReader(), "en");
+			BodyReader bodyReader = new BodyReader(reader);
+			document.setBody(bodyReader.readBody(LANG, (args.length > 1)?SimpleValueFactory.getInstance().createIRI(args[1]):null));
+	
+			Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
+			m.setProperty("jaxb.formatted.output", true);
+			// m.marshal(display, System.out);
+			m.marshal(document, new File("src/main/resources/translation-output-test.xml"));
+			
+			DisplayPrinter printer = new DisplayPrinter();
+			printer.setDebug(true);
+			printer.printToHtml(document, new File("display-test.html"), LANG);
+			printer.printToPdf(document, new File("display-test.pdf"), LANG);
+		}
 	}
 	
 }

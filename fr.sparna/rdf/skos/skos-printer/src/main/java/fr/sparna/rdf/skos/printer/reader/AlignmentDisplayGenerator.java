@@ -1,7 +1,6 @@
 package fr.sparna.rdf.skos.printer.reader;
 
 import java.io.File;
-import java.net.URI;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,32 +12,32 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.DC;
 import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
 import org.eclipse.rdf4j.model.vocabulary.RDFS;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.commons.lang.Function;
-import fr.sparna.commons.lang.Lists;
 import fr.sparna.commons.lang.StringUtil;
-import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationException;
-import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
-import fr.sparna.rdf.sesame.toolkit.util.Namespaces;
-import fr.sparna.rdf.sesame.toolkit.util.PreferredPropertyReader;
+import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
+import fr.sparna.rdf.rdf4j.toolkit.util.LabelReader;
+import fr.sparna.rdf.rdf4j.toolkit.util.Namespaces;
+import fr.sparna.rdf.rdf4j.toolkit.util.PreferredPropertyReader;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.schema.ConceptBlock;
 import fr.sparna.rdf.skos.printer.schema.KosDisplay;
@@ -61,29 +60,28 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 	protected boolean separateByTargetScheme = true;
 
 	public AlignmentDisplayGenerator(
-			Repository r,
+			RepositoryConnection connection,
 			ConceptBlockReader cbReader,
 			String displayId,
 			AlignmentDataHarvesterIfc alignmentHarvester
 	) {
-		super(r, displayId);
+		super(connection, displayId);
 		this.cbReader = cbReader;
 		this.alignmentHarvester = alignmentHarvester;
 	}
 	
 	public AlignmentDisplayGenerator(
-			Repository r,
+			RepositoryConnection connection,
 			ConceptBlockReader cbReader,
 			AlignmentDataHarvesterIfc alignmentHarvester
 	) {
-		super(r);
+		super(connection);
 		this.cbReader = cbReader;
 		this.alignmentHarvester = alignmentHarvester;
 	}
 
 	@Override
-	public KosDisplay doGenerate(final String lang, final URI conceptScheme) 
-	throws SparqlPerformException {
+	public KosDisplay doGenerate(final String lang, final IRI conceptScheme) {
 
 		// init ConceptBlockReader
 		this.cbReader.initInternal(lang, conceptScheme, this.displayId);
@@ -92,11 +90,7 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 		KosDisplay d = new KosDisplay();
 		
 		// harvest necessary data for alignments
-		try {
-			this.alignmentHarvester.harvestData(repository, conceptScheme);
-		} catch (RepositoryOperationException e) {
-			e.printStackTrace();
-		}
+		this.alignmentHarvester.harvestData(connection, conceptScheme);
 		
 		// query for all the correspondance
 		final List<AlignmentRow> queryResultRows = new ArrayList<AlignmentRow>();
@@ -118,16 +112,16 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 			}
 		};
 		
-		// execute fetch alignments
-		Perform.on(repository).select(helper);	
+		// execute fetch alignments		
+		Perform.on(connection).select(helper);	
 
 		log.debug("Found "+queryResultRows.size()+" alignment rows");
 		
 		// prepare a skos:prefLabel reader for concepts of our thesaurus
 		LabelReader conceptLabelReader = new LabelReader(
-				repository,
-				Arrays.asList(new URI[] {
-						URI.create(SKOS.PREF_LABEL)
+				connection,
+				Arrays.asList(new IRI[] {
+						SimpleValueFactory.getInstance().createIRI(SKOS.PREF_LABEL)
 				}),
 				"",
 				lang
@@ -145,13 +139,13 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 		fallbackLanguages.add("en");
 		
 		LabelReader alignedConceptLabelReader = new LabelReader(
-				repository,
-				Arrays.asList(new URI[] {
-						URI.create(SKOS.PREF_LABEL),
+				connection,
+				Arrays.asList(new IRI[] {
+						SimpleValueFactory.getInstance().createIRI(SKOS.PREF_LABEL),
 						// pour DBPedia
-						URI.create(RDFS.LABEL.toString()),
+						RDFS.LABEL,
 						// pour INSPIRE
-						URI.create(DCTERMS.TITLE.toString())
+						DCTERMS.TITLE
 				}),
 				fallbackLanguages,
 				lang
@@ -159,39 +153,35 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 		
 		// prepare a skos:prefLabel reader for concept schemes
 		LabelReader schemeLabelReader = new LabelReader(
-				repository,
-				Arrays.asList(new URI[] {
-						URI.create(SKOS.PREF_LABEL),
+				connection,
+				Arrays.asList(new IRI[] {
+						SimpleValueFactory.getInstance().createIRI(SKOS.PREF_LABEL),
 						// pour DBPedia
-						URI.create(RDFS.LABEL.toString()),
+						RDFS.LABEL,
 						// pour les concept schemes
-						URI.create(DCTERMS.TITLE.toString()),
-						URI.create(DC.TITLE.toString())}),
+						DCTERMS.TITLE,
+						DC.TITLE
+				}),
 				fallbackLanguages,
 				lang
 		);
 		
 		// read source concept labels
-		Map<URI, List<Value>> sourceLabels = conceptLabelReader.getValues(
-				// on évite les doublons !
-				new HashSet<URI>(
-					// convertir la liste en liste des URI de concepts source
-					Lists.transform(queryResultRows, new Function<AlignmentRow, URI>() {
-						public URI apply(AlignmentRow r) { return URI.create(r.sourceConcept); }
-					}
-				)
-		));
+		Map<IRI, List<Value>> sourceLabels = conceptLabelReader.getValues(
+			// on évite les doublons !
+			queryResultRows.stream().map(row -> SimpleValueFactory.getInstance().createIRI(row.sourceConcept)).collect(Collectors.toSet())
+		);
 		
 		// read target concepts labels
-		HashSet<URI> targetConcepts = new HashSet<URI>();
+		HashSet<IRI> targetConcepts = new HashSet<IRI>();
 		for (AlignmentRow aRow : queryResultRows) {
-			targetConcepts.add(URI.create(aRow.targetConcept));
+			targetConcepts.add(SimpleValueFactory.getInstance().createIRI(aRow.targetConcept));
 		}
-		Map<URI, List<Value>> targetLabels = alignedConceptLabelReader.getValues(targetConcepts);
+		Map<IRI, List<Value>> targetLabels = alignedConceptLabelReader.getValues(targetConcepts);
 		
 		// read skos:inScheme values
-		PreferredPropertyReader inSchemeReader = new PreferredPropertyReader(repository, URI.create(SKOS.IN_SCHEME));
-		Map<URI, List<Value>> inSchemes = inSchemeReader.getValues(targetConcepts);
+		PreferredPropertyReader inSchemeReader = new PreferredPropertyReader(connection, SimpleValueFactory.getInstance().createIRI(SKOS.IN_SCHEME));
+		Map<IRI, List<Value>> inSchemes = inSchemeReader.getValues(targetConcepts);
 		
 		// store the labels in data-structure
 		List<AlignmentRow> newAlignmentRows = new ArrayList<AlignmentRow>();
@@ -199,8 +189,8 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 			
 			// on récupère les schemes
 			Set<String> targetSchemes = new HashSet<String>();
-			if(inSchemes.get(URI.create(row.targetConcept)) != null) {
-				for (Value aScheme : inSchemes.get(URI.create(row.targetConcept))) {
+			if(inSchemes.get(SimpleValueFactory.getInstance().createIRI(row.targetConcept)) != null) {
+				for (Value aScheme : inSchemes.get(SimpleValueFactory.getInstance().createIRI(row.targetConcept))) {
 					targetSchemes.add(aScheme.stringValue());
 				}
 			}
@@ -216,10 +206,10 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 				newRow.sourceConcept = row.sourceConcept;
 				newRow.targetConcept = row.targetConcept;
 				newRow.alignmentType = row.alignmentType;
-				newRow.sourceConceptLabel = LabelReader.display(sourceLabels.get(URI.create(row.sourceConcept)));
-				newRow.targetConceptLabel = LabelReader.display(targetLabels.get(URI.create(row.targetConcept)));
+				newRow.sourceConceptLabel = LabelReader.display(sourceLabels.get(SimpleValueFactory.getInstance().createIRI(row.sourceConcept)));
+				newRow.targetConceptLabel = LabelReader.display(targetLabels.get(SimpleValueFactory.getInstance().createIRI(row.targetConcept)));
 				newRow.targetScheme = aScheme;
-				newRow.targetSchemeLabel = LabelReader.display(schemeLabelReader.getValues(URI.create(aScheme))).intern();
+				newRow.targetSchemeLabel = LabelReader.display(schemeLabelReader.getValues(SimpleValueFactory.getInstance().createIRI(aScheme))).intern();
 				newAlignmentRows.add(newRow);
 			}
 		}
@@ -231,7 +221,7 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 			generator = new SourceConceptAlignmentTablesGenerator();
 		}
 		
-		generator.addAlignmentTables(newAlignmentRows, d, lang);
+		generator.addAlignmentTables(connection, newAlignmentRows, d, lang);
 		
 		// return display
 		return d;
@@ -269,13 +259,13 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 	
 	
 	interface AlignmentTablesGenerator {		
-		public void addAlignmentTables(List<AlignmentRow> data, KosDisplay d, String lang) throws SparqlPerformException;		
+		public void addAlignmentTables(RepositoryConnection connection, List<AlignmentRow> data, KosDisplay d, String lang);		
 	}
 	
 	
 	class TargetSchemeAlignmentTablesGenerator implements AlignmentTablesGenerator {
 		
-		public void addAlignmentTables(List<AlignmentRow> data, KosDisplay d, String lang) throws SparqlPerformException {
+		public void addAlignmentTables(RepositoryConnection connection, List<AlignmentRow> data, KosDisplay d, String lang) {
 			// setup Collator
 			final Collator collator = Collator.getInstance(new Locale(lang));
 			collator.setStrength(Collator.SECONDARY);
@@ -338,6 +328,7 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 					// 3. add our row to the current table
 					// siouxerie pour éviter les ID dupliquées dans le cas où un libellé serait le même dans les 2 langues
 					ConceptBlock cb1 = cbReader.readConceptBlock(
+							connection,
 							aRow.sourceConcept,
 							aRow.sourceConceptLabel,
 							cbReader.computeConceptBlockId(aRow.sourceConcept, aRow.alignmentType+"-"+aRow.targetConcept),
@@ -365,7 +356,7 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 	
 	class SourceConceptAlignmentTablesGenerator implements AlignmentTablesGenerator {		
 		
-		public void addAlignmentTables(List<AlignmentRow> data, KosDisplay d, String lang) throws SparqlPerformException {
+		public void addAlignmentTables(RepositoryConnection connection, List<AlignmentRow> data, KosDisplay d, String lang) {
 			
 			// setup Collator
 			final Collator collator = Collator.getInstance(new Locale(lang));
@@ -439,6 +430,7 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 					Object cell1;
 					if(previousRow == null || !(aRow.sourceConcept.equals(previousRow.sourceConcept))) {
 						cell1 = cbReader.readConceptBlock(
+								connection,
 								aRow.sourceConcept,
 								aRow.sourceConceptLabel,
 								cbReader.computeConceptBlockId(aRow.sourceConcept, aRow.alignmentType+"-"+aRow.targetConcept),
@@ -482,36 +474,39 @@ public class AlignmentDisplayGenerator extends AbstractKosDisplayGenerator {
 		
 		final String LANG = "fr";
 		
-		Repository r = RepositoryBuilder.fromString(args[0]);
+		Repository r = RepositoryBuilderFactory.fromString(args[0]).get();
 		
 		// build result document
 		KosDocument document = new KosDocument();
 		
-		// build and set header
-		HeaderAndFooterReader headerReader = new HeaderAndFooterReader(r);
-		// KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?URI.create(args[1]):null);
-		// document.setHeader(header);
-		
-		ConceptBlockReader cbr = new ConceptBlockReader(r);
+		ConceptBlockReader cbr = new ConceptBlockReader();
 		cbr.setLinkDestinationIdPrefix("alignId");
-		AlignmentDisplayGenerator reader = new AlignmentDisplayGenerator(
-				r,
-				cbr,
-				"alignId",
-				new AlignmentDataHarvesterCachedLoader("/home/thomas/workspace/skosplay/alignCache", RDFFormat.RDFXML));
-		reader.setSeparateByTargetScheme(false);
-		BodyReader bodyReader = new BodyReader(reader);
-		document.setBody(bodyReader.readBody(LANG, (args.length > 1)?URI.create(args[1]):null));
-
-		Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
-		m.setProperty("jaxb.formatted.output", true);
-		// m.marshal(display, System.out);
-		m.marshal(document, new File("src/main/resources/translation-output-test.xml"));
 		
-		DisplayPrinter printer = new DisplayPrinter();
-		printer.setDebug(true);
-		printer.printToHtml(document, new File("display-test-alignment.html"), LANG);
-		printer.printToPdf(document, new File("display-test-alignment.pdf"), LANG);
+		try(RepositoryConnection connection = r.getConnection()) {
+			// build and set header
+			HeaderAndFooterReader headerReader = new HeaderAndFooterReader(connection);
+			// KosDocumentHeader header = headerReader.readHeader(LANG, (args.length > 1)?URI.create(args[1]):null);
+			// document.setHeader(header);
+			
+			AlignmentDisplayGenerator reader = new AlignmentDisplayGenerator(
+					connection,
+					cbr,
+					"alignId",
+					new AlignmentDataHarvesterCachedLoader("/home/thomas/workspace/skosplay/alignCache", RDFFormat.RDFXML));
+			reader.setSeparateByTargetScheme(false);
+			BodyReader bodyReader = new BodyReader(reader);
+			document.setBody(bodyReader.readBody(LANG, (args.length > 1)?SimpleValueFactory.getInstance().createIRI(args[1]):null));
+	
+			Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
+			m.setProperty("jaxb.formatted.output", true);
+			// m.marshal(display, System.out);
+			m.marshal(document, new File("src/main/resources/translation-output-test.xml"));
+			
+			DisplayPrinter printer = new DisplayPrinter();
+			printer.setDebug(true);
+			printer.printToHtml(document, new File("display-test-alignment.html"), LANG);
+			printer.printToPdf(document, new File("display-test-alignment.pdf"), LANG);
+		}
 	}
 	
 }
