@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.impl.SimpleLogger;
 
 import fr.sparna.rdf.rdf4j.toolkit.query.Queries;
-import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
 
 public class InferIsoThesThesaurusArrayTest {
@@ -18,8 +17,8 @@ public class InferIsoThesThesaurusArrayTest {
 	public void test() {
 		System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
 		Logger log = org.slf4j.LoggerFactory.getLogger(this.getClass().getName());
-		RepositoryBuilder rb = new RepositoryBuilderFactory("/fr/sparna/rdf/rdf4j/skos/InferIsoThesThesaurusArray.ttl").get();
-		Repository r = rb.get();
+		Repository r = RepositoryBuilderFactory.fromString("/fr/sparna/rdf/rdf4j/skos/InferIsoThesThesaurusArray.ttl").get();
+
 		try(RepositoryConnection c = r.getConnection()) {
 			Model m = Queries.examineUpdateResult(c, "/fr/sparna/rdf/skos/helper/InferIsoThesThesaurusArray.ru");
 			m.stream().forEach(s -> {

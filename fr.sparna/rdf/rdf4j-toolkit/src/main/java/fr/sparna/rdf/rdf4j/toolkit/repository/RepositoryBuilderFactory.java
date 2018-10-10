@@ -34,10 +34,6 @@ public class RepositoryBuilderFactory implements Supplier<RepositoryBuilder> {
 	
 	protected Supplier<Repository> localRepositorySupplier; 
 	
-	public static RepositoryBuilderFactory fromSystemProperty() {
-		return new RepositoryBuilderFactory(DEFAULT_REPOSITORY_SYSTEM_PROPERTY);
-	}
-	
 	/**
 	 * Creates a RepositoryBuilderFactory with a list of Strings that can be file path, directory paths, or URLs, and the
 	 * original Supplier<Repository>.
@@ -51,15 +47,19 @@ public class RepositoryBuilderFactory implements Supplier<RepositoryBuilder> {
 		this.localRepositorySupplier = localRepositoryFactory;
 	}
 	
+	public static RepositoryBuilder fromSystemProperty() {
+		return RepositoryBuilderFactory.fromString(DEFAULT_REPOSITORY_SYSTEM_PROPERTY);
+	}
+	
 	/**
-	 * Creates a RepositoryBuilderFactory with a single String that can be file path, directory paths, or URLs, and the
+	 * Creates a RepositoryBuilder with a single String that can be file path, directory paths, or URLs, and the
 	 * original Supplier<Repository>.
 	 * 
 	 * @param fileOrDirectoryOrURL
 	 * @param localRepositoryFactory
 	 */
-	public RepositoryBuilderFactory(String fileOrDirectoryOrURL, Supplier<Repository> localRepositoryFactory) {
-		this(Collections.singletonList(fileOrDirectoryOrURL), localRepositoryFactory);
+	public static RepositoryBuilder fromString(String fileOrDirectoryOrURL, Supplier<Repository> localRepositoryFactory) {
+		return new RepositoryBuilderFactory(Collections.singletonList(fileOrDirectoryOrURL), localRepositoryFactory).get();
 	}
 	
 	/**
@@ -68,8 +68,8 @@ public class RepositoryBuilderFactory implements Supplier<RepositoryBuilder> {
 	 * 
 	 * @param fileOrDirectoryOrURLs
 	 */
-	public RepositoryBuilderFactory(List<String> fileOrDirectoryOrURLs) {
-		this(fileOrDirectoryOrURLs, new LocalMemoryRepositorySupplier());
+	public static RepositoryBuilder fromStringList(List<String> fileOrDirectoryOrURLs) {
+		return new RepositoryBuilderFactory(fileOrDirectoryOrURLs, new LocalMemoryRepositorySupplier()).get();
 	}
 	
 	/**
@@ -78,8 +78,8 @@ public class RepositoryBuilderFactory implements Supplier<RepositoryBuilder> {
 	 * 
 	 * @param fileOrDirectoryOrURL
 	 */
-	public RepositoryBuilderFactory(String fileOrDirectoryOrURL) {
-		this(Collections.singletonList(fileOrDirectoryOrURL), new LocalMemoryRepositorySupplier());
+	public static RepositoryBuilder fromString(String fileOrDirectoryOrURL) {
+		return new RepositoryBuilderFactory(Collections.singletonList(fileOrDirectoryOrURL), new LocalMemoryRepositorySupplier()).get();
 	}
 	
 	/**

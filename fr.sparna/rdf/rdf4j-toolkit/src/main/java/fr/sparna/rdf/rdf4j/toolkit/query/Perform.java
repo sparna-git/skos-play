@@ -204,7 +204,7 @@ public class Perform {
 	}
 	
 	/**
-	 * Executes the SPARQL SELECT query returned by the helper, and pass the helper to the <code>evaluate</code> method
+	 * Executes the provided SPARQL SELECT query, and pass the helper to the <code>evaluate</code> method
 	 */
 	public void select(SparqlOperationIfc query, TupleQueryResultHandler handler) 
 	throws TupleQueryResultHandlerException, QueryEvaluationException, RepositoryException {

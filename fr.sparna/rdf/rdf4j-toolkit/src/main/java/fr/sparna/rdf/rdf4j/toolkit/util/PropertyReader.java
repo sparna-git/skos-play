@@ -16,6 +16,7 @@ import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
 /**
  * Reads a given property in a repository, and handles caching of values.
  * 
+ * @deprecated use PropertyValueReader.GenericQueryBuilder
  * @author Thomas Francart
  *
  */

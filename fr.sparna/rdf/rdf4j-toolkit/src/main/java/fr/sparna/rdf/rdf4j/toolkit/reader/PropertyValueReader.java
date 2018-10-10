@@ -12,19 +12,46 @@ public class PropertyValueReader extends KeyValueReader<IRI, Value> {
 
 	public PropertyValueReader(IRI property) {
 		super(
-				new QuerySupplier(property).get(),
+				new GenericQuerySupplier("<"+property+">").get(),
+				new IriBindingSetGenerator(KEY_VAR_NAME),
+				new IriToValueBindingSetParser(KEY_VAR_NAME, VALUE_VAR_NAME)
+		);
+	}
+	
+	public PropertyValueReader(String path) {
+		super(
+				new GenericQuerySupplier(path).get(),
+				new IriBindingSetGenerator(KEY_VAR_NAME),
+				new IriToValueBindingSetParser(KEY_VAR_NAME, VALUE_VAR_NAME)
+		);
+	}
+	
+	public PropertyValueReader(PropertyValueReader.GenericQuerySupplier querySupplier) {
+		super(
+				querySupplier.get(),
 				new IriBindingSetGenerator(KEY_VAR_NAME),
 				new IriToValueBindingSetParser(KEY_VAR_NAME, VALUE_VAR_NAME)
 		);
 	}
 
-	public static class QuerySupplier implements Supplier<String> {
+	public static class GenericQuerySupplier implements Supplier<String> {
 
-		protected IRI property;
-			
-		public QuerySupplier(IRI property) {
+		protected String path;
+		protected IRI facetProperty;
+		protected IRI facetValue;
+		protected String lang;
+		
+		public GenericQuerySupplier(String path) {
 			super();
-			this.property = property;
+			this.path = path;
+		}
+		
+		public GenericQuerySupplier(String path, String lang, IRI facetProperty, IRI facetValue) {
+			super();
+			this.path = path;
+			this.facetProperty = facetProperty;
+			this.facetValue = facetValue;
+			this.lang = lang;
 		}
 
 		@Override
@@ -33,7 +60,9 @@ public class PropertyValueReader extends KeyValueReader<IRI, Value> {
 			String sparql = "" +
 					"SELECT ?"+KEY_VAR_NAME+" ?"+VALUE_VAR_NAME+""+"\n" +
 					"WHERE {"+"\n" +
-					"	?"+KEY_VAR_NAME+" <"+this.property.stringValue()+"> ?"+VALUE_VAR_NAME+"\n" +
+					"	?"+KEY_VAR_NAME+" "+this.path+" ?"+VALUE_VAR_NAME+"\n" +
+					((this.facetProperty != null && this.facetValue != null)?"	?"+KEY_VAR_NAME+" <"+this.facetProperty.stringValue()+"> <"+this.facetValue.stringValue()+">"+"\n":"")+
+					((this.lang != null)?"   FILTER(langMatches(lang(?"+VALUE_VAR_NAME+"), '"+this.lang+"'))"+"\n":"")+
 					"}"
 			;		
 			
