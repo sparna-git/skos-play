@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.impl.SimpleLogger;
 
 import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
-import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
 import fr.sparna.rdf.skos.toolkit.GetAlignmentsInSchemeHelper;
 
@@ -20,8 +19,7 @@ public class GetAlignementInSchemeTest {
 		System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "DEBUG");
 		Logger log = org.slf4j.LoggerFactory.getLogger(this.getClass().getName());
 		
-		RepositoryBuilder rb = new RepositoryBuilderFactory("/fr/sparna/rdf/rdf4j/skos/GetAlignmentsInScheme.ttl").get();
-		Repository r = rb.get();
+		Repository r = RepositoryBuilderFactory.fromString("/fr/sparna/rdf/rdf4j/skos/GetAlignmentsInScheme.ttl").get();
 		
 		try(RepositoryConnection c = r.getConnection()) {
 			Perform.on(c).select(new GetAlignmentsInSchemeHelper() {				
