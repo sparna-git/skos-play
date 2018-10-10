@@ -30,11 +30,14 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.DC;
 import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.query.AbstractTupleQueryResultHandler;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
@@ -66,27 +69,22 @@ import fr.sparna.google.DriveHelper;
 import fr.sparna.google.GoogleConnector;
 import fr.sparna.google.GoogleUser;
 import fr.sparna.i18n.StrictResourceBundleControl;
-import fr.sparna.rdf.sesame.toolkit.languages.Languages.Language;
-import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlUpdate;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
-import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.FactoryConfiguration;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryException;
-import fr.sparna.rdf.sesame.toolkit.repository.StringRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.ApplyUpdates;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromStream;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromUrl;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationException;
-import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
-import fr.sparna.rdf.sesame.toolkit.util.PreferredPropertyReader;
-import fr.sparna.rdf.sesame.toolkit.util.PropertyReader;
-import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
+import fr.sparna.rdf.rdf4j.toolkit.languages.Languages;
+import fr.sparna.rdf.rdf4j.toolkit.languages.Languages.Language;
+import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
+import fr.sparna.rdf.rdf4j.toolkit.query.SimpleQueryReader;
+import fr.sparna.rdf.rdf4j.toolkit.reader.TypeReader;
+import fr.sparna.rdf.rdf4j.toolkit.repository.LocalMemoryRepositorySupplier;
+import fr.sparna.rdf.rdf4j.toolkit.repository.LocalMemoryRepositorySupplier.FactoryConfiguration;
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
+import fr.sparna.rdf.rdf4j.toolkit.repository.init.ApplyUpdates;
+import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromFileOrDirectory;
+import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromStream;
+import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromUrl;
+import fr.sparna.rdf.rdf4j.toolkit.util.LabelReader;
+import fr.sparna.rdf.rdf4j.toolkit.util.PreferredPropertyReader;
+import fr.sparna.rdf.rdf4j.toolkit.util.RepositoryWriter;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.autocomplete.Items;
 import fr.sparna.rdf.skos.printer.autocomplete.JSONWriter;
@@ -451,7 +449,7 @@ public class SkosPlayController {
 			// flag indicating to transform SKOS-XL to SKOS
 			@RequestParam(value="skosxl2skos", required=false) boolean skosxl2skos,
 			HttpServletRequest request
-			) throws IOException, SparqlPerformException, URISyntaxException {
+			) throws IOException, URISyntaxException {
 		
 		log.debug("upload(source="+sourceString+",example="+example+",url="+url+",rdfsInference="+rdfsInference+", owl2skos="+owl2skos+")");
 
@@ -475,7 +473,7 @@ public class SkosPlayController {
 		RepositoryBuilder localRepositoryBuilder;
 
 		if(rdfsInference) {
-			localRepositoryBuilder = new RepositoryBuilder(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_AWARE));			
+			localRepositoryBuilder = new RepositoryBuilder(new LocalMemoryRepositorySupplier(FactoryConfiguration.RDFS_AWARE));			
 			// load the SKOS model to be able to infer skos:inScheme from skos:isTopConceptOf
 			localRepositoryBuilder.addOperation(new LoadFromFileOrDirectory("skos.rdf"));
 		} else {
@@ -493,25 +491,26 @@ public class SkosPlayController {
 
 				log.debug("Uploaded file name is "+file.getOriginalFilename());
 				localRepositoryBuilder.addOperation(new LoadFromStream(file.getInputStream(), Rio.getParserFormatForFileName(file.getOriginalFilename()).orElse(RDFFormat.RDFXML)));
-				repository = localRepositoryBuilder.createNewRepository();
+				repository = localRepositoryBuilder.get();
 				
 				// apply rules if needed
-				try {
+				try(RepositoryConnection connection = repository.getConnection()) {
 					if(owl2skos) {
 						printFormData.setOwl2skos(true);
 						// check that data does not contain more than X concepts before convert
-						initialCount = Perform.on(repository).count(new SparqlQuery(new SparqlQueryBuilder(this, "CountConcepts.rq")));
+						initialCount = Perform.on(connection).count(new SimpleQueryReader(this, "CountConcepts.rq").get());
+						
 						// apply inference
-						ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getOWL2SKOSRuleset()));
-						au.execute(repository);
+						ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getOWL2SKOSRuleset());
+						au.accept(connection);						
 					}
 
 					if(skosxl2skos) {
 						// apply inference
-						ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSkosXl2SkosRuleset()));
-						au.execute(repository);
+						ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getSkosXl2SkosRuleset());
+						au.accept(connection);
 					}
-				} catch (RepositoryOperationException e1) {
+				} catch (Exception e1) {
 					return doError(request, e1.getMessage());
 				}
 
@@ -527,21 +526,21 @@ public class SkosPlayController {
 				repository = SkosPlayConfig.getInstance().getApplicationData().getExampleDatas().get(resourceParam);
 
 				// apply rules if needed
-				try {
+				try(RepositoryConnection connection = repository.getConnection()) {
 					if(owl2skos) {
-						initialCount = Perform.on(repository).count(new SparqlQuery(new SparqlQueryBuilder(this, "CountConcepts.rq")));
+						initialCount = Perform.on(connection).count(new SimpleQueryReader(this, "CountConcepts.rq").get());
 						printFormData.setOwl2skos(true);
 						// apply inference
-						ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getOWL2SKOSRuleset()));
-						au.execute(repository);
+						ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getOWL2SKOSRuleset());
+						au.accept(connection);
 					}
 
 					if(skosxl2skos) {
 						// apply inference
-						ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSkosXl2SkosRuleset()));
-						au.execute(repository);
+						ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getSkosXl2SkosRuleset());
+						au.accept(connection);
 					}
-				} catch (RepositoryOperationException e1) {
+				} catch (Exception e1) {
 					return doError(request, e1.getMessage());
 				}
 
@@ -557,27 +556,27 @@ public class SkosPlayController {
 			}
 			case URL : {				
 				// we are loading an RDF file from the web, use the localRepositoryBuilder and apply inference if required
-				if(!StringRepositoryFactory.isEndpointURL(url)) {
+				if(!RepositoryBuilderFactory.isEndpointURL(url)) {
 
 					localRepositoryBuilder.addOperation(new LoadFromUrl(new URL(url)));
-					repository = localRepositoryBuilder.createNewRepository();
+					repository = localRepositoryBuilder.get();
 
 					// apply OWL2SKOS rules if needed
-					try {
-						if(owl2skos && !StringRepositoryFactory.isEndpointURL(url)) {
+					try(RepositoryConnection connection = repository.getConnection()) {
+						if(owl2skos && !RepositoryBuilderFactory.isEndpointURL(url)) {
 							printFormData.setOwl2skos(true);
-							initialCount = Perform.on(repository).count(new SparqlQuery(new SparqlQueryBuilder(this, "CountConcepts.rq")));
+							initialCount = Perform.on(connection).count(new SimpleQueryReader(this, "CountConcepts.rq").get());
 							// apply inference
-							ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getOWL2SKOSRuleset()));
-							au.execute(repository);
+							ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getOWL2SKOSRuleset());
+							au.accept(connection);
 						}
-					} catch (RepositoryOperationException e1) {
+					} catch (Exception e1) {
 						return doError(request, e1.getMessage());
 					}
 					sessionData.setListurl(url);
 				} else {
 					// this is a endpoint
-					repository = RepositoryBuilder.fromString(url, rdfsInference);
+					repository = RepositoryBuilderFactory.fromString(url).get();
 				}
 
 				break;
@@ -587,15 +586,15 @@ public class SkosPlayController {
 				break;
 			}
 			}
-		} catch (RepositoryFactoryException e) {
+		} catch (Exception e) {
 			return doError(request, e);
 		}
 
 		
-		try {			
+		try(RepositoryConnection connection = repository.getConnection()) {			
 			
 			// check that data does not contain more than X concepts
-			count = Perform.on(repository).count(new SparqlQuery(new SparqlQueryBuilder(this, "CountConcepts.rq")));
+			count = Perform.on(connection).count(new SimpleQueryReader(this, "CountConcepts.rq").get());
 			if(count>initialCount){
 				printFormData.setNbConcept(count);
 			}
@@ -621,18 +620,18 @@ public class SkosPlayController {
 						);
 			}			
 
-		} catch (SparqlPerformException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return doError(request, e);
 		}
 
 		// set loaded data licence, if any
-		try {
-			Value license = Perform.on(repository).read(new SparqlQuery(new SparqlQueryBuilder(this, "ReadLicense.rq")));
+		try(RepositoryConnection connection = repository.getConnection()) {
+			Value license = Perform.on(connection).read(new SimpleQueryReader(this, "ReadLicense.rq").get());
 			if(license != null && license instanceof Literal) {
 				printFormData.setLoadedDataLicense(((Literal)license).stringValue());
 			}
-		} catch (SparqlPerformException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return doError(request, e);
 		}
@@ -641,61 +640,62 @@ public class SkosPlayController {
 		// store repository in the session
 		sessionData.setRepository(repository);
 
-		// store sourceConceptLabel reader in the session
-		// default to no language
-		final LabelReader labelReader = new LabelReader(repository, "", sessionData.getUserLocale().getLanguage());
-		// add dcterms title and dc title
-		labelReader.getProperties().add(URI.create(DCTERMS.TITLE.toString()));
-		labelReader.getProperties().add(URI.create(DC.TITLE.toString()));
-		sessionData.setLabelReader(labelReader);
-
-		// store success message with number of concepts
-		printFormData.setSuccessMessage(MessageFormat.format(b.getString("print.message.numberOfConcepts"), count));
-
-		if(DisplayType.needHierarchyCheck() || VizType.needHierarchyCheck()) {
-			try {
-				// ask if some hierarchy exists
-				if(!Perform.on(repository).ask(new SparqlQuery(new SparqlQueryBuilder(this, "AskBroadersOrNarrowers.rq")))) {
+		try(RepositoryConnection connection = repository.getConnection()) {
+			// store sourceConceptLabel reader in the session
+			// default to no language
+			final LabelReader labelReader = new LabelReader(connection, "", sessionData.getUserLocale().getLanguage());
+			// add dcterms title and dc title
+			labelReader.getProperties().add(DCTERMS.TITLE);
+			labelReader.getProperties().add(DC.TITLE);
+			sessionData.setLabelReader(labelReader);
+	
+			// store success message with number of concepts
+			printFormData.setSuccessMessage(MessageFormat.format(b.getString("print.message.numberOfConcepts"), count));
+	
+			if(DisplayType.needHierarchyCheck() || VizType.needHierarchyCheck()) {
+				try {
+					// ask if some hierarchy exists
+					if(!Perform.on(connection).ask(new SimpleQueryReader(this, "AskBroadersOrNarrowers.rq").get())) {
+						printFormData.setEnableHierarchical(false);
+						printFormData.getWarningMessages().add(b.getString("upload.warning.noHierarchyFound"));
+					}
+				} catch (Exception e) {
 					printFormData.setEnableHierarchical(false);
 					printFormData.getWarningMessages().add(b.getString("upload.warning.noHierarchyFound"));
 				}
-			} catch (SparqlPerformException e) {
-				printFormData.setEnableHierarchical(false);
-				printFormData.getWarningMessages().add(b.getString("upload.warning.noHierarchyFound"));
 			}
-		}
-
-		if(DisplayType.needTranslationCheck()) {
-			try {
-				// ask if some translations exists
-				if(!Perform.on(repository).ask(new SparqlQuery(new SparqlQueryBuilder(this, "AskTranslatedConcepts.rq")))) {
+	
+			if(DisplayType.needTranslationCheck()) {
+				try {
+					// ask if some translations exists
+					if(!Perform.on(connection).ask(new SimpleQueryReader(this, "AskTranslatedConcepts.rq").get())) {
+						printFormData.setEnableTranslations(false);
+						printFormData.getWarningMessages().add(b.getString("upload.warning.noTranslationsFound"));
+					}
+				} catch (Exception e) {
 					printFormData.setEnableTranslations(false);
 					printFormData.getWarningMessages().add(b.getString("upload.warning.noTranslationsFound"));
 				}
-			} catch (SparqlPerformException e) {
-				printFormData.setEnableTranslations(false);
-				printFormData.getWarningMessages().add(b.getString("upload.warning.noTranslationsFound"));
 			}
-		}
-
-		if(DisplayType.needAlignmentCheck()) {
-			try {
-				// ask if some alignments exists
-				if(!Perform.on(repository).ask(new SparqlQuery(new SparqlQueryBuilder(this, "AskMappings.rq")))) {
+	
+			if(DisplayType.needAlignmentCheck()) {
+				try {
+					// ask if some alignments exists
+					if(!Perform.on(connection).ask(new SimpleQueryReader(this, "AskMappings.rq").get())) {
+						printFormData.setEnableMappings(false);
+						printFormData.getWarningMessages().add(b.getString("upload.warning.noMappingsFound"));
+					}
+				} catch (Exception e) {
 					printFormData.setEnableMappings(false);
 					printFormData.getWarningMessages().add(b.getString("upload.warning.noMappingsFound"));
 				}
-			} catch (SparqlPerformException e) {
-				printFormData.setEnableMappings(false);
-				printFormData.getWarningMessages().add(b.getString("upload.warning.noMappingsFound"));
 			}
-		}
+		
 
-		try {
 			// retrieve number of concepts per concept schemes
-			Perform.on(repository).select(new SelectSparqlHelper(
-					new SparqlQueryBuilder(this, "ConceptCountByConceptSchemes.rq"),
-					new TupleQueryResultHandlerBase() {
+			Perform.on(connection).select(
+					new SimpleQueryReader(this, "ConceptCountByConceptSchemes.rq").get(),
+					new AbstractTupleQueryResultHandler() {
 
 						@Override
 						public void handleSolution(BindingSet bindingSet)
@@ -705,30 +705,30 @@ public class SkosPlayController {
 									printFormData.getConceptCountByConceptSchemes().put(
 											new LabeledResource(
 													java.net.URI.create(bindingSet.getValue("scheme").stringValue()),
-													LabelReader.display(labelReader.getValues((org.eclipse.rdf4j.model.URI)bindingSet.getValue("scheme")))
+													LabelReader.display(labelReader.getValues((IRI)bindingSet.getValue("scheme")))
 													),
 											(bindingSet.getValue("conceptCount") != null)?
 													((Literal)bindingSet.getValue("conceptCount")).intValue()
 													:0
 											);
-								} catch (SparqlPerformException e) {
+								} catch (Exception e) {
 									throw new TupleQueryResultHandlerException(e);
 								}
 							}
 						}						
 					}
-					));
+			);
 
 			// retrieve list of declared languages in the data
-			Perform.on(repository).select(new SelectSparqlHelper(
-					new SparqlQueryBuilder(this, "ListOfSkosLanguages.rq"),
-					new TupleQueryResultHandlerBase() {
+			Perform.on(connection).select(
+					new SimpleQueryReader(this, "ListOfSkosLanguages.rq").get(),
+					new AbstractTupleQueryResultHandler() {
 
 						@Override
 						public void handleSolution(BindingSet bindingSet)
 								throws TupleQueryResultHandlerException {
 							String rdfLanguage = bindingSet.getValue("language").stringValue();
-							Language l = fr.sparna.rdf.sesame.toolkit.languages.Languages.getInstance().withIso639P1(rdfLanguage);
+							Language l = Languages.getInstance().withIso639P1(rdfLanguage);
 							String languageName = (l != null)?l.displayIn(sessionData.getUserLocale().getLanguage()):rdfLanguage;
 							printFormData.getLanguages().put(
 									bindingSet.getValue("language").stringValue(),
@@ -737,8 +737,8 @@ public class SkosPlayController {
 						}
 
 					}
-					));
-		} catch (SparqlPerformException e) {
+			);
+		} catch (Exception e) {
 			return doError(request, e);
 		}
 
@@ -819,7 +819,7 @@ public class SkosPlayController {
 		VizType displayType = (displayParam != null)?VizType.valueOf(displayParam.toUpperCase()):null;
 
 		// get scheme param
-		URI scheme = (schemeParam.equals("no-scheme"))?null:URI.create(schemeParam);
+		IRI scheme = (schemeParam.equals("no-scheme"))?null:SimpleValueFactory.getInstance().createIRI(schemeParam);
 
 		// update source language param - only for translations
 		language = (language.equals("no-language"))?null:language;
@@ -829,47 +829,49 @@ public class SkosPlayController {
 		Repository r = sessionData.getRepository();
 
 		// make a log to trace usage
-		String aRandomConcept = Perform.on(r).read(new SparqlQuery(new SparqlQueryBuilder(this, "ReadRandomConcept.rq"))).stringValue();
-		log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+"HTML");
-
-		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, "datavize", displayParam, SessionData.get(request.getSession()).getListurl(),"print", schemeParam));
-
-		
-		switch(displayType) {
-		case PARTITION : {		
-			request.setAttribute("dataset", generateJSON(r, language, scheme));
-			// forward to the JSP
-			return new ModelAndView("viz-partition");
+		try(RepositoryConnection connection = r.getConnection()) {
+			String aRandomConcept = Perform.on(connection).read(new SimpleQueryReader(this, "ReadRandomConcept.rq").get()).stringValue();
+			log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+"HTML");		
+			
+			SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, "datavize", displayParam, SessionData.get(request.getSession()).getListurl(),"print", schemeParam));
+	
+			
+			switch(displayType) {
+			case PARTITION : {		
+				request.setAttribute("dataset", generateJSON(connection, language, scheme));
+				// forward to the JSP
+				return new ModelAndView("viz-partition");
+			}
+			case TREELAYOUT : {
+				request.setAttribute("dataset", generateJSON(connection, language, scheme));
+				// forward to the JSP
+				return new ModelAndView("viz-treelayout");
+			}
+			case SUNBURST : {
+				request.setAttribute("dataset", generateJSON(connection, language, scheme));
+				// forward to the JSP
+				return new ModelAndView("viz-sunburst");
+			}
+			/*case TREEMAP : {
+				request.setAttribute("dataset", generateJSON(r, language, scheme));
+				// forward to the JSP
+				return new ModelAndView("viz-treemap");
+			}*/
+			case AUTOCOMPLETE : {
+				AutocompleteItemsReader autocompleteReader = new AutocompleteItemsReader();
+				Items items = autocompleteReader.readItems(r, language, scheme);
+				JSONWriter writer = new JSONWriter();
+				request.setAttribute("items", writer.write(items));
+				// forward to the JSP
+				return new ModelAndView("viz-autocomplete");
+			}
+			
+			default : {
+				throw new InvalidParameterException("Unknown display type "+displayType);
+			}
+			
+			}	
 		}
-		case TREELAYOUT : {
-			request.setAttribute("dataset", generateJSON(r, language, scheme));
-			// forward to the JSP
-			return new ModelAndView("viz-treelayout");
-		}
-		case SUNBURST : {
-			request.setAttribute("dataset", generateJSON(r, language, scheme));
-			// forward to the JSP
-			return new ModelAndView("viz-sunburst");
-		}
-		/*case TREEMAP : {
-			request.setAttribute("dataset", generateJSON(r, language, scheme));
-			// forward to the JSP
-			return new ModelAndView("viz-treemap");
-		}*/
-		case AUTOCOMPLETE : {
-			AutocompleteItemsReader autocompleteReader = new AutocompleteItemsReader();
-			Items items = autocompleteReader.readItems(r, language, scheme);
-			JSONWriter writer = new JSONWriter();
-			request.setAttribute("items", writer.write(items));
-			// forward to the JSP
-			return new ModelAndView("viz-autocomplete");
-		}
-		
-		default : {
-			throw new InvalidParameterException("Unknown display type "+displayType);
-		}
-		
-		}		
 		
 	}
 
@@ -886,8 +888,10 @@ public class SkosPlayController {
 		Repository r = SessionData.get(request.getSession()).getRepository();
 
 		// serialize and return data
-		RepositoryWriter writer = new RepositoryWriter(r);
-		writer.writeToStream(response.getOutputStream(), RDFFormat.TURTLE);
+		try(RepositoryConnection connection = r.getConnection()) {
+			RepositoryWriter writer = new RepositoryWriter(connection);
+			writer.writeToStream(response.getOutputStream(), RDFFormat.TURTLE);
+		}
 
 		// flush
 		response.flushBuffer();
@@ -914,7 +918,7 @@ public class SkosPlayController {
 		DisplayType displayType = (displayParam != null)?DisplayType.valueOf(displayParam.toUpperCase()):null;
 
 		// get scheme param
-		URI scheme = (schemeParam.equals("no-scheme"))?null:URI.create(schemeParam);
+		IRI scheme = (schemeParam.equals("no-scheme"))?null:SimpleValueFactory.getInstance().createIRI(schemeParam);
 
 		// update source language param - only for translations
 		language = (language.equals("no-language"))?null:language;
@@ -925,214 +929,215 @@ public class SkosPlayController {
 		// retrieve data from session
 		Repository r = sessionData.getRepository();
 		
-		// make a log to trace usage
-		String aRandomConcept = Perform.on(r).read(new SparqlQuery(new SparqlQueryBuilder(this, "ReadRandomConcept.rq"))).stringValue();
-		log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+outputType);
-
 		// build display result
 		KosDocument document = new KosDocument();
-
-
-		HeaderAndFooterReader headerReader = new HeaderAndFooterReader(r);
-		headerReader.setApplicationString("Generated by SKOS Play!, sparna.fr");
-		// on désactive complètement le header pour les PDF
-		if(outputType != OutputType.PDF) {
-			// build and set header
-			document.setHeader(headerReader.readHeader(language, scheme));
-		}
-		// all the time, set footer
-		document.setFooter(headerReader.readFooter(language, scheme));
-
-		// pass on Repository to skos-printer level
-		BodyReader bodyReader;
 		
-		
-		switch(displayType) {
-		case ALPHABETICAL : {			
-			ConceptBlockReader cbr = new ConceptBlockReader(r);
-			bodyReader = new BodyReader(new AlphaIndexDisplayGenerator(r, cbr));			
-			break;
-		}
-		case ALPHABETICAL_EXPANDED : {			
-			ConceptBlockReader cbr = new ConceptBlockReader(r);
-			cbr.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
-			bodyReader = new BodyReader(new AlphaIndexDisplayGenerator(r, cbr));
-			break;
-		}
-		case HIERARCHICAL : {
-			bodyReader = new BodyReader(new HierarchicalDisplayGenerator(r, new ConceptBlockReader(r)));
-			break;
-		}
-		case HIERARCHICAL_TREE : {
-			bodyReader = new BodyReader(new HierarchicalDisplayGenerator(r, new ConceptBlockReader(r)));
-			break;
-		}
-		//			case HIERARCHICAL_EXPANDED : {
-		//				displayGenerator = new HierarchicalDisplayGenerator(r, new ConceptBlockReader(r, HierarchicalDisplayGenerator.EXPANDED_SKOS_PROPERTIES));
-		//				break;
-		//			}
-		case CONCEPT_LISTING : {
-			ConceptBlockReader cbr = new ConceptBlockReader(r);
-			cbr.setSkosPropertiesToRead(ConceptListDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
-			List<String> additionalLanguages = new ArrayList<String>();
-			for (String aLang : SessionData.get(request.getSession()).getPrintFormData().getLanguages().keySet()) {
-				if(!aLang.equals(language)) {
-					additionalLanguages.add(aLang);
+		try(RepositoryConnection connection = r.getConnection()) {
+			// make a log to trace usage
+			String aRandomConcept = Perform.on(connection).read(new SimpleQueryReader(this, "ReadRandomConcept.rq").get()).stringValue();
+			log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+outputType);
+	
+			HeaderAndFooterReader headerReader = new HeaderAndFooterReader(connection);
+			headerReader.setApplicationString("Generated by SKOS Play!, sparna.fr");
+			// on désactive complètement le header pour les PDF
+			if(outputType != OutputType.PDF) {
+				// build and set header
+				document.setHeader(headerReader.readHeader(language, scheme));
+			}
+			// all the time, set footer
+			document.setFooter(headerReader.readFooter(language, scheme));
+	
+			// pass on Repository to skos-printer level
+			BodyReader bodyReader;
+			
+			
+			switch(displayType) {
+			case ALPHABETICAL : {			
+				ConceptBlockReader cbr = new ConceptBlockReader();
+				bodyReader = new BodyReader(new AlphaIndexDisplayGenerator(connection, cbr));			
+				break;
+			}
+			case ALPHABETICAL_EXPANDED : {			
+				ConceptBlockReader cbr = new ConceptBlockReader();
+				cbr.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
+				bodyReader = new BodyReader(new AlphaIndexDisplayGenerator(connection, cbr));
+				break;
+			}
+			case HIERARCHICAL : {
+				bodyReader = new BodyReader(new HierarchicalDisplayGenerator(connection, new ConceptBlockReader()));
+				break;
+			}
+			case HIERARCHICAL_TREE : {
+				bodyReader = new BodyReader(new HierarchicalDisplayGenerator(connection, new ConceptBlockReader()));
+				break;
+			}
+			//			case HIERARCHICAL_EXPANDED : {
+			//				displayGenerator = new HierarchicalDisplayGenerator(r, new ConceptBlockReader(r, HierarchicalDisplayGenerator.EXPANDED_SKOS_PROPERTIES));
+			//				break;
+			//			}
+			case CONCEPT_LISTING : {
+				ConceptBlockReader cbr = new ConceptBlockReader();
+				cbr.setSkosPropertiesToRead(ConceptListDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
+				List<String> additionalLanguages = new ArrayList<String>();
+				for (String aLang : SessionData.get(request.getSession()).getPrintFormData().getLanguages().keySet()) {
+					if(!aLang.equals(language)) {
+						additionalLanguages.add(aLang);
+					}
 				}
+				cbr.setAdditionalLabelLanguagesToInclude(additionalLanguages);
+	
+				bodyReader = new BodyReader(new ConceptListDisplayGenerator(connection, cbr));
+				break;
 			}
-			cbr.setAdditionalLabelLanguagesToInclude(additionalLanguages);
-
-			bodyReader = new BodyReader(new ConceptListDisplayGenerator(r, cbr));
-			break;
-		}
-		case TRANSLATION_TABLE : {
-			bodyReader = new BodyReader(new TranslationTableDisplayGenerator(r, new ConceptBlockReader(r), targetLanguage));
-			break;
-		}
-		case PERMUTED_INDEX : {
-			bodyReader = new BodyReader(new IndexGenerator(r, IndexType.KWAC));
-			break;
-		}
-		case KWIC_INDEX : {
-			bodyReader = new BodyReader(new IndexGenerator(r, IndexType.KWIC));
-			break;
-		}
-		case COMPLETE_MONOLINGUAL : {
-
-			// prepare a list of generators
-			List<AbstractKosDisplayGenerator> generators = new ArrayList<AbstractKosDisplayGenerator>();
-
-			// alphabetical display
-			ConceptBlockReader alphaCbReader = new ConceptBlockReader(r);
-			alphaCbReader.setStyleAttributes(true);
-			alphaCbReader.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
-			alphaCbReader.setLinkDestinationIdPrefix("hier");
-			AlphaIndexDisplayGenerator alphaGen = new AlphaIndexDisplayGenerator(
-					r,
-					alphaCbReader,
-					"alpha"
-					);
-			generators.add(alphaGen);
-
-			// hierarchical display
-			ConceptBlockReader hierCbReader = new ConceptBlockReader(r);
-			hierCbReader.setLinkDestinationIdPrefix("alpha");
-			HierarchicalDisplayGenerator hierarchyGen = new HierarchicalDisplayGenerator(
-					r,
-					hierCbReader,
-					"hier"
-					);
-			generators.add(hierarchyGen);
-
-			bodyReader = new BodyReader(generators);				
-
-			break;
-		}
-		case COMPLETE_MULTILINGUAL : {
-
-			// prepare a list of generators
-			List<AbstractKosDisplayGenerator> generators = new ArrayList<AbstractKosDisplayGenerator>();
-
-			// read all potential languages and exclude the main one
-			final List<String> additionalLanguages = new ArrayList<String>();
-			for (String aLang : SessionData.get(request.getSession()).getPrintFormData().getLanguages().keySet()) {
-				if(!aLang.equals(language)) {
-					additionalLanguages.add(aLang);
+			case TRANSLATION_TABLE : {
+				bodyReader = new BodyReader(new TranslationTableDisplayGenerator(connection, new ConceptBlockReader(), targetLanguage));
+				break;
+			}
+			case PERMUTED_INDEX : {
+				bodyReader = new BodyReader(new IndexGenerator(connection, IndexType.KWAC));
+				break;
+			}
+			case KWIC_INDEX : {
+				bodyReader = new BodyReader(new IndexGenerator(connection, IndexType.KWIC));
+				break;
+			}
+			case COMPLETE_MONOLINGUAL : {
+	
+				// prepare a list of generators
+				List<AbstractKosDisplayGenerator> generators = new ArrayList<AbstractKosDisplayGenerator>();
+	
+				// alphabetical display
+				ConceptBlockReader alphaCbReader = new ConceptBlockReader();
+				alphaCbReader.setStyleAttributes(true);
+				alphaCbReader.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
+				alphaCbReader.setLinkDestinationIdPrefix("hier");
+				AlphaIndexDisplayGenerator alphaGen = new AlphaIndexDisplayGenerator(
+						connection,
+						alphaCbReader,
+						"alpha"
+						);
+				generators.add(alphaGen);
+	
+				// hierarchical display
+				ConceptBlockReader hierCbReader = new ConceptBlockReader();
+				hierCbReader.setLinkDestinationIdPrefix("alpha");
+				HierarchicalDisplayGenerator hierarchyGen = new HierarchicalDisplayGenerator(
+						connection,
+						hierCbReader,
+						"hier"
+						);
+				generators.add(hierarchyGen);
+	
+				bodyReader = new BodyReader(generators);				
+	
+				break;
+			}
+			case COMPLETE_MULTILINGUAL : {
+	
+				// prepare a list of generators
+				List<AbstractKosDisplayGenerator> generators = new ArrayList<AbstractKosDisplayGenerator>();
+	
+				// read all potential languages and exclude the main one
+				final List<String> additionalLanguages = new ArrayList<String>();
+				for (String aLang : SessionData.get(request.getSession()).getPrintFormData().getLanguages().keySet()) {
+					if(!aLang.equals(language)) {
+						additionalLanguages.add(aLang);
+					}
 				}
+	
+				// alphabetical display
+				ConceptBlockReader alphaCbReader = new ConceptBlockReader();
+				alphaCbReader.setStyleAttributes(true);
+				alphaCbReader.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
+				alphaCbReader.setAdditionalLabelLanguagesToInclude(additionalLanguages);
+				alphaCbReader.setLinkDestinationIdPrefix("hier");
+				AlphaIndexDisplayGenerator alphaGen = new AlphaIndexDisplayGenerator(
+						connection,
+						alphaCbReader,
+						"alpha"
+						);
+				generators.add(alphaGen);
+	
+				// hierarchical display
+				ConceptBlockReader hierCbReader = new ConceptBlockReader();
+				hierCbReader.setLinkDestinationIdPrefix("alpha");
+				HierarchicalDisplayGenerator hierarchyGen = new HierarchicalDisplayGenerator(
+						connection,
+						hierCbReader,
+						"hier"
+						);
+				generators.add(hierarchyGen);
+	
+				// add translation tables for each additional languages
+				for (int i=0;i<additionalLanguages.size(); i++) {
+					String anAdditionalLang = additionalLanguages.get(i);
+					ConceptBlockReader aCbReader = new ConceptBlockReader();
+					aCbReader.setLinkDestinationIdPrefix("alpha");
+					TranslationTableReverseDisplayGenerator ttGen = new TranslationTableReverseDisplayGenerator(
+							connection,
+							aCbReader,
+							anAdditionalLang,
+							"trans"+i);
+					generators.add(ttGen);
+				}
+	
+				bodyReader = new BodyReader(generators);
+	
+				break;
 			}
-
-			// alphabetical display
-			ConceptBlockReader alphaCbReader = new ConceptBlockReader(r);
-			alphaCbReader.setStyleAttributes(true);
-			alphaCbReader.setSkosPropertiesToRead(AlphaIndexDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
-			alphaCbReader.setAdditionalLabelLanguagesToInclude(additionalLanguages);
-			alphaCbReader.setLinkDestinationIdPrefix("hier");
-			AlphaIndexDisplayGenerator alphaGen = new AlphaIndexDisplayGenerator(
-					r,
-					alphaCbReader,
-					"alpha"
-					);
-			generators.add(alphaGen);
-
-			// hierarchical display
-			ConceptBlockReader hierCbReader = new ConceptBlockReader(r);
-			hierCbReader.setLinkDestinationIdPrefix("alpha");
-			HierarchicalDisplayGenerator hierarchyGen = new HierarchicalDisplayGenerator(
-					r,
-					hierCbReader,
-					"hier"
-					);
-			generators.add(hierarchyGen);
-
-			// add translation tables for each additional languages
-			for (int i=0;i<additionalLanguages.size(); i++) {
-				String anAdditionalLang = additionalLanguages.get(i);
-				ConceptBlockReader aCbReader = new ConceptBlockReader(r);
-				aCbReader.setLinkDestinationIdPrefix("alpha");
-				TranslationTableReverseDisplayGenerator ttGen = new TranslationTableReverseDisplayGenerator(
-						r,
-						aCbReader,
-						anAdditionalLang,
-						"trans"+i);
-				generators.add(ttGen);
+			case ALIGNMENT_ALPHA : {
+				AlignmentDataHarvesterIfc harvester = new AlignmentDataHarvesterCachedLoader(null, RDFFormat.RDFXML);
+				AlignmentDisplayGenerator adg = new AlignmentDisplayGenerator(connection, new ConceptBlockReader(), harvester);
+				// this is the difference with other alignment display
+				adg.setSeparateByTargetScheme(false);
+				bodyReader = new BodyReader(adg);
+				break;
 			}
-
-			bodyReader = new BodyReader(generators);
-
-			break;
-		}
-		case ALIGNMENT_ALPHA : {
-			AlignmentDataHarvesterIfc harvester = new AlignmentDataHarvesterCachedLoader(null, RDFFormat.RDFXML);
-			AlignmentDisplayGenerator adg = new AlignmentDisplayGenerator(r, new ConceptBlockReader(r), harvester);
-			// this is the difference with other alignment display
-			adg.setSeparateByTargetScheme(false);
-			bodyReader = new BodyReader(adg);
-			break;
-		}
-		case ALIGNMENT_BY_SCHEME : {
-			AlignmentDataHarvesterIfc harvester = new AlignmentDataHarvesterCachedLoader(null, RDFFormat.RDFXML);
-			AlignmentDisplayGenerator adg = new AlignmentDisplayGenerator(r, new ConceptBlockReader(r), harvester);
-			// this is the difference with other alignment display
-			adg.setSeparateByTargetScheme(true);
-			bodyReader = new BodyReader(adg);
-			break;
-		}
-		default :
-			throw new InvalidParameterException("Unknown display type "+displayType);
-		}	
-		// read the body
-		document.setBody(bodyReader.readBody(language, scheme));
-
-		DisplayPrinter printer = new DisplayPrinter();
-		// TODO : use Spring for configuration for easier debugging config
-		// for the moment we desactivate debugging completely
-		printer.setDebug(false);
-		
-		
-		switch(outputType) {
-		case HTML : {
-			if(displayType==DisplayType.HIERARCHICAL_TREE) {
-				printer.printToHtmlTree(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
-			} else {
-				printer.printToHtml(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
+			case ALIGNMENT_BY_SCHEME : {
+				AlignmentDataHarvesterIfc harvester = new AlignmentDataHarvesterCachedLoader(null, RDFFormat.RDFXML);
+				AlignmentDisplayGenerator adg = new AlignmentDisplayGenerator(connection, new ConceptBlockReader(), harvester);
+				// this is the difference with other alignment display
+				adg.setSeparateByTargetScheme(true);
+				bodyReader = new BodyReader(adg);
+				break;
 			}
-			break;
-		}
-		case PDF : {
-			response.setContentType("application/pdf");
-			// if alphabetical or concept listing display, set 2-columns layout
-			if(
-					displayType == DisplayType.ALPHABETICAL
-					||
-					displayType == DisplayType.CONCEPT_LISTING
-					||
-					displayType == DisplayType.ALPHABETICAL_EXPANDED
-					) {
-				printer.getTransformerParams().put("column-count", 2);
+			default :
+				throw new InvalidParameterException("Unknown display type "+displayType);
+			}	
+			// read the body
+			document.setBody(bodyReader.readBody(language, scheme));
 			}
-			printer.printToPdf(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
-			break;
-		}
+			
+			DisplayPrinter printer = new DisplayPrinter();
+			// TODO : use Spring for configuration for easier debugging config
+			// for the moment we desactivate debugging completely
+			printer.setDebug(false);
+			
+			
+			switch(outputType) {
+			case HTML : {
+				if(displayType==DisplayType.HIERARCHICAL_TREE) {
+					printer.printToHtmlTree(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
+				} else {
+					printer.printToHtml(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
+				}
+				break;
+			}
+			case PDF : {
+				response.setContentType("application/pdf");
+				// if alphabetical or concept listing display, set 2-columns layout
+				if(
+						displayType == DisplayType.ALPHABETICAL
+						||
+						displayType == DisplayType.CONCEPT_LISTING
+						||
+						displayType == DisplayType.ALPHABETICAL_EXPANDED
+						) {
+					printer.getTransformerParams().put("column-count", 2);
+				}
+				printer.printToPdf(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
+				break;
+			}
 		}
 
 		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, outputParam, displayParam, SessionData.get(request.getSession()).getListurl(),"print",schemeParam));
@@ -1141,31 +1146,31 @@ public class SkosPlayController {
 	}
 
 	protected String generateJSON (
-			Repository r,
+			RepositoryConnection connection,
 			String language,
-			URI scheme
-			) throws Exception {
+			IRI scheme
+	) throws Exception {
 
 		// Careful : we need to use the same init code here than in the hierarhical display generator to get a consistent output
 		PreferredPropertyReader ppr = new PreferredPropertyReader(
-				r,
-				Arrays.asList(new URI[] { URI.create(SKOS.NOTATION), URI.create(SKOS.PREF_LABEL) }),
+				connection,
+				Arrays.asList(new IRI[] { SimpleValueFactory.getInstance().createIRI(SKOS.NOTATION), SimpleValueFactory.getInstance().createIRI(SKOS.PREF_LABEL) }),
 				language
 				);
 		ppr.setCaching(true);
 
-		PropertyReader typeReader = new PropertyReader(r, URI.create(RDF.TYPE.stringValue()));
+		TypeReader typeReader = new TypeReader();
 		typeReader.setPreLoad(false);
-		SKOSNodeTypeReader nodeTypeReader = new SKOSNodeTypeReader(typeReader, r);
+		SKOSNodeTypeReader nodeTypeReader = new SKOSNodeTypeReader(typeReader, connection);
 
-		SKOSTreeBuilder builder = new SKOSTreeBuilder(r, new SKOSNodeSortCriteriaPreferredPropertyReader(ppr), nodeTypeReader);
+		SKOSTreeBuilder builder = new SKOSTreeBuilder(connection, new SKOSNodeSortCriteriaPreferredPropertyReader(ppr), nodeTypeReader);
 
 		builder.setUseConceptSchemesAsFirstLevelNodes(false);
 
-		GenericTree<SKOSTreeNode> tree = buildTree(builder, (scheme != null)?URI.create(scheme.toString()):null);			
+		GenericTree<SKOSTreeNode> tree = buildTree(builder, scheme);			
 
 		// writes json output
-		LabelReader labelReader = new LabelReader(r, language);
+		LabelReader labelReader = new LabelReader(connection, language);
 		JsonSKOSTreePrinter printer = new JsonSKOSTreePrinter(labelReader);
 		printer.setPrettyPrinting(true);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -1173,8 +1178,7 @@ public class SkosPlayController {
 		return baos.toString("UTF-8").replaceAll("'", "\\\\'");
 	}
 
-	public GenericTree<SKOSTreeNode> buildTree(SKOSTreeBuilder builder, URI root)
-			throws SparqlPerformException {
+	public GenericTree<SKOSTreeNode> buildTree(SKOSTreeBuilder builder, IRI root) {
 		GenericTree<SKOSTreeNode> tree = new GenericTree<SKOSTreeNode>();
 
 		List<GenericTree<SKOSTreeNode>> trees;
@@ -1199,11 +1203,11 @@ public class SkosPlayController {
 			log.debug("Multiple trees found ("+trees.size()+"), will create a fake root to group them all");
 			// otherwise, create a fake root
 			GenericTreeNode<SKOSTreeNode> fakeRoot = new GenericTreeNode<SKOSTreeNode>();
-			fakeRoot.setData(new SKOSTreeNode(URI.create("skosplay:allData"), "", NodeType.UNKNOWN));
+			fakeRoot.setData(new SKOSTreeNode(SimpleValueFactory.getInstance().createIRI("skosplay:allData"), "", NodeType.UNKNOWN));
 
 			// add all the trees under it					
 			for (GenericTree<SKOSTreeNode> genericTree : trees) {
-				log.debug("Addind tree under fake root : "+genericTree.getRoot().getData().getUri());
+				log.debug("Addind tree under fake root : "+genericTree.getRoot().getData().getIri());
 				fakeRoot.addChild(genericTree.getRoot());
 			}
 

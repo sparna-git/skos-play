@@ -6,31 +6,29 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.query.AbstractTupleQueryResultHandler;
 import org.eclipse.rdf4j.query.BindingSet;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
 
-import fr.sparna.rdf.sesame.toolkit.languages.Languages.Language;
-import fr.sparna.rdf.sesame.toolkit.query.Perform;
-import fr.sparna.rdf.sesame.toolkit.query.SelectSparqlHelper;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlPerformException;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlQuery;
-import fr.sparna.rdf.sesame.toolkit.query.SparqlUpdate;
-import fr.sparna.rdf.sesame.toolkit.query.builder.SparqlQueryBuilder;
-import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.repository.LocalMemoryRepositoryFactory.FactoryConfiguration;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryException;
-import fr.sparna.rdf.sesame.toolkit.repository.StringRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.ApplyUpdates;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromStream;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromUrl;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.RepositoryOperationException;
-import fr.sparna.rdf.sesame.toolkit.util.LabelReader;
+import fr.sparna.rdf.rdf4j.toolkit.languages.Languages;
+import fr.sparna.rdf.rdf4j.toolkit.languages.Languages.Language;
+import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
+import fr.sparna.rdf.rdf4j.toolkit.query.SimpleQueryReader;
+import fr.sparna.rdf.rdf4j.toolkit.repository.LocalMemoryRepositorySupplier;
+import fr.sparna.rdf.rdf4j.toolkit.repository.LocalMemoryRepositorySupplier.FactoryConfiguration;
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
+import fr.sparna.rdf.rdf4j.toolkit.repository.init.ApplyUpdates;
+import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromFileOrDirectory;
+import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromStream;
+import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromUrl;
+import fr.sparna.rdf.rdf4j.toolkit.util.LabelReader;
 import fr.sparna.rdf.skos.toolkit.SKOSRules;
 
 public class SkosPlayModel {
@@ -40,55 +38,47 @@ public class SkosPlayModel {
 	public void load(InputStream file, RDFFormat format, boolean rdfsInference, boolean owl2skos)
 	throws SkosPlayModelException {
 		
-		try {
-			RepositoryBuilder localRepositoryBuilder = createRepositoryBuilder(rdfsInference);		
-			localRepositoryBuilder.addOperation(new LoadFromStream(file, format));
-			repository = localRepositoryBuilder.createNewRepository();
-		} catch (RepositoryFactoryException e) {
-			throw new SkosPlayModelException("Exception when loading input data", e);
-		}
+		RepositoryBuilder localRepositoryBuilder = createRepositoryBuilder(rdfsInference);		
+		localRepositoryBuilder.addOperation(new LoadFromStream(file, format));
+		repository = localRepositoryBuilder.get();
 
 		// apply OWL2SKOS rules if needed
-		try {
-			if(owl2skos) {
+		if(owl2skos) {
+			try(RepositoryConnection connection = repository.getConnection()) {
 				// apply inference
-				ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getOWL2SKOSRuleset()));
-				au.execute(repository);
+				ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getOWL2SKOSRuleset());
+				au.accept(connection);
 			}
-		} catch (RepositoryOperationException e) {
-			throw new SkosPlayModelException("Exception when applying OWL2SKOS rules", e);
-		}		
+		}	
 	}
 	
 	public void load(String url, boolean rdfsInference, boolean owl2skos)
 	throws SkosPlayModelException {
 		// we are loading an RDF file from the web, use the localRepositoryBuilder and apply inference if required
-		if(!StringRepositoryFactory.isEndpointURL(url)) {
+		if(!RepositoryBuilderFactory.isEndpointURL(url)) {
 			
 			try {
 				RepositoryBuilder localRepositoryBuilder = createRepositoryBuilder(rdfsInference);
 				localRepositoryBuilder.addOperation(new LoadFromUrl(new URL(url)));
-				repository = localRepositoryBuilder.createNewRepository();
+				repository = localRepositoryBuilder.get();
 			} catch (Exception e) {
 				throw new SkosPlayModelException("Exception when trying to load URL "+url, e);
 			}
 			
 			// apply OWL2SKOS rules if needed
-			try {
-				if(owl2skos && !StringRepositoryFactory.isEndpointURL(url)) {
+			if(owl2skos && !RepositoryBuilderFactory.isEndpointURL(url)) {
+				try(RepositoryConnection connection = repository.getConnection()) {
 					// apply inference
-					ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getOWL2SKOSRuleset()));
-					au.execute(repository);
+					ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getOWL2SKOSRuleset());
+					au.accept(connection);
 				}
-			} catch (RepositoryOperationException e) {
-				throw new SkosPlayModelException("Exception when applying OWL2SKOS rules", e);
 			}
 			
 		} else {
 			try {
 				// this is a endpoint
-				repository = RepositoryBuilder.fromString(url, rdfsInference);
-			} catch (RepositoryFactoryException e) {
+				repository = RepositoryBuilderFactory.fromString(url).get();
+			} catch (Exception e) {
 				throw new SkosPlayModelException("Exception when trying to connect to endpoint "+url, e);
 			}
 		}
@@ -104,27 +94,27 @@ public class SkosPlayModel {
 	
 	public boolean isHierarchical()
 	throws SkosPlayModelException {
-		try {
-			return Perform.on(repository).ask(new SparqlQuery(new SparqlQueryBuilder(this, "AskBroadersOrNarrowers.rq")));
-		} catch (SparqlPerformException e) {
+		try(RepositoryConnection connection = repository.getConnection()) {
+			return Perform.on(connection).ask(new SimpleQueryReader(this, "AskBroadersOrNarrowers.rq").get());
+		} catch (Exception e) {
 			throw new SkosPlayModelException(e);
 		}
 	}
 	
 	public boolean isMultilingual()
 	throws SkosPlayModelException {
-		try {
-			return Perform.on(repository).ask(new SparqlQuery(new SparqlQueryBuilder(this, "AskTranslatedConcepts.rq")));
-		} catch (SparqlPerformException e) {
+		try(RepositoryConnection connection = repository.getConnection()) {
+			return Perform.on(connection).ask(new SimpleQueryReader(this, "AskTranslatedConcepts.rq").get());
+		} catch (Exception e) {
 			throw new SkosPlayModelException(e);
 		}
 	}
 	
 	public int getConceptCount()
 	throws SkosPlayModelException {
-		try {
-			return Perform.on(repository).count(new SparqlQuery(new SparqlQueryBuilder(this, "CountConcepts.rq")));
-		} catch (SparqlPerformException e) {
+		try(RepositoryConnection connection = repository.getConnection()) {
+			return Perform.on(connection).count(new SimpleQueryReader(this, "CountConcepts.rq").get());
+		} catch (Exception e) {
 			throw new SkosPlayModelException(e);
 		}
 	}
@@ -133,17 +123,17 @@ public class SkosPlayModel {
 	throws SkosPlayModelException {
 		final HashMap<String, String> result = new HashMap<String, String>();
 		
-		try {
+		try(RepositoryConnection connection = repository.getConnection()) {
 			// retrieve list of declared languages in the data
-			Perform.on(repository).select(new SelectSparqlHelper(
-					new SparqlQueryBuilder(this, "ListOfSkosLanguages.rq"),
-					new TupleQueryResultHandlerBase() {
+			Perform.on(connection).select(
+					new SimpleQueryReader(this, "ListOfSkosLanguages.rq").get(),
+					new AbstractTupleQueryResultHandler() {
 
 						@Override
 						public void handleSolution(BindingSet bindingSet)
 						throws TupleQueryResultHandlerException {
 							String rdfLanguage = bindingSet.getValue("language").stringValue();
-							Language l = fr.sparna.rdf.sesame.toolkit.languages.Languages.getInstance().withIso639P1(rdfLanguage);
+							Language l = Languages.getInstance().withIso639P1(rdfLanguage);
 							String languageName = (l != null)?l.displayIn(locale):rdfLanguage;
 							result.put(
 									bindingSet.getValue("language").stringValue(),
@@ -152,8 +142,8 @@ public class SkosPlayModel {
 						}
 						
 					}
-			));
-		} catch (SparqlPerformException e) {
+			);
+		} catch (Exception e) {
 			throw new SkosPlayModelException(e);
 		}
 		
@@ -165,11 +155,11 @@ public class SkosPlayModel {
 		
 		final Map<LabeledResource, Integer> conceptCountByConceptSchemes = new TreeMap<LabeledResource, Integer>();
 		
-		try {
+		try(RepositoryConnection connection = repository.getConnection()) {
 			// retrieve number of concepts per concept schemes
-			Perform.on(repository).select(new SelectSparqlHelper(
-					new SparqlQueryBuilder(this, "ConceptCountByConceptSchemes.rq"),
-					new TupleQueryResultHandlerBase() {
+			Perform.on(connection).select(
+					new SimpleQueryReader(this, "ConceptCountByConceptSchemes.rq").get(),
+					new AbstractTupleQueryResultHandler() {
 
 						@Override
 						public void handleSolution(BindingSet bindingSet)
@@ -179,20 +169,20 @@ public class SkosPlayModel {
 									conceptCountByConceptSchemes.put(
 											new LabeledResource(
 													java.net.URI.create(bindingSet.getValue("scheme").stringValue()),
-													LabelReader.display(labelReader.getValues((org.eclipse.rdf4j.model.URI)bindingSet.getValue("scheme")))
+													LabelReader.display(labelReader.getValues((IRI)bindingSet.getValue("scheme")))
 											),
 											(bindingSet.getValue("conceptCount") != null)?
 													((Literal)bindingSet.getValue("conceptCount")).intValue()
 													:0
 									);
-								} catch (SparqlPerformException e) {
+								} catch (Exception e) {
 									throw new TupleQueryResultHandlerException(e);
 								}
 							}
 						}						
 					}
-			));
-		} catch (SparqlPerformException e) {
+			);
+		} catch (Exception e) {
 			throw new SkosPlayModelException(e);
 		}
 		
@@ -203,7 +193,7 @@ public class SkosPlayModel {
 		RepositoryBuilder localRepositoryBuilder;
 		
 		if(rdfsInference) {
-			localRepositoryBuilder = new RepositoryBuilder(new LocalMemoryRepositoryFactory(FactoryConfiguration.RDFS_AWARE));			
+			localRepositoryBuilder = new RepositoryBuilder(new LocalMemoryRepositorySupplier(FactoryConfiguration.RDFS_AWARE));			
 			// load the SKOS model to be able to infer skos:inScheme from skos:isTopConceptOf
 			localRepositoryBuilder.addOperation(new LoadFromFileOrDirectory("skos.rdf"));
 		} else {

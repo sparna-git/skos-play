@@ -8,9 +8,9 @@ import org.eclipse.rdf4j.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryBuilder;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryException;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.LoadFromFileOrDirectory;
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
+import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromFileOrDirectory;
+
 
 /**
  * Everything that needs to be loaded at an application-wide level
@@ -51,14 +51,11 @@ public class ApplicationData {
 					if(!aFileName.endsWith(".properties")) {
 						log.debug("Pre-loading data from file/dir "+aFileName);
 						File aFile = new File(thesaurusDirectoryDir, aFileName);
-						try {
-							RepositoryBuilder builder = new RepositoryBuilder();
-							builder.addOperation(new LoadFromFileOrDirectory(aFile.getAbsolutePath()));
-							// use the file name as a key
-							exampleDataMap.put(aFile.getName(), builder.createNewRepository());
-						} catch (RepositoryFactoryException e) {
-							e.printStackTrace();
-						}
+						
+						RepositoryBuilder builder = new RepositoryBuilder();
+						builder.addOperation(new LoadFromFileOrDirectory(aFile.getAbsolutePath()));
+						// use the file name as a key
+						exampleDataMap.put(aFile.getName(), builder.get());
 					}
 				}
 			}
