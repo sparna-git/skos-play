@@ -1,14 +1,13 @@
 package fr.sparna.rdf.skos.printer.cli.skosxl2skos;
 
 import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.rdf.sesame.toolkit.query.SparqlUpdate;
-import fr.sparna.rdf.sesame.toolkit.repository.RepositoryFactoryIfc;
-import fr.sparna.rdf.sesame.toolkit.repository.StringRepositoryFactory;
-import fr.sparna.rdf.sesame.toolkit.repository.operation.ApplyUpdates;
-import fr.sparna.rdf.sesame.toolkit.util.RepositoryWriter;
+import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
+import fr.sparna.rdf.rdf4j.toolkit.repository.init.ApplyUpdates;
+import fr.sparna.rdf.rdf4j.toolkit.util.RepositoryWriter;
 import fr.sparna.rdf.skos.printer.cli.SkosPlayCliCommandIfc;
 import fr.sparna.rdf.skos.toolkit.SKOSRules;
 
@@ -24,15 +23,15 @@ public class SkosXl2Skos implements SkosPlayCliCommandIfc {
 		// TODO configure logging
 
 		// lire le RDF d'input		
-		RepositoryFactoryIfc factory = new StringRepositoryFactory(args.getInput());
-		Repository inputRepository = factory.createNewRepository();
+		Repository inputRepository = RepositoryBuilderFactory.fromStringList(args.getInput()).get();
 
-		// Apply transformation
-		ApplyUpdates au = new ApplyUpdates(SparqlUpdate.fromUpdateList(SKOSRules.getSkosXl2SkosRuleset(args.isCleanXl())));	
-		au.execute(inputRepository);
-		
-		// output in an output file
-		RepositoryWriter.writeToFile(args.getOutput(), inputRepository);
+		try(RepositoryConnection connection = inputRepository.getConnection()) {
+			// Apply transformation
+			ApplyUpdates.fromQueryReaders(SKOSRules.getSkosXl2SkosRuleset()).accept(connection);
+			
+			// output in an output file
+			RepositoryWriter.writeToFile(args.getOutput(), connection);
+		}
 		
 		// shutdown repos
 		inputRepository.shutDown();
