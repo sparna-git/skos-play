@@ -1,7 +1,0 @@
-SELECT DISTINCT ?concept1 ?align ?concept2
-WHERE {
-	?concept1 a skos:Concept .
-	?concept1 skos:inScheme ?scheme .
-	?concept1 ?align ?concept2 .
-	VALUES ?align { skos:exactMatch skos:closeMatch skos:relatedMatch skos:broadMatch skos:narrowMatch }
-}
