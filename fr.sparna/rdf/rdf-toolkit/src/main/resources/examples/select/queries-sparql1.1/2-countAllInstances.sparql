@@ -1,1 +1,0 @@
-SELECT (COUNT(DISTINCT ?s) as ?totalNumberOfInstances) WHERE { ?s a ?o }

@@ -1,2 +1,0 @@
-# counts the total number of triples
-SELECT (COUNT(*) as ?totalNumberOfTriples) WHERE { ?s ?p ?o }
