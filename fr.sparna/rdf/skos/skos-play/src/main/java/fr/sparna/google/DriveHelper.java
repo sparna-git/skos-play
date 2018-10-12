@@ -2,6 +2,8 @@ package fr.sparna.google;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +24,8 @@ public class DriveHelper {
 		this.drive = drive;
 	}
 	
-	public FileList listSpreadsheets() throws IOException {
-		FileList listeComplete = new FileList();
+	public List<File> listSpreadsheets() throws IOException {
+		List<File> listeComplete = new ArrayList<File>();
 		String pageToken = null;
 		do {
 			FileList result = drive.files().list()
@@ -34,10 +36,9 @@ public class DriveHelper {
 					.setPageToken(pageToken)
 					.execute();
 			
-			listeComplete.putAll(result);
-			
 			for(File file: result.getFiles()) {
 				log.debug("Found file : "+file.getName()+" ("+file.getId()+"), modified "+file.getModifiedTime());
+				listeComplete.add(file);
 			}
 			pageToken = result.getNextPageToken();
 		} while (pageToken != null);

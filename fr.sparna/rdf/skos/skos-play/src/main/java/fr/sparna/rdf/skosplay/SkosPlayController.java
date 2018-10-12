@@ -60,6 +60,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 
 import fr.sparna.commons.io.ReadWriteTextFile;
@@ -252,8 +253,8 @@ public class SkosPlayController {
 			Drive service = gc.getDriveService();
 			DriveHelper driveHelper = new DriveHelper(service);
 			// récupération de la liste de spreadsheets et enregistrement dans la session
-			FileList listeSpreadsheets = driveHelper.listSpreadsheets();
-			data.setGoogleFiles(listeSpreadsheets.getFiles());
+			List<File> listeSpreadsheets = driveHelper.listSpreadsheets();
+			data.setGoogleFiles(listeSpreadsheets);
 		}
 		
 		data.setDefaultLanguage(SessionData.get(request.getSession()).getUserLocale().getLanguage());
