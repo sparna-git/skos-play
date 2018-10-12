@@ -25,7 +25,6 @@
 
     <modules>
         <module>skos</module>
-        <module>rdf-toolkit</module>
     </modules>
 
 </project>
