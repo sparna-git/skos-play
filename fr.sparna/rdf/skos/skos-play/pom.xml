@@ -95,7 +95,6 @@
         <dependency>
             <groupId>fr.sparna.rdf</groupId>
             <artifactId>rdf4j-toolkit</artifactId>
-            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>fr.sparna.rdf.skos</groupId>

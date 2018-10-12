@@ -43,7 +43,7 @@
 		<dependency>
               <groupId>org.eclipse.rdf4j</groupId>
               <artifactId>rdf4j-runtime</artifactId>
-              <version>2.0</version>
+              <version>2.4.0</version>
         </dependency>
 
 		<dependency>
@@ -71,7 +71,6 @@
 		<dependency>
 			<groupId>fr.sparna.rdf</groupId>
 			<artifactId>rdf4j-toolkit</artifactId>
-            <version>0.1</version>
 		</dependency>
 
 		<dependency>

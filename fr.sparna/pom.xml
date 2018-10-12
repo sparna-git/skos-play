@@ -102,34 +102,14 @@
             <!-- Sparna Modules : RDF -->
             <dependency>
                 <groupId>fr.sparna.rdf</groupId>
-                <artifactId>sesame-toolkit</artifactId>
-                <version>0.33-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>fr.sparna.rdf</groupId>
-                <artifactId>rdf-toolkit</artifactId>
-                <version>0.33-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>fr.sparna.rdf</groupId>
-                <artifactId>jena-repository</artifactId>
-                <version>0.33-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>fr.sparna.rdf</groupId>
-                <artifactId>dbpedia-lookup-client</artifactId>
-                <version>0.33-SNAPSHOT</version>
+                <artifactId>rdf4j-toolkit</artifactId>
+                <version>0.4</version>
             </dependency>
             
             <!-- Sparna modules : SKOS -->
             <dependency>
                 <groupId>fr.sparna.rdf.skos</groupId>
                 <artifactId>skos-toolkit</artifactId>
-                <version>0.7.4</version>
-            </dependency>
-            <dependency>
-                <groupId>fr.sparna.rdf.skos</groupId>
-                <artifactId>skos-toolkit-solr</artifactId>
                 <version>0.7.4</version>
             </dependency>
             <dependency>
