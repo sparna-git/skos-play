@@ -1,8 +1,0 @@
-# S43 : skos:narrowMatch is owl:inverseOf the property skos:broadMatch.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-CONSTRUCT {
-	?x skos:narrowMatch ?y .
-	?y skos:broadMatch ?x .
-} WHERE {
-	?x skos:narrowMatch|^skos:broadMatch ?y .
-}

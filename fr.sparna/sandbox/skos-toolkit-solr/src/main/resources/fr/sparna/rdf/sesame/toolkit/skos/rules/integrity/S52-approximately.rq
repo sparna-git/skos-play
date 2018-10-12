@@ -1,9 +1,0 @@
-# S52 : skosxl:Label is a sub-class of a restriction on skosxl:literalForm cardinality exactly 1.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-PREFIX skosxl:<http://www.w3.org/2008/05/skos-xl#>
-SELECT ?x 
-WHERE {
-	?x skosxl:literalForm ?y1 .
-	?x skosxl:literalForm ?y2 .
-	FILTER(?y1 != ?y2)
-}

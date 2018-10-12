@@ -1,7 +1,0 @@
-# S39 : skos:mappingRelation is a sub-property of skos:semanticRelation.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-CONSTRUCT {
-	?x skos:semanticRelation ?y
-} WHERE {
-	?x skos:mappingRelation ?y .
-}

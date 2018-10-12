@@ -1,8 +1,0 @@
-# S25 : skos:narrower is owl:inverseOf the property skos:broader.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-CONSTRUCT {
-	?x skos:narrower ?y .
-	?y skos:broader ?x .
-} WHERE {
-	?x skos:narrower|^skos:broader ?y .
-}

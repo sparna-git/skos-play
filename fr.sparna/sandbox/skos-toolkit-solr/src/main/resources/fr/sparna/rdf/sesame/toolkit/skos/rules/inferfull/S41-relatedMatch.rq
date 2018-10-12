@@ -1,7 +1,0 @@
-# S41-relatedMatch : skos:broadMatch is a sub-property of skos:broader, skos:narrowMatch is a sub-property of skos:narrower, and skos:relatedMatch is a sub-property of skos:related.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-CONSTRUCT {
-	?x skos:related ?y
-} WHERE {
-	?x skos:relatedMatch ?y .
-}

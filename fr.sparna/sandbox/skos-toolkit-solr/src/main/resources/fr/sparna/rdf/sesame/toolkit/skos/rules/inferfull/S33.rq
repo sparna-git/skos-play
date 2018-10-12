@@ -1,7 +1,0 @@
-# S33 : The rdfs:domain of skos:memberList is the class skos:OrderedCollection.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-CONSTRUCT {
-	?x a skos:OrderedCollection .
-} WHERE {
-	?x skos:memberList ?y .
-}

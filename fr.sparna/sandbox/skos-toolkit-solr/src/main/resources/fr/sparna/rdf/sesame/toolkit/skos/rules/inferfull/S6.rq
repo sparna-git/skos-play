@@ -1,7 +1,0 @@
-# S6 : The rdfs:range of skos:hasTopConcept is the class skos:Concept.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-CONSTRUCT {
-	?concept a skos:Concept .
-} WHERE {
-	?x skos:hasTopConcept ?concept .
-}

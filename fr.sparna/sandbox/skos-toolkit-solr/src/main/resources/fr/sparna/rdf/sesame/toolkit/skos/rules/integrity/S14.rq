@@ -1,8 +1,0 @@
-# S14 : A resource has no more than one value of skos:prefLabel per language tag.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-SELECT ?x 
-WHERE {
-	?x skos:prefLabel ?y1 .
-	?x skos:prefLabel ?y2 .
-	FILTER((?y1 != ?y2) && (lang(y1) = lang(y2)))
-}

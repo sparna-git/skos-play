@@ -1,7 +1,0 @@
-# S29 :  skos:OrderedCollection is a sub-class of skos:Collection.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-CONSTRUCT {
-	?x a skos:Collection .
-} WHERE {
-	?x a skos:OrderedCollection .
-}

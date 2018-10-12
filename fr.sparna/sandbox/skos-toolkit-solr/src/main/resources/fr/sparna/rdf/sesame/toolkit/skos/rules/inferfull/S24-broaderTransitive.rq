@@ -1,7 +1,0 @@
-# S24 (broader) : skos:broaderTransitive and skos:narrowerTransitive are each instances of owl:TransitiveProperty.
-PREFIX skos:<http://www.w3.org/2004/02/skos/core#>
-CONSTRUCT {
-	?x skos:broaderTransitive ?y .
-} WHERE {
-	?x skos:broaderTransitive+ ?y .
-}
