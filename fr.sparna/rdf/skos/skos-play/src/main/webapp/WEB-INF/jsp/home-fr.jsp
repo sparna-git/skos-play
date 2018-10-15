@@ -18,7 +18,7 @@
 		<link href="style/custom.css" rel="stylesheet" />
 		<script src="js/jquery.min.js"></script>
 		<script src="bootstrap/js/bootstrap.min.js"></script>
-		<script src="bootstrap-fileupload/bootstrap-fileupload.min.js"></script>		
+		<script src="bootstrap-fileupload/bootstrap-fileupload.min.js"></script>	
 		
 		<link rel="alternate" hreflang="en" href="?lang=en" />
 	</head>

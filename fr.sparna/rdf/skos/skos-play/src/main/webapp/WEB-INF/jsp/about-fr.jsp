@@ -55,7 +55,7 @@
 				</p>
 				<h4>C'est open-source ?</h4>
 				<p>
-					Oui, le code est récupérable <a href="http://bitbucket.org/tfrancart/sparna">ici</a>.
+					Oui, le code est récupérable <a href="https://github.com/sparna-git/skos-play">ici</a>.
 					SKOS-Play a pour le moment une licence
 					<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.fr" target="_blank">CC-BY-SA</a>, en d'autres termes :
 					<ul>
@@ -64,7 +64,7 @@
 						</li>
 						<li>Si vous réutilisez l'application, vous devez citez son auteur ("Thomas Francart pour Sparna");</li>
 						<li>Si vous modifiez le code, vous devez publier vos modifications sous cette mếme licence, le mieux étant
-						d'apporter vos modifications directement dans <a href="http://bitbucket.org/tfrancart/sparna" target="_blank">les sources</a>;
+						d'apporter vos modifications directement dans <a href="https://github.com/sparna-git/skos-play" target="_blank">les sources</a>;
 						</li>
 					</ul>					
 					Enfin, <a href="m&#x61;ilto:t&#x68;om&#x61;s.fr&#x61;nc&#x61;&#x72;t@sp&#x61;&#x72;na&#46;fr">contactez-moi</a> si tout
@@ -95,7 +95,7 @@
 						<li><a href="https://groups.google.com/d/forum/skos-play-discuss" target="_blank">discutez-en sur le forum</a>;</li>
 						<li>ou <a href="http://blog.sparna.fr">laissez un mot sur le blog</a>;</li>
 						<li>ou <a href="m&#x61;ilto:t&#x68;om&#x61;s.fr&#x61;nc&#x61;&#x72;t@sp&#x61;&#x72;na&#46;fr">prenez contact par e-mail</a>;</li>
-						<li>ou regardez <a href="http://bitbucket.org/tfrancart/sparna" target="_blank">le code</a>;</li>
+						<li>ou laissez un ticket sur <a href="https://github.com/sparna-git/skos-play" target="_blank">le Github</a>;</li>
 					</ul>
 				</p>
 			</fieldset>
@@ -165,13 +165,13 @@ chezmoi:123456 skos:broader chezmoi:Vehicule .
 				<legend>SKOS Play : fonctionnement</legend>
 				<h4>Comment fonctionne SKOS Play ?</h4>
 				<p>
-					SKOS Play est basé sur <a href="http://rdf4j.org">Eclipse RDF4J</a> et utilise notamment le composant <a href="http://tfrancart.bitbucket.org/sesame-toolkit/apidocs/fr/sparna/rdf/sesame/toolkit/Documentation.html" target="_blank">sesame-toolkit</a>.
+					SKOS Play est basé sur <a href="http://rdf4j.org">Eclipse RDF4J</a>.
 					Les visualisations de données sont faites avec <a href="http://d3js.org" target="_blank">d3js</a>, les PDF avec <a href="http://xmlgraphics.apache.org/fop/" target="_blank">Apache FOP</a>.
 					La génération des rendus est faite avec des requêtes SPARQL.
 					<br />
 					Schématiquement, il y a 4 niveaux logiques dans l'application :
 					<ol>
-						<li>Le chargement/traitement du RDF avec RDF4J et <a href="http://tfrancart.bitbucket.org/sesame-toolkit/apidocs/fr/sparna/rdf/sesame/toolkit/Documentation.html" target="_blank">sesame-toolkit</a>;</li>
+						<li>Le chargement/traitement du RDF avec RDF4J;</li>
 						<li>Les requêtes spécifiques au modèle de données SKOS (voir l'algo de parcours d'arbre plus bas);</li>
 						<li>La transformation des données SKOS en structure "imprimable" en utilisant JAXB, puis de cette structure en HTML ou PDF avec des XSLT;</li>
 						<li>Le code des écrans de l'application, servlets, JSP & JSPL, Jquery, Bootstrap.</li>

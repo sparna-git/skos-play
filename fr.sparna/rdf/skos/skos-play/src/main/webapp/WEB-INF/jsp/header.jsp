@@ -8,6 +8,8 @@
 
 <fmt:setBundle basename="fr.sparna.rdf.skosplay.i18n.Bundle"/>
 
+			 	
+			<a href="https://github.com/sparna-git/skos-play" class="ribbon">SKOS-Play on Github</a>
 			<nav class="navbar navbar-default" id="mainnav">
 				<div class="container-fluid">
 					<a class="navbar-brand" href="#" id="header-logo">SKOS Play !</a>

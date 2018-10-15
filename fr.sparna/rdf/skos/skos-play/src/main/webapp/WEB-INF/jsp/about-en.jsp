@@ -56,7 +56,7 @@
 				</p>
 				<h4>Is is open-source ?</h4>
 				<p>
-					Yes, the code is published <a href="http://bitbucket.org/tfrancart/sparna">on bitbucket</a>.
+					Yes, the code is published <a href="https://github.com/sparna-git/skos-play">on Github</a>.
 					SKOS Play has for the time being a
 					<a href="http://creativecommons.org/licenses/by-sa/3.0/deed.fr" target="_blank">CC-BY-SA</a> licence :
 					<ul>
@@ -64,7 +64,7 @@
 						</li>
 						<li>If you reuse it, you have to cite the author ("Thomas Francart for Sparna");</li>
 						<li>If you modify the code you have to publish your modifications in the same licence, the easiest
-						being to contribute directly in <a href="http://bitbucket.org/tfrancart/sparna" target="_blank">the sources</a>;
+						being to contribute directly in <a href="https://github.com/sparna-git/skos-play" target="_blank">the Github repository</a>;
 						</li>
 					</ul>					
 					Anyway, <a href="m&#x61;ilto:t&#x68;om&#x61;s.fr&#x61;nc&#x61;&#x72;t@sp&#x61;&#x72;na&#46;fr">contact me</a> if in doubt.
@@ -94,7 +94,7 @@
 						<li><a href="https://groups.google.com/d/forum/skos-play-discuss" target="_blank">give feedbacks on the forum</a>;</li>
 						<li>or <a href="http://blog.sparna.fr/skos-play-generer-html-pdf-dataviz-thesaurus-skos">leave a word on the blog</a>;</li>
 						<li>or <a href="m&#x61;ilto:t&#x68;om&#x61;s.fr&#x61;nc&#x61;&#x72;t@sp&#x61;&#x72;na&#46;fr">send me an email</a>;</li>
-						<li>or look at <a href="http://bitbucket.org/tfrancart/sparna" target="_blank">the code</a>;</li>
+						<li>or file an issue in <a href="https://github.com/sparna-git/skos-play" target="_blank">the Github repository</a>;</li>
 					</ul>
 				</p>
 			</fieldset>
@@ -164,13 +164,13 @@ me:123456 skos:broader me:Vehicle .
 				<h4>How does it look like under the hood ?</h4>
 				<p>
 					SKOS Play is based on <a href="http://rdf4j.org">Eclipse RDF4J</a>, the only sensible choice for enterprise semantic technologies
-					applications, and also uses the <a href="http://tfrancart.bitbucket.org/sesame-toolkit/apidocs/fr/sparna/rdf/sesame/toolkit/Documentation.html" target="_blank">sesame-toolkit</a> component.
+					applications.
 					Data visualisation are created with <a href="http://d3js.org" target="_blank">d3js</a>, PDF with <a href="http://xmlgraphics.apache.org/fop/" target="_blank">Apache FOP</a>.
 					All of that uses SPARQL to query the data
 					<br />
 					Schematically, there are 4 layers in the application :
 					<ol>
-						<li>Loading/processing RDF with RDF4J and <a href="http://tfrancart.bitbucket.org/sesame-toolkit/apidocs/fr/sparna/rdf/sesame/toolkit/Documentation.html" target="_blank">sesame-toolkit</a>;</li>
+						<li>Loading/processing RDF with RDF4J;</li>
 						<li>SKOS-specific queries to navigate the data (see algorithm below);</li>
 						<li>Transformation of SKOS data into "printable" structure using JAXB, then from this structure to HTML or PDF using XSLT;</li>
 						<li>The screens of the application itself, using servlets, JSP & JSPL, Jquery, Bootstrap.</li>

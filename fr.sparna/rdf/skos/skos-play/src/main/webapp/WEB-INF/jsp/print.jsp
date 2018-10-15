@@ -33,6 +33,9 @@
 					<div class="alert alert-success fade in">
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 						<h4><fmt:message key="success" /></h4>
+						<c:if test="${data.nbConcept>0 && data.owl2skos==true}">
+							<fmt:message key="print.form.display.owl2skos" /><br />
+						</c:if >
 						${data.successMessage}
 					</div>
 				</c:if>
@@ -43,12 +46,6 @@
 						${warningMessage}
 					</div>
 				</c:forEach>
-				<c:if test="${data.nbConcept>0 && data.owl2skos==true}">
-					<div class="alert alert-success fade in">
-						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						<h4><fmt:message key="print.form.display.owl2skos" /></h4>
-					</div>
-				</c:if >
 			</div>
 			
 <%-- 			<a href="#" style="cursor:default;"><h4><fmt:message key="print.form.legend" /></h4></a> --%>
@@ -426,8 +423,6 @@
 			$.AjaxDownloader({
 			    url  : "owl2skos"
 			});
-
-			
 		}
 		
 		</script>
