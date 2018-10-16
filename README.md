@@ -82,6 +82,7 @@ SKOS Play includes a frontend for the qSKOS validator, hosted in a separate proj
 ## Who is using SKOS Play ?
   - French Ministry of Culture
   - UNESCO
+  - Heritage Data
   - Reegle thesaurus
   - Service Central de Legislation du Luxembourg
 
