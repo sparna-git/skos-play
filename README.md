@@ -19,9 +19,11 @@ SKOS Play can print your thesaurus in various ways :
 
 ##### Alphabetical indexes
 
-
+![SKOS Play alphabetical index output](github/images/print-alphabetical.png)
 
 ##### Hierarchical trees (static or unfoldable)
+
+![SKOS Play hierarchical tree output](github/images/print-tree.png)
 
 ##### Translation tables
 
