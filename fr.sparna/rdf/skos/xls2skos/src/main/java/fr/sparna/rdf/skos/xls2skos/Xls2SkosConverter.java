@@ -13,7 +13,6 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Level;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -36,6 +35,8 @@ import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.BasicConfigurator;
 
 
 
@@ -576,9 +577,9 @@ public class Xls2SkosConverter {
 
 	public static void main(String[] args) throws Exception {
 		
-		// quick and dirty Log4J config
-		org.apache.log4j.BasicConfigurator.configure();
-		org.apache.log4j.Logger.getLogger("org.eclipse.rdf4j").setLevel(Level.INFO);
+		// quick and dirty Log4J config		
+		BasicConfigurator.configureDefaultContext();
+		((ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger("org.eclipse.rdf4j")).setLevel(ch.qos.logback.classic.Level.INFO);
 		
 		
 		// Method 1 : save each scheme to a separate directory

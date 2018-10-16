@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    	<encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+     
+    <appender name="SKOSPLAY_ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    	<file>${catalina.base}/logs/skos-play.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${catalina.base}/logs/skos-play.%d{yyyy-MM-dd}.log</fileNamePattern>
+
+            <!-- keep 1 days' worth of history -->
+            <maxHistory>5</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS}  %-4relative %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+        
+    </appender>
+
+    <!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.beans">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.springframework.context">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.apache.fop">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.eclipse.rdf4j">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.apache.http.wire">
+		<level value="info" />
+	</logger>
+	<logger name="org.apache.http">
+		<level value="info" />
+	</logger>
+    
+ 
+    <logger name="fr.sparna.rdf" additivity="false">
+        <level value="TRACE" />
+        <appender-ref ref="SKOSPLAY_ROLLING_FILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+         
+    <!-- ** -->
+     
+    <root level="DEBUG">
+        <level value="DEBUG" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

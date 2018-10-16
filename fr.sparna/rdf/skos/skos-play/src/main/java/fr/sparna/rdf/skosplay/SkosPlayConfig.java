@@ -2,7 +2,6 @@ package fr.sparna.rdf.skosplay;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,11 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-
-import fr.sparna.rdf.skosplay.log.SQLQueryRegistry;
 import fr.sparna.rdf.skosplay.log.DBConnectionManager;
-import fr.sparna.rdf.skosplay.log.SQLLogComptageDao;
 import fr.sparna.rdf.skosplay.log.SQLLogDao;
+import fr.sparna.rdf.skosplay.log.SQLQueryRegistry;
 
 
 

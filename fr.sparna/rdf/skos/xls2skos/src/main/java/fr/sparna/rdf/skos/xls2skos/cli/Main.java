@@ -1,8 +1,5 @@
 package fr.sparna.rdf.skos.xls2skos.cli;
 
-import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.xml.DOMConfigurator;
-
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.MissingCommandException;
 import com.beust.jcommander.ParameterException;
@@ -68,15 +65,15 @@ public class Main {
 		}
 		
 		// configure logging using log4j
-		if(main.getLog() != null) {
-			if(main.getLog().getName().endsWith(".xml")) {
-				DOMConfigurator.configure(main.getLog().getAbsolutePath());
-			} else {
-				PropertyConfigurator.configure(main.getLog().getAbsolutePath());
-			}
-		} else {
-			DOMConfigurator.configure(ClassLoader.getSystemResource("log4j.xml"));
-		}
+//		if(main.getLog() != null) {
+//			if(main.getLog().getName().endsWith(".xml")) {
+//				DOMConfigurator.configure(main.getLog().getAbsolutePath());
+//			} else {
+//				PropertyConfigurator.configure(main.getLog().getAbsolutePath());
+//			}
+//		} else {
+//			DOMConfigurator.configure(ClassLoader.getSystemResource("log4j.xml"));
+//		}
 		
 		// executes the command with the associated arguments
 		COMMAND.valueOf(jc.getParsedCommand().toUpperCase()).getCommand().execute(
