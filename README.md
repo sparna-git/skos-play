@@ -51,11 +51,11 @@ SKOS Play leverages D3js to display the hierarchy of the SKOS structure in nice 
 
 ##### Square visualization
 
-![SKOS Play square visualization](github/images/visualize-square.png)
+![SKOS Play square visualization](github/images/visualize-icicle.png)
 
 ##### Circle visualization
 
-![SKOS Play circle visualization](github/images/visualize-circle.png)
+![SKOS Play circle visualization](github/images/visualize-sunburst.png)
 
 ##### Autocomplete field
 
@@ -76,12 +76,19 @@ The converter is also integrated with Google Spreadsheets, so you can even maint
 ![SKOS Play Excel converter](github/images/convert-excel.png)
 
 
-### Validate SKOS files
+### Validate SKOS data
 
-SKOS Play includes a frontend for the qSKOS validator, hosted in a separate project : [SKOS-testing-tool](https://github.com/sparna-git/skos-testing-tool)
+SKOS Play includes a frontend for the qSKOS validator, hosted in a separate project : [SKOS-testing-tool](https://github.com/sparna-git/skos-testing-tool).
 
 
 ## Who is using SKOS Play ?
+
+  - French Ministry of Culture
+  - UNESCO
+  - Reegle thesaurus
+  - Service Central de Legislation du Luxembourg
+
+_(want to be listed here ? [contact us](http://www.sparna.fr/contact) !)_
 
 
 ## Contribution guidelines
@@ -91,5 +98,5 @@ SKOS Play includes a frontend for the qSKOS validator, hosted in a separate proj
 
 ## Who are we ?
 
-*  [SKOS Play](http://labs.sparna.fr/skos-play) is developped by Thomas Francart in his company [Sparna](http://www.sparna.fr)
+*  [SKOS Play](http://labs.sparna.fr/skos-play) is developped by Thomas Francart in his company [Sparna](http://www.sparna.fr/contact)
 *  You can read more about SKOS Play on [blog.sparna.fr](http://blog.sparna.fr)
