@@ -27,10 +27,15 @@ SKOS Play can print your thesaurus in various ways :
 
 ##### Translation tables
 
+![SKOS Play translation table output](github/images/print-translations.png)
+
 ##### Permuted / KWIC indexes
+
+![SKOS Play KWIC output](github/images/print-kwic.png)
 
 ##### Alignment tables
 
+![SKOS Play alignments output](github/images/print-alignments.png)
 
 #### Generate PDF files
 
@@ -40,14 +45,23 @@ SKOS Play can also be used to produce printable PDFs from your thesaurus, with t
 
 SKOS Play leverages D3js to display the hierarchy of the SKOS structure in nice ways :
 
-##### Tree-like visualization
+##### Tree visualization
+
+![SKOS Play tree visualization](github/images/visualize-tree.png)
 
 ##### Square visualization
 
+![SKOS Play square visualization](github/images/visualize-square.png)
+
 ##### Circle visualization
+
+![SKOS Play circle visualization](github/images/visualize-circle.png)
+
+##### Autocomplete field
 
 SKOS Play also illustrates the generation of an autocomplete form filled with your thesaurus labels :
 
+![SKOS Play autocomple visualization](github/images/visualize-autocomplete.png)
 
 #### Works with OWL ontologies too !
 
@@ -58,6 +72,8 @@ By the way, SKOS Play also works with [OWL or RDFS ontologies](https://www.w3.or
 The [SKOS Play converter](http://labs.sparna.fr/skos-play/convert) is a tool to easily maintain classifications in Excel and turn them into SKOS, following a simple file template, with specific column headers.
 
 The converter is also integrated with Google Spreadsheets, so you can even maintain your classification collaboratively, and turn it directly into SKOS !
+
+![SKOS Play Excel converter](github/images/convert-excel.png)
 
 
 ### Validate SKOS files
