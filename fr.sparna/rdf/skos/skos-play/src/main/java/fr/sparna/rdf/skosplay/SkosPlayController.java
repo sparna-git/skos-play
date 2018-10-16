@@ -1164,7 +1164,7 @@ public class SkosPlayController {
 		// writes json output
 		LabelReader labelReader = new LabelReader(connection, language);
 		JsonSKOSTreePrinter printer = new JsonSKOSTreePrinter(labelReader);
-		printer.setPrettyPrinting(true);
+		printer.setPrettyPrinting(false);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		printer.print(tree, baos);
 		return baos.toString("UTF-8").replaceAll("'", "\\\\'");
