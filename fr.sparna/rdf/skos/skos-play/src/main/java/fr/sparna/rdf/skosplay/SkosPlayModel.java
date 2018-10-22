@@ -1,5 +1,6 @@
 package fr.sparna.rdf.skosplay;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
@@ -8,9 +9,9 @@ import java.util.TreeMap;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.query.AbstractTupleQueryResultHandler;
 import org.eclipse.rdf4j.query.BindingSet;
-import org.eclipse.rdf4j.query.TupleQueryResultHandlerBase;
 import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -34,52 +35,52 @@ import fr.sparna.rdf.skos.toolkit.SKOSRules;
 public class SkosPlayModel {
 
 	protected Repository repository;
+	protected String inputFileName;
+	protected String inputUrl;
 	
-	public void load(InputStream file, RDFFormat format, boolean rdfsInference, boolean owl2skos)
-	throws SkosPlayModelException {
+	public SkosPlayModel() {
+		super();
+	}
+
+	public void load(InputStream file, RDFFormat format, boolean rdfsInference) {
 		
 		RepositoryBuilder localRepositoryBuilder = createRepositoryBuilder(rdfsInference);		
 		localRepositoryBuilder.addOperation(new LoadFromStream(file, format));
 		repository = localRepositoryBuilder.get();
-
-		// apply OWL2SKOS rules if needed
-		if(owl2skos) {
-			try(RepositoryConnection connection = repository.getConnection()) {
-				// apply inference
-				ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getOWL2SKOSRuleset());
-				au.accept(connection);
-			}
-		}	
 	}
 	
-	public void load(String url, boolean rdfsInference, boolean owl2skos)
-	throws SkosPlayModelException {
+	public void performOwl2Skos() {
+		try(RepositoryConnection connection = repository.getConnection()) {
+			// apply inference
+			ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getOWL2SKOSRuleset());
+			au.accept(connection);
+		}
+	}
+	
+	public void performSkosXl2Skos() {
+		try(RepositoryConnection connection = repository.getConnection()) {
+			// apply inference
+			ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getSkosXl2SkosRuleset());
+			au.accept(connection);
+		}		
+	}
+	
+	public void load(String url, boolean rdfsInference) throws IOException {
 		// we are loading an RDF file from the web, use the localRepositoryBuilder and apply inference if required
 		if(!RepositoryBuilderFactory.isEndpointURL(url)) {
-			
 			try {
 				RepositoryBuilder localRepositoryBuilder = createRepositoryBuilder(rdfsInference);
 				localRepositoryBuilder.addOperation(new LoadFromUrl(new URL(url)));
 				repository = localRepositoryBuilder.get();
 			} catch (Exception e) {
-				throw new SkosPlayModelException("Exception when trying to load URL "+url, e);
-			}
-			
-			// apply OWL2SKOS rules if needed
-			if(owl2skos && !RepositoryBuilderFactory.isEndpointURL(url)) {
-				try(RepositoryConnection connection = repository.getConnection()) {
-					// apply inference
-					ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getOWL2SKOSRuleset());
-					au.accept(connection);
-				}
-			}
-			
+				throw new IOException("Exception when trying to load URL "+url, e);
+			}			
 		} else {
 			try {
 				// this is a endpoint
 				repository = RepositoryBuilderFactory.fromString(url).get();
 			} catch (Exception e) {
-				throw new SkosPlayModelException("Exception when trying to connect to endpoint "+url, e);
+				throw new IOException("Exception when trying to connect to endpoint "+url, e);
 			}
 		}
 	}
@@ -92,35 +93,41 @@ public class SkosPlayModel {
 		return repository;
 	}
 	
-	public boolean isHierarchical()
-	throws SkosPlayModelException {
+	public boolean isHierarchical() {
 		try(RepositoryConnection connection = repository.getConnection()) {
 			return Perform.on(connection).ask(new SimpleQueryReader(this, "AskBroadersOrNarrowers.rq").get());
-		} catch (Exception e) {
-			throw new SkosPlayModelException(e);
-		}
+		} 
 	}
 	
-	public boolean isMultilingual()
-	throws SkosPlayModelException {
+	public boolean isMultilingual() {
 		try(RepositoryConnection connection = repository.getConnection()) {
 			return Perform.on(connection).ask(new SimpleQueryReader(this, "AskTranslatedConcepts.rq").get());
-		} catch (Exception e) {
-			throw new SkosPlayModelException(e);
+		} 
+	}
+	
+	public boolean isAligned() {
+		try(RepositoryConnection connection = repository.getConnection()) {
+			return Perform.on(connection).ask(new SimpleQueryReader(this, "AskMappings.rq").get());
 		}
 	}
 	
-	public int getConceptCount()
-	throws SkosPlayModelException {
+	public int getConceptCount() {
 		try(RepositoryConnection connection = repository.getConnection()) {
 			return Perform.on(connection).count(new SimpleQueryReader(this, "CountConcepts.rq").get());
-		} catch (Exception e) {
-			throw new SkosPlayModelException(e);
 		}
 	}
 	
-	public Map<String, String> getLanguages(final String locale)
-	throws SkosPlayModelException {
+	public String getLicense() {
+		try(RepositoryConnection connection = repository.getConnection()) {
+			Value license = Perform.on(connection).read(new SimpleQueryReader(this, "ReadLicense.rq").get());
+			if(license != null && license instanceof Literal) {
+				return ((Literal)license).stringValue();
+			}
+		}
+		return null;
+	}
+	
+	public Map<String, String> getLanguages(final String locale) {
 		final HashMap<String, String> result = new HashMap<String, String>();
 		
 		try(RepositoryConnection connection = repository.getConnection()) {
@@ -143,15 +150,12 @@ public class SkosPlayModel {
 						
 					}
 			);
-		} catch (Exception e) {
-			throw new SkosPlayModelException(e);
 		}
 		
 		return result;
 	}
 	
-	public Map<LabeledResource, Integer> getConceptCountByConceptScheme(final LabelReader labelReader)
-	throws SkosPlayModelException {
+	public Map<LabeledResource, Integer> getConceptCountByConceptScheme(final LabelReader labelReader) {
 		
 		final Map<LabeledResource, Integer> conceptCountByConceptSchemes = new TreeMap<LabeledResource, Integer>();
 		
@@ -182,11 +186,25 @@ public class SkosPlayModel {
 						}						
 					}
 			);
-		} catch (Exception e) {
-			throw new SkosPlayModelException(e);
-		}
+		} 
 		
 		return conceptCountByConceptSchemes;
+	}
+
+	public String getInputFileName() {
+		return inputFileName;
+	}
+
+	public void setInputFileName(String inputFileName) {
+		this.inputFileName = inputFileName;
+	}
+
+	public String getInputUrl() {
+		return inputUrl;
+	}
+
+	public void setInputUrl(String inputUrl) {
+		this.inputUrl = inputUrl;
 	}
 
 	private RepositoryBuilder createRepositoryBuilder(boolean rdfsInference) {

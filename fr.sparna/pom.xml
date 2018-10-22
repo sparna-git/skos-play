@@ -165,6 +165,19 @@
                     <version>2.9.7</version>
             </dependency>
 
+            <!-- RDF4J -->
+            <dependency>
+              <groupId>org.eclipse.rdf4j</groupId>
+              <artifactId>rdf4j-runtime</artifactId>
+              <version>2.4.0</version>
+              <exclusions>
+                    <exclusion>
+                        <groupId>org.eclipse.rdf4j</groupId>
+                        <artifactId>rdf4j-rio-trix</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

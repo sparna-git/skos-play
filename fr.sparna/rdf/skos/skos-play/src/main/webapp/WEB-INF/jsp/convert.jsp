@@ -218,7 +218,7 @@
 							<fmt:message key="convert.form.language.legend" />
 					</label>
 					<div class="col-sm-10">
-						<select id="choice_Language" class="ui-select" required name="language" id="lg" style="width:4em;">								 
+						<select id="choice_Language" class="ui-select" name="language" id="lg" style="width:4em;">								 
 							<option value="de" <c:if test="${data.defaultLanguage == 'de'}">selected</c:if>>de</option>
 							<option value="en" <c:if test="${data.defaultLanguage == 'en'}">selected</c:if>>en</option>
 							<option value="es" <c:if test="${data.defaultLanguage == 'es'}">selected</c:if>>es</option>	
@@ -450,8 +450,8 @@
 				<p />The converter can actually generate other RDF vocabularies than SKOS. For this :
 				<ul>
 					<li>Add an <code>rdf:type</code> column to your data, and specify an explicit rdf:type for each row. Each row not having an explicit rdf:type will be considered a skos:Concept;</li>
-					<li>Make sure you still declare a URI in cell B1, this will be the URI of the <em>named graph</em> 	in which the data will be generated;</li>
-					<li>Don't declare metadata in the header;</li>
+					<li>Make sure you still declare a URI in cell B1, this will be the URI of the <em>named graph</em> 	in which the data will be generated; note that to see this named graph in the output, you need to select an RDF format that supports named graphs (NQuads or TriG);</li>
+					<li>If you declare metadata in the header, these will be interpreted as metadata of the named graph;</li>
 				</ul>
 				<p />This is how this kind of file could look like :
 				<img src="images/convert-screenshot-other-skos.png" width="100%" />
@@ -469,6 +469,10 @@
 				<h4><a href="#striketrough" id="striketrough"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Disabling cell conversion with a <strike>strikethrough</strike></h4>
 					<p />When working on a file, if you are unsure about the conversion of a certain cell but you don't want to delete the value, use a <strike>strikethrough font</strike> : the converter will ignore any
 					cell with such a font style. You can keep uncertain values in the files and simply change the font back to normal once the value is validated.
+					<p />
+				<h4><a href="#graph-management" id="graph-management"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Named graph management</h4>
+					<p />The converter actually puts all the triples generated in one sheet in a graph with the URI in cell B1. This is usually the same URI as the URI of the ConceptScheme;
+					but in case of processing generic RDF data, this cell B1 can be used to indicate the URI of the graph, with its associated metadata in the header.
 					<p />
 			</fieldset>
 			

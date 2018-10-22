@@ -33,7 +33,7 @@
 					<div class="alert alert-success fade in">
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 						<h4><fmt:message key="success" /></h4>
-						<c:if test="${data.nbConcept>0 && data.owl2skos==true}">
+						<c:if test="${data.owl2skos==true}">
 							<fmt:message key="print.form.display.owl2skos" /><br />
 						</c:if >
 						${data.successMessage}
@@ -421,7 +421,7 @@
 		
 		function getResponse(){
 			$.AjaxDownloader({
-			    url  : "owl2skos"
+			    url  : "getData"
 			});
 		}
 		

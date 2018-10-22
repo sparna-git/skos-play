@@ -9,6 +9,8 @@ import org.apache.lucene.analysis.util.CharArraySet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.qos.logback.classic.Level;
+
 public class CharArraySetFactory {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
@@ -59,8 +61,8 @@ public class CharArraySetFactory {
 	
 	public static void main(String... args) throws Exception {
 		
-		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
-		org.apache.log4j.Logger.getLogger("fr.sparna.rdf").setLevel(org.apache.log4j.Level.TRACE);
+		((ch.qos.logback.classic.Logger) LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME)).setLevel(Level.INFO);
+	    ((ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger("fr.sparna.rdf")).setLevel(Level.TRACE);
 		
 		CharArraySetFactory f = CharArraySetFactory.createStopWordsFactory();
 		f.createCharArraySet("fr", true);

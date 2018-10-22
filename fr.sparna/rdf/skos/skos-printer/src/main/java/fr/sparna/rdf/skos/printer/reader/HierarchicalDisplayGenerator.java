@@ -8,7 +8,6 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
-import org.apache.log4j.Level;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
@@ -161,13 +160,10 @@ public class HierarchicalDisplayGenerator extends AbstractKosDisplayGenerator {
 	public static void main(String... args) throws Exception {
 		// BasicConfigurator.configure();
 
-		// reduce all logs
-		org.apache.log4j.Logger.getRootLogger().setLevel(Level.INFO);
-		// except the SPARQL queries
-		org.apache.log4j.Logger.getLogger("fr.sparna.rdf").setLevel(Level.TRACE);
-		// and if we need to log the request and responses to a remote server...
-		org.apache.log4j.Logger.getLogger("httpclient.wire").setLevel(Level.DEBUG);
-		org.apache.log4j.Logger.getLogger("org.apache.commons.httpclient").setLevel(Level.DEBUG);
+		((ch.qos.logback.classic.Logger) LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME)).setLevel(ch.qos.logback.classic.Level.INFO);
+	    ((ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger("fr.sparna.rdf")).setLevel(ch.qos.logback.classic.Level.TRACE);
+	    ((ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger("httpclient.wire")).setLevel(ch.qos.logback.classic.Level.DEBUG);
+	    ((ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger("org.apache.commons.httpclient")).setLevel(ch.qos.logback.classic.Level.DEBUG);
 		
 		// final String LANG = "fr";
 		final String LANG = null;

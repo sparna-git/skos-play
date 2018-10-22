@@ -22,6 +22,7 @@ import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.qos.logback.classic.Level;
 import fr.sparna.commons.lang.StringUtil;
 import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
 import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
@@ -145,9 +146,9 @@ public class TranslationTableReverseDisplayGenerator extends AbstractKosDisplayG
 	}
 	
 	public static void main(String... args) throws Exception {
-		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
-		org.apache.log4j.Logger.getLogger("fr.sparna.rdf").setLevel(org.apache.log4j.Level.TRACE);
-		
+		((ch.qos.logback.classic.Logger) LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME)).setLevel(Level.INFO);
+	    ((ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger("fr.sparna.rdf")).setLevel(Level.TRACE);
+	    
 		final String LANG = "fr";
 		
 		Repository r = RepositoryBuilderFactory.fromString(args[0]).get();

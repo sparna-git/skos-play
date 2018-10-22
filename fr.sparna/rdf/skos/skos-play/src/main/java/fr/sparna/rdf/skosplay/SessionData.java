@@ -1,6 +1,5 @@
 package fr.sparna.rdf.skosplay;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -10,7 +9,6 @@ import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 
 import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.model.File;
 
 import fr.sparna.google.GoogleConnector;
 import fr.sparna.google.GoogleUser;
@@ -18,20 +16,16 @@ import fr.sparna.rdf.rdf4j.toolkit.handler.DebugHandler;
 import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
 import fr.sparna.rdf.rdf4j.toolkit.repository.EndpointRepositorySupplier;
 import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
-import fr.sparna.rdf.rdf4j.toolkit.util.LabelReader;
 
 public class SessionData {
 
 	public static final String KEY = SessionData.class.getCanonicalName();
 	
-	// The repository
-	protected Repository repository;
+	// The currently uploaded data
+	protected SkosPlayModel skosPlayModel;
 	
 	// The user Locale
 	protected Locale userLocale;
-	
-	// The sourceConceptLabel reader (with a cache)
-	protected LabelReader labelReader;
 	
 	// data for the PrintForm
 	protected PrintFormData printFormData;
@@ -48,19 +42,8 @@ public class SessionData {
 	protected String baseUrl;
 	
 	protected GoogleConnector googleConnector;
-
-	protected String listurl;
 	
 	protected String periodeView;
-	
-
-	public String getListurl() {
-		return listurl;
-	}
-
-	public void setListurl(String listurl) {
-		this.listurl = listurl;
-	}
 
 	/**
 	 * Stores this data into session
@@ -88,20 +71,12 @@ public class SessionData {
 		this.user = user;
 	}
 
-	public Repository getRepository() {
-		return repository;
-	}
-	
-	public void setRepository(Repository repository) {
-		this.repository = repository;
+	public SkosPlayModel getSkosPlayModel() {
+		return skosPlayModel;
 	}
 
-	public LabelReader getLabelReader() {
-		return labelReader;
-	}
-	
-	public void setLabelReader(LabelReader labelReader) {
-		this.labelReader = labelReader;
+	public void setSkosPlayModel(SkosPlayModel skosPlayModel) {
+		this.skosPlayModel = skosPlayModel;
 	}
 
 	public PrintFormData getPrintFormData() {

@@ -27,8 +27,8 @@ public class CompleteDisplayGeneratorTest {
 	private static Logger log = LoggerFactory.getLogger(CompleteDisplayGeneratorTest.class);
 	
 	public static void main(String... args) throws Exception {			
-		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.INFO);
-		org.apache.log4j.Logger.getLogger("fr.sparna.rdf").setLevel(org.apache.log4j.Level.TRACE);
+		((ch.qos.logback.classic.Logger) LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME)).setLevel(ch.qos.logback.classic.Level.INFO);
+	    ((ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger("fr.sparna.rdf")).setLevel(ch.qos.logback.classic.Level.TRACE);
 		
 		final String LANG = "fr-fr";
 		

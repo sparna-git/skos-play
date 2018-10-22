@@ -1,43 +1,30 @@
 package fr.sparna.rdf.skosplay;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.security.InvalidParameterException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Literal;
-import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.DC;
 import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
-import org.eclipse.rdf4j.query.AbstractTupleQueryResultHandler;
-import org.eclipse.rdf4j.query.BindingSet;
-import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFParserRegistry;
 import org.eclipse.rdf4j.rio.RDFWriter;
 import org.eclipse.rdf4j.rio.RDFWriterRegistry;
 import org.eclipse.rdf4j.rio.Rio;
@@ -51,32 +38,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.model.File;
-
 import fr.sparna.commons.io.ReadWriteTextFile;
 import fr.sparna.commons.tree.GenericTree;
 import fr.sparna.commons.tree.GenericTreeNode;
-import fr.sparna.google.DriveHelper;
-import fr.sparna.google.GoogleConnector;
-import fr.sparna.google.GoogleUser;
 import fr.sparna.i18n.StrictResourceBundleControl;
-import fr.sparna.rdf.rdf4j.toolkit.languages.Languages;
-import fr.sparna.rdf.rdf4j.toolkit.languages.Languages.Language;
 import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
 import fr.sparna.rdf.rdf4j.toolkit.query.SimpleQueryReader;
 import fr.sparna.rdf.rdf4j.toolkit.reader.TypeReader;
-import fr.sparna.rdf.rdf4j.toolkit.repository.LocalMemoryRepositorySupplier;
-import fr.sparna.rdf.rdf4j.toolkit.repository.LocalMemoryRepositorySupplier.FactoryConfiguration;
-import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
 import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
-import fr.sparna.rdf.rdf4j.toolkit.repository.init.ApplyUpdates;
-import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromFileOrDirectory;
-import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromStream;
-import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromUrl;
 import fr.sparna.rdf.rdf4j.toolkit.util.LabelReader;
 import fr.sparna.rdf.rdf4j.toolkit.util.PreferredPropertyReader;
-import fr.sparna.rdf.rdf4j.toolkit.util.RepositoryWriter;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.autocomplete.Items;
 import fr.sparna.rdf.skos.printer.autocomplete.JSONWriter;
@@ -100,14 +71,9 @@ import fr.sparna.rdf.skos.toolkit.JsonSKOSTreePrinter;
 import fr.sparna.rdf.skos.toolkit.SKOS;
 import fr.sparna.rdf.skos.toolkit.SKOSNodeSortCriteriaPreferredPropertyReader;
 import fr.sparna.rdf.skos.toolkit.SKOSNodeTypeReader;
-import fr.sparna.rdf.skos.toolkit.SKOSRules;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeBuilder;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
-import fr.sparna.rdf.skos.xls2skos.ModelWriterFactory;
-import fr.sparna.rdf.skos.xls2skos.ModelWriterIfc;
-import fr.sparna.rdf.skos.xls2skos.Xls2SkosConverter;
-import fr.sparna.rdf.skos.xls2skos.Xls2SkosException;
 import fr.sparna.rdf.skosplay.log.LogEntry;
 
 
@@ -126,8 +92,6 @@ import fr.sparna.rdf.skosplay.log.LogEntry;
 public class SkosPlayController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
-	
-	private int nbAction=0;
 
 	@Autowired
 	protected ServletContext servletContext;
@@ -135,8 +99,7 @@ public class SkosPlayController {
 	private enum SOURCE_TYPE {
 		FILE,
 		URL,
-		EXAMPLE,
-		GOOGLE,
+		EXAMPLE
 	}
 
 	@RequestMapping("/home")
@@ -199,229 +162,6 @@ public class SkosPlayController {
 		return new ModelAndView("upload", UploadFormData.KEY, data);
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView login(
-			@RequestParam(value="code", required=true) String code,
-			HttpServletRequest request,
-			HttpServletResponse response
-			) throws IOException  {
-
-		try{
-			final SessionData sessionData = SessionData.get(request.getSession());
-			GoogleConnector gc = sessionData.getGoogleConnector();
-
-			// récupération du token d'accès
-			String token = gc.getAccessToken(code);
-			// récupération des infos utilisateur
-			GoogleUser user = gc.readUserInfo(token);
-			// enregistrement des infos utilisateur dans la session
-			sessionData.setUser(user);
-			// création et stockage en session d'un "Credential" google
-			gc.createAndRegisterCredential(token);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (ProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		response.sendRedirect("convert");
-		return null;
-	}
-
-
-	@RequestMapping(value = "/convert", method = RequestMethod.GET)
-	public ModelAndView convertForm(
-			HttpServletRequest request,
-			HttpServletResponse response
-			) throws IOException  {
-		final SessionData sessionData = SessionData.get(request.getSession());
-		ConvertFormData data = new ConvertFormData();
-		
-		if(sessionData.getUser() != null) {
-			GoogleConnector gc = sessionData.getGoogleConnector();
-			// récupération du service de Drive Google
-			Drive service = gc.getDriveService();
-			DriveHelper driveHelper = new DriveHelper(service);
-			// récupération de la liste de spreadsheets et enregistrement dans la session
-			List<File> listeSpreadsheets = driveHelper.listSpreadsheets();
-			data.setGoogleFiles(listeSpreadsheets);
-		}
-		
-		data.setDefaultLanguage(SessionData.get(request.getSession()).getUserLocale().getLanguage());
-		return new ModelAndView("convert", ConvertFormData.KEY, data);
-	}
-
-	@RequestMapping(value = "/convert",method = RequestMethod.POST)
-	public ModelAndView convertRDF(
-			// type of source ("file", "url", "example", "google")
-			@RequestParam(value="source", required=true) String sourceString,
-			// uploaded file if source=file
-			@RequestParam(value="file", required=false) MultipartFile file,		
-			// language of the labels to generate
-			@RequestParam(value="language", required=false) String language,
-			// ID of the google drive file if source=google
-			@RequestParam(value="google", required=false) String googleId,
-			// URL of the file if source=url
-			@RequestParam(value="url", required=false) String url,
-			// output format of the generated files
-			@RequestParam(value="output", required=false) String format,
-			// reference of the example if source=example
-			@RequestParam(value="example", required=false) String example,
-			// flag to generate SKOS-XL or not
-			@RequestParam(value="useskosxl", required=false) boolean useskosxl,
-			// flag to output result in a ZIP file or not
-			@RequestParam(value="usezip", required=false) boolean useZip,
-			// flag to indicate if graph files should be generated or not
-			@RequestParam(value="usegraph", required=false) boolean useGraph,
-			// the request
-			HttpServletRequest request,
-			// the response
-			HttpServletResponse response			
-	) throws Exception {
-		
-		
-		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+useskosxl+",useZip="+useZip+"language="+language+",url="+url+",ex="+example+")");
-		final SessionData sessionData = SessionData.get(request.getSession());
-		//source, it can be: file, example, url or google
-		SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());
-		// format
-		RDFFormat theFormat = RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format).orElse(RDFFormat.RDFXML);		
-
-		URL baseURL = new URL("http://"+request.getServerName()+((request.getServerPort() != 80)?":"+request.getServerPort():"")+request.getContextPath());
-		log.debug("Base URL is "+baseURL.toString());
-		ConvertFormData data = new ConvertFormData();
-		data.setBaseUrl(baseURL.toString());
-		
-		
-		/**************************CONVERSION RDF**************************/
-		InputStream in = null;
-		String resultFileName = "skos-play-convert";
-		
-		switch(source) {
-
-		case GOOGLE:   {
-			log.debug("*Conversion à partir d'une Google Spreadsheet : "+googleId);
-
-			if(googleId.isEmpty()) {
-				return doErrorConvert(request, "Google ID is empty");
-			}
-			
-			try {
-				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-				new DriveHelper(sessionData.getGoogleConnector().getDriveService()).readSpreadsheet(googleId, outputStream);
-				in = new DataInputStream(new BufferedInputStream(new ByteArrayInputStream(outputStream.toByteArray())));
-			} catch (Exception e1) {
-				String msg = e1.getMessage();
-				int indexOfBeginMessage = msg.lastIndexOf("\"message\":")+"\"message\":".length()+2;
-				int indexOfEndMessage = msg.indexOf("\"", indexOfBeginMessage);
-				log.debug("message d'erreur lié à l'ID google->"+msg.substring(indexOfBeginMessage, indexOfEndMessage));
-				return doErrorConvert(request,"Google message : \""+msg.substring(indexOfBeginMessage, indexOfEndMessage)+"\""); 
-			}
-			
-			break;
-		}					
-
-		case EXAMPLE : {
-			log.debug("*Conversion à partir d'un fichier d'exemple : "+example);
-			URL exampleUrl = new URL(example);
-			InputStream urlInputStream = exampleUrl.openStream(); // throws an IOException
-			in = new DataInputStream(new BufferedInputStream(urlInputStream));
-			// set the output file name to the name of the example
-			resultFileName = (!exampleUrl.getPath().equals(""))?exampleUrl.getPath():resultFileName;
-			// keep only latest file, after final /
-			resultFileName = (resultFileName.contains("/"))?resultFileName.substring(resultFileName.lastIndexOf("/")+1):resultFileName;
-			break;
-		}
-		case FILE : {
-			log.debug("*Conversion à partir d'un fichier uploadé : "+file.getOriginalFilename());
-			if(file.isEmpty()) {
-				return doErrorConvert(request, "Uploaded file is empty");
-			}		
-
-			in = file.getInputStream();
-			// set the output file name to the name of the input file
-			resultFileName = (file.getOriginalFilename().contains("."))?file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf('.')):file.getOriginalFilename();
-			break;
-		}
-		case URL: {
-			log.debug("*Conversion à partir d'une URL : "+url);
-			sessionData.setListurl(url);
-			if(url.isEmpty()) {
-				return doErrorConvert(request, "Uploaded link file is empty");
-			}
-
-			try {
-				URL urls = new URL(url);
-				InputStream urlInputStream = urls.openStream(); // throws an IOException
-				in = new DataInputStream(new BufferedInputStream(urlInputStream));
-				
-				// set the output file name to the final part of the URL
-				resultFileName = (!urls.getPath().equals(""))?urls.getPath():resultFileName;
-				// keep only latest file, after final /
-				resultFileName = (resultFileName.contains("/"))?resultFileName.substring(0, resultFileName.lastIndexOf("/")):resultFileName;
-			} catch(IOException e) {
-				e.printStackTrace();
-				return doErrorConvert(request, e.getMessage()); 
-			}
-
-			break;
-		}
-		default:
-			break;
-		}
-
-
-		try {
-			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+useskosxl);
-			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
-			response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());	
-			// le nom du fichier de retour
-			// strip extension, if any
-			resultFileName = (resultFileName.contains("."))?resultFileName.substring(0, resultFileName.lastIndexOf('.')):resultFileName;
-			String extension = (useZip)?"zip":theFormat.getDefaultFileExtension();
-			
-			// add the date in the filename
-			String dateString = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-			
-			response.setHeader("Content-Disposition", "inline; filename=\""+resultFileName+"-"+dateString+"."+extension+"\"");
-			
-			Set<String> identifiant = runConversion(
-					new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),
-					in,
-					language,
-					useskosxl
-			);
-			
-			// sort to garantee order
-			List<String> uri=new ArrayList<String>(identifiant);
-			Collections.sort(uri);
-			// insert a log
-			SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, null, null, SessionData.get(request.getSession()).getListurl(),"convert",uri.toString()));
-
-		} catch (Xls2SkosException e) {
-			response.reset();
-			e.printStackTrace();
-			return doErrorConvert(request, e.getMessage()); 
-		} finally {
-			try {
-				if(in != null) {
-					in.close();
-				}
-			} catch (IOException ioe) { }
-		}
-
-		return null;
-	}
-
-	private Set<String> runConversion(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl) {
-		Xls2SkosConverter converter = new Xls2SkosConverter(Writer, lang);
-		converter.setGenerateXl(generatexl);
-		converter.setGenerateXlDefinitions(generatexl);
-		converter.processInputStream(filefrom);
-		Set<String> identifiant=converter.getCsModels().keySet();
-		return identifiant;
-	}
 
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -454,25 +194,15 @@ public class SkosPlayController {
 		final PrintFormData printFormData = new PrintFormData();
 		sessionData.setPrintFormData(printFormData);
 		int count = -1;
-		int initialCount=-1;;
+		
 		// retrieve resource bundle for error messages
 		ResourceBundle b = ResourceBundle.getBundle(
 				"fr.sparna.rdf.skosplay.i18n.Bundle",
 				sessionData.getUserLocale(),
 				new StrictResourceBundleControl()
 				);
-		
-		RepositoryBuilder localRepositoryBuilder;
 
-		if(rdfsInference) {
-			localRepositoryBuilder = new RepositoryBuilder(new LocalMemoryRepositorySupplier(FactoryConfiguration.RDFS_AWARE));			
-			// load the SKOS model to be able to infer skos:inScheme from skos:isTopConceptOf
-			localRepositoryBuilder.addOperation(new LoadFromFileOrDirectory("skos.rdf"));
-		} else {
-			localRepositoryBuilder = new RepositoryBuilder();
-		}
-
-		Repository repository;		
+		SkosPlayModel skosPlayModel = new SkosPlayModel();
 		try {
 			switch(source) {
 			case FILE : {
@@ -481,26 +211,20 @@ public class SkosPlayController {
 					return doError(request, "Uploaded file is empty");
 				}
 
-				log.debug("Uploaded file name is "+file.getOriginalFilename());
-				localRepositoryBuilder.addOperation(new LoadFromStream(file.getInputStream(), Rio.getParserFormatForFileName(file.getOriginalFilename()).orElse(RDFFormat.RDFXML)));
-				repository = localRepositoryBuilder.get();
-				
-				// apply rules if needed
-				try(RepositoryConnection connection = repository.getConnection()) {
+				RDFFormat rdfFormat = RDFParserRegistry.getInstance().getFileFormatForFileName(file.getOriginalFilename()).orElse(RDFFormat.RDFXML);				
+				log.debug("Uploaded file name is \""+file.getOriginalFilename()+"\", will be parsed as "+rdfFormat.getName());
+				skosPlayModel.load(
+						file.getInputStream(),
+						rdfFormat,
+						rdfsInference
+				);
+				skosPlayModel.setInputFileName(file.getOriginalFilename());
+				try {
 					if(owl2skos) {
-						printFormData.setOwl2skos(true);
-						// check that data does not contain more than X concepts before convert
-						initialCount = Perform.on(connection).count(new SimpleQueryReader(this, "CountConcepts.rq").get());
-						
-						// apply inference
-						ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getOWL2SKOSRuleset());
-						au.accept(connection);						
+						skosPlayModel.performOwl2Skos();					
 					}
-
 					if(skosxl2skos) {
-						// apply inference
-						ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getSkosXl2SkosRuleset());
-						au.accept(connection);
+						skosPlayModel.performSkosXl2Skos();
 					}
 				} catch (Exception e1) {
 					return doError(request, e1.getMessage());
@@ -515,22 +239,15 @@ public class SkosPlayController {
 				if(resourceParam == null || resourceParam.equals("")) {
 					return doError(request, "Select an example from the list.");
 				}
-				repository = SkosPlayConfig.getInstance().getApplicationData().getExampleDatas().get(resourceParam);
+				skosPlayModel.load(resourceParam, rdfsInference);
 
 				// apply rules if needed
-				try(RepositoryConnection connection = repository.getConnection()) {
+				try {
 					if(owl2skos) {
-						initialCount = Perform.on(connection).count(new SimpleQueryReader(this, "CountConcepts.rq").get());
-						printFormData.setOwl2skos(true);
-						// apply inference
-						ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getOWL2SKOSRuleset());
-						au.accept(connection);
+						skosPlayModel.performOwl2Skos();					
 					}
-
 					if(skosxl2skos) {
-						// apply inference
-						ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getSkosXl2SkosRuleset());
-						au.accept(connection);
+						skosPlayModel.performSkosXl2Skos();
 					}
 				} catch (Exception e1) {
 					return doError(request, e1.getMessage());
@@ -546,50 +263,41 @@ public class SkosPlayController {
 
 				break;
 			}
-			case URL : {				
+			case URL : {	
+				skosPlayModel.load(url, rdfsInference);
+				skosPlayModel.setInputUrl(url);
+				
 				// we are loading an RDF file from the web, use the localRepositoryBuilder and apply inference if required
 				if(!RepositoryBuilderFactory.isEndpointURL(url)) {
-
-					localRepositoryBuilder.addOperation(new LoadFromUrl(new URL(url)));
-					repository = localRepositoryBuilder.get();
-
-					// apply OWL2SKOS rules if needed
-					try(RepositoryConnection connection = repository.getConnection()) {
-						if(owl2skos && !RepositoryBuilderFactory.isEndpointURL(url)) {
-							printFormData.setOwl2skos(true);
-							initialCount = Perform.on(connection).count(new SimpleQueryReader(this, "CountConcepts.rq").get());
-							// apply inference
-							ApplyUpdates au = ApplyUpdates.fromQueryReaders(SKOSRules.getOWL2SKOSRuleset());
-							au.accept(connection);
+					try {
+						if(owl2skos) {
+							skosPlayModel.performOwl2Skos();					
+						}
+						if(skosxl2skos) {
+							skosPlayModel.performSkosXl2Skos();
 						}
 					} catch (Exception e1) {
 						return doError(request, e1.getMessage());
 					}
-					sessionData.setListurl(url);
-				} else {
-					// this is a endpoint
-					repository = RepositoryBuilderFactory.fromString(url).get();
 				}
+				
+				break;
+			}
 
-				break;
-			}
-			default : {
-				repository = null;
-				break;
-			}
 			}
 		} catch (Exception e) {
 			return doError(request, e);
 		}
 
+
+
+		// store repository in the session
+		sessionData.setSkosPlayModel(skosPlayModel);
 		
-		try(RepositoryConnection connection = repository.getConnection()) {			
+		try {			
 			
 			// check that data does not contain more than X concepts
-			count = Perform.on(connection).count(new SimpleQueryReader(this, "CountConcepts.rq").get());
-			if(count>initialCount){
-				printFormData.setNbConcept(count);
-			}
+			count = skosPlayModel.getConceptCount();
 			// check that data contains at least one SKOS Concept
 			if(count <= 0) {
 				return doError(request, b.getString("upload.error.noConceptsFound"));
@@ -618,28 +326,15 @@ public class SkosPlayController {
 		}
 
 		// set loaded data licence, if any
-		try(RepositoryConnection connection = repository.getConnection()) {
-			Value license = Perform.on(connection).read(new SimpleQueryReader(this, "ReadLicense.rq").get());
-			if(license != null && license instanceof Literal) {
-				printFormData.setLoadedDataLicense(((Literal)license).stringValue());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return doError(request, e);
-		}
+		printFormData.setLoadedDataLicense(skosPlayModel.getLicense());
 
-
-		// store repository in the session
-		sessionData.setRepository(repository);
-
-		try(RepositoryConnection connection = repository.getConnection()) {
+		try(RepositoryConnection connection = skosPlayModel.getRepository().getConnection()) {
 			// store sourceConceptLabel reader in the session
 			// default to no language
 			final LabelReader labelReader = new LabelReader(connection, "", sessionData.getUserLocale().getLanguage());
 			// add dcterms title and dc title
 			labelReader.getProperties().add(DCTERMS.TITLE);
 			labelReader.getProperties().add(DC.TITLE);
-			sessionData.setLabelReader(labelReader);
 	
 			// store success message with number of concepts
 			printFormData.setSuccessMessage(MessageFormat.format(b.getString("print.message.numberOfConcepts"), count));
@@ -647,7 +342,7 @@ public class SkosPlayController {
 			if(DisplayType.needHierarchyCheck() || VizType.needHierarchyCheck()) {
 				try {
 					// ask if some hierarchy exists
-					if(!Perform.on(connection).ask(new SimpleQueryReader(this, "AskBroadersOrNarrowers.rq").get())) {
+					if(!skosPlayModel.isHierarchical()) {
 						printFormData.setEnableHierarchical(false);
 						printFormData.getWarningMessages().add(b.getString("upload.warning.noHierarchyFound"));
 					}
@@ -660,7 +355,7 @@ public class SkosPlayController {
 			if(DisplayType.needTranslationCheck()) {
 				try {
 					// ask if some translations exists
-					if(!Perform.on(connection).ask(new SimpleQueryReader(this, "AskTranslatedConcepts.rq").get())) {
+					if(!skosPlayModel.isMultilingual()) {
 						printFormData.setEnableTranslations(false);
 						printFormData.getWarningMessages().add(b.getString("upload.warning.noTranslationsFound"));
 					}
@@ -673,7 +368,7 @@ public class SkosPlayController {
 			if(DisplayType.needAlignmentCheck()) {
 				try {
 					// ask if some alignments exists
-					if(!Perform.on(connection).ask(new SimpleQueryReader(this, "AskMappings.rq").get())) {
+					if(!skosPlayModel.isAligned()) {
 						printFormData.setEnableMappings(false);
 						printFormData.getWarningMessages().add(b.getString("upload.warning.noMappingsFound"));
 					}
@@ -685,51 +380,11 @@ public class SkosPlayController {
 		
 
 			// retrieve number of concepts per concept schemes
-			Perform.on(connection).select(
-					new SimpleQueryReader(this, "ConceptCountByConceptSchemes.rq").get(),
-					new AbstractTupleQueryResultHandler() {
-
-						@Override
-						public void handleSolution(BindingSet bindingSet)
-								throws TupleQueryResultHandlerException {
-							if(bindingSet.getValue("scheme") != null) {
-								try {
-									printFormData.getConceptCountByConceptSchemes().put(
-											new LabeledResource(
-													java.net.URI.create(bindingSet.getValue("scheme").stringValue()),
-													LabelReader.display(labelReader.getValues((IRI)bindingSet.getValue("scheme")))
-													),
-											(bindingSet.getValue("conceptCount") != null)?
-													((Literal)bindingSet.getValue("conceptCount")).intValue()
-													:0
-											);
-								} catch (Exception e) {
-									throw new TupleQueryResultHandlerException(e);
-								}
-							}
-						}						
-					}
-			);
-
+			printFormData.setConceptCountByConceptSchemes(skosPlayModel.getConceptCountByConceptScheme(labelReader));
+			
 			// retrieve list of declared languages in the data
-			Perform.on(connection).select(
-					new SimpleQueryReader(this, "ListOfSkosLanguages.rq").get(),
-					new AbstractTupleQueryResultHandler() {
+			printFormData.setLanguages(skosPlayModel.getLanguages(sessionData.getUserLocale().getLanguage()));
 
-						@Override
-						public void handleSolution(BindingSet bindingSet)
-								throws TupleQueryResultHandlerException {
-							String rdfLanguage = bindingSet.getValue("language").stringValue();
-							Language l = Languages.getInstance().withIso639P1(rdfLanguage);
-							String languageName = (l != null)?l.displayIn(sessionData.getUserLocale().getLanguage()):rdfLanguage;
-							printFormData.getLanguages().put(
-									bindingSet.getValue("language").stringValue(),
-									languageName									
-									);
-						}
-
-					}
-			);
 		} catch (Exception e) {
 			return doError(request, e);
 		}
@@ -754,25 +409,6 @@ public class SkosPlayController {
 		return doError(request, message.toString());
 	}
 	
-	@RequestMapping(value = "/owl2skos", method = RequestMethod.POST)
-	protected void getOwl2skos(
-			HttpServletRequest request,
-			HttpServletResponse response
-			) throws IOException {
-		response.addHeader("Content-Encoding", "UTF-8");
-		response.addHeader("Content-Disposition", "attachment;filename=\"owl2skos.ttl\"");
-		response.setContentType("text/turtle");
-		// write the content of the temporary repository into an in-memory Turtle representation
-		RDFWriter writer = RDFWriterRegistry.getInstance().get(RDFFormat.TURTLE).get().getWriter(response.getOutputStream());
-		// retrieve data from session
-		Repository r = SessionData.get(request.getSession()).getRepository();
-		try(RepositoryConnection connectionTemporaire = r.getConnection()) {
-			connectionTemporaire.export(writer);
-		}
-		
-		
-	}
-
 	protected ModelAndView doError(
 			HttpServletRequest request,
 			String message
@@ -782,15 +418,25 @@ public class SkosPlayController {
 		request.setAttribute(UploadFormData.KEY, data);
 		return new ModelAndView("upload");
 	}
-
-	protected ModelAndView doErrorConvert(
+	
+	@RequestMapping(value = "/getData")
+	protected void getData(
 			HttpServletRequest request,
-			String message
-			) {
-		ConvertFormData data = new ConvertFormData();
-		data.setErrorMessagefile(message);
-		request.setAttribute(ConvertFormData.KEY, data);
-		return new ModelAndView("/convert");
+			HttpServletResponse response
+			) throws IOException {
+		response.addHeader("Content-Encoding", "UTF-8");
+		response.addHeader("Content-Disposition", "attachment;filename=\"owl2skos.ttl\"");
+		response.setContentType("text/turtle");
+		// write the content of the temporary repository into an in-memory Turtle representation
+		RDFWriter writer = RDFWriterRegistry.getInstance().get(RDFFormat.TURTLE).get().getWriter(response.getOutputStream());
+		// retrieve data from session
+		Repository r = SessionData.get(request.getSession()).getSkosPlayModel().getRepository();
+		try(RepositoryConnection connectionTemporaire = r.getConnection()) {
+			connectionTemporaire.export(writer);
+		}
+		
+		// flush response
+		response.flushBuffer();
 	}
 
 
@@ -815,17 +461,24 @@ public class SkosPlayController {
 
 		// update source language param - only for translations
 		language = (language.equals("no-language"))?null:language;
-		SessionData sessionData=SessionData.get(request.getSession());
+		SessionData sessionData = SessionData.get(request.getSession());
 		
 		// retrieve data from session
-		Repository r = sessionData.getRepository();
+		Repository r = sessionData.getSkosPlayModel().getRepository();
 
 		// make a log to trace usage
 		try(RepositoryConnection connection = r.getConnection()) {
 			String aRandomConcept = Perform.on(connection).read(new SimpleQueryReader(this, "ReadRandomConcept.rq").get()).stringValue();
 			log.info("PRINT,"+SimpleDateFormat.getDateTimeInstance().format(new Date())+","+scheme+","+aRandomConcept+","+language+","+displayType+","+"HTML");		
 			
-			SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, "datavize", displayParam, SessionData.get(request.getSession()).getListurl(),"print", schemeParam));
+			SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(
+					language,
+					"datavize",
+					displayParam,
+					sessionData.getSkosPlayModel().getInputUrl(),
+					"print",
+					schemeParam)
+			);
 	
 			
 			switch(displayType) {
@@ -867,28 +520,6 @@ public class SkosPlayController {
 		
 	}
 
-	@RequestMapping(
-			value = "/getData",
-			method = RequestMethod.GET
-			)
-	public void getData(
-			HttpServletRequest request,
-			HttpServletResponse response
-			) throws Exception {
-
-		// retrieve data from session
-		Repository r = SessionData.get(request.getSession()).getRepository();
-
-		// serialize and return data
-		try(RepositoryConnection connection = r.getConnection()) {
-			RepositoryWriter writer = new RepositoryWriter(connection);
-			writer.writeToStream(response.getOutputStream(), RDFFormat.TURTLE);
-		}
-
-		// flush
-		response.flushBuffer();
-	}
-	
 
 	@RequestMapping(value = "/print", method = RequestMethod.POST)
 	public void print(
@@ -919,7 +550,7 @@ public class SkosPlayController {
 		String targetLanguage = (targetLanguageParam != null)?(targetLanguageParam.equals("no-language")?null:targetLanguageParam):null;
 		SessionData sessionData=SessionData.get(request.getSession());
 		// retrieve data from session
-		Repository r = sessionData.getRepository();
+		Repository r = sessionData.getSkosPlayModel().getRepository();
 		
 		// build display result
 		KosDocument document = new KosDocument();
@@ -1132,7 +763,14 @@ public class SkosPlayController {
 			}
 		}
 
-		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(language, outputParam, displayParam, SessionData.get(request.getSession()).getListurl(),"print",schemeParam));
+		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(
+				language,
+				outputParam,
+				displayParam,
+				sessionData.getSkosPlayModel().getInputUrl(),
+				"print",
+				schemeParam
+		));
 
 		response.flushBuffer();		
 	}

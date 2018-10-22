@@ -18,22 +18,8 @@ public class PrintFormData {
 	protected String loadedDataName;
 	protected String loadedDataLicense;
 	protected boolean owl2skos;
-	protected int nbConcept;
 	
 
-	
-
-	public int getNbConcept() {
-		return nbConcept;
-	}
-
-	public void setNbConcept(int nbConcept) {
-		this.nbConcept = nbConcept;
-	}
-
-	
-	
-	
 	public boolean isOwl2skos() {
 		return owl2skos;
 	}

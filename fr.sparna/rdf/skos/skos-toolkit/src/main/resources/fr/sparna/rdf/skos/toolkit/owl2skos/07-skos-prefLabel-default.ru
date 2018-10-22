@@ -14,7 +14,7 @@ PREFIX dcat: <http://www.w3.org/ns/dcat#>
 PREFIX dct:  <http://purl.org/dc/terms/>
 PREFIX dc:   <http://purl.org/dc/elements/1.1/>
 PREFIX vcard:<http://www.w3.org/2006/vcard/ns#>
-PREFIX sparna: <http://www.sparna.fr/rdf/sesame/toolkit/functions#>
+PREFIX sparna: <http://www.sparna.fr/rdf/rdf4j/toolkit/functions#>
 
 INSERT {
 	?x skos:prefLabel ?pref .
