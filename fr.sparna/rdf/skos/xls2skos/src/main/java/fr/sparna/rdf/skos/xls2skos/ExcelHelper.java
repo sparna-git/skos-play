@@ -18,7 +18,8 @@ public class ExcelHelper {
 	}
 	
 	private static String getCellValue(CellType type, Cell cell) {
-		if (type == CellType.BLANK) {
+		// blank or error cells give an empty value
+		if (type == CellType.BLANK || type == CellType.ERROR) {
 			return "";
 		} else if (type == CellType.STRING) {
 			return cell.getStringCellValue();
@@ -36,7 +37,7 @@ public class ExcelHelper {
             // Re-run based on the formula type
             return getCellValue(cell.getCachedFormulaResultTypeEnum(), cell);
         } else {
-        	throw new Xls2SkosException("Cell type unknown or unsupported: {} - {} - {}", cell.getSheet().getSheetName(), cell.getRowIndex(), cell.getColumnIndex());
+        	throw new Xls2SkosException("Cell type unknown or unsupported ({}) at Sheet '{}', row {}, column {}", type.name(), cell.getSheet().getSheetName(), cell.getRowIndex(), cell.getColumnIndex());
         }
 	}
 	

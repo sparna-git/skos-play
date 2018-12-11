@@ -24,7 +24,9 @@ import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.impl.LinkedHashModelFactory;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
+import org.eclipse.rdf4j.model.vocabulary.OWL;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.model.vocabulary.RDFS;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
 import org.eclipse.rdf4j.query.Update;
 import org.eclipse.rdf4j.repository.Repository;
@@ -88,6 +90,11 @@ public class Xls2SkosConverter {
 	 * The workbook currently being processed, to ge references to fonts
 	 */
 	private transient Workbook workbook;
+	
+	/**
+	 * Whether to apply post processings on the RDF produced from the sheets
+	 */
+	private boolean applyPostProcessings = true;
 	
 	public Xls2SkosConverter(ModelWriterIfc modelWriter, String lang) {
 		
@@ -308,12 +315,17 @@ public class Xls2SkosConverter {
 			}
 		}
 		
-		// post-process the model to add inverses, hasTopConcepts, etc.
-		postProcess(model, csResource);		
-		
-		// Turn the model to SKOS-XL
-		if(this.generateXl || this.generateXlDefinitions) {
-			xlify(model);
+		if(this.applyPostProcessings) {
+			log.info("Applying SKOS post-processings on the result");
+			// post-process the model to add inverses, hasTopConcepts, etc.
+			postProcess(model, csResource);		
+			
+			// Turn the model to SKOS-XL
+			if(this.generateXl || this.generateXlDefinitions) {
+				xlify(model);
+			}
+		} else {
+			log.info("Skipping SKOS post-processings");
 		}
 		
 		// writes the resulting Model
@@ -337,13 +349,22 @@ public class Xls2SkosConverter {
 		);
 		
 		if(!model.filter(csResource, RDF.TYPE, SKOS.COLLECTION).isEmpty()) {
-			// if the header object was explicitely typed as skos:Collectio, then add skos:members to every included skos:Concept
+			// if the header object was explicitely typed as skos:Collection, then add skos:members to every included skos:Concept
 			model.filter(null, RDF.TYPE, SKOS.CONCEPT).forEach(
 					s -> { model.add(csResource, SKOS.MEMBER, ((Resource)s.getSubject())); }
 			);
-		} else {
-			// no explicit type given in header : either this is a ConceptScheme (default)
-			// or a class, in which case no post-processing is done 
+		} else if(
+				!model.filter(csResource, RDF.TYPE, OWL.CLASS).isEmpty()
+				||
+				!model.filter(csResource, RDF.TYPE, RDFS.CLASS).isEmpty()
+		) {
+			// for each resource without an explicit rdf:type, declare it of the type specified in the header
+			model.subjects().stream().filter(s -> model.filter(s, RDF.TYPE, null).isEmpty()).forEach(s -> {
+				model.add(s, RDF.TYPE, csResource);
+			});
+		}
+		else {
+			// no explicit type given in header : we suppose this is a ConceptScheme and apply SKOS post processings
 			
 			// add a skos:inScheme to every skos:Concept or skos:Collection or skos:OrderedCollection that was created
 			model.filter(null, RDF.TYPE, SKOS.CONCEPT).forEach(
@@ -379,8 +400,7 @@ public class Xls2SkosConverter {
 						}
 					}
 			);
-		}
-		
+		}		
 	}
 	
 	private Model xlify(Model m) {
@@ -499,6 +519,7 @@ public class Xls2SkosConverter {
 								header.getLanguage().orElse(this.lang)
 						);
 					} catch (Exception e) {
+						e.printStackTrace();
 						throw new Xls2SkosException(e, "Convert exception while processing value '"+value+"', row "+(row.getRowNum()+1)+" in sheet "+row.getSheet().getSheetName()+". Message is : "+e.getMessage());
 					}
 				}
@@ -507,7 +528,7 @@ public class Xls2SkosConverter {
 		
 		// if, after row processing, no rdf:type was generated, then we consider the row to be a skos:Concept
 		// this allows to generate something else that skos:Concept
-		if(rowBuilder != null && !model.contains(rowBuilder.conceptResource, RDF.TYPE, null)) {
+		if(this.applyPostProcessings && rowBuilder != null && !model.contains(rowBuilder.conceptResource, RDF.TYPE, null)) {
 			model.add(rowBuilder.conceptResource, RDF.TYPE, SKOS.CONCEPT);
 		}
 		
@@ -573,6 +594,14 @@ public class Xls2SkosConverter {
 	
 	public Map<String, Model> getCsModels() {
 		return csModels;
+	}
+
+	public boolean isApplyPostProcessings() {
+		return applyPostProcessings;
+	}
+
+	public void setApplyPostProcessings(boolean applyPostProcessings) {
+		this.applyPostProcessings = applyPostProcessings;
 	}
 
 	public static void main(String[] args) throws Exception {

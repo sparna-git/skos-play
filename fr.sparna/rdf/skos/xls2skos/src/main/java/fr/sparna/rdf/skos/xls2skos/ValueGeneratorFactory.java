@@ -14,6 +14,7 @@ import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.model.vocabulary.XMLSchema;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.RDFParserRegistry;
@@ -86,17 +87,27 @@ public final class ValueGeneratorFactory {
 				// consider it like a literal
 				if(datatype != null) {
 					Literal l = null;
-					if(datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#date")) {
-						Date d = ExcelHelper.asCalendar(unescapedValue.trim()).getTime();
-						l = SimpleValueFactory.getInstance().createLiteral(
-								new SimpleDateFormat("yyyy-MM-dd").format(d),
-								SimpleValueFactory.getInstance().createIRI("http://www.w3.org/2001/XMLSchema#date")
-						);
-					} else if(datatype.stringValue().equals("http://www.w3.org/2001/XMLSchema#dateTime")) {
+					if(datatype.stringValue().equals(XMLSchema.DATE.stringValue())) {
 						try {
-							l = SimpleValueFactory.getInstance().createLiteral(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)ExcelHelper.asCalendar(unescapedValue.trim())));
-						} catch (DatatypeConfigurationException e) {
-							e.printStackTrace();
+							Date d = ExcelHelper.asCalendar(unescapedValue.trim()).getTime();
+							l = SimpleValueFactory.getInstance().createLiteral(
+									new SimpleDateFormat("yyyy-MM-dd").format(d),
+									XMLSchema.DATE
+							);
+						} catch (Exception e) {
+							// date parsing failed in the case the cell has a string format - then simply default to a typed literal creation
+							l = SimpleValueFactory.getInstance().createLiteral(unescapedValue.trim(), datatype);
+						}
+					} else if(datatype.stringValue().equals(XMLSchema.DATETIME.stringValue())) {
+						try {
+							try {
+								l = SimpleValueFactory.getInstance().createLiteral(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)ExcelHelper.asCalendar(unescapedValue.trim())));
+							} catch (DatatypeConfigurationException e) {
+								e.printStackTrace();
+							}
+						} catch (Exception e) {
+							// date parsing failed in the case the cell has a string format - then simply default to a typed literal creation
+							l = SimpleValueFactory.getInstance().createLiteral(unescapedValue.trim(), datatype);
 						}
 						
 					} else {

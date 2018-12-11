@@ -75,13 +75,14 @@ public class RdfizableSheet {
 	}
 	
 	/**
-	 * Determines the index of the row containing the column headers. This is determined by checking if column B and C both contain a URI (full, starting with http://, or abbreviated
-	 * using one of the declared prefix).
+	 * Determines the index of the row containing the column headers.
+	 * This is determined by checking if column B and C both contain a URI (full, starting with http://, or abbreviated using one of the declared prefix).
 	 * @return
 	 */
 	public int getTitleRowIndex() {
 		int headerRowIndex = 1;
 		
+		boolean found = false;
 		ColumnHeaderParser headerParser = new ColumnHeaderParser(converter.prefixManager);
 		for (int rowIndex = headerRowIndex; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
 			// test if we find a header in columns 2 and 3, this indicates the header line
@@ -112,12 +113,45 @@ public class RdfizableSheet {
 								)
 					) {
 						headerRowIndex = rowIndex;
+						found = true;
 						break;
 					}
 				}
-
 			}
 		}
+		
+		if(!found) {
+			for (int rowIndex = headerRowIndex; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+				// test if we find a header in columns 2 only
+				if(sheet.getRow(rowIndex) != null) {
+					ColumnHeader headerB = null;
+					try {
+						headerB = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(1)));
+					} catch (Exception e) {
+						// we prevent anything to go wrong in the parsing at this stage, since the parsing
+						// tests cells for which we are unsure of the format.
+						log.debug("Unable to parse a cell content while auto-detecting title row : "+e.getMessage());
+					}
+					
+					if(headerB != null) {
+						if(
+								(
+										converter.valueGenerators.containsKey(headerB.getDeclaredProperty())
+										||
+										headerB.getProperty() != null
+								)
+								&&
+								getCellValue(sheet.getRow(rowIndex).getCell(0)).equalsIgnoreCase("URI")
+						) {
+							headerRowIndex = rowIndex;
+							found = true;
+							break;
+						}
+					}
+				}
+			}
+		}
+		
 		return headerRowIndex;
 	}
 	

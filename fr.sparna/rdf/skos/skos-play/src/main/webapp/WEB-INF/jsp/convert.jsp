@@ -298,6 +298,19 @@
 							</div>	
 						</div>
 						
+						<div class="form-group">
+							<label class="col-sm-4">
+								<fmt:message key="convert.form.ignorepostproc" />
+							</label>
+							<div class="col-sm-1">
+								<input
+									type="checkbox"
+									id="ignorePostProc"
+									name="ignorePostProc" />
+								<span class="help-block"><i></i></span>
+							</div>														
+						</div>
+						
 	   				</div></div>
 	   			</div><!-- end accordion-group : Advanced options -->
    			</div>			

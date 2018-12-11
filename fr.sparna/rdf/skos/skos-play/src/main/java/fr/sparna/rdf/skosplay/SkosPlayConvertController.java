@@ -143,6 +143,8 @@ public class SkosPlayConvertController {
 			@RequestParam(value="usezip", required=false) boolean useZip,
 			// flag to indicate if graph files should be generated or not
 			@RequestParam(value="usegraph", required=false) boolean useGraph,
+			// flag to indicate if graph files should be generated or not
+			@RequestParam(value="ignorePostProc", required=false) boolean ignorePostProc,
 			// the request
 			HttpServletRequest request,
 			// the response
@@ -258,7 +260,8 @@ public class SkosPlayConvertController {
 					new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),
 					in,
 					language.equals("")?null:language,
-					useskosxl
+					useskosxl,
+					ignorePostProc
 			);
 			
 			// sort to garantee order
@@ -290,8 +293,11 @@ public class SkosPlayConvertController {
 		return null;
 	}
 
-	private Set<String> runConversion(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl) {
+	private Set<String> runConversion(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl, boolean ignorePostProc) {
 		Xls2SkosConverter converter = new Xls2SkosConverter(Writer, lang);
+		if(ignorePostProc) {
+			converter.setApplyPostProcessings(false);
+		}
 		converter.setGenerateXl(generatexl);
 		converter.setGenerateXlDefinitions(generatexl);
 		converter.processInputStream(filefrom);
