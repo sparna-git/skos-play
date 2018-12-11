@@ -75,16 +75,14 @@ The converter is also integrated with Google Spreadsheets, so you can even maint
 
 ![SKOS Play Excel converter](github/images/convert-excel.png)
 
-
-### Validate SKOS data
+### Validated SKOS data
 
 SKOS Play includes a frontend for the qSKOS validator, hosted in a separate project : [SKOS-testing-tool](https://github.com/sparna-git/skos-testing-tool).
 
-
-## Who is using SKOS Play ?
-
+## Who is using SKOS Play ?
   - French Ministry of Culture
   - UNESCO
+  - Heritage Data
   - Reegle thesaurus
   - Service Central de Legislation du Luxembourg
 
