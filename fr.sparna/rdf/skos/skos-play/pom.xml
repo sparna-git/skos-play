@@ -125,6 +125,7 @@
         
 
         <!-- Semargl and Semargl Sesame integration for RDFa parsing -->
+        <!--
         <dependency>
             <groupId>org.semarglproject</groupId>
             <artifactId>semargl-rdfa</artifactId>
@@ -135,6 +136,7 @@
             <artifactId>semargl-sesame</artifactId>
             <version>0.6.1</version>
         </dependency>
+        -->
 
         <!-- Spring -->
         <dependency>
@@ -149,7 +151,7 @@
 
 		<dependency>
 			<groupId>com.google.oauth-client</groupId>
-			<artifactId>google-oauth-client-jetty</artifactId>
+			<artifactId>google-oauth-client-servlet</artifactId>
             <version>1.22.0</version>
 		</dependency>
 

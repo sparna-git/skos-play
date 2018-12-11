@@ -1,12 +1,11 @@
 package fr.sparna.rdf.skos.printer.cli;
 
-import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.xml.DOMConfigurator;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.MissingCommandException;
 import com.beust.jcommander.ParameterException;
 
+import ch.qos.logback.classic.util.ContextInitializer;
 import fr.sparna.rdf.skos.printer.cli.alignment.Alignment;
 import fr.sparna.rdf.skos.printer.cli.alignment.ArgumentsAlignment;
 import fr.sparna.rdf.skos.printer.cli.alphabetical.Alphabetical;
@@ -82,6 +81,14 @@ public class Main {
 			System.exit(-1);
 		} 
 		
+		// configure logging
+		if(main.getLog() != null) {
+			System.setProperty(ContextInitializer.CONFIG_FILE_PROPERTY, main.getLog().getAbsolutePath());
+
+		}
+		// explicitely quiet FOP
+		((ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger("org.apache.fop")).setLevel(ch.qos.logback.classic.Level.INFO);		
+		
 		// if help was requested, print it and exit with a normal code
 		if(main.isHelp()) {
 			jc.usage();
@@ -95,17 +102,6 @@ public class Main {
 			jc.usage();
 			System.exit(-1);
 		}
-		
-		// configure logging using log4j
-		if(main.getLog() != null) {
-			if(main.getLog().getName().endsWith(".xml")) {
-				DOMConfigurator.configure(main.getLog().getAbsolutePath());
-			} else {
-				PropertyConfigurator.configure(main.getLog().getAbsolutePath());
-			}
-		}
-		// explicitely quiet FOP
-		org.apache.log4j.Logger.getLogger("org.apache.fop").setLevel(org.apache.log4j.Level.INFO);
 		
 		// executes the command with the associated arguments
 		COMMAND.valueOf(jc.getParsedCommand().toUpperCase()).getCommand().execute(
