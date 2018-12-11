@@ -65,6 +65,10 @@ public class SkosPlayModel {
 		}		
 	}
 	
+	public void loadExample(String example) throws IOException {
+		repository = SkosPlayConfig.getInstance().getApplicationData().getExampleDatas().get(example);
+	}
+	
 	public void load(String url, boolean rdfsInference) throws IOException {
 		// we are loading an RDF file from the web, use the localRepositoryBuilder and apply inference if required
 		if(!RepositoryBuilderFactory.isEndpointURL(url)) {
@@ -128,7 +132,8 @@ public class SkosPlayModel {
 	}
 	
 	public Map<String, String> getLanguages(final String locale) {
-		final HashMap<String, String> result = new HashMap<String, String>();
+		// use a TreeMap to guarantee order on keys
+		final Map<String, String> result = new TreeMap<String, String>();
 		
 		try(RepositoryConnection connection = repository.getConnection()) {
 			// retrieve list of declared languages in the data

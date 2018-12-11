@@ -239,7 +239,7 @@ public class SkosPlayController {
 				if(resourceParam == null || resourceParam.equals("")) {
 					return doError(request, "Select an example from the list.");
 				}
-				skosPlayModel.load(resourceParam, rdfsInference);
+				skosPlayModel.loadExample(resourceParam);
 
 				// apply rules if needed
 				try {
