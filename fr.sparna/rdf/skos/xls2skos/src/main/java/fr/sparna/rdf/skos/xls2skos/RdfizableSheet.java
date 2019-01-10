@@ -122,26 +122,22 @@ public class RdfizableSheet {
 		
 		if(!found) {
 			for (int rowIndex = headerRowIndex; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
-				// test if we find a header in columns 2 only
+				// test if we find "URI" in the first column
 				if(sheet.getRow(rowIndex) != null) {
-					ColumnHeader headerB = null;
+					ColumnHeader headerA = null;
 					try {
-						headerB = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(1)));
+						headerA = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(0)));
 					} catch (Exception e) {
 						// we prevent anything to go wrong in the parsing at this stage, since the parsing
 						// tests cells for which we are unsure of the format.
 						log.debug("Unable to parse a cell content while auto-detecting title row : "+e.getMessage());
 					}
 					
-					if(headerB != null) {
+					if(headerA != null) {
 						if(
-								(
-										converter.valueGenerators.containsKey(headerB.getDeclaredProperty())
-										||
-										headerB.getProperty() != null
-								)
-								&&
-								getCellValue(sheet.getRow(rowIndex).getCell(0)).equalsIgnoreCase("URI")
+								getCellValue(sheet.getRow(rowIndex).getCell(0)).equals("URI")
+								||
+								getCellValue(sheet.getRow(rowIndex).getCell(0)).equals("IRI")
 						) {
 							headerRowIndex = rowIndex;
 							found = true;
