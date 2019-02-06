@@ -2,9 +2,12 @@ package fr.sparna.rdf.skos.xls2skos;
 
 import static fr.sparna.rdf.skos.xls2skos.ExcelHelper.getCellValue;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -501,6 +504,9 @@ public class Xls2SkosConverter {
 					valueGenerator = ValueGeneratorFactory.split(valueGenerator, header.getParameters().get(ColumnHeader.PARAMETER_SEPARATOR));
 					// use a default comma separator for cells that contain URI references
 				} else if(
+					// if it is a true column wih a declared property...
+					header.getProperty() != null
+					&&
 					!header.getDatatype().isPresent()
 					&&
 					!header.getLanguage().isPresent()
@@ -520,7 +526,11 @@ public class Xls2SkosConverter {
 						);
 					} catch (Exception e) {
 						e.printStackTrace();
-						throw new Xls2SkosException(e, "Convert exception while processing value '"+value+"', row "+(row.getRowNum()+1)+" in sheet "+row.getSheet().getSheetName()+". Message is : "+e.getMessage());
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						e.printStackTrace(new PrintStream(baos));
+						String stacktraceString = new String(baos.toByteArray());
+						String stacktraceStringBegin = (stacktraceString.length() > 256)?stacktraceString.substring(0, 256):stacktraceString;
+						throw new Xls2SkosException(e, "Convert exception while processing value '"+value+"', row "+(row.getRowNum()+1)+", column "+(colIndex+1)+" (header "+header.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+".\n Message is : "+e.getMessage()+"\n Beginning of stacktrace is "+stacktraceStringBegin);
 					}
 				}
 			}

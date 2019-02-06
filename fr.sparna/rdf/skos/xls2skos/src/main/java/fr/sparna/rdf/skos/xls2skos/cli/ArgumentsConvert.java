@@ -63,6 +63,12 @@ public class ArgumentsConvert {
 			description = "Generate Virtuoso graph files"
 	)
 	private boolean generateGraphFiles = false;
+	
+	@Parameter(
+			names = { "-np", "--noPostProcessings" },
+			description = "Ignore post processings on sheet data"
+	)
+	private boolean noPostProcessings = false;
 
 	public File getInput() {
 		return input;
@@ -126,6 +132,14 @@ public class ArgumentsConvert {
 
 	public void setOutputAsDirectory(boolean outputAsDirectory) {
 		this.outputAsDirectory = outputAsDirectory;
+	}
+
+	public boolean isNoPostProcessings() {
+		return noPostProcessings;
+	}
+
+	public void setNoPostProcessings(boolean noPostProcessings) {
+		this.noPostProcessings = noPostProcessings;
 	}
 	
 }

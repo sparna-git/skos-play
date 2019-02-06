@@ -1,5 +1,6 @@
 package fr.sparna.rdf.skos.xls2skos.cli;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -66,11 +67,21 @@ public class Convert implements CliCommandIfc {
 			modelWriter = factory.buildNewModelWriter(fileStream);
 		}
 		
-		try(InputStream in = new FileInputStream(a.getInput())) {
-			Xls2SkosConverter converter = new Xls2SkosConverter(modelWriter, a.getLang());
-			converter.setGenerateXl(a.isXlify());
-			converter.setGenerateXlDefinitions(a.isXlifyDefinitions());
-			converter.processInputStream(in);
+		Xls2SkosConverter converter = new Xls2SkosConverter(modelWriter, a.getLang());
+		converter.setGenerateXl(a.isXlify());
+		converter.setGenerateXlDefinitions(a.isXlifyDefinitions());
+		converter.setApplyPostProcessings(!a.isNoPostProcessings());
+		
+		if(a.getInput().isFile()) {
+			try(InputStream in = new FileInputStream(a.getInput())) {			
+				converter.processInputStream(in);			
+			}
+		} else {
+			for (File f : a.getInput().listFiles()) {
+				try(InputStream in = new FileInputStream(f)) {			
+					converter.processInputStream(in);			
+				}
+			}
 		}
 		
 		if(fileStream != null) {
