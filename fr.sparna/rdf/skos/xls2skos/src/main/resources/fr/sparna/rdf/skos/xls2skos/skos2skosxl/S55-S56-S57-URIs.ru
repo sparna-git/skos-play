@@ -21,6 +21,7 @@ INSERT {
 			FILTER(?labelProperty IN (skos:prefLabel, skos:altLabel, skos:hiddenLabel))
 			OPTIONAL {
 				?x skos:prefLabel|skos:altLabel|skos:hiddenLabel ?anotherLabelBefore .
+				FILTER(lang(?anotherLabelBefore) = lang(?label))
 				FILTER(STR(?anotherLabelBefore) < STR(?label))
 			}
 		} GROUP BY ?x ?labelProperty ?label
@@ -30,6 +31,8 @@ INSERT {
 		CONCAT(
 			STR(?x),
 			'-label-',
+			lang(?label),
+			'-',
 			STR(?index)
 		)
 	) AS ?labelUri)
