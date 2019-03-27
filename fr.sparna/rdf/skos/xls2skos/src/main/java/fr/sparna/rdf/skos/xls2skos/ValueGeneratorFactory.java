@@ -19,8 +19,12 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.RDFParserRegistry;
 import org.eclipse.rdf4j.rio.helpers.StatementCollector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ValueGeneratorFactory {
+	
+	private static Logger log = LoggerFactory.getLogger(ValueGeneratorFactory.class.getName());
 	
 	public static ValueGeneratorIfc split(ValueGeneratorIfc delegate, String separator) {
 		return (model, subject, value, language) -> {
@@ -152,6 +156,7 @@ public final class ValueGeneratorFactory {
 				model.addAll(collector.getStatements());
 			} catch (Exception e) {
 				// if anything goes wrong, default to creating a literal
+				log.error("Error in parsing Turtle :\n"+turtle);
 				e.printStackTrace();
 				langOrPlainLiteral(property).addValue(model, subject, value, language);
 			}
