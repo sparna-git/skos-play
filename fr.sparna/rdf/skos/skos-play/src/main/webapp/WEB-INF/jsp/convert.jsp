@@ -105,7 +105,8 @@
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-3.xlsx">Example 3 (multilingual columns)</option>
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-4.xlsx">Example 4 (schema.org, datatypes, multiple sheets)</option>
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-5.xlsx">Example 5 (skos:Collection, inverse columns)</option>
-							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-6.xlsx">Example 6 (skos:OrderedCollection, dealing with rdf:Lists)</option>   
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-6.xlsx">Example 6 (skos:OrderedCollection, dealing with rdf:Lists)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-7.xlsx">Example 7 (different subjects with subjectColumn parameter)</option>  
 						</select>						
 						<span class="help-block"><i><fmt:message key="convert.form.Example.download" />&nbsp;<a id="lien" href="${sessionData.baseUrl}/excel_test/excel2skos-exemple-1.xlsx">Example 1 (simple exemple, in english)</a></i></span>
 					</div>
@@ -486,6 +487,13 @@
 				<h4><a href="#graph-management" id="graph-management"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Named graph management</h4>
 					<p />The converter actually puts all the triples generated in one sheet in a graph with the URI in cell B1. This is usually the same URI as the URI of the ConceptScheme;
 					but in case of processing generic RDF data, this cell B1 can be used to indicate the URI of the graph, with its associated metadata in the header.
+					<p />
+				<h4><a href="#subjectColumn" id="subjectColumn"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Changing Subject Column</h4>
+					<p />Be default, the property in each column is expressed on the subject URI of the first column of the spreadsheet. It is possible to state that a given column is expressed on a subject URI
+					in a different column on the table. To do this, add a column parameter <code>subjectColumn</code> with a reference to the column letter containing the URI of the subject.
+					For example <code>schema:name(subjectColumn="N")</code> means this column is the name of the URI stored in column N.
+					<p />This is how such a header could look like :
+				<img src="images/convert-screenshot-subjectColumn.png" width="100%" />
 					<p />
 			</fieldset>
 			

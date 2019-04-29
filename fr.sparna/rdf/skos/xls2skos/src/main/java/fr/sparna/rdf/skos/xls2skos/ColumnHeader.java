@@ -9,6 +9,7 @@ import org.eclipse.rdf4j.model.IRI;
 public class ColumnHeader {
 	
 	public static final String PARAMETER_SEPARATOR = "separator";
+	public static final String PARAMETER_SUBJECT_COLUMN = "subjectColumn";
 
 	/**
 	 * the full orignal value of the header, as a raw string

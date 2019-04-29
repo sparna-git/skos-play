@@ -7,8 +7,12 @@ import java.util.Optional;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ColumnHeaderParser {
+	
+	private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 	
 	private PrefixManager prefixManager;
 
@@ -101,14 +105,19 @@ public class ColumnHeaderParser {
 		
 		try {
 			if(value.contains("(") && value.trim().charAt(value.length()-1) == ')') {
-				
-				
 				String parametersString = value.substring(value.indexOf("(")+1, value.length()-1);
 				// ISSUE : cannot split on "," since this prevents to declare "," as a separator
 				// TODO : have a full grammar to be able to really split values.
 				String[] splittedParameters = parametersString.split(" ");
 				Arrays.stream(splittedParameters).forEach(p -> {
-					String[] keyValue = p.split("=");
+					System.out.println(p);
+					String[] keyValue;
+					// split on column if the separator value is an equal
+					if(p.contains("\"=\"")) {
+						keyValue = p.split(":");
+					} else {
+						keyValue = p.split("=");
+					}
 					String rawKey = keyValue[0];
 					String rawValue = keyValue[1];
 					
@@ -129,6 +138,7 @@ public class ColumnHeaderParser {
 				});
 			}
 		} catch (Exception e) {
+			log.error("Unsuccessfull parsing of header parameters for header '"+value+"', Exception is "+e.getClass().getName()+" : "+e.getMessage());
 			return null;
 		} 
 		

@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -290,7 +291,7 @@ public class Xls2SkosConverter {
 					}
 					
 					if(valueGenerator != null) {
-						System.out.println("Adding value on "+csResource);
+						log.debug("Adding value on ConceptScheme "+value+" with lang "+header.getLanguage().orElse(this.lang));
 						valueGenerator.addValue(
 								model,
 								csResource,
@@ -490,6 +491,8 @@ public class Xls2SkosConverter {
 								valueGenerator == null
 								||
 								header.getDatatype().isPresent()
+								||
+								(header.getParameters() != null && !header.getParameters().isEmpty())
 						)
 						&&
 						header.getProperty() != null
@@ -516,6 +519,27 @@ public class Xls2SkosConverter {
 					valueGenerator = ValueGeneratorFactory.split(valueGenerator, ",");
 				}
 				
+				if(header.getParameters().get(ColumnHeader.PARAMETER_SUBJECT_COLUMN) != null) {
+					String subjectColumnRef = header.getParameters().get(ColumnHeader.PARAMETER_SUBJECT_COLUMN);
+					int subjectColumnIndex = CellReference.convertColStringToIndex(subjectColumnRef);
+					String currentSubject = getCellValue(row.getCell(subjectColumnIndex));
+					
+					if(currentSubject != null) {
+						try {
+							rowBuilder.setCurrentSubjectString(currentSubject);
+						} catch (Exception e) {
+							e.printStackTrace();
+							ByteArrayOutputStream baos = new ByteArrayOutputStream();
+							e.printStackTrace(new PrintStream(baos));
+							String stacktraceString = new String(baos.toByteArray());
+							String stacktraceStringBegin = (stacktraceString.length() > 256)?stacktraceString.substring(0, 256):stacktraceString;
+							throw new Xls2SkosException(e, "Cannot set subject URI in cell "+subjectColumnRef+(row.getRowNum()+1)+", value is '"+ currentSubject +"' (header "+header.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+".\n Message is : "+e.getMessage()+"\n Beginning of stacktrace is "+stacktraceStringBegin);
+						}
+					} else {
+						log.warn("Unable to set a new current subject from cell '"+subjectColumnRef+(row.getRowNum()+1)+"' (header "+header.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+".");
+					}
+				}
+				
 				// if a value generator was successfully generated, then process the value
 				if(valueGenerator != null) {
 					try {
@@ -530,7 +554,7 @@ public class Xls2SkosConverter {
 						e.printStackTrace(new PrintStream(baos));
 						String stacktraceString = new String(baos.toByteArray());
 						String stacktraceStringBegin = (stacktraceString.length() > 256)?stacktraceString.substring(0, 256):stacktraceString;
-						throw new Xls2SkosException(e, "Convert exception while processing value '"+value+"', row "+(row.getRowNum()+1)+", column "+(colIndex+1)+" (header "+header.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+".\n Message is : "+e.getMessage()+"\n Beginning of stacktrace is "+stacktraceStringBegin);
+						throw new Xls2SkosException(e, "Convert exception while processing value '"+value+"', cell "+CellReference.convertNumToColString(colIndex)+(row.getRowNum()+1)+" (header "+header.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+".\n Message is : "+e.getMessage()+"\n Beginning of stacktrace is "+stacktraceStringBegin);
 					}
 				}
 			}
@@ -548,25 +572,29 @@ public class Xls2SkosConverter {
 	private class RowBuilder {
 		private final Model model;
 		private final Resource conceptResource;
-		private Resource subject;
+		private Resource currentSubject;
 
 		public RowBuilder(Model model, String uri) {
 			this.model = model;
 			conceptResource = SimpleValueFactory.getInstance().createIRI(uri);
 			// set the current subject to the conceptResource by default
-			subject = conceptResource;
+			currentSubject = conceptResource;
 		}
 
 		public void processCell(ValueGeneratorIfc valueGenerator, String value, String language) {
 			// if the column is unknown, ignore it
 			if(valueGenerator != null) {				
-				Resource newResource = valueGenerator.addValue(model, subject, value, language);
+				Resource newResource = valueGenerator.addValue(model, currentSubject, value, language);
 				if (null != newResource) {
 					// change the focus to the new resource in the case of xl labels
 					// so that subsequent columns are added on that resource
-					subject = newResource;
+					currentSubject = newResource;
 				}
 			}
+		}
+		
+		public void setCurrentSubjectString(String subjectUri) {
+			currentSubject = SimpleValueFactory.getInstance().createIRI(subjectUri);
 		}
 	}
 

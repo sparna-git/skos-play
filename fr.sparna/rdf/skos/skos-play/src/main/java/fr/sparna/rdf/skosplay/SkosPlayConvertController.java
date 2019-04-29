@@ -279,8 +279,8 @@ public class SkosPlayConvertController {
 			));
 
 		} catch (Xls2SkosException e) {
-			response.reset();
 			e.printStackTrace();
+			response.reset();
 			return doErrorConvert(request, e.getMessage()); 
 		} finally {
 			try {
