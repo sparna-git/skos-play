@@ -79,10 +79,12 @@ public final class ValueGeneratorFactory {
 				} else {
 					model.add(SimpleValueFactory.getInstance().createIRI(prefixManager.uri(value.trim(), false)), header.getProperty(),subject);
 				}				
-			// handling of rdf:list
+			
 			} else if(value.startsWith("(") && value.endsWith(")")) {
-				turtleParsing(header.getProperty(), prefixManager).addValue(model, subject, value, language);		
+				// handle rdf:list
+				turtleParsing(header.getProperty(), prefixManager).addValue(model, subject, value, language);	
 			} else if(datatype == null && value.startsWith("[") && value.endsWith("]")) {
+				// handle blank nodes
 				turtleParsing(header.getProperty(), prefixManager).addValue(model, subject, value, language);
 			} else {
 				// if the value is surrounded with quotes, remove them, they were here to escape a URI to be considered as a literal
@@ -170,43 +172,46 @@ public final class ValueGeneratorFactory {
 
 			if (StringUtils.isBlank(value)) return null;
 
+			Literal literal = null; 
 			try {
-				model.add(
-						subject,
-						property,
-						SimpleValueFactory.getInstance().createLiteral(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)ExcelHelper.asCalendar(value))));
+				literal = SimpleValueFactory.getInstance().createLiteral(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)ExcelHelper.asCalendar(value)));
+				model.add(subject, property,literal);
 			}
 			catch (NumberFormatException ignore) {
 			}
 			catch (DatatypeConfigurationException ignore) {
 				ignore.printStackTrace();
 			}
-			return null;
+			return literal;
 		};
 	}
 
 	public static ValueGeneratorIfc langLiteral(IRI property) {
 		return (model, subject, value, language) -> {
-			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim(), language));
-			return null;
+			Literal literal = SimpleValueFactory.getInstance().createLiteral(value.trim(), language);
+			model.add(subject, property, literal);
+			return literal;
 		};
 	}
 
 	public static ValueGeneratorIfc plainLiteral(IRI property) {
 		return (model, subject, value, language) -> {
-			model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim()));
-			return null;
+			Literal literal = SimpleValueFactory.getInstance().createLiteral(value.trim());
+			model.add(subject, property, literal);
+			return literal;
 		};
 	}
 	
 	public static ValueGeneratorIfc langOrPlainLiteral(IRI property) {
 		return (model, subject, value, language) -> {
+			Literal literal;
 			if(language != null) {
-				model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim(), language));
+				literal = SimpleValueFactory.getInstance().createLiteral(value.trim(), language);
 			} else {
-				model.add(subject, property, SimpleValueFactory.getInstance().createLiteral(value.trim()));
-			}			
-			return null;
+				literal = SimpleValueFactory.getInstance().createLiteral(value.trim());
+			}
+			model.add(subject, property, literal);
+			return literal;
 		};
 	}
 
@@ -224,7 +229,7 @@ public final class ValueGeneratorFactory {
 	public static ValueGeneratorIfc failIfFilledIn(String property) {
 		return (model, subject, value, language) -> {
 			if (StringUtils.isBlank(value)) return null;
-			throw new Xls2SkosException("Property not supported {} if filled in- {} - {}", property, subject, value);
+			throw new Xls2SkosException("Property not supported {} if filled in - {} - {}", property, subject, value);
 		};
 	}
 

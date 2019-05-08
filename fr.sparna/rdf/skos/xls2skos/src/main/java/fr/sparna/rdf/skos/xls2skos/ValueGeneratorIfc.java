@@ -2,6 +2,7 @@ package fr.sparna.rdf.skos.xls2skos;
 
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Value;
 
 public interface ValueGeneratorIfc {
 	/**
@@ -14,5 +15,5 @@ public interface ValueGeneratorIfc {
 	 * @param language
 	 * @return
 	 */
-	public Resource addValue(Model model, Resource subject, String value, String language);
+	public Value addValue(Model model, Resource subject, String value, String language);
 }

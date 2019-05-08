@@ -15,6 +15,7 @@ import org.eclipse.rdf4j.model.vocabulary.OWL;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.model.vocabulary.RDFS;
 import org.eclipse.rdf4j.model.vocabulary.SKOS;
+import org.eclipse.rdf4j.model.vocabulary.XMLSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +39,7 @@ public class PrefixManager {
 		prefixes.put("dc", DC.NAMESPACE);
 		prefixes.put("dcterms", DCTERMS.NAMESPACE);
 		prefixes.put("dct", DCTERMS.NAMESPACE);
-		prefixes.put("xsd", "http://www.w3.org/2001/XMLSchema#");
+		prefixes.put("xsd", XMLSchema.NAMESPACE);
 		prefixes.put("euvoc", "http://publications.europa.eu/ontology/euvoc#");
 	}
 	

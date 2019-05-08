@@ -85,38 +85,27 @@ public class RdfizableSheet {
 		boolean found = false;
 		ColumnHeaderParser headerParser = new ColumnHeaderParser(converter.prefixManager);
 		for (int rowIndex = headerRowIndex; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
-			// test if we find a header in columns 2 and 3, this indicates the header line
-			if(sheet.getRow(rowIndex) != null) {
-				ColumnHeader headerB = null;
-				ColumnHeader headerC = null;
+			
+			int numFound = 0;
+			// we start to check on the second column to avoid detecting a column header in ConceptScheme metadata
+			for (int colIndex = 1; colIndex < 10; colIndex++) {
 				try {
-					headerB = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(1)));
-					headerC = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(2)));
+					ColumnHeader header = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(colIndex)), colIndex);
+					if(header.getProperty() != null) {
+						numFound++;
+					}
 				} catch (Exception e) {
 					// we prevent anything to go wrong in the parsing at this stage, since the parsing
 					// tests cells for which we are unsure of the format.
-					log.debug("Unable to parse a cell content while auto-detecting title row : "+e.getMessage());
+					log.trace("Unable to parse a cell content while auto-detecting title row : "+e.getMessage());
 				}
-				
-				if(headerB != null && headerC != null) {
-					if(
-								(
-										converter.valueGenerators.containsKey(headerB.getDeclaredProperty())
-										||
-										headerB.getProperty() != null
-								)
-							&&
-								(
-										converter.valueGenerators.containsKey(headerC.getDeclaredProperty())
-										||
-										headerC.getProperty() != null
-								)
-					) {
-						headerRowIndex = rowIndex;
-						found = true;
-						break;
-					}
-				}
+			}
+			
+			// we check if we find 2 columns header in the first 10 columns
+			if(numFound >= 2) {
+				headerRowIndex = rowIndex;
+				found = true;
+				break;
 			}
 		}
 		
@@ -126,11 +115,11 @@ public class RdfizableSheet {
 				if(sheet.getRow(rowIndex) != null) {
 					ColumnHeader headerA = null;
 					try {
-						headerA = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(0)));
+						headerA = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(0)), 0);
 					} catch (Exception e) {
 						// we prevent anything to go wrong in the parsing at this stage, since the parsing
 						// tests cells for which we are unsure of the format.
-						log.debug("Unable to parse a cell content while auto-detecting title row : "+e.getMessage());
+						log.trace("Unable to parse a cell content while auto-detecting title row : "+e.getMessage());
 					}
 					
 					if(headerA != null) {
@@ -170,7 +159,7 @@ public class RdfizableSheet {
 				if (StringUtils.isBlank(columnName)) {
 					break;
 				}
-				columnNames.add(headerParser.parse(columnName));
+				columnNames.add(headerParser.parse(columnName, i));
 			}
 		}
 		return columnNames;

@@ -4,7 +4,7 @@
 
     <groupId>fr.sparna</groupId>
     <artifactId>fr.sparna-root-pom</artifactId>
-    <version>2-SNAPSHOT</version>
+    <version>0.8.2</version>
     <packaging>pom</packaging>
 
     <parent>

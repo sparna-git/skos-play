@@ -105,8 +105,6 @@ public class Xls2SkosConverter {
 		this.modelWriter = modelWriter;
 		this.lang = lang;
 		
-		// TODO : handle language declared on a per-colum basis
-		
 		// inScheme for additionnal inScheme information, if needed
 		valueGenerators.put("skos:inScheme", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.IN_SCHEME, prefixManager), ","));
 		// labels
@@ -132,19 +130,11 @@ public class Xls2SkosConverter {
 		valueGenerators.put("skos:relatedMatch", 	ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.RELATED_MATCH, prefixManager), ","));
 		valueGenerators.put("skos:broadMatch", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.BROAD_MATCH, prefixManager), ","));
 		valueGenerators.put("skos:narrowMatch", 	ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.RELATED_MATCH, prefixManager), ","));
-		// XL labels
-		valueGenerators.put("skosxl:prefLabel", 	ValueGeneratorFactory.skosXlLabel(SKOSXL.PREF_LABEL, prefixManager));
-		valueGenerators.put("skosxl:altLabel", 		ValueGeneratorFactory.skosXlLabel(SKOSXL.ALT_LABEL, prefixManager));
-		valueGenerators.put("skosxl:hiddenLabel",	ValueGeneratorFactory.skosXlLabel(SKOSXL.HIDDEN_LABEL, prefixManager));
-		valueGenerators.put("skosxl:literalForm", 	ValueGeneratorFactory.langLiteral(SKOSXL.LITERAL_FORM));
+
 		// other concepts metadata
-		valueGenerators.put("euvoc:status", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#status"), prefixManager), ","));		
-		valueGenerators.put("euvoc:startDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#startDate")));
-		valueGenerators.put("euvoc:endDate", 		ValueGeneratorFactory.dateLiteral(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#endDate")));
-		valueGenerators.put("dct:created", 			ValueGeneratorFactory.dateLiteral(DCTERMS.CREATED));
-		valueGenerators.put("dct:modified", 		ValueGeneratorFactory.dateLiteral(DCTERMS.MODIFIED));
+		valueGenerators.put("euvoc:status", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#status"), prefixManager), ","));
 		// a source can be a literal or a URI
-		valueGenerators.put("dct:source", 			ValueGeneratorFactory.split(ValueGeneratorFactory.resourceOrLiteral(new ColumnHeaderParser(prefixManager).parse("dct:source"), prefixManager), ","));
+		valueGenerators.put("dct:source", 			ValueGeneratorFactory.split(ValueGeneratorFactory.resourceOrLiteral(new ColumnHeaderParser(prefixManager).parse("dct:source", -1), prefixManager), ","));
 		// dct metadata for the ConceptScheme
 		valueGenerators.put("dct:title", 			ValueGeneratorFactory.langLiteral(DCTERMS.TITLE));
 		valueGenerators.put("dct:description", 		ValueGeneratorFactory.langLiteral(DCTERMS.DESCRIPTION));
@@ -259,10 +249,11 @@ public class Xls2SkosConverter {
 		Resource csResource = svf.createIRI(csUri);	
 		
 		// read the title row index
-		int headerRowIndex = rdfizableSheet.getTitleRowIndex();		
+		int headerRowIndex = rdfizableSheet.getTitleRowIndex();
+		log.debug("Found title row at index "+headerRowIndex);
 		// si la ligne d'entete n'a pas été trouvée, on ne génère que le ConceptScheme
 		if(headerRowIndex == 1) {
-			log.info("Could not find header row index in sheet "+sheet.getSheetName());
+			log.info("Could not find header row index in sheet "+sheet.getSheetName()+", assuming title row at index 10 for ConceptScheme parsing");
 			// we are assuming a header row index of 10 to be able to read at least the ConceptScheme header, even with no concept in it.
 			headerRowIndex = 10;
 		}
@@ -274,7 +265,7 @@ public class Xls2SkosConverter {
 				String key = getCellValue(sheet.getRow(rowIndex).getCell(0));
 				String value = getCellValue(sheet.getRow(rowIndex).getCell(1));
 				
-				ColumnHeader header = headerParser.parse(key);
+				ColumnHeader header = headerParser.parse(key, -1);
 				if(
 						header != null
 						&&
@@ -471,7 +462,8 @@ public class Xls2SkosConverter {
 					return null;
 				}
 				// create the RowBuilder with the URI in the first column
-				rowBuilder = new RowBuilder(model, prefixManager.uri(value, true));
+				// the URI could be null
+				rowBuilder = new RowBuilder(model, prefixManager.uri(value, false));
 				continue;
 			}
 			
@@ -521,12 +513,28 @@ public class Xls2SkosConverter {
 				
 				if(header.getParameters().get(ColumnHeader.PARAMETER_SUBJECT_COLUMN) != null) {
 					String subjectColumnRef = header.getParameters().get(ColumnHeader.PARAMETER_SUBJECT_COLUMN);
-					int subjectColumnIndex = CellReference.convertColStringToIndex(subjectColumnRef);
+					int subjectColumnIndex = -1;
+
+					try {
+						subjectColumnIndex = ColumnHeader.idRefToColumnIndex(columnHeaders, subjectColumnRef);
+					} catch (IllegalArgumentException iae) {
+						try {
+							if(subjectColumnRef.length() <= 2) {
+								subjectColumnIndex = CellReference.convertColStringToIndex(subjectColumnRef);
+							}
+							if(subjectColumnIndex == -1) {
+								throw new IllegalArgumentException(subjectColumnRef);
+							}
+						} catch (IllegalArgumentException iae2) {
+							throw new Xls2SkosException(iae2, "Unable to find subjectColumn reference '"+subjectColumnRef+"' (full header "+header.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+".\n Message is : "+iae2.getMessage());
+						}
+					}
+					
 					String currentSubject = getCellValue(row.getCell(subjectColumnIndex));
 					
 					if(currentSubject != null) {
 						try {
-							rowBuilder.setCurrentSubjectString(currentSubject);
+							rowBuilder.setCurrentSubject(SimpleValueFactory.getInstance().createIRI(currentSubject));
 						} catch (Exception e) {
 							e.printStackTrace();
 							ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -536,7 +544,7 @@ public class Xls2SkosConverter {
 							throw new Xls2SkosException(e, "Cannot set subject URI in cell "+subjectColumnRef+(row.getRowNum()+1)+", value is '"+ currentSubject +"' (header "+header.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+".\n Message is : "+e.getMessage()+"\n Beginning of stacktrace is "+stacktraceStringBegin);
 						}
 					} else {
-						log.warn("Unable to set a new current subject from cell '"+subjectColumnRef+(row.getRowNum()+1)+"' (header "+header.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+".");
+						log.warn("Unable to set a new current subject from cell '"+CellReference.convertNumToColString(colIndex)+(row.getRowNum()+1)+"' (header "+header.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+".");
 					}
 				}
 				
@@ -562,40 +570,43 @@ public class Xls2SkosConverter {
 		
 		// if, after row processing, no rdf:type was generated, then we consider the row to be a skos:Concept
 		// this allows to generate something else that skos:Concept
-		if(this.applyPostProcessings && rowBuilder != null && !model.contains(rowBuilder.conceptResource, RDF.TYPE, null)) {
-			model.add(rowBuilder.conceptResource, RDF.TYPE, SKOS.CONCEPT);
+		if(this.applyPostProcessings && rowBuilder != null && rowBuilder.rowMainResource != null && !model.contains(rowBuilder.rowMainResource, RDF.TYPE, null)) {
+			model.add(rowBuilder.rowMainResource, RDF.TYPE, SKOS.CONCEPT);
 		}
 		
-		return null == rowBuilder ? null : rowBuilder.conceptResource;
+		return null == rowBuilder ? null : rowBuilder.rowMainResource;
 	}
 
 	private class RowBuilder {
 		private final Model model;
-		private final Resource conceptResource;
+		private Resource rowMainResource;
 		private Resource currentSubject;
 
+		public RowBuilder(Model model) {
+			this(model, null);
+		}
+		
 		public RowBuilder(Model model, String uri) {
 			this.model = model;
-			conceptResource = SimpleValueFactory.getInstance().createIRI(uri);
-			// set the current subject to the conceptResource by default
-			currentSubject = conceptResource;
+			if(uri != null) {
+				rowMainResource = SimpleValueFactory.getInstance().createIRI(uri);
+				// set the current subject to the main resource by default
+				currentSubject = rowMainResource;
+			}
 		}
 
 		public void processCell(ValueGeneratorIfc valueGenerator, String value, String language) {
 			// if the column is unknown, ignore it
-			if(valueGenerator != null) {				
-				Resource newResource = valueGenerator.addValue(model, currentSubject, value, language);
-				if (null != newResource) {
-					// change the focus to the new resource in the case of xl labels
-					// so that subsequent columns are added on that resource
-					currentSubject = newResource;
-				}
+			// if no current subject was found, cannot add any value
+			if(valueGenerator != null && this.currentSubject != null) {				
+				valueGenerator.addValue(model, currentSubject, value, language);
 			}
 		}
-		
-		public void setCurrentSubjectString(String subjectUri) {
-			currentSubject = SimpleValueFactory.getInstance().createIRI(subjectUri);
+
+		public void setCurrentSubject(Resource currentSubject) {
+			this.currentSubject = currentSubject;
 		}
+
 	}
 
 	public List<String> getSheetsToIgnore() {

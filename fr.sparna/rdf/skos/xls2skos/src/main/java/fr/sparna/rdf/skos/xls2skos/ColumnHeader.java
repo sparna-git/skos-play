@@ -1,6 +1,7 @@
 package fr.sparna.rdf.skos.xls2skos;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ public class ColumnHeader {
 	
 	public static final String PARAMETER_SEPARATOR = "separator";
 	public static final String PARAMETER_SUBJECT_COLUMN = "subjectColumn";
+	public static final String PARAMETER_ID = "id";
 
 	/**
 	 * the full orignal value of the header, as a raw string
@@ -39,6 +41,14 @@ public class ColumnHeader {
 	 * Additionnal parameters on the header, e.g. "skos:altLabel(separator=",")"
 	 */
 	private Map<String, String> parameters = new HashMap<String, String>();
+	/**
+	 * The column id set by the "id" parameter
+	 */
+	private String id;
+	/**
+	 * The actual Excel column index corresponding to this header
+	 */
+	private int columnIndex;
 	
 	public ColumnHeader(String originalValue) {
 		this.originalValue = originalValue;
@@ -68,7 +78,6 @@ public class ColumnHeader {
 		return declaredProperty;
 	}
 
-
 	public void setLanguage(Optional<String> language) {
 		this.language = language;
 	}
@@ -97,12 +106,39 @@ public class ColumnHeader {
 		this.parameters = parameters;
 	}
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public int getColumnIndex() {
+		return columnIndex;
+	}
+
+	public void setColumnIndex(int columnIndex) {
+		this.columnIndex = columnIndex;
+	}
+	
+	public static int idRefToColumnIndex(List<ColumnHeader> headers, String idRef) {
+		for (ColumnHeader header : headers) {
+			if(header.getId() != null && header.getId().equals(idRef)) {
+				return header.getColumnIndex();
+			}
+		}
+		throw new IllegalArgumentException("Cannot find column with id '"+idRef+"'");
+	}
+
 	@Override
 	public String toString() {
 		return "ColumnHeader [originalValue=" + originalValue + ", language=" + language + ", datatype=" + datatype
 				+ ", property=" + property + ", declaredProperty=" + declaredProperty + ", inverse=" + inverse
-				+ ", parameters=" + parameters + "]";
+				+ ", parameters=" + parameters + ", id=" + id + ", columnIndex=" + columnIndex + "]";
 	}
+
+	
 	
 	
 	

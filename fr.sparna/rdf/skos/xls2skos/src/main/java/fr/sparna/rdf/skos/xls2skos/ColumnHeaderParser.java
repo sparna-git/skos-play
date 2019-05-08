@@ -20,8 +20,12 @@ public class ColumnHeaderParser {
 		super();
 		this.prefixManager = prefixManager;
 	}
-
+	
 	public ColumnHeader parse(String value) {
+		return parse(value, -1);
+	}
+
+	public ColumnHeader parse(String value, int columnIndex) {
 		if(value == null || value.equals("")) {
 			return null;
 		}
@@ -31,7 +35,12 @@ public class ColumnHeaderParser {
 		h.setLanguage(parseLanguage(value));
 		h.setDatatype(parseDatatype(value));
 		h.setInverse(parseInverse(value));
-		h.setParameters(parseParameters(value));
+		Map<String, String> parameters = parseParameters(value);
+		h.setParameters(parameters);
+		if(parameters.containsKey(ColumnHeader.PARAMETER_ID)) {
+			h.setId(parameters.get(ColumnHeader.PARAMETER_ID));
+		}
+		h.setColumnIndex(columnIndex);
 		
 		return h;
 	}
@@ -110,7 +119,6 @@ public class ColumnHeaderParser {
 				// TODO : have a full grammar to be able to really split values.
 				String[] splittedParameters = parametersString.split(" ");
 				Arrays.stream(splittedParameters).forEach(p -> {
-					System.out.println(p);
 					String[] keyValue;
 					// split on column if the separator value is an equal
 					if(p.contains("\"=\"")) {
