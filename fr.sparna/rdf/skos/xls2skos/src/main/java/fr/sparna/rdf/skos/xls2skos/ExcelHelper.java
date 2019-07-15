@@ -6,6 +6,8 @@ import java.util.TimeZone;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 
 public class ExcelHelper {
 
@@ -47,5 +49,20 @@ public class ExcelHelper {
 		calendar.setTimeZone(TimeZone.getTimeZone("CEST"));
 		return calendar;
 	}
+	
+	public static Row columnLookup(String value, Sheet sheet, int columnIndex) {
+		for(Row r : sheet) {
+		   Cell c = r.getCell(columnIndex);
+		   if(c != null) {
+		      String cellValue = getCellValue(c);
+		      if(cellValue.equals(value)) {
+		    	  return r;
+		      }
+		   }
+		}
+		
+		return null;
+	}
+
 
 }

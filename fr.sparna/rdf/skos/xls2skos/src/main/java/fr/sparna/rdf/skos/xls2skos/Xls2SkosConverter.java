@@ -134,7 +134,7 @@ public class Xls2SkosConverter {
 		// other concepts metadata
 		valueGenerators.put("euvoc:status", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#status"), prefixManager), ","));
 		// a source can be a literal or a URI
-		valueGenerators.put("dct:source", 			ValueGeneratorFactory.split(ValueGeneratorFactory.resourceOrLiteral(new ColumnHeaderParser(prefixManager).parse("dct:source", -1), prefixManager), ","));
+		valueGenerators.put("dct:source", 			ValueGeneratorFactory.split(ValueGeneratorFactory.resourceOrLiteral(new ColumnHeaderParser(prefixManager).parse("dct:source", (short)-1), prefixManager), ","));
 		// dct metadata for the ConceptScheme
 		valueGenerators.put("dct:title", 			ValueGeneratorFactory.langLiteral(DCTERMS.TITLE));
 		valueGenerators.put("dct:description", 		ValueGeneratorFactory.langLiteral(DCTERMS.DESCRIPTION));
@@ -265,7 +265,7 @@ public class Xls2SkosConverter {
 				String key = getCellValue(sheet.getRow(rowIndex).getCell(0));
 				String value = getCellValue(sheet.getRow(rowIndex).getCell(1));
 				
-				ColumnHeader header = headerParser.parse(key, -1);
+				ColumnHeader header = headerParser.parse(key, (short)-1);
 				if(
 						header != null
 						&&
@@ -476,9 +476,37 @@ public class Xls2SkosConverter {
 				
 				ValueGeneratorIfc valueGenerator = valueGenerators.get(header.getDeclaredProperty());
 				
+				if(header.getParameters().get(ColumnHeader.PARAMETER_LOOKUP_COLUMN) != null) {
+					// finds the index of the column corresponding to lookupColumn reference
+					String lookupColumnRef = header.getParameters().get(ColumnHeader.PARAMETER_LOOKUP_COLUMN);
+					short lookupColumnIndex = ColumnHeader.idRefOrPropertyRefToColumnIndex(columnHeaders, lookupColumnRef);
+					if(lookupColumnIndex == -1) {
+						throw new Xls2SkosException("Unable to find lookupColumn reference '"+lookupColumnRef+"' (full header "+header.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+".");
+					}
+					
+					// now find the subject at which the lookupColumn property is attached
+					ColumnHeader lookupColumnHeader = ColumnHeader.findByColumnIndex(columnHeaders, lookupColumnIndex);
+					short lookupSubjectColumn = 0;
+					if(header.getParameters().get(ColumnHeader.PARAMETER_SUBJECT_COLUMN) != null) {
+						String subjectColumnRef = lookupColumnHeader.getParameters().get(ColumnHeader.PARAMETER_SUBJECT_COLUMN);
+						lookupSubjectColumn = ColumnHeader.idRefToColumnIndex(columnHeaders, subjectColumnRef);
+						if(lookupSubjectColumn == -1) {
+							throw new Xls2SkosException("Unable to find subjectColumn reference '"+subjectColumnRef+"' (full header "+lookupColumnHeader.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+", while processing lookupColumn in header "+header.getOriginalValue());
+						}
+					}
+					
+					valueGenerator = ValueGeneratorFactory.lookup(
+							header.getProperty(),
+							row.getSheet(),
+							lookupColumnIndex,
+							lookupSubjectColumn,
+							prefixManager
+					);
+				}
+				
 				// if this is not one of the known processor, but the property is known, then defaults to a generic processor
 				// also defaults to a generic processor if a custom datatype is declared on the property
-				if(
+				else if(
 						(
 								valueGenerator == null
 								||
@@ -511,23 +539,12 @@ public class Xls2SkosConverter {
 					valueGenerator = ValueGeneratorFactory.split(valueGenerator, ",");
 				}
 				
+				// determine the subject of the triple, be default it is the value of the first column but can be overidden
 				if(header.getParameters().get(ColumnHeader.PARAMETER_SUBJECT_COLUMN) != null) {
 					String subjectColumnRef = header.getParameters().get(ColumnHeader.PARAMETER_SUBJECT_COLUMN);
-					int subjectColumnIndex = -1;
-
-					try {
-						subjectColumnIndex = ColumnHeader.idRefToColumnIndex(columnHeaders, subjectColumnRef);
-					} catch (IllegalArgumentException iae) {
-						try {
-							if(subjectColumnRef.length() <= 2) {
-								subjectColumnIndex = CellReference.convertColStringToIndex(subjectColumnRef);
-							}
-							if(subjectColumnIndex == -1) {
-								throw new IllegalArgumentException(subjectColumnRef);
-							}
-						} catch (IllegalArgumentException iae2) {
-							throw new Xls2SkosException(iae2, "Unable to find subjectColumn reference '"+subjectColumnRef+"' (full header "+header.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+".\n Message is : "+iae2.getMessage());
-						}
+					int subjectColumnIndex = ColumnHeader.idRefToColumnIndex(columnHeaders, subjectColumnRef);
+					if(subjectColumnIndex == -1) {
+						throw new Xls2SkosException("Unable to find subjectColumn reference '"+subjectColumnRef+"' (full header "+header.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+".");
 					}
 					
 					String currentSubject = getCellValue(row.getCell(subjectColumnIndex));

@@ -22,10 +22,10 @@ public class ColumnHeaderParser {
 	}
 	
 	public ColumnHeader parse(String value) {
-		return parse(value, -1);
+		return parse(value, (short)-1);
 	}
 
-	public ColumnHeader parse(String value, int columnIndex) {
+	public ColumnHeader parse(String value, short columnIndex) {
 		if(value == null || value.equals("")) {
 			return null;
 		}

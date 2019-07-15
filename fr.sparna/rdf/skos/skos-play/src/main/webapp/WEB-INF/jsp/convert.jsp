@@ -106,7 +106,8 @@
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-4.xlsx">Example 4 (schema.org, datatypes, multiple sheets)</option>
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-5.xlsx">Example 5 (skos:Collection, inverse columns)</option>
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-6.xlsx">Example 6 (skos:OrderedCollection, dealing with rdf:Lists)</option>
-							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-7.xlsx">Example 7 (different subjects with subjectColumn parameter)</option>  
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-7.xlsx">Example 7 (different subjects with subjectColumn parameter)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-8.xlsx">Example 8 (ease references with lookupColumn parameter)</option>  
 						</select>						
 						<span class="help-block"><i><fmt:message key="convert.form.Example.download" />&nbsp;<a id="lien" href="${sessionData.baseUrl}/excel_test/excel2skos-exemple-1.xlsx">Example 1 (simple exemple, in english)</a></i></span>
 					</div>
@@ -489,11 +490,23 @@
 					but in case of processing generic RDF data, this cell B1 can be used to indicate the URI of the graph, with its associated metadata in the header.
 					<p />
 				<h4><a href="#subjectColumn" id="subjectColumn"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Changing Subject Column</h4>
-					<p />Be default, the property in each column is expressed on the subject URI of the first column of the spreadsheet. It is possible to state that a given column is expressed on a subject URI
+					<p />By default, the property in each column is expressed on the subject URI of the first column of the spreadsheet. It is possible to state that a given column is expressed on a subject URI
 					in a different column on the table. To do this, add a column parameter <code>subjectColumn</code> with a reference to the column letter containing the URI of the subject.
 					For example <code>schema:name(subjectColumn="N")</code> means this column is the name of the URI stored in column N.
 					<p />This is how such a header could look like :
 				<img src="images/convert-screenshot-subjectColumn.png" width="100%" />
+				<h4><a href="#lookupColumn" id="lookupColumn"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Refering to URIs using their labels</h4>
+					<p />SKOS involves creating hierarchies of concepts, and connecting related concepts. This involves making references to other concept URIs, typically in
+					a column <code>skos:broader</code>. But URIs can be opaque, and copy-pasting concept URIs across cells can be tedious. The lookupColumn parameter is a mechanism
+					that allows you to <em>reference a concept URI through one of its label (or other unique key) stored in another column</em>. To use it, add a column parameter
+					<code>lookupColumn</code> with a reference to the column in which the string value of this column will be searched. The reference can be either a reference to the
+					Excel column letter or to the corresponding property in which you want to lookup. A typical example is <code>skos:broader(lookupColumn=skos:prefLabel)</code>,
+					which means that you want to create a skos:broader having as a value the URI of the Concept that have in its <code>skos:prefLabel</code> column the value you indicate
+					in your skos:broader column.
+					<p />This is how it would look like, have a look at example 8 in the included examples :
+				<img src="images/convert-screenshot-lookupColumn.png" width="100%" />
+					<p />You can view the <code>lookupColumn</code> parameter as the equivalent of Excel "VLOOKUP" / "RECHERCHEV" function, except easier to write.
+
 					<p />
 			</fieldset>
 			

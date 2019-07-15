@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.poi.hssf.util.CellReference;
 import org.eclipse.rdf4j.model.IRI;
 
 public class ColumnHeader {
 	
 	public static final String PARAMETER_SEPARATOR = "separator";
 	public static final String PARAMETER_SUBJECT_COLUMN = "subjectColumn";
+	public static final String PARAMETER_LOOKUP_COLUMN = "lookupColumn";
 	public static final String PARAMETER_ID = "id";
 
 	/**
@@ -48,7 +50,7 @@ public class ColumnHeader {
 	/**
 	 * The actual Excel column index corresponding to this header
 	 */
-	private int columnIndex;
+	private short columnIndex;
 	
 	public ColumnHeader(String originalValue) {
 		this.originalValue = originalValue;
@@ -114,21 +116,79 @@ public class ColumnHeader {
 		this.id = id;
 	}
 
-	public int getColumnIndex() {
+	public short getColumnIndex() {
 		return columnIndex;
 	}
 
-	public void setColumnIndex(int columnIndex) {
+	public void setColumnIndex(short columnIndex) {
 		this.columnIndex = columnIndex;
 	}
 	
-	public static int idRefToColumnIndex(List<ColumnHeader> headers, String idRef) {
+	/**
+	 * Finds the column index based on a column ID reference or an Excel column reference.
+	 * Returns -1 if not found.
+	 * 
+	 * @param headers
+	 * @param idRef
+	 * @return
+	 */
+	public static short idRefToColumnIndex(List<ColumnHeader> headers, String idRef) {
 		for (ColumnHeader header : headers) {
 			if(header.getId() != null && header.getId().equals(idRef)) {
 				return header.getColumnIndex();
 			}
 		}
-		throw new IllegalArgumentException("Cannot find column with id '"+idRef+"'");
+		
+		// if we haven't found the proper column id, try it as an Excel column reference
+		if(idRef.length() <= 2) {
+			short subjectColumnIndex = (short)CellReference.convertColStringToIndex(idRef);
+			if(subjectColumnIndex != -1) {
+				return subjectColumnIndex;
+			}
+		}
+
+		return -1;
+	}
+	
+	/**
+	 * Finds the column index based on a reference that can be 
+	 * either an ID reference or a property reference or an Excel column reference.
+	 * Returns -1 if not found.
+	 * 
+	 * @param headers
+	 * @param idOrPropertyRef the ID or property reference to search
+	 * @return
+	 */
+	public static short idRefOrPropertyRefToColumnIndex(List<ColumnHeader> headers, String idOrPropertyRef) {
+		for (ColumnHeader header : headers) {
+			if(
+					(header.getId() != null && header.getId().equals(idOrPropertyRef))
+					||
+					(header.getDeclaredProperty() != null && header.getDeclaredProperty().equals(idOrPropertyRef))
+			) {
+				return header.getColumnIndex();
+			}
+		}
+		
+		// if we haven't found the proper column id, try it as an Excel column reference
+		if(idOrPropertyRef.length() <= 2) {
+			short subjectColumnIndex = (short)CellReference.convertColStringToIndex(idOrPropertyRef);
+			if(subjectColumnIndex != -1) {
+				return subjectColumnIndex;
+			}
+		}
+		
+		return -1;
+	}
+	
+	public static ColumnHeader findByColumnIndex(List<ColumnHeader> headers, int columnIndex) {
+		for (ColumnHeader header : headers) {
+			if(header.getColumnIndex() == columnIndex) {
+				return header;
+			}
+		}
+		
+		return null;
 	}
 
 	@Override

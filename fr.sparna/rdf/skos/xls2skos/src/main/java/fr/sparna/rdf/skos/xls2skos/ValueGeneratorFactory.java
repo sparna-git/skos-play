@@ -1,5 +1,7 @@
 package fr.sparna.rdf.skos.xls2skos;
 
+import static fr.sparna.rdf.skos.xls2skos.ExcelHelper.getCellValue;
+
 import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -10,6 +12,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
@@ -57,7 +61,25 @@ public final class ValueGeneratorFactory {
 		};
 	}
 	
-	public static ValueGeneratorIfc resourceOrLiteral(ColumnHeader header, PrefixManager prefixManager) {	
+	public static ValueGeneratorIfc lookup(IRI property, Sheet sheet, short lookupColumn, short uriColumn, PrefixManager prefixManager) {
+		return (model, subject, value, language) -> {
+			String lookupValue = value.trim();
+			
+			Row foundRow = ExcelHelper.columnLookup(lookupValue, sheet, lookupColumn);
+			if(foundRow != null) {
+				String iriCellValue = getCellValue(foundRow.getCell(uriColumn));
+				IRI iri = SimpleValueFactory.getInstance().createIRI(prefixManager.uri(iriCellValue.trim(), true));
+				model.add(subject, property, iri);
+			} else {
+				// throw Exception if a reference was not found
+				throw new Xls2SkosException("Unable to find value '"+lookupValue+"' in column of index "+lookupColumn+", while trying to generate property "+property);
+			}
+			
+			return null;
+		};
+	}
+	
+	public static ValueGeneratorIfc resourceOrLiteral(ColumnHeader header, PrefixManager prefixManager) {
 		return (model, subject, value, language) -> {
 			if (StringUtils.isBlank(value)) {
 				return null;
