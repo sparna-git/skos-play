@@ -118,39 +118,39 @@ public class Xls2SkosConverter {
 		this.modelWriter = modelWriter;
 		this.lang = lang;
 		
-		// inScheme for additionnal inScheme information, if needed
-		valueGenerators.put("skos:inScheme", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.IN_SCHEME, prefixManager), ","));
-		// labels
-		valueGenerators.put("skos:prefLabel", 		ValueGeneratorFactory.langLiteral(SKOS.PREF_LABEL));
-		valueGenerators.put("skos:altLabel", 		ValueGeneratorFactory.langLiteral(SKOS.ALT_LABEL));
-		valueGenerators.put("skos:hiddenLabel", 	ValueGeneratorFactory.langLiteral(SKOS.HIDDEN_LABEL));
-		// notes
-		valueGenerators.put("skos:definition", 		ValueGeneratorFactory.langLiteral(SKOS.DEFINITION));		
-		valueGenerators.put("skos:editorialNote", 	ValueGeneratorFactory.langLiteral(SKOS.EDITORIAL_NOTE));
-		valueGenerators.put("skos:historyNote", 	ValueGeneratorFactory.langLiteral(SKOS.HISTORY_NOTE));
-		valueGenerators.put("skos:scopeNote", 		ValueGeneratorFactory.langLiteral(SKOS.SCOPE_NOTE));
-		valueGenerators.put("skos:changeNote", 		ValueGeneratorFactory.langLiteral(SKOS.CHANGE_NOTE));
-		valueGenerators.put("skos:example", 		ValueGeneratorFactory.langLiteral(SKOS.EXAMPLE));
-		// notation
-		valueGenerators.put("skos:notation", 		ValueGeneratorFactory.plainLiteral(SKOS.NOTATION));
-		// semantic relations
-		valueGenerators.put("skos:broader", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.BROADER, prefixManager), ","));
-		valueGenerators.put("skos:narrower", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.NARROWER, prefixManager), ","));
-		valueGenerators.put("skos:related", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.RELATED, prefixManager), ","));
-		// mapping relations		
-		valueGenerators.put("skos:exactMatch", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.EXACT_MATCH, prefixManager), ","));
-		valueGenerators.put("skos:closeMatch", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.CLOSE_MATCH, prefixManager), ","));
-		valueGenerators.put("skos:relatedMatch", 	ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.RELATED_MATCH, prefixManager), ","));
-		valueGenerators.put("skos:broadMatch", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.BROAD_MATCH, prefixManager), ","));
-		valueGenerators.put("skos:narrowMatch", 	ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.RELATED_MATCH, prefixManager), ","));
-
-		// other concepts metadata
-		valueGenerators.put("euvoc:status", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#status"), prefixManager), ","));
-		// a source can be a literal or a URI
-		valueGenerators.put("dct:source", 			ValueGeneratorFactory.split(ValueGeneratorFactory.resourceOrLiteral(new ColumnHeaderParser(prefixManager).parse("dct:source", (short)-1), prefixManager), ","));
-		// dct metadata for the ConceptScheme
-		valueGenerators.put("dct:title", 			ValueGeneratorFactory.langLiteral(DCTERMS.TITLE));
-		valueGenerators.put("dct:description", 		ValueGeneratorFactory.langLiteral(DCTERMS.DESCRIPTION));
+//		// inScheme for additionnal inScheme information, if needed
+//		valueGenerators.put("skos:inScheme", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.IN_SCHEME, prefixManager), ","));
+//		// labels
+//		valueGenerators.put("skos:prefLabel", 		ValueGeneratorFactory.langLiteral(SKOS.PREF_LABEL));
+//		valueGenerators.put("skos:altLabel", 		ValueGeneratorFactory.langLiteral(SKOS.ALT_LABEL));
+//		valueGenerators.put("skos:hiddenLabel", 	ValueGeneratorFactory.langLiteral(SKOS.HIDDEN_LABEL));
+//		// notes
+//		valueGenerators.put("skos:definition", 		ValueGeneratorFactory.langLiteral(SKOS.DEFINITION));		
+//		valueGenerators.put("skos:editorialNote", 	ValueGeneratorFactory.langLiteral(SKOS.EDITORIAL_NOTE));
+//		valueGenerators.put("skos:historyNote", 	ValueGeneratorFactory.langLiteral(SKOS.HISTORY_NOTE));
+//		valueGenerators.put("skos:scopeNote", 		ValueGeneratorFactory.langLiteral(SKOS.SCOPE_NOTE));
+//		valueGenerators.put("skos:changeNote", 		ValueGeneratorFactory.langLiteral(SKOS.CHANGE_NOTE));
+//		valueGenerators.put("skos:example", 		ValueGeneratorFactory.langLiteral(SKOS.EXAMPLE));
+//		// notation
+//		valueGenerators.put("skos:notation", 		ValueGeneratorFactory.plainLiteral(SKOS.NOTATION));
+//		// semantic relations
+//		valueGenerators.put("skos:broader", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.BROADER, prefixManager), ","));
+//		valueGenerators.put("skos:narrower", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.NARROWER, prefixManager), ","));
+//		valueGenerators.put("skos:related", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.RELATED, prefixManager), ","));
+//		// mapping relations		
+//		valueGenerators.put("skos:exactMatch", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.EXACT_MATCH, prefixManager), ","));
+//		valueGenerators.put("skos:closeMatch", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.CLOSE_MATCH, prefixManager), ","));
+//		valueGenerators.put("skos:relatedMatch", 	ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.RELATED_MATCH, prefixManager), ","));
+//		valueGenerators.put("skos:broadMatch", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.BROAD_MATCH, prefixManager), ","));
+//		valueGenerators.put("skos:narrowMatch", 	ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SKOS.RELATED_MATCH, prefixManager), ","));
+//
+//		// other concepts metadata
+//		valueGenerators.put("euvoc:status", 		ValueGeneratorFactory.split(ValueGeneratorFactory.resource(SimpleValueFactory.getInstance().createIRI("http://publications.europa.eu/ontology/euvoc#status"), prefixManager), ","));
+//		// a source can be a literal or a URI
+//		valueGenerators.put("dct:source", 			ValueGeneratorFactory.split(ValueGeneratorFactory.resourceOrLiteral(new ColumnHeaderParser(prefixManager).parse("dct:source", (short)-1), prefixManager), ","));
+//		// dct metadata for the ConceptScheme
+//		valueGenerators.put("dct:title", 			ValueGeneratorFactory.langLiteral(DCTERMS.TITLE));
+//		valueGenerators.put("dct:description", 		ValueGeneratorFactory.langLiteral(DCTERMS.DESCRIPTION));
 	}
 
 	/**
