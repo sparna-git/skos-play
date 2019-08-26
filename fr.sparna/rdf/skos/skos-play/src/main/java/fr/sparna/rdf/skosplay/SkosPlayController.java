@@ -210,7 +210,12 @@ public class SkosPlayController {
 				if(file.isEmpty()) {
 					return doError(request, "Uploaded file is empty");
 				}
-
+				
+				// explicitely remove TRIX format from RDFParserRegistry
+				if(RDFParserRegistry.getInstance().has(RDFFormat.TRIX)) {
+					RDFParserRegistry.getInstance().remove(RDFParserRegistry.getInstance().get(RDFFormat.TRIX).get());
+				}
+				
 				RDFFormat rdfFormat = RDFParserRegistry.getInstance().getFileFormatForFileName(file.getOriginalFilename()).orElse(RDFFormat.RDFXML);				
 				log.debug("Uploaded file name is \""+file.getOriginalFilename()+"\", will be parsed as "+rdfFormat.getName());
 				skosPlayModel.load(
