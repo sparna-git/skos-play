@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.stream.Collectors;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -16,8 +17,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.model.vocabulary.SKOS;
 import org.eclipse.rdf4j.model.vocabulary.XMLSchema;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParser;
@@ -61,18 +66,47 @@ public final class ValueGeneratorFactory {
 		};
 	}
 	
-	public static ValueGeneratorIfc lookup(IRI property, Sheet sheet, short lookupColumn, short uriColumn, PrefixManager prefixManager) {
+	public static ValueGeneratorIfc lookup(ColumnHeader header, Sheet sheet, short lookupColumn, short uriColumn, PrefixManager prefixManager) {
 		return (model, subject, value, language) -> {
-			String lookupValue = value.trim();
+			String lookupValue = value;
+			
+			if(lookupValue.equals("")) {
+				return null;
+			}
 			
 			Row foundRow = ExcelHelper.columnLookup(lookupValue, sheet, lookupColumn);
 			if(foundRow != null) {
-				String iriCellValue = getCellValue(foundRow.getCell(uriColumn));
-				IRI iri = SimpleValueFactory.getInstance().createIRI(prefixManager.uri(iriCellValue.trim(), true));
-				model.add(subject, property, iri);
+				String iriCellValue = getCellValue(foundRow.getCell(uriColumn));				
+				ResourceOrLiteralValueGenerator g = new ResourceOrLiteralValueGenerator(header, prefixManager);
+				return g.addValue(model, subject, iriCellValue, language);				
 			} else {
 				// throw Exception if a reference was not found
-				throw new Xls2SkosException("Unable to find value '"+lookupValue+"' in column of index "+lookupColumn+", while trying to generate property "+property);
+				log.error("Unable to find value '"+lookupValue+"' in column of index "+lookupColumn+", while trying to generate property "+header.getProperty());
+				// keep the triple as a literal with special predicate ?				
+				// throw new Xls2SkosException("Unable to find value '"+lookupValue+"' in column of index "+lookupColumn+", while trying to generate property "+property);
+			}
+			
+			return null;
+		};
+	}
+	
+	public static ValueGeneratorIfc reconcile(ColumnHeader header, PrefixManager prefixManager, IRI lookupProperty, Model lookupModel) {
+		return (model, subject, value, language) -> {
+			String lookupValue = value.trim();
+			
+			if(lookupValue.equals("")) {
+				return null;
+			}
+			
+			Model values = lookupModel.filter(null, lookupProperty, SimpleValueFactory.getInstance().createLiteral(lookupValue, language));
+			
+			if(values.size() == 1) {
+				ResourceOrLiteralValueGenerator g = new ResourceOrLiteralValueGenerator(header, prefixManager);
+				return g.addValue(model, subject, values.iterator().next().getSubject().toString(), language);		
+			} else if(values.size() > 1) {
+				log.error("Found multiple values for '"+lookupValue+"' in property '"+ lookupProperty +"' : "+values.subjects().stream().map(s -> s.toString()).collect(Collectors.joining(", ")));
+			} else {
+					log.error("Unable to find value '"+lookupValue+"'@"+language+" in a property '"+ lookupProperty +"' in the model");
 			}
 			
 			return null;
@@ -80,76 +114,8 @@ public final class ValueGeneratorFactory {
 	}
 	
 	public static ValueGeneratorIfc resourceOrLiteral(ColumnHeader header, PrefixManager prefixManager) {
-		return (model, subject, value, language) -> {
-			if (StringUtils.isBlank(value)) {
-				return null;
-			}
-			
-			IRI datatype = header.getDatatype().orElse(null);
-
-			// if the value starts with http, or uses a known namespace, then try to parse it as a resource
-			// only if no datatype or language have been explicitely specified, in which case this will default to a literal
-			if(
-					datatype == null
-					&&
-					!header.getLanguage().isPresent()
-					&&
-					(value.startsWith("http") || prefixManager.usesKnownPrefix(value.trim()))
-			) {
-				if(!header.isInverse()) {
-					model.add(subject, header.getProperty(), SimpleValueFactory.getInstance().createIRI(prefixManager.uri(value.trim(), false)));
-				} else {
-					model.add(SimpleValueFactory.getInstance().createIRI(prefixManager.uri(value.trim(), false)), header.getProperty(),subject);
-				}				
-			
-			} else if(value.startsWith("(") && value.endsWith(")")) {
-				// handle rdf:list
-				turtleParsing(header.getProperty(), prefixManager).addValue(model, subject, value, language);	
-			} else if(datatype == null && value.startsWith("[") && value.endsWith("]")) {
-				// handle blank nodes
-				turtleParsing(header.getProperty(), prefixManager).addValue(model, subject, value, language);
-			} else {
-				// if the value is surrounded with quotes, remove them, they were here to escape a URI to be considered as a literal
-				String unescapedValue = (value.startsWith("\"") && value.endsWith("\""))?value.substring(1, value.length()-1):value;
-				
-				// consider it like a literal
-				if(datatype != null) {
-					Literal l = null;
-					if(datatype.stringValue().equals(XMLSchema.DATE.stringValue())) {
-						try {
-							Date d = ExcelHelper.asCalendar(unescapedValue.trim()).getTime();
-							l = SimpleValueFactory.getInstance().createLiteral(
-									new SimpleDateFormat("yyyy-MM-dd").format(d),
-									XMLSchema.DATE
-							);
-						} catch (Exception e) {
-							// date parsing failed in the case the cell has a string format - then simply default to a typed literal creation
-							l = SimpleValueFactory.getInstance().createLiteral(unescapedValue.trim(), datatype);
-						}
-					} else if(datatype.stringValue().equals(XMLSchema.DATETIME.stringValue())) {
-						try {
-							try {
-								l = SimpleValueFactory.getInstance().createLiteral(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)ExcelHelper.asCalendar(unescapedValue.trim())));
-							} catch (DatatypeConfigurationException e) {
-								e.printStackTrace();
-							}
-						} catch (Exception e) {
-							// date parsing failed in the case the cell has a string format - then simply default to a typed literal creation
-							l = SimpleValueFactory.getInstance().createLiteral(unescapedValue.trim(), datatype);
-						}
-						
-					} else {
-						l = SimpleValueFactory.getInstance().createLiteral(unescapedValue.trim(), datatype);
-					}
-					
-					model.add(subject, header.getProperty(), l);
-				} else {
-					langOrPlainLiteral(header.getProperty()).addValue(model, subject, value, language);
-				}
-			}
-			
-			return null;
-		};
+		ResourceOrLiteralValueGenerator g = new ResourceOrLiteralValueGenerator(header, prefixManager);
+		return g;
 	}
 
 	public static ValueGeneratorIfc turtleParsing(IRI property, PrefixManager prefixManager) {
@@ -255,5 +221,88 @@ public final class ValueGeneratorFactory {
 		};
 	}
 
+	public static class ResourceOrLiteralValueGenerator implements ValueGeneratorIfc {
+
+		protected ColumnHeader header;
+		protected PrefixManager prefixManager;
+		
+		public ResourceOrLiteralValueGenerator(ColumnHeader header, PrefixManager prefixManager) {
+			super();
+			this.header = header;
+			this.prefixManager = prefixManager;
+		}
+
+		@Override
+		public Value addValue(Model model, Resource subject, String value, String language) {
+			if (StringUtils.isBlank(value)) {
+				return null;
+			}
+			
+			IRI datatype = header.getDatatype().orElse(null);
+
+			// if the value starts with http, or uses a known namespace, then try to parse it as a resource
+			// only if no datatype or language have been explicitely specified, in which case this will default to a literal
+			if(
+					datatype == null
+					&&
+					!header.getLanguage().isPresent()
+					&&
+					(value.startsWith("http") || prefixManager.usesKnownPrefix(value.trim()))
+			) {
+				if(!header.isInverse()) {
+					model.add(subject, header.getProperty(), SimpleValueFactory.getInstance().createIRI(prefixManager.uri(value.trim(), false)));
+				} else {
+					model.add(SimpleValueFactory.getInstance().createIRI(prefixManager.uri(value.trim(), false)), header.getProperty(),subject);
+				}				
+			
+			} else if(value.startsWith("(") && value.endsWith(")")) {
+				// handle rdf:list
+				turtleParsing(header.getProperty(), prefixManager).addValue(model, subject, value, language);	
+			} else if(datatype == null && value.startsWith("[") && value.endsWith("]")) {
+				// handle blank nodes
+				turtleParsing(header.getProperty(), prefixManager).addValue(model, subject, value, language);
+			} else {
+				// if the value is surrounded with quotes, remove them, they were here to escape a URI to be considered as a literal
+				String unescapedValue = (value.startsWith("\"") && value.endsWith("\""))?value.substring(1, value.length()-1):value;
+				
+				// consider it like a literal
+				if(datatype != null) {
+					Literal l = null;
+					if(datatype.stringValue().equals(XMLSchema.DATE.stringValue())) {
+						try {
+							Date d = ExcelHelper.asCalendar(unescapedValue.trim()).getTime();
+							l = SimpleValueFactory.getInstance().createLiteral(
+									new SimpleDateFormat("yyyy-MM-dd").format(d),
+									XMLSchema.DATE
+							);
+						} catch (Exception e) {
+							// date parsing failed in the case the cell has a string format - then simply default to a typed literal creation
+							l = SimpleValueFactory.getInstance().createLiteral(unescapedValue.trim(), datatype);
+						}
+					} else if(datatype.stringValue().equals(XMLSchema.DATETIME.stringValue())) {
+						try {
+							try {
+								l = SimpleValueFactory.getInstance().createLiteral(DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar)ExcelHelper.asCalendar(unescapedValue.trim())));
+							} catch (DatatypeConfigurationException e) {
+								e.printStackTrace();
+							}
+						} catch (Exception e) {
+							// date parsing failed in the case the cell has a string format - then simply default to a typed literal creation
+							l = SimpleValueFactory.getInstance().createLiteral(unescapedValue.trim(), datatype);
+						}
+						
+					} else {
+						l = SimpleValueFactory.getInstance().createLiteral(unescapedValue.trim(), datatype);
+					}
+					
+					model.add(subject, header.getProperty(), l);
+				} else {
+					langOrPlainLiteral(header.getProperty()).addValue(model, subject, value, language);
+				}
+			}
+			
+			return null;
+		};		
+	}
 	
 }

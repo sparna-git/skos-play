@@ -22,6 +22,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
@@ -76,9 +77,9 @@ public class Xls2SkosConverter {
 	protected ModelWriterIfc modelWriter;
 
 	/**
-	 * Internal storage of Models for each ConceptScheme URI
+	 * List of identifiers of all the graphs / concept schemes converted
 	 */
-	private final Map<String, Model> csModels = new HashMap<>();
+	private final List<String> convertedVocabularyIdentifiers = new ArrayList<String>();
 	
 	/**
 	 * Internal list of value generators
@@ -91,14 +92,26 @@ public class Xls2SkosConverter {
 	protected PrefixManager prefixManager = new PrefixManager();
 	
 	/**
-	 * The workbook currently being processed, to ge references to fonts
+	 * The workbook currently being processed, to get references to fonts
 	 */
 	private transient Workbook workbook;
+	
+	/**
+	 * Global Model containing all the converted data from all sheets, useful for reconciling values
+	 */
+	private transient Model globalModel = new LinkedHashModelFactory().createEmptyModel();
+	
+	/**
+	 * Supporting Model containing external data on which to reconcile values
+	 */
+	private transient Model supportModel = new LinkedHashModelFactory().createEmptyModel();
 	
 	/**
 	 * Whether to apply post processings on the RDF produced from the sheets
 	 */
 	private boolean applyPostProcessings = true;
+	
+	
 	
 	public Xls2SkosConverter(ModelWriterIfc modelWriter, String lang) {
 		
@@ -147,6 +160,7 @@ public class Xls2SkosConverter {
 	 */
 	public List<Model> processFile(File input) {
 		try {
+			log.info("Converting file "+input.getAbsolutePath()+"...");
 			Workbook workbook = WorkbookFactory.create(input);
 			return processWorkbook(workbook);
 		} catch (Exception e) {
@@ -202,6 +216,7 @@ public class Xls2SkosConverter {
 				// if load(sheet) returns null, the sheet was ignored
 				Model model = processSheet(sheet);
 				models.add(model);
+				this.globalModel.addAll(model);
 			}
 			
 			// notify end
@@ -222,27 +237,27 @@ public class Xls2SkosConverter {
 	 */
 	private Model processSheet(Sheet sheet) {
 		
+		// initialize target Model
+		Model model = new LinkedHashModelFactory().createEmptyModel();
+		SimpleValueFactory svf = SimpleValueFactory.getInstance();
+		
 		RdfizableSheet rdfizableSheet = new RdfizableSheet(sheet, this);
 		
 		if(!rdfizableSheet.canRDFize()) {
 			log.debug(sheet.getSheetName()+" : Ignoring sheet.");
-			return null;
+			return model;
 		} else {
 			log.debug("Processing sheet: " + sheet.getSheetName());
 		}
 		
 		// read the prefixes
 		this.prefixManager.register(rdfizableSheet.readPrefixes());
-		
-		// initialize target Model
-		Model model = new LinkedHashModelFactory().createEmptyModel();
-		SimpleValueFactory svf = SimpleValueFactory.getInstance();
 
 		// read the concept scheme or graph URI
 		String csUri = prefixManager.uri(rdfizableSheet.getSchemeOrGraph(), true);
 		
-		// if the URI was already processed, this is an exception
-		if(this.csModels.containsKey(csUri)) {
+		// if the URI was already processed, output a warning (this is a possible case)
+		if(this.convertedVocabularyIdentifiers.contains(csUri)) {
 			log.debug("Duplicate graph declaration found: " + csUri + " (declared in more than one sheet)");
 		}
 		
@@ -324,9 +339,11 @@ public class Xls2SkosConverter {
 		}
 		
 		// writes the resulting Model
+		log.debug("Saving graph of "+model.size()+" statements generated from Sheet "+sheet.getSheetName());
 		modelWriter.saveGraphModel(csUri, model, prefixManager.getPrefixes());
-		// stores the Model
-		csModels.put(csUri, model);
+		
+		// stores the idenifier of generated vocabulary
+		convertedVocabularyIdentifiers.add(csUri);
 		return model;
 	}
 	
@@ -496,12 +513,35 @@ public class Xls2SkosConverter {
 					}
 					
 					valueGenerator = ValueGeneratorFactory.lookup(
-							header.getProperty(),
+							header,
 							row.getSheet(),
 							lookupColumnIndex,
 							lookupSubjectColumn,
 							prefixManager
 					);
+				}
+				
+				else if(header.getParameters().get(ColumnHeader.PARAMETER_RECONCILE) != null) {
+					String reconcileParameterValue = header.getParameters().get(ColumnHeader.PARAMETER_RECONCILE);
+					IRI reconcileProperty = (header.getReconcileProperty() != null)?header.getReconcileProperty():SKOS.PREF_LABEL;
+					
+					
+					if(reconcileParameterValue.equals("local")) {						
+						valueGenerator = ValueGeneratorFactory.reconcile(
+								header,
+								prefixManager,
+								reconcileProperty,
+								globalModel
+						);
+					} else if(reconcileParameterValue.equals("external")) {						
+						valueGenerator = ValueGeneratorFactory.reconcile(
+								header,
+								prefixManager,
+								reconcileProperty,
+								supportModel
+						);
+					}
+					
 				}
 				
 				// if this is not one of the known processor, but the property is known, then defaults to a generic processor
@@ -542,7 +582,7 @@ public class Xls2SkosConverter {
 				// determine the subject of the triple, be default it is the value of the first column but can be overidden
 				if(header.getParameters().get(ColumnHeader.PARAMETER_SUBJECT_COLUMN) != null) {
 					String subjectColumnRef = header.getParameters().get(ColumnHeader.PARAMETER_SUBJECT_COLUMN);
-					int subjectColumnIndex = ColumnHeader.idRefToColumnIndex(columnHeaders, subjectColumnRef);
+					int subjectColumnIndex = ColumnHeader.idRefOrPropertyRefToColumnIndex(columnHeaders, subjectColumnRef);
 					if(subjectColumnIndex == -1) {
 						throw new Xls2SkosException("Unable to find subjectColumn reference '"+subjectColumnRef+"' (full header "+header.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+".");
 					}
@@ -582,6 +622,9 @@ public class Xls2SkosConverter {
 						throw new Xls2SkosException(e, "Convert exception while processing value '"+value+"', cell "+CellReference.convertNumToColString(colIndex)+(row.getRowNum()+1)+" (header "+header.getOriginalValue()+") in sheet "+row.getSheet().getSheetName()+".\n Message is : "+e.getMessage()+"\n Beginning of stacktrace is "+stacktraceStringBegin);
 					}
 				}
+				
+				// reset the current subject after that
+				rowBuilder.resetCurrentSubject();
 			}
 		}
 		
@@ -623,6 +666,10 @@ public class Xls2SkosConverter {
 		public void setCurrentSubject(Resource currentSubject) {
 			this.currentSubject = currentSubject;
 		}
+		
+		public void resetCurrentSubject() {
+			this.currentSubject = this.rowMainResource;
+		}
 
 	}
 
@@ -657,9 +704,9 @@ public class Xls2SkosConverter {
 	public void setGenerateXlDefinitions(boolean generateXlDefinitions) {
 		this.generateXlDefinitions = generateXlDefinitions;
 	}
-	
-	public Map<String, Model> getCsModels() {
-		return csModels;
+
+	public List<String> getConvertedVocabularyIdentifiers() {
+		return convertedVocabularyIdentifiers;
 	}
 
 	public boolean isApplyPostProcessings() {
@@ -668,6 +715,10 @@ public class Xls2SkosConverter {
 
 	public void setApplyPostProcessings(boolean applyPostProcessings) {
 		this.applyPostProcessings = applyPostProcessings;
+	}
+
+	public void setSupportModel(Model supportModel) {
+		this.supportModel = supportModel;
 	}
 
 	public static void main(String[] args) throws Exception {

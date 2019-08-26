@@ -4,6 +4,7 @@ package fr.sparna.rdf.skos.xls2skos;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -33,6 +34,9 @@ public class DirectoryModelWriter implements ModelWriterIfc {
 	private RDFFormat format = RDFFormat.RDFXML;
 	private String graphSuffix = null;
 	
+	private Map<String, Model> modelsByGraph = new HashMap<>();
+	private Map<String, Map<String, String>> prefixesByGraph = new HashMap<>();
+	
 	public DirectoryModelWriter(File outputFolder) {
 		super();
 		this.outputFolder = outputFolder;
@@ -45,25 +49,14 @@ public class DirectoryModelWriter implements ModelWriterIfc {
 	public void saveGraphModel(String graph, Model model, Map<String, String> prefixes) {
 		graph = graph + ((this.graphSuffix != null)?graphSuffix:"");
 		
-		try {
-			String filename = URLEncoder.encode(graph, "UTF-8");
-			File file = new File(outputFolder, filename + "." + format.getDefaultFileExtension());
-			try (FileOutputStream fos = new FileOutputStream(file)) {
-				RDFHandler w = new BufferedGroupingRDFHandler(20000, RDFWriterRegistry.getInstance().get(format).get().getWriter(fos));
-				exportModel(model, w, prefixes);
-				fos.flush();
-			}
-			catch (Exception e) {
-				throw new RuntimeException("Failed to save model", e);
-			}
-			
-			if(saveGraphFile) {
-				File graphFile = new File(outputFolder, file.getName() + ".graph");
-				IOUtils.write(graph, new FileOutputStream(graphFile));
-			}
-		} catch(Exception e) {
-			throw Xls2SkosException.rethrow(e);
+		if(modelsByGraph.containsKey(graph)) {
+			modelsByGraph.get(graph).addAll(model);
+		} else {
+			modelsByGraph.put(graph, model);
 		}
+		
+		// TODO : accumulate prefixes by graphs
+		prefixesByGraph.put(graph, prefixes);
 	}
 	
 	public void exportModel(Model model, RDFHandler handler, Map<String, String> prefixes) {
@@ -92,7 +85,35 @@ public class DirectoryModelWriter implements ModelWriterIfc {
 
 	@Override
 	public void endWorkbook() {
+		
+		for (Map.Entry<String, Model> anEntry : this.modelsByGraph.entrySet()) {
+			String graph = anEntry.getKey();
+			Model model = anEntry.getValue();
+			
+			try {
+				String filename = URLEncoder.encode(graph, "UTF-8");
+				File file = new File(outputFolder, filename + "." + format.getDefaultFileExtension());
+				try (FileOutputStream fos = new FileOutputStream(file)) {
+					RDFHandler w = new BufferedGroupingRDFHandler(50000, RDFWriterRegistry.getInstance().get(format).get().getWriter(fos));
+					exportModel(model, w, prefixesByGraph.get(graph));
+					fos.flush();
+				}
+				catch (Exception e) {
+					throw new RuntimeException("Failed to save model", e);
+				}
+				
+				if(saveGraphFile) {
+					File graphFile = new File(outputFolder, file.getName() + ".graph");
+					IOUtils.write(graph, new FileOutputStream(graphFile));
+				}
+			} catch(Exception e) {
+				throw Xls2SkosException.rethrow(e);
+			}			
+		}
 
+		// reset accumulated data so that the same writer does not accumulate data between every files
+		this.modelsByGraph = new HashMap<>();
+		this.prefixesByGraph = new HashMap<>();
 	}
 
 	public boolean isSaveGraphFile() {

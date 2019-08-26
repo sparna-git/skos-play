@@ -55,7 +55,7 @@ public class ExcelHelper {
 		   Cell c = r.getCell(columnIndex);
 		   if(c != null) {
 		      String cellValue = getCellValue(c);
-		      if(cellValue.equals(value)) {
+		      if(cellValue.trim().equals(value.trim())) {
 		    	  return r;
 		      }
 		   }

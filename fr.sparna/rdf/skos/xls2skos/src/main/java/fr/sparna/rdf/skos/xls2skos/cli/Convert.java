@@ -5,9 +5,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.impl.LinkedHashModelFactory;
 import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFParser;
+import org.eclipse.rdf4j.rio.RDFParserRegistry;
 import org.eclipse.rdf4j.rio.RDFWriterRegistry;
 import org.eclipse.rdf4j.rio.Rio;
+import org.eclipse.rdf4j.rio.helpers.StatementCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,10 +72,35 @@ public class Convert implements CliCommandIfc {
 			modelWriter = factory.buildNewModelWriter(fileStream);
 		}
 		
+		log.debug("Will use ModelWriter : "+modelWriter.getClass().getName());
 		Xls2SkosConverter converter = new Xls2SkosConverter(modelWriter, a.getLang());
 		converter.setGenerateXl(a.isXlify());
 		converter.setGenerateXlDefinitions(a.isXlifyDefinitions());
 		converter.setApplyPostProcessings(!a.isNoPostProcessings());
+		if(a.getExternalData() != null) {
+			
+			Model externalData = new LinkedHashModelFactory().createEmptyModel();
+			
+			if(a.getExternalData().isFile()) {
+				log.debug("Loading external data from  : "+a.getExternalData().getName());
+				RDFFormat f = RDFParserRegistry.getInstance().getFileFormatForFileName(a.getExternalData().getName()).orElse(RDFFormat.RDFXML);
+				RDFParser rdfParser = Rio.createParser(f);
+				rdfParser.setRDFHandler(new StatementCollector(externalData));
+				
+				rdfParser.parse(new FileInputStream(a.getExternalData()), a.getExternalData().toURI().toURL().toString());
+			} else {
+				for (File anExternalFile : a.getExternalData().listFiles()) {
+					log.debug("Loading external data from  : "+anExternalFile.getName());
+					RDFFormat f = RDFParserRegistry.getInstance().getFileFormatForFileName(anExternalFile.getName()).orElse(RDFFormat.RDFXML);
+					RDFParser rdfParser = Rio.createParser(f);
+					rdfParser.setRDFHandler(new StatementCollector(externalData));
+					
+					rdfParser.parse(new FileInputStream(anExternalFile), anExternalFile.toURI().toURL().toString());
+				}
+			}
+			
+			converter.setSupportModel(externalData);			
+		}
 		
 		if(a.getInput().isFile()) {
 			try(InputStream in = new FileInputStream(a.getInput())) {			

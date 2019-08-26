@@ -1,9 +1,6 @@
 package fr.sparna.rdf.skos.xls2skos.cli;
 
 import java.io.File;
-import java.util.List;
-
-import org.eclipse.rdf4j.rio.RDFFormat;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.FileConverter;
@@ -69,6 +66,14 @@ public class ArgumentsConvert {
 			description = "Ignore post processings on sheet data"
 	)
 	private boolean noPostProcessings = false;
+	
+	@Parameter(
+			names = { "-xd", "--externalData" },
+			description = "External support data for reconcile",
+			converter = FileConverter.class,
+			required = false
+	)
+	private File externalData;
 
 	public File getInput() {
 		return input;
@@ -140,6 +145,14 @@ public class ArgumentsConvert {
 
 	public void setNoPostProcessings(boolean noPostProcessings) {
 		this.noPostProcessings = noPostProcessings;
+	}
+
+	public File getExternalData() {
+		return externalData;
+	}
+
+	public void setExternalData(File externalData) {
+		this.externalData = externalData;
 	}
 	
 }

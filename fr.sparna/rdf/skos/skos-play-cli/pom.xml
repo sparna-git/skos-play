@@ -6,7 +6,7 @@
 	<parent>
 	    <groupId>fr.sparna.rdf.skos</groupId>
 	    <artifactId>sparna-skos</artifactId>
-	    <version>0.8.2</version>
+	    <version>0.8.3</version>
         <relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -129,7 +129,7 @@
         <dependency>
             <groupId>fr.sparna.rdf.skos</groupId>
             <artifactId>skos-printer</artifactId>
-            <version>0.8.2</version>
+            <version>0.8.3</version>
         </dependency>
 
 		<!-- for command-line parsing -->
@@ -147,6 +147,20 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
+        </dependency>
+
+        <!-- Add explicit java.xml.bind dependency for Java 11 compatibility -->
+        <!-- JAXB API + Dependency -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.1</version>
+            <scope>runtime</scope>
         </dependency>
 		
 	</dependencies>
