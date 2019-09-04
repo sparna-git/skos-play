@@ -40,6 +40,7 @@ public class PrefixManager {
 		prefixes.put("dcterms", DCTERMS.NAMESPACE);
 		prefixes.put("dct", DCTERMS.NAMESPACE);
 		prefixes.put("xsd", XMLSchema.NAMESPACE);
+		prefixes.put("qb", "http://purl.org/linked-data/cube#");
 		prefixes.put("euvoc", "http://publications.europa.eu/ontology/euvoc#");
 	}
 	
