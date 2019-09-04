@@ -1,5 +1,6 @@
 package fr.sparna.rdf.skos.xls2skos;
 
+import java.net.URI;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,19 +41,20 @@ public class ColumnHeaderParser {
 		h.setParameters(parameters);
 		// prevent problems if parameter parsing went wrong, if cell content
 		// contains parentheses but these are not parameters
-		if(parameters != null && parameters.containsKey(ColumnHeader.PARAMETER_ID)) {
-			h.setId(parameters.get(ColumnHeader.PARAMETER_ID));
-		}
-		
-		// sets the reconcileProperty from parameters, if needed
-		if(parameters.containsKey(ColumnHeader.PARAMETER_RECONCILE_PROPERTY)) {
-			IRI reconcileProperty = parseProperty(parameters.get(ColumnHeader.PARAMETER_RECONCILE_PROPERTY));
-			if(reconcileProperty == null) {
-				 throw new InvalidParameterException("Unable to parse reconcileProperty value : '"+parameters.get(ColumnHeader.PARAMETER_RECONCILE_PROPERTY)+"'");
+		if(parameters != null) {
+			if(parameters.containsKey(ColumnHeader.PARAMETER_ID)) {
+				h.setId(parameters.get(ColumnHeader.PARAMETER_ID));
 			}
-			h.setReconcileProperty(reconcileProperty);
+			// sets the reconcileProperty from parameters, if needed
+			if(parameters.containsKey(ColumnHeader.PARAMETER_RECONCILE_PROPERTY)) {
+				IRI reconcileProperty = parseProperty(parameters.get(ColumnHeader.PARAMETER_RECONCILE_PROPERTY));
+				if(reconcileProperty == null) {
+					 throw new InvalidParameterException("Unable to parse reconcileProperty value : '"+parameters.get(ColumnHeader.PARAMETER_RECONCILE_PROPERTY)+"'");
+				}
+				h.setReconcileProperty(reconcileProperty);
+			}
 		}
-		
+				
 		h.setColumnIndex(columnIndex);
 		
 		return h;
@@ -63,7 +65,12 @@ public class ColumnHeaderParser {
 			if(this.prefixManager.usesKnownPrefix(declaredProperty)) {
 				return SimpleValueFactory.getInstance().createIRI(this.prefixManager.uri(declaredProperty, false));
 			} else {
-				return SimpleValueFactory.getInstance().createIRI(declaredProperty);
+				// if not using known namespace, handle only if it is an absolute URI
+				if((new URI(declaredProperty)).isAbsolute()) {
+					return SimpleValueFactory.getInstance().createIRI(declaredProperty);
+				} else {
+					return null;
+				}
 			}
 		} catch (Exception e) {
 			return null;
