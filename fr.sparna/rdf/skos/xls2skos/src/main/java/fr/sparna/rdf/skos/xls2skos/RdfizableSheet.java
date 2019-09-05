@@ -27,11 +27,13 @@ public class RdfizableSheet {
 	
 	protected Sheet sheet;
 	protected Xls2SkosConverter converter;
+	protected int titleRowIndex;
 
 	public RdfizableSheet(Sheet sheet, Xls2SkosConverter converter) {
 		super();
 		this.sheet = sheet;
 		this.converter = converter;
+		this.titleRowIndex = this.computeTitleRowIndex();
 	}
 	
 	/**
@@ -74,12 +76,16 @@ public class RdfizableSheet {
 		return getCellValue(sheet.getRow(0).getCell(1));
 	}
 	
+	public int getTitleRowIndex() {
+		return titleRowIndex;
+	}
+
 	/**
 	 * Determines the index of the row containing the column headers.
 	 * This is determined by checking if column B and C both contain a URI (full, starting with http://, or abbreviated using one of the declared prefix).
 	 * @return
 	 */
-	public int getTitleRowIndex() {
+	protected int computeTitleRowIndex() {
 		int headerRowIndex = 1;
 		
 		boolean found = false;
@@ -92,6 +98,7 @@ public class RdfizableSheet {
 				try {
 					ColumnHeader header = headerParser.parse(getCellValue(sheet.getRow(rowIndex).getCell(colIndex)), colIndex);
 					if(header.getProperty() != null) {
+						log.info("Found proper property in header : "+header.getProperty().toString());
 						numFound++;
 					}
 				} catch (Exception e) {
@@ -103,6 +110,7 @@ public class RdfizableSheet {
 			
 			// we check if we find 2 columns header in the first 10 columns
 			if(numFound >= 2) {
+				log.info("Found at least 2 headers with proper property declaration in the first 10 columns, title row is at index "+rowIndex);
 				headerRowIndex = rowIndex;
 				found = true;
 				break;
@@ -138,6 +146,14 @@ public class RdfizableSheet {
 		}
 		
 		return headerRowIndex;
+	}
+	
+	/**
+	 * A RDFizable sheet has a data section if the title row is greater than 1
+	 * @return
+	 */
+	public boolean hasDataSection() {
+		return titleRowIndex > 1;
 	}
 	
 	/**

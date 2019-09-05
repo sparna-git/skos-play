@@ -268,12 +268,11 @@ public class Xls2SkosConverter {
 		log.debug("Found title row at index "+headerRowIndex);
 		// si la ligne d'entete n'a pas été trouvée, on ne génère que le ConceptScheme
 		if(headerRowIndex == 1) {
-			log.info("Could not find header row index in sheet "+sheet.getSheetName()+", assuming title row at index 10 for ConceptScheme parsing");
-			// we are assuming a header row index of 10 to be able to read at least the ConceptScheme header, even with no concept in it.
-			headerRowIndex = 10;
+			log.info("Could not find header row index in sheet "+sheet.getSheetName()+", will parse header object until end of sheet (last rowNum = "+ sheet.getLastRowNum() +")");
+			headerRowIndex = sheet.getLastRowNum();
 		}
 		
-		// read the properties on the concept scheme by reading the top rows
+		// read the properties on the header by reading the top rows
 		ColumnHeaderParser headerParser = new ColumnHeaderParser(prefixManager);
 		for (int rowIndex = 1; rowIndex <= headerRowIndex; rowIndex++) {
 			if(sheet.getRow(rowIndex) != null) {
@@ -297,7 +296,7 @@ public class Xls2SkosConverter {
 					}
 					
 					if(valueGenerator != null) {
-						log.debug("Adding value on ConceptScheme "+value+" with lang "+header.getLanguage().orElse(this.lang));
+						log.debug("Adding value on header object \""+value+"\"@"+header.getLanguage().orElse(this.lang));
 						valueGenerator.addValue(
 								model,
 								csResource,
@@ -309,21 +308,26 @@ public class Xls2SkosConverter {
 			}
 		}		
 
-		// read the column names from the header row
-		List<ColumnHeader> columnNames = rdfizableSheet.getColumnHeaders(headerRowIndex);
-		
-		log.debug("Processing column headers: ");
-		for (ColumnHeader columnHeader : columnNames) {
-			log.debug(columnHeader.toString());
-		}
-		
-		// read the rows after the header and process each row
-		for (int rowIndex = (headerRowIndex + 1); rowIndex <= sheet.getLastRowNum(); rowIndex++) {
-			Row r = sheet.getRow(rowIndex);
-			if(r != null) {
-				handleRow(model, columnNames, prefixManager, r);
+		if(rdfizableSheet.hasDataSection()) {
+			// read the column names from the header row
+			List<ColumnHeader> columnNames = rdfizableSheet.getColumnHeaders(headerRowIndex);
+			
+			log.debug("Processing column headers: ");
+			for (ColumnHeader columnHeader : columnNames) {
+				log.debug(columnHeader.toString());
 			}
+			
+			// read the rows after the header and process each row
+			for (int rowIndex = (headerRowIndex + 1); rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+				Row r = sheet.getRow(rowIndex);
+				if(r != null) {
+					handleRow(model, columnNames, prefixManager, r);
+				}
+			}
+		} else {
+			log.info("Sheet has no title row, skipping data processing.");
 		}
+		
 		
 		if(this.applyPostProcessings) {
 			log.info("Applying SKOS post-processings on the result");
