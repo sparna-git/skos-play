@@ -528,6 +528,7 @@
 					<li><a href="http://prefix.cc/dct"><code>dct</code></a> or <a href="http://prefix.cc/dcterms"><code>dcterms</code></a></li>
 					<li><a href="http://prefix.cc/xsd"><code>xsd</code></a></li>
 					<li><a href="http://prefix.cc/qb"><code>qb</code></a></li>
+					<li><a href="http://prefix.cc/dcat"><code>dcat</code></a></li>
 				</ul>
 			</fieldset>
 			

@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.DC;
+import org.eclipse.rdf4j.model.vocabulary.DCAT;
 import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
 import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.OWL;
@@ -39,6 +40,7 @@ public class PrefixManager {
 		prefixes.put("dc", DC.NAMESPACE);
 		prefixes.put("dcterms", DCTERMS.NAMESPACE);
 		prefixes.put("dct", DCTERMS.NAMESPACE);
+		prefixes.put("dcat", DCAT.NAMESPACE);
 		prefixes.put("xsd", XMLSchema.NAMESPACE);
 		prefixes.put("qb", "http://purl.org/linked-data/cube#");
 		prefixes.put("euvoc", "http://publications.europa.eu/ontology/euvoc#");
