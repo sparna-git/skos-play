@@ -14,7 +14,7 @@ public class ColumnHeader {
 	public static final String PARAMETER_SUBJECT_COLUMN = "subjectColumn";
 	public static final String PARAMETER_LOOKUP_COLUMN = "lookupColumn";
 	public static final String PARAMETER_RECONCILE = "reconcile";
-	public static final String PARAMETER_RECONCILE_PROPERTY = "reconcileProperty";
+	public static final String PARAMETER_RECONCILE_ON = "reconcileOn";
 	public static final String PARAMETER_ID = "id";
 
 	/**
@@ -50,9 +50,9 @@ public class ColumnHeader {
 	 */
 	private String id;
 	/**
-	 * The IRI of the property on which to reconcile, set by the "reconcileProperty" parameter
+	 * The IRI of the type or ConceptScheme on which to reconcile, set by the "reconcileOn" parameter
 	 */
-	private IRI reconcileProperty;
+	private IRI reconcileOn;
 	/**
 	 * The actual Excel column index corresponding to this header
 	 */
@@ -129,13 +129,13 @@ public class ColumnHeader {
 	public void setColumnIndex(short columnIndex) {
 		this.columnIndex = columnIndex;
 	}
-	
-	public IRI getReconcileProperty() {
-		return reconcileProperty;
+
+	public IRI getReconcileOn() {
+		return reconcileOn;
 	}
 
-	public void setReconcileProperty(IRI reconcileProperty) {
-		this.reconcileProperty = reconcileProperty;
+	public void setReconcileOn(IRI reconcileOn) {
+		this.reconcileOn = reconcileOn;
 	}
 
 	/**

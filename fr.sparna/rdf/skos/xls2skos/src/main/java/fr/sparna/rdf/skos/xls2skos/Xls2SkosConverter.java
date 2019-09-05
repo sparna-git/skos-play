@@ -527,22 +527,20 @@ public class Xls2SkosConverter {
 				}
 				
 				else if(header.getParameters().get(ColumnHeader.PARAMETER_RECONCILE) != null) {
-					String reconcileParameterValue = header.getParameters().get(ColumnHeader.PARAMETER_RECONCILE);
-					IRI reconcileProperty = (header.getReconcileProperty() != null)?header.getReconcileProperty():SKOS.PREF_LABEL;
-					
+					String reconcileParameterValue = header.getParameters().get(ColumnHeader.PARAMETER_RECONCILE);					
 					
 					if(reconcileParameterValue.equals("local")) {						
 						valueGenerator = ValueGeneratorFactory.reconcile(
 								header,
 								prefixManager,
-								reconcileProperty,
+								header.getReconcileOn(),
 								globalRepository
 						);
-					} else if(reconcileParameterValue.equals("external")) {						
+					} else if(reconcileParameterValue.equals("external") && this.supportRepository != null) {						
 						valueGenerator = ValueGeneratorFactory.reconcile(
 								header,
 								prefixManager,
-								reconcileProperty,
+								header.getReconcileOn(),
 								supportRepository
 						);
 					}

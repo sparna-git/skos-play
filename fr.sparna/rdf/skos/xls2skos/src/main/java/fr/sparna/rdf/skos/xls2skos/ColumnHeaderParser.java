@@ -45,13 +45,14 @@ public class ColumnHeaderParser {
 			if(parameters.containsKey(ColumnHeader.PARAMETER_ID)) {
 				h.setId(parameters.get(ColumnHeader.PARAMETER_ID));
 			}
+			
 			// sets the reconcileProperty from parameters, if needed
-			if(parameters.containsKey(ColumnHeader.PARAMETER_RECONCILE_PROPERTY)) {
-				IRI reconcileProperty = parseProperty(parameters.get(ColumnHeader.PARAMETER_RECONCILE_PROPERTY));
-				if(reconcileProperty == null) {
-					 throw new InvalidParameterException("Unable to parse reconcileProperty value : '"+parameters.get(ColumnHeader.PARAMETER_RECONCILE_PROPERTY)+"'");
+			if(parameters.containsKey(ColumnHeader.PARAMETER_RECONCILE_ON)) {
+				IRI reconcileOn = parseProperty(parameters.get(ColumnHeader.PARAMETER_RECONCILE_ON));
+				if(reconcileOn == null) {
+					 throw new InvalidParameterException("Unable to parse value of "+ ColumnHeader.PARAMETER_RECONCILE_ON +" : '"+parameters.get(ColumnHeader.PARAMETER_RECONCILE_ON)+"'");
 				}
-				h.setReconcileProperty(reconcileProperty);
+				h.setReconcileOn(reconcileOn);
 			}
 		}
 				
