@@ -6,7 +6,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +27,6 @@ import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.impl.LinkedHashModelFactory;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
-import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
 import org.eclipse.rdf4j.model.vocabulary.OWL;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.model.vocabulary.RDFS;
@@ -97,14 +95,14 @@ public class Xls2SkosConverter {
 	private transient Workbook workbook;
 	
 	/**
-	 * Global Model containing all the converted data from all sheets, useful for reconciling values
+	 * Global Repository containing all the converted data from all sheets, useful for reconciling values
 	 */
-	private transient Model globalModel = new LinkedHashModelFactory().createEmptyModel();
+	private transient Repository globalRepository = new SailRepository(new MemoryStore());
 	
 	/**
-	 * Supporting Model containing external data on which to reconcile values
+	 * Supporting Repository containing external data on which to reconcile values
 	 */
-	private transient Model supportModel = new LinkedHashModelFactory().createEmptyModel();
+	private transient Repository supportRepository = null;
 	
 	/**
 	 * Whether to apply post processings on the RDF produced from the sheets
@@ -115,6 +113,7 @@ public class Xls2SkosConverter {
 	
 	public Xls2SkosConverter(ModelWriterIfc modelWriter, String lang) {
 		
+		this.globalRepository.initialize();
 		this.modelWriter = modelWriter;
 		this.lang = lang;
 		
@@ -216,7 +215,9 @@ public class Xls2SkosConverter {
 				// if load(sheet) returns null, the sheet was ignored
 				Model model = processSheet(sheet);
 				models.add(model);
-				this.globalModel.addAll(model);
+				try(RepositoryConnection connection = this.globalRepository.getConnection()) {
+					connection.add(model);
+				}
 			}
 			
 			// notify end
@@ -535,14 +536,14 @@ public class Xls2SkosConverter {
 								header,
 								prefixManager,
 								reconcileProperty,
-								globalModel
+								globalRepository
 						);
 					} else if(reconcileParameterValue.equals("external")) {						
 						valueGenerator = ValueGeneratorFactory.reconcile(
 								header,
 								prefixManager,
 								reconcileProperty,
-								supportModel
+								supportRepository
 						);
 					}
 					
@@ -720,9 +721,9 @@ public class Xls2SkosConverter {
 	public void setApplyPostProcessings(boolean applyPostProcessings) {
 		this.applyPostProcessings = applyPostProcessings;
 	}
-
-	public void setSupportModel(Model supportModel) {
-		this.supportModel = supportModel;
+	
+	public void setSupportRepository(Repository supportRepository) {
+		this.supportRepository = supportRepository;
 	}
 
 	public static void main(String[] args) throws Exception {

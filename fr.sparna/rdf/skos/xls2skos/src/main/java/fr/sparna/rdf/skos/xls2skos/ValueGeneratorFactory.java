@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -15,15 +16,18 @@ import javax.xml.datatype.DatatypeFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.eclipse.rdf4j.common.iteration.Iterations;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.Value;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
-import org.eclipse.rdf4j.model.vocabulary.SKOS;
 import org.eclipse.rdf4j.model.vocabulary.XMLSchema;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.RDFParserRegistry;
@@ -90,7 +94,7 @@ public final class ValueGeneratorFactory {
 		};
 	}
 	
-	public static ValueGeneratorIfc reconcile(ColumnHeader header, PrefixManager prefixManager, IRI lookupProperty, Model lookupModel) {
+	public static ValueGeneratorIfc reconcile(ColumnHeader header, PrefixManager prefixManager, IRI lookupProperty, Repository supportRepository) {
 		return (model, subject, value, language) -> {
 			String lookupValue = value.trim();
 			
@@ -98,16 +102,18 @@ public final class ValueGeneratorFactory {
 				return null;
 			}
 			
-			Model values = lookupModel.filter(null, lookupProperty, SimpleValueFactory.getInstance().createLiteral(lookupValue, language));
-			
-			if(values.size() == 1) {
-				ResourceOrLiteralValueGenerator g = new ResourceOrLiteralValueGenerator(header, prefixManager);
-				return g.addValue(model, subject, values.iterator().next().getSubject().toString(), language);		
-			} else if(values.size() > 1) {
-				log.error("Found multiple values for '"+lookupValue+"' in property '"+ lookupProperty +"' : "+values.subjects().stream().map(s -> s.toString()).collect(Collectors.joining(", ")));
-			} else {
-					log.error("Unable to find value '"+lookupValue+"'@"+language+" in a property '"+ lookupProperty +"' in the model");
-			}
+			try(RepositoryConnection c = supportRepository.getConnection()) {
+				List<Statement> statements = Iterations.asList(c.getStatements(null, lookupProperty, SimpleValueFactory.getInstance().createLiteral(lookupValue, language)));
+				
+				if(statements.size() == 1) {
+					ResourceOrLiteralValueGenerator g = new ResourceOrLiteralValueGenerator(header, prefixManager);
+					return g.addValue(model, subject, statements.get(0).getSubject().toString(), language);		
+				} else if(statements.size() > 1) {
+					log.error("Found multiple values for '"+lookupValue+"' in property '"+ lookupProperty +"' : "+statements.stream().map(s -> s.getSubject().toString()).collect(Collectors.joining(", ")));
+				} else {
+						log.error("Unable to find value '"+lookupValue+"'@"+language+" in a property '"+ lookupProperty +"' in the model");
+				}
+			}		
 			
 			return null;
 		};
