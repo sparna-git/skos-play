@@ -37,6 +37,8 @@ import org.eclipse.rdf4j.rio.helpers.StatementCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.sparna.rdf.skos.xls2skos.reconcile.ReconciliableValueSetIfc;
+
 public final class ValueGeneratorFactory {
 	
 	private static Logger log = LoggerFactory.getLogger(ValueGeneratorFactory.class.getName());
@@ -96,7 +98,66 @@ public final class ValueGeneratorFactory {
 		};
 	}
 	
-	public static ValueGeneratorIfc reconcile(ColumnHeader header, PrefixManager prefixManager, IRI reconcileOn, Repository supportRepository) {
+	public static ValueGeneratorIfc reconcile(ColumnHeader header, PrefixManager prefixManager, ReconciliableValueSetIfc reconciledValues) {
+		return (model, subject, value, language) -> {
+			String lookupValue = value.trim();
+			
+			if(lookupValue.equals("")) {
+				return null;
+			}
+			
+			IRI result = reconciledValues.getReconciledValue(value);
+			if(result != null) {
+				ResourceOrLiteralValueGenerator g = new ResourceOrLiteralValueGenerator(header, prefixManager);
+				return g.addValue(model, subject, result.toString(), language);						
+			} else {
+				log.error("Unable to find value '"+lookupValue+"'@"+language+" in reconciled values");
+			}
+			
+//			if(filteredStatements.size() == 1) {
+//			ResourceOrLiteralValueGenerator g = new ResourceOrLiteralValueGenerator(header, prefixManager);
+//			return g.addValue(model, subject, filteredStatements.get(0).getSubject().toString(), language);		
+//		} else if(filteredStatements.size() > 1) {
+//			log.error("Found multiple values for '"+lookupValue+"' in type/scheme '"+reconcileOn+"' : "+filteredStatements.stream().map(s -> s.getSubject().toString()).collect(Collectors.joining(", ")));
+//		} else {
+//			log.error("Unable to find value '"+lookupValue+"'@"+language+" in a type/scheme '"+ reconcileOn +"' in the model");
+//		}
+			
+//			try(RepositoryConnection c = supportRepository.getConnection()) {
+//				// look for every value in any predicate
+//				List<Statement> statementsWithValue = Iterations.asList(c.getStatements(null, null, SimpleValueFactory.getInstance().createLiteral(lookupValue, language)));
+//				
+//				List<Statement> filteredStatements = new ArrayList<Statement>();
+//				// filter with the reconcileOn if present
+//				if(reconcileOn != null) {
+//					for (Statement s : model) {
+//						filteredStatements.addAll(Iterations.asList(
+//								c.getStatements(s.getSubject(), RDF.TYPE, reconcileOn)
+//						));
+//						filteredStatements.addAll(Iterations.asList(
+//								c.getStatements(s.getSubject(), SKOS.IN_SCHEME, reconcileOn)
+//						));
+//					}
+//				} else {
+//					filteredStatements = statementsWithValue;
+//				}
+//				
+//				if(filteredStatements.size() == 1) {
+//					ResourceOrLiteralValueGenerator g = new ResourceOrLiteralValueGenerator(header, prefixManager);
+//					return g.addValue(model, subject, filteredStatements.get(0).getSubject().toString(), language);		
+//				} else if(filteredStatements.size() > 1) {
+//					log.error("Found multiple values for '"+lookupValue+"' in type/scheme '"+reconcileOn+"' : "+filteredStatements.stream().map(s -> s.getSubject().toString()).collect(Collectors.joining(", ")));
+//				} else {
+//					log.error("Unable to find value '"+lookupValue+"'@"+language+" in a type/scheme '"+ reconcileOn +"' in the model");
+//				}
+//			}		
+			
+			return null;
+		};
+	}
+
+	@Deprecated
+	public static ValueGeneratorIfc reconcileLocal(ColumnHeader header, PrefixManager prefixManager, IRI reconcileOn, Repository supportRepository) {
 		return (model, subject, value, language) -> {
 			String lookupValue = value.trim();
 			
@@ -129,7 +190,7 @@ public final class ValueGeneratorFactory {
 				} else if(filteredStatements.size() > 1) {
 					log.error("Found multiple values for '"+lookupValue+"' in type/scheme '"+reconcileOn+"' : "+filteredStatements.stream().map(s -> s.getSubject().toString()).collect(Collectors.joining(", ")));
 				} else {
-						log.error("Unable to find value '"+lookupValue+"'@"+language+" in a type/scheme '"+ reconcileOn +"' in the model");
+					log.error("Unable to find value '"+lookupValue+"'@"+language+" in a type/scheme '"+ reconcileOn +"' in the model");
 				}
 			}		
 			

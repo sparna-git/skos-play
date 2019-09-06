@@ -62,6 +62,20 @@ public class Xls2SkosConverterTestExecution implements Test {
 		final File expected = new File(this.testFolder, "expected.ttl");
 		System.out.println("Testing "+input.getAbsolutePath());
 
+		// set external data for reconcile if present
+		final File external = new File(this.testFolder, "external.ttl");
+		if(external.exists()) {
+			Repository externalRepository = new SailRepository(new MemoryStore());
+			externalRepository.initialize();
+			try(RepositoryConnection c = externalRepository.getConnection()) {
+				c.add(Rio.parse(new FileInputStream(external), external.toURI().toURL().toString(), RDFFormat.TURTLE));
+			} catch (Exception e) {
+				result.addError(this, e);
+				throw new IllegalArgumentException("Problem with external.ttl in unit test "+this.testFolder.getName(), e);
+			}
+			this.converter.setSupportRepository(externalRepository);
+		}
+		
 		// convert
 		this.converter.processFile(input);
 		

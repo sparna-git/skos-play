@@ -4,15 +4,21 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.impl.LinkedHashModelFactory;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.sail.SailRepository;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.RDFParserRegistry;
 import org.eclipse.rdf4j.rio.RDFWriterRegistry;
 import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.rio.helpers.StatementCollector;
+import org.eclipse.rdf4j.sail.memory.MemoryStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,39 +83,46 @@ public class Convert implements CliCommandIfc {
 		converter.setGenerateXl(a.isXlify());
 		converter.setGenerateXlDefinitions(a.isXlifyDefinitions());
 		converter.setApplyPostProcessings(!a.isNoPostProcessings());
-		if(a.getExternalData() != null) {
-			
-			Model externalData = new LinkedHashModelFactory().createEmptyModel();
-			
-			if(a.getExternalData().isFile()) {
-				log.debug("Loading external data from  : "+a.getExternalData().getName());
-				RDFFormat f = RDFParserRegistry.getInstance().getFileFormatForFileName(a.getExternalData().getName()).orElse(RDFFormat.RDFXML);
-				RDFParser rdfParser = Rio.createParser(f);
-				rdfParser.setRDFHandler(new StatementCollector(externalData));
-				
-				rdfParser.parse(new FileInputStream(a.getExternalData()), a.getExternalData().toURI().toURL().toString());
-			} else {
-				for (File anExternalFile : a.getExternalData().listFiles()) {
-					log.debug("Loading external data from  : "+anExternalFile.getName());
-					RDFFormat f = RDFParserRegistry.getInstance().getFileFormatForFileName(anExternalFile.getName()).orElse(RDFFormat.RDFXML);
-					RDFParser rdfParser = Rio.createParser(f);
-					rdfParser.setRDFHandler(new StatementCollector(externalData));
-					
-					rdfParser.parse(new FileInputStream(anExternalFile), anExternalFile.toURI().toURL().toString());
-				}
+		
+		Repository supportRepository = new SailRepository(new MemoryStore());
+		supportRepository.initialize();
+		
+		try(RepositoryConnection connection = supportRepository.getConnection()) {
+			if(a.getExternalData() != null) {			
+				if(a.getExternalData().isFile()) {
+					log.debug("Loading external data from  : "+a.getExternalData().getName());
+					RDFFormat f = RDFParserRegistry.getInstance().getFileFormatForFileName(a.getExternalData().getName()).orElse(RDFFormat.RDFXML);
+					connection.add(a.getExternalData(), a.getExternalData().toURI().toString(), f);
+				} else {
+					for (File anExternalFile : a.getExternalData().listFiles()) {
+						log.debug("Loading external data from  : "+anExternalFile.getName());
+						RDFFormat f = RDFParserRegistry.getInstance().getFileFormatForFileName(anExternalFile.getName()).orElse(RDFFormat.RDFXML);
+						connection.add(anExternalFile, anExternalFile.toURI().toString(), f);
+					}
+				}			
 			}
-			
-			converter.setSupportModel(externalData);			
 		}
+		
+		converter.setSupportRepository(supportRepository);
 		
 		if(a.getInput().isFile()) {
 			try(InputStream in = new FileInputStream(a.getInput())) {			
 				converter.processInputStream(in);			
 			}
 		} else {
-			for (File f : a.getInput().listFiles()) {
+			// sort files to guarantee alphabetical processing
+			List<File> files = Arrays.asList(a.getInput().listFiles());
+			files.sort((f1, f2) -> { return f1.getName().compareTo(f2.getName()) ;});
+			
+			// process each file, and add resulting data in supportRepository
+			for (File f : files) {
 				try(InputStream in = new FileInputStream(f)) {			
-					converter.processInputStream(in);			
+					List<Model> result = converter.processInputStream(in);
+					for (Model m : result) {
+						try(RepositoryConnection connection = supportRepository.getConnection()) {
+							connection.add(m);
+						}
+					}
 				}
 			}
 		}

@@ -1,0 +1,17 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:<http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+
+<http://vousetesici.fr/vocabulaires/test> a skos:ConceptScheme ;
+	.
+
+<http://vousetesici.fr/vocabulaires/test/concept_1> a skos:Concept ;
+	skos:prefLabel "Titi"@fr;
+	skos:inScheme <http://vousetesici.fr/vocabulaires/test>;
+	.
+
+<http://vousetesici.fr/vocabulaires/test/concept_2> a skos:Concept ;
+	skos:prefLabel "Tata"@fr;
+	skos:inScheme <http://vousetesici.fr/vocabulaires/test>;
+	.

@@ -21,7 +21,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Statement;
@@ -42,6 +41,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.BasicConfigurator;
+import fr.sparna.rdf.skos.xls2skos.reconcile.DummyReconcileService;
+import fr.sparna.rdf.skos.xls2skos.reconcile.DynamicReconciliableValueSet;
+import fr.sparna.rdf.skos.xls2skos.reconcile.PreloadedReconciliableValueSet;
+import fr.sparna.rdf.skos.xls2skos.reconcile.ReconciliableValueSetIfc;
+import fr.sparna.rdf.skos.xls2skos.reconcile.SparqlReconcileService;
 
 
 
@@ -108,6 +112,8 @@ public class Xls2SkosConverter {
 	 * Whether to apply post processings on the RDF produced from the sheets
 	 */
 	private boolean applyPostProcessings = true;
+	
+	private transient Map<Short, ReconciliableValueSetIfc> reconcileColumnsValues = new HashMap<Short, ReconciliableValueSetIfc>();
 	
 	
 	
@@ -313,9 +319,38 @@ public class Xls2SkosConverter {
 			// read the column names from the header row
 			List<ColumnHeader> columnNames = rdfizableSheet.getColumnHeaders(headerRowIndex);
 			
-			log.debug("Processing column headers: ");
+			log.debug("Converting data with these column headers: ");
 			for (ColumnHeader columnHeader : columnNames) {
 				log.debug(columnHeader.toString());
+			}
+			
+			// reconcile columns that need to be reconciled, and store result
+			for (ColumnHeader columnHeader : columnNames) {
+				if(columnHeader.isReconcileExternal()) {
+					SparqlReconcileService reconcileService = new SparqlReconcileService(this.supportRepository);
+					
+					PreloadedReconciliableValueSet reconciliableValueSet = new PreloadedReconciliableValueSet(
+							reconcileService,
+							true
+					);
+					reconciliableValueSet.initReconciledValues(
+							PreloadedReconciliableValueSet.extractDistinctValues(sheet, columnHeader.getColumnIndex(), headerRowIndex),
+							columnHeader.getReconcileOn()
+					);
+					
+					this.reconcileColumnsValues.put(columnHeader.getColumnIndex(), reconciliableValueSet);
+					
+				} else if (columnHeader.isReconcileLocal()) {
+					SparqlReconcileService reconcileService = new SparqlReconcileService(this.globalRepository);
+					
+					DynamicReconciliableValueSet reconciliableValueSet = new DynamicReconciliableValueSet(
+							reconcileService,
+							columnHeader.getReconcileOn(),
+							true
+					);
+
+					this.reconcileColumnsValues.put(columnHeader.getColumnIndex(), reconciliableValueSet);
+				} 
 			}
 			
 			// read the rows after the header and process each row
@@ -325,6 +360,7 @@ public class Xls2SkosConverter {
 					handleRow(model, columnNames, prefixManager, r);
 				}
 			}
+			
 		} else {
 			log.info("Sheet has no title row, skipping data processing.");
 		}
@@ -533,15 +569,13 @@ public class Xls2SkosConverter {
 						valueGenerator = ValueGeneratorFactory.reconcile(
 								header,
 								prefixManager,
-								header.getReconcileOn(),
-								globalRepository
+								this.reconcileColumnsValues.get(header.getColumnIndex())
 						);
 					} else if(reconcileParameterValue.equals("external") && this.supportRepository != null) {						
 						valueGenerator = ValueGeneratorFactory.reconcile(
 								header,
 								prefixManager,
-								header.getReconcileOn(),
-								supportRepository
+								this.reconcileColumnsValues.get(header.getColumnIndex())
 						);
 					}
 					

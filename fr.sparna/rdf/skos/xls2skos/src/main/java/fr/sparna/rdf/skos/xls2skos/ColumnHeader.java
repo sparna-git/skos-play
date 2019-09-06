@@ -8,6 +8,8 @@ import java.util.Optional;
 import org.apache.poi.hssf.util.CellReference;
 import org.eclipse.rdf4j.model.IRI;
 
+import fr.sparna.rdf.skos.xls2skos.ColumnHeader.RECONCILE_VALUES;
+
 public class ColumnHeader {
 	
 	public static final String PARAMETER_SEPARATOR = "separator";
@@ -16,6 +18,11 @@ public class ColumnHeader {
 	public static final String PARAMETER_RECONCILE = "reconcile";
 	public static final String PARAMETER_RECONCILE_ON = "reconcileOn";
 	public static final String PARAMETER_ID = "id";
+	
+	public static enum RECONCILE_VALUES {
+		external,
+		local
+	}
 
 	/**
 	 * the full orignal value of the header, as a raw string
@@ -136,6 +143,14 @@ public class ColumnHeader {
 
 	public void setReconcileOn(IRI reconcileOn) {
 		this.reconcileOn = reconcileOn;
+	}
+	
+	public boolean isReconcileExternal() {
+		return getParameters().get(ColumnHeader.PARAMETER_RECONCILE) != null && getParameters().get(ColumnHeader.PARAMETER_RECONCILE).equals(RECONCILE_VALUES.external.name());
+	}
+	
+	public boolean isReconcileLocal() {
+		return getParameters().get(ColumnHeader.PARAMETER_RECONCILE) != null && getParameters().get(ColumnHeader.PARAMETER_RECONCILE).equals(RECONCILE_VALUES.local.name());
 	}
 
 	/**
