@@ -13,7 +13,7 @@
     <artifactId>xls2rdf-lib</artifactId>
     <!-- version inherited from parent pom -->
 
-    <name>Sparna SKOS : Excel2RDF</name>
+    <name>Sparna SKOS : Excel2RDF Library</name>
     <description>Turns Excel files from specific templates into RDF and SKOS</description>
 
     <organization>

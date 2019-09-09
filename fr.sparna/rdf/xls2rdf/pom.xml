@@ -24,7 +24,7 @@
     </organization>    
 
     <modules>
-        <module>xls2rdf</module>
+        <module>xls2rdf-lib</module>
         <module>xls2rdf-app</module>
     </modules>
 
