@@ -1,0 +1,21 @@
+@prefix places: <http://data.sparna.fr/vocabularies/places#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://data.sparna.fr/vocabularies/semweb-events#semweb.pro> a schema:Event;
+  schema:location places:Paris;
+  schema:startDate "2016-11-21"^^xsd:date;
+  rdfs:label "Semweb.pro"@en, "Semweb.pro"@fr .
+
+<http://data.sparna.fr/vocabularies/semweb-events#eswc> a schema:Event;
+  schema:location places:Heraklion;
+  schema:startDate "2016-05-29"^^xsd:date;
+  rdfs:label "ESWC"@en, "ESWC"@fr .
+
+places:Paris a schema:Place;
+  rdfs:label "Paris"@en, "Paris"@fr .
+
+places:Heraklion a schema:Place;
+  rdfs:label "Heraklion"@en, "Heraklion"@fr .

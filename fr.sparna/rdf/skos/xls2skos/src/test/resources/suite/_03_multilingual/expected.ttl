@@ -1,0 +1,52 @@
+@prefix days: <http://data.sparna.fr/vocabularies/days#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<http://data.sparna.fr/vocabularies/days> a skos:ConceptScheme;
+  dct:description "Les jours de la semaine"@fr, "The days of the week"@en;
+  dct:title "La semaine"@fr, "Weekdays"@en;
+  skos:hasTopConcept days:friday, days:monday, days:saturday, days:sunday, days:thursday,
+    days:tuesday, days:wednesday .
+
+days:monday a skos:Concept;
+  skos:altLabel "1"@en, "mon"@en;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:prefLabel "Lundi"@fr, "Monday"@en;
+  skos:topConceptOf <http://data.sparna.fr/vocabularies/days> .
+
+days:tuesday a skos:Concept;
+  skos:altLabel "2"@en, "tue"@en;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:prefLabel "Mardi"@fr, "Tuesday"@en;
+  skos:topConceptOf <http://data.sparna.fr/vocabularies/days> .
+
+days:wednesday a skos:Concept;
+  skos:altLabel "3"@en, "wed"@en;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:prefLabel "Mercredi"@fr, "Wednesday"@en;
+  skos:topConceptOf <http://data.sparna.fr/vocabularies/days> .
+
+days:thursday a skos:Concept;
+  skos:altLabel "4"@en, "thu"@en;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:prefLabel "Jeudi"@fr, "Thursday"@en;
+  skos:topConceptOf <http://data.sparna.fr/vocabularies/days> .
+
+days:friday a skos:Concept;
+  skos:altLabel "5"@en, "fri"@en;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:prefLabel "Friday"@en, "Vendredi"@fr;
+  skos:topConceptOf <http://data.sparna.fr/vocabularies/days> .
+
+days:saturday a skos:Concept;
+  skos:altLabel "6"@en, "sat"@en;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:prefLabel "Samedi"@fr, "Saturday"@en;
+  skos:topConceptOf <http://data.sparna.fr/vocabularies/days> .
+
+days:sunday a skos:Concept;
+  skos:altLabel "7"@en, "sun"@en;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:prefLabel "Dimanche"@fr, "Sunday"@en;
+  skos:topConceptOf <http://data.sparna.fr/vocabularies/days> .

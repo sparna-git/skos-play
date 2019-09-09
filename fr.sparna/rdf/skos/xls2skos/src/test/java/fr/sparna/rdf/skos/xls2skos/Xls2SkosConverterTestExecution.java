@@ -48,6 +48,7 @@ public class Xls2SkosConverterTestExecution implements Test {
 		
 		this.converter = new Xls2SkosConverter(new RepositoryModelWriter(outputRepository), "fr");
 		this.converter.setGenerateXl(false);
+		this.converter.setGenerateXlDefinitions(false);
 	}
 
 	@Override
@@ -58,7 +59,14 @@ public class Xls2SkosConverterTestExecution implements Test {
 	@Override
 	public void run(TestResult result) {
 		result.startTest(this);
-		final File input = new File(this.testFolder, "input.xls");
+		File input = new File(this.testFolder, "input.xls");
+		if(!input.exists()) {
+			input = new File(this.testFolder, "input.xlsx");
+		}
+		if(!input.exists()) {
+			input = new File(this.testFolder, "input.xlsm");
+		}
+		
 		final File expected = new File(this.testFolder, "expected.ttl");
 		System.out.println("Testing "+input.getAbsolutePath());
 

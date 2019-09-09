@@ -1,0 +1,22 @@
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix vocab: <http://data.chateaudefontainebleau.fr/vocabulaires/ecoles_styles/> .
+
+<http://data.chateaudefontainebleau.fr/vocabulaires/ecoles_styles> a skos:ConceptScheme;
+  dct:title "Ecoles-styles"@fr;
+  skos:hasTopConcept vocab:concept_B396BC44-2DC3-4F92-A317-D50C07C489D1, vocab:concept_CB601155-92D5-4A1A-A5A1-27C4239285D0 .
+
+vocab:concept_B396BC44-2DC3-4F92-A317-D50C07C489D1 a skos:Concept;
+  dct:source "BNF"@fr, <https://data.bnf.fr/ark:/12148/cb119519238>;
+  skos:definition "Nom donné à des peintres paysagistes qui travaillèrent, d'après nature, dans la région de Barbizon, près de Fontainebleau (France) (BnF)."@fr;
+  skos:inScheme <http://data.chateaudefontainebleau.fr/vocabulaires/ecoles_styles>;
+  skos:prefLabel "Ecole de Barbizon"@fr;
+  skos:topConceptOf <http://data.chateaudefontainebleau.fr/vocabulaires/ecoles_styles> .
+
+vocab:concept_CB601155-92D5-4A1A-A5A1-27C4239285D0 a skos:Concept;
+  dct:source "Château de Fontainebleau"@fr;
+  skos:definition "Mouvement artistique né en France au XVIe siècle, autour des peintres italiens invités par François Ier à décorer le château de Fontainebleau. La première école de Fontainebleau, représentée par Le Rosso (1495-1540), Primatice (1504-1570) assisté par Nicolo dell'Abate (1509/1517-1571), s'épanouit de 1530 à 1570."@fr;
+  skos:inScheme <http://data.chateaudefontainebleau.fr/vocabulaires/ecoles_styles>;
+  skos:prefLabel "Premiere Ecole de Fontainebleau"@fr;
+  skos:topConceptOf <http://data.chateaudefontainebleau.fr/vocabulaires/ecoles_styles> .

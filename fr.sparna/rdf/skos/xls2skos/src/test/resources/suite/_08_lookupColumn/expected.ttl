@@ -1,0 +1,55 @@
+@prefix days: <http://data.sparna.fr/vocabularies/days/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<http://data.sparna.fr/vocabularies/days> a skos:ConceptScheme;
+  dct:title "Week days"@fr;
+  skos:hasTopConcept days:Sunday, days:WeekEnd, days:WorkingDay .
+
+days:Monday a skos:Concept;
+  skos:broader days:WorkingDay;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:prefLabel "Monday"@en .
+
+days:Tuesday a skos:Concept;
+  skos:broader days:WorkingDay;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:prefLabel "Tuesday"@en .
+
+days:Wednesday a skos:Concept;
+  skos:broader days:WorkingDay;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:prefLabel "Wednesday"@en .
+
+days:Thursday a skos:Concept;
+  skos:broader days:WorkingDay;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:prefLabel "Thursday"@en .
+
+days:Friday a skos:Concept;
+  skos:broader days:WorkingDay;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:prefLabel "Friday"@en .
+
+days:Saturday a skos:Concept;
+  skos:broader days:WeekEnd;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:prefLabel "Saturday"@en .
+
+days:Sunday a skos:Concept;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:prefLabel "Sunday"@en;
+  skos:topConceptOf <http://data.sparna.fr/vocabularies/days> .
+
+days:WeekEnd a skos:Concept;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:narrower days:Saturday;
+  skos:prefLabel "Week-end"@en;
+  skos:topConceptOf <http://data.sparna.fr/vocabularies/days> .
+
+days:WorkingDay a skos:Concept;
+  skos:inScheme <http://data.sparna.fr/vocabularies/days>;
+  skos:narrower days:Friday, days:Monday, days:Thursday, days:Tuesday, days:Wednesday;
+  skos:prefLabel "Working day"@en;
+  skos:topConceptOf <http://data.sparna.fr/vocabularies/days> .
