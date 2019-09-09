@@ -10,11 +10,11 @@
     </parent>
 
     <groupId>fr.sparna.rdf.skos</groupId>
-    <artifactId>xls2skos</artifactId>
+    <artifactId>xls2rdf</artifactId>
     <!-- version inherited from parent pom -->
 
-    <name>Sparna SKOS : Excel2SKOS</name>
-    <description>Turns Excel files from given templates into SKOS</description>
+    <name>Sparna SKOS : Excel2RDF</name>
+    <description>Turns Excel files from specific templates into RDF and SKOS</description>
 
     <organization>
         <name>Sparna</name>

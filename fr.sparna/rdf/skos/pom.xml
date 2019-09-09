@@ -25,7 +25,7 @@
     <modules>
         <module>skos-toolkit</module>
         <module>skos-printer</module>
-        <module>xls2skos</module>
+        <module>xls2rdf</module>
         <module>skos-play</module>
         <module>skos-play-cli</module>
     </modules>
