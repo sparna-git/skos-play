@@ -38,11 +38,11 @@ import com.google.api.services.drive.model.File;
 import fr.sparna.google.DriveHelper;
 import fr.sparna.google.GoogleConnector;
 import fr.sparna.google.GoogleUser;
-import fr.sparna.rdf.skos.xls2skos.ModelWriterFactory;
-import fr.sparna.rdf.skos.xls2skos.ModelWriterIfc;
-import fr.sparna.rdf.skos.xls2skos.Xls2SkosConverter;
-import fr.sparna.rdf.skos.xls2skos.Xls2SkosException;
 import fr.sparna.rdf.skosplay.log.LogEntry;
+import fr.sparna.rdf.xls2rdf.ModelWriterFactory;
+import fr.sparna.rdf.xls2rdf.ModelWriterIfc;
+import fr.sparna.rdf.xls2rdf.Xls2SkosConverter;
+import fr.sparna.rdf.xls2rdf.Xls2SkosException;
 
 
 
@@ -256,7 +256,7 @@ public class SkosPlayConvertController {
 			
 			response.setHeader("Content-Disposition", "inline; filename=\""+resultFileName+"-"+dateString+"."+extension+"\"");
 			
-			Set<String> identifiant = runConversion(
+			List<String> identifiant = runConversion(
 					new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),
 					in,
 					language.equals("")?null:language,
@@ -293,7 +293,7 @@ public class SkosPlayConvertController {
 		return null;
 	}
 
-	private Set<String> runConversion(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl, boolean ignorePostProc) {
+	private List<String> runConversion(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl, boolean ignorePostProc) {
 		Xls2SkosConverter converter = new Xls2SkosConverter(Writer, lang);
 		if(ignorePostProc) {
 			converter.setApplyPostProcessings(false);
@@ -301,8 +301,7 @@ public class SkosPlayConvertController {
 		converter.setGenerateXl(generatexl);
 		converter.setGenerateXlDefinitions(generatexl);
 		converter.processInputStream(filefrom);
-		Set<String> identifiant=converter.getCsModels().keySet();
-		return identifiant;
+		return converter.getConvertedVocabularyIdentifiers();
 	}
 
 
