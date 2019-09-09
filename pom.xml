@@ -40,59 +40,8 @@
         </plugins>
     </build>
 
-<!--
-    <licenses>
-        <license>
-        </license>
-    </licenses>
--->    
-
-<!--
-    <repositories>
-        <repository>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id></id>
-            <name></name>
-            <url></url>
-        </repository>
-        <repository>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id></id>
-            <name></name>
-            <url></url>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id></id>
-            <name></name>
-            <url></url>
-            <uniqueVersion></uniqueVersion>
-        </repository>
-        <snapshotRepository>
-            <id></id>
-            <name></name>
-            <url></url>
-            <uniqueVersion></uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
--->
-
-<!--
-    <properties>
-        <organization.logo></organization.logo>
-    </properties>
--->
+    <modules>
+       <module>fr.sparna</module>
+    </modules>
 
 </project>
