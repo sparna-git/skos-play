@@ -29,6 +29,13 @@
         <timestamp>${maven.build.timestamp}</timestamp>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <build>
         <!-- to populate automagically version.properties -->
         <resources>
@@ -103,8 +110,9 @@
 
         <!-- Sparna other dependecies -->
         <dependency>
-            <groupId>fr.sparna.rdf</groupId>
+            <groupId>com.github.sparna-git.rdf4j-toolkit</groupId>
             <artifactId>rdf4j-toolkit</artifactId>
+            <version>e127733104</version>
         </dependency>
         <dependency>
             <groupId>fr.sparna.rdf.skos</groupId>
@@ -117,9 +125,9 @@
             <version>0.8.3</version>
         </dependency>
         <dependency>
-            <groupId>fr.sparna.rdf.xls2rdf</groupId>
+            <groupId>com.github.sparna-git.xls2rdf</groupId>
             <artifactId>xls2rdf-lib</artifactId>
-            <version>0.8.3</version>
+            <version>0.9b</version>
         </dependency>
         
         

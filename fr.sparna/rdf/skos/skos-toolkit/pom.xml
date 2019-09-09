@@ -21,6 +21,13 @@
         <url>http://www.sparna.fr/</url>
     </organization>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <build>
 
     </build>
@@ -46,10 +53,11 @@
               <artifactId>rdf4j-runtime</artifactId>
         </dependency>
 
-		<dependency>
-			<groupId>fr.sparna.rdf</groupId>
-			<artifactId>rdf4j-toolkit</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>com.github.sparna-git.rdf4j-toolkit</groupId>
+            <artifactId>rdf4j-toolkit</artifactId>
+            <version>e127733104</version>
+        </dependency>
 
         <dependency>
             <groupId>fr.sparna.commons</groupId>

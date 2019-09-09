@@ -24,7 +24,6 @@
     </organization>    
 
     <modules>
-        <module>xls2rdf</module>
         <module>skos</module>
     </modules>
 

@@ -22,6 +22,12 @@
 		<url>http://www.sparna.fr/</url>
 	</organization>
 
+	<repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
 	<dependencies>
 
@@ -63,9 +69,10 @@
 		</dependency>
 
 		<dependency>
-			<groupId>fr.sparna.rdf</groupId>
-			<artifactId>rdf4j-toolkit</artifactId>
-		</dependency>
+            <groupId>com.github.sparna-git.rdf4j-toolkit</groupId>
+            <artifactId>rdf4j-toolkit</artifactId>
+            <version>e127733104</version>
+        </dependency>
 
 		<dependency>
 			<groupId>fr.sparna.rdf.skos</groupId>
@@ -99,6 +106,20 @@
                 <artifactId>jackson-databind</artifactId>
         </dependency>
 		
+        <!-- Add explicit java.xml.bind dependency for Java 11 compatibility -->
+        <!-- JAXB API + Dependency -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.1</version>
+            <scope>runtime</scope>
+        </dependency>
+
 	</dependencies>
 
 </project>
