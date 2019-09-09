@@ -41,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.BasicConfigurator;
+import ch.qos.logback.classic.LoggerContext;
 import fr.sparna.rdf.skos.xls2skos.reconcile.DummyReconcileService;
 import fr.sparna.rdf.skos.xls2skos.reconcile.DynamicReconciliableValueSet;
 import fr.sparna.rdf.skos.xls2skos.reconcile.PreloadedReconciliableValueSet;
@@ -760,8 +761,9 @@ public class Xls2SkosConverter {
 
 	public static void main(String[] args) throws Exception {
 		
-		// quick and dirty Log4J config		
-		BasicConfigurator.configureDefaultContext();
+		// quick and dirty Log4J config
+		BasicConfigurator bc = new BasicConfigurator();
+		bc.configure((LoggerContext) LoggerFactory.getILoggerFactory());
 		((ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger("org.eclipse.rdf4j")).setLevel(ch.qos.logback.classic.Level.INFO);
 		
 		
