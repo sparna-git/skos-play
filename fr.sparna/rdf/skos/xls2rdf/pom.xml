@@ -50,7 +50,7 @@
                   <transformers>
                     <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                         <manifestEntries>
-                          <Main-Class>fr.sparna.rdf.skos.xls2skos.cli.Main</Main-Class>
+                          <Main-Class>fr.sparna.rdf.skos.xls2rdf.cli.Main</Main-Class>
                           <Class-Path>.</Class-Path>
                         </manifestEntries>
                     </transformer>
