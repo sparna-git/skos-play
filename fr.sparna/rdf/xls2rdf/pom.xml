@@ -3,19 +3,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.sparna.rdf</groupId>
-    <artifactId>sparna-rdf</artifactId>
+    <artifactId>xls2rdf-pom</artifactId>
     <version>0.8.3</version>
     <packaging>pom</packaging>
 
     <parent>
-        <groupId>fr.sparna</groupId>
-        <artifactId>fr.sparna-root-pom</artifactId>
+        <groupId>fr.sparna.rdf</groupId>
+        <artifactId>sparna-rdf</artifactId>
         <version>0.8.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <name>Sparna RDF</name>
-    <description>All RDF-related modules</description>
+    <name>Sparna XLS2RDF root POM</name>
+    <description>All modules of XLS2RDF converter</description>
     <url>http://www.sparna.fr/</url>
     
     <organization>
@@ -25,7 +25,7 @@
 
     <modules>
         <module>xls2rdf</module>
-        <module>skos</module>
+        <module>xls2rdf-app</module>
     </modules>
 
 </project>

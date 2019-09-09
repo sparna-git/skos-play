@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>fr.sparna.rdf.skos</groupId>
-        <artifactId>sparna-skos</artifactId>
+        <groupId>fr.sparna.rdf</groupId>
+        <artifactId>xls2rdf-pom</artifactId>
         <version>0.8.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>fr.sparna.rdf.skos</groupId>
+    <groupId>fr.sparna.rdf.xls2rdf</groupId>
     <artifactId>xls2rdf-app</artifactId>
     <!-- version inherited from parent pom -->
 

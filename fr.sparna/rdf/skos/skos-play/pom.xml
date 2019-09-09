@@ -117,8 +117,8 @@
             <version>0.8.3</version>
         </dependency>
         <dependency>
-            <groupId>fr.sparna.rdf.skos</groupId>
-            <artifactId>xls2rdf</artifactId>
+            <groupId>fr.sparna.rdf.xls2rdf</groupId>
+            <artifactId>xls2rdf-lib</artifactId>
             <version>0.8.3</version>
         </dependency>
         
