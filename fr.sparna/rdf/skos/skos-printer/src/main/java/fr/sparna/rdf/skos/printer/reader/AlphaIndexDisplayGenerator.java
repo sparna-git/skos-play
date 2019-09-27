@@ -226,7 +226,7 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 //		);
 		
 		// final String LANG = "fr";
-		final String LANG = null;
+		final String LANG = "en";
 		
 		((ch.qos.logback.classic.Logger) LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME)).setLevel(ch.qos.logback.classic.Level.INFO);
 	    ((ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger("fr.sparna.rdf")).setLevel(ch.qos.logback.classic.Level.TRACE);
@@ -256,8 +256,9 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 			);
 			
 			ConceptBlockReader cbReader = new ConceptBlockReader();
-			cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES_WITH_MT);
-			cbReader.setAdditionalLabelLanguagesToInclude(Arrays.asList(new String[] { "en", "es", "ru" }));
+			cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
+			// cbReader.setSkosPropertiesToRead(EXPANDED_SKOS_PROPERTIES_WITH_MT);
+			// cbReader.setAdditionalLabelLanguagesToInclude(Arrays.asList(new String[] { "en", "es", "ru" }));
 			
 			AlphaIndexDisplayGenerator reader = new AlphaIndexDisplayGenerator(connection, cbReader);
 			BodyReader bodyReader = new BodyReader(reader);		
