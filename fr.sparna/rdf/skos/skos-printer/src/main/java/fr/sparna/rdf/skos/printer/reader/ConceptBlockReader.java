@@ -104,13 +104,13 @@ public class ConceptBlockReader {
 					additionalReaders.put(aProperty,
 							(conceptScheme != null)
 							?new PropertyValueReader(new GenericQuerySupplier(
-									(inverseProperty != null)?("<"+aProperty+">"+"/"+"^<"+inverseProperty+">"):"<"+aProperty+">",
+									(inverseProperty != null)?("<"+aProperty+">"+"|"+"^<"+inverseProperty+">"):"<"+aProperty+">",
 									(SKOS.isDatatypeProperty(aProperty) && !aProperty.equals(SKOS.NOTATION))?lang:null,
 									SimpleValueFactory.getInstance().createIRI(SKOS.IN_SCHEME),
 									SimpleValueFactory.getInstance().createIRI(conceptScheme.toString())
 							))
 							:new PropertyValueReader(new GenericQuerySupplier(
-									(inverseProperty != null)?("<"+aProperty+">"+"/"+"^<"+inverseProperty+">"):"<"+aProperty+">",
+									(inverseProperty != null)?("<"+aProperty+">"+"|"+"^<"+inverseProperty+">"):"<"+aProperty+">",
 									(SKOS.isDatatypeProperty(aProperty) && !aProperty.equals(SKOS.NOTATION))?lang:null,
 									null,
 									null
