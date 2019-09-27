@@ -112,7 +112,7 @@
         <dependency>
             <groupId>com.github.sparna-git.rdf4j-toolkit</groupId>
             <artifactId>rdf4j-toolkit</artifactId>
-            <version>e127733104</version>
+            <version>66b205cc06</version>
         </dependency>
         <dependency>
             <groupId>fr.sparna.rdf.skos</groupId>
@@ -127,7 +127,7 @@
         <dependency>
             <groupId>com.github.sparna-git.xls2rdf</groupId>
             <artifactId>xls2rdf-lib</artifactId>
-            <version>0.9b</version>
+            <version>master-SNAPSHOT</version>
         </dependency>
         
         
