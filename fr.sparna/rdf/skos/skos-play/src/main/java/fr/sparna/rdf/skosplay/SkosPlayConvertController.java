@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -41,8 +40,11 @@ import fr.sparna.google.GoogleUser;
 import fr.sparna.rdf.skosplay.log.LogEntry;
 import fr.sparna.rdf.xls2rdf.ModelWriterFactory;
 import fr.sparna.rdf.xls2rdf.ModelWriterIfc;
-import fr.sparna.rdf.xls2rdf.Xls2SkosConverter;
-import fr.sparna.rdf.xls2rdf.Xls2SkosException;
+import fr.sparna.rdf.xls2rdf.SkosPostProcessor;
+import fr.sparna.rdf.xls2rdf.SkosXlPostProcessor;
+import fr.sparna.rdf.xls2rdf.Xls2RdfConverter;
+import fr.sparna.rdf.xls2rdf.Xls2RdfException;
+import fr.sparna.rdf.xls2rdf.Xls2RdfPostProcessorIfc;
 
 
 
@@ -278,7 +280,7 @@ public class SkosPlayConvertController {
 					uri.toString()
 			));
 
-		} catch (Xls2SkosException e) {
+		} catch (Xls2RdfException e) {
 			e.printStackTrace();
 			response.reset();
 			return doErrorConvert(request, e.getMessage()); 
@@ -293,13 +295,18 @@ public class SkosPlayConvertController {
 		return null;
 	}
 
-	private List<String> runConversion(ModelWriterIfc Writer, InputStream filefrom, String lang, boolean generatexl, boolean ignorePostProc) {
-		Xls2SkosConverter converter = new Xls2SkosConverter(Writer, lang);
-		if(ignorePostProc) {
-			converter.setApplyPostProcessings(false);
+	private List<String> runConversion(ModelWriterIfc writer, InputStream filefrom, String lang, boolean generatexl, boolean ignorePostProc) {
+		Xls2RdfConverter converter = new Xls2RdfConverter(writer, lang);
+		List<Xls2RdfPostProcessorIfc> postProcessors = new ArrayList<>();
+		
+		if(!ignorePostProc) {
+			postProcessors.add(new SkosPostProcessor());
 		}
-		converter.setGenerateXl(generatexl);
-		converter.setGenerateXlDefinitions(generatexl);
+		if(!ignorePostProc && generatexl) {
+			postProcessors.add(new SkosXlPostProcessor(generatexl, generatexl));
+		}
+		converter.setPostProcessors(postProcessors);
+
 		converter.processInputStream(filefrom);
 		return converter.getConvertedVocabularyIdentifiers();
 	}
