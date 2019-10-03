@@ -8,7 +8,7 @@
     <parent>
         <groupId>fr.sparna.rdf.skos</groupId>
         <artifactId>sparna-skos</artifactId>
-        <version>0.8.4</version>
+        <version>0.8.5</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -35,6 +35,7 @@
             <url>https://jitpack.io</url>
         </repository>
     </repositories>
+
 
     <build>
         <!-- to populate automagically version.properties -->
@@ -110,27 +111,25 @@
 
         <!-- Sparna other dependecies -->
         <dependency>
-            <groupId>com.github.sparna-git.rdf4j-toolkit</groupId>
+            <groupId>fr.sparna.rdf</groupId>
             <artifactId>rdf4j-toolkit</artifactId>
-            <version>66b205cc06</version>
         </dependency>
         <dependency>
             <groupId>fr.sparna.rdf.skos</groupId>
             <artifactId>skos-toolkit</artifactId>
-            <version>0.8.4</version>
+            <version>0.8.5</version>
         </dependency>
         <dependency>
             <groupId>fr.sparna.rdf.skos</groupId>
             <artifactId>skos-printer</artifactId>
-            <version>0.8.4</version>
-        </dependency>
+            <version>0.8.5</version>
+        </dependency>   
+        
         <dependency>
             <groupId>com.github.sparna-git.xls2rdf</groupId>
             <artifactId>xls2rdf-lib</artifactId>
             <version>master-SNAPSHOT</version>
         </dependency>
-        
-        
 
         <!-- Semargl and Semargl Sesame integration for RDFa parsing -->
         <!--

@@ -6,7 +6,7 @@
 	<parent>
 	    <groupId>fr.sparna.rdf.skos</groupId>
 	    <artifactId>sparna-skos</artifactId>
-	    <version>0.8.4</version>
+	    <version>0.8.5</version>
         <relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -22,12 +22,6 @@
 		<url>http://www.sparna.fr/</url>
 	</organization>
 
-	<repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
 
 	<dependencies>
 
@@ -69,15 +63,14 @@
 		</dependency>
 
 		<dependency>
-            <groupId>com.github.sparna-git.rdf4j-toolkit</groupId>
-            <artifactId>rdf4j-toolkit</artifactId>
-            <version>66b205cc06</version>
-        </dependency>
+			<groupId>fr.sparna.rdf</groupId>
+			<artifactId>rdf4j-toolkit</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>fr.sparna.rdf.skos</groupId>
 			<artifactId>skos-toolkit</artifactId>
-			<version>0.8.4</version>
+			<version>0.8.5</version>
 		</dependency>
 
 		<dependency>
@@ -105,7 +98,7 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
         </dependency>
-		
+
         <!-- Add explicit java.xml.bind dependency for Java 11 compatibility -->
         <!-- JAXB API + Dependency -->
         <dependency>
@@ -119,7 +112,7 @@
             <version>2.3.1</version>
             <scope>runtime</scope>
         </dependency>
-
+		
 	</dependencies>
 
 </project>
