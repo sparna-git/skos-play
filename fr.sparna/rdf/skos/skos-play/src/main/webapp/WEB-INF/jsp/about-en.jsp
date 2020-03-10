@@ -177,54 +177,54 @@ me:123456 skos:broader me:Vehicle .
 					</ol>
 				</p>
 				<h4>How is the tree data structure generated from SKOS ?</h4>
-				<p>
-					Good question. SKOS data model is flexible and SKOS data can come in multiple variations, choices has to made.
-					Here is the algorithm that SKOS Play follows to try to accomodate diverse situations :
-					<ul>
-						<li>To determine the root :
-							<ul>
-								<li>If at least one concept scheme exists, it needs to be selected in the screen, and will be the root.</li>
-								<li>Otherwise, if one and only one collection exists, it will be considered as the root.</li>
-								<li>Otherwise, if one and only one concept without skos:broader (or not referenced by a skos:narrower) exists, it will be considered as the root.</li>
-								<li>Otherwise, if multiple collections or multiple concepts without skos:broader (or not referenced by a skos:narrower) exist,
-									a dummy root is created under which these first level elements will be inserted.
+				<p>Good question. SKOS data model is flexible and SKOS data can come in multiple variations, choices has to be made.</p>
+				<p>Part of the algorithm followed by SKOS Play relies on the interpretation of Collections as <a href="http://purl.org/iso25964/skos-thes#ThesaurusArray">ThesaurusArray</a>.
+					A ThesaurusArray is a Collection that is explicitely typed as such, or for which we finf that it contains only Concepts that have the same parent, or Concepts
+					that have no parent.
+				</p>
+				<p>Here is the algorithm that SKOS Play follows to try to accomodate diverse situations :
+						<ul>
+							<li>We start from the URI of the ConceptScheme as the root (if there is one, which is the case most of the time, otherwise SKOS Play tries to determine a root as best as it can).</li>
+							<li>If on a concept scheme :
+								<li>If Collections are marked skos:inScheme of this ConceptScheme exist, and they are not referenced by skos:member
+								in other collections, and they are not ThesaurusArrays, then they are inserted as child of the ConceptScheme in the tree.
 								</li>
-							</ul>
-						</li>
-						<li>To navigate the tree :
-							<ul>
-								<li>If on a concept scheme :
+								<li>Otherwise, if no "first level" Collection was found, we look for Concepts :
 									<ul>
-										<li>If some collections are marked skos:inScheme of that scheme, without being referenced as skos:member
-										from other collections (indicating a top-level collection), they are inserted as children of the scheme in the tree.
+										<li>if the ConceptScheme indicate top Concepts through skos:hasTopConcept or its inverse skos:topConceptOf,
+										these Concepts are inserted as child of the ConceptScheme in the tree.
 										</li>
-										<li>Otherwise, if the concept scheme indicates skos:hasTopConcepts, or if concepts are marked skos:hasTopConcept
-										of that scheme, they are inserted as children of the scheme in the tree.
+										<li>Otherwise, if Concepts withtout skos:broader (or not referenced by skos:narrower) exist in this scheme,
+										these Concepts are inserted as child of the ConceptScheme in the tree.									
 										</li>
-										<li>Otherwise, if concepts without skos:broader (or not referenced as skos:narrower) exists in that scheme,
-										they are inserted as children of the scheme in the tree.									
+										<li>Additionnally, we look for Collections that are ThesaurusArrays that contain only root Concepts,
+										that is Concepts without parents.
 										</li>
 									</ul>
 								</li>
-								<li>If on a collection :
-									<ul>
-										<li>If that collection indicates sub-collections via skos:member, these collection are inserted as children in the tree.
-										</li>
-										<li>Otherwise, concepts without skos:broader (or not referenced as skos:narrower) belonging to that collection 
-										via skos:member are inserted as children in the tree.								
-										</li>
-									</ul>
-								</li>
-								<li>If on a concept :
-									<ul>
-										<li>concepts indicating a skos:broader to that concept, or indicated by a skos:narrower from that concept
-											are inserted as children in the tree.
-										</li>
-									</ul>
-								</li>
-							</ul>
-						</li>
-					</ul>
+							</li>
+							<li>If on a "standard" Collection, not a ThesaurusArray :
+								<ul>
+									<li>We look for all Collections referenced by a skos:member from this Collection
+									and Concepts without skos:broader (or not referenced by a skos:narrower) that are referenced by a skos:member.								
+									</li>
+								</ul>
+							</li>
+							<li>If on a Collection that is a ThesaurusArray :
+								<ul>
+									<li>We look for all Concepts referenced by a skos:member from this Collection.
+									By construction these are only Concepts that have the same parent or no parent at all.</li>
+								</ul>
+							</li>
+							<li>If on a concept :
+								<ul>
+									<li>We insert as children the ThesaurusArray that are arrays of Concepts that have this Concept as parent.</li>
+									<li>concepts indicating a skos:broader to that concept, or indicated by a skos:narrower from that concept
+										are inserted as children in the tree, only if they are not member of a ThesaurusArray under that Concept.
+									</li>
+								</ul>
+							</li>
+						</ul>
 				</p>
 				<h4>What are the language supported ?</h4>
 				<p>

@@ -178,55 +178,57 @@ chezmoi:123456 skos:broader chezmoi:Vehicule .
 					</ol>
 				</p>
 				<h4>Comment est générée la structure d'arbre à partir du SKOS ?</h4>
+				<p>Bonne question. Le modèle SKOS est lâche et des données SKOS peuvent se structurer de plusieurs façons, il faut donc faire des choix.</p>
+				<p>Une partie de l'algorithme suivi par SKOS Play repose sur l'interprétation de Collections comme des <a href="http://purl.org/iso25964/skos-thes#ThesaurusArray">ThesaurusArray</a>.
+					Un ThesaurusArray est une Collection qui a explicitement ce type, ou dont on trouve qu'elle ne contient que des Concepts qui ont le même parent, ou que des Concepts
+					qui n'ont pas de parent.
+				</p>
 				<p>
-					Bonne question. Le modèle SKOS est lâche et des données SKOS peuvent se structurer de plusieurs façons, il faut donc faire des choix.
 					Voici l'algorithme qui est suivi par SKOS Play :
-					<ul>
-						<li>Pour déterminer la racine :
-							<ul>
-								<li>Si au moins un schema de concepts existe, on doit en choisir un dans l'interface, ce sera la racine.</li>
-								<li>Sinon, si une et une seule collection existe, elle sera prise comme racine.</li>
-								<li>Sinon, si un et un seul concept sans broader (ou pas référencé par un narrower) existe, il sera pris comme racine.</li>
-								<li>Sinon, si de multiples collections ou de multiples concepts sans broader (ou pas référencé par un narrower) existent,
-									une racine fictive est créée sous laquelle ces éléments de premier niveau sont insérés.
-								</li>
-							</ul>
-						</li>
-						<li>Pour parcourir l'arbre :
-							<ul>
-								<li>Si on est sur un schéma de concept :
-									<ul>
-										<li>Si des collections marquées skos:inScheme de ce schéma de concepts existent, et qui ne sont pas référencées
-											comme skos:member d'une autres collection, elles sont insérées comme fils du schéma de concepts dans l'arbre.
-										</li>
-										<li>Sinon, si le schéma de concepts indique des skos:hasTopConcepts, ou bien si des concepts sont indiqués
-										skos:isTopConceptOf de ce schéma, ces concepts sont insérés comme fils du schéma de concepts dans l'arbre.
-										</li>
-										<li>Sinon, si des concepts sans skos:broader (ou pas référencés comme skos:narrower) existent dans ce schéma,
-										ils sont insérés comme files du schéma de concepts dans l'arbre.									
-										</li>
-									</ul>
-								</li>
-								<li>Si on est sur une collection :
-									<ul>
-										<li>Si cette collection indique des sous-collections via un skos:member, ces collections sont insérées comme
-										fils dans l'arbre.
-										</li>
-										<li>Sinon, les concepts sans skos:broader (ou pas référencés comme skos:narrower) appartenant à cette collection
-										via des skos:member sont insérés comme fils.								
-										</li>
-									</ul>
-								</li>
-								<li>Si on est sur un concept :
-									<ul>
-										<li>Les concepts qui indiquent un skos:broader vers ce concept, ou qui sont indiqués par un skos:narrower par
-											ce concept, sont insérés comme fils.
-										</li>
-									</ul>
-								</li>
-							</ul>
-						</li>
-					</ul>
+						<ul>
+							<li>On commence par l'URI du ConceptScheme sélectionné comme racine (s'il y en a une - c'est le cas la plupart du temps. Sinon SKOS Play essaiera de déterminer une racine "au mieux").</li>
+							<li>Si on est sur un schéma de concept :
+								<ul>
+									<li>Si des collections marquées skos:inScheme de ce schéma de concepts existent, et qui ne sont pas référencées
+										comme skos:member d'une autres collection, et qui ne sont pas des ThesaurusArray, elles sont insérées comme fils du schéma de concepts dans l'arbre.
+									</li>
+									<li>Sinon, si aucune Collection "de premier niveau" n'a été trouvée, on cherche les Concepts :
+										<ul>
+											<li>si le schéma de concepts indique des skos:hasTopConcepts, ou bien si des concepts sont indiqués
+											skos:isTopConceptOf de ce schéma, ces concepts sont insérés comme fils du schéma de concepts dans l'arbre.
+											</li>
+											<li>Sinon, si des concepts sans skos:broader (ou pas référencés comme skos:narrower) existent dans ce schéma,
+											ils sont insérés comme files du schéma de concepts dans l'arbre.									
+											</li>
+											<li>En plus de cela, on essaie de ramener sous le ConceptScheme les Collections qui sont considérées comme des ThesaurusArray
+											contenant seulement des Concepts racines. C'est-à-dire les Collections contenant uniquement des Concepts sans parent.
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li>Si on est sur une Collection "normale" qui n'est pas un ThesaurusArray :
+								<ul>
+									<li>On cherche toutes les Collections référencés par un skos:member depuis cette Collection, et
+									les concepts sans skos:broader (ou pas référencés comme skos:narrower) référencés par un skos:inScheme.								
+									</li>
+								</ul>
+							</li>
+							<li>Si on est sur une Collection qui est un ThesaurusArray :
+								<ul>
+									<li>On cherche tous les Concepts référencés par un skos:member depuis cette Collection.
+									Par construction, ce sont des Concepts qui ont le même parent ou pas de parent du tout.</li>
+								</ul>
+							</li>
+							<li>Si on est sur un concept :
+								<ul>
+									<li>On insère comme fils les ThesaurusArray qui sont des tableaux de Concepts fils de ce Concept</li>
+									<li>Les concepts qui indiquent un skos:broader vers ce concept, ou qui sont indiqués par un skos:narrower par
+										ce concept, sont insérés comme fils, seulement s'ils ne font pas partie d'un ThesaurusArray de Concepts fils de ce Concept.
+									</li>
+								</ul>
+							</li>
+						</ul>
 				</p>
 				<h4>Quelles sont les langues supportées ?</h4>
 				<p>
