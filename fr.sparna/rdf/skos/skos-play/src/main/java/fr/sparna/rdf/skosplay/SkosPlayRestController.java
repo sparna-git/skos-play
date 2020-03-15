@@ -26,7 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
-@RequestMapping("/skos-rest")
 public class SkosPlayRestController {
   private Logger log = LoggerFactory.getLogger(this.getClass().getName());
 
@@ -58,7 +57,7 @@ public class SkosPlayRestController {
    * @return
    * @throws Exception
    */
-  @RequestMapping(value = "/convert", method = RequestMethod.POST)
+  @RequestMapping(value = "/rest/convert", method = RequestMethod.POST)
   public ResponseEntity<ByteArrayResource> convertRDF(
     @RequestParam(value="source", required=true) String sourceString,
     @RequestParam(value="file", required=false) MultipartFile file,
@@ -165,7 +164,7 @@ public class SkosPlayRestController {
     }
   }
 
-  @RequestMapping(method = RequestMethod.GET, value = "/ping")
+  @RequestMapping(method = RequestMethod.GET, value = "/rest/ping")
   public ResponseEntity<Map<String, String>> ping(){
     return ResponseEntity.ok(Collections.singletonMap("message","pong"));
   }
