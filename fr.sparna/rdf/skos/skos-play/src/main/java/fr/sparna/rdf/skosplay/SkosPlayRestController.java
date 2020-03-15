@@ -42,7 +42,6 @@ public class SkosPlayRestController {
   private enum SOURCE_TYPE {
     FILE,
     URL,
-    EXAMPLE,
   }
 
   /**
@@ -51,7 +50,6 @@ public class SkosPlayRestController {
    * @param language language of the labels to generate
    * @param url URL of the file if source=url
    * @param format output format of the generated files
-   * @param example reference of the example if source=example
    * @param useskosxl flag to generate SKOS-XL or not
    * @param useZip flag to output result in a ZIP file or not
    * @param useGraph flag to indicate if graph files should be generated or not
@@ -67,7 +65,6 @@ public class SkosPlayRestController {
     @RequestParam(value="language", required=false) String language,
     @RequestParam(value="url", required=false) String url,
     @RequestParam(value="output", required=false) String format,
-    @RequestParam(value="example", required=false) String example,
     @RequestParam(value="useskosxl", required=false) boolean useskosxl,
     @RequestParam(value="usezip", required=false) boolean useZip,
     @RequestParam(value="usegraph", required=false) boolean useGraph,
@@ -166,6 +163,11 @@ public class SkosPlayRestController {
     } finally {
       IOUtils.closeQuietly(in);
     }
+  }
+
+  @RequestMapping(method = RequestMethod.GET, value = "/ping")
+  public ResponseEntity<Map<String, String>> ping(){
+    return ResponseEntity.ok(Collections.singletonMap("message","pong"));
   }
 
   private List<String> runConversion(ModelWriterIfc writer, InputStream filefrom, String lang, boolean generatexl, boolean ignorePostProc) {
