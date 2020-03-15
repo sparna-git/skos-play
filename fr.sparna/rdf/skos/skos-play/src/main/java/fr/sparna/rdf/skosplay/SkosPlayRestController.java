@@ -49,7 +49,6 @@ public class SkosPlayRestController {
    * @param sourceString type of source ("file", "url", "example", "google")
    * @param file uploaded file if source=file
    * @param language language of the labels to generate
-   * @param googleId ID of the google drive file if source=google
    * @param url URL of the file if source=url
    * @param format output format of the generated files
    * @param example reference of the example if source=example
