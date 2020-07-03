@@ -18,6 +18,8 @@ import fr.sparna.rdf.skos.printer.cli.index.ArgumentsIndex;
 import fr.sparna.rdf.skos.printer.cli.index.Index;
 import fr.sparna.rdf.skos.printer.cli.normalize.ArgumentsNormalizeLabels;
 import fr.sparna.rdf.skos.printer.cli.normalize.NormalizeLabels;
+import fr.sparna.rdf.skos.printer.cli.reconcile.ArgumentsBatchReconcile;
+import fr.sparna.rdf.skos.printer.cli.reconcile.BatchReconcile;
 import fr.sparna.rdf.skos.printer.cli.skos2skosxl.ArgumentsSkos2SkosXl;
 import fr.sparna.rdf.skos.printer.cli.skos2skosxl.Skos2SkosXl;
 import fr.sparna.rdf.skos.printer.cli.skosxl2skos.ArgumentsSkosXl2Skos;
@@ -39,6 +41,7 @@ public class Main {
 		INDEX(new ArgumentsIndex(), new Index()),
 		SKOS2SKOSXL(new ArgumentsSkos2SkosXl(), new Skos2SkosXl()),
 		SKOSXL2SKOS(new ArgumentsSkosXl2Skos(), new SkosXl2Skos()),
+		BATCH_RECONCILE(new ArgumentsBatchReconcile(), new BatchReconcile())
 		;
 		
 		private SkosPlayCliCommandIfc command;

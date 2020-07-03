@@ -6,7 +6,7 @@
 	<parent>
 	    <groupId>fr.sparna.rdf.skos</groupId>
 	    <artifactId>sparna-skos</artifactId>
-	    <version>0.8.5</version>
+	    <version>0.8.6</version>
         <relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -148,6 +148,13 @@
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
         </dependency>
+
+        <!-- for CSV output in reconcile -->
+        <dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-csv</artifactId>
+		    <version>1.8</version>
+		</dependency>
 		
 	</dependencies>
 

@@ -27,8 +27,8 @@ public class SkosXl2Skos implements SkosPlayCliCommandIfc {
 
 		try(RepositoryConnection connection = inputRepository.getConnection()) {
 			// Apply transformation
-			ApplyUpdates.fromQueryReaders(SKOSRules.getSkosXl2SkosRuleset()).accept(connection);
-			
+			ApplyUpdates.fromQueryReaders(SKOSRules.getSkosXl2SkosRuleset(args.isCleanXl())).accept(connection);
+
 			// output in an output file
 			RepositoryWriter.writeToFile(args.getOutput(), connection);
 		}

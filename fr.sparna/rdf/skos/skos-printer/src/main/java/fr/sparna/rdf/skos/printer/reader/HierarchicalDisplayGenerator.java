@@ -106,6 +106,11 @@ public class HierarchicalDisplayGenerator extends AbstractKosDisplayGenerator {
 		PropertyValueReader notationReader = new PropertyValueReader(SimpleValueFactory.getInstance().createIRI(SKOS.NOTATION));
 		notationReader.setPreLoad(false);
 		
+		if(skosTrees.stream().allMatch(t -> t.getNumberOfNodes() == 1)) {
+			log.debug("Flat list of trees - no hierarchy - not outputting anything.");
+			return d;
+		}
+		
 		for (GenericTree<SKOSTreeNode> genericTree : skosTrees) {
 			Section s = new Section();
 			// sets the name of the root node as section title

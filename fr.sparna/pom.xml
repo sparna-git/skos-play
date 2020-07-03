@@ -4,7 +4,7 @@
 
     <groupId>fr.sparna</groupId>
     <artifactId>fr.sparna-root-pom</artifactId>
-    <version>0.8.5</version>
+    <version>0.8.6</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -103,7 +103,7 @@
             <dependency>
                 <groupId>fr.sparna.rdf</groupId>
                 <artifactId>rdf4j-toolkit</artifactId>
-                <version>0.5-SNAPSHOT</version>
+                <version>0.6.0</version>
             </dependency>
 
             <!-- Logging: SLF4J -->

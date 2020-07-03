@@ -80,7 +80,7 @@ public class AlignmentDataHarvesterCachedLoader implements AlignmentDataHarveste
 				+ "<http://vocab.getty.edu/aat/> skos:prefLabel \"AAT Getty\"@en , \"AAT Getty\"@fr ."
 				;
 		
-		new LoadFromString(wellKnownThesauriNames, "turtle").accept(connection);	
+		new LoadFromString(wellKnownThesauriNames, RDFFormat.TURTLE).accept(connection);	
 		
 	}
 	
