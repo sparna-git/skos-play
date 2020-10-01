@@ -44,6 +44,20 @@
           <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n021024l.pfb" embedding-mode="full">
                <font-triplet name="Nimbus Roman No9 L" style="italic" weight="bold" />
           </font>
+
+           <font metrics-url="fonts/dejavu-fonts-ttf-2.37/DejaVuSans.xml" kerning="no" embed-url="fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans.ttf" embedding-mode="full">
+               <font-triplet name="Deja Vu" style="normal" weight="normal" />
+           </font>           
+           <font metrics-url="fonts/dejavu-fonts-ttf-2.37/DejaVuSans-Bold.xml" kerning="no" embed-url="fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans-Bold.ttf" embedding-mode="full">
+               <font-triplet name="Deja Vu" style="normal" weight="bold" />
+           </font> 
+           <font metrics-url="fonts/dejavu-fonts-ttf-2.37/DejaVuSans.xml" kerning="no" embed-url="fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans.ttf" embedding-mode="full">
+               <font-triplet name="Deja Vu" style="italic" weight="normal" />
+           </font> 
+           <font metrics-url="fonts/dejavu-fonts-ttf-2.37/DejaVuSans.xml" kerning="no" embed-url="fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans.ttf" embedding-mode="full">
+               <font-triplet name="Deja Vu" style="italic" weight="bold" />
+           </font> 
+        
          
           <!-- register all the fonts found in a directory -->
           <!--

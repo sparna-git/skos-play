@@ -18,7 +18,14 @@
 	</xsl:template>
 	
 	<xsl:template match="disp:kosDocument">
-		<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
+		<xsl:variable name="writingMode">
+			<xsl:choose>
+				<xsl:when test="$lang = 'ar'">rl-tb</xsl:when>
+				<xsl:otherwise>lr-tb</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		
+		<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format" writing-mode="{$writingMode}">
 		
 			<fo:layout-master-set>
 				<xsl:apply-templates select="disp:body/disp:kosDisplay" mode="layout-master-set" />
@@ -157,6 +164,7 @@
 
 	<!-- A KOS Display -->
 	<xsl:template match="disp:kosDisplay">
+		<!-- <fo:page-sequence master-reference="pageMaster-{generate-id()}" writing-mode="rl-tb">  -->
 		<fo:page-sequence master-reference="pageMaster-{generate-id()}">
 			
 			<!-- static-content are first, before flow -->
@@ -196,7 +204,7 @@
 			<fo:block font-size="12pt" font-weight="bold"><fo:page-number/></fo:block>
 			<xsl:if test="/disp:kosDocument/disp:footer/disp:title">
 				<!-- font-variant is unsupported for capitals, see https://xmlgraphics.apache.org/fop/compliance.html -->
-				<fo:block font-family="Nimbus Sans L, Helvetica" font-size="7pt" font-weight="bold"><xsl:value-of select="/disp:kosDocument/disp:footer/disp:title" /></fo:block>
+				<fo:block font-family="Nimbus Sans L, Helvetica, Deja Vu" font-size="7pt" font-weight="bold"><xsl:value-of select="/disp:kosDocument/disp:footer/disp:title" /></fo:block>
 				<!--
 				<fo:block font-family="Helvetica" font-size="7pt" font-weight="bold"><xsl:value-of select="/disp:kosDocument/disp:footer/disp:title" /></fo:block>
 				-->
@@ -214,26 +222,26 @@
 	</xsl:template>
 	
 	<xsl:template name="header">
-		<fo:block font-family="Nimbus Sans L, Helvetica" font-size="32pt" font-weight="bold">
+		<fo:block font-family="Nimbus Sans L, Helvetica, Deja Vu" font-size="32pt" font-weight="bold">
 			<fo:retrieve-marker 
 	      		retrieve-class-name="section.head.marker"
 	      		retrieve-position="first-including-carryover"
 	      		retrieve-boundary="page-sequence"/>
 		</fo:block>
-		<fo:block font-family="Nimbus Sans L, Helvetica" font-size="17pt">
+		<fo:block font-family="Nimbus Sans L, Helvetica, Deja Vu" font-size="17pt">
 			<!-- generates a whole line of the same character -->
 			<fo:leader leader-pattern="use-content" leader-length.optimum="100%">I</fo:leader>
 		</fo:block>
 	</xsl:template>
 	
 	<xsl:template name="header-medium">
-		<fo:block font-family="Nimbus Sans L, Helvetica" font-size="22pt" font-weight="bold">
+		<fo:block font-family="Nimbus Sans L, Helvetica, Deja Vu" font-size="22pt" font-weight="bold">
 			<fo:retrieve-marker 
 	      		retrieve-class-name="section.head.marker"
 	      		retrieve-position="first-including-carryover"
 	      		retrieve-boundary="page-sequence"/>
 		</fo:block>
-		<fo:block font-family="Nimbus Sans L, Helvetica" font-size="17pt">
+		<fo:block font-family="Nimbus Sans L, Helvetica, Deja Vu" font-size="17pt">
 			<!-- generates a whole line of the same character -->
 			<fo:leader leader-pattern="use-content" leader-length.optimum="100%">I</fo:leader>
 		</fo:block>
@@ -241,14 +249,14 @@
 	
 	<xsl:template name="header-long">
 		<fo:block-container height="2cm" max-height="2cm" width="100%" overflow="hidden">
-			<fo:block font-family="Nimbus Sans L, Helvetica" font-size="22pt">
+			<fo:block font-family="Nimbus Sans L, Helvetica, Deja Vu" font-size="22pt">
 				<fo:retrieve-marker 
 		      		retrieve-class-name="section.head.marker"
 		      		retrieve-position="first-including-carryover"
 		      		retrieve-boundary="page-sequence"/>
 			</fo:block>
 		</fo:block-container>
-		<fo:block font-family="Nimbus Sans L, Helvetica" font-size="17pt">
+		<fo:block font-family="Nimbus Sans L, Helvetica, Deja Vu" font-size="17pt">
 			<!-- generates a whole line of the same character -->
 			<fo:leader leader-pattern="use-content" leader-length.optimum="100%">I</fo:leader>
 		</fo:block>
@@ -388,7 +396,7 @@
 	<xsl:template match="disp:node" mode="subtree-root">
 		<!-- suppression du keep-together.within-page="always" -->
 		<fo:block margin-bottom="0.5cm">
-			<fo:inline id="{disp:nodeData/disp:conceptBlock/@id}" font-family="Nimbus Sans L, Helvetica" font-weight="bold"><xsl:apply-templates select="disp:nodeData/disp:conceptBlock/disp:label" /></fo:inline>
+			<fo:inline id="{disp:nodeData/disp:conceptBlock/@id}" font-family="Nimbus Sans L, Helvetica, Deja Vu" font-weight="bold"><xsl:apply-templates select="disp:nodeData/disp:conceptBlock/disp:label" /></fo:inline>
 			
 			<!-- recurse -->
 			<xsl:apply-templates select="disp:node" />
@@ -400,7 +408,7 @@
 		<fo:block>
 
 			<!-- print indentation and non-breaking space if we are at least one level deep -->
-			<fo:inline font-family="Nimbus Sans L, Helvetica" font-weight="bold"><xsl:for-each select="ancestor::disp:node[parent::disp:node]">L </xsl:for-each></fo:inline>
+			<fo:inline font-family="Nimbus Sans L, Helvetica, Deja Vu" font-weight="bold"><xsl:for-each select="ancestor::disp:node[parent::disp:node]">L </xsl:for-each></fo:inline>
 			<xsl:if test="ancestor::disp:node">&#160;</xsl:if>
 			
 			<!--
@@ -501,7 +509,7 @@
 				
 				<!-- all the attributes except definition, scopeNote and translations -->
 				<xsl:if test="disp:att[@type != 'definition' and @type != 'scopeNote' and not(contains(@type, 'lang:'))]">
-					<fo:table font-size="80%" font-weight="bold" font-family="Nimbus Sans L, Helvetica">
+					<fo:table font-size="80%" font-weight="bold" font-family="Nimbus Sans L, Helvetica, Deja Vu">
 						<fo:table-column column-width="2.5em"/>
 						<fo:table-column />
 						<fo:table-body>
@@ -514,7 +522,7 @@
 				<fo:block text-align="justify" font-family="Times" font-size="95%">
 					<!-- Now display the definition without the attribute type -->
 					<xsl:if test="disp:att[@type = 'definition']/*">
-						<fo:block font-family="Nimbus Roman No9 L, Times" margin-top="0.7mm" line-height="95%">
+						<fo:block font-family="Nimbus Roman No9 L, Times, Deja Vu" margin-top="0.7mm" line-height="95%">
 							<xsl:apply-templates select="disp:att[@type = 'definition']/*" />
 						</fo:block>
 					</xsl:if>
@@ -524,14 +532,14 @@
 						<fo:block margin-top="0.7mm" line-height="95%">
 							<!-- je n'ai pas mis baseline-shift="super" sinon ca décale trop la ligne du dessus -->
 							<fo:inline font-family="ZapfDingbats">&#x2605;</fo:inline>
-							<fo:inline font-family="Nimbus Roman No9 L, Times" font-style="italic">&#160;<xsl:apply-templates select="disp:att[@type = 'scopeNote']/*" /></fo:inline>
+							<fo:inline font-family="Nimbus Roman No9 L, Times, Deja Vu" font-style="italic">&#160;<xsl:apply-templates select="disp:att[@type = 'scopeNote']/*" /></fo:inline>
 						</fo:block>
 					</xsl:if>
 				</fo:block>
 				
 				<!--  Now display all the translations in other languages -->
 				<xsl:if test="disp:att[contains(@type, 'lang:')]">
-					<fo:block font-family="Nimbus Sans L, Helvetica" font-size="smaller" font-style="italic" margin-top="0.7mm">
+					<fo:block font-family="Nimbus Sans L, Helvetica, Deja Vu" font-size="smaller" font-style="italic" margin-top="0.7mm">
 						<xsl:apply-templates select="disp:att[contains(@type, 'lang:')]" />
 					</fo:block>
 				</xsl:if>
@@ -541,7 +549,7 @@
 	</xsl:template>
 
 	<xsl:template match="disp:label">
-		<fo:inline font-family="Nimbus Sans L, Helvetica"><xsl:apply-templates /></fo:inline>
+		<fo:inline font-family="Nimbus Sans L, Helvetica, Deja Vu"><xsl:apply-templates /></fo:inline>
 	</xsl:template>
 	
 	<!-- Display attributes in normal mode -->
