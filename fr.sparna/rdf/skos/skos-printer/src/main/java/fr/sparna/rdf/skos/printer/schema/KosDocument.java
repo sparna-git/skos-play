@@ -10,6 +10,7 @@ package fr.sparna.rdf.skos.printer.schema;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -56,6 +57,8 @@ public class KosDocument {
     protected KosDocumentBody body;
     @XmlElement(required = true)
     protected KosDocumentFooter footer;
+    @XmlAttribute(name = "writing-mode")
+    protected String writingMode;
 
     /**
      * Gets the value of the kosDocumentMetadata property.
@@ -151,6 +154,16 @@ public class KosDocument {
      */
     public void setFooter(KosDocumentFooter value) {
         this.footer = value;
+    }
+    
+
+    public String getWritingMode() {
+        return writingMode;
+    }
+
+
+    public void setWritingMode(String value) {
+        this.writingMode = value;
     }
 
 }

@@ -20,7 +20,7 @@
 	<xsl:template match="disp:kosDocument">
 		<xsl:variable name="writingMode">
 			<xsl:choose>
-				<xsl:when test="$lang = 'ar'">rl-tb</xsl:when>
+				<xsl:when test="@disp:writing-mode"><xsl:value-of select="@disp:writing-mode" /></xsl:when>
 				<xsl:otherwise>lr-tb</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>

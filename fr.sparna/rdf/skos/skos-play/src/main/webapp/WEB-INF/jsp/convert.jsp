@@ -391,14 +391,9 @@
 					full URI (starting with 'http'), or using a declared prefix.
 					<p /><strong>Cell</strong> : Each cell in a line is processed, and the value is converted to a literal or object property :
 					<ul>
-						<li>If the cell value starts with 'http' or with a declared prefix, it will be interpreted as an object property;</li>
+						<li>If the cell value starts with 'http' or 'mailto' or with a declared prefix, it will be interpreted as an object property;</li>
 						<li>Multiple URIs can be given in single cell, by separating them with commas <code>, </code>;</li>
 						<li>Otherwise, the value is interpreted as a literal;</li>
-						<li>Known SKOS labels and notes values (<code>skos:prefLabel</code>, <code>altLabel</code>, <code>hiddenLabel</code>, <code>definition</code>, <code>scopeNote</code>, <code>example</code>, <code>historyNote</code>, <code>changeNote</code>, <code>editorialNote</code>)
-						are always converted to literal values,	with the appropriate language (see below);</li>
-						<li>Known SKOS semantic relations (<code>skos:broader</code>, <code>narrower</code>, <code>related</code>, <code>exactMatch</code>, <code>closeMatch</code>, <code>broadMatch</code>, <code>narrowMatch</code>, <code>relatedMatch</code>)
-						are always converted to object properties; the URI can be given either as a full URI (starting with 'http'), or using a declared prefix.
-						<li>Other well-known properties are interpreted as xsd:date literals, such as <code>dct:created</code>, <code>dct:modified</code>, <code>euvoc:startDate</code> and <code>euvoc:endDate</code>;</li>
 					</ul>
 					<p />This is how a typical body part can look like :
 					<img src="images/convert-screenshot-body.png" width="100%" />

@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 
+	targetNamespace="http://www.sparna.fr/thesaurus-display"
+	elementFormDefault="qualified"
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:disp="http://www.sparna.fr/thesaurus-display"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+>
+
+	<!-- Import DCTerms -->
+	<import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/dc.xsd" />
+
+	<!-- Document and header -->
+
+    <annotation>
+    	<documentation>XmlRootElement to be set on : 
+  - ConceptBlock
+  - KosDocument
+  - StyledString</documentation></annotation>
+    <complexType name="kosDocument">
+    	<annotation>
+        	<documentation>Represent an entire document. This is the root element.</documentation>
+        </annotation>
+    	<sequence>
+    		<element ref="disp:kosDocumentMetadata" minOccurs="0" maxOccurs="1"></element>
+    		<element ref="disp:header" minOccurs="1" maxOccurs="1"></element>
+    		<element ref="disp:body" minOccurs="1" maxOccurs="1"></element>
+    		<element ref="disp:footer"></element>
+    	</sequence>
+    	<attribute name="writing-mode" type="string">
+    		<annotation>
+        		<documentation>The writing mode, can take values lr-td, lr, rl, rl-td</documentation>
+        	</annotation>
+    	</attribute>
+    </complexType>
+    <element name="kosDocument" type="disp:kosDocument"></element>
+
+    <complexType name="kosDocumentHeader">
+    	<annotation>
+        	<documentation>Header of the entire document</documentation>
+        </annotation>
+    	<sequence>
+    		<element name="title" type="string"></element>
+    		<element name="creator" type="string"></element>
+    		<element name="date" type="string"></element>
+    		<element name="version" type="string"></element>
+    		<element name="description" type="string"></element>
+    	</sequence>
+    </complexType>
+    <element name="header" type="disp:kosDocumentHeader"></element>
+
+	<!-- display, header and body -->
+	
+    <complexType name="kosDisplay">
+    	<annotation>
+        	<documentation>One particular way of displaying a thesaurus.</documentation>
+        </annotation>
+    	<sequence>
+    		<element ref="disp:section" minOccurs="1" maxOccurs="unbounded"></element>
+    	</sequence>
+    	<attribute name="displayId" type="string" use="required">
+    		<annotation>
+        		<documentation>The ID of this display; must be unique within a single document.</documentation>
+        	</annotation>
+    	</attribute>
+    	<attribute name="column-count" type="integer"></attribute>
+    	<attribute name="main" type="boolean">
+    		<annotation>
+        		<documentation>Indicates whether a display is the main one in the document. Only one display
+        		par document may have this attribute set to true.
+        		</documentation>
+        	</annotation>
+    	</attribute>
+    </complexType>
+    <element name="kosDisplay" type="disp:kosDisplay"></element>
+
+    <complexType name="kosDocumentBody">
+    	<sequence>
+    		<element ref="disp:kosDisplay" minOccurs="1" maxOccurs="unbounded"></element>
+   		</sequence>
+    </complexType>
+    <element name="body" type="disp:kosDocumentBody"></element>
+    
+    <complexType name="section">
+    	<annotation>
+    		<documentation>
+    			A section in the output document, typically to organize
+    			output alphabetically. @title : title of the section.
+    		</documentation>
+    	</annotation>
+    	<choice>
+    		<element ref="disp:list"></element>
+    		<element ref="disp:tree"></element>
+    		<element ref="disp:table"></element>
+    		<element ref="disp:index"></element>
+    	</choice>
+    	<attribute name="title" type="string" use="required"></attribute>
+    </complexType>
+    <element name="section" type="disp:section"></element>
+
+	<!-- END display, header and body -->
+	
+	<!-- tree -->
+    <complexType name="tree">
+    	<annotation>
+        	<documentation>A tree representation.</documentation>
+        </annotation>
+    	<sequence>
+    		<element ref="disp:node"></element>
+    	</sequence>
+    </complexType>
+    <element name="tree" type="disp:tree"></element>
+    
+    <complexType name="node">
+    	<annotation>
+        	<documentation>The node of a tree representation.</documentation>
+        </annotation>
+    	<sequence>
+    		<element ref="disp:nodeData"></element>
+    		<sequence>
+    			<element ref="disp:node" minOccurs="0" maxOccurs="unbounded"></element>
+    		</sequence>
+    	</sequence>
+    </complexType>
+	<element name="node" type="disp:node"></element>
+
+    <complexType name="nodeData">
+        <annotation>
+        	<documentation>The data of a tree node.</documentation>
+        </annotation>
+        <sequence minOccurs="0" maxOccurs="1">
+    		<element ref="disp:conceptBlock"></element>
+    	</sequence>
+    </complexType>
+	<element name="nodeData" type="disp:nodeData"></element>
+
+	<!-- END tree -->
+
+	<!-- list -->
+	<complexType name="list">
+		<annotation>
+        	<documentation>A list representation.</documentation>
+        </annotation>
+    	<sequence>
+    		<element name="listItem" type="disp:listItem" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+    <element name="list" type="disp:list"></element>
+
+    <complexType name="listItem">
+    	<annotation>
+        	<documentation>An item of a list.</documentation>
+        </annotation>
+    	<sequence>
+    		<any></any>
+    	</sequence>
+    </complexType>
+    
+	<!-- END list -->
+	
+	<!-- table -->
+	
+	<complexType name="table">
+		<annotation>
+			<documentation>A table representation.</documentation>
+		</annotation>
+		<sequence>
+            <element name="tableColumn" type="disp:tableColumnType" minOccurs="1" maxOccurs="unbounded"></element>
+            <element name="tableHeader" type="disp:rowType"
+				minOccurs="0" maxOccurs="1">
+			</element>
+			<element name="row" type="disp:rowType" minOccurs="0"
+				maxOccurs="unbounded">
+			</element>
+		</sequence>
+		<attribute name="colnum" type="int" use="required"></attribute>
+	</complexType>
+	<element name="table" type="disp:table"></element>
+
+    <complexType name="rowType">
+    	<annotation>
+        	<documentation>A row in a table.</documentation>
+        </annotation>
+    	<sequence>
+    		<element name="cell" type="disp:cellType" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="cellType">
+    	<annotation>
+    		<documentation>A cell of a row in a table.</documentation>
+    	</annotation>
+    	<sequence>
+    		<any></any>
+    	</sequence>
+    </complexType>
+
+    <!-- END table -->
+	
+	<!-- KWIC Index -->
+	
+	<complexType name="index">
+		<annotation>
+			<documentation>
+				Representation of a KWIC index.
+			</documentation>
+		</annotation>
+		<sequence>
+			<element name="entry" type="disp:indexEntry" minOccurs="0"
+				maxOccurs="unbounded">
+			</element>
+		</sequence>
+		<attribute ref="disp:indexStyle"></attribute>
+	</complexType>
+	<element name="index" type="disp:index"></element>
+
+    <complexType name="indexEntry">
+    	<annotation>
+    		<documentation>
+    			Representation of a KWIC index entry.
+    		</documentation>
+    	</annotation>
+    	<sequence>
+    		<element minOccurs="1" maxOccurs="1" ref="disp:label">
+    			<annotation>
+    				<documentation>
+    					Stores the complete label + the type pref / alt
+    				</documentation>
+    			</annotation>
+    		</element>
+    		<element ref="disp:att" minOccurs="0" maxOccurs="1"></element>
+    	</sequence>
+    	<attribute name="uri" type="anyURI">
+    		<annotation>
+    			<documentation>
+    				URI of the corresponding concept
+    			</documentation>
+    		</annotation>
+    	</attribute>
+    	<attribute name="before" type="string">
+    		<annotation>
+    			<documentation>
+    				Beginning of the string entry, may be empty.
+    			</documentation>
+    		</annotation>
+    	</attribute>
+    	<attribute name="key" type="string">
+    		<annotation>
+    			<documentation>
+    				Part of the label that corresponds to the index
+    				entry
+    			</documentation>
+    		</annotation>
+    	</attribute>
+    	<attribute name="after" type="string">
+    		<annotation>
+    			<documentation>
+    				End of the string entry, may be empty.
+    			</documentation>
+    		</annotation>
+    	</attribute>
+    	<attribute name="id" type="ID"></attribute>
+    </complexType>
+
+    <!-- End KWIC Index -->
+	
+	<!-- conceptBlock -->
+	
+	<complexType name="conceptBlock">
+		<annotation>
+        	<documentation>The representation of one KOS concept. Contains a label and a sequence of attributes.</documentation>
+        </annotation>
+    	<sequence>
+    		<element minOccurs="1" maxOccurs="1" ref="disp:label" />
+    		<sequence minOccurs="0" maxOccurs="unbounded">
+    			<element ref="disp:att"></element>
+    		</sequence>
+    	</sequence>
+    	<attribute name="uri" type="anyURI"></attribute>
+    	<attribute name="id" type="ID"></attribute>
+    </complexType>
+    <element name="conceptBlock" type="disp:conceptBlock"></element>
+    
+    
+    <complexType name="label">
+    	<annotation>
+        	<documentation>The label of a concept. Can contain a String or a link.</documentation>
+        </annotation>
+    	<choice>
+    		<element ref="disp:link" />
+    		<element ref="disp:str" />
+    		<element ref="disp:linkExternal"></element>
+    	</choice>
+    </complexType> 
+    <element name="label" type="disp:label"></element>   
+    
+    
+    <complexType name="att">
+    	<annotation>
+        	<documentation>The representation of an attribute of a concept. Can contain a String or a link.</documentation>
+        </annotation>
+    	<choice>
+    		<element ref="disp:link" />
+    		<element ref="disp:str" />
+    		<element ref="disp:linkExternal"></element>
+    	</choice>
+    	<attribute name="type" type="string"></attribute>
+    </complexType> 
+    <element name="att" type="disp:att"></element>   
+
+    <complexType name="link">
+        <annotation>
+        	<documentation>A link to another conceptBlock.
+@refId : the id of the referenced conceptBlock.
+@uri : the URI of the referenced concept.</documentation>
+        </annotation>
+        <complexContent>
+        	<extension base="disp:styledString">
+        		<attribute name="refId" type="string"></attribute>
+    			<attribute name="uri" type="anyURI"></attribute>
+        	</extension>
+        </complexContent>
+    </complexType>
+    <element name="link" type="disp:link"></element>
+
+    <complexType name="styledString">
+    	<annotation>
+    		<documentation>
+    			A span of text with an optional additional style
+    			(typically "pref" or "alt").
+    		</documentation>
+    	</annotation>
+    	<simpleContent>
+    		<extension base="string">
+    			<attribute name="style" type="string"></attribute>
+    			<attribute name="key" type="string"></attribute>
+    		</extension>
+    	</simpleContent>
+    </complexType>
+    <element name="str" type="disp:styledString"></element>
+    
+
+    <attribute name="indexStyle">
+    	<simpleType>
+    		<restriction base="string">
+    			<enumeration value="kwic"></enumeration>
+    			<enumeration value="kwac"></enumeration>
+    			<enumeration value="kwoc"></enumeration>
+    		</restriction>
+    	</simpleType>
+    </attribute>
+
+    <complexType name="kosDocumentFooter">
+    	<sequence>
+    		<element name="application" type="string"></element>
+    		<element name="title" type="string"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="footer" type="disp:kosDocumentFooter"></element>
+
+    <element name="linkExternal" type="disp:link"></element>
+
+
+    <complexType name="tableColumnType">
+    	<attribute name="width" type="double" use="required"></attribute>
+    </complexType>
+    
+    <element name="kosDocumentMetadata" type="dc:elementContainer" />
+
+	<!--
+    <complexType name="kosDocumentMetadata">
+    	<sequence minOccurs="0" maxOccurs="unbounded">
+    		<any namespace="http://purl.org/dc/elements/1.1/" />
+    	</sequence>
+    </complexType>
+     -->
+</schema>

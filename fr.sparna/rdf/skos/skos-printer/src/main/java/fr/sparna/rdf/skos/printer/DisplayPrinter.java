@@ -81,7 +81,7 @@ public class DisplayPrinter {
 	}
 	
 	private static String LANG_PARAM = "lang";
-	private static List<String> SUPPORTED_LANGUAGES = Arrays.asList(new String[]{ "en", "fr" });
+	private static List<String> SUPPORTED_LANGUAGES = Arrays.asList(new String[]{ "en", "fr", "ar" });
 
 	protected Style style = Style.DEFAULT;
 	
@@ -165,6 +165,7 @@ public class DisplayPrinter {
 			}
 		}
 		// add the language as a parameter
+		log.debug("Setting "+LANG_PARAM+" param on the stylesheet to "+selectLanguage(lang));
 		t.setParameter(LANG_PARAM, selectLanguage(lang));
 		
 		p.processToFile(
