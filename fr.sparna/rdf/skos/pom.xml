@@ -9,7 +9,7 @@
     <parent>
         <groupId>fr.sparna.rdf</groupId>
         <artifactId>sparna-rdf</artifactId>
-        <version>0.8.6</version>
+        <version>0.8.7</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

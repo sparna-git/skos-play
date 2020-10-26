@@ -10,7 +10,7 @@
     <parent>
         <groupId>fr.sparna</groupId>
         <artifactId>fr.sparna-root-pom</artifactId>
-        <version>0.8.6</version>
+        <version>0.8.7</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
