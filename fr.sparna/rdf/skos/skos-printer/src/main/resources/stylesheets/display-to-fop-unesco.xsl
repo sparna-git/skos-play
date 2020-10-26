@@ -11,20 +11,18 @@
 	<xsl:param name="lang">en</xsl:param>	
 	<xsl:variable name="labels" select="document(concat('labels-',$lang,'.xml'))" />
 	
-	
+	<xsl:variable name="writingMode">
+		<xsl:choose>
+			<xsl:when test="/disp:kosDocument/@writing-mode"><xsl:value-of select="/disp:kosDocument/@writing-mode" /></xsl:when>
+			<xsl:otherwise>lr-tb</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
 	
 	<xsl:template match="/">
 		<xsl:apply-templates select="disp:kosDocument" />
 	</xsl:template>
 	
 	<xsl:template match="disp:kosDocument">
-		<xsl:variable name="writingMode">
-			<xsl:choose>
-				<xsl:when test="@writing-mode"><xsl:value-of select="@writing-mode" /></xsl:when>
-				<xsl:otherwise>lr-tb</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-	
 	
 		<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format" writing-mode="{$writingMode}">
 		
@@ -125,7 +123,7 @@
 	  			padding-after="1em"
 	  			padding-start="1em"
 	  			margin-bottom="1em"
-	  			font-family="sans-serif"
+	  			font-family="Nimbus Sans L, Helvetica, Deja Vu"
 	  			span="all"
 	  			border-before-style="outset"
 	  			border-after-style="outset"
@@ -152,7 +150,7 @@
 		
 		<!-- if we are in a complete display with more than one section, add a blank page at the end -->
 		<xsl:if test="count(disp:kosDisplay) > 1">
-			<fo:page-sequence master-reference="pageMaster-{generate-id(disp:kosDisplay[position() = last()])}">
+			<fo:page-sequence master-reference="pageMaster-{generate-id(disp:kosDisplay[position() = last()])}" writing-mode="{$writingMode}">
 				<fo:flow flow-name="xsl-region-body">
 					<!-- add a page break -->
 					<fo:block page-break-before="always" />
@@ -165,7 +163,7 @@
 
 	<!-- A KOS Display -->
 	<xsl:template match="disp:kosDisplay">
-		<fo:page-sequence master-reference="pageMaster-{generate-id()}">
+		<fo:page-sequence master-reference="pageMaster-{generate-id()}" writing-mode="{$writingMode}">
 			
 			<!-- static-content are first, before flow -->
 			<fo:static-content flow-name="xsl-region-before">

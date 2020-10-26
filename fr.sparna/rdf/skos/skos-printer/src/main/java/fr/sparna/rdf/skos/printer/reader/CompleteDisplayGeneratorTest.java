@@ -30,13 +30,18 @@ public class CompleteDisplayGeneratorTest {
 		((ch.qos.logback.classic.Logger) LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME)).setLevel(ch.qos.logback.classic.Level.INFO);
 	    ((ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory.getLogger("fr.sparna.rdf")).setLevel(ch.qos.logback.classic.Level.TRACE);
 		
-		final String LANG = "fr-fr";
+		// final String LANG = "fr-fr";
+	    final String LANG = "ar";
 		
 		Repository r = RepositoryBuilderFactory.fromString(args[0]).get();
 		try(RepositoryConnection connection = r.getConnection()) {
 		
 			// build result document
 			KosDocument document = new KosDocument();
+			if(LANG.startsWith("ar")) {
+				log.info("Setting writing mode on the KosDocument");
+				document.setWritingMode("rl-tb");
+			}
 			
 			// build and set header
 			HeaderAndFooterReader headerReader = new HeaderAndFooterReader(connection);
@@ -50,6 +55,9 @@ public class CompleteDisplayGeneratorTest {
 			
 			// read all potential languages and exclude the main one
 			final List<String> additionalLangs = new ArrayList<String>();
+			
+			// Uncomment this for multilingual display
+			/*
 			Perform.on(connection).select(new GetLanguagesHelper() {			
 				@Override
 				protected void handleLang(Literal lang) throws TupleQueryResultHandlerException {
@@ -58,6 +66,7 @@ public class CompleteDisplayGeneratorTest {
 					}
 				}
 			});
+			*/
 				
 			// alphabetical display
 			ConceptBlockReader alphaCbReader = new ConceptBlockReader();
@@ -102,7 +111,7 @@ public class CompleteDisplayGeneratorTest {
 					connection,
 					alignCbReader,
 					"alignId",
-					new AlignmentDataHarvesterCachedLoader("/home/thomas/workspace/skosplay/alignCache")
+					new AlignmentDataHarvesterCachedLoader("/home/thomas/temp/alignCache")
 			);
 			alignmentGen.setSeparateByTargetScheme(false);
 			generators.add(alignmentGen);
@@ -113,9 +122,13 @@ public class CompleteDisplayGeneratorTest {
 			Marshaller m = JAXBContext.newInstance("fr.sparna.rdf.skos.printer.schema").createMarshaller();
 			m.setProperty("jaxb.formatted.output", true);
 			// m.marshal(display, System.out);
-			m.marshal(document, new File("src/main/resources/complete-display-output-test.xml"));
+			m.marshal(document, new File("display-test.xml"));
 			
 			DisplayPrinter printer = new DisplayPrinter();
+			printer.setStyle(DisplayPrinter.Style.UNESCO);
+			// to debug FOP output
+			printer.setDebug(true);
+			printer.setDebugPath(".");
 			printer.printToHtml(document, new File("display-test.html"), LANG);
 			printer.printToPdf(document, new File("display-test.pdf"), LANG);
 		} // end try(connection)

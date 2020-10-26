@@ -19,7 +19,7 @@
            </font>
           -->
 
-          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n019003l.pfb" embedding-mode="full">
+           <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n019003l.pfb" embedding-mode="full">
                <font-triplet name="Nimbus Sans L" style="normal" weight="normal" />
            </font>
            <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n019004l.pfb" embedding-mode="full">
@@ -30,7 +30,7 @@
            </font>
            <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n019024l.pfb" embedding-mode="full">
                <font-triplet name="Nimbus Sans L" style="italic" weight="bold" />
-          </font>
+           </font>
          
           <!-- register all the fonts found in a directory -->
           <!--
