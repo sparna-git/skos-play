@@ -2,7 +2,7 @@
 
 SKOS Play is a free application to work with thesaurus or classification expressed in [SKOS](https://www.w3.org/TR/2009/REC-skos-reference-20090818/).
 
-SKOS Play! is live at **http://labs.sparna.fr/skos-play**
+SKOS Play! is live at **https://labs.sparna.fr/skos-play/**
 
 With SKOS Play you can :
   1. Print / visualize thesaurus
@@ -69,7 +69,7 @@ By the way, SKOS Play also works with [OWL or RDFS ontologies](https://www.w3.or
 
 ### Create SKOS classifications from Excel / Google spreadsheets
 
-The [SKOS Play converter](http://labs.sparna.fr/skos-play/convert) is a tool to easily maintain classifications in Excel and turn them into SKOS, following a simple file template, with specific column headers.
+The [SKOS Play converter](https://labs.sparna.fr/skos-play/convert) is a tool to easily maintain classifications in Excel and turn them into SKOS, following a simple file template, with specific column headers.
 
 The converter is also integrated with Google Spreadsheets, so you can even maintain your classification collaboratively, and turn it directly into SKOS !
 
@@ -96,5 +96,5 @@ _(want to be listed here ? [contact us](http://www.sparna.fr/contact) !)_
 
 ## Who are we ?
 
-*  [SKOS Play](http://labs.sparna.fr/skos-play) is developped by Thomas Francart in his company [Sparna](http://www.sparna.fr/contact)
+*  [SKOS Play](https://labs.sparna.fr/skos-play/) is developped by Thomas Francart in his company [Sparna](http://www.sparna.fr/contact)
 *  You can read more about SKOS Play on [blog.sparna.fr](http://blog.sparna.fr)
