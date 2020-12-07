@@ -29,14 +29,6 @@
         <timestamp>${maven.build.timestamp}</timestamp>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
-
-
     <build>
         <!-- to populate automagically version.properties -->
         <resources>
@@ -128,7 +120,7 @@
         <dependency>
             <groupId>com.github.sparna-git.xls2rdf</groupId>
             <artifactId>xls2rdf-lib</artifactId>
-            <version>master-SNAPSHOT</version>
+            <!-- from jitpack -->
         </dependency>
 
         <!-- Semargl and Semargl Sesame integration for RDFa parsing -->

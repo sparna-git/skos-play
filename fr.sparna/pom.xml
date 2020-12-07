@@ -57,6 +57,11 @@
 	  		<id>java.net 5</id>
 	  		<url>http://download.java.net/maven/2</url>
 	  	</repository>
+        <!-- Jitpack for cross-project dependencies -->
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
 	  </repositories>
 
 
@@ -97,13 +102,6 @@
                 <groupId>fr.sparna.commons</groupId>
                 <artifactId>sparna-commons-xml</artifactId>
                 <version>0.4</version>
-            </dependency>
-
-            <!-- Sparna Modules : RDF -->
-            <dependency>
-                <groupId>fr.sparna.rdf</groupId>
-                <artifactId>rdf4j-toolkit</artifactId>
-                <version>0.6.1</version>
             </dependency>
 
             <!-- Logging: SLF4J -->
@@ -176,6 +174,22 @@
                         <artifactId>rdf4j-rio-trix</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+
+            <!-- ***** Sparna Modules ***** -->
+
+            <!-- RDF4J toolkit -->
+            <dependency>
+                <groupId>fr.sparna.rdf</groupId>
+                <artifactId>rdf4j-toolkit</artifactId>
+                <version>0.6.1</version>
+            </dependency>
+
+            <!-- xls2rdf -->
+            <dependency>
+                <groupId>com.github.sparna-git.xls2rdf</groupId>
+                <artifactId>xls2rdf-lib</artifactId>
+                <version>master-SNAPSHOT</version>
             </dependency>
 
         </dependencies>
