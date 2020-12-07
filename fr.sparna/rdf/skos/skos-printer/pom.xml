@@ -70,7 +70,7 @@
 		<dependency>
 			<groupId>fr.sparna.rdf.skos</groupId>
 			<artifactId>skos-toolkit</artifactId>
-			<version>0.8.5</version>
+			<version>0.8.7</version>
 		</dependency>
 
 		<dependency>
