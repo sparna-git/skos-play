@@ -74,7 +74,7 @@ public class SessionFilter implements Filter {
 			
 			try {
 				// init base URL
-				URL baseURL = new URL("http://"+request.getServerName()+((request.getServerPort() != 80)?":"+request.getServerPort():"")+request.getContextPath());
+				URL baseURL = new URL("http"+((!request.getServerName().equals("localhost"))?"s":"")+"://"+request.getServerName()+((request.getServerPort() != 80)?":"+request.getServerPort():"")+request.getContextPath());
 				log.debug("Setting the base URL to "+baseURL.toString());
 				session.setBaseUrl(baseURL.toString());		
 			
