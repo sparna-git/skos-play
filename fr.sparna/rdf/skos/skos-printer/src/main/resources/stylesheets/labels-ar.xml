@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <labels lang="en">
-	<altLabel>UFar</altLabel>
+	<altLabel>UF</altLabel>
 	<broadMatch>broad</broadMatch>
 	<broader>BT</broader>
 	<broaderTransitive></broaderTransitive>
@@ -29,7 +29,9 @@
 	<semanticRelation></semanticRelation>
 	<topConceptOf></topConceptOf>
 	<!-- SKOS Play specific -->
+	<!-- "Top Term" -->
 	<topTerm>TT</topTerm>
+	<!-- "Micro-Thesaurus" -->
 	<memberOf>MT</memberOf>
 	<!-- Alignements -->
 	<alignmentSource>source concept</alignmentSource>
