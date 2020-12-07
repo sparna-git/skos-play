@@ -144,6 +144,13 @@ public class DisplayPrinter {
 			File outputFile,
 			String lang
 	) throws FOPException, TransformerException, IOException, JAXBException {
+		
+		// sets writing mode depending on language
+		if(lang.startsWith("ar")) {
+			log.info("Setting writing mode on the KosDocument");
+			document.setWritingMode("rl-tb");
+		}
+		
 		Marshaller m = createMarshaller();
 		debugJAXBMarshalling(m, document);
 		
@@ -181,6 +188,13 @@ public class DisplayPrinter {
 			OutputStream os,
 			String lang
 	) throws FOPException, TransformerException, IOException, JAXBException {
+		
+		// sets writing mode depending on language
+		if(lang.startsWith("ar")) {
+			log.info("Setting writing mode on the KosDocument");
+			document.setWritingMode("rl-tb");
+		}
+		
 		Marshaller m = createMarshaller();
 		debugJAXBMarshalling(m, document);
 		
@@ -214,6 +228,12 @@ public class DisplayPrinter {
 			File htmlFile,
 			String lang
 	) throws FileNotFoundException, JAXBException, TransformerException {
+		
+		// sets writing mode depending on language
+		if(lang.startsWith("ar")) {
+			log.info("Setting writing mode on the KosDocument");
+			document.setWritingMode("rl-tb");
+		}
 		
 		if(!htmlFile.exists()) {
 			try {
@@ -292,6 +312,13 @@ public class DisplayPrinter {
 			Source xslSource,
 			String lang
 	) throws FileNotFoundException, JAXBException, TransformerException {
+		
+		// sets writing mode depending on language
+		if(lang.startsWith("ar")) {
+			log.info("Setting writing mode on the KosDocument");
+			document.setWritingMode("rl-tb");
+		}
+		
 		Marshaller m = createMarshaller();
 		debugJAXBMarshalling(m, document);
 		

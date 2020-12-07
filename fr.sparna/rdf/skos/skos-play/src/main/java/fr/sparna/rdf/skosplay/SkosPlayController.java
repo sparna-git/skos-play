@@ -560,10 +560,11 @@ public class SkosPlayController {
 		
 		// build display result
 		KosDocument document = new KosDocument();
-		if(language.startsWith("ar")) {
-			log.info("Setting writing mode on the KosDocument");
-			document.setWritingMode("rl-tb");
-		}
+		// this is done in Displayprinter now
+//		if(language.startsWith("ar")) {
+//			log.info("Setting writing mode on the KosDocument");
+//			document.setWritingMode("rl-tb");
+//		}
 		
 		try(RepositoryConnection connection = r.getConnection()) {
 			// make a log to trace usage
