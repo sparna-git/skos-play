@@ -273,7 +273,19 @@
 								<span class="help-block"><i></i></span>
 							</div>													
 						</div>
-						
+						<div class="form-group">
+							<label class="col-sm-4">
+								<fmt:message key="convert.form.broaderTransitive" />
+							</label>
+							<div class="col-sm-1">
+								<input
+									type="checkbox"
+									id="broaderTransitive"
+									name="broaderTransitive" />
+								<span class="help-block"><i></i></span>
+							</div>
+						</div>
+
 						<div class="form-group">
 							<label class="col-sm-4">
 								<fmt:message key="convert.form.usezip" />
