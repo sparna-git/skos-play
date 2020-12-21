@@ -1,63 +1,82 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <fop>
+  <complex-scripts disabled="false"/>
+
   <renderers>
     <renderer mime="application/pdf">
        <fonts>
-        
+
+          <!-- Fonts references in this file are resolved using a specific resouce resolver able to loadfrom the classpath -->
+
+
+          <!-- Cyrilic Font -->
+
+          <font 
+              kerning="yes" 
+              embed-url="/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n019003l.pfb"
+              embedding-mode="subset">
+               <font-triplet name="Nimbus Sans L" style="normal" weight="normal" />
+          </font>
+          <font 
+              kerning="yes"
+              embed-url="/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n019004l.pfb"
+              embedding-mode="subset">
+               <font-triplet name="Nimbus Sans L" style="normal" weight="bold" />
+          </font>
+          <font 
+              kerning="yes"
+              embed-url="/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n019023l.pfb"
+              embedding-mode="subset">
+               <font-triplet name="Nimbus Sans L" style="italic" weight="normal" />
+          </font>
+          <font 
+              kerning="yes"
+              embed-url="/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n019024l.pfb"
+              embedding-mode="subset">
+               <font-triplet name="Nimbus Sans L" style="italic" weight="bold" />
+          </font>
+
           <!--
-           <font kerning="no" embed-url="file:///home/thomas/workspace/02-Sources/sparna/fr.sparna/rdf/skos/skos-printer/src/main/resources/fonts/ghostscript-fonts-std-8.11/n019003l.pfb" embedding-mode="full">
-               <font-triplet name="Nimbus Sans L" style="normal" weight="normal" />
-           </font>
-           <font kerning="no" embed-url="file:///home/thomas/workspace/02-Sources/sparna/fr.sparna/rdf/skos/skos-printer/src/main/resources/fonts/ghostscript-fonts-std-8.11/n019004l.pfb" embedding-mode="full">
-               <font-triplet name="Nimbus Sans L" style="normal" weight="bold" />
-           </font>
-           <font kerning="no" embed-url="file:///home/thomas/workspace/02-Sources/sparna/fr.sparna/rdf/skos/skos-printer/src/main/resources/fonts/ghostscript-fonts-std-8.11/n019023l.pfb" embedding-mode="full">
-               <font-triplet name="Nimbus Sans L" style="italic" weight="normal" />
-           </font>
-           <font kerning="no" embed-url="file:///home/thomas/workspace/02-Sources/sparna/fr.sparna/rdf/skos/skos-printer/src/main/resources/fonts/ghostscript-fonts-std-8.11/n019024l.pfb" embedding-mode="full">
-               <font-triplet name="Nimbus Sans L" style="italic" weight="bold" />
-           </font>
-          -->
-
-          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n019003l.pfb" embedding-mode="full">
-               <font-triplet name="Nimbus Sans L" style="normal" weight="normal" />
-          </font>
-          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n019004l.pfb" embedding-mode="full">
-               <font-triplet name="Nimbus Sans L" style="normal" weight="bold" />
-          </font>
-          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n019023l.pfb" embedding-mode="full">
-               <font-triplet name="Nimbus Sans L" style="italic" weight="normal" />
-          </font>
-          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n019024l.pfb" embedding-mode="full">
-               <font-triplet name="Nimbus Sans L" style="italic" weight="bold" />
-          </font>
-
-          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n021003l.pfb" embedding-mode="full">
+          <font 
+              kerning="yes"
+              embed-url="/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n021003l.pfb"
+              embedding-mode="subset">
                <font-triplet name="Nimbus Roman No9 L" style="normal" weight="normal" />
           </font>
-          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n021004l.pfb" embedding-mode="full">
+          <font 
+              kerning="yes" 
+              embed-url="/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n021004l.pfb" 
+              embedding-mode="subset">
                <font-triplet name="Nimbus Roman No9 L" style="normal" weight="bold" />
           </font>
-          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n021023l.pfb" embedding-mode="full">
+          <font 
+              kerning="yes" 
+              embed-url="/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n021023l.pfb" 
+              embedding-mode="subset">
                <font-triplet name="Nimbus Roman No9 L" style="italic" weight="normal" />
           </font>
-          <font kerning="no" embed-url="fonts/ghostscript-fonts-std-8.11/n021024l.pfb" embedding-mode="full">
+          <font 
+              kerning="yes" 
+              embed-url="/fr/sparna/commons/xml/fop//fonts/ghostscript-fonts-std-8.11/n021024l.pfb"
+              embedding-mode="subset">
                <font-triplet name="Nimbus Roman No9 L" style="italic" weight="bold" />
           </font>
+          -->
 
-           <font metrics-url="fonts/dejavu-fonts-ttf-2.37/DejaVuSans.xml" kerning="no" embed-url="fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans.ttf" embedding-mode="full">
-               <font-triplet name="Deja Vu" style="normal" weight="normal" />
+          <!-- Arabic Font -->
+
+          <font kerning="yes" embed-url="/fr/sparna/commons/xml/fop/fonts/traditional_arabic/trado.ttf" embedding-mode="subset">
+               <font-triplet name="Trad Arabic" style="normal" weight="normal" />
            </font>           
-           <font metrics-url="fonts/dejavu-fonts-ttf-2.37/DejaVuSans-Bold.xml" kerning="no" embed-url="fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans-Bold.ttf" embedding-mode="full">
-               <font-triplet name="Deja Vu" style="normal" weight="bold" />
+           <font kerning="yes" embed-url="/fr/sparna/commons/xml/fop/fonts/traditional_arabic/tradbdo.ttf" embedding-mode="subset">
+               <font-triplet name="Trad Arabic" style="normal" weight="bold" />
            </font> 
-           <font metrics-url="fonts/dejavu-fonts-ttf-2.37/DejaVuSans.xml" kerning="no" embed-url="fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans.ttf" embedding-mode="full">
-               <font-triplet name="Deja Vu" style="italic" weight="normal" />
+           <font kerning="yes" embed-url="/fr/sparna/commons/xml/fop/fonts/traditional_arabic/trado.ttf" embedding-mode="subset">
+               <font-triplet name="Trad Arabic" style="italic" weight="normal" />
            </font> 
-           <font metrics-url="fonts/dejavu-fonts-ttf-2.37/DejaVuSans.xml" kerning="no" embed-url="fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans.ttf" embedding-mode="full">
-               <font-triplet name="Deja Vu" style="italic" weight="bold" />
-           </font> 
-        
+           <font kerning="yes" embed-url="/fr/sparna/commons/xml/fop/fonts/traditional_arabic/tradbdo.ttf" embedding-mode="subset">
+               <font-triplet name="Trad Arabic" style="italic" weight="bold" />
+           </font>
          
           <!-- register all the fonts found in a directory -->
           <!--
