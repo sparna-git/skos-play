@@ -1,5 +1,33 @@
 package fr.sparna.rdf.skosplay;
 
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
+import fr.sparna.google.DriveHelper;
+import fr.sparna.google.GoogleConnector;
+import fr.sparna.google.GoogleUser;
+import fr.sparna.rdf.skosplay.log.LogEntry;
+import fr.sparna.rdf.xls2rdf.ModelWriterFactory;
+import fr.sparna.rdf.xls2rdf.ModelWriterIfc;
+import fr.sparna.rdf.xls2rdf.SkosPostProcessor;
+import fr.sparna.rdf.xls2rdf.SkosXlPostProcessor;
+import fr.sparna.rdf.xls2rdf.Xls2RdfConverter;
+import fr.sparna.rdf.xls2rdf.Xls2RdfException;
+import fr.sparna.rdf.xls2rdf.Xls2RdfPostProcessorIfc;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFWriterRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -15,42 +43,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFWriterRegistry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.model.File;
-
-import fr.sparna.google.DriveHelper;
-import fr.sparna.google.GoogleConnector;
-import fr.sparna.google.GoogleUser;
-import fr.sparna.rdf.skosplay.log.LogEntry;
-import fr.sparna.rdf.xls2rdf.ModelWriterFactory;
-import fr.sparna.rdf.xls2rdf.ModelWriterIfc;
-import fr.sparna.rdf.xls2rdf.SkosPostProcessor;
-import fr.sparna.rdf.xls2rdf.SkosXlPostProcessor;
-import fr.sparna.rdf.xls2rdf.Xls2RdfConverter;
-import fr.sparna.rdf.xls2rdf.Xls2RdfException;
-import fr.sparna.rdf.xls2rdf.Xls2RdfPostProcessorIfc;
-
 
 
 
 /**
- * 
+ *
  * @author Thomas Francart
  *
  */
@@ -108,7 +105,7 @@ public class SkosPlayConvertController {
 			) throws IOException  {
 		final SessionData sessionData = SessionData.get(request.getSession());
 		ConvertFormData data = new ConvertFormData();
-		
+
 		if(sessionData.getUser() != null) {
 			GoogleConnector gc = sessionData.getGoogleConnector();
 			// récupération du service de Drive Google
@@ -118,7 +115,7 @@ public class SkosPlayConvertController {
 			List<File> listeSpreadsheets = driveHelper.listSpreadsheets();
 			data.setGoogleFiles(listeSpreadsheets);
 		}
-		
+
 		data.setDefaultLanguage(SessionData.get(request.getSession()).getUserLocale().getLanguage());
 		return new ModelAndView("convert", ConvertFormData.KEY, data);
 	}
@@ -128,7 +125,7 @@ public class SkosPlayConvertController {
 			// type of source ("file", "url", "example", "google")
 			@RequestParam(value="source", required=true) String sourceString,
 			// uploaded file if source=file
-			@RequestParam(value="file", required=false) MultipartFile file,		
+			@RequestParam(value="file", required=false) MultipartFile file,
 			// language of the labels to generate
 			@RequestParam(value="language", required=false) String language,
 			// ID of the google drive file if source=google
@@ -141,6 +138,8 @@ public class SkosPlayConvertController {
 			@RequestParam(value="example", required=false) String example,
 			// flag to generate SKOS-XL or not
 			@RequestParam(value="useskosxl", required=false) boolean useskosxl,
+			// flag to generate broaderTransitive or not
+			@RequestParam(value="broaderTransitive", required=false) boolean broaderTransitive,
 			// flag to output result in a ZIP file or not
 			@RequestParam(value="usezip", required=false) boolean useZip,
 			// flag to indicate if graph files should be generated or not
@@ -150,27 +149,27 @@ public class SkosPlayConvertController {
 			// the request
 			HttpServletRequest request,
 			// the response
-			HttpServletResponse response			
+			HttpServletResponse response
 	) throws Exception {
-		
-		
-		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+useskosxl+",useZip="+useZip+"language="+language+",url="+url+",ex="+example+")");
+
+
+		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+useskosxl+",broaderTransitive="+broaderTransitive+",useZip="+useZip+"language="+language+",url="+url+",ex="+example+")");
 		final SessionData sessionData = SessionData.get(request.getSession());
 		//source, it can be: file, example, url or google
 		SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());
 		// format
-		RDFFormat theFormat = RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format).orElse(RDFFormat.RDFXML);		
+		RDFFormat theFormat = RDFWriterRegistry.getInstance().getFileFormatForMIMEType(format).orElse(RDFFormat.RDFXML);
 
 		URL baseURL = new URL("http://"+request.getServerName()+((request.getServerPort() != 80)?":"+request.getServerPort():"")+request.getContextPath());
 		log.debug("Base URL is "+baseURL.toString());
 		ConvertFormData data = new ConvertFormData();
 		data.setBaseUrl(baseURL.toString());
-		
-		
+
+
 		/**************************CONVERSION RDF**************************/
 		InputStream in = null;
 		String resultFileName = "skos-play-convert";
-		
+
 		switch(source) {
 
 		case GOOGLE:   {
@@ -179,7 +178,7 @@ public class SkosPlayConvertController {
 			if(googleId.isEmpty()) {
 				return doErrorConvert(request, "Google ID is empty");
 			}
-			
+
 			try {
 				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 				new DriveHelper(sessionData.getGoogleConnector().getDriveService()).readSpreadsheet(googleId, outputStream);
@@ -189,11 +188,11 @@ public class SkosPlayConvertController {
 				int indexOfBeginMessage = msg.lastIndexOf("\"message\":")+"\"message\":".length()+2;
 				int indexOfEndMessage = msg.indexOf("\"", indexOfBeginMessage);
 				log.debug("message d'erreur lié à l'ID google->"+msg.substring(indexOfBeginMessage, indexOfEndMessage));
-				return doErrorConvert(request,"Google message : \""+msg.substring(indexOfBeginMessage, indexOfEndMessage)+"\""); 
+				return doErrorConvert(request,"Google message : \""+msg.substring(indexOfBeginMessage, indexOfEndMessage)+"\"");
 			}
-			
+
 			break;
-		}					
+		}
 
 		case EXAMPLE : {
 			log.debug("*Conversion à partir d'un fichier d'exemple : "+example);
@@ -210,7 +209,7 @@ public class SkosPlayConvertController {
 			log.debug("*Conversion à partir d'un fichier uploadé : "+file.getOriginalFilename());
 			if(file.isEmpty()) {
 				return doErrorConvert(request, "Uploaded file is empty");
-			}		
+			}
 
 			in = file.getInputStream();
 			// set the output file name to the name of the input file
@@ -227,14 +226,14 @@ public class SkosPlayConvertController {
 				URL urls = new URL(url);
 				InputStream urlInputStream = urls.openStream(); // throws an IOException
 				in = new DataInputStream(new BufferedInputStream(urlInputStream));
-				
+
 				// set the output file name to the final part of the URL
 				resultFileName = (!urls.getPath().equals(""))?urls.getPath():resultFileName;
 				// keep only latest file, after final /
 				resultFileName = (resultFileName.contains("/"))?resultFileName.substring(0, resultFileName.lastIndexOf("/")):resultFileName;
 			} catch(IOException e) {
 				e.printStackTrace();
-				return doErrorConvert(request, e.getMessage()); 
+				return doErrorConvert(request, e.getMessage());
 			}
 
 			break;
@@ -247,29 +246,30 @@ public class SkosPlayConvertController {
 		try {
 			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+useskosxl);
 			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
-			response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());	
+			response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());
 			// le nom du fichier de retour
 			// strip extension, if any
 			resultFileName = (resultFileName.contains("."))?resultFileName.substring(0, resultFileName.lastIndexOf('.')):resultFileName;
 			String extension = (useZip)?"zip":theFormat.getDefaultFileExtension();
-			
+
 			// add the date in the filename
 			String dateString = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-			
+
 			response.setHeader("Content-Disposition", "inline; filename=\""+resultFileName+"-"+dateString+"."+extension+"\"");
-			
+
 			List<String> identifiant = runConversion(
 					new ModelWriterFactory(useZip, theFormat, useGraph).buildNewModelWriter(response.getOutputStream()),
 					in,
 					language.equals("")?null:language,
 					useskosxl,
+					broaderTransitive,
 					ignorePostProc
 			);
-			
+
 			// sort to garantee order
 			List<String> uri=new ArrayList<String>(identifiant);
 			Collections.sort(uri);
-			
+
 			// insert a log
 			SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(
 					language,
@@ -283,7 +283,7 @@ public class SkosPlayConvertController {
 		} catch (Xls2RdfException e) {
 			e.printStackTrace();
 			response.reset();
-			return doErrorConvert(request, e.getMessage()); 
+			return doErrorConvert(request, e.getMessage());
 		} finally {
 			try {
 				if(in != null) {
@@ -295,15 +295,16 @@ public class SkosPlayConvertController {
 		return null;
 	}
 
-	private List<String> runConversion(ModelWriterIfc writer, InputStream filefrom, String lang, boolean generatexl, boolean ignorePostProc) {
+	private List<String> runConversion(ModelWriterIfc writer, InputStream filefrom, String lang, boolean generatexl, boolean broaderTransitive, boolean ignorePostProc) {
 		Xls2RdfConverter converter = new Xls2RdfConverter(writer, lang);
 		List<Xls2RdfPostProcessorIfc> postProcessors = new ArrayList<>();
-		
+
 		if(!ignorePostProc) {
-			postProcessors.add(new SkosPostProcessor());
-		}
-		if(!ignorePostProc && generatexl) {
-			postProcessors.add(new SkosXlPostProcessor(generatexl, generatexl));
+			postProcessors.add(new SkosPostProcessor(broaderTransitive));
+
+			if (generatexl) {
+				postProcessors.add(new SkosXlPostProcessor(generatexl, generatexl));
+			}
 		}
 		converter.setPostProcessors(postProcessors);
 
