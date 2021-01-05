@@ -153,7 +153,7 @@ public class SkosPlayConvertController {
 	) throws Exception {
 
 
-		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+useskosxl+",broaderTransitive="+broaderTransitive+",useZip="+useZip+"language="+language+",url="+url+",ex="+example+")");
+		log.debug("convert(source="+sourceString+",file="+file+"format="+format+",usexl="+useskosxl+",broaderTransitive="+broaderTransitive+",useZip="+useZip+",language="+language+",url="+url+",ex="+example+")");
 		final SessionData sessionData = SessionData.get(request.getSession());
 		//source, it can be: file, example, url or google
 		SOURCE_TYPE source = SOURCE_TYPE.valueOf(sourceString.toUpperCase());
@@ -296,7 +296,13 @@ public class SkosPlayConvertController {
 	}
 
 	private List<String> runConversion(ModelWriterIfc writer, InputStream filefrom, String lang, boolean generatexl, boolean broaderTransitive, boolean ignorePostProc) {
-		Xls2RdfConverter converter = new Xls2RdfConverter(writer, lang);
+		Xls2RdfConverter converter;
+		if(lang == null || lang.trim().equals("")) {
+			converter = new Xls2RdfConverter(writer);
+		} else {
+			converter = new Xls2RdfConverter(writer, lang);
+		}
+		
 		List<Xls2RdfPostProcessorIfc> postProcessors = new ArrayList<>();
 
 		if(!ignorePostProc) {

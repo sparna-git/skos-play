@@ -222,13 +222,14 @@
 							<fmt:message key="convert.form.language.legend" />
 					</label>
 					<div class="col-sm-10">
-						<select id="choice_Language" class="ui-select" name="language" id="lg" style="width:4em;">								 
-							<option value="de" <c:if test="${data.defaultLanguage == 'de'}">selected</c:if>>de</option>
-							<option value="en" <c:if test="${data.defaultLanguage == 'en'}">selected</c:if>>en</option>
-							<option value="es" <c:if test="${data.defaultLanguage == 'es'}">selected</c:if>>es</option>	
-							<option value="fr" <c:if test="${data.defaultLanguage == 'fr'}">selected</c:if>>fr</option>
-							<option value="it" <c:if test="${data.defaultLanguage == 'it'}">selected</c:if>>it</option>
-							<option value="ru" <c:if test="${data.defaultLanguage == 'ru'}">selected</c:if>>ru</option>					 
+						<select id="choice_Language" class="ui-select" name="language" id="lg" style="width:4em;">
+							<option value="" selected></option>	
+							<option value="de">de</option>
+							<option value="en">en</option>
+							<option value="es">es</option>	
+							<option value="fr">fr</option>
+							<option value="it">it</option>
+							<option value="ru">ru</option>					 
 						</select>
 					</div>
 				</div>	
