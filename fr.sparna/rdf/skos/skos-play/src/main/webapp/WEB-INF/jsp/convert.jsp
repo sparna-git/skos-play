@@ -102,14 +102,16 @@
 						<select style=" width:40%;" name="example" id="example" onchange="dowloadExample()">
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-1.xlsx" selected>Example 1 (simple exemple, in english)</option>
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-2.xlsx">Example 2 (prefixes)</option>
-							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-3.xlsx">Example 3 (multilingual columns)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-3.xlsx">Example 3 (multilingual columns and deprecation)</option>
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-4.xlsx">Example 4 (schema.org, datatypes, multiple sheets)</option>
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-5.xlsx">Example 5 (skos:Collection, inverse columns)</option>
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-6.xlsx">Example 6 (skos:OrderedCollection, dealing with rdf:Lists)</option>
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-7.xlsx">Example 7 (different subjects with subjectColumn parameter)</option>
 							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-8.xlsx">Example 8 (ease references with lookupColumn parameter)</option>
-							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-9.xlsx">Example 9 (real-world thesaurus : maintaining concept hierarchy in Excel)</option>
-							<option value="${sessionData.baseUrl}/excel_test/excel2skos-exemple-10.xlsx">Example 10 (real-world person authority file)</option>  
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-use-case-1.xlsx">Use-case 1 (real-world thesaurus : maintaining concept hierarchy in Excel)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-use-case-2.xlsx">Use-case 2 (real-world person authority file)</option>  
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-use-case-3.xlsx">Use-case 3 (real-world SHACL constraints)</option>
+							<option value="${sessionData.baseUrl}/excel_test/excel2skos-use-case-4.xlsx">Use-case 4 (Metadata template from fairdatacollective.com)</option>    
 						</select>						
 						<span class="help-block"><i><fmt:message key="convert.form.Example.download" />&nbsp;<a id="lien" href="${sessionData.baseUrl}/excel_test/excel2skos-exemple-1.xlsx">Example 1 (simple exemple, in english)</a></i></span>
 					</div>
