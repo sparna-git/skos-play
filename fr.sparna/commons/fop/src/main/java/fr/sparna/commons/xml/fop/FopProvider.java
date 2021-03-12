@@ -132,8 +132,7 @@ public class FopProvider {
     private static final class CustomPathResolver implements ResourceResolver {
         @Override
         public OutputStream getOutputStream(URI uri) throws IOException {
-            return Thread.currentThread().getContextClassLoader().getResource(uri.toString()).openConnection()
-                    .getOutputStream();
+        	return this.getClass().getClassLoader().getResource(uri.toString()).openConnection().getOutputStream();
         }
 
         @Override
@@ -143,10 +142,10 @@ public class FopProvider {
         	log.debug("Getting resource " + uri.toString());
         	String resourcePath = uri.toString().substring("file:/".length());
         	log.debug("Loading resource " + resourcePath);
-        	if(Thread.currentThread().getContextClassLoader().getResource(resourcePath) == null) {
+        	if(this.getClass().getClassLoader().getResource(resourcePath) == null) {
         		return null;
         	}
-        	InputStream inputStream = ClassLoader.getSystemResourceAsStream(resourcePath);
+        	InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(resourcePath);
             return new Resource(inputStream);
         }
     }
