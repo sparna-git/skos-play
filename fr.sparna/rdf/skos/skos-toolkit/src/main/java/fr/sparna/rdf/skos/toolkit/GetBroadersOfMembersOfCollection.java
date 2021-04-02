@@ -53,7 +53,7 @@ public abstract class GetBroadersOfMembersOfCollection extends SelfTupleQueryHel
 	throws TupleQueryResultHandlerException;
 	
 	/**
-	 * Builds a SPARQL Query that fetch the brodaer <code>?concepts</code> of a <code>?collection</code> variable.
+	 * Builds a SPARQL Query that fetch the broader <code>?concepts</code> of a <code>?collection</code> variable.
 	 * 
 	 * @author Thomas Francart
 	 */
@@ -67,8 +67,14 @@ public abstract class GetBroadersOfMembersOfCollection extends SelfTupleQueryHel
 			String sparql = "" +
 			"SELECT DISTINCT ?broader"+"\n" +
 			"WHERE {"+"\n" +
-			"	?broader <"+SKOS.NARROWER+">|^<"+SKOS.BROADER+"> ?member . "+"\n" +
+			"  { "+"\n" +
 			"	?collection <"+SKOS.MEMBER+"> ?member . " + "\n" +
+			"	?broader <"+SKOS.NARROWER+">|^<"+SKOS.BROADER+"> ?member . "+"\n" +
+			"  } UNION { "+"\n" +
+			"	?collection <"+SKOS.MEMBER+"> ?member . " + "\n" +
+			"	FILTER NOT EXISTS { ?broader <"+SKOS.NARROWER+">|^<"+SKOS.BROADER+"> ?member . } "+"\n" +
+			"   BIND(<https://skos-play.sparna.fr/fakeRoot> AS ?broader) "+"\n" +
+			"  } "+"\n" +
 			"}";
 			
 			return sparql;

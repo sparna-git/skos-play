@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +33,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -526,6 +529,101 @@ public class SkosPlayController {
 		
 	}
 
+	/**
+	 * Print API that takes directy a URL as an input
+	 * 
+	 * @param url
+	 * @param displayParam
+	 * @param outputParam
+	 * @param languageParam
+	 * @param schemeParam
+	 * @param targetLanguageParam
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/print", method = RequestMethod.GET, params = {"url"})
+	public void printApi(			
+			@RequestParam(value="url", required=true) String url,
+			@RequestParam(value="display", required=false) String displayParam,
+			// output type, PDF or HTML
+			@RequestParam(value="output", required=false) String outputParam,			
+			@RequestParam(value="language", required=false) String languageParam,
+			@RequestParam(value="scheme", defaultValue="no-scheme") String schemeParam,
+			@RequestParam(value="targetLanguage", defaultValue="no-language") String targetLanguageParam,
+			HttpServletRequest request,
+			HttpServletResponse response
+	) throws Exception {
+		
+		SkosPlayModel skosPlayModel = new SkosPlayModel();
+		// rdfsInference : false
+		skosPlayModel.load(url, false);
+		skosPlayModel.setInputUrl(url);
+		// handle SKOS-XL by default
+		skosPlayModel.performSkosXl2Skos();
+		// get repository back
+		Repository r = skosPlayModel.getRepository();
+
+		// read all languages
+		Set<String> languages = skosPlayModel.getLanguages();
+		
+		// get output type param
+		OutputType outputType = (outputParam != null)?OutputType.valueOf(outputParam.toUpperCase()):OutputType.HTML;
+
+		// get display type param
+		DisplayType displayType = (displayParam != null)?DisplayType.valueOf(displayParam.toUpperCase()):DisplayType.ALPHABETICAL_EXPANDED;
+
+		// get scheme param
+		IRI scheme = (schemeParam.equals("no-scheme"))?null:SimpleValueFactory.getInstance().createIRI(schemeParam);
+
+		// update source language param - only for translations
+		String language = (languageParam == null || languageParam.equals("no-language"))?null:languageParam;
+		if(language == null) {
+			// try to determine language
+			if(languages.size() == 1) {
+				language = languages.iterator().next();
+			} else {
+				throw new Exception("Please set language param, found "+languages.size()+" different languages, don't know which one to use : "+languages+"");
+			}
+		}
+
+		// get target language param - only for translations
+		String targetLanguage = (targetLanguageParam != null)?(targetLanguageParam.equals("no-language")?null:targetLanguageParam):null;
+		
+		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(
+				language,
+				outputParam,
+				displayParam,
+				skosPlayModel.getInputUrl(),
+				"print",
+				schemeParam
+		));
+		
+		// read all potential languages and exclude the main one
+		final List<String> additionalLanguages = new ArrayList<String>();
+		for (String aLang : languages) {
+			if(!aLang.equals(language)) {
+				additionalLanguages.add(aLang);
+			}
+		}
+		
+		doPrint(
+			r,
+			outputType,
+			displayType,
+			language,
+			SessionData.get(request.getSession()).getUserLocale().getLanguage(),
+			additionalLanguages,
+			scheme,
+			targetLanguage,
+			response			
+		);
+
+
+
+		response.flushBuffer();
+	}
+	
 
 	@RequestMapping(value = "/print", method = RequestMethod.POST)
 	public void print(
@@ -537,8 +635,7 @@ public class SkosPlayController {
 			@RequestParam(value="targetLanguage", defaultValue="no-language") String targetLanguageParam,
 			HttpServletRequest request,
 			HttpServletResponse response
-			) throws Exception {
-
+	) throws Exception {
 		
 		// get output type param
 		OutputType outputType = (outputParam != null)?OutputType.valueOf(outputParam.toUpperCase()):null;
@@ -554,17 +651,63 @@ public class SkosPlayController {
 
 		// get target language param - only for translations
 		String targetLanguage = (targetLanguageParam != null)?(targetLanguageParam.equals("no-language")?null:targetLanguageParam):null;
+		
 		SessionData sessionData=SessionData.get(request.getSession());
 		// retrieve data from session
 		Repository r = sessionData.getSkosPlayModel().getRepository();
 		
+		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(
+				language,
+				outputParam,
+				displayParam,
+				sessionData.getSkosPlayModel().getInputUrl(),
+				"print",
+				schemeParam
+		));
+		
+		// read all potential languages and exclude the main one
+		final List<String> additionalLanguages = new ArrayList<String>();
+		for (String aLang : SessionData.get(request.getSession()).getPrintFormData().getLanguages().keySet()) {
+			if(!aLang.equals(language)) {
+				additionalLanguages.add(aLang);
+			}
+		}
+		
+		doPrint(
+			r,
+			outputType,
+			displayType,
+			language,
+			SessionData.get(request.getSession()).getUserLocale().getLanguage(),
+			additionalLanguages,
+			scheme,
+			targetLanguage,
+			response			
+		);
+
+
+
+		response.flushBuffer();		
+	}
+	
+	
+	
+	protected void doPrint(	
+			Repository r,
+			// output type, PDF or HTML
+			OutputType outputType,
+			DisplayType displayType,
+			String language,
+			String userLanguage,
+			List<String> additionalLanguages,
+			IRI scheme,
+			String targetLanguage,
+			HttpServletResponse response
+	) throws Exception {
+
+		
 		// build display result
 		KosDocument document = new KosDocument();
-		// this is done in Displayprinter now
-//		if(language.startsWith("ar")) {
-//			log.info("Setting writing mode on the KosDocument");
-//			document.setWritingMode("rl-tb");
-//		}
 		
 		try(RepositoryConnection connection = r.getConnection()) {
 			// make a log to trace usage
@@ -612,12 +755,6 @@ public class SkosPlayController {
 			case CONCEPT_LISTING : {
 				ConceptBlockReader cbr = new ConceptBlockReader();
 				cbr.setSkosPropertiesToRead(ConceptListDisplayGenerator.EXPANDED_SKOS_PROPERTIES_WITH_TOP_TERMS);
-				List<String> additionalLanguages = new ArrayList<String>();
-				for (String aLang : SessionData.get(request.getSession()).getPrintFormData().getLanguages().keySet()) {
-					if(!aLang.equals(language)) {
-						additionalLanguages.add(aLang);
-					}
-				}
 				cbr.setAdditionalLabelLanguagesToInclude(additionalLanguages);
 	
 				bodyReader = new BodyReader(new ConceptListDisplayGenerator(connection, cbr));
@@ -670,14 +807,6 @@ public class SkosPlayController {
 	
 				// prepare a list of generators
 				List<AbstractKosDisplayGenerator> generators = new ArrayList<AbstractKosDisplayGenerator>();
-	
-				// read all potential languages and exclude the main one
-				final List<String> additionalLanguages = new ArrayList<String>();
-				for (String aLang : SessionData.get(request.getSession()).getPrintFormData().getLanguages().keySet()) {
-					if(!aLang.equals(language)) {
-						additionalLanguages.add(aLang);
-					}
-				}
 	
 				// alphabetical display
 				ConceptBlockReader alphaCbReader = new ConceptBlockReader();
@@ -751,9 +880,9 @@ public class SkosPlayController {
 			switch(outputType) {
 			case HTML : {
 				if(displayType==DisplayType.HIERARCHICAL_TREE) {
-					printer.printToHtmlTree(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
+					printer.printToHtmlTree(document, response.getOutputStream(), userLanguage);
 				} else {
-					printer.printToHtml(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
+					printer.printToHtml(document, response.getOutputStream(), userLanguage);
 				}
 				break;
 			}
@@ -769,22 +898,14 @@ public class SkosPlayController {
 						) {
 					printer.getTransformerParams().put("column-count", 2);
 				}
-				printer.printToPdf(document, response.getOutputStream(), SessionData.get(request.getSession()).getUserLocale().getLanguage());
+				printer.printToPdf(document, response.getOutputStream(), userLanguage);
 				break;
 			}
 		}
 
-		SkosPlayConfig.getInstance().getSqlLogDao().insertLog(new LogEntry(
-				language,
-				outputParam,
-				displayParam,
-				sessionData.getSkosPlayModel().getInputUrl(),
-				"print",
-				schemeParam
-		));
-
-		response.flushBuffer();		
+		response.flushBuffer();	
 	}
+	
 
 	protected String generateJSON (
 			RepositoryConnection connection,

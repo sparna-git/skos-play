@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.eclipse.rdf4j.model.IRI;
@@ -129,6 +130,10 @@ public class SkosPlayModel {
 			}
 		}
 		return null;
+	}
+	
+	public Set<String> getLanguages() {
+		return this.getLanguages(null).keySet();
 	}
 	
 	public Map<String, String> getLanguages(final String locale) {
