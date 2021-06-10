@@ -302,6 +302,7 @@ public class SkosPlayConvertController {
 		} else {
 			converter = new Xls2RdfConverter(writer, lang);
 		}
+		converter.setFailIfNoReconcile(true);
 		
 		List<Xls2RdfPostProcessorIfc> postProcessors = new ArrayList<>();
 

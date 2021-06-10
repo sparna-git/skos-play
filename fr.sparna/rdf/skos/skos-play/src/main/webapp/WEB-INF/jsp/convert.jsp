@@ -507,7 +507,7 @@
 					For example <code>schema:name(subjectColumn="N")</code> means this column is the name of the URI stored in column N.
 					<p />This is how such a header could look like :
 				<img src="images/convert-screenshot-subjectColumn.png" width="100%" />
-				<h4><a href="#lookupColumn" id="lookupColumn"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Refering to URIs using their labels</h4>
+				<h4><a href="#lookupColumn" id="lookupColumn"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Referring to URIs using their labels</h4>
 					<p />SKOS involves creating hierarchies of concepts, and connecting related concepts. This involves making references to other concept URIs, typically in
 					a column <code>skos:broader</code>. But URIs can be opaque, and copy-pasting concept URIs across cells can be tedious. The lookupColumn parameter is a mechanism
 					that allows you to <em>reference a concept URI through one of its label (or other unique key) stored in another column</em>. To use it, add a column parameter
@@ -520,6 +520,32 @@
 					<p />You can view the <code>lookupColumn</code> parameter as the equivalent of Excel "VLOOKUP" / "RECHERCHEV" function, except easier to write.
 
 					<p />
+				<h4><a href="#reconcileLocal" id="reconcileLocal"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Reconcile / lookup values in other sheets</h4>
+					<p />The <code>lookupColumn</code> parameter described above works only to search for a URI within the same sheet. It may be the case that you would like to create a link
+					to an entity that is defined in <em>another sheet of the same file</em>. In that case :
+					<ul>
+					  <li>use the <code>reconcile="local"</code> column parameter in the column that contains the label of the entity you want to search for.</li>
+					  <li>use the additional <code>reconcileOn="http://..."</code> column parameter to restrict the reconciliation either on the rdf:type or the skos:inScheme of the values
+					  you would like to search for.</li> 
+					</ul>
+					
+					<p />Warning : <strong>The sheet you want to search into needs to be _before_ the sheet you search from</strong>; the sheets are converted in order, and the reconcile runs a SPARQL
+					query on the content of the already converted sheets. This means you cannot reconcile on a value that is in a sheet _after_ the sheet that contain your column with a <code>reconcile</code>
+					parameter.
+					<p />The reconciliation is done on the following properties : 
+					<ul>
+						<li><code>rdfs:label</code></li>
+						<li><code>skos:prefLabel</code></li>
+						<li><code>skos:altLabel</code></li>
+						<li><code>skos:notation</code></li>
+						<li><code>foaf:name</code></li>
+						<li><code>dct:title</code></li>
+						<li><code>dc:title</code></li>
+						<li><code>dct:identifier</code></li>
+						<li><code>dc:identifier</code></li>
+						<li><code>schema:name</code></li>
+					</ul>
+					<img src="images/convert-screenshot-reconcileLocal.png" width="100%" />
 			</fieldset>
 			
 			<!-- Prefixes -->		
