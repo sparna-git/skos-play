@@ -4,13 +4,13 @@
 
     <groupId>fr.sparna.rdf</groupId>
     <artifactId>sparna-rdf</artifactId>
-    <version>0.8.8</version>
+    <version>0.8.9</version>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>fr.sparna</groupId>
         <artifactId>fr.sparna-root-pom</artifactId>
-        <version>0.8.8</version>
+        <version>0.8.9</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
