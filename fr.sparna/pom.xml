@@ -10,7 +10,7 @@
     <parent>
         <groupId>Sparna</groupId>
         <artifactId>root-pom</artifactId>
-        <version>0.9</version>
+        <version>1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
