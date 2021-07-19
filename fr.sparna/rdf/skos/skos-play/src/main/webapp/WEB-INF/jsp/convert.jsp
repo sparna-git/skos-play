@@ -176,6 +176,8 @@
 						<span class="help-block"><i><fmt:message key="convert.form.remoteUrl.help" /></i></span>
 					</div>
 					</div>
+					
+					<!-- Hide Google Drive option
 				<div class="form-group">
 								<input
 										class="col-sm-1"
@@ -213,7 +215,7 @@
 							</div><br/><br/>
 						</div>
 					</div>
-				
+				 	-->
 			</fieldset>
 			
 			<!-- Choix de la langue -->		
@@ -546,6 +548,11 @@
 						<li><code>schema:name</code></li>
 					</ul>
 					<img src="images/convert-screenshot-reconcileLocal.png" width="100%" />
+				<h4><a href="#ignoreIfParenthesis" id="ignoreIfParenthesis"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Ignore values in parenthesis</h4>
+					<p />Add parameter <code>ignoreIfParenthesis="true"</code> to the column header parameters to ignore the values if they are between parenthesis. This can be combined with a separator, e.g.
+						<code>skos:broader(separator=";" ignoreIfParenthesis="true")</code>. In this case, if the cell value is "pollution;(water pollution)" then water pollution will be ignored.
+					<p />This can be used to maintain temporary values in the spreadsheet, waiting for further validation.
+					<p />
 			</fieldset>
 			
 			<!-- Prefixes -->		
@@ -567,6 +574,19 @@
 					<li><a href="http://prefix.cc/xsd"><code>xsd</code></a></li>
 					<li><a href="http://prefix.cc/qb"><code>qb</code></a></li>
 					<li><a href="http://prefix.cc/dcat"><code>dcat</code></a></li>
+				</ul>
+			</fieldset>
+			
+			<!-- Parameters reference -->		
+			<fieldset style="margin-top:3em;">
+				<legend><a href="#parameters-reference" id="parameters-reference"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Column header parameters reference</legend>
+				<ul>
+					<li><code>separator=";"</code> : specifies the separator to split cell in multiple values</li>
+					<li><code>id="theLabel"</code> : specifies the columnId to be used as a reference in subjectColumn or lookupColumn parameters</li>
+					<li><code>lookupColumn="skos:prefLabel"</code> or <code>lookupColumn="columnId"</code> or <code>lookupColumn="C"</code> : specifies the column to lookup the literal values to be converted to URIs</li>
+					<li><code>subjectColumn="dcterms:creator"</code> or <code>subjectColumn="columnId"</code> or <code>subjectColumn="C"</code> : specifies the column containing the URI of the subject for predicates generated from this column</li>
+					<li><code>reconcile="local"</code> or <code>reconcile="external"</code> : whether to reconcile the value either locally or to an external reconcile endpoint (not implemented yet)</li>
+					<li><code>ignoreIfParenthesis="true"</code> whether to ignore the values if they are in parenthesis</li>
 				</ul>
 			</fieldset>
 			

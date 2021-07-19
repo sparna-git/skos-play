@@ -28,19 +28,22 @@
 			    			<li id="header-pill-test"><a href="http://labs.sparna.fr/skos-testing-tool" target="_blank"><i class="glyphicon glyphicon-ok-circle"></i>&nbsp;<fmt:message key="menu.testingtool" /></a></li>
 					    	<li id="header-pill-about" ${param.active == 'about' ? 'class="active"' : ''}><a href="about"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;<fmt:message key="menu.about" /></a></li>
 					    	<li id="header-pill-forum"><a href="https://groups.google.com/d/forum/skos-play-discuss" target="_blank"><i class="glyphicon glyphicon-comment"></i>&nbsp;<fmt:message key="menu.feedback" /></a></li>
+					    	
+					    	<!-- Hide Google connexion
 					    	<li id="header-pill-connexion">
 						    	
 						    	<c:if test="${data.user!= null}">
 										<a><i class="glyphicon glyphicon-user"></i>&nbsp; ${data.user.name}</a>	
 								</c:if>
 								<c:if test="${data.user== null}">
-								<!-- https://www.googleapis.com/auth/spreadsheets.readonly -->
+								-- https://www.googleapis.com/auth/spreadsheets.readonly --
 									<a 
 							    	href="${data.googleConnector.generateLoginUrl()}">
 							    	<i class="glyphicon glyphicon-user"></i>&nbsp;login
 							    	</a>
 								</c:if>
 					    	</li>
+					    	 -->
 					    	<!-- <li><a href="log">log</a></li> -->
 							<li id="header-pill-lang" >
 								
