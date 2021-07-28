@@ -395,7 +395,7 @@ public class SKOSTreeBuilder {
 				
 				// add top-level thesaurus arrays
 				log.debug("Adding top-level collections that are thesaurus arrays...");
-				Perform.on(connection).select(new GetTopCollectionsHelper(null, null) {				
+				Perform.on(connection).select(new GetTopCollectionsHelper(conceptOrConceptSchemeOrCollection, null) {				
 					@Override
 					protected void handleTopCollection(Resource top)
 					throws TupleQueryResultHandlerException {
