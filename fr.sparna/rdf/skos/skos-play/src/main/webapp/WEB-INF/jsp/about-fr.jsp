@@ -192,7 +192,11 @@ chezmoi:123456 skos:broader chezmoi:Vehicule .
 									<li>Si des collections marquées skos:inScheme de ce schéma de concepts existent, et qui ne sont pas référencées
 										comme skos:member d'une autres collection, et qui ne sont pas des ThesaurusArray, elles sont insérées comme fils du schéma de concepts dans l'arbre.
 									</li>
-									<li>Sinon, si aucune Collection "de premier niveau" n'a été trouvée, on cherche les Concepts :
+									<li>Sinon, si 1/ aucun concept ayant des broaders ou narrowers n'est trouvé (cad le ConceptScheme est une liste à plat) et 2/ tous
+									les concepts de ce ConceptScheme appartiennent à un ThesaurusArray (cad le ConceptScheme est entièrement partitionné), alors seuls ces
+									ThesaurusArray sont mis comme fils du ConceptScheme.</li>
+									<li>Sinon, si aucune Collection "de premier niveau" n'a été trouvée, et qu'il y une hiérarchie ou que le partitionnement du ConceptScheme
+									en ThesaurusArray est incomplet, alors on cherche les Concepts :
 										<ul>
 											<li>si le schéma de concepts indique des skos:hasTopConcepts, ou bien si des concepts sont indiqués
 											skos:isTopConceptOf de ce schéma, ces concepts sont insérés comme fils du schéma de concepts dans l'arbre.

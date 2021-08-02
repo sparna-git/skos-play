@@ -179,7 +179,7 @@ me:123456 skos:broader me:Vehicle .
 				<h4>How is the tree data structure generated from SKOS ?</h4>
 				<p>Good question. SKOS data model is flexible and SKOS data can come in multiple variations, choices has to be made.</p>
 				<p>Part of the algorithm followed by SKOS Play relies on the interpretation of Collections as <a href="http://purl.org/iso25964/skos-thes#ThesaurusArray">ThesaurusArray</a>.
-					A ThesaurusArray is a Collection that is explicitely typed as such, or for which we finf that it contains only Concepts that have the same parent, or Concepts
+					A ThesaurusArray is a Collection that is explicitely typed as such, or for which we find that it contains only Concepts that have the same parent, or Concepts
 					that have no parent.
 				</p>
 				<p>Here is the algorithm that SKOS Play follows to try to accomodate diverse situations :
@@ -189,7 +189,10 @@ me:123456 skos:broader me:Vehicle .
 								<li>If Collections are marked skos:inScheme of this ConceptScheme exist, and they are not referenced by skos:member
 								in other collections, and they are not ThesaurusArrays, then they are inserted as child of the ConceptScheme in the tree.
 								</li>
-								<li>Otherwise, if no "first level" Collection was found, we look for Concepts :
+								<li>Otherwise, if 1/ no concepts in the scheme have broaders or narrowers (i.e. it is a flat list) and 2/ all concepts belong to
+								a ThesaurusArray (i.e. the entire scheme is a list partitioned using ThesaurusArrays), then only these ThesaurusArray are considered
+								as children.</li>
+								<li>Otherwise, if no "first level" Collection was found, and there is some hierarchy or the scheme is not completely partitioned, we look for Concepts :
 									<ul>
 										<li>if the ConceptScheme indicate top Concepts through skos:hasTopConcept or its inverse skos:topConceptOf,
 										these Concepts are inserted as child of the ConceptScheme in the tree.

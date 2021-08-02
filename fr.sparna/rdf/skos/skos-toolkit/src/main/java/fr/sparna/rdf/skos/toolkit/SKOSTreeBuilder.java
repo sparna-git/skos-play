@@ -4,6 +4,7 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -359,41 +360,58 @@ public class SKOSTreeBuilder {
 			// if no collection was found, we look for topConcepts declared on the scheme
 			if(node.getChildren() == null || node.getChildren().size() == 0) {
 				log.debug("No top-level Collections that are not ThesaurusArray found, will look for top-level Concepts...");
-				if(!ignoreExplicitTopConcepts) {
-					Perform.on(connection).select(new GetTopConceptsHelper(conceptOrConceptSchemeOrCollection, null) {
+				
+				// see if the collection coverage is complete
+				if(
+						Perform.on(connection).ask(new HasConceptNotInACollectionQuery(conceptOrConceptSchemeOrCollection).get())
+						||
+						Perform.on(connection).ask(new HasConceptWithBroaderOrNarrower(conceptOrConceptSchemeOrCollection).get())
+				) {
+					log.debug("Collection coverage is incomplete (or there are no collections) or some concepts do have broader or narrower links, so will list children concepts under ConceptScheme ");
+					
+					List<Resource> childrenConcepts = new ArrayList<Resource>();
+					
+					if(!ignoreExplicitTopConcepts) {
+						Perform.on(connection).select(new GetTopConceptsHelper(conceptOrConceptSchemeOrCollection, null) {
 
-						@Override
-						protected void handleTopConcept(Resource top)
-								throws TupleQueryResultHandlerException {
-							try {
-								log.debug("Adding as ConceptScheme child a top Concept "+top);
-								node.addChild(buildTreeRecDelayed((IRI)top));
-							} catch (Exception e) {
-								throw new TupleQueryResultHandlerException(e);
+							@Override
+							protected void handleTopConcept(Resource top)
+									throws TupleQueryResultHandlerException {
+								try {
+									log.debug("Adding as ConceptScheme child a top Concept "+top);
+									childrenConcepts.add(top);
+								} catch (Exception e) {
+									throw new TupleQueryResultHandlerException(e);
+								}
 							}
-						}
 
-					});
-				}
+						});
+					}
 
-				// if no explicit hasTopConcept or topConceptOf was found, get the concepts of that scheme with no broader info
-				if(node.getChildren() == null || node.getChildren().size() == 0) {
-					log.debug("No explicit top Concepts found, will look for Concepts without broader/narrower...");
-					Perform.on(connection).select(new GetConceptsWithNoBroaderHelper(null, conceptOrConceptSchemeOrCollection) {
-						@Override
-						protected void handleConceptWithNoBroader(Resource noBroader)
-								throws TupleQueryResultHandlerException {
-							try {
-								log.debug("Adding as ConceptScheme child a Concept without broader/narrower"+noBroader);
-								node.addChild(buildTreeRecDelayed((IRI)noBroader));
-							} catch (Exception e) {
-								throw new TupleQueryResultHandlerException(e);
+					// if no explicit hasTopConcept or topConceptOf was found, get the concepts of that scheme with no broader info
+					if(childrenConcepts.size() == 0) {
+						log.debug("No explicit top Concepts found, will look for Concepts without broader/narrower...");
+						Perform.on(connection).select(new GetConceptsWithNoBroaderHelper(null, conceptOrConceptSchemeOrCollection) {
+							@Override
+							protected void handleConceptWithNoBroader(Resource noBroader)
+									throws TupleQueryResultHandlerException {
+								try {
+									log.debug("Adding as ConceptScheme child a Concept without broader/narrower"+noBroader);
+									childrenConcepts.add(noBroader);
+								} catch (Exception e) {
+									throw new TupleQueryResultHandlerException(e);
+								}
 							}
-						}
-					});
+						});
+					}
+					
+					for (Iterator<Resource> i = childrenConcepts.iterator(); i.hasNext();) {
+						Resource aChildConcept = (Resource) i.next();
+						node.addChild(buildTreeRecDelayed((IRI)aChildConcept));
+					}
 				}
 				
-				// add top-level thesaurus arrays
+				// and we add top-level thesaurus arrays
 				log.debug("Adding top-level collections that are thesaurus arrays...");
 				Perform.on(connection).select(new GetTopCollectionsHelper(conceptOrConceptSchemeOrCollection, null) {				
 					@Override
