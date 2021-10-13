@@ -587,6 +587,7 @@
 					<li><code>subjectColumn="dcterms:creator"</code> or <code>subjectColumn="columnId"</code> or <code>subjectColumn="C"</code> : specifies the column containing the URI of the subject for predicates generated from this column</li>
 					<li><code>reconcile="local"</code> or <code>reconcile="external"</code> : whether to reconcile the value either locally or to an external reconcile endpoint (not implemented yet)</li>
 					<li><code>ignoreIfParenthesis="true"</code> whether to ignore the values if they are in parenthesis</li>
+					<li><code>ignoreIf="xxx"</code> indicate that the value xxx should be ignored when present in this column</li>
 				</ul>
 			</fieldset>
 			
