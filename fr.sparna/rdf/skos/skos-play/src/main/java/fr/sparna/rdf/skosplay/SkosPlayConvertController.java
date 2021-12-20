@@ -247,6 +247,10 @@ public class SkosPlayConvertController {
 			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+useskosxl);
 			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
 			response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());
+			// set response charset corresponding to the format, if applicable
+			if(theFormat.hasCharset()) {
+				response.setCharacterEncoding(theFormat.getCharset().name());
+			}
 			// le nom du fichier de retour
 			// strip extension, if any
 			resultFileName = (resultFileName.contains("."))?resultFileName.substring(0, resultFileName.lastIndexOf('.')):resultFileName;
