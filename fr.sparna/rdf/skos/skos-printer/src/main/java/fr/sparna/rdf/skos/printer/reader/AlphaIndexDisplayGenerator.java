@@ -27,6 +27,7 @@ import fr.sparna.commons.lang.StringUtil;
 import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
 import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
 import fr.sparna.rdf.rdf4j.toolkit.repository.init.ApplyUpdates;
+import fr.sparna.rdf.rdf4j.toolkit.util.LabelReader;
 import fr.sparna.rdf.rdf4j.toolkit.util.Namespaces;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.DisplayPrinter.Style;
@@ -146,6 +147,7 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 			
 		});
 		
+		
 		boolean addSections = queryResultRows.size() > 200;
 		log.debug("Processing "+queryResultRows.size()+" entries.");
 		Namespaces namespaces = Namespaces.getInstance().withRepository(this.connection.getRepository());
@@ -174,6 +176,7 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 			d.getSection().add(currentSection);
 		} else {
 			log.debug("Single section added to output");
+			
 			Section s = new Section();
 			fr.sparna.rdf.skos.printer.schema.List list = new fr.sparna.rdf.skos.printer.schema.List();
 			s.setList(list);
@@ -181,6 +184,12 @@ public class AlphaIndexDisplayGenerator extends AbstractKosDisplayGenerator {
 				ConceptBlock cb = buildConceptBlock(connection, aRow, namespaces);
 				list.getListItem().add(SchemaFactory.createListItem(cb));
 			}
+			
+			// read label of concept scheme to use as title
+			LabelReader labelReader = new LabelReader(this.connection, lang);
+			String title = LabelReader.display(labelReader.getValues(conceptScheme));
+			s.setTitle(title+" : A-Z");
+			
 			d.getSection().add(s);
 		}
 		
