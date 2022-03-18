@@ -6,7 +6,7 @@
 	<parent>
 	    <groupId>fr.sparna.rdf.skos</groupId>
 	    <artifactId>sparna-skos</artifactId>
-	    <version>0.9</version>
+	    <version>0.9.1</version>
         <relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -70,7 +70,7 @@
 		<dependency>
 			<groupId>fr.sparna.rdf.skos</groupId>
 			<artifactId>skos-toolkit</artifactId>
-			<version>0.9</version>
+			<version>0.9.1</version>
 		</dependency>
 
 		<dependency>
