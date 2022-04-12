@@ -495,6 +495,10 @@
 					<code>[ rdf:value "Definition blah blah"; dcterms:created "2017-02-21"^^xsd:date ]</code>, then a reference to a blank node will be created. You need to use the prefixes defined in the file in your
 					blank node content. The blank node is parsed exactly as a piece of Turtle, so it can contain any piece of valid Turtle syntax. If anything goes wrong during the parsing, the converter
 					will generate a Literal with the cell content instead.
+				<h4><a href="#rdf-lists" id="rdf-lists"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Creating RDF lists with (...)</h4>
+					<p />The converter understands the RDF lists syntax with "(...)" : simply put a cell value between parenthesis and write the list items inside like you would do in a Turtle file : 
+					<code>(ex:concept1 ex:concept2 ex:concept3)</code>. You need to use the prefixes defined in the file in your list content. The list is parsed exactly as a piece of Turtle; 
+					if anything goes wrong during the parsing, the converter will generate a Literal with the cell content instead.
 				<h4><a href="#striketrough" id="striketrough"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Disabling cell conversion with a <strike>strikethrough</strike></h4>
 					<p />When working on a file, if you are unsure about the conversion of a certain cell but you don't want to delete the value, use a <strike>strikethrough font</strike> : the converter will ignore any
 					cell with such a font style. You can keep uncertain values in the files and simply change the font back to normal once the value is validated.
