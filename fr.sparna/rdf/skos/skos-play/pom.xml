@@ -8,7 +8,7 @@
     <parent>
         <groupId>fr.sparna.rdf.skos</groupId>
         <artifactId>sparna-skos</artifactId>
-        <version>0.9.1</version>
+        <version>0.9.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -107,12 +107,12 @@
         <dependency>
             <groupId>fr.sparna.rdf.skos</groupId>
             <artifactId>skos-toolkit</artifactId>
-            <version>0.9.1</version>
+            <version>0.9.2</version>
         </dependency>
         <dependency>
             <groupId>fr.sparna.rdf.skos</groupId>
             <artifactId>skos-printer</artifactId>
-            <version>0.9.1</version>
+            <version>0.9.2</version>
         </dependency>   
         
         <dependency>
