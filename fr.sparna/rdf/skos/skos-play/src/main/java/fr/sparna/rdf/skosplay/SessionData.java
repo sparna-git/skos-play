@@ -1,5 +1,6 @@
 package fr.sparna.rdf.skosplay;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -17,8 +18,10 @@ import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
 import fr.sparna.rdf.rdf4j.toolkit.repository.EndpointRepositorySupplier;
 import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
 
-public class SessionData {
+public class SessionData implements Serializable {
 
+	static final long serialVersionUID = -1;
+	
 	public static final String KEY = SessionData.class.getCanonicalName();
 	
 	// The currently uploaded data

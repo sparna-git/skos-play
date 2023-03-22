@@ -336,9 +336,10 @@
 	   			</div><!-- end accordion-group : Advanced options -->
    			</div>			
 			<div class="form-actions">
-				<div class="col-sm-offset-2 col-sm-4">
+				<div class="col-sm-offset-1 col-sm-4">
 					<button type="submit"   id="submit-button" class="btn btn-info btn-lg "><fmt:message key="convert" /></button>
 					<img src="images/ajax-loader.gif" id="loading" hidden="hidden" />
+					<p><em>03/05/2022 : The converter is now available as an <code><a href="http://xls2rdf.sparna.fr/rest">API</a></code> !</em></p>
 				</div>
 				<div class="col-sm-offset-2 col-sm-4">
 					<img src="images/logo-luxembourg.png"/>
@@ -354,8 +355,8 @@
 				<legend><a href="#documentation" id="documentation"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;General Documentation</legend>
 				<h4>What is this tool ?</h4>
 				<p>
-					This is an Excel-to-SKOS converter. It can generate SKOS RDF files from Excel spreadsheets structured in a specific way.
-					<br />Using the same Excel spreadsheet structure, it is also possible to produce other RDF data than SKOS (lists of foaf:Person, of schema:Event, etc.)
+					This is an Excel-to-RDF converter. It can generate RDF files from Excel spreadsheets structured in a specific way, and contains specific features for SKOS.
+					<br />Using the same Excel spreadsheet structure, it is possible to produce and RDF, not only SKOS (lists of foaf:Person, of schema:Event, SHACL, OWL, etc.)
 					<br />This converter does not require any configuration file to work, only the Excel document to convert.
 				</p>
 				<h4>Can I convert <i>any</i> Excel file in RDF ?</h4>
@@ -564,20 +565,22 @@
 				<legend><a href="#prefixes" id="prefixes"><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>&nbsp;Default prefixes known in the converter</legend>
 				<p />This is the list of known prefixes in the converter. You don't have to declare them in the header.
 				<ul>
-					<li><a href="http://prefix.cc/rdf"><code>rdf</code></a></li>
-					<li><a href="http://prefix.cc/rdfs"><code>rdfs</code></a></li>
-					<li><a href="http://prefix.cc/owl"><code>owl</code></a></li>
-					<li><a href="http://prefix.cc/skos"><code>skos</code></a></li>
-					<li><a href="http://prefix.cc/skosxl"><code>skosxl</code></a></li>
-					<li><a href="http://prefix.cc/foaf"><code>foaf</code></a></li>
-					<li><a href="http://prefix.cc/org"><code>org</code></a></li>
-					<li><a href="http://prefix.cc/prov"><code>prov</code></a></li>
-					<li><a href="http://prefix.cc/schema"><code>schema</code></a></li>
+					<li><a href="http://prefix.cc/adms"><code>adms</code></a></li>					
+					<li><a href="http://prefix.cc/dcat"><code>dcat</code></a></li>
 					<li><a href="http://prefix.cc/dc"><code>dc</code></a></li>
 					<li><a href="http://prefix.cc/dct"><code>dct</code></a> or <a href="http://prefix.cc/dcterms"><code>dcterms</code></a></li>
-					<li><a href="http://prefix.cc/xsd"><code>xsd</code></a></li>
+					<li><a href="http://prefix.cc/doap"><code>doap</code></a></li>
+					<li><a href="http://prefix.cc/foaf"><code>foaf</code></a></li>
+					<li><a href="http://prefix.cc/org"><code>org</code></a></li>
+					<li><a href="http://prefix.cc/owl"><code>owl</code></a></li>
+					<li><a href="http://prefix.cc/prov"><code>prov</code></a></li>
 					<li><a href="http://prefix.cc/qb"><code>qb</code></a></li>
-					<li><a href="http://prefix.cc/dcat"><code>dcat</code></a></li>
+					<li><a href="http://prefix.cc/rdf"><code>rdf</code></a></li>
+					<li><a href="http://prefix.cc/rdfs"><code>rdfs</code></a></li>
+					<li><a href="http://prefix.cc/schema"><code>schema</code></a></li>
+					<li><a href="http://prefix.cc/skos"><code>skos</code></a></li>
+					<li><a href="http://prefix.cc/skosxl"><code>skosxl</code></a></li>
+					<li><a href="http://prefix.cc/xsd"><code>xsd</code></a></li>
 				</ul>
 			</fieldset>
 			

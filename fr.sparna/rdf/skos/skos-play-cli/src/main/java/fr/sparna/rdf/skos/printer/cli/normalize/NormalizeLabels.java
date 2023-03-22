@@ -56,7 +56,7 @@ public class NormalizeLabels implements SkosPlayCliCommandIfc {
 			
 			// output skos:hiddenLabels
 			Repository outputRepository = new SailRepository(new MemoryStore());
-			outputRepository.initialize();
+			outputRepository.init();
 			
 			List<Statement> statements = new ArrayList<Statement>();
 			for (Map.Entry<Resource, List<Literal>> anEntry : labels.entrySet()) {
@@ -66,7 +66,7 @@ public class NormalizeLabels implements SkosPlayCliCommandIfc {
 					if(!withoutAccents.equals(aLabel.getLabel())) {
 						statements.add(outputRepository.getValueFactory().createStatement(
 								anEntry.getKey(),
-								outputRepository.getValueFactory().createURI(SKOS.HIDDEN_LABEL),
+								outputRepository.getValueFactory().createIRI(SKOS.HIDDEN_LABEL),
 								outputRepository.getValueFactory().createLiteral(
 										fr.sparna.commons.lang.StringUtil.withoutAccents(withoutAccents), 
 										aLabel.getLanguage().get()

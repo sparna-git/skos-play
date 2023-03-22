@@ -37,7 +37,8 @@
 
 		<dependency>
               <groupId>org.eclipse.rdf4j</groupId>
-              <artifactId>rdf4j-runtime</artifactId>
+              <artifactId>rdf4j-storage</artifactId>
+              <type>pom</type>
         </dependency>
 
 		<dependency>

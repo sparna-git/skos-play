@@ -35,6 +35,10 @@
             <artifactId>slf4j-simple</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
 
 	    <dependency>
 	        <groupId>org.slf4j</groupId>
@@ -43,7 +47,8 @@
 
 		<dependency>
               <groupId>org.eclipse.rdf4j</groupId>
-              <artifactId>rdf4j-runtime</artifactId>
+              <artifactId>rdf4j-storage</artifactId>
+              <type>pom</type>
         </dependency>
 
 		<dependency>
@@ -64,7 +69,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.2.1</version>
         </dependency> 
     </dependencies>
 

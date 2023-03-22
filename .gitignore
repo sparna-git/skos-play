@@ -11,3 +11,7 @@ pom.xml.releaseBackup
 .FopProcessor-debug.xml
 output.pdf
 display-test.pdf
+
+fr.sparna/rdf/skos/skos-printer/display-test.html
+
+fr.sparna/rdf/skos/skos-printer/display-test.xml
