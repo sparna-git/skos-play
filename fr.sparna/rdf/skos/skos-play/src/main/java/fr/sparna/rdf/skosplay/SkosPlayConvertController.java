@@ -244,6 +244,10 @@ public class SkosPlayConvertController {
 
 
 		try {
+			
+			// Always disable use of scientific annotation on numbers 
+			System.setProperty("org.eclipse.rdf4j.rio.turtle.abbreviate_numbers", "false");			
+			
 			log.debug("*Lancement de la conversion avec lang="+language+" et usexl="+useskosxl);
 			// le content type est toujours positionné à "application/zip" si on nous a demandé un zip, sinon il dépend du format de retour demandé
 			response.setContentType((useZip)?"application/zip":theFormat.getDefaultMIMEType());
