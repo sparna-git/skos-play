@@ -30,13 +30,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.sparna.rdf.skosplay.log.LogEntry;
-import fr.sparna.rdf.xls2rdf.ModelWriterFactory;
 import fr.sparna.rdf.xls2rdf.ModelWriterIfc;
-import fr.sparna.rdf.xls2rdf.SkosPostProcessor;
-import fr.sparna.rdf.xls2rdf.SkosXlPostProcessor;
 import fr.sparna.rdf.xls2rdf.Xls2RdfConverter;
 import fr.sparna.rdf.xls2rdf.Xls2RdfException;
 import fr.sparna.rdf.xls2rdf.Xls2RdfPostProcessorIfc;
+import fr.sparna.rdf.xls2rdf.postprocess.SkosPostProcessor;
+import fr.sparna.rdf.xls2rdf.postprocess.SkosXlPostProcessor;
+import fr.sparna.rdf.xls2rdf.write.ModelWriterFactory;
 
 
 
