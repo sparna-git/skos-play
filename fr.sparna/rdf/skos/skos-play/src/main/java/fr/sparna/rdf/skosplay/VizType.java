@@ -6,6 +6,7 @@ public enum VizType {
 	TREELAYOUT(true),
 	SUNBURST(true),
 	TREEMAP(true),
+	FREEMIND(true),
 	AUTOCOMPLETE(false);
 	
 	protected boolean requiresHierarchy;

@@ -327,6 +327,16 @@
 									
 									<span class="help-inline"><fmt:message key="print.form.displayType.autocomplete.help" /></span>
 								</c:if>
+								<c:if test="${data.vizType.FREEMIND.enabled}">
+								
+									<label class="radio">
+										<input type="radio" name="viztype" id="viz-freemind" value="freemind">
+										<fmt:message key="print.form.displayType.freemind" />
+										
+									</label>
+									
+									<span class="help-inline"><fmt:message key="print.form.displayType.freemind.help" /></span>
+								</c:if>
 							</div>
 						</div>
 						<div class="form-actions">
