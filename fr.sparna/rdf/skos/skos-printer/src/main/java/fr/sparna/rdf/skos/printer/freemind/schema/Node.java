@@ -1,5 +1,6 @@
 package fr.sparna.rdf.skos.printer.freemind.schema;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -29,7 +30,17 @@ public class Node {
 	@XmlElement(name = "node")
 	private List<Node> childrens;
 
+
 	
+	public Node(String id, String text) {
+		super();
+		this.id = id;
+		this.text = text;
+		this.created = Long.toString(System.currentTimeMillis());
+		this.modified = Long.toString(System.currentTimeMillis());
+		this.childrens = new ArrayList<Node>();
+	}
+
 	public String getCreated() {
 		return created;
 	}

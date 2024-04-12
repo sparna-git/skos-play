@@ -31,16 +31,13 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParserRegistry;
 import org.eclipse.rdf4j.rio.RDFWriter;
 import org.eclipse.rdf4j.rio.RDFWriterRegistry;
-import org.eclipse.rdf4j.rio.Rio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -58,7 +55,6 @@ import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.autocomplete.Items;
 import fr.sparna.rdf.skos.printer.autocomplete.JSONWriter;
 import fr.sparna.rdf.skos.printer.freemind.schema.Map;
-import fr.sparna.rdf.skos.printer.freemind.schema.Node;
 import fr.sparna.rdf.skos.printer.reader.AbstractKosDisplayGenerator;
 import fr.sparna.rdf.skos.printer.reader.AlignmentDataHarvesterCachedLoader;
 import fr.sparna.rdf.skos.printer.reader.AlignmentDataHarvesterIfc;
@@ -68,6 +64,7 @@ import fr.sparna.rdf.skos.printer.reader.AutocompleteItemsReader;
 import fr.sparna.rdf.skos.printer.reader.BodyReader;
 import fr.sparna.rdf.skos.printer.reader.ConceptBlockReader;
 import fr.sparna.rdf.skos.printer.reader.ConceptListDisplayGenerator;
+import fr.sparna.rdf.skos.printer.reader.FreemindReader;
 import fr.sparna.rdf.skos.printer.reader.HeaderAndFooterReader;
 import fr.sparna.rdf.skos.printer.reader.HierarchicalDisplayGenerator;
 import fr.sparna.rdf.skos.printer.reader.IndexGenerator;
@@ -528,7 +525,7 @@ public class SkosPlayController {
 				response.setContentType("application/xml");
                 response.setHeader("Content-Disposition", "inline; filename=\""+"freemind-export.mm");
                 
-                
+                /*
                 Map m = new Map();
                 Node root = new Node();
                 m.setNode(root);
@@ -554,6 +551,10 @@ public class SkosPlayController {
                 nodes.add(node2);
                 
                 root.setChildrens(nodes);
+                */
+                
+                FreemindReader fm = new FreemindReader(connection);
+                Map m = fm.generateFreemindMap(language, scheme);
                 
                 OutputStreamWriter w = new OutputStreamWriter(response.getOutputStream());
                 JAXBContext context = JAXBContext.newInstance(Map.class);
