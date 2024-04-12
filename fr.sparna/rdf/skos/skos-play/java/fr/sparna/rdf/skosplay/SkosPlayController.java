@@ -795,6 +795,7 @@ public class SkosPlayController {
 					) {
 				return doError(
 						request,
+						count+" concepts - "+
 						MessageFormat.format(
 								b.getString("upload.error.dataTooLarge"),
 								limitConfiguration

@@ -3,6 +3,7 @@ package fr.sparna.rdf.skosplay;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
 import java.security.InvalidParameterException;
 import java.text.MessageFormat;
@@ -17,6 +18,8 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
@@ -54,6 +57,8 @@ import fr.sparna.rdf.rdf4j.toolkit.util.PreferredPropertyReader;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.autocomplete.Items;
 import fr.sparna.rdf.skos.printer.autocomplete.JSONWriter;
+import fr.sparna.rdf.skos.printer.freemind.schema.Map;
+import fr.sparna.rdf.skos.printer.freemind.schema.Node;
 import fr.sparna.rdf.skos.printer.reader.AbstractKosDisplayGenerator;
 import fr.sparna.rdf.skos.printer.reader.AlignmentDataHarvesterCachedLoader;
 import fr.sparna.rdf.skos.printer.reader.AlignmentDataHarvesterIfc;
@@ -518,6 +523,57 @@ public class SkosPlayController {
 				request.setAttribute("items", writer.write(items));
 				// forward to the JSP
 				return new ModelAndView("viz-autocomplete");
+			}
+			case FREEMIND : {
+				response.setContentType("application/xml");
+                response.setHeader("Content-Disposition", "inline; filename=\""+"freemind-export.mm");
+                
+                
+                Map m = new Map();
+                Node root = new Node();
+                m.setNode(root);
+                root.setCreated("1708696092718");
+                root.setModified("1708696092718");
+                root.setId("1");
+                root.setText("Thésaurus du SMT !");
+                
+                Node node1 = new Node();
+                node1.setCreated("1708696092718");
+                node1.setModified("1708696092718");
+                node1.setId("2");
+                node1.setText("node 1");
+                
+                Node node2 = new Node();
+                node2.setCreated("1708696092718");
+                node2.setModified("1708696092718");
+                node2.setId("3");
+                node2.setText("node 2");
+                
+                List<Node> nodes = new ArrayList<Node>();
+                nodes.add(node1);
+                nodes.add(node2);
+                
+                root.setChildrens(nodes);
+                
+                OutputStreamWriter w = new OutputStreamWriter(response.getOutputStream());
+                JAXBContext context = JAXBContext.newInstance(Map.class);
+                Marshaller marsh = context.createMarshaller();
+                marsh.marshal(m, w);
+                
+                w.close();
+                response.getOutputStream().flush();
+                
+                /*
+                String FAKE =  "<map version=\"1.0.1\">"
+                		+ "<node CREATED=\"1706716720958\" ID=\"ID_1328781019\" MODIFIED=\"1708696092718\" TEXT=\"Thésaurus du STM\"></node></map>";
+                
+                OutputStreamWriter w = new OutputStreamWriter(response.getOutputStream());
+                w.write(FAKE);
+                w.close();
+                response.getOutputStream().flush();
+                */
+                
+                return null;
 			}
 			
 			default : {
