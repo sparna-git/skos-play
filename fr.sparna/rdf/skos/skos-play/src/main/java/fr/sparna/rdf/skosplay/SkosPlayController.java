@@ -508,11 +508,6 @@ public class SkosPlayController {
 				// forward to the JSP
 				return new ModelAndView("viz-sunburst");
 			}
-			/*case TREEMAP : {
-				request.setAttribute("dataset", generateJSON(r, language, scheme));
-				// forward to the JSP
-				return new ModelAndView("viz-treemap");
-			}*/
 			case AUTOCOMPLETE : {
 				AutocompleteItemsReader autocompleteReader = new AutocompleteItemsReader();
 				Items items = autocompleteReader.readItems(r, language, scheme);
@@ -525,34 +520,6 @@ public class SkosPlayController {
 				response.setContentType("application/xml");
                 response.setHeader("Content-Disposition", "inline; filename=\""+"freemind-export.mm");
                 
-                /*
-                Map m = new Map();
-                Node root = new Node();
-                m.setNode(root);
-                root.setCreated("1708696092718");
-                root.setModified("1708696092718");
-                root.setId("1");
-                root.setText("Thésaurus du SMT !");
-                
-                Node node1 = new Node();
-                node1.setCreated("1708696092718");
-                node1.setModified("1708696092718");
-                node1.setId("2");
-                node1.setText("node 1");
-                
-                Node node2 = new Node();
-                node2.setCreated("1708696092718");
-                node2.setModified("1708696092718");
-                node2.setId("3");
-                node2.setText("node 2");
-                
-                List<Node> nodes = new ArrayList<Node>();
-                nodes.add(node1);
-                nodes.add(node2);
-                
-                root.setChildrens(nodes);
-                */
-                
                 FreemindReader fm = new FreemindReader(connection);
                 Map m = fm.generateFreemindMap(language, scheme);
                 
@@ -563,16 +530,6 @@ public class SkosPlayController {
                 
                 w.close();
                 response.getOutputStream().flush();
-                
-                /*
-                String FAKE =  "<map version=\"1.0.1\">"
-                		+ "<node CREATED=\"1706716720958\" ID=\"ID_1328781019\" MODIFIED=\"1708696092718\" TEXT=\"Thésaurus du STM\"></node></map>";
-                
-                OutputStreamWriter w = new OutputStreamWriter(response.getOutputStream());
-                w.write(FAKE);
-                w.close();
-                response.getOutputStream().flush();
-                */
                 
                 return null;
 			}

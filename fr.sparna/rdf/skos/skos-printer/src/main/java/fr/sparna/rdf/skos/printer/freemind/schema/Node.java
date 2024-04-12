@@ -31,7 +31,11 @@ public class Node {
 	private List<Node> childrens;
 
 
-	
+	// required for JAXB
+	public Node() {
+		super();
+	}
+
 	public Node(String id, String text) {
 		super();
 		this.id = id;

@@ -80,7 +80,7 @@ public class FreemindReader {
 
 		Map m = new Map();
 		if(skosTrees.size() == 1) {
-			m.setNode(treeNodeToFreeMindNode(skosTrees.get(0).getRoot()));
+			m.setNode(treeToFreeMindNode(skosTrees.get(0)));
 		} else {
 			Node root = new Node("root", "root");
 			m.setNode(root);
