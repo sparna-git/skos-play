@@ -14,6 +14,8 @@
 <html>
 	<head>
 		<title><c:out value="${applicationData.skosPlayConfig.applicationTitle}" /></title>
+		<link rel="canonical" href="https://skos-play.sparna.fr/play/upload" />
+
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="bootstrap-fileupload/jasny-bootstrap.min.css" rel="stylesheet" />
