@@ -9,18 +9,17 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.google.GoogleConnector;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class SessionFilter implements Filter {
 
@@ -78,12 +77,7 @@ public class SessionFilter implements Filter {
 				log.debug("Setting the base URL to "+baseURL.toString());
 				session.setBaseUrl(baseURL.toString());		
 			
-				// init GoogleConnector
-				String redirectUrl = baseURL.toString()+"/login";
-				session.setGoogleConnector(new GoogleConnector("SKOS Play!", redirectUrl));
 			} catch (MalformedURLException e) {
-				throw new RuntimeException(e);
-			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
 		}

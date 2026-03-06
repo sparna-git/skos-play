@@ -23,6 +23,11 @@
         <url>http://www.sparna.fr/</url>
     </organization>    
 
+    <properties>            
+        <!-- library versions -->                     
+        <jackson.version>2.19.4</jackson.version>        
+    </properties>
+
 
     <build>
         <plugins>
@@ -125,11 +130,11 @@
                 <scope>test</scope>
             </dependency>
 
-    	    <!-- J2EE -->
+    	    <!-- Jakarta EE -->
     		<dependency>
-    		    <groupId>javaee</groupId>
-    		    <artifactId>javaee-api</artifactId>
-    		    <version>5</version>
+    		    <groupId>jakarta.platform</groupId>
+    		    <artifactId>jakarta.ee-api</artifactId>
+    		    <version>10.0.0</version>
     			<scope>provided</scope>
     		</dependency>
 
@@ -137,31 +142,33 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
-                <version>4.1.0.RELEASE</version>
+                <version>6.2.16</version>
                 <!-- exclude commons-logging to be able to work with slf4j -->
+                 <!--
                 <exclusions>
                     <exclusion>
                       <artifactId>commons-logging</artifactId>
                       <groupId>commons-logging</groupId>
                     </exclusion>
                 </exclusions>
+            -->
             </dependency>
 
             <!-- Jackson dependencies for JSON processing -->
             <dependency>
                     <groupId>com.fasterxml.jackson.core</groupId>
                     <artifactId>jackson-core</artifactId>
-                    <version>2.9.7</version>
+                    <version>${jackson.version}</version>
             </dependency>
             <dependency>
                     <groupId>com.fasterxml.jackson.core</groupId>
                     <artifactId>jackson-annotations</artifactId>
-                    <version>2.9.7</version>
+                    <version>${jackson.version}</version>
             </dependency>
             <dependency>
                     <groupId>com.fasterxml.jackson.core</groupId>
                     <artifactId>jackson-databind</artifactId>
-                    <version>2.9.7</version>
+                    <version>${jackson.version}</version>
             </dependency>
 
             <!-- RDF4J -->

@@ -11,10 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.util.JAXBSource;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -30,6 +26,10 @@ import fr.sparna.commons.xml.XSLProcessor;
 import fr.sparna.commons.xml.fop.FopProcessor;
 import fr.sparna.commons.xml.fop.FopProvider;
 import fr.sparna.rdf.skos.printer.schema.KosDocument;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.util.JAXBSource;
 
 public class DisplayPrinter {
 

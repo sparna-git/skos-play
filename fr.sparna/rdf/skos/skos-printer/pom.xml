@@ -100,17 +100,15 @@
                 <artifactId>jackson-databind</artifactId>
         </dependency>
 
-        <!-- Add explicit java.xml.bind dependency for Java 11 compatibility -->
-        <!-- JAXB API + Dependency -->
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
+    		<groupId>jakarta.xml.bind</groupId>
+    		<artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.5</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>2.3.1</version>
+            <version>4.0.6</version>
             <scope>runtime</scope>
         </dependency>
 		

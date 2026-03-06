@@ -356,6 +356,22 @@ public class SKOSTreeBuilder {
 				}
 				
 			});
+
+			// if no collection was found, we look for cdt:isPartOf sub-schemes
+			if(node.getChildren() == null || node.getChildren().size() == 0) {
+				Perform.on(connection).select(new GetIsPartOfHelper(conceptOrConceptSchemeOrCollection, null) {
+				
+					@Override
+					protected void handleIsPartOf(Resource conceptScheme, Resource isPartOf)
+					throws TupleQueryResultHandlerException {
+						// include only concept schemes
+						final NodeType nodeType = nodeTypeReader.readNodeType((IRI)isPartOf);
+						if(nodeType == NodeType.CONCEPT_SCHEME) {
+							node.addChild(buildTreeRecDelayed((IRI)isPartOf));
+						}
+					}					
+				});
+			}
 			
 			// if no collection was found, we look for topConcepts declared on the scheme
 			if(node.getChildren() == null || node.getChildren().size() == 0) {

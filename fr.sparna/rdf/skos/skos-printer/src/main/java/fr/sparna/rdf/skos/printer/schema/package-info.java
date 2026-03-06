@@ -5,5 +5,5 @@
 // Generated on: 2016.01.26 at 10:36:31 AM CET 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.sparna.fr/thesaurus-display", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@jakarta.xml.bind.annotation.XmlSchema(namespace = "http://www.sparna.fr/thesaurus-display", elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package fr.sparna.rdf.skos.printer.schema;

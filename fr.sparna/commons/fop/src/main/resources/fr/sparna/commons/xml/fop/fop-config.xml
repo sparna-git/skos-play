@@ -13,25 +13,25 @@
 
           <font 
               kerning="yes" 
-              embed-url="/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n019003l.pfb"
+              embed-url="classpath:/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n019003l.pfb"
               embedding-mode="subset">
                <font-triplet name="Nimbus Sans L" style="normal" weight="normal" />
           </font>
           <font 
               kerning="yes"
-              embed-url="/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n019004l.pfb"
+              embed-url="classpath:/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n019004l.pfb"
               embedding-mode="subset">
                <font-triplet name="Nimbus Sans L" style="normal" weight="bold" />
           </font>
           <font 
               kerning="yes"
-              embed-url="/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n019023l.pfb"
+              embed-url="classpath:/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n019023l.pfb"
               embedding-mode="subset">
                <font-triplet name="Nimbus Sans L" style="italic" weight="normal" />
           </font>
           <font 
               kerning="yes"
-              embed-url="/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n019024l.pfb"
+              embed-url="classpath:/fr/sparna/commons/xml/fop/fonts/ghostscript-fonts-std-8.11/n019024l.pfb"
               embedding-mode="subset">
                <font-triplet name="Nimbus Sans L" style="italic" weight="bold" />
           </font>
@@ -65,16 +65,16 @@
 
           <!-- Arabic Font -->
 
-          <font kerning="yes" embed-url="/fr/sparna/commons/xml/fop/fonts/traditional_arabic/trado.ttf" embedding-mode="subset">
+          <font kerning="yes" embed-url="classpath:/fr/sparna/commons/xml/fop/fonts/traditional_arabic/trado.ttf" embedding-mode="subset">
                <font-triplet name="Trad Arabic" style="normal" weight="normal" />
            </font>           
-           <font kerning="yes" embed-url="/fr/sparna/commons/xml/fop/fonts/traditional_arabic/tradbdo.ttf" embedding-mode="subset">
+           <font kerning="yes" embed-url="classpath:/fr/sparna/commons/xml/fop/fonts/traditional_arabic/tradbdo.ttf" embedding-mode="subset">
                <font-triplet name="Trad Arabic" style="normal" weight="bold" />
            </font> 
-           <font kerning="yes" embed-url="/fr/sparna/commons/xml/fop/fonts/traditional_arabic/trado.ttf" embedding-mode="subset">
+           <font kerning="yes" embed-url="classpath:/fr/sparna/commons/xml/fop/fonts/traditional_arabic/trado.ttf" embedding-mode="subset">
                <font-triplet name="Trad Arabic" style="italic" weight="normal" />
            </font> 
-           <font kerning="yes" embed-url="/fr/sparna/commons/xml/fop/fonts/traditional_arabic/tradbdo.ttf" embedding-mode="subset">
+           <font kerning="yes" embed-url="classpath:/fr/sparna/commons/xml/fop/fonts/traditional_arabic/tradbdo.ttf" embedding-mode="subset">
                <font-triplet name="Trad Arabic" style="italic" weight="bold" />
            </font>
          

@@ -68,15 +68,23 @@
 
     <dependencies>
         
+		<!-- Jakarta EE -->
         <dependency>
-            <groupId>javaee</groupId>
-            <artifactId>javaee-api</artifactId>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>10.0.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>3.0.1</version>
         </dependency>
 
         <dependency>
@@ -121,42 +129,11 @@
             <!-- from jitpack -->
         </dependency>
 
-        <!-- Semargl and Semargl Sesame integration for RDFa parsing -->
-        <!--
-        <dependency>
-            <groupId>org.semarglproject</groupId>
-            <artifactId>semargl-rdfa</artifactId>
-            <version>0.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.semarglproject</groupId>
-            <artifactId>semargl-sesame</artifactId>
-            <version>0.6.1</version>
-        </dependency>
-        -->
-
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
         </dependency>
-        <dependency>
-			<groupId>com.google.api-client</groupId>
-			<artifactId>google-api-client</artifactId>
-            <version>1.22.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.oauth-client</groupId>
-			<artifactId>google-oauth-client-servlet</artifactId>
-            <version>1.22.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.apis</groupId>
-			<artifactId>google-api-services-drive</artifactId>
-            <version>v3-rev47-1.22.0</version>
-		</dependency>
 		
         <dependency>
             <groupId>com.google.code.gson</groupId>

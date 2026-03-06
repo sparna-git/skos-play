@@ -15,12 +15,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.DC;
@@ -80,6 +74,11 @@ import fr.sparna.rdf.skos.toolkit.SKOSTreeBuilder;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode;
 import fr.sparna.rdf.skos.toolkit.SKOSTreeNode.NodeType;
 import fr.sparna.rdf.skosplay.log.LogEntry;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Marshaller;
 
 
 
@@ -518,12 +517,13 @@ public class SkosPlayController {
 			}
 			case FREEMIND : {
 				response.setContentType("application/xml");
+				response.addHeader("Content-Encoding", "UTF-8");	
                 response.setHeader("Content-Disposition", "inline; filename=\""+"freemind-export.mm");
                 
                 FreemindReader fm = new FreemindReader(connection);
                 Map m = fm.generateFreemindMap(language, scheme);
                 
-                OutputStreamWriter w = new OutputStreamWriter(response.getOutputStream());
+                OutputStreamWriter w = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
                 JAXBContext context = JAXBContext.newInstance(Map.class);
                 Marshaller marsh = context.createMarshaller();
                 marsh.marshal(m, w);

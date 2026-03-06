@@ -2,8 +2,6 @@ package fr.sparna.rdf.skosplay;
 
 import java.util.List;
 
-import com.google.api.services.drive.model.File;
-
 public class ConvertFormData {
 
 	public static final String KEY = ConvertFormData.class.getCanonicalName();
@@ -12,8 +10,6 @@ public class ConvertFormData {
 	protected String errorMessagefile;
 	// default language of the user to initialize the language selection
 	protected String defaultLanguage;
-	// liste de fichiers issus du google drive
-	protected List<File> googleFiles;
 	// base URL of the application for the example files
 	protected String baseUrl;
 	
@@ -93,14 +89,6 @@ public class ConvertFormData {
 
 	public void setBaseUrl(String baseUrl) {
 		this.baseUrl = baseUrl;
-	}
-
-	public List<File> getGoogleFiles() {
-		return googleFiles;
-	}
-
-	public void setGoogleFiles(List<File> googleFiles) {
-		this.googleFiles = googleFiles;
 	}
 	
 }

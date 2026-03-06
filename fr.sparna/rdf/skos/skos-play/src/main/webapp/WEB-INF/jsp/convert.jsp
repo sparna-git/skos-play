@@ -34,8 +34,7 @@
 				document.getElementById('url').disabled = selected != 'url';
 				document.getElementById('example').disabled = selected != 'example';
 				document.getElementById('file').disabled = selected != 'file';
-				document.getElementById('google').disabled = selected != 'google';
-				if((selected != 'google')||(selected!='url')) {
+				if((selected!='url')) {
 					 document.formulaire.google.style.borderColor = "gray";
 					 document.formulaire.url.style.borderColor = "gray";
 					 $('#length').hide();
@@ -44,17 +43,6 @@
 			   if(selected==='google')
 				verifID();			
 			}	
-			
-			function verifID(){
-      			var currlength = $('#google').val().length;
-	      		 if((currlength!=44)) {
-	      			document.formulaire.google.style.borderColor = "#f5500c";
-      				$('#length').show();	      				
-	      		 }else{	      				 
-      				document.formulaire.google.style.borderColor = "#80ff00";
-      				$('#length').hide();
-	      		 }	      		 
-      		}
 			
 			function dowloadExample(){
 				var urlExample= $('#example option:selected').val();
@@ -179,45 +167,6 @@
 					</div>
 					</div>
 					
-					<!-- Hide Google Drive option
-				<div class="form-group">
-								<input
-										class="col-sm-1"
-										type="radio"
-										name="source"
-										id="source-google"
-										value="google"
-										
-										onchange="enabledInput('google')" />	
-								<label class="col-sm-2 control-label">							
-									<fmt:message key="convert.form.remoteUrl.Google" />
-								</label>
-						<div class="col-sm-9" >
-							<div class="col-sm-10" style="margin-left:-15px;">
-							<c:choose>
-								<c:when test="${sessionData.user != null}">					
-									<select 
-										id="google"
-										class="form-control"
-										onchange="enabledInput('google');verifID();"
-										name="google"
-										style="width:100%;">	
-										<c:forEach var="currentFile" items="${data.googleFiles}" >
-										   <option value="${currentFile.id}">${currentFile.name} (${currentFile.modifiedTime})</option>
-										</c:forEach>							 					 
-									</select>				  					
-				  					<span class="help-block"><i><fmt:message key="convert.form.remoteUrl.Google.help" /></i></span>
-								</c:when>
-								<c:otherwise>
-									<div class="alert alert-info">
-										<fmt:message key="convert.form.googleID.notLogged" />
-									</div>
-								</c:otherwise>
-							</c:choose>	
-							</div><br/><br/>
-						</div>
-					</div>
-				 	-->
 			</fieldset>
 			
 			<!-- Choix de la langue -->		
@@ -394,13 +343,6 @@
 			    	$('#loading').hide();
 				    $('#submit-button').attr('disabled', false);
 			    });
-		   		
-			    <c:if test="${sessionData.user == null}">
-			    	$('#source-google').attr('disabled',true);
-		    	</c:if>
-		    	<c:if test="${sessionData.user != null}">
-		    		$('#source-google').attr('disabled',false);
-	    		</c:if>
 			    
 				$(function(){	 
 					$('#choice_Language').editableSelect();
