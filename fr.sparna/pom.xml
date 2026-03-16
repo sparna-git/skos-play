@@ -137,7 +137,7 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
-                <version>4.1.0.RELEASE</version>
+                <version>5.2.20.RELEASE</version>
                 <!-- exclude commons-logging to be able to work with slf4j -->
                 <exclusions>
                     <exclusion>
