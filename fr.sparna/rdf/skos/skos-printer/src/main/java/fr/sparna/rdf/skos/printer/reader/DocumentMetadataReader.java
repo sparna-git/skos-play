@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Resource;

@@ -1,10 +1,5 @@
 package fr.sparna.rdf.skosplay;
 
-import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.model.File;
-import fr.sparna.google.DriveHelper;
-import fr.sparna.google.GoogleConnector;
-import fr.sparna.google.GoogleUser;
 import fr.sparna.rdf.skosplay.log.LogEntry;
 
 import fr.sparna.rdf.xls2rdf.ModelWriterIfc;
@@ -15,6 +10,9 @@ import fr.sparna.rdf.xls2rdf.Xls2RdfPostProcessorIfc;
 import fr.sparna.rdf.xls2rdf.postprocess.SkosPostProcessor;
 import fr.sparna.rdf.xls2rdf.postprocess.SkosXlPostProcessor;
 import fr.sparna.rdf.xls2rdf.write.ModelWriterFactory;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFWriterRegistry;
@@ -28,17 +26,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,39 +56,7 @@ public class SkosPlayConvertController {
 	private enum SOURCE_TYPE {
 		FILE,
 		URL,
-		EXAMPLE,
-		GOOGLE,
-	}
-
-
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView login(
-			@RequestParam(value="code", required=true) String code,
-			HttpServletRequest request,
-			HttpServletResponse response
-			) throws IOException  {
-
-		try{
-			final SessionData sessionData = SessionData.get(request.getSession());
-			GoogleConnector gc = sessionData.getGoogleConnector();
-
-			// récupération du token d'accès
-			String token = gc.getAccessToken(code);
-			// récupération des infos utilisateur
-			GoogleUser user = gc.readUserInfo(token);
-			// enregistrement des infos utilisateur dans la session
-			sessionData.setUser(user);
-			// création et stockage en session d'un "Credential" google
-			gc.createAndRegisterCredential(token);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (ProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		response.sendRedirect("convert");
-		return null;
+		EXAMPLE
 	}
 
 
@@ -106,18 +65,7 @@ public class SkosPlayConvertController {
 			HttpServletRequest request,
 			HttpServletResponse response
 			) throws IOException  {
-		final SessionData sessionData = SessionData.get(request.getSession());
 		ConvertFormData data = new ConvertFormData();
-
-		if(sessionData.getUser() != null) {
-			GoogleConnector gc = sessionData.getGoogleConnector();
-			// récupération du service de Drive Google
-			Drive service = gc.getDriveService();
-			DriveHelper driveHelper = new DriveHelper(service);
-			// récupération de la liste de spreadsheets et enregistrement dans la session
-			List<File> listeSpreadsheets = driveHelper.listSpreadsheets();
-			data.setGoogleFiles(listeSpreadsheets);
-		}
 
 		data.setDefaultLanguage(SessionData.get(request.getSession()).getUserLocale().getLanguage());
 		return new ModelAndView("convert", ConvertFormData.KEY, data);
@@ -174,28 +122,6 @@ public class SkosPlayConvertController {
 		String resultFileName = "skos-play-convert";
 
 		switch(source) {
-
-		case GOOGLE:   {
-			log.debug("*Conversion à partir d'une Google Spreadsheet : "+googleId);
-
-			if(googleId.isEmpty()) {
-				return doErrorConvert(request, "Google ID is empty");
-			}
-
-			try {
-				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-				new DriveHelper(sessionData.getGoogleConnector().getDriveService()).readSpreadsheet(googleId, outputStream);
-				in = new DataInputStream(new BufferedInputStream(new ByteArrayInputStream(outputStream.toByteArray())));
-			} catch (Exception e1) {
-				String msg = e1.getMessage();
-				int indexOfBeginMessage = msg.lastIndexOf("\"message\":")+"\"message\":".length()+2;
-				int indexOfEndMessage = msg.indexOf("\"", indexOfBeginMessage);
-				log.debug("message d'erreur lié à l'ID google->"+msg.substring(indexOfBeginMessage, indexOfEndMessage));
-				return doErrorConvert(request,"Google message : \""+msg.substring(indexOfBeginMessage, indexOfEndMessage)+"\"");
-			}
-
-			break;
-		}
 
 		case EXAMPLE : {
 			log.debug("*Conversion à partir d'un fichier d'exemple : "+example);

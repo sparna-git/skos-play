@@ -1,6 +1,6 @@
 package fr.sparna.rdf.skos.printer.reader;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 
 import org.eclipse.rdf4j.query.algebra.Str;
 

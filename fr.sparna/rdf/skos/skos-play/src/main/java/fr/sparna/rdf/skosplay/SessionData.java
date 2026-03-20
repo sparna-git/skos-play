@@ -4,19 +4,15 @@ import java.io.Serializable;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import javax.servlet.http.HttpSession;
 
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 
-import com.google.api.services.drive.Drive;
-
-import fr.sparna.google.GoogleConnector;
-import fr.sparna.google.GoogleUser;
 import fr.sparna.rdf.rdf4j.toolkit.handler.DebugHandler;
 import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
 import fr.sparna.rdf.rdf4j.toolkit.repository.EndpointRepositorySupplier;
 import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilder;
+import jakarta.servlet.http.HttpSession;
 
 public class SessionData implements Serializable {
 
@@ -36,15 +32,9 @@ public class SessionData implements Serializable {
 	// the pre-loaded data resource bundle
 	protected ResourceBundle preLoadedDataLabels;
 	
-	protected Drive service;
-	
 	protected ConvertFormData convertFormData;
 	
-	protected GoogleUser user;
-	
 	protected String baseUrl;
-	
-	protected GoogleConnector googleConnector;
 	
 	protected String periodeView;
 
@@ -64,14 +54,6 @@ public class SessionData implements Serializable {
 	 */
 	public static SessionData get(HttpSession session) {
 		return (SessionData)session.getAttribute(KEY);
-	}
-	
-	public GoogleUser getUser() {
-		return user;
-	}
-
-	public void setUser(GoogleUser user) {
-		this.user = user;
 	}
 
 	public SkosPlayModel getSkosPlayModel() {
@@ -120,19 +102,9 @@ public class SessionData implements Serializable {
 
 	public void setBaseUrl(String baseUrl) {
 		this.baseUrl = baseUrl;
-	}
+	}	
 
-	public GoogleConnector getGoogleConnector() {
-		return googleConnector;
-	}
-
-	public void setGoogleConnector(GoogleConnector googleConnector) {
-		this.googleConnector = googleConnector;
-	}
-	
-
-	public String getPeriodeView() {
-		
+	public String getPeriodeView() {		
 		return periodeView;
 	}
 

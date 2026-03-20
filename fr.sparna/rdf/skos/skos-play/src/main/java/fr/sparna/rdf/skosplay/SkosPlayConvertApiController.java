@@ -13,10 +13,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.io.IOUtils;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFWriterRegistry;
@@ -37,6 +33,9 @@ import fr.sparna.rdf.xls2rdf.Xls2RdfPostProcessorIfc;
 import fr.sparna.rdf.xls2rdf.postprocess.SkosPostProcessor;
 import fr.sparna.rdf.xls2rdf.postprocess.SkosXlPostProcessor;
 import fr.sparna.rdf.xls2rdf.write.ModelWriterFactory;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 

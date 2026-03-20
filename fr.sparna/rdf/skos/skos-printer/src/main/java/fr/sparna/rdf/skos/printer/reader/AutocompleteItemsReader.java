@@ -23,13 +23,11 @@ import org.slf4j.LoggerFactory;
 
 import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
 import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
-import fr.sparna.rdf.rdf4j.toolkit.repository.init.LoadFromFileOrDirectory;
 import fr.sparna.rdf.rdf4j.toolkit.util.LabelReader;
 import fr.sparna.rdf.rdf4j.toolkit.util.PropertyReader;
 import fr.sparna.rdf.skos.printer.autocomplete.Item;
 import fr.sparna.rdf.skos.printer.autocomplete.Items;
 import fr.sparna.rdf.skos.printer.autocomplete.JSONWriter;
-import fr.sparna.rdf.skos.printer.reader.AlphaIndexDisplayGenerator.QueryResultRow;
 import fr.sparna.rdf.skos.toolkit.GetLabelsInSchemeHelper;
 import fr.sparna.rdf.skos.toolkit.SKOS;
 

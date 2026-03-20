@@ -4,23 +4,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Marshaller;
 
-import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
-import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.sparna.rdf.rdf4j.toolkit.query.Perform;
 import fr.sparna.rdf.rdf4j.toolkit.repository.RepositoryBuilderFactory;
 import fr.sparna.rdf.skos.printer.DisplayPrinter;
 import fr.sparna.rdf.skos.printer.schema.KosDocument;
 import fr.sparna.rdf.skos.printer.schema.KosDocumentHeader;
-import fr.sparna.rdf.skos.toolkit.GetLanguagesHelper;
 
 public class CompleteDisplayGeneratorTest {
 	
